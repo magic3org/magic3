@@ -36,17 +36,13 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-					<jdoc:include type="modules" name="menutitle" style="none" /><i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
-				    <jdoc:include type="modules" name="brand" style="none" />
-                </a>
+                <jdoc:include type="modules" name="menutitle" style="boottitle" />
+                <jdoc:include type="modules" name="brand" style="bootbrand" />
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-                <ul class="nav navbar-nav">
+                <!--<ul class="nav navbar-nav">
                     <li>
                         <a class="page-scroll" href="#about">About</a>
                     </li>
@@ -56,7 +52,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
-                </ul>
+                </ul>-->
+				<jdoc:include type="navmenu" name="hmenu" />
             </div>
             <!-- /.navbar-collapse -->
         </div>

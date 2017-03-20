@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'functions.php';
+
 $tag = ($params->get('tag_id') != NULL) ? ' id="' . $params->get('tag_id') . '"' : '';
 //if (isset($attribs['name']) && $attribs['name'] == 'user3') {
 if (isset($attribs['type']) && $attribs['type'] == 'navmenu') {

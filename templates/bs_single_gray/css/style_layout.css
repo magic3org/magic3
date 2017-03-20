@@ -1,7 +1,10 @@
 /* レイアウト補正用 */
-#pos-fixed {
-	position:relative;
-}
 .navbar-toggle {
-	display:block;
+	display:inline-block;
+}
+.navbar-main-collapse {
+	width:40%;
+}
+.intro {
+	padding-top:400px;
 }

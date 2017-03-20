@@ -36,7 +36,15 @@ function modChrome_bootother($module, &$params, &$attribs)
     </section>
 	<?php endif;
 }
-
-
-				
-            
+function modChrome_boottitle($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><?php echo $module->content; ?><i class="fa fa-bars"></i></button>
+	<?php endif;
+}
+function modChrome_bootbrand($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+			<a class="navbar-brand page-scroll" href="#page-top"><?php echo $module->content; ?></a>
+	<?php endif;
+}

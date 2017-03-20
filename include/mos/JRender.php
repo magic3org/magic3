@@ -519,7 +519,8 @@ $this->item->title = '****';*/
 			$GLOBALS['artx_settings']['vmenu']['show_submenus'] = true;
 			
 			ob_clean();
-			if ($templateVer == 2){// Joomla!v2.5テンプレート
+			if ($templateVer == 2 ||		// Joomla!v2.5テンプレート
+				$templateVer == 10){		// Bootstrapテンプレート
 				require_once($gEnvManager->getJoomlaRootPath() . '/class/moduleHelper.php');
 			}
 			//require_once($helper);		// デフォルトの出力方法
