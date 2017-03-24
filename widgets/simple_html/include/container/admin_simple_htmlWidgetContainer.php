@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -168,6 +168,13 @@ class admin_simple_htmlWidgetContainer extends BaseAdminWidgetContainer
 			$this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 			$replaceNew = true;			// データ再取得
 		}
+		
+		// ### CKEditor用のCSSファイルを読み込む ###
+		// このウィジェットがマップされているページサブIDを取得
+		$subPageId = $this->gPage->getPageSubIdByWidget($this->gEnv->getDefaultPageId(), $this->gEnv->getCurrentWidgetId(), $this->configId);
+		$previewUrl = $this->gEnv->getDefaultUrl();
+		if (!empty($subPageId)) $previewUrl .= '?sub=' . $subPageId;
+		$this->loadCKEditorCssFiles($previewUrl);
 		
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
