@@ -42,17 +42,6 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-                <!--<ul class="nav navbar-nav">
-                    <li>
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#photo">Photo</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
-                    </li>
-                </ul>-->
 				<jdoc:include type="navmenu" name="hmenu" />
             </div>
             <!-- /.navbar-collapse -->
