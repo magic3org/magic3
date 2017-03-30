@@ -98,11 +98,11 @@ INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,             pd_menu_id,  pd_title_visible, pd_view_page_state, pd_update_dt) VALUES
 ('index', '',        'hmenu',        2,        'default_menu',       1,            'メインメニュー設定', '',                   'main_menu', true,             0,                  now()),
 ('index', '',        'footer',       20,       'default_footer',     0,            '',                   '',                   '',          false,            0,                  now()),
-('index', 'front',   'brand',        2,        'simple_html',        1,            '',                   '',                   '',          false,            0,                  now()),
-('index', 'front',   'header',       2,        'simple_html',        2,            '',                   'Grayscale',          '',          true,             0,                  now()),
-('index', 'front',   'about',        2,        'simple_html',        3,            '',                   'About Grayscale',    '',          true,             0,                  now()),
-('index', 'front',   'photo',        2,        'simple_html',        4,            '',                   'Download Grayscale', '',          true,             0,                  now()),
-('index', 'front',   'contact',      2,        'simple_html',        5,            '',                   'Contact Start Bootstrap', '',          true,             0,                  now());
+('index', 'front',   'brand',        2,        'simple_html',        1,            '名称未設定1',                   '',                   '',          false,            0,                  now()),
+('index', 'front',   'header',       2,        'simple_html',        2,            '名称未設定2',                   'Grayscale',          '',          true,             0,                  now()),
+('index', 'front',   'about',        2,        'simple_html',        3,            '名称未設定3',                   'About Grayscale',    '',          true,             0,                  now()),
+('index', 'front',   'photo',        2,        'simple_html',        4,            '名称未設定4',                   'Download Grayscale', '',          true,             0,                  now()),
+('index', 'front',   'contact',      2,        'simple_html',        5,            '名称未設定5',                   'Contact Start Bootstrap', '',          true,             0,                  now());
 
 -- メニュー定義
 TRUNCATE TABLE _menu_def;
