@@ -20,7 +20,28 @@ function modChrome_bootheader($module, &$params, &$attribs)
 		<?php endif; ?>
 			<hr /><?php echo $module->content; ?>
 	<?php endif;
-} 
+}
+function modChrome_bootheaderbutton($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+			<a href="#about" class="btn btn-primary btn-xl page-scroll"><?php echo $module->content; ?></a>
+	<?php endif;
+}
+function modChrome_bootabout($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+		<?php if ($module->showtitle != 0) : ?>
+			<h2 class="section-heading"><?php echo $module->title; ?></h2>
+		<?php endif; ?>
+			<hr class="light" /><?php echo $module->content; ?>
+	<?php endif;
+}
+function modChrome_bootaboutbutton($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+			<a href="#services" class="page-scroll btn btn-default btn-xl sr-button"><?php echo $module->content; ?></a>
+	<?php endif;
+}
 function modChrome_bootother($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>
