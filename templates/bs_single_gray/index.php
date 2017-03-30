@@ -36,7 +36,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <jdoc:include type="modules" name="menutitle" style="boottitle" />
+                <jdoc:include type="modules" name="menu-title" style="boottitle" />
                 <jdoc:include type="modules" name="brand" style="bootbrand" />
             </div>
 

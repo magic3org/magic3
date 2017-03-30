@@ -16,11 +16,11 @@ function modChrome_bootheader($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>
 		<?php if ($module->showtitle != 0) : ?>
-			<h1 class="brand-heading"><?php echo $module->title; ?></h1>
+			<h1 id="homeHeading"><?php echo $module->title; ?></h1>
 		<?php endif; ?>
-			<div class="intro-text"><?php echo $module->content; ?></div>
+			<hr /><?php echo $module->content; ?>
 	<?php endif;
-}
+} 
 function modChrome_bootother($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>

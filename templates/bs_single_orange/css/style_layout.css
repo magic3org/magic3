@@ -1,0 +1,9 @@
+/* レイアウト補正用 */
+#bs-example-navbar-collapse-1 {
+	width:40%;
+	display:inline-block;
+	float:right;
+}
+header {
+	position:relative;
+}

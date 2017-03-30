@@ -38,7 +38,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-			    <jdoc:include type="modules" name="menutitle" style="boottitle" />
+			    <jdoc:include type="modules" name="menu-title" style="boottitle" />
 				<jdoc:include type="modules" name="brand" style="bootbrand" />
             </div>
 
@@ -68,9 +68,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <header>
         <div class="header-content">
             <div class="header-content-inner">
-                <h1 id="homeHeading">Your Favorite Source of Free Bootstrap Themes</h1>
-                <hr>
-                <p>Start Bootstrap can help you build better websites using the Bootstrap CSS framework! Just download your template and start going, no strings attached!</p>
+				<jdoc:include type="modules" name="header" style="bootheader" />
                 <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
             </div>
         </div>
