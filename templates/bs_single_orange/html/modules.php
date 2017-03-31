@@ -42,6 +42,28 @@ function modChrome_bootaboutbutton($module, &$params, &$attribs)
 			<a href="#services" class="page-scroll btn btn-default btn-xl sr-button"><?php echo $module->content; ?></a>
 	<?php endif;
 }
+function modChrome_bootservices($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+		<?php if ($module->showtitle != 0) : ?>
+			<h2 class="section-heading"><?php echo $module->title; ?></h2>
+		<?php endif; ?>
+			<hr class="primary" />
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+            <?php echo $module->content; ?>
+            </div>
+        </div>
+    </section>
+	<?php endif;
+}
 function modChrome_bootother($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>

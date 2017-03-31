@@ -103,16 +103,17 @@ INSERT INTO _page_def
 ('index', 'front',   'header-button', 2,        'simple_html',        3,            '名称未設定3',                   '',                   '',          false,            0,                  now()),
 ('index', 'front',   'about',         2,        'simple_html',        4,            '名称未設定4',                   'We\'ve got what you need!',    '',          true,             0,                  now()),
 ('index', 'front',   'about-button',  2,        'simple_html',        5,            '名称未設定5',                   '',    '',          false,             0,                  now()),
-('index', 'front',   'photo',         2,        'simple_html',        6,            '名称未設定6',                   '', '',          false,             0,                  now()),
+('index', 'front',   'services',      2,        'simple_html',        6,            '名称未設定6',                   'At Your Service', '',          true,             0,                  now()),
 ('index', 'front',   'contact',       2,        'simple_html',        7,            '名称未設定7',                   'Contact Start Bootstrap', '',          true,             0,                  now());
 
 -- メニュー定義
 TRUNCATE TABLE _menu_def;
 INSERT INTO _menu_def
-(md_id, md_index, md_menu_id,  md_name,        md_link_url,                                         md_update_dt) VALUES
-(1,     1,        'main_menu', 'About',        '#about',                                   now()),
-(2,     2,        'main_menu', 'Download',     '#photo', now()),
-(3,     3,        'main_menu', 'Contact',      '#contact',             now());
+(md_id, md_index, md_menu_id,  md_name,        md_link_url,  md_update_dt) VALUES
+(1,     1,        'main_menu', 'About',        '#about',     now()),
+(2,     2,        'main_menu', 'Services',     '#services',  now()),
+(3,     3,        'main_menu', 'Portfolio',    '#portfolio', now()),
+(4,     4,        'main_menu', 'Contact',      '#contact',   now());
 
 -- ウィジェットパラメータ
 DELETE FROM _widget_param WHERE wp_id = 'default_menu';
@@ -127,4 +128,4 @@ INSERT INTO _widget_param
 ('simple_html', 3,            'O:8:\"stdClass\":3:{s:2:\"id\";N;s:4:\"name\";s:16:\"名称未設定3\";s:4:\"html\";s:13:\"Find Out More\";}', now()),
 ('simple_html', 4,            'O:8:\"stdClass\":3:{s:2:\"id\";N;s:4:\"name\";s:16:\"名称未設定4\";s:4:\"html\";s:240:\"<p class=\"text-faded\">Start Bootstrap has everything you need to get your new website up and running in no time! All of the templates and themes on Start Bootstrap are open source, free to download, and easy to use. No strings attached!</p>\";}', now()),
 ('simple_html', 5,            'O:8:\"stdClass\":3:{s:2:\"id\";N;s:4:\"name\";s:16:\"名称未設定5\";s:4:\"html\";s:12:\"Get Started!\";}', now()),
-('simple_html', 6,            'O:8:"stdClass":3:{s:2:"id";N;s:4:"name";s:16:"名称未設定5";s:4:"html";s:799:"<p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p><p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a></p><ul class="list-inline banner-social-buttons"><li><a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a></li><li><a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a></li><li><a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a></li></ul>";}', now());
+('simple_html', 6,            'O:8:\"stdClass\":3:{s:2:\"id\";N;s:4:\"name\";s:16:\"名称未設定6\";s:4:\"html\";s:983:\"<div class=\"col-lg-3 col-md-6 text-center\"><div class=\"service-box\"><i class=\"fa fa-4x fa-diamond text-primary sr-icons\">&nbsp;</i><h3>Sturdy Templates</h3><p class=\"text-muted\">Our templates are updated regularly so they don&#39;t break.</p></div></div><div class=\"col-lg-3 col-md-6 text-center\"><div class=\"service-box\"><i class=\"fa fa-4x fa-paper-plane text-primary sr-icons\">&nbsp;</i><h3>Ready to Ship</h3><p class=\"text-muted\">You can use this theme as is, or you can make changes!</p></div></div><div class=\"col-lg-3 col-md-6 text-center\"><div class=\"service-box\"><i class=\"fa fa-4x fa-newspaper-o text-primary sr-icons\">&nbsp;</i><h3>Up to Date</h3><p class=\"text-muted\">We update dependencies to keep things fresh.</p></div></div><div class=\"col-lg-3 col-md-6 text-center\"><div class=\"service-box\"><i class=\"fa fa-4x fa-heart text-primary sr-icons\">&nbsp;</i><h3>Made with Love</h3><p class=\"text-muted\">You have to make your websites with love these days!</p></div></div>\r\n\";}', now());

@@ -6514,10 +6514,18 @@ class PageManager extends Core
 		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
 		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
 			foreach ($matches as $match){
-				if (strEndsWith($match[1], '.css')) $urlArray[] = $match[1];
+				if (strEndsWith($match[1], '.css')){		// ファイル名の拡張子が「css」の場合
+					$urlArray[] = $match[1];
+				} else {
+					// typeが「text/css」の場合も取得
+					$attrPattern = '/type\s*=\s*[\'"]+(.+?)[\'"]/si';
+					if (preg_match($attrPattern, $match[0], $attrMatch)){
+						if (strcasecmp($attrMatch[1], 'text/css') == 0) $urlArray[] = $match[1];
+					}
+				}
 			}
 		}
-		
+
 		// ifで制御されているCSSファイルを除く
 		$delUrlArray = array();
 		$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';
