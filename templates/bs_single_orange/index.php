@@ -186,5 +186,14 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
         </div>
     </section>
     
+    <!-- Footer -->
+	<?php if ($document->countModules('footer')): ?>
+    <footer>
+        <div class="container text-center">
+            <jdoc:include type="modules" name="footer" style="none" />
+        </div>
+    </footer>
+	<?php endif; ?>
+
 </body>
 </html>
