@@ -71,7 +71,10 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
         </div>
     </section>
 
-    <jdoc:include type="modules" name="services" style="bootservices" />
+    <section id="services">
+    <jdoc:include type="modules" name="services" style="bootservice" />
+	<jdoc:include type="modules" name="services-body" style="bootservicebody" />
+	</section>
 
     <section class="no-padding" id="portfolio">
         <div class="container-fluid">
