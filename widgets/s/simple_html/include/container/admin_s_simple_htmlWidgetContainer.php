@@ -96,7 +96,7 @@ class admin_s_simple_htmlWidgetContainer extends BaseAdminWidgetContainer
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
 				$targetObj = $this->paramObj[$i]->object;
-				if ($defName == $targetObj->name){		// 定義名
+				if ($name == $targetObj->name){		// 定義名
 					$this->setUserErrorMsg('名前が重複しています');
 					break;
 				}
