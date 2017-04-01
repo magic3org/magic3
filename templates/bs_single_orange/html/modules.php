@@ -58,25 +58,43 @@ function modChrome_bootservices($module, &$params, &$attribs)
         </div>
         <div class="container">
             <div class="row">
-            <?php echo $module->content; ?>
+        <?php echo $module->content; ?>
             </div>
         </div>
     </section>
 	<?php endif;
 }
+function modChrome_bootcontact($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+        <div class="col-lg-8 col-lg-offset-2 text-center">
+		<?php if ($module->showtitle != 0) : ?>
+			<h2 class="section-heading"><?php echo $module->title; ?></h2>
+		<?php endif; ?>
+            <hr class="primary /">
+        <?php echo $module->content; ?>
+        </div>
+	<?php endif;
+}
+function modChrome_bootcontactbody($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+		<?php echo $module->content; ?>
+	<?php endif;
+}
 function modChrome_bootother($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>
-    <section class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
+    <aside class="bg-dark">
+        <div class="container text-center">
+            <div class="call-to-action">
 		<?php if ($module->showtitle != 0) : ?>
 			<h2><?php echo $module->title; ?></h2>
 		<?php endif; ?>
-			<?php echo $module->content; ?>
+        <?php echo $module->content; ?>
             </div>
         </div>
-    </section>
+    </aside>
 	<?php endif;
 }
 function modChrome_boottitle($module, &$params, &$attribs)
