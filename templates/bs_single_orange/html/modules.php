@@ -68,6 +68,16 @@ function modChrome_bootservicebody($module, &$params, &$attribs)
         </div>
 	<?php endif;
 }
+function modChrome_bootportfolio($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+        <div class="container-fluid">
+            <div class="row no-gutter popup-gallery">
+		<?php echo $module->content; ?>
+            </div>
+        </div>
+	<?php endif;
+}
 function modChrome_bootcontact($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) : ?>
