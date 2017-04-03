@@ -68,7 +68,7 @@ class simple_htmlWidgetContainer extends BaseWidgetContainer
 		$html = $targetObj->html;		// 汎用HTMLコンテンツ
 		
 		// マクロ変換
-		$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $html);
+		$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html);		// 表示するページのSSLの状態に合わせる
 							
 		// 画面に埋め込む
 		$this->tmpl->addVar("_widget", "content", $html);
