@@ -240,6 +240,10 @@ CKEDITOR.editorConfig = function(config){
 		config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
 	}
 };
+// HTML5対応
+CKEDITOR.dtd.a.div = 1;
+CKEDITOR.dtd.a.p = 1;
+
 CKEDITOR.on('dialogDefinition', function(ev){
 	var dialogName = ev.data.name;
 	var dialogDefinition = ev.data.definition;
