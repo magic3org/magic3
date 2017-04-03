@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: simple_htmlWidgetContainer.php 4616 2012-01-25 09:50:25Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -66,6 +66,9 @@ class simple_htmlWidgetContainer extends BaseWidgetContainer
 		
 		// 値取得
 		$html = $targetObj->html;		// 汎用HTMLコンテンツ
+		
+		// マクロ変換
+		$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $html);
 							
 		// 画面に埋め込む
 		$this->tmpl->addVar("_widget", "content", $html);
