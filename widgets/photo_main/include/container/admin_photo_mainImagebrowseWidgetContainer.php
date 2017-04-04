@@ -33,7 +33,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const LIST_ICON_SIZE = 64;		// リスト用アイコンのサイズ
-	const CSS_FILE = '/swfupload2.5/css/default.css';		// CSSファイルのパス
 //	const PHOTO_DIR = '/etc/photo';		// マスター画像格納ディレクトリ
 	const PHOTO_HOME_DIR = '/etc/photo/home';		// マスター画像格納ディレクトリ（ユーザ別)
 	const DEFAULT_THUMBNAIL_SIZE = 128;		// サムネール画像サイズ
@@ -905,20 +904,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		} else {
 			return ($fileTime1 > $fileTime2) ? -1 : 1;
 		}
-	}
-	/**
-	 * CSSファイルをHTMLヘッダ部に設定
-	 *
-	 * CSSファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssFileToHead($request, &$param)
-	{
-		return $this->getUrl($this->gEnv->getScriptsUrl() . self::CSS_FILE);
 	}
 	/**
 	 * windowパスを使用する場合は、Javascriptに認識させる
