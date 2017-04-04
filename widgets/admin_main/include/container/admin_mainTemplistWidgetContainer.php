@@ -44,6 +44,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
 //	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
 	const THEMLER_APP_FILENAME = '/app/themler.version';		// Themlerテンプレートかどうかを判断するためのファイル
+	const DEFAULT_IMAGE_DIR = '/images';		// デフォルトの画像格納ディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -576,7 +577,16 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$downloadButtonTag = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" />';
 		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate(\'' . $templateId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
-
+		// テンプレート編集ボタン
+		$editDisabled = '';// ボタンの状態
+		$editUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $templateId;	// テンプレート編集画面
+		$imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $templateId . self::DEFAULT_IMAGE_DIR;				
+		if (!is_dir($imageBasePath)){			// ディレクトリがない場合はボタンを使用不可にする
+			$editDisabled = 'disabled';
+			$editUrl = '';
+		}
+		$editButtonTag = $this->gDesign->createEditButton($editUrl, $this->_('Edit Template'), ''/*タグID*/, $editDisabled/*ボタン状態*/);
+		
 		$row = array(
 			'no'			=> $index + 1,													// 行番号
 			'serial'		=> $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
@@ -590,7 +600,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 			'image_tag'		=> $imageTag,		// 画像
 			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
 			'preview_button'	=> $previewButtonTag,		// プレビューボタン
-			'download_button' 	=> $downloadButtonTag								// ダウンロードボタン
+			'download_button' 	=> $downloadButtonTag,		// ダウンロードボタン
+			'edit_button' 		=> $editButtonTag			// テンプレート編集ボタン
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');

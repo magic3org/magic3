@@ -18,11 +18,12 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $serialArray = array();		// 表示されているファイルのインデックス番号
-	private $photoBasePath;				// アクセス可能な画像格納ディレクトリ
+	private $imageBasePath;				// 画像格納ディレクトリ
 	private $sortOrderByDateAsc;		// 日付でソート
 	private $masterMimeType;			// マスター画像のMIMEタイプ
 	private $permitMimeType;			// アップロードを許可する画像タイプ
 	private $fileListAdded;				// 一覧にデータが追加されたかどうか
+	private $templateId;				// テンプレートID
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const FILE_ICON_FILE = '/images/system/tree/file_inactive32.png';			// ファイルアイコン
@@ -33,6 +34,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const LIST_ICON_SIZE = 64;		// リスト用アイコンのサイズ
+	const DEFAULT_IMAGE_DIR = '/images';		// デフォルトの画像格納ディレクトリ
 //	const PHOTO_DIR = '/etc/photo';		// マスター画像格納ディレクトリ
 	const PHOTO_HOME_DIR = '/etc/photo/home';		// マスター画像格納ディレクトリ（ユーザ別)
 	const DEFAULT_THUMBNAIL_SIZE = 128;		// サムネール画像サイズ
@@ -91,7 +93,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		$act = $request->trimValueOf('act');
 		$task = $request->trimValueOf('task');
-		
+		$this->templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
+
 		switch ($task){
 			case 'tempimage':
 			default:
@@ -118,33 +121,35 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function createList($request)
 	{
-		$account = $this->gEnv->getCurrentUserAccount();
-		
-		// パラメータエラーチェック
-		if (empty($account)){
-			$this->SetMsg(self::MSG_APP_ERR, $this->_('Error parameters.'));// パラメータにエラーがあります。
+		// パラメータチェック
+		if (empty($this->templateId)){
+			$this->setAppErrorMsg('テンプレートIDが設定されていません');
 			return;
 		}
 		
-		// 移動可能なディレクトリ範囲を取得
-//		$this->photoBasePath = $this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR;				// 画像格納ディレクトリ
+		// 画像格納ディレクトリを取得
+		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;				
+		if (!is_dir($this->imageBasePath)){
+			$this->setAppErrorMsg('画像ディレクトリが見つかりません。パス=' . $this->imageBasePath);
+			return;
+		}
 
 		// パスを取得
 		$path = trim($request->valueOf('path'));		// 現在のパス
 		if (empty($path)){
-			$path = $this->photoBasePath;
+			$path = $this->imageBasePath;
 		} else {
 			if (!strStartsWith($path, '/')) $path = '/' . $path;
-			$path = $this->photoBasePath . $path;
+			$path = $this->imageBasePath . $path;
 		}
 		// パスのエラーチェック
-		if (isDescendantPath($this->photoBasePath, $path)){
+		if (isDescendantPath($this->imageBasePath, $path)){
 			if (!is_dir($path)){
-				$this->setUserErrorMsg($this->_('Can not access the page.'));			// アクセスできません
+//				$this->setUserErrorMsg($this->_('Can not access the page.'));			// アクセスできません
 				return;
 			}
 		} else {
-			$this->setUserErrorMsg($this->_('Can not access the page.'));			// アクセスできません
+//			$this->setUserErrorMsg($this->_('Can not access the page.'));			// アクセスできません
 			return;
 		}
 		
@@ -180,7 +185,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 					// 削除可能かチェック
 					$filename = $request->trimValueOf('item' . $i . '_name');
 					$filePath = $path . DIRECTORY_SEPARATOR . $filename;
-					if (is_writable($filePath) && strStartsWith($filePath, $this->photoBasePath . DIRECTORY_SEPARATOR)){
+					if (is_writable($filePath) && strStartsWith($filePath, $this->imageBasePath . DIRECTORY_SEPARATOR)){
 						$serial = $listedItem[$i];
 						if ($serial > 0){
 							// 写真情報のアクセス権をチェック
@@ -261,7 +266,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// カレントディレクトリのパスを作成
-		$photoParentPath = dirname($this->photoBasePath);
+		$photoParentPath = dirname($this->imageBasePath);
 		$pathLink = '';
 		$relativePath = substr($path, strlen($photoParentPath));
 		$relativePath = trim($relativePath, DIRECTORY_SEPARATOR);
@@ -273,7 +278,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 					$pathLink .= '&nbsp;' . DIRECTORY_SEPARATOR . '&nbsp;' . $this->convertToDispString($pathArray[$i]);
 				} else {
 					$absPath .= DIRECTORY_SEPARATOR . $pathArray[$i];
-					$relativeFilePath = substr($absPath, strlen($this->photoBasePath));
+					$relativeFilePath = substr($absPath, strlen($this->imageBasePath));
 					$pathLink .= '&nbsp;' . DIRECTORY_SEPARATOR . '&nbsp;';
 					$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 					$pathLink .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($pathArray[$i]) . '</a>';
@@ -314,7 +319,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 					$link = '&nbsp;' . $i;
 				} else {
 					//$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-					$relativePath = substr($path, strlen($this->photoBasePath));
+					$relativePath = substr($path, strlen($this->imageBasePath));
 					$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
 					if ($i > 1) $pageUrl .= '&page=' . $i;
 					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $i . '</a>';
@@ -323,7 +328,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 		}*/
 		// ページングリンク作成
-		$relativePath = substr($path, strlen($this->photoBasePath));
+		$relativePath = substr($path, strlen($this->imageBasePath));
 		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $pageUrl);
 
@@ -338,7 +343,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->createFileList($path, $fileList, $startNo, $endNo);
 		if (!$this->fileListAdded) $this->tmpl->setAttribute('file_list', 'visibility', 'hidden');				// 一覧にデータが追加されたかどうか
 		
-		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->photoBasePath)));// 現在のディレクトリ
+		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
@@ -350,11 +355,11 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
 //		$uploadUrl .= '&' . M3_REQUEST_PARAM_ADMIN_KEY . '=' . $this->gEnv->getAdminKey();	// 管理者キー
 		//$uploadUrl .= '&path=' . $this->adaptWindowsPath($path);
-		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
+		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));					// アップロードディレクトリ
 		*/
-		$param = M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
+		$param = M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_TEMPIMAGE;
 		$param .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-		$param .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
+		$param .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));					// アップロードディレクトリ
 		$uploadUrl = $this->getConfigAdminUrl($param);
 		$this->tmpl->addVar("_widget", "upload_image_url", $this->getUrl($uploadUrl));
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
@@ -373,10 +378,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_check'] = $this->_('Select');		// 選択
 		$localeText['label_filename'] = $this->_('Filename');		// ファイル名
 		$localeText['label_status'] = $this->_('Status');		// 状態
-		$localeText['label_image_code'] = $this->_('Image Code');		// 画像コード
 		$localeText['label_size'] = $this->_('Size');		// サイズ
-		$localeText['label_view_count'] = $this->_('View Count');		// 閲覧数
-		$localeText['label_rate'] = $this->_('Rating');		// 評価
 		$localeText['label_date'] = $this->_('Update Date');		// 更新日時
 		$localeText['label_upload'] = $this->_('Image Upload');		// 画像アップロード
 		$localeText['label_filesize'] = $this->_('Max Filesize');		// 1ファイル最大サイズ
@@ -565,7 +567,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				
 				$isPhtoInfo = true;		// 画像情報があるかどうか
 			} else {
-				$this->setAppErrorMsg($this->_('Can not find photo information.'));			// 画像情報が見つかりません
+//				$this->setAppErrorMsg($this->_('Can not find photo information.'));			// 画像情報が見つかりません
 			}
 		}
 		// 入力領域の表示制御
@@ -651,9 +653,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	function createFileList($path, $fileList, $startNo, $endNo)
 	{
 		// 親ディレクトリを追加
-		if ($path != $this->photoBasePath){
+		if ($path != $this->imageBasePath){
 			$file = '..';
-			$relativeFilePath = substr(dirname($path), strlen($this->photoBasePath));
+			$relativeFilePath = substr(dirname($path), strlen($this->imageBasePath));
 			//$fileLink = '<a href="#" onclick="selDir(\'' . $this->adaptWindowsPath($this->convertToDispString(dirname($path))) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
 			//$fileLink = '<a href="#" onclick="selDir(\'' . $this->adaptWindowsPath($this->convertToDispString($relativeFilePath)) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
 			$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
@@ -685,7 +687,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		//for ($i = 0; $i < count($fileList); $i++){
 		for ($i = $startNo -1; $i < $endNo; $i++){
 			$filePath = $fileList[$i];
-			$relativeFilePath = substr($filePath, strlen($this->photoBasePath));
+			$relativeFilePath = substr($filePath, strlen($this->imageBasePath));
 
 			//$pathParts = pathinfo($filePath);
 			////$file = basename($filePath);
@@ -736,11 +738,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 						$checkDisabled = 'disabled ';		// チェックボックス使用制御
 						$serial = -1;
 					}
-				} else {
-					if (self::$_isLimitedUser){		// 使用限定ユーザの場合は削除不可
-						$checkDisabled = 'disabled ';		// チェックボックス使用制御
-						$serial = -1;
-					}
 				}
 				// ファイル削除用チェックボックス
 				//if (!$this->canDeleteFile || !is_writable($filePath)) $checkDisabled = 'disabled ';		// チェックボックス使用制御
@@ -775,10 +772,10 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		
 				if ($isActive){		// コンテンツが公開状態のとき
 					$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-					$iconTitle = $this->_('Published');
+//					$iconTitle = $this->_('Published');
 				} else {
 					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-					$iconTitle = $this->_('Unpublished');
+//					$iconTitle = $this->_('Unpublished');
 				}
 				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
@@ -1157,8 +1154,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
 	{
 		if (!$isSuccess) return;		// ファイルアップロード失敗のときは終了
-		
-		$account = $this->gEnv->getCurrentUserAccount();
 		
 		// ファイル名を作成
 		$code = $account . '-' . self::$_mainDb->getNewPhotoNo($this->_userId);		// 画像コード
