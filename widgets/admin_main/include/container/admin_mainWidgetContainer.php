@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -177,6 +177,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 //					} else if ($task == 'loginstatus' ||				// ログイン状況
 //								$task == 'loginstatus_history'){		// ログイン状況ユーザ単位履歴
 //						$task = 'loginstatus';
+					} else if ($task == 'tempimage' ||				// テンプレート画像編集
+								$task == 'tempimage_detail'){		// テンプレート画像編集詳細
+						$task = 'tempimage';
 					} else if ($task == 'pagedef_detail' ||		// ページ定義詳細
 								$task == 'pagedef_mobile' ||	// 携帯用ページ定義
 								$task == 'pagedef_smartphone'){		// スマートフォン用ページ定義
@@ -247,6 +250,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 //						case 'loginstatus':	// ログイン状況
 						case 'widgetlist':	// ウィジェットリスト
 						case 'templist':	// テンプレートリスト
+						case 'tempimage':	// テンプレート画像編集
 						case 'pagedef':		// 画面定義
 						case 'help':	// ヘルプ画面
 						case 'initsystem':	// システム初期化

@@ -1,0 +1,212 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateList()
+{
+	if (!window.confirm('{_LC_MSG_FILE_UPLOAD}')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('{_LC_MSG_SELECT_ITEM_TO_DEL}');
+		} else {
+			if (!window.confirm('{_LC_MSG_DELETE_ITEM}')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('{_LC_MSG_SELECT_ITEM_TO_EDIT}');
+		} else {
+			// ディレクトリは編集不可
+			if (items[i] == -1){
+				window.alert('{_LC_MSG_DIRECTORY_NOT_ALLOWED}');
+				return true;
+			}
+			document.main.task.value = 'imagebrowse_detail';
+			document.main.act.value = 'edit';
+			document.main.serial.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySerial(serial){
+	document.main.task.value = 'imagebrowse_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+// ディレクトリ作成ダイアログ表示
+function showCreateDir()
+{
+	var dialogText = '';
+	
+	dialogText += '{_LC_LABEL_DIRECTORY_NAME}<input type="text" id="dir_name" name="dir_name" class="form-control" value="{DIRECTORY_NAME}" maxlength="100" />';
+
+	// ダイアログ作成
+	BootstrapDialog.show({
+		title: '{_LC_LABEL_CREATE_DIRECTORY}',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: '{_LC_LABEL_CREATE}',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				// 入力状態のチェック
+				var value = $('#dir_name').val();
+				if (value){
+					dialog.close();
+					
+					// ディレクトリ名を送信
+					createDir(value);
+				} else {
+					alert("ディレクトリ名を入力してください");
+				}
+			}
+		}]
+	});
+}
+// ディレクトリを作成
+function createDir(dir)
+{
+	document.main.directory_name.value = dir;
+	document.main.act.value = 'createdir';
+	document.main.submit();
+	return true;
+}
+// ファイルアップロードダイアログ表示
+function showFileUpload()
+{
+	var dialogText = '';
+	
+	dialogText += '<div id="uploader_image">{UPLOAD_AREA}</div>';
+
+	// ダイアログ作成
+	BootstrapDialog.show({
+		title: '{_LC_LABEL_UPLOAD}',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		onshown: function(dialog) {
+			// 画像アップローダー作成
+			m3CreateDragDropUploadFile('uploader_image', '{UPLOAD_IMAGE_URL}');
+		},
+		buttons: [{
+			id: 'cancel',
+			label: '終了',
+			action: function(dialog) {
+				dialog.close();
+				
+				// 画面再表示
+				window.location.href = window.location.href;
+			}
+		}]
+	});
+}
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
+	// ディレクトリ作成ボタンの処理
+	$("#createdirbutton").click(function (){
+		showCreateDir();
+	});
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="imagebrowse" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="path" value="{PATH}" />
+<input type="hidden" name="directory_name" />
+
+<h3 class="m3config_h" style="margin-right:20px;"><span {_HELP_IMAGEBROWSE_LIST}>画像一覧</span></h3><span {_HELP_IMAGEBROWSE_PATH}>{_LC_LABEL_PATH}</span>{PATH_LINK}
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGEBROWSE_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/>
+</div></div></div>
+
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
+<div {_HELP_IMAGEBROWSE_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="showFileUpload();" value="アップロード" /><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
+</div></div></div>
+
+<table id="mainconfig">
+    <thead>
+    <tr>
+	    <th class="select"><span {_HELP_IMAGEBROWSE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <th style="border-right:none;width:50px;"></th>
+	    <th style="border-left:none;width:300px;"><span {_HELP_IMAGEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
+	    <th class="status"><span {_HELP_IMAGEBROWSE_STATUS}>{_LC_LABEL_STATUS}</span></th>
+	    <th width="10%"><span {_HELP_IMAGEBROWSE_IMAGE_CODE}>{_LC_LABEL_IMAGE_CODE}</span></th>
+	    <!--<th width="7%"><span {_HELP_IMAGEBROWSE_SIZE}>{_LC_LABEL_SIZE}</span></th>-->
+	    <th><span {_HELP_IMAGEBROWSE_VIEW_COUNT}>{_LC_LABEL_VIEW_COUNT}</span></th>
+	    <th class="status"><span {_HELP_IMAGEBROWSE_RATE}>{_LC_LABEL_RATE}</span></th>
+	    <th class="date_narrow"><span {_HELP_IMAGEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="file_list">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" {CHECK_DISABLED}/><input type="hidden" name="item{INDEX}_name" value="{NAME}" /></td>
+	    <td style="border-right:none;text-align:center;">{ICON}</td>
+	    <td style="border-left:none;">{FILENAME}{FILENAME_OPTION}</td>
+	    <td>{STATUS}</td>
+	    <td>{CODE}</td>
+	    <!--<td>{SIZE}</td>-->
+	    <td class="number">{VIEW_COUNT}</td>
+	    <td>{RATE}</td>
+	    <td>{DATE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</form>
+</div>
+</patTemplate:tmpl>
