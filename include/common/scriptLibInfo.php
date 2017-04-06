@@ -362,14 +362,10 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const WEBRTC_ADAPTER_FILENAME	= 'adapter-1.1.0.js';				// WebRTC
 
 	// Bootstrapライブラリ
-/*	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.6/js/bootstrap.min.js';			// bootstrap
-	const BOOTSTRAP_CSS				= 'bootstrap-3.3.6/css/bootstrap.min.css';
-	*/
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.7/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.3.7/css/bootstrap.min.css';
 	const BOOTSTRAP_ADMIN_CSS		= 'bootstrap-3.3.7/css/bootswatch_flatly_ja.css';	// 管理画面用のCSS
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
-//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.3.6/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.3.7/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
