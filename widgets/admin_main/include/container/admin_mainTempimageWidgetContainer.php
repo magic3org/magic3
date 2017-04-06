@@ -32,11 +32,10 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
-	const ICON_SIZE = 32;		// アイコンのサイズ
-	const LIST_ICON_SIZE = 64;		// リスト用アイコンのサイズ
+	const ICON_SIZE = 32;		// ディレクトリアイコンのサイズ
+	const LIST_ICON_SIZE = 128;		// 画像サムネールのサイズ
 	const DEFAULT_IMAGE_DIR = '/images';		// デフォルトの画像格納ディレクトリ
-//	const PHOTO_DIR = '/etc/photo';		// マスター画像格納ディレクトリ
-	const PHOTO_HOME_DIR = '/etc/photo/home';		// マスター画像格納ディレクトリ（ユーザ別)
+	const CACHE_DIR = '/.cache/images';			// 画像キャッシュディレクトリ
 	const DEFAULT_THUMBNAIL_SIZE = 128;		// サムネール画像サイズ
 	const DEFAULT_IMAGE_EXT = 'jpg';			// 画像ファイルのデフォルト拡張子
 	const DEFAULT_IMAGE_TYPE = IMAGETYPE_JPEG;
@@ -95,6 +94,20 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$task = $request->trimValueOf('task');
 		$this->templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
 
+		// パラメータチェック
+		if (empty($this->templateId)){
+			$this->setAppErrorMsg('テンプレートIDが設定されていません');
+			return;
+		}
+		
+		// 画像キャッシュディレクトリ作成
+		$cacheDir = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::CACHE_DIR;
+		if (!is_dir($cacheDir)){
+			if (!mkdir($cacheDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)){
+				$this->setAppErrorMsg('キャッシュディレクトリが作成できません');
+			}
+		}
+			
 		switch ($task){
 			case 'tempimage':
 			default:
@@ -121,14 +134,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function createList($request)
 	{
-		// パラメータチェック
-		if (empty($this->templateId)){
-			$this->setAppErrorMsg('テンプレートIDが設定されていません');
-			return;
-		}
-		
 		// 画像格納ディレクトリを取得
-		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;				
+		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;
 		if (!is_dir($this->imageBasePath)){
 			$this->setAppErrorMsg('画像ディレクトリが見つかりません。パス=' . $this->imageBasePath);
 			return;
@@ -298,35 +305,11 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$fileList = $this->getFileList($path);
 		$totalCount = count($fileList);
 
-		// 表示するページ番号の修正
-/*		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $viewCount + 1;		// 先頭番号
-		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
-		*/
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		$startNo = ($pageNo -1) * $maxListCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;// 最後の行番号
 		
-		// ページング用リンク作成
-/*		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					//$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-					$relativePath = substr($path, strlen($this->imageBasePath));
-					$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
-					if ($i > 1) $pageUrl .= '&page=' . $i;
-					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}*/
 		// ページングリンク作成
 		$relativePath = substr($path, strlen($this->imageBasePath));
 		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
@@ -695,13 +678,11 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 //			$file = end(explode('/', $filePath));			// pathinfo,basenameは日本語処理できないので日本語対応
 			$filePathArray = explode('/', $filePath);		// pathinfo,basenameは日本語処理できないので日本語対応
 			$file = end($filePathArray);
-			$size = '';
+			$size = '';				// ファイルサイズ
 			$fileLink = '';
 			$filenameOption = '';			// ファイル名オプション
-			$code = '';			// 画像コード
 			$checkDisabled = '';		// チェックボックス使用制御
-			$statusImg = '';			// 状態
-			$rating = '';			// 評価
+			$imageSize = '';
 			if (is_dir($filePath)){			// ディレクトリのとき
 				// アイコン作成
 				$iconUrl = $this->gEnv->getRootUrl() . self::FOLDER_ICON_FILE;
@@ -719,34 +700,33 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 					$checkDisabled = 'disabled ';		// チェックボックス使用制御
 				}
 				$serial = -1;
-				
-				$totalViewCount = '';		// 総参照数
-			} else {		// 画像ファイルのとき
-				// 画像情報取得
-//				$ret = self::$_mainDb->getPhotoInfo($file, $this->_langId, $row, $categoryRows);
-				if ($ret){
-					$serial = $row['ht_serial'];
-					$code = $row['ht_code'];			// 画像コード
-					$rating = $row['ht_rate_average'];			// 評価
+			} else {		// ファイルのとき
+				// 画像情報を取得
+				$isImageFile = false;
+				$imageSize = @getimagesize($filePath);
+				if ($imageSize){
+					$imageWidth = $imageSize[0];
+					$imageHeight = $imageSize[1];
+					$imageType = $imageSize[2];
+					$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
 
-					$filenameOption = '<br />元のファイル名： ' . $this->convertToDispString($row['ht_original_filename']);		// ファイル名オプション
-					$filenameOption .= '<br />タイトル名： ' . $this->convertToDispString($row['ht_name']);		// タイトル名
-	//				$filenameOption .= '<br />カテゴリー： ' . $this->convertToDispString($categoryStr);		// 所属カテゴリー
-					
-					// 使用限定ユーザの場合は、所有者でなければ削除できない
-					if (self::$_isLimitedUser && $this->_userId != $row['ht_owner_id']){
-						$checkDisabled = 'disabled ';		// チェックボックス使用制御
-						$serial = -1;
+					// 処理可能な画像ファイルタイプかどうか
+					if (in_array($imageMimeType, $this->permitMimeType)){
+						$isImageFile = true;
+						$imageSize = $imageWidth . 'x' . $imageHeight;
 					}
 				}
+
 				// ファイル削除用チェックボックス
 				//if (!$this->canDeleteFile || !is_writable($filePath)) $checkDisabled = 'disabled ';		// チェックボックス使用制御
 				
 //				$thumbnailPath = photo_mainCommonDef::getThumbnailPath($file);
 				
+				// サムネール画像作成
+				
 				// アイコン作成
 				$iconTitle = $this->convertToDispString($file);
-				if (file_exists($thumbnailPath)){	// サムネールが存在する場合
+				if ($isImageFile){				// 画像ファイルの場合
 //					$iconUrl = photo_mainCommonDef::getThumbnailUrl($file);
 					$iconTag = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">';
 					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::LIST_ICON_SIZE . '" height="' . self::LIST_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
@@ -761,23 +741,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				//$fileLink = $this->convertToDispString($file);
 				$fileLink = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">' . $this->convertToDispString($file) . '</a>';
 				$size = filesize($filePath);
-				
-				// 総参照数
-				//$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(photo_mainCommonDef::REF_TYPE_CONTENT, $row['ht_id']);
-				$totalViewCount = $row['ht_view_count'];
-				
-				// 公開状態
-				$isActive = false;		// 公開状態
-				if ($row['ht_visible']) $isActive = true;// 表示可能
-		
-				if ($isActive){		// コンテンツが公開状態のとき
-					$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-//					$iconTitle = $this->_('Published');
-				} else {
-					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-//					$iconTitle = $this->_('Unpublished');
-				}
-				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 	
 			// ファイル更新日時
@@ -790,12 +753,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				'name'		=> $this->convertToDispString($file),			// ファイル名
 				'filename'    	=> $fileLink,			// ファイル名
 				'filename_option'    	=> $filenameOption,			// ファイル名オプション
-				'code'		=> $this->convertToDispString($code),			// 画像コード
+				'image_size'	=> $imageSize,		// 画像サイズ
 				'size'     		=> $size,			// ファイルサイズ
 				'date'    => $updateDate,			// 更新日時
-				'view_count' => $totalViewCount,									// 総参照数
-				'rate' => $this->convertToDispString($rating),									// 評価
-				'status' => $statusImg,												// 公開状況
 				'check_disabled' => $checkDisabled,		// チェックボックス使用制御
 			);
 			$this->tmpl->addVars('file_list', $row);
