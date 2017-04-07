@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 07:25+0900\n"
-"PO-Revision-Date: 2017-04-05 07:29+0900\n"
+"POT-Creation-Date: 2017-04-08 08:39+0900\n"
+"PO-Revision-Date: 2017-04-08 08:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -318,7 +318,7 @@ msgstr "Hタグレベル"
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:76
 #: ../container/admin_mainOpelogWidgetContainer.php:156
-#: ../container/admin_mainTempimageWidgetContainer.php:390
+#: ../container/admin_mainTempimageWidgetContainer.php:312
 #: ../container/admin_mainUserlistWidgetContainer.php:162
 msgid "Range:"
 msgstr "範囲："
@@ -488,7 +488,7 @@ msgid "Mail Server Cofiguration"
 msgstr "メールサーバ設定"
 
 #: ../container/admin_mainCreateconfigWidgetContainer.php:86
-#: ../container/admin_mainTemplistWidgetContainer.php:372
+#: ../container/admin_mainTemplistWidgetContainer.php:373
 #: ../container/admin_mainWidgetlistWidgetContainer.php:499
 #, php-format
 msgid "Failed in downloading file. (detail: %s)"
@@ -828,8 +828,8 @@ msgstr "未設定"
 #: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:376
 #: ../container/admin_mainSmenudefWidgetContainer.php:419
-#: ../container/admin_mainTempimageWidgetContainer.php:424
-#: ../container/admin_mainTemplistWidgetContainer.php:462
+#: ../container/admin_mainTempimageWidgetContainer.php:344
+#: ../container/admin_mainTemplistWidgetContainer.php:463
 #: ../container/admin_mainUserlistWidgetContainer.php:122
 #: ../container/admin_mainUserlistWidgetContainer.php:150
 #: ../container/admin_mainUserlistWidgetContainer.php:301
@@ -867,7 +867,7 @@ msgid "Menu Definition Script"
 msgstr "管理メニュー定義ファイル"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:204
-#: ../container/admin_mainTemplistWidgetContainer.php:470
+#: ../container/admin_mainTemplistWidgetContainer.php:471
 #: ../container/admin_mainWidgetlistWidgetContainer.php:672
 msgid "Upload"
 msgstr "アップロード"
@@ -899,7 +899,7 @@ msgid "Failed in running script."
 msgstr "スクリプト実行に失敗しました"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:330
-#: ../container/admin_mainTemplistWidgetContainer.php:332
+#: ../container/admin_mainTemplistWidgetContainer.php:333
 #: ../container/admin_mainWidgetlistWidgetContainer.php:459
 #, php-format
 msgid ""
@@ -1064,8 +1064,8 @@ msgstr "リンク先のコンテンツに連動"
 #: ../container/admin_mainMenudefWidgetContainer.php:196
 #: ../container/admin_mainSmenudefWidgetContainer.php:176
 #: ../container/admin_mainSmenudefWidgetContainer.php:189
-#: ../container/admin_mainTempimageWidgetContainer.php:377
-#: ../container/admin_mainTemplistWidgetContainer.php:564
+#: ../container/admin_mainTempimageWidgetContainer.php:299
+#: ../container/admin_mainTemplistWidgetContainer.php:565
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -1090,7 +1090,7 @@ msgstr "削除する項目を選択してください"
 #: ../container/admin_mainMenudefWidgetContainer.php:191
 #: ../container/admin_mainOpelogWidgetContainer.php:145
 #: ../container/admin_mainSmenudefWidgetContainer.php:185
-#: ../container/admin_mainTempimageWidgetContainer.php:372
+#: ../container/admin_mainTempimageWidgetContainer.php:293
 #: ../container/admin_mainUserlistWidgetContainer.php:147
 msgid "Delete selected item?"
 msgstr "選択項目を削除しますか?"
@@ -1102,14 +1102,14 @@ msgid "Menu Definition"
 msgstr "メニュー定義"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:193
-#: ../container/admin_mainTempimageWidgetContainer.php:375
+#: ../container/admin_mainTempimageWidgetContainer.php:297
 msgid "Path:"
 msgstr "パス："
 
 #: ../container/admin_mainMenudefWidgetContainer.php:195
 #: ../container/admin_mainOpelogWidgetContainer.php:149
 #: ../container/admin_mainSmenudefWidgetContainer.php:188
-#: ../container/admin_mainTempimageWidgetContainer.php:376
+#: ../container/admin_mainTempimageWidgetContainer.php:298
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
@@ -1117,7 +1117,7 @@ msgstr "編集"
 #: ../container/admin_mainMenudefWidgetContainer.php:197
 #: ../container/admin_mainOpelogWidgetContainer.php:150
 #: ../container/admin_mainSmenudefWidgetContainer.php:190
-#: ../container/admin_mainTempimageWidgetContainer.php:378
+#: ../container/admin_mainTempimageWidgetContainer.php:300
 #: ../container/admin_mainUserlistWidgetContainer.php:149
 msgid "Select"
 msgstr "選択"
@@ -1130,7 +1130,7 @@ msgstr "区分"
 #: ../container/admin_mainMenudefWidgetContainer.php:203
 #: ../container/admin_mainPagedefWidgetContainer.php:168
 #: ../container/admin_mainSmenudefWidgetContainer.php:196
-#: ../container/admin_mainTemplistWidgetContainer.php:467
+#: ../container/admin_mainTemplistWidgetContainer.php:468
 #: ../container/admin_mainWidgetlistWidgetContainer.php:668
 #: ../help/help_menudef.php:67 ../help/help_templist.php:59
 #: ../help/help_widgetlist.php:63
@@ -1285,13 +1285,13 @@ msgid "Access Log No"
 msgstr "アクセスログ番号"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:143
-#: ../container/admin_mainTempimageWidgetContainer.php:370
+#: ../container/admin_mainTempimageWidgetContainer.php:291
 #: ../container/admin_mainUserlistWidgetContainer.php:145
 msgid "Select item to edit."
 msgstr "編集する項目を選択してください"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:144
-#: ../container/admin_mainTempimageWidgetContainer.php:371
+#: ../container/admin_mainTempimageWidgetContainer.php:292
 #: ../container/admin_mainUserlistWidgetContainer.php:146
 msgid "Select item to delete."
 msgstr "削除する項目を選択してください"
@@ -1336,7 +1336,7 @@ msgid "Layout"
 msgstr "レイアウト"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:146
-#: ../container/admin_mainTemplistWidgetContainer.php:567
+#: ../container/admin_mainTemplistWidgetContainer.php:568
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -1438,7 +1438,7 @@ msgid "Show config window"
 msgstr "設定画面を表示"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:682
-#: ../container/admin_mainTemplistWidgetContainer.php:465
+#: ../container/admin_mainTemplistWidgetContainer.php:466
 msgid "Default"
 msgstr "デフォルト"
 
@@ -1543,259 +1543,263 @@ msgstr "保存"
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:209
+#: ../container/admin_mainTempimageWidgetContainer.php:179
 #, php-format
 msgid "Include files not allowed to delete. (filename: %s)"
 msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:237
-#: ../container/admin_mainTempimageWidgetContainer.php:494
+#: ../container/admin_mainTempimageWidgetContainer.php:207
+#: ../container/admin_mainTempimageWidgetContainer.php:407
 msgid "Files deleted."
 msgstr "ファイルを削除しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:249
-#: ../container/admin_mainTempimageWidgetContainer.php:503
-#: ../container/admin_mainTempimageWidgetContainer.php:506
+#: ../container/admin_mainTempimageWidgetContainer.php:209
+#: ../container/admin_mainTempimageWidgetContainer.php:409
+#: ../container/admin_mainTempimageWidgetContainer.php:412
 msgid "Failed in deleting files."
 msgstr "ファイル削除に失敗しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:254
-#: ../container/admin_mainTempimageWidgetContainer.php:387
+#: ../container/admin_mainTempimageWidgetContainer.php:214
+#: ../container/admin_mainTempimageWidgetContainer.php:309
 msgid "Directory Name"
 msgstr "ディレクトリ名"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:260
+#: ../container/admin_mainTempimageWidgetContainer.php:220
 msgid "Directory created."
 msgstr "ディレクトリを作成しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:263
+#: ../container/admin_mainTempimageWidgetContainer.php:223
 msgid "Failed in creating directory."
 msgstr "ディレクトリの作成に失敗しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:369
+#: ../container/admin_mainTempimageWidgetContainer.php:290
 msgid "Files uploaded. Refresh file list?"
 msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:373
+#: ../container/admin_mainTempimageWidgetContainer.php:294
 msgid "Directory not allowed to edit."
 msgstr "ディレクトリは編集できません"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:374
+#: ../container/admin_mainTempimageWidgetContainer.php:295
 msgid "Create directory?"
 msgstr "ディレクトリを作成しますか?"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:379
+#: ../container/admin_mainTempimageWidgetContainer.php:296
+msgid "Template:"
+msgstr "テンプレート："
+
+#: ../container/admin_mainTempimageWidgetContainer.php:301
 msgid "Filename"
 msgstr "ファイル名"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:380
+#: ../container/admin_mainTempimageWidgetContainer.php:302
 #: ../container/admin_mainWidgetlistWidgetContainer.php:662
 msgid "Status"
 msgstr "状態"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:381
+#: ../container/admin_mainTempimageWidgetContainer.php:303
 msgid "Size"
 msgstr "サイズ"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:382
-#: ../container/admin_mainTemplistWidgetContainer.php:466
+#: ../container/admin_mainTempimageWidgetContainer.php:304
+#: ../container/admin_mainTemplistWidgetContainer.php:467
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 msgid "Update Date"
 msgstr "更新日"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:383
+#: ../container/admin_mainTempimageWidgetContainer.php:305
 msgid "Image Upload"
 msgstr "画像アップロード"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:384
+#: ../container/admin_mainTempimageWidgetContainer.php:306
 msgid "Max Filesize"
 msgstr "1ファイル最大サイズ"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:385
+#: ../container/admin_mainTempimageWidgetContainer.php:307
 msgid "Select Files"
 msgstr "ファイルを選択"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:386
+#: ../container/admin_mainTempimageWidgetContainer.php:308
 msgid "Create Directory"
 msgstr "ディレクトリ作成"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:388
+#: ../container/admin_mainTempimageWidgetContainer.php:310
 msgid "Create"
 msgstr "作成"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:389
-#: ../container/admin_mainTemplistWidgetContainer.php:471
+#: ../container/admin_mainTempimageWidgetContainer.php:311
+#: ../container/admin_mainTemplistWidgetContainer.php:472
 #: ../container/admin_mainWidgetlistWidgetContainer.php:673
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:440
+#: ../container/admin_mainTempimageWidgetContainer.php:353
 #: ../container/admin_mainUserlistWidgetContainer.php:354
 msgid "Item updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:457
+#: ../container/admin_mainTempimageWidgetContainer.php:370
 #: ../container/admin_mainUserlistWidgetContainer.php:364
 msgid "Failed in updating item."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:516
+#: ../container/admin_mainTempimageWidgetContainer.php:422
 msgid "Images recreated."
 msgstr "画像再作成しました"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:60
+#: ../container/admin_mainTemplistWidgetContainer.php:61
 #: ../container/admin_mainWidgetlistWidgetContainer.php:58
 msgid "For PC"
 msgstr "PC用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:61
+#: ../container/admin_mainTemplistWidgetContainer.php:62
 #: ../container/admin_mainWidgetlistWidgetContainer.php:59
 msgid "For Mobile"
 msgstr "携帯用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:62
+#: ../container/admin_mainTemplistWidgetContainer.php:63
 #: ../container/admin_mainWidgetlistWidgetContainer.php:60
 msgid "For Smartphone"
 msgstr "スマートフォン用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:186
+#: ../container/admin_mainTemplistWidgetContainer.php:187
 #, php-format
 msgid "New templates added. (templates count=%d)"
 msgstr "新規テンプレートを追加しました。(追加数=%d)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:189
+#: ../container/admin_mainTemplistWidgetContainer.php:190
 msgid "No new templates added."
 msgstr "新規テンプレートはありません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:194
-#: ../container/admin_mainTemplistWidgetContainer.php:380
+#: ../container/admin_mainTemplistWidgetContainer.php:195
+#: ../container/admin_mainTemplistWidgetContainer.php:381
 msgid "Template not selected."
 msgstr "テンプレートが選択されていません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:205
+#: ../container/admin_mainTemplistWidgetContainer.php:206
 #, php-format
 msgid "Template deleted. (template ID: %s)"
 msgstr "テンプレートを削除しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:208
+#: ../container/admin_mainTemplistWidgetContainer.php:209
 #, php-format
 msgid "Failed in deleting template. (template ID: %s)"
 msgstr "テンプレート削除に失敗しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:212
+#: ../container/admin_mainTemplistWidgetContainer.php:213
 #, php-format
 msgid "Failed in deleting template directory. (directory: %s)"
 msgstr "テンプレートのディレクトリが削除できませんでした。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:229
+#: ../container/admin_mainTemplistWidgetContainer.php:230
 #: ../container/admin_mainWidgetlistWidgetContainer.php:295
 msgid "Only zip format file is allowed to upload."
 msgstr "zip圧縮のファイルのみアップロード可能です"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:236
+#: ../container/admin_mainTemplistWidgetContainer.php:237
 #: ../container/admin_mainWidgetlistWidgetContainer.php:302
 #, php-format
 msgid "You are not allowed to write temporary directory. (directory: %s)"
 msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:288
+#: ../container/admin_mainTemplistWidgetContainer.php:289
 #, php-format
 msgid "The template already exists. (template ID: %s)"
 msgstr "テンプレートがすでに存在します。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:298
+#: ../container/admin_mainTemplistWidgetContainer.php:299
 #, php-format
 msgid "The template directory already exists. (directory: %s)"
 msgstr "テンプレートディレクトリがすでに存在します。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:309
+#: ../container/admin_mainTemplistWidgetContainer.php:310
 #, php-format
 msgid "File uploaded. (template ID: %s)"
 msgstr "ファイルのアップロードが完了しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:314
+#: ../container/admin_mainTemplistWidgetContainer.php:315
 #, php-format
 msgid "Failed in moving directory. (directory: %s)"
 msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:324
+#: ../container/admin_mainTemplistWidgetContainer.php:325
 #: ../container/admin_mainWidgetlistWidgetContainer.php:432
 #: ../container/admin_mainWidgetlistWidgetContainer.php:451
 msgid "Failed in uploading file."
 msgstr "ファイルのアップロードに失敗しました"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:453
+#: ../container/admin_mainTemplistWidgetContainer.php:454
 #: ../container/admin_mainWidgetlistWidgetContainer.php:651
 msgid "Update line?"
 msgstr "行を更新しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:454
+#: ../container/admin_mainTemplistWidgetContainer.php:455
 msgid "Delete tmplate?"
 msgstr "テンプレートを削除しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:455
+#: ../container/admin_mainTemplistWidgetContainer.php:456
 #: ../container/admin_mainWidgetlistWidgetContainer.php:653
 msgid "File not selected."
 msgstr "アップロードするファイルが選択されていません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:456
+#: ../container/admin_mainTemplistWidgetContainer.php:457
 #: ../container/admin_mainWidgetlistWidgetContainer.php:654
 msgid "Upload file."
 msgstr "ファイルをアップロードします"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:457
+#: ../container/admin_mainTemplistWidgetContainer.php:458
 #: ../help/help_templist.php:31
 msgid "Template List"
 msgstr "テンプレート一覧"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:459
+#: ../container/admin_mainTemplistWidgetContainer.php:460
 #: ../container/admin_mainWidgetlistWidgetContainer.php:658
 msgid "Install Directory:"
 msgstr "インストールディレクトリ:"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:460
+#: ../container/admin_mainTemplistWidgetContainer.php:461
 #: ../container/admin_mainWidgetlistWidgetContainer.php:659
 #: ../help/help_templist.php:71 ../help/help_widgetlist.php:75
 msgid "Reload directory"
 msgstr "ディレクトリ再読み込み"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:461
+#: ../container/admin_mainTemplistWidgetContainer.php:462
 #: ../help/help_templist.php:67
 msgid "Show detail"
 msgstr "詳細表示"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:463
+#: ../container/admin_mainTemplistWidgetContainer.php:464
 msgid "Format"
 msgstr "形式"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:464
+#: ../container/admin_mainTemplistWidgetContainer.php:465
 msgid "Genarator - Version"
 msgstr "生成ソフト - バージョン"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:468
+#: ../container/admin_mainTemplistWidgetContainer.php:469
 msgid "Template Upload (zip compressed file)"
 msgstr "テンプレートアップロード(zip圧縮ファイル)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:469
+#: ../container/admin_mainTemplistWidgetContainer.php:470
 #: ../container/admin_mainWidgetlistWidgetContainer.php:670
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:518
+#: ../container/admin_mainTemplistWidgetContainer.php:519
 msgid "Template not found."
 msgstr "テンプレートが見つかりません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:542
-#: ../container/admin_mainTemplistWidgetContainer.php:553
+#: ../container/admin_mainTemplistWidgetContainer.php:543
+#: ../container/admin_mainTemplistWidgetContainer.php:554
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:581
+#: ../container/admin_mainTemplistWidgetContainer.php:588
 msgid "Edit Template"
 msgstr "テンプレートを編集"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:628
-#: ../container/admin_mainTemplistWidgetContainer.php:685
+#: ../container/admin_mainTemplistWidgetContainer.php:635
+#: ../container/admin_mainTemplistWidgetContainer.php:692
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 

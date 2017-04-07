@@ -149,7 +149,10 @@ $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
 	
-	// ディレクトリ作成ボタンの処理
+	// ボタンの処理
+	$("#fileuploadbutton").click(function (){
+		showFileUpload();
+	});
 	$("#createdirbutton").click(function (){
 		showCreateDir();
 	});
@@ -166,14 +169,14 @@ $(function(){
 <input type="hidden" name="path" value="{PATH}" />
 <input type="hidden" name="directory_name" />
 
-<h3 class="m3config_h" style="margin-right:20px;"><span {_HELP_TEMPIMAGE_LIST}>画像一覧</span></h3><span {_HELP_TEMPIMAGE_PATH}>{_LC_LABEL_PATH}</span>{PATH_LINK}
+<h3 class="m3config_h" style="margin-right:20px;"><span {_HELP_TEMPIMAGE_LIST}>画像一覧</span></h3><span {_HELP_TEMPIMAGE_TEMPLATE}>{_LC_LABEL_TEMPLATE}</span><span style="margin-right:10px;">{TEMPLATE}</span> <span {_HELP_TEMPIMAGE_PATH}>{_LC_LABEL_PATH}</span>{PATH_LINK}
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_TEMPIMAGE_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/>
 </div></div></div>
 
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
 <div {_HELP_TEMPIMAGE_BUTTONS2}><div class="btn-group">
-<input type="button" class="button" onclick="showFileUpload();" value="アップロード" /><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
+<a href="javascript:void(0);" id="fileuploadbutton" class="button" role="button" rel="m3help" data-container="body" title="ファイルアップロード"><i class="glyphicon glyphicon-cloud-upload"></i></a><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
 </div></div></div>
 
 <table id="mainconfig">

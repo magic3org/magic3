@@ -272,6 +272,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		// ファイル一覧を作成
 		$this->createFileList($path, $fileList, $startNo, $endNo);
 		
+		$this->tmpl->addVar('_widget', 'template', $this->convertToDispString($this->templateId));		// テンプレート名
 		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
@@ -293,6 +294,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['msg_delete_item'] = $this->_('Delete selected item?');		// 選択項目を削除しますか?
 		$localeText['msg_directory_not_allowed'] = $this->_('Directory not allowed to edit.');		// ディレクトリは編集できません
 		$localeText['msg_create_directory'] = $this->_('Create directory?');		// ディレクトリを作成しますか?
+		$localeText['label_template'] = $this->_('Template:');		// テンプレート
 		$localeText['label_path'] = $this->_('Path:');		// パス
 		$localeText['label_edit'] = $this->_('Edit');		// 編集
 		$localeText['label_delete'] = $this->_('Delete');		// 削除
