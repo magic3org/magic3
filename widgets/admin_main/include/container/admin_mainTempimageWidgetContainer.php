@@ -240,7 +240,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 					$absPath .= DIRECTORY_SEPARATOR . $pathArray[$i];
 					$relativeFilePath = substr($absPath, strlen($this->imageBasePath));
 					$pathLink .= '&nbsp;' . DIRECTORY_SEPARATOR . '&nbsp;';
-					$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+			//		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+					$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 					$pathLink .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($pathArray[$i]) . '</a>';
 				}
 			}
@@ -257,7 +258,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// ページングリンク作成
 		$relativePath = substr($path, strlen($this->imageBasePath));
-		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
+	//	$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
+		$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativePath;
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $pageUrl);
 
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
@@ -464,7 +466,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				
 				// 画像URL取得
 //				photo_mainCommonDef::adjustImageSize($width, $height, photo_mainCommonDef::DEFAULT_PUBLIC_IMAGE_SIZE);
-				$originalImageUrl = $this->_baseUrl . '&task=imagebrowse_direct&act=getimage&' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;		// 元の写真
+//				$originalImageUrl = $this->_baseUrl . '&task=imagebrowse_direct&act=getimage&' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;		// 元の写真
 				$imageUrl = $originalImageUrl . '&width=' . $width . '&height=' . $height;// 画像
 				$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" width="' . $width . '" height="' . $height . '" border="0" alt="' . $photoId . '" title="' . $photoId . '" />';
 				
@@ -559,7 +561,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($path != $this->imageBasePath){
 			$file = '..';
 			$relativeFilePath = substr(dirname($path), strlen($this->imageBasePath));
-			$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+//			$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+			$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 			$fileLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($file) . '</a>';
 					
 			// アイコン作成
@@ -597,7 +600,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				// アイコン作成
 				$iconUrl = $this->gEnv->getRootUrl() . self::FOLDER_ICON_FILE;
 				$iconTitle = $this->convertToDispString($file);
-				$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+//				$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
+				$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 				$iconTag = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">';
 				$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 				$iconTag .= '</a>';
