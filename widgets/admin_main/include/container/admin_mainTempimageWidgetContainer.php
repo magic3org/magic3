@@ -17,7 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	private $serialArray = array();		// 表示されているファイルのインデックス番号
+//	private $serialArray = array();		// 表示されているファイルのインデックス番号
+	private $fileArray = array();		// ファイル名リスト
 	private $imageBasePath;				// 画像格納ディレクトリ
 	private $cacheDir;					// サムネール画像用キャッシュディレクトリ
 	private $sortOrderByDateAsc;		// 日付でソート
@@ -275,7 +276,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'template', $this->convertToDispString($this->templateId));		// テンプレート名
 		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+//		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "file_list", implode($this->fileArray, ','));// ファイル名のリストを設定
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL
@@ -593,7 +595,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 			$relativeFilePath = substr($filePath, strlen($this->imageBasePath));
 
 			$filePathArray = explode('/', $filePath);		// pathinfo,basenameは日本語処理できないので日本語対応
-			$file = end($filePathArray);
+			$file = end($filePathArray);		// ファイル名
 			$size = '';				// ファイルサイズ
 			$fileLink = '';
 			$checkDisabled = '';		// チェックボックス使用制御
@@ -670,17 +672,17 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 						$iconUrl = $this->gEnv->getUrlToPath($filePath);
 					}
 					
-					$iconTag = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">';
+					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
 					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageWidth . '" height="' . $imageHeight . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
 				} else {
 					$iconUrl = $this->gEnv->getRootUrl() . self::FILE_ICON_FILE;
-					$iconTag = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">';
+					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
 					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
 				}
 				
-				$fileLink = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">' . $this->convertToDispString($file) . '</a>';
+				$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
 				$size = filesize($filePath);
 			}
 	
@@ -702,7 +704,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->tmpl->parseTemplate('file_list', 'a');
 			
 			// インデックス番号を保存
-			$this->serialArray[] = $serial;
+	//		$this->serialArray[] = $serial;
+			$this->fileArray[] = $this->convertToDispString($file);			// ファイル名
 			$index++;
 		}
 	}
