@@ -658,7 +658,12 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 							}
 							$iconUrl = $this->gEnv->getUrlToPath($thumbPath);
 						} else {
-							$ret = $this->gInstance->getImageManager()->createImage($filePath, $thumbPath, self::LIST_ICON_SIZE, $imageType, $destSize);
+							// ディレクトリ作成
+							$ret = true;
+							$thumbDir = dirname($thumbPath);
+							if (!is_dir($thumbDir)) $ret = mkdir($thumbDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+							
+							if ($ret) $ret = $this->gInstance->getImageManager()->createImage($filePath, $thumbPath, self::LIST_ICON_SIZE, $imageType, $destSize);
 							if ($ret){
 								$imageWidth = $destSize['width'];
 								$imageHeight = $destSize['height'];
@@ -862,7 +867,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$filename = $resultObj['file']['filename'];				// 元のファイル名
 		$destFilePath = $this->path . DIRECTORY_SEPARATOR . $filename;
 		
-		if (file_exists($destFilePath)) $this->writeError(__METHOD__, 'アップロード画像がすでに存在しています。新しい画像で置き換えます。', 1100, 'ファイル名=' . $filename);
+		if (file_exists($destFilePath)) $this->writeUserError(__METHOD__, 'アップロード画像がすでに存在しています。新しい画像で置き換えます。', 1100, 'ファイル名=' . $filename);
 
 		// アップされたファイルをコピー
 		$ret = copy($filePath, $destFilePath);
