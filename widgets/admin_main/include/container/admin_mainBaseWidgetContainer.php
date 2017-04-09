@@ -28,8 +28,9 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
 	
 	// 画面
+	const TASK_TEMPLIST			= 'templist';				// テンプレート一覧
 	const TASK_TEMPIMAGE		= 'tempimage';				// テンプレート画像編集
-	const TASK_TEMPIMAGE_DETAIL	= 'tempimage_detail';		// テンプレート画像編集詳細
+	const TASK_TEMPIMAGE_DETAIL	= 'tempimage_detail';		// テンプレート画像編集(詳細)
 	const TASK_TEST				= 'test';					// テスト画面
 	
 	/**

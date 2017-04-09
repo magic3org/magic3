@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
@@ -22,7 +22,7 @@ require_once($gEnvManager->getCommonPath()		. '/archive.php');
 require_once($gEnvManager->getJoomlaRootPath() . '/JParameter.php');
 require_once($gEnvManager->getJoomlaRootPath() . '/JRender.php');
 				
-class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $newTemplate = array();		// 新規追加テンプレート
@@ -30,7 +30,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $templateTypeArray;		// テンプレートタイプ
 	private $templateType;			// 現在のテンプレートタイプ
 	private $isExistsTemplateList;		// テンプレートが存在するかどうか
-	const BREADCRUMB_TITLE			= 'テンプレート管理';		// 画面タイトル名(パンくずリスト)
+//	const BREADCRUMB_TITLE			= 'テンプレート管理';		// 画面タイトル名(パンくずリスト)
 	const TITLE_INFO_URL			= 'テンプレートの情報';		// テンプレート情報URLのタイトル
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const previewImageSizeHeight = 27;
@@ -99,10 +99,10 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
 	 * @return								なし
 	 */
-	function _postAssign($request, &$param)
+/*	function _postAssign($request, &$param)
 	{
 		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
-	}
+	}*/
 	/**
 	 * テンプレートにデータ埋め込む
 	 *

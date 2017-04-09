@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBaseWidgetContainer.php');
 
-class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContainer
 {
 //	private $serialArray = array();		// 表示されているファイルのインデックス番号
 	private $fileArray = array();		// ファイル名リスト
