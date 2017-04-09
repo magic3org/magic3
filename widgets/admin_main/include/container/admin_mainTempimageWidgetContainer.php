@@ -618,14 +618,18 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
 					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageWidth . '" height="' . $imageHeight . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
-				} else {
+					
+					$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
+				} else {	// 画像ファイル以外のとき
+					// 画像ファイル以外の場合は詳細画面へ遷移しない
 					$iconUrl = $this->gEnv->getRootUrl() . self::FILE_ICON_FILE;
-					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
-					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-					$iconTag .= '</a>';
+//					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
+					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+//					$iconTag .= '</a>';
+
+					$fileLink = $this->convertToDispString($file);
 				}
 				
-				$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
 				$size = filesize($filePath);
 			}
 	
