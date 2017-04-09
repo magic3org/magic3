@@ -329,25 +329,37 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 		$openby = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);
 		
 		$act = $request->trimValueOf('act');
-		$this->serialNo = intval($request->trimValueOf('serial'));		// 選択項目のシリアル番号
-		$name = $request->trimValueOf('item_name');
-		$sortOrder = $request->trimValueOf('item_sort_order');			// 表示順
-		$location = $request->trimValueOf('item_location');		// 撮影場所
-		$camera = $request->trimValueOf('item_camera');		// カメラ
-		$summary = $request->trimValueOf('item_summary');			// 画像概要
-/*		if (self::$_configArray[photo_mainCommonDef::CF_HTML_PHOTO_DESCRIPTION]){		// HTMLタイプの説明のとき
-			$description = $request->valueOf('item_description');			// 画像説明
+		$filename = $request->trimValueOf('filename');
+
+		// 画像格納ディレクトリを取得
+		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;
+		if (!is_dir($this->imageBasePath)){
+			$this->setAppErrorMsg('画像ディレクトリが見つかりません。パス=' . $this->imageBasePath);
+			return;
+		}
+
+		// パスを取得
+		$path = trim($request->valueOf('path'));		// 現在のパス
+		if (empty($path)){
+			$path = $this->imageBasePath;
 		} else {
-			$description = $request->trimValueOf('item_description');			// 画像説明
-		}*/
-		$keyword = $request->trimValueOf('item_keyword');	// 検索キーワード
-		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
+			if (!strStartsWith($path, '/')) $path = '/' . $path;
+			$path = $this->imageBasePath . $path;
+		}
+		// パスのエラーチェック
+		if (isDescendantPath($this->imageBasePath, $path)){
+			if (!is_dir($path)){
+				return;
+			}
+		} else {
+			return;
+		}
+		$filePath = $path . '/' . $filename;
 		
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 行更新のとき
 			// 入力チェック
-			$this->checkInput($name, $this->_('Name'));		// 名前
-			$this->checkNumeric($sortOrder, '表示順');
+
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
@@ -356,7 +368,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 //								''/*画像縦横サイズ*/, ''/*元のファイル名*/, ''/*ファイルサイズ*/, $name, $camera, $location, $updatePhotoDate, $summary, $description, ''/*ライセンス*/, 0/*所有者*/, $keyword, $visible, $sortOrder, $categoryArray/*画像カテゴリー*/, ''/*サムネールファイル名*/, $newSerial);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
-					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
 					
 /*					// 運用ログを残す
@@ -376,9 +387,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
-			$ret = self::$_mainDb->getPhotoInfoBySerial($this->serialNo, $row);
+
 			if ($ret){
-				$delItems = array($this->serialNo);	// シリアル番号
 //				$imagePath = $this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR . $row['ht_dir'] . DIRECTORY_SEPARATOR . $row['ht_public_id'];
 				$delFiles = array($imagePath);	// ファイル名
 				$delSystemFiles = array($row['ht_thumb_filename']);		// 削除するシステム用画像ファイル
@@ -416,139 +426,67 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 			} else {
 				$this->setAppErrorMsg($this->_('Failed in deleting files.'));			// ファイル削除に失敗しました
 			}
-		} else if ($act == 'recreate_image'){		// 画像再作成のとき
-			$ret = self::$_mainDb->getPhotoInfoBySerial($this->serialNo, $row);
-			if ($ret){
-				$photoId		= $row['ht_public_id'];
-				$originalName	= $row['ht_original_filename'];
-//				$imagePath		= $this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR . $row['ht_dir'] . DIRECTORY_SEPARATOR . $row['ht_public_id'];
-				$ret = $this->createImages($photoId, $imagePath, $originalName, $thumbFilename);
-				if ($ret){		// ファイル削除成功のとき
-					$this->setGuidanceMsg($this->_('Images recreated.'));			// 画像再作成しました
-				}
-			}
-			$reloadData = true;		// データの再読み込み
+		} else if ($act == 'uploadimage'){		// 画像アップロード
+			// 作業ディレクトリを作成
+			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
+		} else if ($act == 'getimage'){			// 画像取得
+			$this->getImageByType($type);
 		} else {
 			// 初期値を設定
 			$reloadData = true;		// データの再読み込み
+			
+			// 作業ディレクトリを削除
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 		}
-		$isPhtoInfo = false;		// 画像情報があるかどうか
-		if ($reloadData){		// データの再読み込み
-//			$ret = self::$_mainDb->getPhotoInfoBySerial($this->serialNo, $row, $categoryRows);
-			if ($ret){
-				$name = $row['ht_name'];
-				$photoId = $row['ht_public_id'];
-				$photoCode = $row['ht_code'];
-				$originalName = $row['ht_original_filename'];
-				$size = $row['ht_image_size'];
-				$author = $row['lu_name'];
-				$sortOrder = $row['ht_sort_order'];		// ソート順
-				$location = $row['ht_location'];		// 撮影場所
-				$camera = $row['ht_camera'];		// カメラ
-				$summary = $row['ht_summary'];			// 画像概要
-				$description = $row['ht_description'];			// 画像説明
-				$keyword = $row['ht_keyword'];	// 検索キーワード
-				$visible = $row['ht_visible'];		// 公開
 
-				$photoTime = $this->convertToDispTime($row['ht_time'], 1/*時分*/);	// 撮影時間
+		// 画像情報取得
+		if (file_exists($filePath)){
+			$imageSize = @getimagesize($filePath);
+			if ($imageSize){
+				$imageWidth = $imageSize[0];
+				$imageHeight = $imageSize[1];
+				$imageType = $imageSize[2];
+				$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
 				
-				// 画像サイズ
-				list($width, $height) = explode('x', $row['ht_image_size']);
-				$originalWidth = $width;
-				$originalHeight = $height;
-				
-				// 画像フォーマット
-				$mimeType = $row['ht_mime_type'];
-				$format = '未検出';
-				if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)){
-					$format = 'GIF';
-				} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)){
-					$format = 'JPEG';
-				} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)){
-					$format = 'PNG';
-				} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_BMP)){
-					$format = 'BMP';
-				}
-				
-				// 画像URL取得
-//				photo_mainCommonDef::adjustImageSize($width, $height, photo_mainCommonDef::DEFAULT_PUBLIC_IMAGE_SIZE);
-//				$originalImageUrl = $this->_baseUrl . '&task=imagebrowse_direct&act=getimage&' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;		// 元の写真
-				$imageUrl = $originalImageUrl . '&width=' . $width . '&height=' . $height;// 画像
-				$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" width="' . $width . '" height="' . $height . '" border="0" alt="' . $photoId . '" title="' . $photoId . '" />';
-				
-				$isPhtoInfo = true;		// 画像情報があるかどうか
-			} else {
-//				$this->setAppErrorMsg($this->_('Can not find photo information.'));			// 画像情報が見つかりません
+				$imageSizeStr = $imageWidth . 'x' . $imageHeight;
 			}
+			
+			// ファイルサイズ
+			$size = filesize($filePath);
+			
+			// 画像URL
+			$imageUrl = $this->gEnv->getUrlToPath($filePath);
 		}
-		// 入力領域の表示制御
-//		if (!self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_DATE]){
-			$this->tmpl->setAttribute('show_photo_date', 'visibility', 'hidden');			// 画像情報(撮影日)を使用
-			$this->tmpl->setAttribute('show_calender', 'visibility', 'hidden');				// カレンダーを作成しない
-//		}
-//		if (!self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_LOCATION]) $this->tmpl->setAttribute('show_photo_location', 'visibility', 'hidden');	// 画像情報(撮影場所)を使用
-//		if (!self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_CAMERA]) $this->tmpl->setAttribute('show_photo_camera', 'visibility', 'hidden');		// 画像情報(カメラ)を使用
-//		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_DESCRIPTION]){
-//			if (self::$_configArray[photo_mainCommonDef::CF_HTML_PHOTO_DESCRIPTION]) $this->tmpl->setAttribute('show_html_description', 'visibility', 'visible');		// HTMLエディターを表示
-//		} else {
-//			$this->tmpl->setAttribute('show_photo_description', 'visibility', 'hidden');	// 画像情報(説明)を使用
-//		}
-//		if (!self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_KEYWORD]) $this->tmpl->setAttribute('show_photo_keyword', 'visibility', 'hidden');	// 画像情報(検索キーワード)を使用
-		
-		// サムネールのURLの作成
-		$thumbnailUrlHtml = '';
-//		$thumbailSizeArray = trimExplode(',', self::$_configArray[photo_mainCommonDef::CF_THUMBNAIL_SIZE]);
-//		if (empty($thumbailSizeArray)) $thumbailSizeArray = array(photo_mainCommonDef::DEFAULT_THUMBNAIL_SIZE);
-		for ($i = 0; $i < count($thumbailSizeArray); $i++){
-			$thumbnailSize = $thumbailSizeArray[$i];
-//			$thumbnailPath = photo_mainCommonDef::getThumbnailPath($photoId, $thumbnailSize);
-			if (file_exists($thumbnailPath)){		// サムネールが存在するとき
-				$thumbnailUrlHtml .= '<b><font color="green">';
-			} else {
-				$thumbnailUrlHtml .= '<b><font color="red">';
-			}
-//			$thumbnailUrlHtml .= $this->convertToDispString($this->getUrl(photo_mainCommonDef::getThumbnailUrl($photoId, $thumbnailSize)));
-			$thumbnailUrlHtml .= '</font></b><br />';
-		}
+							
+		// アップロード実行用URL
+/*		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
+		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';*/
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_TEMPIMAGE_DETAIL;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));
+		$this->tmpl->addVar("_widget", "upload_url_sitelogo", $this->getUrl($uploadUrl));
 								
 		// 取得データを設定
-		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
-		$this->tmpl->addVar("_widget", "photo_id", $this->convertToDispString($photoId));
-		$this->tmpl->addVar("_widget", "code", $this->convertToDispString($photoCode));
-		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));
-		$this->tmpl->addVar("_widget", "sort_order", $this->convertToDispString($sortOrder));
-		$this->tmpl->addVar("_widget", "original_name", $this->convertToDispString($originalName));
+		$this->tmpl->addVar("_widget", "filename", $this->convertToDispString($filename));
+
 		$this->tmpl->addVar("_widget", "image_tag", $imageTag);
-		$this->tmpl->addVar("_widget", "image_url", $this->getUrl($originalImageUrl));
-		$this->tmpl->addVar("_widget", "format", $this->convertToDispString($format));
+		$this->tmpl->addVar("_widget", "image_url", $this->getUrl($imageUrl));
+
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));
-		$this->tmpl->addVar("_widget", "author", $this->convertToDispString($author));
-		$this->tmpl->addVar("_widget", "summary", $this->convertToDispString($summary));			// 画像概要
-/*		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_LOCATION]){	// 画像情報(撮影場所)を使用のとき
-			$this->tmpl->addVar("show_photo_location", "location", $this->convertToDispString($location));	// 撮影場所
-		}
-		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_CAMERA]){		// 画像情報(カメラ)を使用のとき
-			$this->tmpl->addVar("show_photo_camera", "camera", $this->convertToDispString($camera));		// カメラ
-		}
-		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_DESCRIPTION]){		// 画像情報(説明)を使用のとき
-			$this->tmpl->addVar("show_photo_description", "description", $this->convertToDispString($description));
-		}
-		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_KEYWORD]){	// 画像情報(検索キーワード)を使用のとき
-			$this->tmpl->addVar("show_photo_keyword", "keyword", $this->convertToDispString($keyword));	// 検索キーワード
-		}
-		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_DATE]){		// 画像情報(撮影日)を使用のとき
-			$this->tmpl->addVar("show_photo_date", "date", $photoDate);	// 撮影日
-			$this->tmpl->addVar('show_photo_date', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
-		}*/
+		$this->tmpl->addVar("_widget", "image_size", $this->convertToDispString($imageSizeStr));
+		
+
 //		$this->tmpl->addVar('_widget', 'public_image_url', $this->convertToDispString($this->getUrl(photo_mainCommonDef::getPublicImageUrl($photoId))));	// 公開画像URL
 		$this->tmpl->addVar('_widget', 'thumbnail_url', $thumbnailUrlHtml);	// サムネール画像URL
-		$checkedStr = '';
-		if ($visible) $checkedStr = 'checked';
-		$this->tmpl->addVar("_widget", "visible", $checkedStr);		// 公開
+
 		
-		if (!empty($this->serialNo) && $isPhtoInfo){		// 新規以外で画像情報がある場合
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新、削除ボタン表示
-		}
+		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新、削除ボタン表示
+
 		// 「戻る」ボタンの表示
 		if ($openby == 'simple' || $openby == 'tabs') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示またはタブ表示のときは戻るボタンを隠す
 	}
