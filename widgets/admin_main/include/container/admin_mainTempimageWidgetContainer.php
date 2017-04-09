@@ -483,12 +483,10 @@ class admin_mainTempimageWidgetContainer extends admin_mainBaseWidgetContainer
 
 //		$this->tmpl->addVar('_widget', 'public_image_url', $this->convertToDispString($this->getUrl(photo_mainCommonDef::getPublicImageUrl($photoId))));	// 公開画像URL
 		$this->tmpl->addVar('_widget', 'thumbnail_url', $thumbnailUrlHtml);	// サムネール画像URL
+		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
 
-		
-		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新、削除ボタン表示
-
-		// 「戻る」ボタンの表示
-		if ($openby == 'simple' || $openby == 'tabs') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示またはタブ表示のときは戻るボタンを隠す
+//		// 「戻る」ボタンの表示
+//		if ($openby == 'simple' || $openby == 'tabs') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示またはタブ表示のときは戻るボタンを隠す
 	}
 	/**
 	 * ファイル一覧を作成
