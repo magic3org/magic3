@@ -17,7 +17,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBas
 
 class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContainer
 {
-//	private $serialArray = array();		// 表示されているファイルのインデックス番号
 	private $fileArray = array();		// ファイル名リスト
 	private $imageBasePath;				// 画像格納ディレクトリ
 	private $cacheDir;					// サムネール画像用キャッシュディレクトリ
@@ -31,9 +30,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 	const PARENT_ICON_FILE = '/images/system/tree/parent32.png';		// 親ディレクトリアイコン
 	const ICON_SIZE = 32;		// ディレクトリアイコンのサイズ
 	const LIST_ICON_SIZE = 128;		// サムネール画像のサイズ
+	const PREVIEW_IMAGE_MAX_SIZE = 200;			// プレビュー画像の最大サイズ
 	const DEFAULT_IMAGE_DIR = '/images';		// デフォルトの画像格納ディレクトリ
 	const CACHE_DIR = '/.cache/images';			// 画像キャッシュディレクトリ
-//	const DEFAULT_THUMBNAIL_SIZE = 128;		// サムネール画像サイズ
 	const IMAGE_QUALITY = 100;			// 生成画像の品質(0～100)
 	
 	/**
@@ -104,7 +103,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			case 'tempimage_detail':
 				$this->createDetail($request);
 				break;
-			case 'tempimage_direct':
+/*			case 'tempimage_direct':
 				if ($act == 'getimage'){		// 画像取得
 					$width = $request->trimValueOf('width');
 					$height = $request->trimValueOf('height');
@@ -112,6 +111,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 //					photo_mainCommonDef::getImage($photoId, self::$_mainDb, $width, $height);
 				}
 				break;
+				*/
 		}
 	}
 	/**
@@ -276,7 +276,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$this->tmpl->addVar('_widget', 'template', $this->convertToDispString($this->templateId));		// テンプレート名
 		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
-//		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "file_list", implode($this->fileArray, ','));// ファイル名のリストを設定
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
@@ -329,8 +328,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$openby = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);
 		
 		$act = $request->trimValueOf('act');
-		$filename = $request->trimValueOf('filename');
-
+		$this->filename = $request->trimValueOf('filename');
+		$imageUdated = $request->trimValueOf('image_updated');		// 画像更新フラグ
+		
 		// 画像格納ディレクトリを取得
 		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;
 		if (!is_dir($this->imageBasePath)){
@@ -354,86 +354,36 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		} else {
 			return;
 		}
-		$filePath = $path . '/' . $filename;
+		$filePath = $path . '/' . $this->filename;
 		
 		$reloadData = false;		// データの再読み込み
-		if ($act == 'update'){		// 行更新のとき
-			// 入力チェック
-
+		if ($act == 'update'){		// 更新のとき
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// サイトロゴ
+				$ret = mvFileToDir($tmpDir, $siteLogoFilenameArray, $this->gInstance->getImageManager()->getSiteLogoPath());
 
-//				$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, $this->serialNo/*更新*/, $this->_langId, ''/*ファイル名*/, ''/*格納ディレクトリ*/, ''/*画像コード*/, ''/*画像MIMEタイプ*/,
-//								''/*画像縦横サイズ*/, ''/*元のファイル名*/, ''/*ファイルサイズ*/, $name, $camera, $location, $updatePhotoDate, $summary, $description, ''/*ライセンス*/, 0/*所有者*/, $keyword, $visible, $sortOrder, $categoryArray/*画像カテゴリー*/, ''/*サムネールファイル名*/, $newSerial);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 					$reloadData = true;		// データの再読み込み
 					
-/*					// 運用ログを残す
-					$ret = self::$_mainDb->getPhotoInfoBySerial($newSerial, $row, $categoryRows);
-					if ($ret){
-						$photoId = $row['ht_public_id'];
-						$name = $row['ht_name'];
-						$updateDt = $row['ht_create_dt'];		// コンテンツ作成日時
-					}
-					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
-											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
-					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_UPDATE_CONTENT, $name), 2401, 'ID=' . $photoId, $eventParam);
-					*/
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
 				}
-			}
-		} else if ($act == 'delete'){		// 削除のとき
-
-			if ($ret){
-//				$imagePath = $this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR . $row['ht_dir'] . DIRECTORY_SEPARATOR . $row['ht_public_id'];
-				$delFiles = array($imagePath);	// ファイル名
-				$delSystemFiles = array($row['ht_thumb_filename']);		// 削除するシステム用画像ファイル
-				$photoId = $row['ht_public_id'];
-				$name = $row['ht_name'];
-						
-				// 写真情報削除
-				$ret = self::$_mainDb->delPhotoInfo($delItems);
-				if ($ret){
-					// ファイル、ディレクトリ削除
-					$imageFiles = array();
-					for ($i = 0; $i < count($delFiles); $i++){
-						$file = $delFiles[$i];
-						if (is_dir($file)){
-							// ファイル、ディレクトリがある場合は削除しない
-							$files = getFileList($file);
-							if (count($files) == 0){
-								if (!rmDirectory($file)) $ret = false;
-							} else {
-								$ret = false;
-							}
-						} else {
-							if (!@unlink($file)) $ret = false;
-							$imageFiles[] = $file;
-						}
-					}
-					// 公開画像、サムネールを削除
-					$ret = $this->deleteCacheImages($imageFiles);
-				}
-				if ($ret){		// ファイル削除成功のとき
-					$this->setGuidanceMsg($this->_('Files deleted.'));			// ファイルを削除しました
-				} else {
-					$this->setAppErrorMsg($this->_('Failed in deleting files.'));			// ファイル削除に失敗しました
-				}
-			} else {
-				$this->setAppErrorMsg($this->_('Failed in deleting files.'));			// ファイル削除に失敗しました
+				
+				// 作業ディレクトリを削除
+				rmDirectory($tmpDir);
 			}
 		} else if ($act == 'uploadimage'){		// 画像アップロード
 			// 作業ディレクトリを作成
 			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 			
 			// Ajaxでのファイルアップロード処理
-			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
+			$this->ajaxUploadFile($request, array($this, 'uploadReplaceFile'), $tmpDir);
 		} else if ($act == 'getimage'){			// 画像取得
-			$this->getImageByType($type);
+			$this->getImage();
 		} else {
 			// 初期値を設定
 			$reloadData = true;		// データの再読み込み
@@ -452,16 +402,45 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				$imageType = $imageSize[2];
 				$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
 				
+				// 画像サイズ(表示用)
 				$imageSizeStr = $imageWidth . 'x' . $imageHeight;
+				
+				// 画像URL
+				$imageUrl = $this->gEnv->getUrlToPath($filePath);
+			
+				// プレビュー画像のサイズ
+				$imageWidth = $imageSize[0];
+				$imageHeight = $imageSize[1];
+				if ($imageWidth > self::PREVIEW_IMAGE_MAX_SIZE || $imageHeight > self::PREVIEW_IMAGE_MAX_SIZE){
+					if ($imageWidth > $imageHeight){
+						$newWidth	= self::PREVIEW_IMAGE_MAX_SIZE;
+						$newHeight	= round(self::PREVIEW_IMAGE_MAX_SIZE * $imageHeight / $imageWidth);
+					} else {
+						$newHeight	= self::PREVIEW_IMAGE_MAX_SIZE;
+						$newWidth	= round(self::PREVIEW_IMAGE_MAX_SIZE * $imageWidth / $imageHeight);
+					}
+					$imageWidth = $newWidth;
+					$imageHeight = $newHeight;
+				}
+				$title = $this->convertToDispString($this->filename);
+				$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" width="' . $imageWidth . '" height="' . $imageHeight . '" alt="' . $title . '" title="' . $title . '" />';
 			}
 			
 			// ファイルサイズ
 			$size = filesize($filePath);
-			
-			// 画像URL
-			$imageUrl = $this->gEnv->getUrlToPath($filePath);
 		}
-							
+
+		// ##### 画像の表示 #####
+		// アップロードされているファイルがある場合は、アップロード画像を表示
+		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		
+//		$path = $tmpDir . DIRECTORY_SEPARATOR . $filename;
+//		if (!file_exists($path))
+			
+		// アップロード画像の状態
+		$updateStatus = '0';
+		$this->tmpl->addVar("_widget", "image_updated", $updateStatus);
+				
 		// アップロード実行用URL
 /*		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
 		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
@@ -469,24 +448,21 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_TEMPIMAGE_DETAIL;
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));
-		$this->tmpl->addVar("_widget", "upload_url_sitelogo", $this->getUrl($uploadUrl));
+		$uploadUrl .= '&filename' . '=' . $this->convertUrlToHtmlEntity($this->filename);
+		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 								
 		// 取得データを設定
-		$this->tmpl->addVar("_widget", "filename", $this->convertToDispString($filename));
-
-		$this->tmpl->addVar("_widget", "image_tag", $imageTag);
-		$this->tmpl->addVar("_widget", "image_url", $this->getUrl($imageUrl));
+		$this->tmpl->addVar("_widget", "filename", $this->convertToDispString($this->filename));
+		$this->tmpl->addVar("_widget", "src_image_tag", $imageTag);				// 画像
+//		$this->tmpl->addVar("_widget", "src_image_url", $this->getUrl($imageUrl));
 
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));
 		$this->tmpl->addVar("_widget", "image_size", $this->convertToDispString($imageSizeStr));
 		
 
-//		$this->tmpl->addVar('_widget', 'public_image_url', $this->convertToDispString($this->getUrl(photo_mainCommonDef::getPublicImageUrl($photoId))));	// 公開画像URL
-		$this->tmpl->addVar('_widget', 'thumbnail_url', $thumbnailUrlHtml);	// サムネール画像URL
+//		$this->tmpl->addVar('_widget', 'dest_image_url', $this->convertToDispString($this->getUrl(photo_mainCommonDef::getPublicImageUrl($photoId))));	// 公開画像URL
+//		$this->tmpl->addVar('_widget', 'dest_image_url', $thumbnailUrlHtml);	// サムネール画像URL
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
-
-//		// 「戻る」ボタンの表示
-//		if ($openby == 'simple' || $openby == 'tabs') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示またはタブ表示のときは戻るボタンを隠す
 	}
 	/**
 	 * ファイル一覧を作成
@@ -651,7 +627,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			$this->tmpl->parseTemplate('file_list', 'a');
 			
 			// インデックス番号を保存
-	//		$this->serialArray[] = $serial;
 			$this->fileArray[] = $this->convertToDispString($file);			// ファイル名
 			$index++;
 		}
@@ -724,50 +699,42 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		}
 	}
 	/**
-	 * 各種画像作成
+	 * 一時ディレクトリ内の画像を取得
 	 *
-	 * @param string $photoId				公開画像ID
-	 * @param string $imagePath				画像パス
-	 * @param string $originalFilename		オリジナル画像名
-	 * @param string $thumbFilename			サムネールファイル名(画像情報格納用)
-	 * @return bool 						true=成功、失敗
+	 * @return					なし
 	 */
-	function createImages($photoId, $imagePath, $originalFilename, &$thumbFilename)
+	function getImage()
 	{
-		$ret = true;
-		$imageSize = @getimagesize($imagePath);
-		if ($imageSize){
-			$imageType = $imageSize[2];
-		} else {
-			return false;
-		}
-		// ##### システム用サムネール作成 #####
-		$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_PHOTO, 0/*PC用*/, $photoId, $imagePath, $destFilename);
-		if ($ret){
-			$thumbFilename = implode(';', $destFilename);
-		} else {
-			$this->writeError(__METHOD__, 'システム用画像ファイル作成に失敗しました。', 1100, '元のファイル名=' . $originalFilename);// 運用ログに記録
-		}
+		// 画像パス作成
+		$imagePath = '';
+		if (!empty($this->filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $this->filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
 		
-		// ##### サムネール画像作成 #####
-		// サムネール画像サイズ取得
-//		$thumbailSizeArray = trimExplode(',', self::$_configArray[photo_mainCommonDef::CF_THUMBNAIL_SIZE]);
-//		if (empty($thumbailSizeArray)) $thumbailSizeArray = array(photo_mainCommonDef::DEFAULT_THUMBNAIL_SIZE);
-		for ($i = 0; $i < count($thumbailSizeArray); $i++){
-			$thumbnailSize = $thumbailSizeArray[$i];
-//			$thumbnailPath = photo_mainCommonDef::getThumbnailPath($photoId, $thumbnailSize);
-			//$ret = $this->createThumbImage($imagePath, $imageType, $thumbnailPath, self::DEFAULT_IMAGE_TYPE, $thumbnailSize);
-//			if (self::$_configArray[photo_mainCommonDef::CF_THUMBNAIL_CROP]){		// 切り取りサムネールの場合
-//				$ret = $this->gInstance->getImageManager()->createThumb($imagePath, $thumbnailPath, $thumbnailSize, self::DEFAULT_IMAGE_TYPE, true);
-//			} else {
-//				$ret = $this->gInstance->getImageManager()->createThumb($imagePath, $thumbnailPath, $thumbnailSize, self::DEFAULT_IMAGE_TYPE, false, self::$_configArray[photo_mainCommonDef::CF_THUMBNAIL_BG_COLOR]);
-//			}
-			if (!$ret){
-				$this->writeError(__METHOD__, '画像ファイル作成に失敗しました。', 1100,
-									'元のファイル名=' . $originalFilename . ', 画像ファイル=' . $thumbnailPath);// 運用ログに記録
-			}
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
 		}
-		return $ret;
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
 	}
 	/**
 	 * キャッシュ画像削除
@@ -843,6 +810,63 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		} else {
 			// エラーコード設定
 			$resultObj = array('error' => '596 File Upload Error');
+		}
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadReplaceFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+		if (!$isSuccess) return;		// ファイルアップロード失敗のときは終了
+		
+		// ファイルタイプのチェック
+		$imageSize = @getimagesize($filePath);
+		if ($imageSize){
+			$imageWidth = $imageSize[0];
+			$imageHeight = $imageSize[1];
+			$imageType = $imageSize[2];
+			$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+
+			// 処理可能な画像ファイルタイプでないときは終了
+			if (!in_array($imageMimeType, $this->permitMimeType)){
+				$resultObj = array('error' => 'Image type is not allowed.');
+				return;
+			}
+		} else {
+			$resultObj = array('error' => 'Image file is only allowed.');
+			return;
+		}
+		
+		$imageSizeTag = $imageWidth . 'x' . $imageHeight;
+		$size = filesize($filePath);
+		
+		// アップロードされた画像用のパスを取得
+		$destFilePath = $this->gEnv->getTempDirBySession() . DIRECTORY_SEPARATOR . $this->filename;
+				
+		// アップされたファイルをコピー
+		$ret = copy($filePath, $destFilePath);
+		if ($ret){
+
+			
+			// 画像参照用URL
+			$imageUrl = $this->gEnv->getDefaultAdminUrl();
+			$imageUrl .= '?task=' . self::TASK_TEMPIMAGE_DETAIL;
+			$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+			$imageUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId;
+			$imageUrl .= '&filename' . '=' . $this->convertUrlToHtmlEntity($this->filename);
+			$imageUrl .= '&' . date('YmdHis');
+			$resultObj['url'] = $imageUrl;
+			
+			$resultObj['size'] = $size;
+		} else {// エラーの場合
+			$resultObj = array('error' => 'Could not create resized images.');
 		}
 	}
 }

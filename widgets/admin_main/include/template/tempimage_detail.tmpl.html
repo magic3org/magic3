@@ -19,15 +19,15 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function uploader_useravatar_onSuccess(files, data)
+function uploader_onSuccess(files, data)
 {
 	// 画像を読み込む
-	$('#useravatar_preview').attr('src', data.url).load(function(){
+	$('#dest_image').attr('src', data.url).load(function(){
 		m3AdjustParentWindow();// 親ウィンドウリサイズ
 	});
 	
 	// 編集フラグを更新
-	document.main.useravatar_updated.value = '1';
+	document.main.image_updated.value = '1';
 }
 function cancelItem(){
 	if (document.main._backurl.value){
@@ -42,7 +42,7 @@ $(function() {
 	m3SetConfigTable('config_area');
 	
 	// 画像アップローダー作成
-	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', uploader_useravatar_onSuccess);
+	m3CreateDragDropUploadFile('uploader_image', '{UPLOAD_URL}', uploader_onSuccess);
 });
 //]]>
 </script>
@@ -51,7 +51,7 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="tempimage" />
 <input type="hidden" name="act" />
-<input type="hidden" name="useravatar_updated" value="{USERAVATAR_UPDATED}" />
+<input type="hidden" name="image_updated" value="{IMAGE_UPDATED}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGEBROWSE_DETAIL}>画像詳細</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_TEAMPIMAGE_BUTTONS}><div class="btn-group">
@@ -71,11 +71,11 @@ $(function() {
 	</tr>
     <tr style="height:100px;">
 	    <th><span>画像</span></th>
-	    <td colspan="3"><img id="image_preview" class="pull-left" src="{IMAGE_URL}" /></td>
+	    <td colspan="3">{SRC_IMAGE_TAG}<!--<img id="src_image" class="pull-left" src="{SRC_IMAGE_URL}" />--></td>
 	</tr>
     <tr style="height:100px;">
 	    <th><span>置き換え画像</span></th>
-	    <td colspan="3"><img id="useravatar_preview" class="pull-left" src="{USERAVATAR_URL}" /><div class="pull-right"><div id="uploader_useravatar">{UPLOAD_AREA}</div></div></td>
+	    <td colspan="3"><img id="dest_image" class="pull-left" src="{DEST_IMAGE_URL}" /><div class="pull-right"><div id="uploader_image">{UPLOAD_AREA}</div></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_TEAMPIMAGE_SIZE}>サイズ(バイト)</span></th>
