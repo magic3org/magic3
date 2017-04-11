@@ -20,7 +20,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 	private $fileArray = array();		// ファイル名リスト
 	private $imageBasePath;				// 画像格納ディレクトリ
 	private $cacheDir;					// サムネール画像用キャッシュディレクトリ
-	private $sortOrderByDateAsc;		// 日付でソート
 	private $permitMimeType;			// アップロードを許可する画像タイプ
 	private $templateId;				// テンプレートID
 	private $filePath;					// 操作対象画像のパス(詳細画面)
@@ -400,7 +399,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				$imageSizeStr = $imageWidth . 'x' . $imageHeight;
 				
 				// 画像URL
-				$imageUrl = $this->gEnv->getUrlToPath($this->filePath) . '?' . date('YmdHis');;
+				$imageUrl = $this->gEnv->getUrlToPath($this->filePath) . '?' . date('YmdHis');
 			
 				// プレビュー画像のサイズ
 				list($imageWidth, $imageHeight) = $this->getPreviewImageSize($imageSize[0], $imageSize[1]);
@@ -563,7 +562,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 					}
 					
 					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
-					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageWidth . '" height="' . $imageHeight . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '?' . date('YmdHis') . '" width="' . $imageWidth . '" height="' . $imageHeight . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
 					
 					$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
@@ -621,20 +620,19 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		}
 		$dir->close();
 		
-		// 一覧を日付でソート
-		$this->sortOrderByDateAsc = false;	// 日付で降順にソート
-		usort($fileList, array($this, 'sortOrderByDate'));
+		// アルファベット順にソート
+		usort($fileList, array($this, 'sortOrderByAlphabet'));
 		
 		return $fileList;
 	}
 	/**
-	 * ファイルパスを日付で昇順にソートする。ディレクトリは先頭。
+	 * ファイルをアルファベットで昇順にソートする。ディレクトリは先頭。
 	 *
 	 * @param string  	$path1			比較するパス1
 	 * @param string	$path2			比較するパス2
 	 * @return int						同じとき0、$path1が$path2より大きいとき1,$path1が$path2より小さいとき-1を返す
 	 */
-	function sortOrderByDate($path1, $path2)
+	function sortOrderByAlphabet($path1, $path2)
 	{
 		// ディレクトリは常に先頭に表示
 		if (is_dir($path1)){			// ディレクトリのとき
@@ -642,15 +640,8 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		} else {
 			if (is_dir($path2)) return 1;	// ディレクトリのとき
 		}
-		$fileTime1 = filemtime($path1);
-		$fileTime2 = filemtime($path2);
 		
-		if ($fileTime1 == $fileTime2) return 0;
-		if ($this->sortOrderByDateAsc){	// 日付で昇順にソート
-			return ($fileTime1 < $fileTime2) ? -1 : 1;
-		} else {
-			return ($fileTime1 > $fileTime2) ? -1 : 1;
-		}
+		return strcasecmp($path1, $path2);
 	}
 	/**
 	 * windowパスを使用する場合は、Javascriptに認識させる
