@@ -339,21 +339,34 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		}
 		$this->filePath = $path . '/' . $this->filename;
 		
-		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 更新のとき
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 			
+			// 入れ替え画像の存在チェック
+			$destImagePath = $tmpDir . '/' . $this->filename;
+			if (!file_exists($destImagePath)) $this->setAppErrorMsg('入れ替え画像が見つかりません。画像ファイル=' . $this->filePath);
+			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// サイトロゴ
-				$ret = mvFileToDir($tmpDir, $siteLogoFilenameArray, $this->gInstance->getImageManager()->getSiteLogoPath());
+				// 画像ファイルを入れ替え
+				$tmpImagePath = $tmpDir . '/.' . $this->filename;			// ファイル名に「.」をつける
+				$ret = mvFile($this->filePath, $tmpImagePath);
+				if ($ret) $ret = mvFile($destImagePath, $this->filePath);
 
-				if ($ret){		// データ追加成功のとき
+				if ($ret){		// 画像更新成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
-					$reloadData = true;		// データの再読み込み
 					
+					// キャッシュ画像を削除
+					$relativeFilePath = substr($this->filePath, strlen($this->imageBasePath));
+					$thumbPath = $this->cacheDir . $relativeFilePath;		// サムネール画像パス
+						
+					// サムネール画像が存在しない場合は作成
+					if (file_exists($thumbPath)) unlink($thumbPath);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
+					
+					// エラーの場合は画像を戻す
+					if (file_exists($tmpImagePath)) mvFile($tmpImagePath, $this->filePath);
 				}
 				
 				// 作業ディレクトリを削除
@@ -368,9 +381,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		} else if ($act == 'getimage'){			// 画像取得
 			$this->getImage();
 		} else {
-			// 初期値を設定
-			$reloadData = true;		// データの再読み込み
-			
 			// 作業ディレクトリを削除
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 			rmDirectory($tmpDir);
@@ -419,6 +429,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 								
 		// 取得データを設定
+		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar("_widget", "filename", $this->convertToDispString($this->filename));
 		$this->tmpl->addVar("_widget", "src_image_tag", $imageTag);				// 画像
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));
