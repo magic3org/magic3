@@ -400,7 +400,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				$imageSizeStr = $imageWidth . 'x' . $imageHeight;
 				
 				// 画像URL
-				$imageUrl = $this->gEnv->getUrlToPath($this->filePath);
+				$imageUrl = $this->gEnv->getUrlToPath($this->filePath) . '?' . date('YmdHis');;
 			
 				// プレビュー画像のサイズ
 				list($imageWidth, $imageHeight) = $this->getPreviewImageSize($imageSize[0], $imageSize[1]);
