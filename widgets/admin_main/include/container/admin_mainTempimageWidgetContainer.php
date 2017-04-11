@@ -104,15 +104,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			case 'tempimage_detail':
 				$this->createDetail($request);
 				break;
-/*			case 'tempimage_direct':
-				if ($act == 'getimage'){		// 画像取得
-					$width = $request->trimValueOf('width');
-					$height = $request->trimValueOf('height');
-					$photoId = $request->trimValueOf(M3_REQUEST_PARAM_PHOTO_ID);			// 画像ID
-//					photo_mainCommonDef::getImage($photoId, self::$_mainDb, $width, $height);
-				}
-				break;
-				*/
 		}
 	}
 	/**
@@ -242,7 +233,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 					$absPath .= DIRECTORY_SEPARATOR . $pathArray[$i];
 					$relativeFilePath = substr($absPath, strlen($this->imageBasePath));
 					$pathLink .= '&nbsp;' . DIRECTORY_SEPARATOR . '&nbsp;';
-			//		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 					$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 					$pathLink .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($pathArray[$i]) . '</a>';
 				}
@@ -260,16 +250,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		
 		// ページングリンク作成
 		$relativePath = substr($path, strlen($this->imageBasePath));
-	//	$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
 		$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativePath;
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $pageUrl);
-
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));// 全 x件
-//		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-//		$this->tmpl->addVar("search_range", "start_no", $startNo);
-//		$this->tmpl->addVar("search_range", "end_no", $endNo);
-//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// ファイル一覧を作成
 		$this->createFileList($path, $fileList, $startNo, $endNo);
@@ -281,12 +264,11 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL
-//		$param = M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_TEMPIMAGE;
-//		$param .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-//		$param .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));					// アップロードディレクトリ
-		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_TEMPIMAGE;
+		$uploadUrl  = $this->gEnv->getDefaultAdminUrl();
+		$uploadUrl .= '?task=' . self::TASK_TEMPIMAGE;
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . substr($path, strlen($this->imageBasePath));
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId;
+		$uploadUrl .= '&path=' . substr($path, strlen($this->imageBasePath));
 		$this->tmpl->addVar("_widget", "upload_image_url", $this->getUrl($uploadUrl));
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
 	
@@ -410,19 +392,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				$imageUrl = $this->gEnv->getUrlToPath($this->filePath);
 			
 				// プレビュー画像のサイズ
-/*				$imageWidth = $imageSize[0];
-				$imageHeight = $imageSize[1];
-				if ($imageWidth > self::PREVIEW_IMAGE_MAX_SIZE || $imageHeight > self::PREVIEW_IMAGE_MAX_SIZE){
-					if ($imageWidth > $imageHeight){
-						$newWidth	= self::PREVIEW_IMAGE_MAX_SIZE;
-						$newHeight	= round(self::PREVIEW_IMAGE_MAX_SIZE * $imageHeight / $imageWidth);
-					} else {
-						$newHeight	= self::PREVIEW_IMAGE_MAX_SIZE;
-						$newWidth	= round(self::PREVIEW_IMAGE_MAX_SIZE * $imageWidth / $imageHeight);
-					}
-					$imageWidth = $newWidth;
-					$imageHeight = $newHeight;
-				}*/
 				list($imageWidth, $imageHeight) = $this->getPreviewImageSize($imageSize[0], $imageSize[1]);
 				
 				$title = $this->convertToDispString($this->filename);
@@ -436,9 +405,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		// ##### 画像の表示 #####
 		// アップロードされているファイルがある場合は、アップロード画像を表示
 		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
-		
-//		$path = $tmpDir . DIRECTORY_SEPARATOR . $filename;
-//		if (!file_exists($path))
 			
 		// アップロード画像の状態
 		$updateStatus = '0';
@@ -449,20 +415,14 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$uploadUrl .= '?task=' . self::TASK_TEMPIMAGE_DETAIL;
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->imageBasePath)));
-		$uploadUrl .= '&filename' . '=' . $this->convertUrlToHtmlEntity($this->filename);
+		$uploadUrl .= '&filename' . '=' . $this->filename;
 		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 								
 		// 取得データを設定
 		$this->tmpl->addVar("_widget", "filename", $this->convertToDispString($this->filename));
 		$this->tmpl->addVar("_widget", "src_image_tag", $imageTag);				// 画像
-//		$this->tmpl->addVar("_widget", "src_image_url", $this->getUrl($imageUrl));
-
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));
 		$this->tmpl->addVar("_widget", "image_size", $this->convertToDispString($imageSizeStr));
-		
-
-//		$this->tmpl->addVar('_widget', 'dest_image_url', $this->convertToDispString($this->getUrl(photo_mainCommonDef::getPublicImageUrl($photoId))));	// 公開画像URL
-//		$this->tmpl->addVar('_widget', 'dest_image_url', $thumbnailUrlHtml);	// サムネール画像URL
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
 	}
 	/**
@@ -480,7 +440,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		if ($path != $this->imageBasePath){
 			$file = '..';
 			$relativeFilePath = substr(dirname($path), strlen($this->imageBasePath));
-//			$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 			$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 			$fileLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($file) . '</a>';
 					
@@ -519,7 +478,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				// アイコン作成
 				$iconUrl = $this->gEnv->getRootUrl() . self::FOLDER_ICON_FILE;
 				$iconTitle = $this->convertToDispString($file);
-//				$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 				$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
 				$iconTag = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">';
 				$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
@@ -600,9 +558,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				} else {	// 画像ファイル以外のとき
 					// 画像ファイル以外の場合は詳細画面へ遷移しない
 					$iconUrl = $this->gEnv->getRootUrl() . self::FILE_ICON_FILE;
-//					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
 					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-//					$iconTag .= '</a>';
 
 					$fileLink = $this->convertToDispString($file);
 				}
@@ -903,7 +859,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			$imageUrl .= '?task=' . self::TASK_TEMPIMAGE_DETAIL;
 			$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
 			$imageUrl .= '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId;
-			$imageUrl .= '&filename' . '=' . $this->convertUrlToHtmlEntity($this->filename);
+			$imageUrl .= '&filename' . '=' . $this->filename;
 			$imageUrl .= '&' . date('YmdHis');
 			
 			// 戻り値を設定
@@ -911,6 +867,10 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			$resultObj['size'] = $size;		// ファイルサイズ
 			$resultObj['width'] = $width;
 			$resultObj['height'] = $height;
+			
+			// 画像サイズが変更されている場合は赤で画像サイズを表示
+			if ($srcImageWidth != $imageWidth || $srcImageHeight != $imageHeight) $imageSizeTag = '<span style="color:red">' . $imageSizeTag . '</span>';
+			$resultObj['imagesizetag'] = $imageSizeTag;
 			
 		} else {// エラーの場合
 			$resultObj = array('error' => 'Could not create resized images.');
