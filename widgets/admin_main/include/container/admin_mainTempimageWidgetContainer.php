@@ -155,8 +155,9 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 			// 作業ディレクトリ削除
 			rmDirectory($tmpDir);
 		} else if ($act == 'delete'){			// ファイル削除のとき
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
+			$listedItem = explode(',', $request->trimValueOf('filelist'));
 			$delFiles = array();	// ファイル名
+			
 			for ($i = 0; $i < count($listedItem); $i++){
 				// 項目がチェックされているかを取得
 				$itemName = 'item' . $i . '_selected';
@@ -175,7 +176,6 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 				}
 			}
 			if ($this->getMsgCount() == 0 && count($delFiles) > 0){
-
 				// ファイル、ディレクトリ削除
 				$imageFiles = array();
 				for ($i = 0; $i < count($delFiles); $i++){
@@ -193,6 +193,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 						$imageFiles[] = $file;
 					}
 				}
+
 				// サムネール画像を削除
 				$ret = $this->deleteCacheImages($imageFiles);
 
