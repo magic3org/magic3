@@ -21,8 +21,19 @@ function updateItem(){
 }
 function uploader_onSuccess(files, data)
 {
+	// 画像を一旦非表示にする
+	$('#dest_image').hide();
+	
 	// 画像を読み込む
 	$('#dest_image').attr('src', data.url).load(function(){
+		// 画像表示
+		$(this).attr('width', data.width);
+		$(this).attr('height', data.height);
+		$(this).show();
+		
+		$('#dest_filesize').html(data.size);
+		$('#dest_imagesize').html(data.imagesizetag);
+		
 		m3AdjustParentWindow();// 親ウィンドウリサイズ
 	});
 	
@@ -71,7 +82,7 @@ $(function() {
 	</tr>
     <tr style="height:100px;">
 	    <th><span>画像</span></th>
-	    <td colspan="3">{SRC_IMAGE_TAG}<!--<img id="src_image" class="pull-left" src="{SRC_IMAGE_URL}" />--></td>
+	    <td colspan="3">{SRC_IMAGE_TAG}</td>
 	</tr>
     <tr style="height:100px;">
 	    <th><span>置き換え画像</span></th>
@@ -79,9 +90,9 @@ $(function() {
 	</tr>
     <tr>
 	    <th><span {_HELP_TEAMPIMAGE_SIZE}>サイズ(バイト)</span></th>
-	    <td><div class="form-control-static m3config_item">{DEST_SIZE}</div></td>
+	    <td><div class="form-control-static m3config_item"><span id="dest_filesize"></span></div></td>
 	    <th><span {_HELP_TEAMPIMAGE_IMAGE_SIZE}>画像サイズ(横x縦)</span></th>
-	    <td><div class="form-control-static m3config_item">{DEST_IMAGE_SIZE}</div></td>
+	    <td><div class="form-control-static m3config_item"><span id="dest_imagesize"></span></div></td>
 	</tr>
     </tbody>
 </table>
