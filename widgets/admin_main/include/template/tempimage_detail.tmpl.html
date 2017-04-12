@@ -41,13 +41,8 @@ function uploader_onSuccess(files, data)
 	document.main.image_updated.value = '1';
 }
 function cancelItem(){
-	if (document.main._backurl.value){
-		location.href = document.main._backurl.value;
-		return false;
-	} else {
-		history.back();
-		return false;
-	}
+	location.href = location;
+	return false;
 }
 $(function() {
 	m3SetConfigTable('config_area');
