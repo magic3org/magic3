@@ -21,7 +21,7 @@
 DELETE FROM _templates WHERE tm_id = 'bs_single_orange';
 INSERT INTO _templates
 (tm_id,                           tm_name,                  tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_info_url, tm_create_dt) VALUES
-('bs_single_orange',                'bs_single_orange',       10,       0,              false,     true,             true,        0,             'https://startbootstrap.com/template-overviews/grayscale/',          now());
+('bs_single_orange',                'bs_single_orange',       10,       0,              false,     true,             true,        0,             'https://startbootstrap.com/template-overviews/creative/',          now());
 
 -- ページ定義マスター
 ALTER TABLE _page_def MODIFY pd_title     TEXT NOT NULL;       -- タイトル
