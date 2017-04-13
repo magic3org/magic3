@@ -505,6 +505,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 		static $browserIconFile = array(
 			'opera'							=> 'opera.png',
 			'opera next'					=> 'operanext.png',
+			'silk'							=> 'silk.png',
 			'msie'							=> 'ie.png',
 			'microsoft internet explorer'	=> 'ie.png',
 			'internet explorer'				=> 'ie.png',
