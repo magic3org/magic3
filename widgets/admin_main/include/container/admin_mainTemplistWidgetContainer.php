@@ -585,7 +585,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			$editDisabled = 'disabled';
 			$editUrl = '';
 		}
-		$editButtonTag = $this->gDesign->createEditButton($editUrl, $this->_('Edit Template'), ''/*タグID*/, $editDisabled/*ボタン状態*/);
+//		$editButtonTag = $this->gDesign->createEditButton($editUrl, $this->_('Edit Template'), ''/*タグID*/, $editDisabled/*ボタン状態*/);
 		
 		$row = array(
 			'no'			=> $index + 1,													// 行番号
@@ -601,7 +601,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
 			'preview_button'	=> $previewButtonTag,		// プレビューボタン
 			'download_button' 	=> $downloadButtonTag,		// ダウンロードボタン
-			'edit_button' 		=> $editButtonTag			// テンプレート編集ボタン
+//			'edit_button' 		=> $editButtonTag,			// テンプレート編集ボタン
+			'edit_disabled'		=> $editDisabled,		// テンプレート編集ボタンの使用可否
+			'edit_url'			=> $editUrl				// テンプレート画像編集用URL
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');
