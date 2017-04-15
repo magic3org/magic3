@@ -6,4 +6,10 @@
   <author></author>
   <authorUrl></authorUrl>
   <description>Bootstrap type template</description>
+  <develop>
+    <less>
+      <source>creative.less</source>
+      <destination>creative.css</destination>
+    </less>
+  </develop>
 </install>
