@@ -57,7 +57,7 @@ class help_templist extends HelpConv
 			),
 			'templist_act' => array(	
 				'title' =>	$this->_('Operation'),			// 操作
-				'body' =>	$this->_('You can operate below.<br /><strong>Delete</strong> - Delete template.<br /><strong>Preview</strong> - Preview template with no widgets.<br /><strong>Download</strong> - Download template with zip format compressed. The compressed file can be upload by Template Upload area.')		// 各種操作を行います。<br />●削除<br />テンプレートをシステムから削除します。<br />●プレビュー<br />テンプレートがプレビューできます。<br />●ダウンロード<br />テンプレートをZIP圧縮形式でダウンロードします。このファイルはそのまま「テンプレートアップロード」からシステムへインストールできる形式です。
+				'body' =>	$this->_('You can operate below.<br /><strong>Delete</strong> - Delete template.<br /><strong>Preview</strong> - Preview template with no widgets.<br /><strong>Download</strong> - Download template with zip compressed. The compressed file can be upload by Template Upload area.<br /><strong>Edit</strong> - Customize template.')		// 各種操作を行います。<br />●削除<br />テンプレートをシステムから削除します。<br />●プレビュー<br />テンプレートがプレビューできます。<br />●ダウンロード<br />テンプレートをZIP圧縮形式でダウンロードします。このファイルはそのまま「テンプレートアップロード」からシステムへインストールできる形式です。<br />●編集<br />テンプレートを編集します。
 			),
 			'templist_upload' => array(	
 				'title' =>	$this->_('Template Upload'),			// テンプレートアップロード

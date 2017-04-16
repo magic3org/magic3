@@ -769,10 +769,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createEditButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
+	function createEditButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-warning')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -785,6 +786,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
 		return $buttonTag;
 	}
@@ -795,10 +797,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createPreviewButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	function createPreviewButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-default')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -811,6 +814,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-new-window"></i></a>';
 		return $buttonTag;
 	}
@@ -821,10 +825,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createPreviewImageButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	function createPreviewImageButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-default')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -837,6 +842,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-picture"></i></a>';
 		return $buttonTag;
 	}
@@ -847,10 +853,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createTrashButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	function createTrashButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-default')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -863,7 +870,36 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-trash"></i></a>';
+		return $buttonTag;
+	}
+	/**
+	 * ダウンロードボタンを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createDownloadButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-cloud-download"></i></a>';
 		return $buttonTag;
 	}
 	/**
@@ -873,10 +909,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createTermButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
+	function createTermButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-warning')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -889,6 +926,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-time"></i></a>';
 		return $buttonTag;
 	}
@@ -899,10 +937,11 @@ class DesignManager extends Core
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
 	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
 	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createSearchButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
+	function createSearchButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-warning')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -915,6 +954,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-search"></i></a>';
 		return $buttonTag;
 	}
@@ -926,10 +966,11 @@ class DesignManager extends Core
 	 * @param string $title			ツールチップ用文字列
 	 * @param string $tagId			タグのID
 	 * @param string $attr			その他の追加属性
+	 * @param bool $disabled		ボタンの使用可否
 	 * @param string $btnClass		ボタンのカラークラス
 	 * @return string 				ボタンのタグ
 	 */
-	function createOptionButton($buttonType, $url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
+	function createOptionButton($buttonType, $url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-warning')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -942,6 +983,7 @@ class DesignManager extends Core
 		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
 		
 		// アイコンタイプ
 		$iconType = 'glyphicon-plus';

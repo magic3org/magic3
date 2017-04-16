@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-08 08:39+0900\n"
-"PO-Revision-Date: 2017-04-08 08:40+0900\n"
+"POT-Creation-Date: 2017-04-16 09:50+0900\n"
+"PO-Revision-Date: 2017-04-16 09:50+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -318,7 +318,7 @@ msgstr "Hタグレベル"
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:76
 #: ../container/admin_mainOpelogWidgetContainer.php:156
-#: ../container/admin_mainTempimageWidgetContainer.php:312
+#: ../container/admin_mainTempimageWidgetContainer.php:299
 #: ../container/admin_mainUserlistWidgetContainer.php:162
 msgid "Range:"
 msgstr "範囲："
@@ -828,7 +828,6 @@ msgstr "未設定"
 #: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:376
 #: ../container/admin_mainSmenudefWidgetContainer.php:419
-#: ../container/admin_mainTempimageWidgetContainer.php:344
 #: ../container/admin_mainTemplistWidgetContainer.php:463
 #: ../container/admin_mainUserlistWidgetContainer.php:122
 #: ../container/admin_mainUserlistWidgetContainer.php:150
@@ -1064,7 +1063,7 @@ msgstr "リンク先のコンテンツに連動"
 #: ../container/admin_mainMenudefWidgetContainer.php:196
 #: ../container/admin_mainSmenudefWidgetContainer.php:176
 #: ../container/admin_mainSmenudefWidgetContainer.php:189
-#: ../container/admin_mainTempimageWidgetContainer.php:299
+#: ../container/admin_mainTempimageWidgetContainer.php:286
 #: ../container/admin_mainTemplistWidgetContainer.php:565
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
@@ -1090,7 +1089,7 @@ msgstr "削除する項目を選択してください"
 #: ../container/admin_mainMenudefWidgetContainer.php:191
 #: ../container/admin_mainOpelogWidgetContainer.php:145
 #: ../container/admin_mainSmenudefWidgetContainer.php:185
-#: ../container/admin_mainTempimageWidgetContainer.php:293
+#: ../container/admin_mainTempimageWidgetContainer.php:280
 #: ../container/admin_mainUserlistWidgetContainer.php:147
 msgid "Delete selected item?"
 msgstr "選択項目を削除しますか?"
@@ -1102,14 +1101,14 @@ msgid "Menu Definition"
 msgstr "メニュー定義"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:193
-#: ../container/admin_mainTempimageWidgetContainer.php:297
+#: ../container/admin_mainTempimageWidgetContainer.php:284
 msgid "Path:"
 msgstr "パス："
 
 #: ../container/admin_mainMenudefWidgetContainer.php:195
 #: ../container/admin_mainOpelogWidgetContainer.php:149
 #: ../container/admin_mainSmenudefWidgetContainer.php:188
-#: ../container/admin_mainTempimageWidgetContainer.php:298
+#: ../container/admin_mainTempimageWidgetContainer.php:285
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
@@ -1117,7 +1116,7 @@ msgstr "編集"
 #: ../container/admin_mainMenudefWidgetContainer.php:197
 #: ../container/admin_mainOpelogWidgetContainer.php:150
 #: ../container/admin_mainSmenudefWidgetContainer.php:190
-#: ../container/admin_mainTempimageWidgetContainer.php:300
+#: ../container/admin_mainTempimageWidgetContainer.php:287
 #: ../container/admin_mainUserlistWidgetContainer.php:149
 msgid "Select"
 msgstr "選択"
@@ -1285,13 +1284,13 @@ msgid "Access Log No"
 msgstr "アクセスログ番号"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:143
-#: ../container/admin_mainTempimageWidgetContainer.php:291
+#: ../container/admin_mainTempimageWidgetContainer.php:278
 #: ../container/admin_mainUserlistWidgetContainer.php:145
 msgid "Select item to edit."
 msgstr "編集する項目を選択してください"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:144
-#: ../container/admin_mainTempimageWidgetContainer.php:292
+#: ../container/admin_mainTempimageWidgetContainer.php:279
 #: ../container/admin_mainUserlistWidgetContainer.php:146
 msgid "Select item to delete."
 msgstr "削除する項目を選択してください"
@@ -1543,109 +1542,102 @@ msgstr "保存"
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:179
+#: ../container/admin_mainTempimageWidgetContainer.php:172
 #, php-format
 msgid "Include files not allowed to delete. (filename: %s)"
 msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:207
-#: ../container/admin_mainTempimageWidgetContainer.php:407
+#: ../container/admin_mainTempimageWidgetContainer.php:200
 msgid "Files deleted."
 msgstr "ファイルを削除しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:209
-#: ../container/admin_mainTempimageWidgetContainer.php:409
-#: ../container/admin_mainTempimageWidgetContainer.php:412
+#: ../container/admin_mainTempimageWidgetContainer.php:202
 msgid "Failed in deleting files."
 msgstr "ファイル削除に失敗しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:214
-#: ../container/admin_mainTempimageWidgetContainer.php:309
+#: ../container/admin_mainTempimageWidgetContainer.php:207
+#: ../container/admin_mainTempimageWidgetContainer.php:296
 msgid "Directory Name"
 msgstr "ディレクトリ名"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:220
+#: ../container/admin_mainTempimageWidgetContainer.php:213
 msgid "Directory created."
 msgstr "ディレクトリを作成しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:223
+#: ../container/admin_mainTempimageWidgetContainer.php:216
 msgid "Failed in creating directory."
 msgstr "ディレクトリの作成に失敗しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:290
+#: ../container/admin_mainTempimageWidgetContainer.php:277
 msgid "Files uploaded. Refresh file list?"
 msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:294
+#: ../container/admin_mainTempimageWidgetContainer.php:281
 msgid "Directory not allowed to edit."
 msgstr "ディレクトリは編集できません"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:295
+#: ../container/admin_mainTempimageWidgetContainer.php:282
 msgid "Create directory?"
 msgstr "ディレクトリを作成しますか?"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:296
+#: ../container/admin_mainTempimageWidgetContainer.php:283
 msgid "Template:"
 msgstr "テンプレート："
 
-#: ../container/admin_mainTempimageWidgetContainer.php:301
+#: ../container/admin_mainTempimageWidgetContainer.php:288
 msgid "Filename"
 msgstr "ファイル名"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:302
+#: ../container/admin_mainTempimageWidgetContainer.php:289
 #: ../container/admin_mainWidgetlistWidgetContainer.php:662
 msgid "Status"
 msgstr "状態"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:303
+#: ../container/admin_mainTempimageWidgetContainer.php:290
 msgid "Size"
 msgstr "サイズ"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:304
+#: ../container/admin_mainTempimageWidgetContainer.php:291
 #: ../container/admin_mainTemplistWidgetContainer.php:467
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 msgid "Update Date"
 msgstr "更新日"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:305
+#: ../container/admin_mainTempimageWidgetContainer.php:292
 msgid "Image Upload"
 msgstr "画像アップロード"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:306
+#: ../container/admin_mainTempimageWidgetContainer.php:293
 msgid "Max Filesize"
 msgstr "1ファイル最大サイズ"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:307
+#: ../container/admin_mainTempimageWidgetContainer.php:294
 msgid "Select Files"
 msgstr "ファイルを選択"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:308
+#: ../container/admin_mainTempimageWidgetContainer.php:295
 msgid "Create Directory"
 msgstr "ディレクトリ作成"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:310
+#: ../container/admin_mainTempimageWidgetContainer.php:297
 msgid "Create"
 msgstr "作成"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:311
+#: ../container/admin_mainTempimageWidgetContainer.php:298
 #: ../container/admin_mainTemplistWidgetContainer.php:472
 #: ../container/admin_mainWidgetlistWidgetContainer.php:673
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:353
+#: ../container/admin_mainTempimageWidgetContainer.php:357
 #: ../container/admin_mainUserlistWidgetContainer.php:354
 msgid "Item updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainTempimageWidgetContainer.php:370
+#: ../container/admin_mainTempimageWidgetContainer.php:366
 #: ../container/admin_mainUserlistWidgetContainer.php:364
 msgid "Failed in updating item."
 msgstr "データ更新に失敗しました"
-
-#: ../container/admin_mainTempimageWidgetContainer.php:422
-msgid "Images recreated."
-msgstr "画像再作成しました"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:61
 #: ../container/admin_mainWidgetlistWidgetContainer.php:58
@@ -1794,12 +1786,13 @@ msgstr "テンプレートが見つかりません"
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:588
-msgid "Edit Template"
-msgstr "テンプレートを編集"
+#: ../container/admin_mainTemplistWidgetContainer.php:582
+msgid ".zip Download"
+msgstr ".zip ダウンロード"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:635
-#: ../container/admin_mainTemplistWidgetContainer.php:692
+#: ../container/admin_mainTemplistWidgetContainer.php:640
+#: ../container/admin_mainTemplistWidgetContainer.php:697
+#: ../container/test/admin_mainTest_regexWidgetContainer.php:78
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
@@ -2730,13 +2723,15 @@ msgstr "現在システムで選択されているデフォルトのテンプレ
 msgid ""
 "You can operate below.<br /><strong>Delete</strong> - Delete template.<br /"
 "><strong>Preview</strong> - Preview template with no widgets.<br /"
-"><strong>Download</strong> - Download template with zip format compressed. "
-"The compressed file can be upload by Template Upload area."
+"><strong>Download</strong> - Download template with zip compressed. The "
+"compressed file can be upload by Template Upload area.<br /><strong>Edit</"
+"strong> - Customize template."
 msgstr ""
 "各種操作を行います。<br />●削除<br />テンプレートをシステムから削除します。"
 "<br />●プレビュー<br />テンプレートがプレビューできます。<br />●ダウンロード"
 "<br />テンプレートをZIP圧縮形式でダウンロードします。このファイルはそのまま"
-"「テンプレートアップロード」からシステムへインストールできる形式です。"
+"「テンプレートアップロード」からシステムへインストールできる形式です。<br />●"
+"編集<br />テンプレートを編集します。"
 
 #: ../help/help_templist.php:63
 msgid "Template Upload"
@@ -2971,6 +2966,12 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Images recreated."
+#~ msgstr "画像再作成しました"
+
+#~ msgid "Edit Template"
+#~ msgstr "テンプレートを編集"
 
 #, fuzzy
 #~ msgid "View Count"
