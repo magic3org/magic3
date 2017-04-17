@@ -592,6 +592,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		
 		// テンプレートCSS生成ボタン
 		$generateCssUrl = '?task=' . self::TASK_TEMPGENERATECSS . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $templateId;	// テンプレートCSS生成画面
+		$generateDisabled = '';
+		$canGenerateCss = $this->canGenerateCss($templateId);
+		if (!$canGenerateCss) $generateDisabled = 'class="disabled"';
 		
 		$row = array(
 			'no'			=> $index + 1,													// 行番号
@@ -610,7 +613,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 //			'edit_button' 		=> $editButtonTag,			// テンプレート編集ボタン
 			'edit_disabled'		=> $editDisabled,		// テンプレート編集ボタンの使用可否
 			'edit_url'			=> $editUrl,				// テンプレート画像編集用URL
-			'generate_css_url'	=> $generateCssUrl			// テンプレートCSS生成用URL
+			'generate_css_url'	=> $generateCssUrl,			// テンプレートCSS生成用URL
+			'generate_disabled'	=> $generateDisabled		// CSS生成ボタンの使用可否
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');
@@ -709,6 +713,38 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			}
 		}
 		return $id;
+	}
+	/**
+	 * CSS生成可能か判断
+	 *
+	 * @param string $id		テンプレートID
+	 * @return bool				true=CSS生成可能、false=CSS生成不可
+	 */
+	function canGenerateCss($id)
+	{
+		$canGenerate = false;		// 生成可否
+		
+		$configFile = $this->gEnv->getTemplatesPath() . '/' . $id . '/' . self::JOOMLA_CONFIG_FILENAME;
+		if (file_exists($configFile)){
+			if (!function_exists('simplexml_load_file')){
+				$msg = $this->_('SimpleXML module not installed.');		// SimpleXML拡張モジュールがインストールされていません
+				$this->setAppErrorMsg($msg);
+				return false;
+			}
+			$xml = simplexml_load_file($configFile);
+			if ($xml !== false){
+				if ($xml->attributes()->type == 'template'){
+					$version = $xml->attributes()->version;
+					$format = $xml->attributes()->format;
+					
+					$less = $xml->develop->less;
+//					$sass = $xml->develop->sass;
+//					$scss = $xml->develop->scss;
+					if (!empty($less)) $canGenerate = true;
+				}
+			}
+		}
+		return $canGenerate;
 	}
 	/**
 	 * タイプ選択メニュー作成
