@@ -590,6 +590,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		}
 //		$editButtonTag = $this->gDesign->createEditButton($editUrl, $this->_('Edit Template'), ''/*タグID*/, $editDisabled/*ボタン状態*/);
 		
+		// テンプレートCSS生成ボタン
+		$generateCssUrl = '?task=' . self::TASK_TEMPGENERATECSS . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $templateId;	// テンプレートCSS生成画面
+		
 		$row = array(
 			'no'			=> $index + 1,													// 行番号
 			'serial'		=> $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
@@ -606,7 +609,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'download_button' 	=> $downloadButtonTag,		// ダウンロードボタン
 //			'edit_button' 		=> $editButtonTag,			// テンプレート編集ボタン
 			'edit_disabled'		=> $editDisabled,		// テンプレート編集ボタンの使用可否
-			'edit_url'			=> $editUrl				// テンプレート画像編集用URL
+			'edit_url'			=> $editUrl,				// テンプレート画像編集用URL
+			'generate_css_url'	=> $generateCssUrl			// テンプレートCSS生成用URL
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');

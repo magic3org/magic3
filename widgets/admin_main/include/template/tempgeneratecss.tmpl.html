@@ -1,0 +1,70 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function generate(){
+	if (!window.confirm('CSSを生成しますか?')) return false;
+	document.main.act.value='generate';
+	document.main.submit();
+	return true;
+}
+$(function() {
+	m3SetConfigTable('config_table');
+	m3SetConfigTable('config_table2');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="tempgeneratecss" />
+<input type="hidden" name="act" />
+<h3>CSS生成情報</h3>
+<table id="config_table">
+    <tbody>
+    <tr>
+	    <th>ビルドタイプ</th>
+	    <td><div class="form-control-static m3config_item">{GENERATE_TYPE}</div></td>
+	</tr>
+    <tr>
+	    <th>ソース</th>
+	    <td><div class="form-control-static m3config_item">{SOURCE_FILE}</div></td>
+	</tr>
+    <tr>
+	    <th>出力CSS</th>
+	    <td><div class="form-control-static m3config_item">{DESTINATION_FILE}</div></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="generate();" value="生成" /></div>
+<h3>ソースファイル</h3>
+<table id="config_table2">
+   <thead>
+    <tr>
+	    <th>ファイル名</th>
+	    <th>操作</th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="source_file_list">
+    <tr>
+	    <td><div class="form-control-static m3config_item">{NAME}</div></td>
+		<td><input type="checkbox" {ACTIVE} disabled /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

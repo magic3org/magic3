@@ -31,7 +31,9 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_TEMPLIST			= 'templist';				// テンプレート一覧
 	const TASK_TEMPIMAGE		= 'tempimage';				// テンプレート画像編集
 	const TASK_TEMPIMAGE_DETAIL	= 'tempimage_detail';		// テンプレート画像編集(詳細)
-	const TASK_TEST				= 'test';					// テスト画面
+	const TASK_TEMPGENERATECSS			= 'tempgeneratecss';			// テンプレートCSS生成
+	const TASK_TEMPGENERATECSS_DETAIL	= 'tempgeneratecss_detail';		// テンプレートCSS生成(詳細)
+	const TASK_TEST						= 'test';						// テスト画面
 	
 	/**
 	 * コンストラクタ

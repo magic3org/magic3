@@ -54,6 +54,10 @@ class admin_mainTempBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			case self::TASK_TEMPIMAGE_DETAIL:	// テンプレート画像一覧(詳細)
 				$titles[] = '画像一覧';
 				break;
+			case self::TASK_TEMPGENERATECSS:			// テンプレートCSS生成
+			case self::TASK_TEMPGENERATECSS_DETAIL:	// テンプレートCSS生成(詳細)
+				$titles[] = 'CSS生成';
+				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
 		

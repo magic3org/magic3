@@ -180,6 +180,10 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					} else if ($task == 'tempimage' ||				// テンプレート画像編集
 								$task == 'tempimage_detail'){		// テンプレート画像編集詳細
 						$task = 'tempimage';
+
+					} else if ($task == self::TASK_TEMPGENERATECSS ||			// テンプレートCSS生成
+								$task == self::TASK_TEMPGENERATECSS_DETAIL){	// テンプレートCSS生成(詳細)
+						$task = self::TASK_TEMPGENERATECSS;
 					} else if ($task == 'pagedef_detail' ||		// ページ定義詳細
 								$task == 'pagedef_mobile' ||	// 携帯用ページ定義
 								$task == 'pagedef_smartphone'){		// スマートフォン用ページ定義
@@ -251,6 +255,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'widgetlist':	// ウィジェットリスト
 						case 'templist':	// テンプレートリスト
 						case 'tempimage':	// テンプレート画像編集
+						case self::TASK_TEMPGENERATECSS:			// テンプレートCSS生成
 						case 'pagedef':		// 画面定義
 						case 'help':	// ヘルプ画面
 						case 'initsystem':	// システム初期化
