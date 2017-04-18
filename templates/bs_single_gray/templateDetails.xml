@@ -6,4 +6,10 @@
   <author></author>
   <authorUrl></authorUrl>
   <description>Bootstrap type template</description>
+  <develop>
+    <less>
+      <source>grayscale.less</source>
+      <destination>grayscale.css</destination>
+    </less>
+  </develop>
 </install>
