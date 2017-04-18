@@ -14,10 +14,15 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBaseWidgetContainer.php');
+require_once($gEnvManager->getLibPath()				. '/lessphp-0.5.0/lessc.inc.php' );
 
 class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetContainer
 {
 	private $templateId;				// テンプレートID
+	private $buildType;					// CSS生成タイプ
+	const JOOMLA_CONFIG_FILENAME = 'templateDetails.xml';		// Joomla!のテンプレート設定ファイル名
+	const DEFAULT_CSS_DIR = '/css';				// CSSファイルの格納ディレクトリ
+	const DEFAULT_LESS_DIR = '/less';		// LESSソースファイルの格納ディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -85,15 +90,54 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 	 */
 	function createList($request)
 	{
-		// 画像格納ディレクトリを取得
-		$this->imageBasePath = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_IMAGE_DIR;
-		if (!is_dir($this->imageBasePath)){
-			$this->setAppErrorMsg('画像ディレクトリが見つかりません。パス=' . $this->imageBasePath);
-			return;
+		$enableBuild = true;		// CSS生成実行可否
+		
+		// CSS生成タイプを取得
+		list($buildType, $srcFilePath, $destFilePath) = $this->getBuildType();
+		
+		// ソースファイル、出力ファイルの存在チェック
+		if (!file_exists($srcFilePath)){
+			$msg = $this->_('ソースファイルが見つかりません。パス=' . $srcFilePath);
+			$this->setAppErrorMsg($msg);
+			
+			$enableBuild = false;		// CSS生成実行可否
+		}
+		$filePathArray = explode('/', $srcFilePath);		// pathinfo,basenameは日本語処理できないので日本語対応
+		$srcFile = end($filePathArray);		// ファイル名
+		
+		if (!file_exists($destFilePath)){
+			$msg = $this->_('CSS出力ファイルが見つかりません。パス=' . $destFilePath);
+			$this->setAppErrorMsg($msg);
+			
+			$enableBuild = false;		// CSS生成実行可否
+		}
+		$filePathArray = explode('/', $destFilePath);		// pathinfo,basenameは日本語処理できないので日本語対応
+		$destFile = end($filePathArray);		// ファイル名
+		
+		$act = $request->trimValueOf('act');
+		if ($act == 'generate'){		// CSS生成実行の場合
+		$less = new lessc;
+		$lessFile = $this->gEnv->getTemplatesPath() .'/bs_single_orange/less/creative.less';
+		$lessOutputFile = $this->gEnv->getTemplatesPath() .'/bs_single_orange/less/output.css';
+//echo 'path='.$lessFile;
+		//echo $less->compileFile($lessFile);
+//		$less->checkedCompile($lessFile, $lessOutputFile);
+			$this->setGuidanceMsg($this->_('CSSビルド完了しました'));
 		}
 		
 		// ファイル一覧を作成
-		$this->createFileList($path);
+//		$this->createFileList($path);
+		// ファイル更新日時
+		$updateDate = date('Y/m/d H:i:s', filemtime($destFilePath));
+			
+		// CSS生成不可の場合はボタンを使用不可にする
+		if (!$enableBuild) $this->tmpl->addVar('_widget', 'build_disabled', 'disabled="disabled"');		// 「生成」ボタン使用不可
+		
+		$this->tmpl->addVar('_widget', 'template', $this->convertToDispString($this->templateId));		// テンプレート名
+		$this->tmpl->addVar('_widget', 'build_type', $this->convertToDispString(strtoupper($buildType)));		// CSS生成タイプ
+		$this->tmpl->addVar('_widget', 'source_file', $this->convertToDispString($srcFile));		// ソースファイル
+		$this->tmpl->addVar('_widget', 'destination_file', $this->convertToDispString($destFile));		// 出力ファイル
+		$this->tmpl->addVar('_widget', 'update_dt', $updateDate);		// 更新日時
 	}
 	/**
 	 * ファイル一覧を作成
@@ -118,93 +162,12 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 			$checkDisabled = '';		// チェックボックス使用制御
 			$imageSizeStr = '';
 			if (is_dir($filePath)){			// ディレクトリのとき
-				// アイコン作成
-				$iconUrl = $this->gEnv->getRootUrl() . self::FOLDER_ICON_FILE;
-				$iconTitle = $this->convertToDispString($file);
-				$pageUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $this->templateId . '&path=' . $relativeFilePath;
-				$iconTag = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">';
-				$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-				$iconTag .= '</a>';
-			
-				$fileLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($file) . '</a>';
-				
-				// ファイルまたはディレクトリがないときは削除可能
-				$files = getFileList($filePath);
-				if (count($files) > 0){
-					$checkDisabled = 'disabled ';		// チェックボックス使用制御
-				}
-				$serial = -1;
 			} else {		// ファイルのとき
-				// 画像情報を取得
-				$isImageFile = false;
-				$imageSize = @getimagesize($filePath);
-				if ($imageSize){
-					$imageWidth = $imageSize[0];
-					$imageHeight = $imageSize[1];
-					$imageType = $imageSize[2];
-					$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-
-					// 処理可能な画像ファイルタイプかどうか
-					if (in_array($imageMimeType, $this->permitMimeType)){
-						$isImageFile = true;
-						$imageSizeStr = $imageWidth . 'x' . $imageHeight;
-					}
-				}
 
 				// ファイル削除用チェックボックス
 				if (!is_writable($filePath)) $checkDisabled = 'disabled ';		// チェックボックス使用制御
 				
-				// アイコン作成
-				$iconTitle = $this->convertToDispString($file);
-				if ($isImageFile){				// 画像ファイルの場合
-					// 画像サイズが指定サイズより大きい場合はサムネール画像を作成
-					if ($imageWidth > self::LIST_ICON_SIZE || $imageHeight > self::LIST_ICON_SIZE){
-						$thumbPath = $this->cacheDir . $relativeFilePath;		// サムネール画像パス
-						
-						// サムネール画像が存在しない場合は作成
-						if (file_exists($thumbPath)){
-							$imageSize = @getimagesize($thumbPath);
-							if ($imageSize){
-								$imageWidth = $imageSize[0];
-								$imageHeight = $imageSize[1];
-								$imageType = $imageSize[2];
-								$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-							}
-							$iconUrl = $this->gEnv->getUrlToPath($thumbPath);
-						} else {
-							// ディレクトリ作成
-							$ret = true;
-							$thumbDir = dirname($thumbPath);
-							if (!is_dir($thumbDir)) $ret = mkdir($thumbDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
-							
-							if ($ret) $ret = $this->gInstance->getImageManager()->createImage($filePath, $thumbPath, self::LIST_ICON_SIZE, $imageType, $destSize);
-							if ($ret){
-								$imageWidth = $destSize['width'];
-								$imageHeight = $destSize['height'];
-								$iconUrl = $this->gEnv->getUrlToPath($thumbPath);
-							} else {
-								$this->setAppErrorMsg('サムネール画像が作成できません。画像ファイル=' . $filePath);
-							
-								$imageWidth = '';
-								$imageHeight = '';
-							}
-						}
-					} else {		// 画像サイズが範囲内の場合はそのまま表示
-						$iconUrl = $this->gEnv->getUrlToPath($filePath);
-					}
-					
-					$iconTag = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">';
-					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '?' . date('YmdHis') . '" width="' . $imageWidth . '" height="' . $imageHeight . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-					$iconTag .= '</a>';
-					
-					$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
-				} else {	// 画像ファイル以外のとき
-					// 画像ファイル以外の場合は詳細画面へ遷移しない
-					$iconUrl = $this->gEnv->getRootUrl() . self::FILE_ICON_FILE;
-					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 
-					$fileLink = $this->convertToDispString($file);
-				}
 				
 				$size = filesize($filePath);
 			}
@@ -274,6 +237,54 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 		}
 		
 		return strcasecmp($path1, $path2);
+	}
+	/**
+	 * CSS生成タイプを取得
+	 *
+	 * @return array			CSS生成タイプ(less,sass,scss)、ソースファイル名、出力ファイル名の配列
+	 */
+	function getBuildType()
+	{
+		$buildType = '';
+		$srcFile = '';
+		$destFile = '';
+		
+		$configFile = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . '/' . self::JOOMLA_CONFIG_FILENAME;
+		if (file_exists($configFile)){
+			if (!function_exists('simplexml_load_file')){
+				$msg = $this->_('SimpleXML module not installed.');		// SimpleXML拡張モジュールがインストールされていません
+				$this->setAppErrorMsg($msg);
+				return array();
+			}
+			$xml = simplexml_load_file($configFile);
+			if ($xml !== false){
+				if ($xml->attributes()->type == 'template'){
+					$version = $xml->attributes()->version;
+					$format = $xml->attributes()->format;
+					
+					$less = $xml->develop->less;
+					$sass = $xml->develop->sass;
+					$scss = $xml->develop->scss;
+					
+					if (!empty($less)){
+						$buildType = 'less';
+						$srcFile = (string)$less->source;
+						if (!empty($srcFile)) $srcFile = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_LESS_DIR . '/' . $srcFile;
+						$destFile = (string)$less->destination;
+						if (!empty($destFile)) $destFile = $this->gEnv->getTemplatesPath() . '/' . $this->templateId . self::DEFAULT_CSS_DIR . '/' . $destFile;
+					} else if (!empty($sass)){
+						$buildType = 'sass';
+						$srcFile = (string)$sass->source;
+						$destFile = (string)$sass->destination;
+					} else if (!empty($scss)){
+						$buildType = 'scss';
+						$srcFile = (string)$scss->source;
+						$destFile = (string)$scss->destination;
+					}
+				}
+			}
+		}
+		return array($buildType, $srcFile, $destFile);
 	}
 }
 ?>

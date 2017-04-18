@@ -61,8 +61,6 @@ class admin_mainTest_regexWidgetContainer extends admin_mainBaseWidgetContainer
 			$ext = strtolower($matches[5]);
 		}
 		echo 'imagetype=[' . $imageType . '] name=[' . $name . '] size=[' . $size . '] type=[' . $type . '] ext=[' . $ext . ']';
-//		echo hex2bin('466F726D617474696E6752756C6573');
-//		echo bin2hex(':FormattingRules');
 	}
 }
 ?>
