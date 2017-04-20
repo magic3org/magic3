@@ -1,0 +1,63 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+    if (!window.confirm('ファイルを更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'tempgeneratecss';
+    document.main.submit();
+    return true;
+}
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="tempgeneratecss_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="filename" value="{FILENAME}" />
+<h3 class="m3config_h"><span {_HELP_TEMPGENERATECSS_DETAIL}>ソースコード編集</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_TEMPGENERATECSS_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+
+<table id="mainconfig">
+    <tbody>
+    <tr>
+	    <th><span {_HELP_TEMPGENERATECSS_ID}>ファイル名</span></th>
+	    <td><div class="form-control-static m3config_item">{FILENAME}</div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_TEMPGENERATECSS_CODE}>ソースコード</span></th>
+	    <td><textarea name="item_code" style="height:400px;">{CODE}</textarea></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+    <input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
+
+</form>
+</div>
+</patTemplate:tmpl>

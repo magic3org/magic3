@@ -78,7 +78,7 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 				$this->createList($request);
 				break;
 			case self::TASK_TEMPGENERATECSS_DETAIL:// テンプレートCSS生成(詳細)
-//				$this->createDetail($request);
+				$this->createDetail($request);
 				break;
 		}
 	}
@@ -97,7 +97,7 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 		
 		// ソースファイル、出力ファイルの存在チェック
 		if (!file_exists($srcFilePath)){
-			$msg = $this->_('ソースファイルが見つかりません。パス=' . $srcFilePath);
+			$msg = 'ソースファイルが見つかりません。パス=' . $srcFilePath;
 			$this->setAppErrorMsg($msg);
 			
 			$enableBuild = false;		// CSS生成実行可否
@@ -105,8 +105,8 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 		$filePathArray = explode('/', $srcFilePath);		// pathinfo,basenameは日本語処理できないので日本語対応
 		$srcFile = end($filePathArray);		// ファイル名
 		
-		if (!file_exists($destFilePath)){
-			$msg = $this->_('CSS出力ファイルが見つかりません。パス=' . $destFilePath);
+		if (!is_writable($destFilePath)){
+			$msg = 'CSS出力ファイルが存在しないか書き込みできません。パス=' . $destFilePath;
 			$this->setAppErrorMsg($msg);
 			
 			$enableBuild = false;		// CSS生成実行可否
@@ -115,18 +115,31 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 		$destFile = end($filePathArray);		// ファイル名
 		
 		$act = $request->trimValueOf('act');
-		if ($act == 'generate'){		// CSS生成実行の場合
-		$less = new lessc;
-		$lessFile = $this->gEnv->getTemplatesPath() .'/bs_single_orange/less/creative.less';
-		$lessOutputFile = $this->gEnv->getTemplatesPath() .'/bs_single_orange/less/output.css';
-//echo 'path='.$lessFile;
-		//echo $less->compileFile($lessFile);
-//		$less->checkedCompile($lessFile, $lessOutputFile);
-			$this->setGuidanceMsg($this->_('CSSビルド完了しました'));
+		if ($enableBuild && $act == 'generate'){		// CSS生成実行の場合
+			$ret = false;
+			
+			if ($buildType = 'less'){
+				$less = new lessc;
+				try {
+					// コンパイル実行
+					$compiledData = $less->compileFile($srcFilePath);
+				
+					// ファイルに保存
+					file_put_contents($destFilePath, $compiledData);
+				
+					$ret = true;		// コンパイル成功
+				} catch (Exception $ex) {
+					$msg = 'コンパイルエラー：' . $ex->getMessage();
+					$this->setAppErrorMsg($msg);
+				}
+			}
+
+			if ($ret) $this->setGuidanceMsg('CSSビルド完了しました');
 		}
 		
-		// ファイル一覧を作成
-//		$this->createFileList($path);
+		// ソースファイル一覧を作成
+		$this->createFileList(dirname($srcFilePath));
+		
 		// ファイル更新日時
 		$updateDate = date('Y/m/d H:i:s', filemtime($destFilePath));
 			
@@ -140,6 +153,15 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 		$this->tmpl->addVar('_widget', 'update_dt', $updateDate);		// 更新日時
 	}
 	/**
+	 * 詳細画面作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createDetail($request)
+	{
+	}
+	/**
 	 * ファイル一覧を作成
 	 *
 	 * @param string $path		パス
@@ -149,9 +171,9 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 	{
 		// ファイル一覧取得
 		$fileList = $this->getFileList($path);
-				
-		$index = 0;			// インデックス番号
-		for ($i = $startNo -1; $i < $endNo; $i++){
+
+		$index = 0;
+		for ($i = 0; $i < count($fileList); $i++){
 			$filePath = $fileList[$i];
 			$relativeFilePath = substr($filePath, strlen($this->imageBasePath));
 
@@ -159,16 +181,9 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 			$file = end($filePathArray);		// ファイル名
 			$size = '';				// ファイルサイズ
 			$fileLink = '';
-			$checkDisabled = '';		// チェックボックス使用制御
-			$imageSizeStr = '';
-			if (is_dir($filePath)){			// ディレクトリのとき
-			} else {		// ファイルのとき
-
-				// ファイル削除用チェックボックス
-				if (!is_writable($filePath)) $checkDisabled = 'disabled ';		// チェックボックス使用制御
-				
-
-				
+			if (is_file($filePath)){			// ファイルのとき
+				$fileLink = '<a href="#" onclick="editItemByFilename(\'' . addslashes($file) . '\');return false;">' . $this->convertToDispString($file) . '</a>';
+					
 				$size = filesize($filePath);
 			}
 	
@@ -178,19 +193,15 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 			$row = array(
 				'serial'		=> $serial,
 				'index'			=> $index,			// インデックス番号(チェックボックス識別)
-				'icon'			=> $iconTag,		// アイコン
 				'name'			=> $this->convertToDispString($file),			// ファイル名
 				'filename'    	=> $fileLink,			// ファイル名
-				'image_size'	=> $imageSizeStr,		// 画像サイズ
 				'size'     		=> $size,			// ファイルサイズ
-				'date'    		=> $updateDate,			// 更新日時
-				'check_disabled'	=> $checkDisabled,		// チェックボックス使用制御
+				'update_dt'    	=> $updateDate			// 更新日時
 			);
 			$this->tmpl->addVars('file_list', $row);
 			$this->tmpl->parseTemplate('file_list', 'a');
 			
-			// インデックス番号を保存
-			$this->fileArray[] = $this->convertToDispString($file);			// ファイル名
+			// インデックス番号を更新
 			$index++;
 		}
 	}

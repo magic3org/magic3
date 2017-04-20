@@ -19,6 +19,12 @@ function generate(){
 	document.main.submit();
 	return true;
 }
+function editItemByFilename(filename){
+	document.main.task.value = 'tempgeneratecss_detail';
+	document.main.act.value = 'edit';
+	document.main.filename.value = filename;
+	document.main.submit();
+}
 $(function() {
 	m3SetConfigTable('config_table');
 	m3SetConfigTable('config_table2');
@@ -30,6 +36,7 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="tempgeneratecss" />
 <input type="hidden" name="act" />
+<input type="hidden" name="filename" />
 <h3 class="m3config_h" style="margin-right:20px;">CSS生成情報</h3><span {_HELP_TEMPGENERATECSS_TEMPLATE}>テンプレート：</span><span>{TEMPLATE}</span>
 <table id="config_table">
     <tbody>
@@ -56,15 +63,17 @@ $(function() {
 <table id="config_table2">
    <thead>
     <tr>
-	    <th>ファイル名</th>
-	    <th>操作</th>
+	    <th style="width:300px;">ファイル名</th>
+		<th style="width:70px;">サイズ(バイト)</th>
+		<th>更新日時</th>
 	</tr>
     </thead>
     <tbody>
-    <patTemplate:tmpl name="source_file_list">
+    <patTemplate:tmpl name="file_list">
     <tr>
-	    <td><div class="form-control-static m3config_item">{NAME}</div></td>
-		<td><input type="checkbox" {ACTIVE} disabled /></td>
+	    <td><div class="form-control-static m3config_item">{FILENAME}</div></td>
+		<td><div class="form-control-static m3config_item">{SIZE}</div></td>
+		<td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
