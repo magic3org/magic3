@@ -160,6 +160,39 @@ class admin_mainTempgeneratecssWidgetContainer extends admin_mainTempBaseWidgetC
 	 */
 	function createDetail($request)
 	{
+		$canEdit = true;		// ファイル編集可否
+					
+		// CSS生成タイプを取得
+		list($buildType, $srcFilePath, $destFilePath) = $this->getBuildType();
+		
+		// 編集ファイルのパスを取得
+		$filename = $request->trimValueOf('filename');
+		$filePath = dirname($srcFilePath) . '/' . $filename;
+		if (!file_exists($filePath)){// ファイルの存在チェック
+			$msg = 'ソースファイルが見つかりません。パス=' . $filePath;
+			$this->setAppErrorMsg($msg);
+			
+			$canEdit = false;		// ファイル編集可否
+		}
+		
+		$code = $request->valueOf('item_code');
+		
+		$act = $request->trimValueOf('act');
+		if ($act == 'update'){		// コード更新のとき
+			// ファイルに保存
+			$ret = file_put_contents($filePath, $code);
+			if ($ret){
+				$this->setGuidanceMsg('ファイル更新しました');
+			} else {
+				$this->setAppErrorMsg('ファイル更新に失敗しました');
+			}
+		}
+		
+		// ファイルからソースコードを読み込む
+		$code = file_get_contents($filePath);
+		
+		$this->tmpl->addVar('_widget', 'code', $this->convertToDispString($code));		// ファイル名
+		$this->tmpl->addVar('_widget', 'filename', $this->convertToDispString($filename));		// ファイル名
 	}
 	/**
 	 * ファイル一覧を作成
