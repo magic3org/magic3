@@ -207,6 +207,8 @@ foreach (array(WikiConfig::getDefaultPage()) as $page){
 	
 // 入力チェック
 if (!WikiParam::checkParam()){
+	global $gPageManager;
+	
 	//die('Using both cmd= and plugin= is not allowed');
 	
 	// パラメータエラーの場合はエラー画面へ遷移
