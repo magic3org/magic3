@@ -63,6 +63,8 @@ class wikiExternal
 	{
 		global $vars;
 		
+		// ### cmd,pluginパラメータのエラーチェックは行わない ###
+		
 		// ページ指定でWikiコンテンツ作成の場合はパラメータを初期化
 		if (!empty($pageId)){
 			// 一旦退避
