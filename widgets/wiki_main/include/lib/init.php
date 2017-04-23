@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -206,8 +206,13 @@ foreach (array(WikiConfig::getDefaultPage()) as $page){
 }
 	
 // 入力チェック
-if (!WikiParam::checkParam()) die('Using both cmd= and plugin= is not allowed');
-
+if (!WikiParam::checkParam()){
+	//die('Using both cmd= and plugin= is not allowed');
+	
+	// パラメータエラーの場合はエラー画面へ遷移
+	$gPageManager->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
+	return;
+}
 /////////////////////////////////////////////////
 // 初期設定($WikiName,$BracketNameなど)
 // $WikiName = '[A-Z][a-z]+(?:[A-Z][a-z]+)+';

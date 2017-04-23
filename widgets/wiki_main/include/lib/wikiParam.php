@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: wikiParam.php 4952 2012-06-09 09:56:59Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 //require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
@@ -124,15 +124,30 @@ class WikiParam
 	 */
 	public static function checkParam()
 	{
+		global $gEnvManager;
+		global $gOpeLogManager;
+		
 		// クラス初期化
 		self::_init();
 		
 		// コマンドとプラグイン両方のパラメータが設定されている場合はエラー
-		if (!empty(self::$cmd) && !empty(self::$plugin)) return false;
+		if (!empty(self::$cmd) && !empty(self::$plugin)){
+			$errMessage = 'Wikiパラメータの不正。';
+			$gOpeLogManager->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2203, 'アクセスをブロックしました。URL: ' . $gEnvManager->getCurrentRequestUri());
+			return false;
+		}
 
 		// 英数字以外はエラー
-		if (!empty(self::$cmd) && !preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', self::$cmd)) return false;
-		if (!empty(self::$plugin) && !preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', self::$plugin)) return false;
+		if (!empty(self::$cmd) && !preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', self::$cmd)){
+			$errMessage = 'Wikiパラメータの不正。';
+			$gOpeLogManager->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2203, 'アクセスをブロックしました。URL: ' . $gEnvManager->getCurrentRequestUri());
+			return false;
+		}
+		if (!empty(self::$plugin) && !preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', self::$plugin)){
+			$errMessage = 'Wikiパラメータの不正。';
+			$gOpeLogManager->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2203, 'アクセスをブロックしました。URL: ' . $gEnvManager->getCurrentRequestUri());
+			return false;
+		}
 		return true;
 	}
 	/**
