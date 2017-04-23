@@ -204,17 +204,7 @@ foreach (array(WikiConfig::getDefaultPage()) as $page){
 	// 初期化前にDBの内容を必ず確認する
 	if (!WikiPage::isExistsPage($page)) WikiPage::initPage($page, '', true/*ページ一覧更新*/);		// ページ初期化
 }
-	
-// 入力チェック
-if (!WikiParam::checkParam()){
-	global $gPageManager;
-	
-	//die('Using both cmd= and plugin= is not allowed');
-	
-	// パラメータエラーの場合はエラー画面へ遷移
-	$gPageManager->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
-	return;
-}
+
 /////////////////////////////////////////////////
 // 初期設定($WikiName,$BracketNameなど)
 // $WikiName = '[A-Z][a-z]+(?:[A-Z][a-z]+)+';
@@ -297,4 +287,17 @@ $line_rules = array_merge(array(
 	'&amp;(#[0-9]+|#x[0-9a-f]+|' . $entity_pattern . ');' => '&$1;',
 	"\r"          => '<br />' . "\n",	/* 行末にチルダは改行 */
 ), $line_rules);
+
+// ######################################################################
+// パラメータ初期化後に入力チェックを行う(2017/4/24)
+// ここではdieしない
+// ######################################################################
+if (!WikiParam::checkParam()){
+	global $gPageManager;
+	
+	//die('Using both cmd= and plugin= is not allowed');
+	
+	// パラメータエラーの場合はエラー画面へ遷移
+	$gPageManager->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
+}
 ?>

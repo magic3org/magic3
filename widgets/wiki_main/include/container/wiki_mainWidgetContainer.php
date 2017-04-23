@@ -145,7 +145,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$vars['page'] = WikiParam::getPage();
 		
 		// ##### ページID設定後、各種パラメータの初期化 #####
-		global $gEnvManager;
 		require_once($wikiLibDir . '/init.php');
 
 		// Load optional libraries
