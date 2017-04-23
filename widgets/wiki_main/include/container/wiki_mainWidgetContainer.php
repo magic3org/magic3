@@ -147,6 +147,12 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// ##### ページID設定後、各種パラメータの初期化 #####
 		require_once($wikiLibDir . '/init.php');
 
+		// ######################################################################
+		// パラメータ初期化後に入力チェックを行う(2017/4/24)
+		// エラー値を画面に表示させた後、エラー画面へ遷移
+		// ######################################################################
+		if (!WikiParam::checkParam()) $gPageManager->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
+		
 		// Load optional libraries
 		if ($notify) {
 			require_once($wikiLibDir . '/mail.php'); // Mail notification

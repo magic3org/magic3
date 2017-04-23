@@ -287,17 +287,4 @@ $line_rules = array_merge(array(
 	'&amp;(#[0-9]+|#x[0-9a-f]+|' . $entity_pattern . ');' => '&$1;',
 	"\r"          => '<br />' . "\n",	/* 行末にチルダは改行 */
 ), $line_rules);
-
-// ######################################################################
-// パラメータ初期化後に入力チェックを行う(2017/4/24)
-// ここではdieしない
-// ######################################################################
-if (!WikiParam::checkParam()){
-	global $gPageManager;
-	
-	//die('Using both cmd= and plugin= is not allowed');
-	
-	// パラメータエラーの場合はエラー画面へ遷移
-	$gPageManager->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
-}
 ?>
