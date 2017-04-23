@@ -593,11 +593,13 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'speedy spider'				=> 'entireweb.png',	// Entireweb
 			'turnitinbot'				=> 'turnitinbot.png',	// TurnitinBot
 			'bingbot'					=> 'bing.png',	// Bing
+			'bingpreview'				=> 'bing.png',	// Bing
 			'yacybot'					=> 'yacy.png',	// YaCy
 			'mj12bot'					=> 'mj12bot.png',
 			'ahrefsbot'					=> 'ahrefs.png',
 			'semrushbot'				=> 'semrush.png',
 			'scrapy'					=> 'scrapy.png',
+			'deusu'						=> 'deusu.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
