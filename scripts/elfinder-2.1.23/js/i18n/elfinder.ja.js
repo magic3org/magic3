@@ -42,7 +42,7 @@
 			'errDataEmpty'         : '空のデータです',
 			'errCmdReq'            : 'バックエンドリクエストがコマンド名を要求しています',
 			'errOpen'              : '"$1"を開くことができません',
-			'errNotFolder'         : 'オブジェクトがフォルダーではありません',
+			'errNotFolder'         : 'オブジェクトがフォルダではありません',
 			'errNotFile'           : 'オブジェクトがファイルではありません',
 			'errRead'              : '"$1"を読むことができません',
 			'errWrite'             : '"$1"に書きこむことができません',
@@ -50,11 +50,11 @@
 			'errLocked'            : '"$1" はロックされているので名前の変更、移動、削除ができません',
 			'errExists'            : '"$1"というファイル名はすでに存在しています',
 			'errInvName'           : '無効なファイル名です',
-			'errFolderNotFound'    : 'フォルダーが見つかりません',
+			'errFolderNotFound'    : 'フォルダが見つかりません',
 			'errFileNotFound'      : 'ファイルが見つかりません',
-			'errTrgFolderNotFound' : 'ターゲットとするフォルダー "$1" が見つかりません',
+			'errTrgFolderNotFound' : 'ターゲットとするフォルダ "$1" が見つかりません',
 			'errPopup'             : 'ポップアップウィンドウが開けません。ファイルを開くにはブラウザの設定を変更してください',
-			'errMkdir'             : '"$1"フォルダーを作成することができません',
+			'errMkdir'             : '"$1"フォルダを作成することができません',
 			'errMkfile'            : '"$1"ファイルを作成することができません',
 			'errRename'            : '"$1"の名前を変更することができません',
 			'errCopyFrom'          : '"$1"からのファイルコピーが許可されていません',
@@ -123,8 +123,8 @@
 			'cmdhelp'      : 'このソフトウェアについて',
 			'cmdhome'      : 'ホーム',
 			'cmdinfo'      : '情報',
-			'cmdmkdir'     : '新規フォルダー',
-			'cmdmkdirin'   : '新規フォルダーへ', // from v2.1.7 added 19.2.2016
+			'cmdmkdir'     : '新規フォルダ',
+			'cmdmkdirin'   : '新規フォルダへ', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : '新規テキストファイル',
 			'cmdopen'      : '開く',
 			'cmdpaste'     : 'ペースト',
@@ -168,9 +168,9 @@
 			'btnBackup' : 'バックアップ', // fromv2.1 added 28.11.2015
 
 			/******************************** notifications ********************************/
-			'ntfopen'     : 'フォルダーを開いています',
+			'ntfopen'     : 'フォルダを開いています',
 			'ntffile'     : 'ファイルを開いています',
-			'ntfreload'   : 'フォルダーを再読込しています',
+			'ntfreload'   : 'フォルダを再読込しています',
 			'ntfmkdir'    : 'ディレクトリーを作成しています',
 			'ntfmkfile'   : 'ファイルを作成しています',
 			'ntfrm'       : 'ファイルを削除しています',
@@ -289,7 +289,7 @@
 			'locked'          : 'ロック',
 			'dim'             : 'サイズ',
 			'files'           : 'ファイル',
-			'folders'         : 'フォルダー',
+			'folders'         : 'フォルダ',
 			'items'           : 'アイテム',
 			'yes'             : 'はい',
 			'no'              : 'いいえ',
@@ -387,13 +387,13 @@
 			'minsLeft'        : '残り$1分', // from v2.1.17 added 13.11.2016
 			'openAsEncoding'  : '選択したエンコーディングで開き直す', // from v2.1.19 added 2.12.2016
 			'saveAsEncoding'  : '選択したエンコーディングで保存', // from v2.1.19 added 2.12.2016
-			'selectFolder'    : 'フォルダーを選択', // from v2.1.20 added 13.12.2016
+			'selectFolder'    : 'フォルダを選択', // from v2.1.20 added 13.12.2016
 			'firstLetterSearch': '一文字目で検索', // from v2.1.23 added 24.3.2017
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : '不明',
 			'kindRoot'        : 'ボリュームルート', // from v2.1.16 added 16.10.2016
-			'kindFolder'      : 'フォルダー',
+			'kindFolder'      : 'フォルダ',
 			'kindAlias'       : '別名',
 			'kindAliasBroken' : '宛先不明の別名',
 			// applications
