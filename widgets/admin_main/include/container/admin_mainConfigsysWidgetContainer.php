@@ -236,10 +236,11 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SYSTEM_TEMPLATE, $this->systemTemplate)) $isErr = true;// システム画面用テンプレート
-			}			
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_ADMIN_DEFAULT_THEME, $this->adminTheme)) $isErr = true;// 管理画面用jQueryUIテーマ
 			}
+			// 管理画面用jQueryUIテーマは「smoothness」に固定(2017/4/25)
+//			if (!$isErr){
+//				if (!$this->db->updateSystemConfig(self::CF_ADMIN_DEFAULT_THEME, $this->adminTheme)) $isErr = true;// 管理画面用jQueryUIテーマ
+//			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_DEFAULT_THEME, $this->defaultTheme)) $isErr = true;// フロント画面用jQueryUIテーマ
 			}

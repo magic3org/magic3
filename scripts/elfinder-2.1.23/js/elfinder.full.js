@@ -530,7 +530,8 @@ var elFinder = function(node, opts) {
 						baseUrl = base.replace(/\/$/, '') + '/' + baseUrl; 
 					}
 				}
-				fm.loadCss([baseUrl+'css/elfinder.min.css', baseUrl+'css/theme.css']);
+//				fm.loadCss([baseUrl+'css/elfinder.min.css', baseUrl+'css/theme.css']);
+				fm.loadCss([baseUrl+'css/elfinder.full.css', baseUrl+'css/theme.css']);			// Magic3 modified.
 				
 				// additional CSS files
 				if (Array.isArray(fm.options.cssAutoLoad)) {

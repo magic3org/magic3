@@ -355,13 +355,13 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 
 	// elFinder v2.1.23版
 	const ELFINDER123_VER			= '2.1.23';									// elFinderバージョン
-//	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.full.js';		// elFinder
-	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.min.js';		// elFinder
+	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.full.js';		// elFinder
+//	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.min.js';		// elFinder
 	const ELFINDER123_LANG_FILENAME	= 'elfinder-2.1.23/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER123_CSS			= 'elfinder-2.1.23/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER123_OPTION_CSS		= 'elfinder-2.1.23/css/theme.css';				// elFinder CSS
 //	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.min.css';		// テーマファイル
-	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.css';		// テーマファイル
+//	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.css';		// テーマファイル
 	
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
@@ -706,7 +706,8 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 														);
 			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER123){
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER123_FILENAME, self::ELFINDER123_LANG_FILENAME),		// elFinder v2.1.15
-															'css'		=> array(self::ELFINDER123_THEME_CSS, self::ELFINDER123_CSS, self::ELFINDER123_OPTION_CSS),	// テーマは最初に読み込む
+														//	'css'		=> array(self::ELFINDER123_THEME_CSS, self::ELFINDER123_CSS, self::ELFINDER123_OPTION_CSS),	// テーマは最初に読み込む
+															'css'		=> array(self::ELFINDER123_CSS, self::ELFINDER123_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER123_VER					// elFinderバージョン
 														);
 			}
