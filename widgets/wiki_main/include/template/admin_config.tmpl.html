@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -92,7 +92,7 @@ $(function(){
 		<h4>ページコンポーネント</h4>
 		<div class="form-group clearfix">
 		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showtitle" {SHOW_TITLE} />タイトル</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showtitle" {SHOW_TITLE} />タイトル</label>(<label><input type="checkbox" name="item_use_page_title_related" {USE_PAGE_TITLE_RELATED} />バックリンクを付加</label>)</div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_url" {SHOW_URL} />URL</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showpageattachfiles" {SHOW_PAGE_ATTACH_FILES} />添付ファイル</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showpagerelated" {SHOW_PAGE_RELATED} />関連ページリンク</label></div>
@@ -106,6 +106,7 @@ $(function(){
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_auto_heading_anchor" {SHOW_AUTO_HEADING_ANCHOR} />見出しの自動アンカー</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_username" {SHOW_USERNAME} />更新者名</label></div>
 		</div>
+		<div class="checkbox m3config_inline_item"></div>
 	    </td>
 	</tr>
     <tr>

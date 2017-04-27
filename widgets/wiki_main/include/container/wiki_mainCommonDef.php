@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,12 +34,13 @@ class wiki_mainCommonDef
 	const CF_SHOW_PAGE_RELATED			= 'show_page_related';			// 関連ページ
 	const CF_SHOW_PAGE_ATTACH_FILES		= 'show_page_attach_files';		// 添付ファイル
 	const CF_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';	// 最終更新
-	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
-	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
-	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
-	const CF_SHOW_USERNAME				= 'show_username';				// ユーザ名を表示するかどうか
-	const CF_AUTO_LINK_WIKINAME			= 'auto_link_wikiname';					// Wiki名を自動リンクするかどうか
-	const CF_LAYOUT_MAIN				= 'layout_main';						// ページレイアウト(メイン)
+	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';		// ツールバーを表示するかどうか
+	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';			// 凍結・解凍機能のユーザ制限
+	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';		// 見出し自動アンカーを表示するかどうか
+	const CF_SHOW_USERNAME				= 'show_username';					// ユーザ名を表示するかどうか
+	const CF_USE_PAGE_TITLE_RELATED		= 'use_page_title_related';			// タイトルにバックリンクを付加するかどうか
+	const CF_AUTO_LINK_WIKINAME			= 'auto_link_wikiname';				// Wiki名を自動リンクするかどうか
+	const CF_LAYOUT_MAIN				= 'layout_main';					// ページレイアウト(メイン)
 	const CF_DATE_FORMAT				= 'date_format';					// 日付フォーマット
 	const CF_TIME_FORMAT				= 'time_format';					// 時間フォーマット
 	const CF_RECENT_CHANGES_COUNT		= 'recent_changes_count';			// 最終更新ページ最大項目数

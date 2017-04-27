@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -80,6 +80,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$userLimitedFreeze		= $request->trimCheckedValueOf('item_user_limited_freeze');				// 凍結・解凍機能のユーザ制限
 		$showAutoHeadingAnchor	= $request->trimCheckedValueOf('item_show_auto_heading_anchor');		// 見出し自動アンカーを表示するかどうか
 		$showUsername			= $request->trimCheckedValueOf('item_show_username');		// ユーザ名を表示するかどうか
+		$usePageTitleRelated	= $request->trimCheckedValueOf('item_use_page_title_related');		// タイトルにバックリンクを付加するかどうか
 		$autoLinkWikiname		= $request->trimCheckedValueOf('item_auto_link_wikiname');					// Wiki名を自動リンクするかどうか
 		$layout					= $request->valueOf('item_layout');						// ページレイアウト(メイン)
 		$dateFormat				= $request->trimValueOf('item_date_format');						// 日付フォーマット
@@ -133,6 +134,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR, $showAutoHeadingAnchor);		// 見出し自動アンカーを表示するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_USERNAME, $showUsername);			// ユーザ名を表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_USE_PAGE_TITLE_RELATED, $usePageTitleRelated);		// タイトルにバックリンクを付加するかどうか
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME, $autoLinkWikiname);				// Wiki名を自動リンクするかどうか
 				
@@ -180,6 +182,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if ($showAutoHeadingAnchor == '') $showAutoHeadingAnchor = '1';
 			$showUsername = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_USERNAME);		// ユーザ名を表示するかどうか
 			if ($showUsername == '') $showUsername = '0';
+			$usePageTitleRelated = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_USE_PAGE_TITLE_RELATED);		// タイトルにバックリンクを付加するかどうか
+			if ($usePageTitleRelated == '') $usePageTitleRelated = '0';
 			$autoLinkWikiname = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME);		// Wiki名を自動リンクするかどうか
 			if ($autoLinkWikiname == '') $autoLinkWikiname = '1';
 			$layout = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN);		// ページレイアウト(メイン)
@@ -215,6 +219,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "user_limited_freeze", $this->convertToCheckedString($userLimitedFreeze));	// 凍結・解凍機能のユーザ制限
 		$this->tmpl->addVar("_widget", "show_auto_heading_anchor", $this->convertToCheckedString($showAutoHeadingAnchor));		// 見出し自動アンカーを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_username", $this->convertToCheckedString($showUsername));		// ユーザ名を表示するかどうか
+		$this->tmpl->addVar("_widget", "use_page_title_related", $this->convertToCheckedString($usePageTitleRelated));	// タイトルにバックリンクを付加するかどうか
 		$this->tmpl->addVar("_widget", "auto_link_wikiname", $this->convertToCheckedString($autoLinkWikiname));		// Wiki名を自動リンクするかどうか
 		$this->tmpl->addVar("_widget", "layout",	$layout);// ページレイアウト(メイン)
 		$this->tmpl->addVar("_widget", "date_format",	$this->convertToDispString($dateFormat));		// 日付フォーマット
