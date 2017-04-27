@@ -59,6 +59,7 @@ INSERT INTO wiki_config
 ('date_format', 'Y-m-d',         '日付フォーマット'),
 ('time_format', 'H:i:s',         '時間フォーマット'),
 ('show_username', '0',         'ユーザ名を表示するかどうか'),
+('use_page_title_related', '1',         'タイトルにバックリンクを付加するかどうか'),
 ('auto_link_wikiname', '1',         'Wiki名を自動リンクするかどうか'),
 ('recent_changes_count', '100',         '最終更新ページ最大項目数'),
 ('recent_deleted_count', '100',         '最終削除ページ最大項目数'),

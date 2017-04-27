@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -407,6 +407,15 @@ class WikiConfig
 	public static function getAutoHeadingAnchorVisibility()
 	{
 		return self::$_configArray[wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR];
+	}
+	/**
+	 * タイトルにバックリンクを付加するかどうかを取得
+	 *
+	 * @return bool			true=付加する、false=付加しない
+	 */
+	public static function getUsePageTitleRelated()
+	{
+		return self::$_configArray[wiki_mainCommonDef::CF_USE_PAGE_TITLE_RELATED];
 	}
 	/**
 	 * ユーザ名を表示するかどうかを取得

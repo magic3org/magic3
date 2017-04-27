@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -318,9 +318,16 @@ function make_search($page)
 {
 	global $script;
 
-	$s_page = htmlspecialchars($page);
-	$r_page = rawurlencode($page);
-	return '<a href="' . $script . WikiParam::convQuery("?plugin=related&amp;page=$r_page") . '">' . $s_page . '</a> ';
+	// タイトルにバックリンクを付加するかどうかを取得
+	$titleRelated = WikiConfig::getUsePageTitleRelated();
+	if ($titleRelated){
+		$s_page = htmlspecialchars($page);
+		$r_page = rawurlencode($page);
+		return '<a href="' . $script . WikiParam::convQuery("?plugin=related&amp;page=$r_page") . '">' . $s_page . '</a> ';
+	} else {			// バックリンクを付加しない場合
+		$s_page = htmlspecialchars($page);
+		return $s_page;
+	}
 }
 
 // Make heading string (remove heading-related decorations from Wiki text)
