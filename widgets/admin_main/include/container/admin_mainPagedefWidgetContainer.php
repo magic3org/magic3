@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,6 +33,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageInfoRows;			// ページ情報
 	private $isExistsDefItems;		// ページ定義項目が存在するかどうか
 	private $subTemplateInfo;		// サブテンプレート情報(Themler設定ファイルからの読み込み用)
+	const BREADCRUMB_TITLE				= '画面構成';
 	const BREADCRUMB_TITLE_PC			= 'PC画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_MOBILE		= '携帯画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_SMARTPHONE	= 'スマートフォン画面';		// 画面タイトル名(パンくずリスト)
@@ -110,18 +111,20 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$task = $request->trimValueOf('task');		// 処理区分
 		
 		// パンくずリストの作成
+		$titles = array(self::BREADCRUMB_TITLE);
+		
 		switch ($task){
 			case 'pagedef_mobile':		// 携帯用設定画面のとき
-				$title = self::BREADCRUMB_TITLE_MOBILE;
+				$titles[] = self::BREADCRUMB_TITLE_MOBILE;
 				break;
 			case 'pagedef_smartphone':		// スマートフォン用設定画面のとき
-				$title = self::BREADCRUMB_TITLE_SMARTPHONE;
+				$titles[] = self::BREADCRUMB_TITLE_SMARTPHONE;
 				break;
 			default:						// PC用画面のとき
-				$title = self::BREADCRUMB_TITLE_PC;
+				$titles[] = self::BREADCRUMB_TITLE_PC;
 				break;
 		}
-		$this->gPage->setAdminBreadcrumbDef(array($title));
+		$this->gPage->setAdminBreadcrumbDef($titles);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
