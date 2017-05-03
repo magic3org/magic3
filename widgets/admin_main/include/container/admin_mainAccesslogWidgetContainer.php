@@ -342,7 +342,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
 		$this->tmpl->addVar("_widget", "user", $user);
 		$this->tmpl->addVar("_widget", "uri", $this->convertToDispString($uri));
+		$this->tmpl->addVar("_widget", "uri_title", $this->convertToDispString(urldecode($uri)));		// URIデコードタイトル
 		$this->tmpl->addVar("_widget", "referer", $this->convertToDispString($referer));
+		$this->tmpl->addVar("_widget", "referer_title", $this->convertToDispString(urldecode($referer)));	// リファラーデコードタイトル
 		$this->tmpl->addVar("_widget", "ip", $this->convertToDispString($ip));
 		$this->tmpl->addVar("_widget", "request", $requestParamStr);
 		$this->tmpl->addVar("_widget", "agent", $this->convertToDispString($agent));
