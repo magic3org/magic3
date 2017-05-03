@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -2405,9 +2405,10 @@ class admin_mainDb extends BaseDb
 	 * @param function	$callback	コールバック関数
 	 * @param timestamp	$startDt	期間(開始日)
 	 * @param timestamp	$endDt		期間(終了日)
+	 * @param string    $ip			IPアドレス
 	 * @return						なし
 	 */
-	function getAccessLogList($limit, $page, $path, $callback, $startDt, $endDt)
+	function getAccessLogList($limit, $page, $path, $callback, $startDt, $endDt, $ip)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -2435,6 +2436,15 @@ class admin_mainDb extends BaseDb
 			}
 			$params[] = $endDt;
 		}
+		// IPアドレス
+		if (!empty($ip)){
+			if (count($params) > 0){
+				$queryStr .=    'AND al_ip = ? ';
+			} else {
+				$queryStr .=    'WHERE al_ip = ? ';
+			}
+			$params[] = $ip;
+		}
 		$queryStr .=  'ORDER BY al_serial DESC limit ' . $limit . ' offset ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}
@@ -2444,9 +2454,10 @@ class admin_mainDb extends BaseDb
 	 * @param string	$path		アクセスパス
 	 * @param timestamp	$startDt	期間(開始日)
 	 * @param timestamp	$endDt		期間(終了日)
+	 * @param string    $ip			IPアドレス
 	 * @return int					総数
 	 */
-	function getAccessLogCount($path, $startDt, $endDt)
+	function getAccessLogCount($path, $startDt, $endDt, $ip)
 	{
 		$params = array();
 		$queryStr = 'SELECT * FROM _access_log ';
@@ -2470,6 +2481,15 @@ class admin_mainDb extends BaseDb
 				$queryStr .=    'WHERE al_dt < ? ';
 			}
 			$params[] = $endDt;
+		}
+		// IPアドレス
+		if (!empty($ip)){
+			if (count($params) > 0){
+				$queryStr .=    'AND al_ip = ? ';
+			} else {
+				$queryStr .=    'WHERE al_ip = ? ';
+			}
+			$params[] = $ip;
 		}
 		return $this->selectRecordCount($queryStr, $params);
 	}

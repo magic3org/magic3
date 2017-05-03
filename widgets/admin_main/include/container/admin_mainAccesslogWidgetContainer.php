@@ -184,6 +184,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$endNextDt = $this->endDt;
 		if (!empty($endNextDt)) $endNextDt = $this->getNextDay($endNextDt);			// 翌日を取得
 		
+		// アクセス元IPを取得
+		$ip = $request->trimValueOf('ip');
+		
 		// 表示条件
 		$maxListCount = $request->trimIntValueOf('viewcount', '0');
 		if (empty($maxListCount)) $maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
@@ -193,6 +196,10 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		if (!empty($this->startDt) && !empty($this->endDt) && $this->startDt > $this->endDt){
 			$this->setUserErrorMsg('期間の指定範囲にエラーがあります。');
 		}
+		if (!empty($ip)){
+			$value = filter_var($ip, FILTER_VALIDATE_IP);
+			if ($value === false) $this->setUserErrorMsg('IPの指定にエラーがあります。');
+		}
 		
 		// 総数を取得
 		$pathParam = $this->path;
@@ -201,7 +208,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		} else if ($pathParam == self::ACCESS_PATH_OTHER){		// その他のパス
 			$pathParam = '';
 		}
-		$totalCount = $this->db->getAccessLogCount($pathParam, $this->startDt, $endNextDt);
+		$totalCount = $this->db->getAccessLogCount($pathParam, $this->startDt, $endNextDt, $ip);
 		
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -224,7 +231,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		
 		// アクセスログを取得
-		$this->db->getAccessLogList($maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'), $this->startDt, $endNextDt);
+		$this->db->getAccessLogList($maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'), $this->startDt, $endNextDt, $ip);
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
