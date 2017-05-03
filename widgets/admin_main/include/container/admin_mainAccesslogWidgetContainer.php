@@ -249,7 +249,27 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$requestParamStr = '';			// 受信リクエスト
 		
 		$reloadData = false;		// データの再読み込み
-		if ($act == 'update'){		// 行更新のとき
+		if ($act == 'gethostname'){		// ホスト名取得のとき
+			// 設定データを取得
+			$ret = $this->db->getAccessLog($this->serialNo, $row);
+			if ($ret){
+				$ip = $row['al_ip'];
+				
+				// ホスト名取得
+				$hostname = gethostbyaddr($ip);
+				if ($hostname === false || $hostname == $ip){			// ホスト名が取得できないとき
+					$hostname = '<span style="color:red">[取得不可]</span>';
+				} else {		// ホスト名が取得できた場合は正引きでIPをチェック
+					$ret = $this->checkHostname($hostname, $ip);
+					if ($ret){
+						$hostname = $this->convertToDispString($hostname);
+					} else {
+						$hostname = '<span style="color:red">[正引き失敗]</span>';
+					}
+				}
+			}
+			
+			$reloadData = true;		// データの再読み込み
 		} else {
 			if (!empty($this->serialNo)) $reloadData = true;		// データの再読み込み
 		}
@@ -336,6 +356,15 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			$user = '[取得不可]';
 		} else {
 			$user = $this->convertToDispString($userName . '(' . $userId . ')');
+		}
+		
+		// ホスト名設定
+		if (!empty($hostname)){
+			$this->tmpl->setAttribute('show_hostname', 'visibility', 'visible');
+			$this->tmpl->addVar("show_hostname", "hostname", $hostname);
+			
+			// 「取得」ボタンを非表示にする
+			$this->tmpl->setAttribute('show_hostname_button', 'visibility', 'hidden');
 		}
 		
 		// 取得データを設定
@@ -520,6 +549,32 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$this->tmpl->addVars('path_list', $row);
 		$this->tmpl->parseTemplate('path_list', 'a');
 		return true;
+	}
+	/**
+	 * ホスト名のクライアントが指定のIPアドレスであるかチェック
+	 *
+	 * @param string $hostname		ホスト名
+	 * @param string $ip			IPアドレス
+	 * @return bool					true=適合する、false=適合しない
+	 */
+	function checkHostname($hostname, $ip)
+	{
+		$ipArray = false;
+		
+		if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){	// IPがIPv6の場合
+			$rows = @dns_get_record($hostname, DNS_AAAA);
+			if ($rows){
+				$ipArray = array_map(function ($v){ return $v['ipv6']; }, $rows);
+			}
+		} else if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){	// IPがIPv4の場合
+			$ipArray = gethostbynamel($hostname);
+		}
+		
+		if ($ipArray && in_array($ip, $ipArray)){
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

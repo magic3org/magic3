@@ -39,6 +39,11 @@ function cancelItem(){
 		return false;
 	}
 }
+function getHostname(){
+	document.main.act.value = 'gethostname';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
@@ -74,7 +79,9 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_ACCESSLOG_IP}>IP</span></th>
-	    <td colspan="3"><div class="form-control-static m3config_item">{IP}</div></td>
+	    <td><div class="form-control-static m3config_item">{IP}</div></td>
+	    <th>ホスト名</th>
+		<td><patTemplate:tmpl name="show_hostname" visibility="hidden"><div class="form-control-static m3config_item">{HOSTNAME}</div></patTemplate:tmpl><patTemplate:tmpl name="show_hostname_button" visibility="visible"><input type="button" class="button" onclick="getHostname();" value="取得" /></patTemplate:tmpl></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ACCESSLOG_URI}>URI</span></th>
