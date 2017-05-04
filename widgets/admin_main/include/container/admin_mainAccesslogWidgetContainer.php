@@ -217,6 +217,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$detailUrl = '?task=accesslog&path=' . $this->path;
 		if (!empty($this->startDt)) $detailUrl .= '&start_date=' . $this->startDt;	// 検索範囲開始日付
 		if (!empty($this->endDt)) $detailUrl .= '&end_date=' . $this->endDt;		// 検索範囲終了日付
+		if (!empty($ip)) $detailUrl .= '&ip=' . $ip;		// アクセス元IP
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $detailUrl);
 		
 		// アクセスパスメニュー作成
@@ -420,8 +421,10 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$ip = $fetchedRow['al_ip'];
 		$ipStr = $this->convertToDispString($ip);
 		if ($ip == $this->clientIp){			// クライアントのIPアドレスと同じときはグリーンで表示
-			$ipStr = '<font color="green">' . $ipStr . '</font>';
+			$ipStr = '<span style="color:green;">' . $ipStr . '</span>';
 		}
+		$ipLinkUrl = '?task=accesslog&ip=' . $ip;
+		$ipLink = '<a href="' . $this->convertUrlToHtmlEntity($ipLinkUrl) . '">' . $ipStr . '</a>';
 		
 		// ブラウザ、プラットフォームの情報を取得
 		if ($agent != $savedAgent) $this->browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
@@ -481,7 +484,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			'browser' => $browserImg,		// ブラウザ
 			'os' => $osImg,			// OS
 			'country' => $countryImg,		// 国画像
-			'ip' => $ipStr,		// クライアントIP
+			'ip' => $ipLink,		// クライアントIP
 			'user' => $userIconHtml,										// ユーザ
 			'dt' => $this->convertToDispDateTime($fetchedRow['al_dt']),	// 出力日時
 			'selected' => $selected												// 項目選択用ラジオボタン
