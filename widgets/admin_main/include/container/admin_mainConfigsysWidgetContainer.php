@@ -444,6 +444,22 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->setAttribute('show_site_smartphone_close', 'visibility', 'visible');
 		}
 		
+		// SSL証明書期限を取得
+		if (!empty($sslUrl)){
+			$expireDt = $this->_getSslExpireDt($sslUrl, $sslDomain);
+			if (empty($expireDt)){
+				$expireDtTag = '未取得';
+			} else {
+				if (time() <= $expireDt){
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				} else {
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				}
+			}
+		}
+		
 		// 画面に書き戻す
 		$checked = '';
 		if ($sitePcInPublic) $checked = 'checked';
@@ -494,11 +510,19 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 
 		// URL
 		$this->tmpl->addVar("_widget", "root_url", $this->gEnv->getRootUrl());
-		$this->tmpl->addVar("_widget", "ssl_url", $sslUrl);// SSLのURL
 		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
 		$this->tmpl->addVar("_widget", "site_smartphone_url", $siteSmartphoneUrl);		// スマートフォン用サイトURL
 		$this->tmpl->addVar("_widget", "site_mobile_url", $siteMobileUrl);		// 携帯用サイトURL
+		
+		// 共有SSL用のURL
+		if (!empty($sslUrl)){
+			$this->tmpl->setAttribute('show_ssl_url', 'visibility', 'hidden');
+			$this->tmpl->setAttribute('show_ssl_url_expiredt', 'visibility', 'visible');		// SSLの期限を表示
 			
+			$this->tmpl->addVar("show_ssl_url_expiredt", "ssl_url", $sslUrl);// SSLのURL
+			$this->tmpl->addVar('show_ssl_url_expiredt', 'ssl_expire_dt',	$expireDtTag);		// SSL証明書期限
+		}
+				
 		$checked = '';
 		if ($canDetailConfig) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "can_detail_config", $checked);
@@ -824,6 +848,50 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$ret = $this->db->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status, $row['pg_visible']);
 		}
 		return $ret;
+	}
+	/**
+	 * SSLの期限を取得
+	 *
+	 * @param string $url		SSL証明書を取得するURL
+	 * @param string $sslDomain	SSLの対象となるドメイン名
+	 * @return int				UNIXタイムスタンプ。取得できない場合は0。
+	 */
+	function _getSslExpireDt($url, &$sslDomain)
+	{
+		$arr = parse_url($url);
+		if ($arr == false)  return '';
+		
+		$hostname = $arr['host'];
+
+		$stream_context = stream_context_create(array(
+			'ssl' => array('capture_peer_cert' => true)
+		));
+		$fp = @stream_socket_client(
+			'ssl://' . $hostname . ':443',
+			$errno,
+			$errstr,
+			30,
+			STREAM_CLIENT_CONNECT,
+			$stream_context
+		);
+		if (!$fp) return 0;		// 取得不可の場合は終了
+		
+		$cont = stream_context_get_params($fp);
+		$parsed = openssl_x509_parse($cont['options']['ssl']['peer_certificate']);
+//		$expireDt = date("Y/m/d H:i:s", $parsed['validTo_time_t']);
+		$expireDt = $parsed['validTo_time_t'];
+		$sslDomain = $parsed['subject']['CN'];		// ドメイン名
+		
+		// ファイルポインタ閉じる
+		fclose($fp);
+		
+		// ドメイン名のチェック
+		if (strStartsWith($sslDomain, '*.')){		// ワイルドカードSSLの場合
+			if (!strEndsWith($hostname, substr($sslDomain, 1))) $expireDt = 0;
+		} else {
+			if (!strEndsWith($hostname, '.' . $sslDomain)) $expireDt = 0;
+		}
+		return $expireDt;
 	}
 }
 ?>

@@ -89,7 +89,8 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_SSL_URL}>共有SSLの<br />ルートURL</span></th>
-	    <td colspan="2"><input type="text" name="item_ssl_url" class="form-control" value="{SSL_URL}" size="60" maxlength="120" style="width:100%;" /></td>
+	    <td colspan="2"><patTemplate:tmpl name="show_ssl_url"><input type="text" name="item_ssl_url" class="form-control" maxlength="200" /></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_ssl_url_expiredt" visibility="hidden"><div class="col-sm-6 m3config_item"><input type="text" name="item_ssl_url" class="form-control" value="{SSL_URL}" maxlength="200" /></div><div class="form-control-static col-sm-6 m3config_item" style="padding-left:10px;">SSL証明書期限：{SSL_EXPIRE_DT}</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_CONFIGSYS_ACCESS_POINT}>アクセスポイント</span></th>
