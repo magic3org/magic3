@@ -936,9 +936,12 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 	-o-text-overflow: ellipsis;
 	margin: 3px 1px 0 1px;
 	padding: 1px;
-	-moz-border-radius: 8px; 
+	-moz-border-radius: 4px; 
+	-webkit-border-radius: 4px; 
+	border-radius: 4px;
+/*	-moz-border-radius: 8px; 
 	-webkit-border-radius: 8px; 
-	border-radius: 8px;
+	border-radius: 8px;*//* modified by magic3 */
 	/* for webkit CSS3 */
 	word-break: break-word;
 	overflow-wrap: break-word;
@@ -3039,7 +3042,7 @@ embed.elfinder-quicklook-preview-audio {
 		rgba(0,0,0,0) 100%);
 }
 /******************************************************************/
-/*                  Magic3 optional configure                     */
+/*                  Magic3用のカスタマイズ                        */
 /******************************************************************/
 .ui-dialog { z-index: 99999 !important ;}
 .ui-widget {
@@ -3059,10 +3062,19 @@ embed.elfinder-quicklook-preview-audio {
 }
 .ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
 
+/* thumbnail hover background image off */
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	background-image: none;
+}
+
 /* fix input text field size with Bootstrap */
 #elfinder .elfinder-button-search input {
 	width: 202px;
 	height: 24px;
 }
 /******************************************************************/
-
