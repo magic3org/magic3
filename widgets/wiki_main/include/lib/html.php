@@ -448,6 +448,14 @@ function password_form()
 					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				}
+			} else {
+				// パスワード認証ではない場合、編集権限がないページへのアクセスは不正アクセスとする
+				$widgetObj = $gEnvManager->getCurrentWidgetObj();
+				if (!empty($widgetObj)){
+					$page = WikiParam::getPage();
+					$msgDetail = 'アクセスをブロックしました。URL=' . $gEnvManager->getCurrentRequestUri();
+					$widgetObj->writeUserError(__METHOD__, 'Wikiページへの不正なアクセスを検出しました。ページ名=' . $page, 2200, $msgDetail);
+				}
 			}
 			return array(
 				'msg'	=> $_title_authorization_required,
