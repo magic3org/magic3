@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 class admin_wiki_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
+	protected $_baseUrl;			// 管理画面のベースURL
 	
 	// 画面
 	const TASK_PAGE			= 'page';				// Wikiページ管理(一覧)
@@ -37,6 +38,23 @@ class admin_wiki_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DBオブジェクト作成
 		if (!isset(self::$_mainDb)) self::$_mainDb = new wiki_mainDb();
+	}
+	/**
+	 * テンプレートに前処理
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _preAssign($request, &$param)
+	{
+		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		if (!empty($this->_openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);
+
+		// 管理画面ペースURL取得
+		$this->_baseUrl = $this->getAdminUrlWithOptionParam();
 	}
 	/**
 	 * テンプレートにデータ埋め込む

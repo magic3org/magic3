@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -80,6 +80,11 @@ function selpage(page){
 	document.main.submit();
 	return true;
 }
+function sortList(type){
+	document.main.sort.value = type;
+	document.main.submit();
+	return true;
+}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
@@ -97,6 +102,7 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="sort" value="{SORT}" />
 <h3 class="m3config_h"><span {_HELP_PAGE_LIST}>Wikiページ一覧</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_PAGE_BUTTONS}><div class="btn-group">
 <input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="アップロード" />
@@ -107,11 +113,11 @@ $(function(){
     <thead>
     <tr>
         <th class="select"><span {_HELP_PAGE_CHECK}>選択</span></th>
-        <th><span {_HELP_PAGE_ID}>ID</span></th>
-		<th style="width:50px;"><span {_HELP_PAGE_STATUS}>状態</span></th>
+        <th class="sort"><a href="#" onclick="sortList('{SORT_ID}');"><span {_HELP_PAGE_ID}>ID</span></a>{DIRECT_ICON_ID}</th>
+		<th class="sort" style="width:50px;"><a href="#" onclick="sortList('{SORT_LOCKED}');"><span {_HELP_PAGE_STATUS}>状態</span></a>{DIRECT_ICON_LOCKED}</th>
 		<th style="width:50px;"><span {_HELP_PAGE_VIEW_COUNT}>閲覧</span></th>
 		<th style="width:50px;"><span {_HELP_PAGE_ATTACH_COUNT}>添付</span></th>
-		<th style="width:110px;">更新日時</th>
+		<th class="sort" style="width:110px;"><a href="#" onclick="sortList('{SORT_DATE}');"><span {_HELP_PAGE_DATE}>更新日時</span></a>{DIRECT_ICON_DATE}</th>
 		<th style="width:60px;"><span {_HELP_CONTENT_ACT}>操作</span></th>
 	</tr>
     </thead>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,13 +22,20 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	private $serialNo;			// シリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $builtinPages;		// 自動生成されるWikiページ
+	private $sortKeyType;			// ソートキータイプ
+	private $sortKey;		// ソートキー
+	private $sortDirection;		// ソート方向
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
+	const SORT_ICON_SIZE = 10;		// ソートアイコンサイズ
 	const LOCK_ICON_FILE = '/images/system/lock32.png';			// ロック状態アイコン
 	const UNLOCK_ICON_FILE = '/images/system/unlock32_inactive.png';		// アンロック状態アイコン
 	const PREVIEW_ICON_FILE = '/images/system/window32.png';		// プレビュー用アイコン
+	const SORT_UP_ICON_FILE = '/images/system/arrow_up10.png';		// ソート降順アイコン
+	const SORT_DOWN_ICON_FILE = '/images/system/arrow_down10.png';		// ソート昇順アイコン
 	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
+	const DEFAULT_SORT_KEY = 'id';		// デフォルトのソートキー
 	
 	/**
 	 * コンストラクタ
@@ -43,6 +50,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
 		$this->builtinPages	= $this->wikiLibObj->getBuiltinPages();			// 自動生成されるWikiページ
+		$this->sortKeyType = array('id'/*WikiページID*/, 'date'/*更新日時*/, 'locked'/*ページロック状態*/);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -91,6 +99,14 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	{
 		$act = $request->trimValueOf('act');
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		$sort = $request->trimValueOf('sort');		// ソート順
+		
+		// ソート順
+		list($this->sortKey, $this->sortDirection) = explode('-', $sort);
+		if (!in_array($this->sortKey, $this->sortKeyType) || !in_array($this->sortDirection, array('0', '1'))){
+			$this->sortKey = self::DEFAULT_SORT_KEY;		// デフォルトのソートキー
+			$this->sortDirection = '1';	// 昇順
+		}
 		
 		if ($act == 'delete'){		// 項目削除の場合
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -311,12 +327,57 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$this->calcPageLink($pageNo, $totalCount, $this->maxListCount);
 		
 		// ページングリンク作成
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
-		
-		// イベントリストを取得
-		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
+		$sort = '';		// ソート値
+		if (!empty($this->sortKey)) $sort = '&sort=' . $this->sortKey . '-' . $this->sortDirection;
+//		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+
+		$currentBaseUrl = $this->_baseUrl . $sort;
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl/*リンク作成用*/);
+
+		// ページリストを取得
+//		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
+		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, $this->sortKey, $this->sortDirection, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
 		
+		// ソート用データ設定
+		if (empty($this->sortDirection)){
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
+			$iconTitle = '降順';
+		} else {
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_DOWN_ICON_FILE);	// ソート昇順アイコン
+			$iconTitle = '昇順';
+		}
+		$style = 'style="' . 'width:' . self::SORT_ICON_SIZE . 'px;height:' . self::SORT_ICON_SIZE . 'px;"';
+		$sortImage = '<img src="' . $iconUrl . '" title="' . $iconTitle . '" alt="' . $iconTitle . '" rel="m3help" ' . $style . ' />';
+		
+		switch ($this->sortKey){
+			case 'id':		// WikiページID
+				$this->tmpl->addVar('_widget', 'direct_icon_id', $sortImage);
+				break;
+			case 'date':		// 更新日時
+				$this->tmpl->addVar('_widget', 'direct_icon_date', $sortImage);
+				break;
+			case 'locked':		// ロック状態
+				$this->tmpl->addVar('_widget', 'direct_icon_locked', $sortImage);
+				break;
+		}
+		if ($this->sortKey == 'id' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_id', 'id-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_id', 'id-1');
+		}
+		if ($this->sortKey == 'date' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_date', 'date-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_date', 'date-1');
+		}
+		if ($this->sortKey == 'locked' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-1');
+		}
+		$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
+
 		// 一覧用項目
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);

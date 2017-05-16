@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -215,10 +215,12 @@ class wiki_mainDb extends BaseDb
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$pageNo				取得するページ(1～)
+	 * @param string	$sortKey			ソートキー(id=WikiページID,date=更新日時,locked=ロック状態)
+	 * @param int		$sortDirection		取得順(0=降順,1=昇順)
 	 * @param function	$callback			コールバック関数
 	 * @return 								なし
 	 */
-	function getAvailablePageList($limit, $pageNo, $callback)
+	function getAvailablePageList($limit, $pageNo, $sortKey, $sortDirection, $callback)
 	{
 		$offset = $limit * ($pageNo -1);
 		if ($offset < 0) $offset = 0;
@@ -228,7 +230,24 @@ class wiki_mainDb extends BaseDb
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND wc_type = ? ';
 		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く
-		$queryStr .=   'ORDER BY wc_id LIMIT ' . $limit . ' OFFSET ' . $offset;
+		
+		// ソート順
+		switch ($sortKey){
+			case 'id':		// WikiページID
+				$orderKey = 'wc_id ';
+				break;
+			case 'date':		// 更新日時
+				$orderKey = 'wc_content_dt ';
+				break;
+			case 'locked':		// ロック状態
+				$orderKey = 'wc_locked ';
+				break;
+		}
+		$ord = '';
+		if (empty($sortDirection)) $ord = 'DESC ';
+		$defaultOrder = '';
+		if ($sortKey != 'id') $defaultOrder = ', wc_id ';
+		$queryStr .=   'ORDER BY ' . $orderKey . $ord . $defaultOrder . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
 		$this->selectLoop($queryStr, array($type), $callback);
 	}
 	/**

@@ -631,6 +631,10 @@ span[rel="m3help"] { cursor: default; }
 {
 	text-decoration: underline;
 }
+.m3config_table th.sort img
+{
+	margin-left:5px;
+}
 .m3config_table th.narrow {
 	width: 75px;
 }

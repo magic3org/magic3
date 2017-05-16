@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -27,6 +27,8 @@ $HELP['visible_items_label']['title'] = '表示項目';
 $HELP['visible_items_label']['body'] = '画面に表示する項目の表示制御を行います。';
 $HELP['attach_files_label']['title'] = '添付ファイルアップロードディレクトリ';
 $HELP['attach_files_label']['body'] = 'Wikiページに添付するファイルの格納ディレクトリです。ファイルをアップロードするには、ディレクトリの書き込み権限が必要です。';
+$HELP['page_id']['title'] = 'WikiページID';
+$HELP['page_id']['body'] = 'Wikiページを区別するIDです。デフォルト値で「FrontPage,RecentChanges,RecentDeleted」のページは自動生成のシステム専用ページです。IDの変更はできますが、ページの削除できません。';
 $HELP['page_status']['title'] = 'Wikiページ状態';
 $HELP['page_status']['body'] = 'Wikiページの編集可否状態をロック(編集不可)またはアンロック(編集可)で示します。状態はフロントのツールバーから「解凍」「凍結」ボタンで変更します。';
 $HELP['page_view_count']['title'] = '閲覧数';
