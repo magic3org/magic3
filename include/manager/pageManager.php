@@ -1324,6 +1324,9 @@ class PageManager extends Core
 						switch ($firstKey){
 							case M3_REQUEST_PARAM_CONTENT_ID:		// コンテンツIDのとき
 							case M3_REQUEST_PARAM_CONTENT_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+							
 								// ローカルメニューのURLからページを特定。ページが特定できないときはページ属性で取得。
 								$url = $gEnvManager->getMacroPath($gEnvManager->getCurrentRequestUri());
 								$ret = $this->db->getSubPageIdByMenuItemUrl($url, $gEnvManager->getCurrentPageId(), M3_VIEW_TYPE_CONTENT, $rows);
@@ -1347,6 +1350,9 @@ class PageManager extends Core
 								break;
 							case M3_REQUEST_PARAM_PRODUCT_ID:	// 製品IDのとき
 							case M3_REQUEST_PARAM_PRODUCT_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PRODUCT;		// ページのコンテンツタイプ
 								
@@ -1357,6 +1363,9 @@ class PageManager extends Core
 							case M3_REQUEST_PARAM_BBS_ID_SHORT:
 							case M3_REQUEST_PARAM_BBS_THREAD_ID:
 							case M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BBS;		// ページのコンテンツタイプ
 								
@@ -1365,6 +1374,9 @@ class PageManager extends Core
 								break;
 							case M3_REQUEST_PARAM_EVENT_ID:		// イベント記事のとき
 							case M3_REQUEST_PARAM_EVENT_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_EVENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_EVENT;		// ページのコンテンツタイプ
 								
@@ -1373,6 +1385,9 @@ class PageManager extends Core
 								break;
 							case M3_REQUEST_PARAM_PHOTO_ID:		// フォトギャラリー写真のとき
 							case M3_REQUEST_PARAM_PHOTO_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PHOTO, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PHOTO;		// ページのコンテンツタイプ
 								
@@ -1383,6 +1398,9 @@ class PageManager extends Core
 							case M3_REQUEST_PARAM_BLOG_ID_SHORT:
 							case M3_REQUEST_PARAM_BLOG_ENTRY_ID:
 							case M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BLOG;		// ページのコンテンツタイプ
 								
@@ -1391,6 +1409,9 @@ class PageManager extends Core
 								break;
 							case M3_REQUEST_PARAM_ROOM_ID:		// ユーザ作成コンテンツのとき
 							case M3_REQUEST_PARAM_ROOM_ID_SHORT:
+								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
+								$this->_checkFirstValueRedirect($firstValue);
+								
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_USER, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_USER;		// ページのコンテンツタイプ
 						
@@ -1598,6 +1619,25 @@ class PageManager extends Core
 		
 		// 画面透過モードを設定
 		if ($openBy == 'tabs') $this->isTransparentMode = true;		// 画面透過モード
+	}
+	/**
+	 * URLの最初のパラメータが不正文字の場合はエラー画面へリダイレクト
+	 *
+	 * @param string $value			URLの最初のパラメータ値
+	 * @return 						なし
+	 */
+	function _checkFirstValueRedirect($value)
+	{
+		global $gEnvManager;
+		global $gOpeLogManager;
+		
+		// 半角英小文字、数字、アンダーバー、ハイフンのみ使用可能。
+		if (preg_match("/[^0-9a-z-_]/", $value)){
+			$errMessage = 'URLパラメータの不正。';
+			$gOpeLogManager->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2200, 'アクセスをブロックしました。URL: ' . $gEnvManager->getCurrentRequestUri());
+			
+			$this->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
+		}
 	}
 	/**
 	 * 言語に依存する情報を取り込む
