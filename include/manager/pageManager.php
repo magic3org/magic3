@@ -6240,12 +6240,15 @@ class PageManager extends Core
 	 * 現在のURLにアクセス可能かチェック
 	 *
 	 * @param bool $isActivePage	ページが有効かどうか
+	 * @param int  $errCode			エラーコード
 	 * @return bool					true=可能、false=不可
 	 */	
-	function canAccessUrl(&$isActivePage)
+	function canAccessUrl(&$isActivePage, &$errCode)
 	{
 		global $gEnvManager;
 
+		$errCode = 0;			// エラーコード初期化
+		
 		// 現在設定されているページIDを取得
 		$pageId		= $gEnvManager->getCurrentPageId();
 		$pageSubId	= $gEnvManager->getCurrentPageSubId();
@@ -6264,6 +6267,9 @@ class PageManager extends Core
 			}
 		} else {			// 無効ページのとき
 			$isActivePage = false;
+			
+			// ページIDの文字のチェック。ページIDは半角英小文字、数字、アンダーバー、ハイフンのみ使用可能。
+			if (preg_match("/[^0-9a-z-_]/", $pageSubId)) $errCode = 1;			// 不正文字検出
 		}
 		return false;
 	}

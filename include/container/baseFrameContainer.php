@@ -123,13 +123,19 @@ class BaseFrameContainer extends Core
 			$messageDetail = '';	// 詳細メッセージ
 			
 			// ページID,ページサブIDからアクセス権をチェック
-			$isPublicUrl = $this->gPage->canAccessUrl($isActivePage);
+			$isPublicUrl = $this->gPage->canAccessUrl($isActivePage, $errCode);
 			if (!$isPublicUrl && !$isSystemManageUser){// システム運用可能ユーザかどうか
 				$canAccess = false;
 				$isErrorAccess = true;		// 不正アクセスかどうか
 				$errMessage = 'ユーザに公開されていないページへのアクセス。';
 				
-				if (!$isActivePage) $toAdminType = 3;		// 有効なアクセスポイントでない場合は存在しないページとする
+				if (!$isActivePage){
+					if ($errCode == 1){			// ページIDが不正な場合
+						$toAdminType = 4;
+					} else {
+						$toAdminType = 3;		// 有効なアクセスポイント、ページでない場合は存在しないページとする
+					}
+				}
 			}
 
 			// ################### ユーザアクセス制御 ######################
@@ -228,6 +234,10 @@ class BaseFrameContainer extends Core
 							$messageDetail = 'アクセスポイント状態=非公開';
 							$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
 						}
+						break;
+					case 4:		// 不正なページIDの指定
+						$messageDetail = '不正なページIDの指定';
+						$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
 						break;
 					default:		// アクセス不可画面へ
 						// システム制御モードに変更
