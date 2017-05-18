@@ -1774,9 +1774,10 @@ class admin_mainDb extends BaseDb
 	 * @param int     $cleanType	クリーン処理タイプ
 	 * @param string  $generator	テンプレート作成アプリケーション
 	 * @param string  $version		テンプレートバージョン
+	 * @param string  $infoUrl		テンプレート情報リンク
 	 * @return						なし
 	 */
-	function addNewTemplate($id, $name, $type, $deviceType = 0, $cleanType = 0, $generator = '', $version = '')
+	function addNewTemplate($id, $name, $type, $deviceType = 0, $cleanType = 0, $generator = '', $version = '', $infoUrl = '')
 	{
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -1809,10 +1810,10 @@ class admin_mainDb extends BaseDb
 		if ($type >= 10) $useBootstrap = true;
 		
 		$queryStr = 'INSERT INTO _templates ';
-		$queryStr .=  '(tm_id, tm_history_index, tm_name, tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_use_bootstrap, tm_generator, tm_version, tm_create_dt, tm_create_user_id) ';
+		$queryStr .=  '(tm_id, tm_history_index, tm_name, tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_use_bootstrap, tm_generator, tm_version, tm_info_url, tm_create_dt, tm_create_user_id) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, $historyIndex, $name, $type, $deviceType, $mobile, $cleanType, intval($useBootstrap), $generator, $version, $now, $userId));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, $type, $deviceType, $mobile, $cleanType, intval($useBootstrap), $generator, $version, $infoUrl, $now, $userId));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();

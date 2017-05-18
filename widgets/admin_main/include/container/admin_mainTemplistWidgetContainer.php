@@ -636,6 +636,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$cleanType = 0;			// HTMLの出力のクリーニングタイプ
 		$genarator = '';		// テンプレート作成アプリケーション
 		$version = '';			// テンプレートバージョン
+		$infoUrl = '';			// テンプレート情報リンク
 		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $id;			// テンプレートディレクトリ
 				
 		// テンプレートの種別を判定
@@ -666,6 +667,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 									$cleanType = $this->checkTemplate($id);
 								}
 							}
+							
+							// テンプレート情報リンク
+							if (!empty($xml->infoUrl)) $infoUrl = $xml->infoUrl;
 						}
 					}
 				}
@@ -684,7 +688,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		}
 		
 		// テンプレートを登録
-		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version);
+		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version, $infoUrl);
 		return $ret;
 	}
 	/**
