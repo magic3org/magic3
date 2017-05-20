@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainAnalyzegraphWidgetContainer.php 5808 2013-03-08 05:18:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConditionBaseWidgetContainer.php');
@@ -20,7 +20,6 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 {
 	private $db;	// DB接続オブジェクト
 	private $analyzeDb;
-	private $sysDb;	// システム情報取得用
 	private $graphTypeArray;	// グラフタイプ
 	private $termTypeArray;		// 期間タイプ
 	private $graphType;			// グラフ種別
@@ -39,7 +38,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 	const TERM_TYPE_ALL = '_all';				// 全データ表示選択
 	const DEFAULT_GRAPH_TYPE = 'pageview';		// デフォルトのグラフ種別
 	const DEFAULT_LIST_COUNT = 10;			// 最大リスト表示数
-	const MAX_PAGE_COUNT = 10;				// 最大ページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const LIB_JQPLOT = 'jquery.jqplot';		// ライブラリID
 	
 	/**
@@ -100,7 +99,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 	function _assign($request, &$param)
 	{
 		// 初期値設定
-		$viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		
 		$act = $request->trimValueOf('act');
 		$this->graphType = $request->trimValueOf('graphtype');			// グラフ種別
@@ -173,7 +172,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 			// 集計終了日までのデータを作成
 			$graphStartDate = date("Y/m/d", strtotime("$this->completedDate 1 day"));		// 処理終了日翌日
 			$this->createGraphData($graphStartDate, $endDate);
-					
+		
 			// ##### グラフデータ埋め込み #####
 			$this->graphDataStr = trim($this->graphDataStr, ',');		// グラフデータ
 			if (empty($this->graphDataStr)){
@@ -181,6 +180,20 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 				$this->tmpl->setAttribute('show_graph', 'visibility', 'hidden');		// グラフ非表示
 				$this->tmpl->setAttribute('draw_graph', 'visibility', 'hidden');		// グラフ非表示
 			} else {
+				// グラフの開始終了期間
+				if (empty($startDate)){
+					$termStart = date("Y-m-d", strtotime("-30 day"));
+				} else {
+					$termStart = $startDate;
+				}
+				if (empty($endDate)){
+					$termEnd = date("Y-m-d", strtotime("-1 day"));
+				} else {
+					$termEnd = date("Y-m-d", strtotime("$endDate"));
+				}
+				$this->tmpl->addVar("draw_graph", "term_start", $termStart);// グラフ期間開始
+				$this->tmpl->addVar("draw_graph", "term_end", $termEnd);// グラフ期間終了
+			
 				// グラフデータ作成
 				for ($i = 0; $i < count($this->yTickValueArray) -1; $i++){
 					if ($this->maxPv >= $this->yTickValueArray[$i + 1]){
@@ -221,19 +234,24 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 			}
 		}
 
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		$this->startNo = ($pageNo -1) * $maxListCount +1;		// 先頭の行番号
+		
 		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
+/*		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
+		$startNo = ($pageNo -1) * $maxListCount +1;		// 先頭の行番号
+		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;// 最後の行番号
 		$this->startNo = $startNo;			// 先頭の項目番号
+		*/
 		
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i > self::MAX_PAGE_COUNT) break;			// 最大ページ数以上のときは終了
+				if ($i > self::LINK_PAGE_COUNT) break;			// 最大ページ数以上のときは終了
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
@@ -241,26 +259,25 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selectPage($1);return false;');
+
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
-		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
+//		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
+//		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		
 		// 一覧作成
 		if (!empty($endDate)){		// 集計済みデータがあるとき
 			switch ($this->graphType){
 				case 'pageview':		//ページビュー
-					$this->db->getUrlListByPageView($pathParam, $startDate, $endDate, $viewCount, $pageNo, array($this, 'pageViewLoop'));
+					$this->db->getUrlListByPageView($pathParam, $startDate, $endDate, $maxListCount, $pageNo, array($this, 'pageViewLoop'));
 					break;
 				case 'visit':			// 訪問数
-					$this->db->getUrlListByDailyCount(0/*訪問数*/, $pathParam, $startDate, $endDate, $viewCount, $pageNo, array($this, 'pageViewLoop'));
+					$this->db->getUrlListByDailyCount(0/*訪問数*/, $pathParam, $startDate, $endDate, $maxListCount, $pageNo, array($this, 'pageViewLoop'));
 					break;
 				case 'visitor':			// 訪問者数
-					$this->db->getUrlListByDailyCount(1/*訪問者数*/, $pathParam, $startDate, $endDate, $viewCount, $pageNo, array($this, 'pageViewLoop'));
+					$this->db->getUrlListByDailyCount(1/*訪問者数*/, $pathParam, $startDate, $endDate, $maxListCount, $pageNo, array($this, 'pageViewLoop'));
 					break;
 			}
 		}
@@ -307,7 +324,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 		}
 		$row = array(
 			'value'    => self::ACCESS_PATH_ALL,			// アクセスパス
-			'name'     => 'すべて表示',			// 表示文字列
+			'name'     => 'すべて',			// 表示文字列
 			'selected' => $selected														// 選択中かどうか
 		);
 		$this->tmpl->addVars('path_list', $row);
@@ -329,7 +346,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 		if ($fetchedRow['pg_path'] == $this->path){
 			$selected = 'selected';
 		}
-		$name = $this->convertToDispString($fetchedRow['pg_path']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// アクセスポイント名
 		$row = array(
 			'value'    => $this->convertToDispString($fetchedRow['pg_path']),			// アクセスパス
 			'name'     => $name,			// ページ名

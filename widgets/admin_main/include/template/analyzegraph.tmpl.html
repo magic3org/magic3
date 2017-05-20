@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: analyzegraph.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -32,14 +32,16 @@ function previewInOtherWindow(url)
 	return true;
 }
 $(function(){
-	// テーブル行配色
-	m3_tableWithScrollbar('urllist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('table_url');
 	
 <patTemplate:tmpl name="draw_graph">
 	line1=[{LINE1_DATA}];
 	plot = $.jqplot('chart1', [line1], {
 			axes:{
 				xaxis:{
+					min:'{TERM_START}',
+					max:'{TERM_END}',
 					renderer:$.jqplot.DateAxisRenderer},
 				yaxis:{
 					min:0,
@@ -55,65 +57,57 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="analyzegraph" />
 <input type="hidden" name="act" />
 <input type="hidden" name="page" />
-<table>
-<tr><td colspan="2">
-<label><span {_HELP_ANALYZEGRAPH_GRAPHTYPE}>グラフ種別:</span></label>
-    <select name="graphtype" onchange="selectMenu();">
-        <patTemplate:tmpl name="graphtype_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>&nbsp;&nbsp;&nbsp;&nbsp;<label>アクセスポイント:</label>
-    <select name="path" onchange="selectMenu();">
-        <patTemplate:tmpl name="path_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>&nbsp;&nbsp;&nbsp;&nbsp;<label>期間:</label>
-    <select name="term" onchange="selectMenu();">
-        <patTemplate:tmpl name="term_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>
-</td></tr>
-<tr><td align="center" colspan="2">
-<patTemplate:tmpl name="show_graph">
-<div class="jqPlot" id="chart1" style="height:320px; width:800px;" /></div>
+
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYZEGRAPH_GRAPHTYPE}>アクセス数</span></h3>
+<div class="form-control-static m3config_h_side_label" style="margin-left:20px;"><span {_HELP_ANALYZEGRAPH_GRAPHTYPE_TYPE}>種別：</span></div>
+<select name="graphtype" class="form-control" onchange="selectMenu();" style="display:inline-block;width:150px;margin-top:-7px;">
+<patTemplate:tmpl name="graphtype_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-<br />
-</td></tr>
-<tr><td colspan="2">
-<label><span {_HELP_ANALYZEGRAPH_TOP_URL}>上位URL</span></label>
-</td></tr>
-<tr><td colspan="2">
-<table id="urllist" class="simple-table" width="800">
+</select>
+<div class="form-control-static m3config_h_side_label" style="margin-left:20px;"><span {_HELP_ANALYZEGRAPH_ACCESS_POINT}>アクセス：</span></div>
+<select name="path" class="form-control" onchange="selectMenu();" style="display:inline-block;width:250px;margin-top:-7px;">
+<patTemplate:tmpl name="path_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+<div class="form-control-static m3config_h_side_label" style="margin-left:20px;"><span>期間：</span></div>
+<select name="term" class="form-control" onchange="selectMenu();" style="display:inline-block;width:100px;margin-top:-7px;">
+<patTemplate:tmpl name="term_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+
+<patTemplate:tmpl name="show_graph">
+<div class="jqPlot" id="chart1" style="height:320px;width:900px;margin:0 auto;" /></div>
+</patTemplate:tmpl>
+
+<h3><span {_HELP_ANALYZEGRAPH_TOP_URL}>上位URL</span></h3>
+<table id="table_url">
     <thead>
-        <tr>
-	    <th width="7%"><span {_HELP_LOGINHISTORY_NAME}>No</span></th>
-	    <th width="80%"><span {_HELP_LOGINHISTORY_IP}>URL</span></th>
-	    <th width="13%">回数</th>
+    <tr>
+	    <th style="width:50px;"><span {_HELP_LOGINHISTORY_NAME}>No</span></th>
+	    <th style="width:500px;"><span {_HELP_LOGINHISTORY_IP}>URL</span></th>
+	    <th>総数</th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="urllist">
-        <tr>
-	    <td align="center">{NO}</td>
-	    <td><a href="#" onclick="previewInOtherWindow('{PREVIEW_URL}');">{URL}</a></td>
-	    <td align="center">{COUNT}</td>
+    <patTemplate:tmpl name="urllist">
+    <tr>
+	    <td><div class="form-control-static m3config_item">{NO}</div></td>
+	    <td class="linebreak"><a href="#" onclick="previewInOtherWindow('{PREVIEW_URL}');">{URL}</a></td>
+	    <td><div class="form-control-static m3config_item">{COUNT}</div></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-<tr><td>
 {PAGE_LINK}
-</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label></td></tr>
-</table>
 </form>
 </div>
 </patTemplate:tmpl>
