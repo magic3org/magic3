@@ -573,6 +573,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'googlebot'					=> 'google.gif',	// Google
 			'googlebot-mobile'			=> 'google.gif',	// Google-Mobile
 			'mediapartners-google'		=> 'google.gif',	// Google
+			'google favicon'			=> 'google.gif',	// Google
 			'msnbot'					=> 'msn.gif',	// MSN
 			'msnbot-media'				=> 'msn.gif',	// MSN
 			'yahooseeker'				=> 'yahoo.gif',	// YahooSeeker
