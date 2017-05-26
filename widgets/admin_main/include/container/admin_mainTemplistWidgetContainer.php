@@ -539,6 +539,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			case 10:					// Bootstrap v3.0型
 				$formatType = 'B30';		// テンプレート形式
 				break;
+			case 100:					// WordPress型
+				$formatType = 'W00';		// テンプレート形式
+				break;
 			default:
 				$formatType = $this->_('Not Detected');			// 未定
 				break;
@@ -672,6 +675,11 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 							if (!empty($xml->infoUrl)) $infoUrl = $xml->infoUrl;
 						}
 					}
+				} else {
+					// 設定ファイルがない場合はWordPressテンプレートかどうかチェック
+					$content = file_get_contents($templateDir . '/header.php');
+					$ret = $this->isWordpressTemplate($content);
+					if ($ret) $templType = 100;		// WordPress型
 				}
 				// ##### テンプレート作成アプリケーションを取得 #####
 				// Artisteerテンプレートかどうか確認
@@ -819,6 +827,21 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
         $ret = preg_match($pattern, $src, $matches);
 		if ($ret) $version = $matches[1];
 		return $version;
+	}
+	/**
+	 * WordPressテンプレートかどうかチェック
+	 *
+	 * @param string $src		検索するデータ
+	 * @return bool				true=WordPressテンプレート、false=WordPressテンプレート以外
+	 */
+	function isWordpressTemplate($src)
+	{
+		$pos = strpos($src, 'wp_head()');
+		if ($pos === false){
+			return false;
+		} else {
+			return true;
+		}
 	}
 	/**
 	 * Themlerテンプレートかどうかを判断
