@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -397,13 +397,22 @@ class EnvManager extends Core
 		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'data';
 	}
 	/**
-	 * Joomla用ルートディレクトリへのパスを取得
+	 * Joomla用ライブラリルートディレクトリへのパスを取得
 	 *
 	 * @return string			パス
 	 */
 	public function getJoomlaRootPath()
 	{
 		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'mos';
+	}
+	/**
+	 * Wordpress用ライブラリルートディレクトリへのパスを取得
+	 *
+	 * @return string			パス
+	 */
+	public function getWordpressRootPath()
+	{
+		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'wp';
 	}
 	/**
 	 * スクリプトファイルディレクトリへのパスを取得

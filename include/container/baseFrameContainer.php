@@ -660,7 +660,11 @@ class BaseFrameContainer extends Core
 		// サブクラスの前処理を実行
 		if (method_exists($this, '_preBuffer')) $this->_preBuffer($request);
 	
-		if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
+		if ($convType == 100){		// Wordpressテンプレートのとき
+			require_once($this->gEnv->getWordpressRootPath() . '/general-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/template.php');
+		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
 			require_once($this->gEnv->getJoomlaRootPath() . '/JParameter.php');
