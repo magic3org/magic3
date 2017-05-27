@@ -30,6 +30,7 @@
 function get_option( $option, $default = false ) {
 	global $wpdb;
 
+return false;
 	$option = trim( $option );
 	if ( empty( $option ) )
 		return false;
@@ -87,7 +88,7 @@ function get_option( $option, $default = false ) {
 		} else {
 			$value = wp_cache_get( $option, 'options' );
 
-			if ( false === $value ) {
+/*			if ( false === $value ) {
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", $option ) );
 
 				// Has to be get_row instead of get_var because of funkiness with 0, false, null values
@@ -100,11 +101,11 @@ function get_option( $option, $default = false ) {
 					}
 					$notoptions[$option] = true;
 					wp_cache_set( 'notoptions', $notoptions, 'options' );
-
+*/
 					/** This filter is documented in wp-includes/option.php */
-					return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
+/*					return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
 				}
-			}
+			}*/
 		}
 	} else {
 		$suppress = $wpdb->suppress_errors();
@@ -184,7 +185,7 @@ function wp_load_alloptions() {
 	else
 		$alloptions = false;
 
-	if ( !$alloptions ) {
+/*	if ( !$alloptions ) {
 		$suppress = $wpdb->suppress_errors();
 		if ( !$alloptions_db = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options WHERE autoload = 'yes'" ) )
 			$alloptions_db = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" );
@@ -195,7 +196,7 @@ function wp_load_alloptions() {
 		}
 		if ( ! wp_installing() || ! is_multisite() )
 			wp_cache_add( 'alloptions', $alloptions, 'options' );
-	}
+	}*/
 
 	return $alloptions;
 }
