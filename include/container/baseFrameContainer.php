@@ -661,9 +661,48 @@ class BaseFrameContainer extends Core
 		if (method_exists($this, '_preBuffer')) $this->_preBuffer($request);
 	
 		if ($convType == 100){		// Wordpressテンプレートのとき
-			require_once($this->gEnv->getWordpressRootPath() . '/general-template.php');
+			// WordPress用定義値
+			define('WPINC', 'wp-includes');
+			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
+			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
+//			define('STYLESHEETPATH', get_stylesheet_directory());
+			define('TEMPLATE', $curTemplate);		// for Magic3
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/functions.php');
+			
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
+			
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/link-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/author-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/user.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/theme.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
+//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/shortcodes.php');
+			
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/widgets.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/kses.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
+			
+			// テンプレート内のファイルを読み込む
+			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
+		
+			wp_initial_constants();
+			$GLOBALS['wp_query'] = new WP_Query();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
@@ -689,8 +728,8 @@ class BaseFrameContainer extends Core
 			// Joomla!v1.5用の設定
 			define('JPATH_BASE', dirname(__FILE__));
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
-			define('JPATH_PLUGINS', $gEnvManager->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
-//			define('JPATH_THEMES', $gEnvManager->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
+			define('JPATH_PLUGINS', $this->gEnv->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
+//			define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
 			define('DS', DIRECTORY_SEPARATOR);
 			$this->language = $this->gEnv->getCurrentLanguage();
 			$this->template = $curTemplate;
