@@ -35,9 +35,9 @@ function wp_set_current_user($id, $name = '') {
 		return $current_user;
 	}
 
-	$current_user = new WP_User( $id, $name );
-
-	setup_userdata( $current_user->ID );
+//	$current_user = new WP_User( $id, $name );
+//
+//	setup_userdata( $current_user->ID );
 
 	/**
 	 * Fires after the current user is set.
@@ -101,8 +101,8 @@ function get_user_by( $field, $value ) {
 	if ( !$userdata )
 		return false;
 
-	$user = new WP_User;
-	$user->init( $userdata );
+//	$user = new WP_User;
+//	$user->init( $userdata );
 
 	return $user;
 }
@@ -958,9 +958,15 @@ if ( !function_exists('is_user_logged_in') ) :
  * @return bool True if user is logged in, false if not logged in.
  */
 function is_user_logged_in() {
-	$user = wp_get_current_user();
+/*	$user = wp_get_current_user();
 
-	return $user->exists();
+	return $user->exists();*/
+	
+	global $gEnvManager;
+	
+	$ret = $gEnvManager->isCurrentUserLogined();
+	
+	return $ret;
 }
 endif;
 

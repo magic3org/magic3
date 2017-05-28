@@ -710,10 +710,10 @@ function get_body_class( $class = '' ) {
 	if ( is_user_logged_in() )
 		$classes[] = 'logged-in';
 
-	if ( is_admin_bar_showing() ) {
+/*	if ( is_admin_bar_showing() ) {
 		$classes[] = 'admin-bar';
 		$classes[] = 'no-customize-support';
-	}
+	}*/
 
 	if ( get_background_color() !== get_theme_support( 'custom-background', 'default-color' ) || get_background_image() )
 		$classes[] = 'custom-background';
