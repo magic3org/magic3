@@ -29,8 +29,8 @@
  */
 function get_option( $option, $default = false ) {
 	global $wpdb;
+	global $gEnvManager;
 
-return false;
 	$option = trim( $option );
 	if ( empty( $option ) )
 		return false;
@@ -118,7 +118,6 @@ return false;
 			return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
 		}
 	}
-
 	// If home is not set use siteurl.
 	if ( 'home' == $option && '' == $value )
 		return get_option( 'siteurl' );
@@ -126,6 +125,12 @@ return false;
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );
 
+	// ##### Magic3 configration #####
+/*	if ($option == 'template'){
+//		$value = $gEnvManager->getCurrentTemplate();
+		$value = 'wisteria';
+	}*/
+	
 	/**
 	 * Filters the value of an existing option.
 	 *

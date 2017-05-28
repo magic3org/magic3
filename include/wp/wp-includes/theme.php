@@ -108,7 +108,7 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 	}
 
-	return new WP_Theme( $stylesheet, $theme_root );
+//	return new WP_Theme( $stylesheet, $theme_root );
 }
 
 /**
@@ -301,10 +301,10 @@ function get_template() {
  * @return string Template directory path.
  */
 function get_template_directory() {
-	$template = get_template();
+/*	$template = get_template();
 	$theme_root = get_theme_root( $template );
 	$template_dir = "$theme_root/$template";
-
+*/
 	/**
 	 * Filters the current theme directory path.
 	 *
@@ -314,7 +314,10 @@ function get_template_directory() {
 	 * @param string $template     Directory name of the current theme.
 	 * @param string $theme_root   Absolute path to the themes directory.
 	 */
-	return apply_filters( 'template_directory', $template_dir, $template, $theme_root );
+//	return apply_filters( 'template_directory', $template_dir, $template, $theme_root );
+
+	global $gEnvManager;
+	return $gEnvManager->getTemplatesPath() . '/' . TEMPLATE;
 }
 
 /**
@@ -823,7 +826,7 @@ function validate_current_theme() {
  * @return array|void Theme modifications.
  */
 function get_theme_mods() {
-	$theme_slug = get_option( 'stylesheet' );
+/*	$theme_slug = get_option( 'stylesheet' );
 	$mods = get_option( "theme_mods_$theme_slug" );
 	if ( false === $mods ) {
 		$theme_name = get_option( 'current_theme' );
@@ -835,7 +838,7 @@ function get_theme_mods() {
 			delete_option( "mods_$theme_name" );
 		}
 	}
-	return $mods;
+	return $mods;*/
 }
 
 /**
