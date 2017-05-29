@@ -317,7 +317,8 @@ function get_template_directory() {
 //	return apply_filters( 'template_directory', $template_dir, $template, $theme_root );
 
 	global $gEnvManager;
-	return $gEnvManager->getTemplatesPath() . '/' . TEMPLATE;
+	$path = $gEnvManager->getTemplatesPath() . '/' . $gEnvManager->getCurrentTemplateId();
+	return $path;
 }
 
 /**
@@ -543,7 +544,7 @@ function search_theme_directories( $force = false ) {
  * @return string Theme path.
  */
 function get_theme_root( $stylesheet_or_template = false ) {
-	global $wp_theme_directories;
+/*	global $wp_theme_directories;
 
 	if ( $stylesheet_or_template && $theme_root = get_raw_theme_root( $stylesheet_or_template ) ) {
 		// Always prepend WP_CONTENT_DIR unless the root currently registered as a theme directory.
@@ -553,7 +554,7 @@ function get_theme_root( $stylesheet_or_template = false ) {
 	} else {
 		$theme_root = WP_CONTENT_DIR . '/themes';
 	}
-
+*/
 	/**
 	 * Filters the absolute path to the themes directory.
 	 *
@@ -561,7 +562,10 @@ function get_theme_root( $stylesheet_or_template = false ) {
 	 *
 	 * @param string $theme_root Absolute path to themes directory.
 	 */
-	return apply_filters( 'theme_root', $theme_root );
+//	return apply_filters( 'theme_root', $theme_root );
+	global $gEnvManager;
+	$path = $gEnvManager->getTemplatesPath();
+	return $path;
 }
 
 /**

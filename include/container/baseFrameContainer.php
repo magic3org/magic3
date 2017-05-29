@@ -666,42 +666,43 @@ class BaseFrameContainer extends Core
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
 			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
 //			define('STYLESHEETPATH', get_stylesheet_directory());
-			define('TEMPLATE', $curTemplate);		// for Magic3
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/functions.php');
-			
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
-			
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
+//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
+//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
+
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post.php');
+//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/user.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/widgets.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/kses.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/script-loader.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/theme.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/template.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/link-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/author-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/user.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/theme.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
-//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/shortcodes.php');
-			
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/widgets.php');
-			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/kses.php');
+//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
-			
+
 			// テンプレート内のファイルを読み込む
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
 		
-			wp_initial_constants();
+			// データ初期化
+			wp_initial_constants();			// デフォルト値取得
+			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp_query'] = new WP_Query();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
