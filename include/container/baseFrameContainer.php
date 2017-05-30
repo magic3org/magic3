@@ -680,8 +680,9 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post.php');
-//			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/user.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/user.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/widgets.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/http.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/kses.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/script-loader.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/theme.php');
@@ -694,6 +695,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/taxonomy.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
 

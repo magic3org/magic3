@@ -192,10 +192,10 @@ function get_stylesheet_directory() {
  * @return string
  */
 function get_stylesheet_directory_uri() {
-	$stylesheet = str_replace( '%2F', '/', rawurlencode( get_stylesheet() ) );
+/*	$stylesheet = str_replace( '%2F', '/', rawurlencode( get_stylesheet() ) );
 	$theme_root_uri = get_theme_root_uri( $stylesheet );
 	$stylesheet_dir_uri = "$theme_root_uri/$stylesheet";
-
+*/
 	/**
 	 * Filters the stylesheet directory URI.
 	 *
@@ -205,7 +205,12 @@ function get_stylesheet_directory_uri() {
 	 * @param string $stylesheet         Name of the activated theme's directory.
 	 * @param string $theme_root_uri     Themes root URI.
 	 */
-	return apply_filters( 'stylesheet_directory_uri', $stylesheet_dir_uri, $stylesheet, $theme_root_uri );
+//	return apply_filters( 'stylesheet_directory_uri', $stylesheet_dir_uri, $stylesheet, $theme_root_uri );
+
+	global $gEnvManager;
+	
+	$url = $gEnvManager->getTemplatesUrl() . '/' . $gEnvManager->getCurrentTemplateId();
+	return $url;
 }
 
 /**
@@ -219,8 +224,8 @@ function get_stylesheet_directory_uri() {
  * @return string
  */
 function get_stylesheet_uri() {
-	$stylesheet_dir_uri = get_stylesheet_directory_uri();
-	$stylesheet_uri = $stylesheet_dir_uri . '/style.css';
+//	$stylesheet_dir_uri = get_stylesheet_directory_uri();
+//	$stylesheet_uri = $stylesheet_dir_uri . '/style.css';
 	/**
 	 * Filters the URI of the current theme stylesheet.
 	 *
@@ -229,7 +234,11 @@ function get_stylesheet_uri() {
 	 * @param string $stylesheet_uri     Stylesheet URI for the current theme/child theme.
 	 * @param string $stylesheet_dir_uri Stylesheet directory URI for the current theme/child theme.
 	 */
-	return apply_filters( 'stylesheet_uri', $stylesheet_uri, $stylesheet_dir_uri );
+//	return apply_filters( 'stylesheet_uri', $stylesheet_uri, $stylesheet_dir_uri );
+	global $gEnvManager;
+	
+	$url = get_stylesheet_directory_uri() . '/style.css';
+	return $url;
 }
 
 /**
@@ -317,6 +326,7 @@ function get_template_directory() {
 //	return apply_filters( 'template_directory', $template_dir, $template, $theme_root );
 
 	global $gEnvManager;
+	
 	$path = $gEnvManager->getTemplatesPath() . '/' . $gEnvManager->getCurrentTemplateId();
 	return $path;
 }
@@ -329,10 +339,10 @@ function get_template_directory() {
  * @return string Template directory URI.
  */
 function get_template_directory_uri() {
-	$template = str_replace( '%2F', '/', rawurlencode( get_template() ) );
+/*	$template = str_replace( '%2F', '/', rawurlencode( get_template() ) );
 	$theme_root_uri = get_theme_root_uri( $template );
 	$template_dir_uri = "$theme_root_uri/$template";
-
+*/
 	/**
 	 * Filters the current theme directory URI.
 	 *
@@ -342,7 +352,11 @@ function get_template_directory_uri() {
 	 * @param string $template         Directory name of the current theme.
 	 * @param string $theme_root_uri   The themes root URI.
 	 */
-	return apply_filters( 'template_directory_uri', $template_dir_uri, $template, $theme_root_uri );
+//	return apply_filters( 'template_directory_uri', $template_dir_uri, $template, $theme_root_uri );
+	global $gEnvManager;
+
+	$url = $gEnvManager->getTemplatesUrl() . '/' . $gEnvManager->getCurrentTemplateId();
+	return $url;
 }
 
 /**
@@ -355,7 +369,7 @@ function get_template_directory_uri() {
  * @return array|string An array of theme roots keyed by template/stylesheet or a single theme root if all themes have the same root.
  */
 function get_theme_roots() {
-	global $wp_theme_directories;
+/*	global $wp_theme_directories;
 
 	if ( count($wp_theme_directories) <= 1 )
 		return '/themes';
@@ -365,7 +379,11 @@ function get_theme_roots() {
 		search_theme_directories( true ); // Regenerate the transient.
 		$theme_roots = get_site_transient( 'theme_roots' );
 	}
-	return $theme_roots;
+	return $theme_roots;*/
+	global $gEnvManager;
+
+	$path = $gEnvManager->getTemplatesPath();
+	return $path;
 }
 
 /**
@@ -564,6 +582,7 @@ function get_theme_root( $stylesheet_or_template = false ) {
 	 */
 //	return apply_filters( 'theme_root', $theme_root );
 	global $gEnvManager;
+	
 	$path = $gEnvManager->getTemplatesPath();
 	return $path;
 }
@@ -639,13 +658,13 @@ function get_raw_theme_root( $stylesheet_or_template, $skip_cache = false ) {
 
 	$theme_root = false;
 
-	// If requesting the root for the current theme, consult options to avoid calling get_theme_roots()
+/*	// If requesting the root for the current theme, consult options to avoid calling get_theme_roots()
 	if ( ! $skip_cache ) {
 		if ( get_option('stylesheet') == $stylesheet_or_template )
 			$theme_root = get_option('stylesheet_root');
 		elseif ( get_option('template') == $stylesheet_or_template )
 			$theme_root = get_option('template_root');
-	}
+	}*/
 
 	if ( empty($theme_root) ) {
 		$theme_roots = get_theme_roots();

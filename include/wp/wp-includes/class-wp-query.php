@@ -886,7 +886,7 @@ class WP_Query {
 			$this->query_vars_hash = false;
 			$this->parse_tax_query( $qv );
 
-			foreach ( $this->tax_query->queries as $tax_query ) {
+/*			foreach ( $this->tax_query->queries as $tax_query ) {
 				if ( ! is_array( $tax_query ) ) {
 					continue;
 				}
@@ -904,7 +904,7 @@ class WP_Query {
 					}
 				}
 			}
-			unset( $tax_query );
+			unset( $tax_query );*/
 
 			if ( empty($qv['author']) || ($qv['author'] == '0') ) {
 				$this->is_author = false;
@@ -1271,7 +1271,7 @@ class WP_Query {
 			);
 		}
 
-		$this->tax_query = new WP_Tax_Query( $tax_query );
+//		$this->tax_query = new WP_Tax_Query( $tax_query );
 
 		/**
 		 * Fires after taxonomy-related query vars have been parsed.
@@ -1687,8 +1687,8 @@ class WP_Query {
 		$q = $this->fill_query_vars($q);
 
 		// Parse meta query
-		$this->meta_query = new WP_Meta_Query();
-		$this->meta_query->parse_query_vars( $q );
+//		$this->meta_query = new WP_Meta_Query();
+//		$this->meta_query->parse_query_vars( $q );
 
 		// Set a flag if a pre_get_posts hook changed the query vars.
 		$hash = md5( serialize( $this->query_vars ) );
@@ -1999,7 +1999,7 @@ class WP_Query {
 		if ( !$this->is_singular ) {
 			$this->parse_tax_query( $q );
 
-			$clauses = $this->tax_query->get_sql( $wpdb->posts, 'ID' );
+//			$clauses = $this->tax_query->get_sql( $wpdb->posts, 'ID' );
 
 			$join .= $clauses['join'];
 			$where .= $clauses['where'];
@@ -2260,7 +2260,7 @@ class WP_Query {
 		} elseif ( !empty( $post_type ) && is_array( $post_type ) ) {
 			$where .= " AND {$wpdb->posts}.post_type IN ('" . join("', '", esc_sql( $post_type ) ) . "')";
 		} elseif ( ! empty( $post_type ) ) {
-			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_type = %s", $post_type );
+//			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_type = %s", $post_type );
 			$post_type_object = get_post_type_object ( $post_type );
 		} elseif ( $this->is_attachment ) {
 			$where .= " AND {$wpdb->posts}.post_type = 'attachment'";
@@ -2771,9 +2771,9 @@ class WP_Query {
 		$this->posts = apply_filters_ref_array( 'posts_pre_query', array( null, &$this ) );
 
 		if ( 'ids' == $q['fields'] ) {
-			if ( null === $this->posts ) {
-				$this->posts = $wpdb->get_col( $this->request );
-			}
+//			if ( null === $this->posts ) {
+//				$this->posts = $wpdb->get_col( $this->request );
+//			}
 
 			$this->posts = array_map( 'intval', $this->posts );
 			$this->post_count = count( $this->posts );
@@ -2833,7 +2833,7 @@ class WP_Query {
 				 */
 				$this->request = apply_filters( 'posts_request_ids', $this->request, $this );
 
-				$ids = $wpdb->get_col( $this->request );
+//				$ids = $wpdb->get_col( $this->request );
 
 				if ( $ids ) {
 					$this->posts = $ids;

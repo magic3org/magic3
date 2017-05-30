@@ -25,9 +25,9 @@
  * @return bool False if cache key and group already exist, true on success.
  */
 function wp_cache_add( $key, $data, $group = '', $expire = 0 ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->add( $key, $data, $group, (int) $expire );
+	return $wp_object_cache->add( $key, $data, $group, (int) $expire );*/
 }
 
 /**
@@ -61,9 +61,9 @@ function wp_cache_close() {
  * @return false|int False on failure, the item's new value on success.
  */
 function wp_cache_decr( $key, $offset = 1, $group = '' ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->decr( $key, $offset, $group );
+	return $wp_object_cache->decr( $key, $offset, $group );*/
 }
 
 /**
@@ -79,9 +79,9 @@ function wp_cache_decr( $key, $offset = 1, $group = '' ) {
  * @return bool True on successful removal, false on failure.
  */
 function wp_cache_delete( $key, $group = '' ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->delete($key, $group);
+	return $wp_object_cache->delete($key, $group);*/
 }
 
 /**
@@ -95,9 +95,9 @@ function wp_cache_delete( $key, $group = '' ) {
  * @return bool False on failure, true on success
  */
 function wp_cache_flush() {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->flush();
+	return $wp_object_cache->flush();*/
 }
 
 /**
@@ -118,10 +118,10 @@ function wp_cache_flush() {
  *		              contents on success
  */
 function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
 //	return $wp_object_cache->get( $key, $group, $force, $found );
-	return false;
+	return false;*/
 }
 
 /**
@@ -138,9 +138,9 @@ function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
  * @return false|int False on failure, the item's new value on success.
  */
 function wp_cache_incr( $key, $offset = 1, $group = '' ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->incr( $key, $offset, $group );
+	return $wp_object_cache->incr( $key, $offset, $group );*/
 }
 
 /**
@@ -151,7 +151,7 @@ function wp_cache_incr( $key, $offset = 1, $group = '' ) {
  * @global WP_Object_Cache $wp_object_cache
  */
 function wp_cache_init() {
-	$GLOBALS['wp_object_cache'] = new WP_Object_Cache();
+//	$GLOBALS['wp_object_cache'] = new WP_Object_Cache();
 }
 
 /**
@@ -171,9 +171,9 @@ function wp_cache_init() {
  * @return bool False if original value does not exist, true if contents were replaced
  */
 function wp_cache_replace( $key, $data, $group = '', $expire = 0 ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->replace( $key, $data, $group, (int) $expire );
+	return $wp_object_cache->replace( $key, $data, $group, (int) $expire );*/
 }
 
 /**
@@ -195,9 +195,9 @@ function wp_cache_replace( $key, $data, $group = '', $expire = 0 ) {
  * @return bool False on failure, true on success
  */
 function wp_cache_set( $key, $data, $group = '', $expire = 0 ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	return $wp_object_cache->set( $key, $data, $group, (int) $expire );
+	return $wp_object_cache->set( $key, $data, $group, (int) $expire );*/
 }
 
 /**
@@ -213,9 +213,9 @@ function wp_cache_set( $key, $data, $group = '', $expire = 0 ) {
  * @param int $blog_id Site ID.
  */
 function wp_cache_switch_to_blog( $blog_id ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	$wp_object_cache->switch_to_blog( $blog_id );
+	$wp_object_cache->switch_to_blog( $blog_id );*/
 }
 
 /**
@@ -229,9 +229,9 @@ function wp_cache_switch_to_blog( $blog_id ) {
  * @param string|array $groups A group or an array of groups to add.
  */
 function wp_cache_add_global_groups( $groups ) {
-	global $wp_object_cache;
+/*	global $wp_object_cache;
 
-	$wp_object_cache->add_global_groups( $groups );
+	$wp_object_cache->add_global_groups( $groups );*/
 }
 
 /**
@@ -265,11 +265,11 @@ function wp_cache_add_non_persistent_groups( $groups ) {
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
  */
 function wp_cache_reset() {
-	_deprecated_function( __FUNCTION__, '3.5.0' );
+/*	_deprecated_function( __FUNCTION__, '3.5.0' );
 
 	global $wp_object_cache;
 
-	$wp_object_cache->reset();
+	$wp_object_cache->reset();*/
 }
 
 /**

@@ -108,15 +108,14 @@ function get_option( $option, $default = false ) {
 			}*/
 		}
 	} else {
-		$suppress = $wpdb->suppress_errors();
+/*		$suppress = $wpdb->suppress_errors();
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", $option ) );
 		$wpdb->suppress_errors( $suppress );
 		if ( is_object( $row ) ) {
 			$value = $row->option_value;
 		} else {
-			/** This filter is documented in wp-includes/option.php */
 			return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
-		}
+		}*/
 	}
 	// If home is not set use siteurl.
 	if ( 'home' == $option && '' == $value )
@@ -124,12 +123,6 @@ function get_option( $option, $default = false ) {
 
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );
-
-	// ##### Magic3 configration #####
-/*	if ($option == 'template'){
-//		$value = $gEnvManager->getCurrentTemplate();
-		$value = 'wisteria';
-	}*/
 	
 	/**
 	 * Filters the value of an existing option.
@@ -221,13 +214,13 @@ function wp_load_core_site_options( $site_id = null ) {
 	if ( ! is_multisite() || wp_using_ext_object_cache() || wp_installing() )
 		return;
 
-	if ( empty($site_id) )
-		$site_id = $wpdb->siteid;
+//	if ( empty($site_id) )
+//		$site_id = $wpdb->siteid;
 
 	$core_options = array('site_name', 'siteurl', 'active_sitewide_plugins', '_site_transient_timeout_theme_roots', '_site_transient_theme_roots', 'site_admins', 'can_compress_scripts', 'global_terms_enabled', 'ms_files_rewriting' );
 
 	$core_options_in = "'" . implode("', '", $core_options) . "'";
-	$options = $wpdb->get_results( $wpdb->prepare("SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE meta_key IN ($core_options_in) AND site_id = %d", $site_id) );
+/*	$options = $wpdb->get_results( $wpdb->prepare("SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE meta_key IN ($core_options_in) AND site_id = %d", $site_id) );
 
 	foreach ( $options as $option ) {
 		$key = $option->meta_key;
@@ -235,7 +228,7 @@ function wp_load_core_site_options( $site_id = null ) {
 		$option->meta_value = maybe_unserialize( $option->meta_value );
 
 		wp_cache_set( $cache_key, $option->meta_value, 'site-options' );
-	}
+	}*/
 }
 
 /**
@@ -336,9 +329,9 @@ function update_option( $option, $value, $autoload = null ) {
 		$update_args['autoload'] = ( 'no' === $autoload || false === $autoload ) ? 'no' : 'yes';
 	}
 
-	$result = $wpdb->update( $wpdb->options, $update_args, array( 'option_name' => $option ) );
+/*	$result = $wpdb->update( $wpdb->options, $update_args, array( 'option_name' => $option ) );
 	if ( ! $result )
-		return false;
+		return false;*/
 
 	$notoptions = wp_cache_get( 'notoptions', 'options' );
 	if ( is_array( $notoptions ) && isset( $notoptions[$option] ) ) {
@@ -443,9 +436,9 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	 */
 	do_action( 'add_option', $option, $value );
 
-	$result = $wpdb->query( $wpdb->prepare( "INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)", $option, $serialized_value, $autoload ) );
+/*	$result = $wpdb->query( $wpdb->prepare( "INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)", $option, $serialized_value, $autoload ) );
 	if ( ! $result )
-		return false;
+		return false;*/
 
 	if ( ! wp_installing() ) {
 		if ( 'yes' == $autoload ) {
@@ -509,9 +502,9 @@ function delete_option( $option ) {
 	wp_protect_special_option( $option );
 
 	// Get the ID, if no ID then return
-	$row = $wpdb->get_row( $wpdb->prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option ) );
+/*	$row = $wpdb->get_row( $wpdb->prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option ) );
 	if ( is_null( $row ) )
-		return false;
+		return false;*/
 
 	/**
 	 * Fires immediately before an option is deleted.
@@ -522,7 +515,7 @@ function delete_option( $option ) {
 	 */
 	do_action( 'delete_option', $option );
 
-	$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $option ) );
+/*	$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $option ) );
 	if ( ! wp_installing() ) {
 		if ( 'yes' == $row->autoload ) {
 			$alloptions = wp_load_alloptions();
@@ -533,7 +526,7 @@ function delete_option( $option ) {
 		} else {
 			wp_cache_delete( $option, 'options' );
 		}
-	}
+	}*/
 	if ( $result ) {
 
 		/**
@@ -1156,7 +1149,7 @@ function get_network_option( $network_id, $option, $default = false ) {
 		$value = wp_cache_get( $cache_key, 'site-options' );
 
 		if ( ! isset( $value ) || false === $value ) {
-			$row = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->sitemeta WHERE meta_key = %s AND site_id = %d", $option, $network_id ) );
+//			$row = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->sitemeta WHERE meta_key = %s AND site_id = %d", $option, $network_id ) );
 
 			// Has to be get_row instead of get_var because of funkiness with 0, false, null values
 			if ( is_object( $row ) ) {
@@ -1259,11 +1252,11 @@ function add_network_option( $network_id, $option, $value ) {
 		$value = sanitize_option( $option, $value );
 
 		$serialized_value = maybe_serialize( $value );
-		$result = $wpdb->insert( $wpdb->sitemeta, array( 'site_id'    => $network_id, 'meta_key'   => $option, 'meta_value' => $serialized_value ) );
+/*		$result = $wpdb->insert( $wpdb->sitemeta, array( 'site_id'    => $network_id, 'meta_key'   => $option, 'meta_value' => $serialized_value ) );
 
 		if ( ! $result ) {
 			return false;
-		}
+		}*/
 
 		wp_cache_set( $cache_key, $value, 'site-options' );
 
@@ -1354,7 +1347,7 @@ function delete_network_option( $network_id, $option ) {
 	if ( ! is_multisite() ) {
 		$result = delete_option( $option );
 	} else {
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT meta_id FROM {$wpdb->sitemeta} WHERE meta_key = %s AND site_id = %d", $option, $network_id ) );
+/*		$row = $wpdb->get_row( $wpdb->prepare( "SELECT meta_id FROM {$wpdb->sitemeta} WHERE meta_key = %s AND site_id = %d", $option, $network_id ) );
 		if ( is_null( $row ) || ! $row->meta_id ) {
 			return false;
 		}
@@ -1362,6 +1355,7 @@ function delete_network_option( $network_id, $option ) {
 		wp_cache_delete( $cache_key, 'site-options' );
 
 		$result = $wpdb->delete( $wpdb->sitemeta, array( 'meta_key' => $option, 'site_id' => $network_id ) );
+		*/
 	}
 
 	if ( $result ) {
@@ -1467,12 +1461,12 @@ function update_network_option( $network_id, $option, $value ) {
 		$value = sanitize_option( $option, $value );
 
 		$serialized_value = maybe_serialize( $value );
-		$result = $wpdb->update( $wpdb->sitemeta, array( 'meta_value' => $serialized_value ), array( 'site_id' => $network_id, 'meta_key' => $option ) );
+/*		$result = $wpdb->update( $wpdb->sitemeta, array( 'meta_value' => $serialized_value ), array( 'site_id' => $network_id, 'meta_key' => $option ) );
 
 		if ( $result ) {
 			$cache_key = "$network_id:$option";
 			wp_cache_set( $cache_key, $value, 'site-options' );
-		}
+		}*/
 	}
 
 	if ( $result ) {
