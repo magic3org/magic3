@@ -644,6 +644,8 @@ function bloginfo( $show = '' ) {
  * @return string Mostly string values, might be empty.
  */
 function get_bloginfo( $show = '', $filter = 'raw' ) {
+	global $gEnvManager;
+	
 	switch( $show ) {
 		case 'home' : // DEPRECATED
 		case 'siteurl' : // DEPRECATED
@@ -698,15 +700,17 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			$output = get_option('admin_email');
 			break;
 		case 'charset':
-			$output = get_option('blog_charset');
-			if ('' == $output) $output = 'UTF-8';
+//			$output = get_option('blog_charset');
+//			if ('' == $output) $output = 'UTF-8';
+			$output = M3_HTML_CHARSET;
 			break;
 		case 'html_type' :
 			$output = get_option('html_type');
 			break;
 		case 'version':
-			global $wp_version;
-			$output = $wp_version;
+//			global $wp_version;
+//			$output = $wp_version;
+			$output = M3_SYSTEM_VERSION;
 			break;
 		case 'language':
 			/* translators: Translate this to the correct language tag for your locale,
@@ -735,7 +739,8 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			break;
 		case 'name':
 		default:
-			$output = get_option('blogname');
+//			$output = get_option('blogname');
+			$output = $gEnvManager->getSiteName();
 			break;
 	}
 

@@ -2987,7 +2987,7 @@ function home_url( $path = '', $scheme = null ) {
  * @return string Home URL link with optional path appended.
  */
 function get_home_url( $blog_id = null, $path = '', $scheme = null ) {
-	global $pagenow;
+/*	global $pagenow;
 
 	$orig_scheme = $scheme;
 
@@ -3010,7 +3010,7 @@ function get_home_url( $blog_id = null, $path = '', $scheme = null ) {
 
 	if ( $path && is_string( $path ) )
 		$url .= '/' . ltrim( $path, '/' );
-
+*/
 	/**
 	 * Filters the home URL.
 	 *
@@ -3022,7 +3022,12 @@ function get_home_url( $blog_id = null, $path = '', $scheme = null ) {
 	 *                                 'relative', 'rest', or null.
 	 * @param int|null    $blog_id     Site ID, or null for the current site.
 	 */
-	return apply_filters( 'home_url', $url, $path, $orig_scheme, $blog_id );
+//	return apply_filters( 'home_url', $url, $path, $orig_scheme, $blog_id );
+
+	global $gEnvManager;
+	
+	$url = $gEnvManager->getRootUrl() . '/';
+	return $url;
 }
 
 /**
