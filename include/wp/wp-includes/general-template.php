@@ -3617,7 +3617,11 @@ function the_generator( $type ) {
 	 * @param string $type           The type of generator to output. Accepts 'html',
 	 *                               'xhtml', 'atom', 'rss2', 'rdf', 'comment', 'export'.
 	 */
-	echo apply_filters( 'the_generator', get_the_generator($type), $type ) . "\n";
+//	echo apply_filters( 'the_generator', get_the_generator($type), $type ) . "\n";
+
+	global $gPageManager;
+	$gPageManager->enableReplaceHead();
+	echo '{{HEAD_TAGS}}';			// ヘッダ部マクロ
 }
 
 /**

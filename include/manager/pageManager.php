@@ -2577,6 +2577,15 @@ class PageManager extends Core
 		return $destBuf;
 	}
 	/**
+	 * ヘッダ部マクロ変換を有効にする
+	 *
+	 * @return					なし
+	 */
+	function enableReplaceHead()
+	{
+		$this->outputHead = true;
+	}
+	/**
 	 * ウィジェット検索モードの場合のページサブIDの設定
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
