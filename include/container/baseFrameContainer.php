@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -666,9 +666,16 @@ class BaseFrameContainer extends Core
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
 			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
 //			define('STYLESHEETPATH', get_stylesheet_directory());
+			define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
+			define('WP_LANG_DIR', WP_CONTENT_DIR . '/languages');
+			
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
+			
+//wp_initial_constants();
+//wp_set_lang_dir();
+
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/functions.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
@@ -698,6 +705,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/taxonomy.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/mo.php');
 
 			// テンプレート内のファイルを読み込む
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
@@ -706,6 +714,9 @@ class BaseFrameContainer extends Core
 			wp_initial_constants();			// デフォルト値取得
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp_query'] = new WP_Query();
+			
+			// 初期処理
+			load_default_textdomain();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
