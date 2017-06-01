@@ -665,7 +665,7 @@ class BaseFrameContainer extends Core
 			define('WPINC', 'wp-includes');
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
 			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
-//			define('STYLESHEETPATH', get_stylesheet_directory());
+			define('STYLESHEETPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);		// 子テンプレートを使用している場合は子テンプレートを示す。デフォルトはテンプレートを示す。
 			define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
 			define('WP_LANG_DIR', WP_CONTENT_DIR . '/languages');
 			
@@ -703,6 +703,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/taxonomy.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/media.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/mo.php');
@@ -716,7 +717,9 @@ class BaseFrameContainer extends Core
 			$GLOBALS['wp_query'] = new WP_Query();
 			
 			// 初期処理
+			do_action('setup_theme');
 			load_default_textdomain();
+			do_action('after_setup_theme');
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
