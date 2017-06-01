@@ -702,6 +702,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-formats.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/taxonomy.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/media.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
