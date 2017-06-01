@@ -721,6 +721,7 @@ class BaseFrameContainer extends Core
 			do_action('setup_theme');
 			load_default_textdomain();
 			do_action('after_setup_theme');
+			do_action('wp_loaded');
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
