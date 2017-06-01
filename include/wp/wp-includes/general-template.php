@@ -645,6 +645,7 @@ function bloginfo( $show = '' ) {
  */
 function get_bloginfo( $show = '', $filter = 'raw' ) {
 	global $gEnvManager;
+	global $gSystemManager;
 	
 	switch( $show ) {
 		case 'home' : // DEPRECATED
@@ -663,7 +664,8 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			$output = site_url();
 			break;
 		case 'description':
-			$output = get_option('blogdescription');
+//			$output = get_option('blogdescription');
+			$output = $gSystemManager->getSiteDef(M3_TB_FIELD_SITE_SLOGAN);			// サイトスローガン
 			break;
 		case 'rdf_url':
 			$output = get_feed_link('rdf');
