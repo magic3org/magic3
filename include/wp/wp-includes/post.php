@@ -3937,7 +3937,7 @@ function wp_set_post_categories( $post_ID = 0, $post_categories = array(), $appe
  * that the function does not transition the post object in the database.
  *
  * For instance: When publishing a post for the first time, the post status may transition
- * from 'draft' – or some other status – to 'publish'. However, if a post is already
+ * from 'draft' ? or some other status ? to 'publish'. However, if a post is already
  * published and is simply being updated, the "old" and "new" statuses may both be 'publish'
  * before and after the transition.
  *
