@@ -1594,26 +1594,37 @@ class PageManager extends Core
 			}
 		}
 
-		// デフォルトのページ情報を取得
-		$row = $this->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId());
-		if (!empty($row)){
-			// ショートURLで取得できない場合は、ページコンテンツタイプを取得
-			if (empty($this->contentType)) $this->contentType = $row['pn_content_type'];
-			
-			// 現在のページ情報を設定
-			$this->currentPageInfo = $row;			// 現在のページのページ情報
-		}
-		
-		// テンプレートの情報を取得
 		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
 			$defPageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
 			$defPageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+			
+			// デフォルトのページ情報を取得
+			$row = $this->getPageInfo($defPageId, $defPageSubId);
+			if (!empty($row)){
+				// ショートURLで取得できない場合は、ページコンテンツタイプを取得
+				if (empty($this->contentType)) $this->contentType = $row['pn_content_type'];
+			
+				// 現在のページ情報を設定
+				$this->currentPageInfo = $row;			// 現在のページのページ情報
+			}
+			
+			// テンプレートの情報を取得
 			$ret = $this->db->getPageDefOnPage($defPageId, $defPageSubId, $rows);
 			if ($ret){
 				for ($i = 0; $i < count($rows); $i++){
 					$position = $rows[$i]['pd_position_id'];
 					if (!in_array($position, $this->defPositions)) $this->defPositions[] = $position;	// 画面定義データのポジション(すべて)
 				}
+			}
+		} else {
+			// デフォルトのページ情報を取得
+			$row = $this->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId());
+			if (!empty($row)){
+				// ショートURLで取得できない場合は、ページコンテンツタイプを取得
+				if (empty($this->contentType)) $this->contentType = $row['pn_content_type'];
+			
+				// 現在のページ情報を設定
+				$this->currentPageInfo = $row;			// 現在のページのページ情報
 			}
 		}
 		
