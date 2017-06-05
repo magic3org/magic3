@@ -1807,7 +1807,7 @@ class admin_mainDb extends BaseDb
 		}
 		// Bootstrapを使用するかどうか
 		$useBootstrap = false;
-		if ($type >= 10) $useBootstrap = true;
+		if ($type >= 10 && $type < 20) $useBootstrap = true;
 		
 		$queryStr = 'INSERT INTO _templates ';
 		$queryStr .=  '(tm_id, tm_history_index, tm_name, tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_use_bootstrap, tm_generator, tm_version, tm_info_url, tm_create_dt, tm_create_user_id) ';
