@@ -1291,12 +1291,26 @@ class PageManager extends Core
 		// デバッグモードの表示
 		if (M3_SYSTEM_DEBUG) echo 'Debug mode<br />';
 		
+		// ##### ページIDの修正 #####
+		// ポジション表示の場合はページID、ページサブIDを再設定。再設定はシステム管理者のみ可能。
+		if (($cmd == M3_REQUEST_CMD_SHOW_POSITION ||					// 管理画面(ウィジェットなしポジション表示)のとき
+			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET) &&		// 管理画面(ウィジェット付きポジション表示)のとき
+			$gEnvManager->isSystemAdmin()){
+
+			$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+			if (empty($pageId)) $pageId = $this->gEnv->getDefaultPageId();		// 値がないときはデフォルトのページIDを設定
+			$this->gEnv->setCurrentPageId($pageId);
+			$subId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+			if (!empty($subId)) $this->gEnv->setCurrentPageSubId($subId);
+		}
+		
 		// ##### サブページIDの設定 #####
 		if ($gEnvManager->isAdminDirAccess() &&		// 管理画面へのアクセスのとき
 			($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT)){				// ログイン、ログアウト場合は管理画面のページサブIDを指定
 			$subId = $gEnvManager->getAdminDefaultPageSubId();		// 管理画面用のデフォルトページサブID
-		} else {				
-			$subId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);// ページサブIDを取得
+		} else {
+			if (empty($subId)) $subId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);// ページサブIDを取得
+			
 			if (empty($subId)){			// サブページIDが設定されていないとき
 				// URLパラメータからコンテンツ形式を取得し、ページを選択
 				$params = $gRequestManager->getQueryArray();
@@ -1594,8 +1608,18 @@ class PageManager extends Core
 			}
 		}
 
+		// デフォルトのページ情報を取得
+		$row = $this->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId());
+		if (!empty($row)){
+			// ショートURLで取得できない場合は、ページコンテンツタイプを取得
+			if (empty($this->contentType)) $this->contentType = $row['pn_content_type'];
+		
+			// 現在のページ情報を設定
+			$this->currentPageInfo = $row;			// 現在のページのページ情報
+		}
+			
 		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
-			$defPageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+/*			$defPageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
 			$defPageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
 			
 			// デフォルトのページ情報を取得
@@ -1606,25 +1630,16 @@ class PageManager extends Core
 			
 				// 現在のページ情報を設定
 				$this->currentPageInfo = $row;			// 現在のページのページ情報
-			}
+			}*/
 			
 			// テンプレートの情報を取得
-			$ret = $this->db->getPageDefOnPage($defPageId, $defPageSubId, $rows);
+	//		$ret = $this->db->getPageDefOnPage($defPageId, $defPageSubId, $rows);
+			$ret = $this->db->getPageDefOnPage($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 			if ($ret){
 				for ($i = 0; $i < count($rows); $i++){
 					$position = $rows[$i]['pd_position_id'];
 					if (!in_array($position, $this->defPositions)) $this->defPositions[] = $position;	// 画面定義データのポジション(すべて)
 				}
-			}
-		} else {
-			// デフォルトのページ情報を取得
-			$row = $this->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId());
-			if (!empty($row)){
-				// ショートURLで取得できない場合は、ページコンテンツタイプを取得
-				if (empty($this->contentType)) $this->contentType = $row['pn_content_type'];
-			
-				// 現在のページ情報を設定
-				$this->currentPageInfo = $row;			// 現在のページのページ情報
 			}
 		}
 		

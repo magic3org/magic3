@@ -281,12 +281,12 @@ class BaseFrameContainer extends Core
 			if ($isSystemAdmin){
 				// ポジションの表示画面のアクセスは、すべて管理機能URLで受け付ける
 				// ページIDを再設定
-				$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+/*				$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
 				if (empty($pageId)) $pageId = $this->gEnv->getDefaultPageId();		// 値がないときはデフォルトのページIDを設定
 				$this->gEnv->setCurrentPageId($pageId);
 				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
 				if (!empty($pageSubId)) $this->gEnv->setCurrentPageSubId($pageSubId);
-				
+			*/
 				$this->gPage->showPosition(1);			// ポジションを表示
 			} else {
 				return;
@@ -297,12 +297,12 @@ class BaseFrameContainer extends Core
 			if ($isSystemAdmin){
 				// ポジションの表示画面のアクセスは、すべて管理機能URLで受け付ける
 				// ページIDを再設定
-				$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+/*				$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
 				if (empty($pageId)) $pageId = $this->gEnv->getDefaultPageId();		// 値がないときはデフォルトのページIDを設定
 				$this->gEnv->setCurrentPageId($pageId);
 				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
 				if (!empty($pageSubId)) $this->gEnv->setCurrentPageSubId($pageSubId);
-				
+				*/
 				$this->gPage->showPosition(2);			// ウィジェット付きポジションを表示
 			} else {
 				return;
