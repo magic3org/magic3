@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -178,6 +178,7 @@ dl.m3_widgetlist_item dd {
 }
 dl.m3_widgetlist_item dd table td {
 	background-color:#FFF !important;
+	padding:2px;
 }
 /*
 .ui-sortable h2 span.options { right:10px; top:8px; width:30px; }
@@ -201,6 +202,10 @@ dl.m3_widget_sortable dt span.options a {
 	height:12px;
 	width:12px;
 }*/
+img.m3widget {
+	width:32px;
+	height:32px;
+}
 .m3_spacer {
 	height:100px;
 	border:2px dashed #AAA;
