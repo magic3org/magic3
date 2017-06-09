@@ -683,6 +683,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
 
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
@@ -712,10 +713,14 @@ class BaseFrameContainer extends Core
 			// テンプレート内のファイルを読み込む
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
 		
+			// コンテンツ取得用API
+			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');
+			
 			// データ初期化
 			wp_initial_constants();			// デフォルト値取得
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp_query'] = new WP_Query();
+			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツアクセスクラス
 			
 			// 初期処理
 			do_action('setup_theme');

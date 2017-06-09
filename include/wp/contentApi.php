@@ -15,9 +15,10 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
+//require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
-class ContentApiManager extends Core
+//class ContentApiManager extends Core
+class ContentApi
 {
 	private $contentType;			// コンテンツタイプ
 	private $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -43,8 +44,8 @@ class ContentApiManager extends Core
 		global $gRequestManager;
 		global $gOpeLogManager;
 		
-		// 親クラスを呼び出す
-		parent::__construct();
+//		// 親クラスを呼び出す
+//		parent::__construct();
 		
 		// コンテンツタイプを取得
 		$this->contentType = $gSystemManager->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ
@@ -113,7 +114,7 @@ class ContentApiManager extends Core
 	 * @param int	$pageNo			取得するページ番号(1～)
 	 * @return						なし
 	 */
-	public function wpSetCondition($params, $langId, $limit, $pageNo)
+	public function setCondition($params, $langId, $limit, $pageNo)
 	{
 		global $gEnvManager;
 			
@@ -128,9 +129,9 @@ class ContentApiManager extends Core
 	 *
 	 * @return array     				WP_Postオブジェクトの配列
 	 */
-	function wpGetContent()
+	function getContent()
 	{
-echo '###wpGetContent()-start ';
+echo '###getContent()-start ';
 		$entryId = 0;
 		$addonObj = $this->_getAddonObj();
 //		$idArray = $addonObj->getPublicContent($this->langId, $this->limit, $this->pageNo);
@@ -144,7 +145,7 @@ echo '###wpGetContent()-start ';
 	 *
 	 * @return int     					コンテンツ数
 	 */
-/*	function wpGetContentCount()
+/*	function getContentCount()
 	{
 		$addonObj = $this->_getAddonObj();
 		$idArray = $addonObj->getPublicContentCount($this->langId, $this->limit, $this->pageNo);
@@ -156,7 +157,7 @@ echo '###wpGetContent()-start ';
 	 * @param array     $ids				コンテンツID
 	 * @return array						コンテンツデータ
 	 */
-/*	function wpSelectContent($ids)
+/*	function selectContent($ids)
 	{
 		$addonObj = $this->_getAddonObj();
 		$retValue = $addonObj->getList($langId, $limit, $pageNo, $rows);
@@ -271,7 +272,25 @@ echo 'inloop....';
 		);
 //		$this->tmpl->addVars('itemlist', $row);
 //		$this->tmpl->parseTemplate('itemlist', 'a');
-		$wpPostObj = new WP_Post();
+$post = new stdClass;
+		$post->ID = $id;
+		$post->post_author = '';
+		$post->post_date = '';
+		$post->post_date_gmt = '';
+		$post->post_password = '';
+		$post->post_name = '';
+		$post->post_type = $post_type;
+		$post->post_status = 'draft';
+		$post->to_ping = '';
+		$post->pinged = '';
+/*		$post->comment_status = get_default_comment_status( $post_type );
+		$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
+		$post->post_pingback = get_option( 'default_pingback_flag' );
+		$post->post_category = get_option( 'default_category' );*/
+		$post->page_template = 'default';
+		$post->post_parent = 0;
+		$post->menu_order = 0;
+		$wpPostObj = new WP_Post($post);
 		$this->contentArray[] = $wpPostObj;
 		return true;
 	}

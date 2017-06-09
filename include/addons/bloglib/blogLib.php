@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -196,6 +196,29 @@ class blogLib extends Addon
 			$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を予約更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $entryId, $eventParam);
 		}
 		return true;
+	}
+	/**
+	 * 公開中のエントリー項目を取得。アクセス制限も行う。
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param int		$entryId			エントリーID(0のときは期間で取得)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param function	$callback			コールバック関数
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @return 			なし
+	 */
+	function getPublicEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$this->db->getPublicEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $userId, $blogId);
 	}
 }
 ?>
