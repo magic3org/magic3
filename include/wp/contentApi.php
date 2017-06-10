@@ -177,7 +177,7 @@ echo 'inloop....';
 		// レコード値取得
 		$serial = $fetchedRow['be_serial'];
 		$id		= $fetchedRow['be_id'];
-
+echo $id.'*';
 		// カテゴリーを取得
 		$categoryArray = array();
 //		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
@@ -272,13 +272,13 @@ echo 'inloop....';
 		);
 //		$this->tmpl->addVars('itemlist', $row);
 //		$this->tmpl->parseTemplate('itemlist', 'a');
-$post = new stdClass;
+		$post = new stdClass;
 		$post->ID = $id;
 		$post->post_author = '';
-		$post->post_date = '';
+		$post->post_date = $fetchedRow['be_regist_dt'];
 		$post->post_date_gmt = '';
 		$post->post_password = '';
-		$post->post_name = '';
+		$post->post_name = $fetchedRow['be_name'];
 		$post->post_type = $post_type;
 		$post->post_status = 'draft';
 		$post->to_ping = '';

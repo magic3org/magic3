@@ -679,6 +679,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/functions.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
@@ -719,6 +720,7 @@ class BaseFrameContainer extends Core
 			// データ初期化
 			wp_initial_constants();			// デフォルト値取得
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
+			$GLOBALS['wp'] = new WP();
 			$GLOBALS['wp_query'] = new WP_Query();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツアクセスクラス
 			
@@ -727,6 +729,7 @@ class BaseFrameContainer extends Core
 			load_default_textdomain();
 			do_action('after_setup_theme');
 			do_action('wp_loaded');
+			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
