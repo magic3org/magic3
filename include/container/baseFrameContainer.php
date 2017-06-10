@@ -698,15 +698,18 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/link-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-template.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-thumbnail-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/author-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/nav-menu.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/general-template.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/cache.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/shortcodes.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/formatting.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/post-formats.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/taxonomy.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/media.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/embed.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/mo.php');
@@ -721,7 +724,8 @@ class BaseFrameContainer extends Core
 			wp_initial_constants();			// デフォルト値取得
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp'] = new WP();
-			$GLOBALS['wp_query'] = new WP_Query();
+			$GLOBALS['wp_the_query'] = new WP_Query();
+			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツアクセスクラス
 			
 			// 初期処理

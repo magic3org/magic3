@@ -131,7 +131,7 @@ class ContentApi
 	 */
 	function getContent()
 	{
-echo '###getContent()-start ';
+//echo '###getContent()-start ';
 		$entryId = 0;
 		$addonObj = $this->_getAddonObj();
 //		$idArray = $addonObj->getPublicContent($this->langId, $this->limit, $this->pageNo);
@@ -173,11 +173,11 @@ echo '###getContent()-start ';
 	 */
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
-echo 'inloop....';
+//echo 'inloop....';
 		// レコード値取得
 		$serial = $fetchedRow['be_serial'];
 		$id		= $fetchedRow['be_id'];
-echo $id.'*';
+//echo $id.'*';
 		// カテゴリーを取得
 		$categoryArray = array();
 //		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
