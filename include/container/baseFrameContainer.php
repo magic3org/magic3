@@ -669,11 +669,12 @@ class BaseFrameContainer extends Core
 			define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
 			define('WP_LANG_DIR', WP_CONTENT_DIR . '/languages');
 			define('WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins');
+			define('WP_CONTENT_URL', '/wp-content');				// 定義自体は必要であるが使用しないのでダミー値で定義
+			define('WP_PLUGIN_URL', WP_CONTENT_URL . '/plugins');	// 定義自体は必要であるが使用しないのでダミー値で定義
 			
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
-			
 //wp_initial_constants();
 //wp_set_lang_dir();
 
@@ -721,13 +722,19 @@ class BaseFrameContainer extends Core
 			// コンテンツ取得用API
 			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');
 			
-			// データ初期化
+
+			// ##### データ初期化 #####
 			wp_initial_constants();			// デフォルト値取得
+			
+			// プラグイン初期化
+			$GLOBALS['wp_plugin_paths'] = array();
 			foreach (wp_get_active_and_valid_plugins() as $plugin) {// プラグインロード
 				wp_register_plugin_realpath($plugin);
 				include_once($plugin);
 			}
 			unset($plugin);
+			
+			// WordPressメインオブジェクト作成
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp'] = new WP();
 			$GLOBALS['wp_the_query'] = new WP_Query();
