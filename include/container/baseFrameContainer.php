@@ -668,6 +668,7 @@ class BaseFrameContainer extends Core
 			define('STYLESHEETPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);		// 子テンプレートを使用している場合は子テンプレートを示す。デフォルトはテンプレートを示す。
 			define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
 			define('WP_LANG_DIR', WP_CONTENT_DIR . '/languages');
+			define('WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins');
 			
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
@@ -722,6 +723,11 @@ class BaseFrameContainer extends Core
 			
 			// データ初期化
 			wp_initial_constants();			// デフォルト値取得
+			foreach (wp_get_active_and_valid_plugins() as $plugin) {// プラグインロード
+				wp_register_plugin_realpath($plugin);
+				include_once($plugin);
+			}
+			unset($plugin);
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp'] = new WP();
 			$GLOBALS['wp_the_query'] = new WP_Query();

@@ -28,6 +28,7 @@ class ContentApi
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
+	const DETECT_GOOGLEMAPS = 'Magic3 googlemaps v';		// Googleマップ検出用文字列
 	// アドオンオブジェクト作成用
 	const ADDON_OBJ_ID_CONTENT	= 'contentlib';
 	const ADDON_OBJ_ID_BLOG		= 'bloglib';
@@ -177,6 +178,8 @@ class ContentApi
 		// レコード値取得
 		$serial = $fetchedRow['be_serial'];
 		$id		= $fetchedRow['be_id'];
+		$title	= $fetchedRow['be_name'];
+		$entryHtml = $fetchedRow['be_html'];
 //echo $id.'*';
 		// カテゴリーを取得
 		$categoryArray = array();
@@ -270,6 +273,9 @@ class ContentApi
 //			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
 			'reg_date' => $dispDate
 		);
+		// コンテンツマクロ変換
+		$entryHtml = $this->_convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/);
+		
 //		$this->tmpl->addVars('itemlist', $row);
 //		$this->tmpl->parseTemplate('itemlist', 'a');
 		$post = new stdClass;
@@ -278,21 +284,63 @@ class ContentApi
 		$post->post_date = $fetchedRow['be_regist_dt'];
 		$post->post_date_gmt = '';
 		$post->post_password = '';
-		$post->post_name = $fetchedRow['be_name'];
+		$post->post_name = $title;		// エンコーディングが必要?
 		$post->post_type = $post_type;
-		$post->post_status = 'draft';
+//		$post->post_status = 'draft';	// デフォルトはpublish
 		$post->to_ping = '';
 		$post->pinged = '';
 /*		$post->comment_status = get_default_comment_status( $post_type );
 		$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
 		$post->post_pingback = get_option( 'default_pingback_flag' );
 		$post->post_category = get_option( 'default_category' );*/
-		$post->page_template = 'default';
+//		$post->page_template = 'default';
 		$post->post_parent = 0;
 		$post->menu_order = 0;
+		// Magic3設定値追加
+		$post->post_title = $title;
+		$post->post_content = $entryHtml;
 		$wpPostObj = new WP_Post($post);
 		$this->contentArray[] = $wpPostObj;
 		return true;
+	}
+	/**
+	 * Magic3マクロを変換してHTMLを作成
+	 *
+	 * ・デフォルトでマクロ変換した文字列に改行が含まれるときは改行をbrに変換する
+	 *
+	 * @param string $src			変換するデータ
+	 * @param bool $convBr			キーワード変換部分の改行コードをBRタグに変換するかどうか
+	 * @param array $contentInfo	コンテンツ情報
+	 * @return string					変換後データ
+	 */
+	function _convertM3ToHtml($src, $convBr = true, $contentInfo = array())
+	{
+		global $gInstanceManager;
+		global $gPageManager;
+		global $gEnvManager;
+		
+		// ### コンテンツ内容のチェック ###
+		// Googleマップが含まれている場合はコンテンツ情報として登録->Googleマップライブラリの読み込み指示
+		$pos = strpos($src, self::DETECT_GOOGLEMAPS);
+		if ($pos !== false) $gPageManager->setIsContentGooglemaps(true);
+		
+		// URLを求める
+		$rootUrl = $gEnvManager->getRootUrlByCurrentPage();
+//		$widgetUrl = str_replace($gEnvManager->getRootUrl(), $rootUrl, $gEnvManager->getCurrentWidgetRootUrl());
+		
+		// パスを変換
+		$dest = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $src);// アプリケーションルートを変換
+//		$dest = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_URL . M3_TAG_END, $widgetUrl, $dest);// ウィジェットルートを変換
+		
+		// コンテンツマクロ変換
+		$dest = $gInstanceManager->getTextConvManager()->convContentMacro($dest, $convBr/*改行コードをbrタグに変換*/, $contentInfo, true/*変換後の値をHTMLエスケープ処理*/);
+		
+		// ウィジェット埋め込みタグを変換
+		$gInstanceManager->getTextConvManager()->convWidgetTag($dest, $dest);
+		
+		// 残っているMagic3タグ削除
+		$dest = $gInstanceManager->getTextConvManager()->deleteM3Tag($dest);
+		return $dest;
 	}
 }
 ?>

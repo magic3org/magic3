@@ -586,7 +586,7 @@ CREATE TABLE _widgets (
     wd_parent_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 親ウィジェットID(ファイル名)
     wd_content_widget_id VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- コンテンツ編集用のウィジェット
     wd_joomla_class      VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- Joomla!テンプレート用のクラス名
-    wd_template_type     TEXT                                         NOT NULL,      -- 標準以外で対応するテンプレートタイプ(「,」区切りで指定。値=bootstrap,jquerymobile)
+    wd_template_type     TEXT                                         NOT NULL,      -- 標準以外で対応するテンプレートタイプ(「,」区切りで指定。値=bootstrap,jquerymobile,wordpress)
     wd_suffix            VARCHAR(4)     DEFAULT ''                    NOT NULL,      -- HTMLタグのクラス名に付けるサフィックス文字列
     wd_params            VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 各種パラメータ
     wd_author            VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 作者名

@@ -224,9 +224,9 @@ add_action( 'transition_comment_status', '_clear_modified_cache_on_transition_co
 add_filter( 'http_request_host_is_external',    'allowed_http_request_hosts', 10, 2 );
 
 // REST API filters.
-add_action( 'xmlrpc_rsd_apis',            'rest_output_rsd' );
+//add_action( 'xmlrpc_rsd_apis',            'rest_output_rsd' );
 //add_action( 'wp_head',                    'rest_output_link_wp_head', 10, 0 );
-add_action( 'template_redirect',          'rest_output_link_header', 11, 0 );
+//add_action( 'template_redirect',          'rest_output_link_header', 11, 0 );
 //add_action( 'auth_cookie_malformed',      'rest_cookie_collect_status' );
 //add_action( 'auth_cookie_expired',        'rest_cookie_collect_status' );
 //add_action( 'auth_cookie_bad_username',   'rest_cookie_collect_status' );
@@ -235,7 +235,7 @@ add_action( 'template_redirect',          'rest_output_link_header', 11, 0 );
 //add_filter( 'rest_authentication_errors', 'rest_cookie_check_errors', 100 );
 
 // Actions
-add_action( 'wp_head',             '_wp_render_title_tag',            1     );
+//add_action( 'wp_head',             '_wp_render_title_tag',            1     );		// TITLEタグはMagic3で出力
 add_action( 'wp_head',             'wp_enqueue_scripts',              1     );
 add_action( 'wp_head',             'wp_resource_hints',               2     );
 //add_action( 'wp_head',             'feed_links',                      2     );
@@ -249,7 +249,7 @@ add_action( 'wp_head',             'noindex',                          1    );
 add_action( 'wp_head',             'print_emoji_detection_script',     7    );
 add_action( 'wp_head',             'wp_print_styles',                  8    );
 add_action( 'wp_head',             'wp_print_head_scripts',            9    );
-add_action( 'wp_head',             'wp_generator'                           );
+add_action( 'wp_head',             'wp_generator'                           );			// Magic3ヘッダ出力
 add_action( 'wp_head',             'rel_canonical'                          );
 add_action( 'wp_head',             'wp_shortlink_wp_head',            10, 0 );
 add_action( 'wp_head',             'wp_custom_css_cb',                101   );
@@ -257,8 +257,8 @@ add_action( 'wp_head',             'wp_site_icon',                    99    );
 add_action( 'wp_footer',           'wp_print_footer_scripts',         20    );
 add_action( 'template_redirect',   'wp_shortlink_header',             11, 0 );
 add_action( 'wp_print_footer_scripts', '_wp_footer_scripts'                 );
-add_action( 'init',                'check_theme_switched',            99    );
-add_action( 'after_switch_theme',  '_wp_sidebars_changed'                   );
+//add_action( 'init',                'check_theme_switched',            99    );
+//add_action( 'after_switch_theme',  '_wp_sidebars_changed'                   );
 add_action( 'wp_print_styles',     'print_emoji_styles'                     );
 
 if ( isset( $_GET['replytocom'] ) )
@@ -354,7 +354,7 @@ add_filter( 'default_option_embed_autourls', '__return_true' );
 add_filter( 'heartbeat_settings', 'wp_heartbeat_settings' );
 
 // Check if the user is logged out
-add_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
+//add_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
 add_filter( 'heartbeat_send',        'wp_auth_check' );
 add_filter( 'heartbeat_nopriv_send', 'wp_auth_check' );
 
@@ -380,11 +380,11 @@ add_action( 'register_new_user',      'wp_send_new_user_notifications' );
 add_action( 'edit_user_created_user', 'wp_send_new_user_notifications', 10, 2 );
 
 // REST API actions.
-add_action( 'init',          'rest_api_init' );
-add_action( 'rest_api_init', 'rest_api_default_filters',   10, 1 );
-add_action( 'rest_api_init', 'register_initial_settings',  10 );
-add_action( 'rest_api_init', 'create_initial_rest_routes', 99 );
-add_action( 'parse_request', 'rest_api_loaded' );
+//add_action( 'init',          'rest_api_init' );
+//add_action( 'rest_api_init', 'rest_api_default_filters',   10, 1 );
+//add_action( 'rest_api_init', 'register_initial_settings',  10 );
+//add_action( 'rest_api_init', 'create_initial_rest_routes', 99 );
+//add_action( 'parse_request', 'rest_api_loaded' );
 
 /**
  * Filters formerly mixed into wp-includes
@@ -394,7 +394,7 @@ add_action( 'wp_loaded', '_custom_header_background_just_in_time' );
 add_action( 'wp_head', '_custom_logo_header_styles' );
 add_action( 'plugins_loaded', '_wp_customize_include' );
 add_action( 'transition_post_status', '_wp_customize_publish_changeset', 10, 3 );
-add_action( 'admin_enqueue_scripts', '_wp_customize_loader_settings' );
+//add_action( 'admin_enqueue_scripts', '_wp_customize_loader_settings' );
 add_action( 'delete_attachment', '_delete_attachment_theme_mod' );
 
 // Calendar widget cache
@@ -427,7 +427,7 @@ add_action( 'set_current_user', 'kses_init' );
 // Script Loader
 add_action( 'wp_default_scripts', 'wp_default_scripts' );
 add_action( 'wp_enqueue_scripts', 'wp_localize_jquery_ui_datepicker', 1000 );
-add_action( 'admin_enqueue_scripts', 'wp_localize_jquery_ui_datepicker', 1000 );
+//add_action( 'admin_enqueue_scripts', 'wp_localize_jquery_ui_datepicker', 1000 );
 add_filter( 'wp_print_scripts', 'wp_just_in_time_script_localization' );
 add_filter( 'print_scripts_array', 'wp_prototype_before_jquery' );
 add_filter( 'customize_controls_print_styles', 'wp_resource_hints', 1 );
@@ -471,8 +471,8 @@ add_filter( 'image_send_to_editor', 'image_add_caption', 20, 8 );
 add_filter( 'media_send_to_editor', 'image_media_send_to_editor', 10, 3 );
 
 // Embeds
-add_action( 'rest_api_init',          'wp_oembed_register_route'              );
-add_filter( 'rest_pre_serve_request', '_oembed_rest_pre_serve_request', 10, 4 );
+//add_action( 'rest_api_init',          'wp_oembed_register_route'              );
+//add_filter( 'rest_pre_serve_request', '_oembed_rest_pre_serve_request', 10, 4 );
 
 //add_action( 'wp_head',                'wp_oembed_add_discovery_links'         );
 //add_action( 'wp_head',                'wp_oembed_add_host_js'                 );
