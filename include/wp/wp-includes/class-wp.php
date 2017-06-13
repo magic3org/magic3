@@ -168,7 +168,7 @@ class WP {
 		// Process PATH_INFO, REQUEST_URI, and 404 for permalinks.
 
 		// Fetch the rewrite rules.
-		$rewrite = $wp_rewrite->wp_rewrite_rules();
+//		$rewrite = $wp_rewrite->wp_rewrite_rules();
 
 		if ( ! empty($rewrite) ) {
 			// If we match a rewrite rule, this will be cleared.
@@ -357,7 +357,7 @@ class WP {
 		}
 
 		// Resolve conflicts between posts with numeric slugs and date archive queries.
-		$this->query_vars = wp_resolve_numeric_slug_conflicts( $this->query_vars );
+//		$this->query_vars = wp_resolve_numeric_slug_conflicts( $this->query_vars );
 
 		foreach ( (array) $this->private_query_vars as $var) {
 			if ( isset($this->extra_query_vars[$var]) )

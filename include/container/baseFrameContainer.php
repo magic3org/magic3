@@ -727,13 +727,13 @@ class BaseFrameContainer extends Core
 			wp_initial_constants();			// デフォルト値取得
 			
 			// プラグイン初期化
-			$GLOBALS['wp_plugin_paths'] = array();
+			$GLOBALS['wp_plugin_paths'] = array();			// $wp_plugin_pathsは未使用?
 			foreach (wp_get_active_and_valid_plugins() as $plugin) {// プラグインロード
 				wp_register_plugin_realpath($plugin);
 				include_once($plugin);
 			}
 			unset($plugin);
-			
+
 			// WordPressメインオブジェクト作成
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
 			$GLOBALS['wp'] = new WP();

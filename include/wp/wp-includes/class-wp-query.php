@@ -2861,7 +2861,7 @@ class WP_Query {
 		global $gContentApi;
 		$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
 		$this->posts = $gContentApi->getContent();
-		
+//var_dump($this->posts);
 //		if ( ! $q['suppress_filters'] ) {
 			/**
 			 * Filters the raw post results array, prior to status checks.
@@ -3352,6 +3352,7 @@ class WP_Query {
 	 * @param string|array $query URL query string or array of vars.
 	 */
 	public function __construct( $query = '' ) {
+		// $queryが空のパターンはquery()を呼び出して実行
 		if ( ! empty( $query ) ) {
 			$this->query( $query );
 		}
