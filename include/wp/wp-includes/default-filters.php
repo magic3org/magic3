@@ -295,11 +295,11 @@ add_action( 'do_pings',                   'do_all_pings',                       
 add_action( 'do_robots',                  'do_robots'                                      );
 add_action( 'set_comment_cookies',        'wp_set_comment_cookies',                  10, 2 );
 add_action( 'sanitize_comment_cookies',   'sanitize_comment_cookies'                       );
-add_action( 'admin_print_scripts',        'print_emoji_detection_script'                   );
-add_action( 'admin_print_scripts',        'print_head_scripts',                      20    );
-add_action( 'admin_print_footer_scripts', '_wp_footer_scripts'                             );
-add_action( 'admin_print_styles',         'print_emoji_styles'                             );
-add_action( 'admin_print_styles',         'print_admin_styles',                      20    );
+//add_action( 'admin_print_scripts',        'print_emoji_detection_script'                   );
+//add_action( 'admin_print_scripts',        'print_head_scripts',                      20    );
+//add_action( 'admin_print_footer_scripts', '_wp_footer_scripts'                             );
+//add_action( 'admin_print_styles',         'print_emoji_styles'                             );
+//add_action( 'admin_print_styles',         'print_admin_styles',                      20    );
 add_action( 'init',                       'smilies_init',                             5    );
 add_action( 'plugins_loaded',             'wp_maybe_load_widgets',                    0    );
 add_action( 'plugins_loaded',             'wp_maybe_load_embeds',                     0    );
@@ -312,7 +312,7 @@ add_action( 'transition_post_status',     '_update_term_count_on_transition_post
 add_action( 'comment_form',               'wp_comment_form_unfiltered_html_nonce'          );
 add_action( 'wp_scheduled_delete',        'wp_scheduled_delete'                            );
 add_action( 'wp_scheduled_auto_draft_delete', 'wp_delete_auto_drafts'                      );
-add_action( 'admin_init',                 'send_frame_options_header',               10, 0 );
+//add_action( 'admin_init',                 'send_frame_options_header',               10, 0 );
 add_action( 'importer_scheduled_cleanup', 'wp_delete_attachment'                           );
 add_action( 'upgrader_scheduled_cleanup', 'wp_delete_attachment'                           );
 add_action( 'welcome_panel',              'wp_welcome_panel'                               );
@@ -341,7 +341,7 @@ add_action( 'wp_head', 'wp_post_preview_js', 1 );
 add_filter( 'pre_option_gmt_offset','wp_timezone_override_offset' );
 
 // Admin Color Schemes
-add_action( 'admin_init', 'register_admin_color_schemes', 1);
+//add_action( 'admin_init', 'register_admin_color_schemes', 1);
 add_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 
 // If the upgrade hasn't run yet, assume link manager is used.
@@ -366,7 +366,7 @@ add_filter( 'determine_current_user', 'wp_validate_auth_cookie'          );
 add_filter( 'determine_current_user', 'wp_validate_logged_in_cookie', 20 );
 
 // Split term updates.
-add_action( 'admin_init',        '_wp_check_for_scheduled_split_terms' );
+//add_action( 'admin_init',        '_wp_check_for_scheduled_split_terms' );
 add_action( 'split_shared_term', '_wp_check_split_default_terms',  10, 4 );
 add_action( 'split_shared_term', '_wp_check_split_terms_in_menus', 10, 4 );
 add_action( 'split_shared_term', '_wp_check_split_nav_menu_terms', 10, 4 );

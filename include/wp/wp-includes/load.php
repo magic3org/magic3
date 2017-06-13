@@ -26,6 +26,7 @@ function wp_get_server_protocol() {
  * @since 2.1.0
  * @access private
  */
+/*
 function wp_unregister_GLOBALS() {
 	if ( !ini_get( 'register_globals' ) )
 		return;
@@ -42,7 +43,7 @@ function wp_unregister_GLOBALS() {
 			unset( $GLOBALS[$k] );
 		}
 }
-
+*/
 /**
  * Fix `$_SERVER` variables for various setups.
  *
@@ -52,6 +53,7 @@ function wp_unregister_GLOBALS() {
  * @global string $PHP_SELF The filename of the currently executing script,
  *                          relative to the document root.
  */
+/*
 function wp_fix_server_vars() {
 	global $PHP_SELF;
 
@@ -105,7 +107,7 @@ function wp_fix_server_vars() {
 	if ( empty( $PHP_SELF ) )
 		$_SERVER['PHP_SELF'] = $PHP_SELF = preg_replace( '/(\?.*)?$/', '', $_SERVER["REQUEST_URI"] );
 }
-
+*/
 /**
  * Check for the required PHP version, and the MySQL extension or
  * a database drop-in.
@@ -118,7 +120,7 @@ function wp_fix_server_vars() {
  * @global string $required_php_version The required PHP version string.
  * @global string $wp_version           The WordPress version string.
  */
-function wp_check_php_mysql_versions() {
+/*function wp_check_php_mysql_versions() {
 	global $required_php_version, $wp_version;
 	$php_version = phpversion();
 
@@ -128,7 +130,7 @@ function wp_check_php_mysql_versions() {
 		$protocol = wp_get_server_protocol();
 		header( sprintf( '%s 500 Internal Server Error', $protocol ), true, 500 );
 		header( 'Content-Type: text/html; charset=utf-8' );
-		/* translators: 1: Current PHP version number, 2: WordPress version number, 3: Minimum required PHP version number */
+		// translators: 1: Current PHP version number, 2: WordPress version number, 3: Minimum required PHP version number
 		die( sprintf( __( 'Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.' ), $php_version, $wp_version, $required_php_version ) );
 	}
 
@@ -141,7 +143,7 @@ function wp_check_php_mysql_versions() {
 		die( __( 'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.' ) );
 	}
 }
-
+*/
 /**
  * Don't load all of WordPress when handling a favicon.ico request.
  *
@@ -593,7 +595,10 @@ function wp_get_mu_plugins() {
  */
 function wp_get_active_and_valid_plugins() {
 	$plugins = array();
-	$active_plugins = (array) get_option( 'active_plugins', array() );
+//	$active_plugins = (array) get_option( 'active_plugins', array() );
+	// Magic3暫定
+	$active_plugins = array();
+	$active_plugins[] = 'wp-multibyte-patch/wp-multibyte-patch.php';
 
 	// Check for hacks file if the option is enabled
 	if ( get_option( 'hack_file' ) && file_exists( ABSPATH . 'my-hacks.php' ) ) {
