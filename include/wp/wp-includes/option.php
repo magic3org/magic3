@@ -28,7 +28,7 @@
  * @return mixed Value set for the option.
  */
 function get_option( $option, $default = false ) {
-	global $wpdb;
+//	global $wpdb;
 	global $gEnvManager;
 
 	$option = trim( $option );
@@ -54,16 +54,16 @@ function get_option( $option, $default = false ) {
 	if ( false !== $pre )
 		return $pre;
 
-	if ( defined( 'WP_SETUP_CONFIG' ) )
-		return false;
+//	if ( defined( 'WP_SETUP_CONFIG' ) )
+//		return false;
 
 	// Distinguish between `false` as a default, and not passing one.
-	$passed_default = func_num_args() > 1;
+//	$passed_default = func_num_args() > 1;
 
-	if ( ! wp_installing() ) {
+//	if ( ! wp_installing() ) {
 		// prevent non-existent options from triggering multiple queries
-		$notoptions = wp_cache_get( 'notoptions', 'options' );
-		if ( isset( $notoptions[ $option ] ) ) {
+//		$notoptions = wp_cache_get( 'notoptions', 'options' );
+//		if ( isset( $notoptions[ $option ] ) ) {
 			/**
 			 * Filters the default value for an option.
 			 *
@@ -78,15 +78,15 @@ function get_option( $option, $default = false ) {
 			 * @param string $option  Option name.
 			 * @param bool   $passed_default Was `get_option()` passed a default value?
 			 */
-			return apply_filters( "default_option_{$option}", $default, $option, $passed_default );
-		}
+//			return apply_filters( "default_option_{$option}", $default, $option, $passed_default );
+//		}
 
-		$alloptions = wp_load_alloptions();
-
-		if ( isset( $alloptions[$option] ) ) {
-			$value = $alloptions[$option];
-		} else {
-			$value = wp_cache_get( $option, 'options' );
+//		$alloptions = wp_load_alloptions();
+//
+//		if ( isset( $alloptions[$option] ) ) {
+//			$value = $alloptions[$option];
+//		} else {
+//			$value = wp_cache_get( $option, 'options' );
 
 /*			if ( false === $value ) {
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", $option ) );
@@ -106,8 +106,8 @@ function get_option( $option, $default = false ) {
 /*					return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
 				}
 			}*/
-		}
-	} else {
+//		}
+//	} else {
 /*		$suppress = $wpdb->suppress_errors();
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", $option ) );
 		$wpdb->suppress_errors( $suppress );
@@ -116,7 +116,7 @@ function get_option( $option, $default = false ) {
 		} else {
 			return apply_filters( 'default_option_' . $option, $default, $option, $passed_default );
 		}*/
-	}
+//	}
 	// If home is not set use siteurl.
 	if ( 'home' == $option && '' == $value )
 		return get_option( 'siteurl' );
@@ -124,6 +124,10 @@ function get_option( $option, $default = false ) {
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );
 	
+	// Maigc3追加
+	if ($option == 'blog_charset'){
+		$value = 'UTF-8';
+	}
 	/**
 	 * Filters the value of an existing option.
 	 *

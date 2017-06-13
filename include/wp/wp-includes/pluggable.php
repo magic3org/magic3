@@ -96,7 +96,7 @@ if ( !function_exists('get_user_by') ) :
  * @return WP_User|false WP_User object on success, false on failure.
  */
 function get_user_by( $field, $value ) {
-	$userdata = WP_User::get_data_by( $field, $value );
+//	$userdata = WP_User::get_data_by( $field, $value );
 
 	if ( !$userdata )
 		return false;

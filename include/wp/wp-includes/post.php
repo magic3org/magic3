@@ -534,7 +534,7 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 	if ( ! $_post )
 		return null;
 
-	$_post = $_post->filter( $filter );
+//	$_post = $_post->filter( $filter );
 
 	if ( $output == ARRAY_A )
 		return $_post->to_array();
@@ -1752,7 +1752,8 @@ function delete_post_meta( $post_id, $meta_key, $meta_value = '' ) {
  *               field if $single is true.
  */
 function get_post_meta( $post_id, $key = '', $single = false ) {
-	return get_metadata('post', $post_id, $key, $single);
+	//return get_metadata('post', $post_id, $key, $single);
+	return false;
 }
 
 /**
@@ -5789,7 +5790,8 @@ function update_post_caches( &$posts, $post_type = 'post', $update_term_cache = 
  *                     of metadata.
  */
 function update_postmeta_cache( $post_ids ) {
-	return update_meta_cache('post', $post_ids);
+//	return update_meta_cache('post', $post_ids);
+	return false;
 }
 
 /**

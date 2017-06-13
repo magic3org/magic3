@@ -611,6 +611,10 @@ function wp_unregister_widget_control($id) {
  * @return bool True, if widget sidebar was found and called. False if not found or not called.
  */
 function dynamic_sidebar( $index = 1 ) {
+	// Magic3のウィジェットエリア出力に変更
+	global $gPageManager;
+	echo $gPageManager->getContents($index);
+return;
 	global $wp_registered_sidebars, $wp_registered_widgets;
 
 	if ( is_int( $index ) ) {
@@ -849,8 +853,8 @@ function is_dynamic_sidebar() {
  */
 function is_active_sidebar( $index ) {
 	$index = ( is_int($index) ) ? "sidebar-$index" : sanitize_title($index);
-	$sidebars_widgets = wp_get_sidebars_widgets();
-	$is_active_sidebar = ! empty( $sidebars_widgets[$index] );
+//	$sidebars_widgets = wp_get_sidebars_widgets();
+//	$is_active_sidebar = ! empty( $sidebars_widgets[$index] );
 
 	/**
 	 * Filters whether a dynamic sidebar is considered "active".
@@ -861,7 +865,13 @@ function is_active_sidebar( $index ) {
 	 *                                      In other words, whether the sidebar contains any widgets.
 	 * @param int|string $index             Index, name, or ID of the dynamic sidebar.
 	 */
-	return apply_filters( 'is_active_sidebar', $is_active_sidebar, $index );
+//	return apply_filters( 'is_active_sidebar', $is_active_sidebar, $index );
+	global $gPageManager;
+	
+	// $indexには「sidebar-N」のポジション名が入る
+	$count = $gPageManager->getWidgetsCount($index);
+	$ret = $count > 0 ? true : false;
+	return $ret;
 }
 
 //
@@ -1087,14 +1097,14 @@ function _get_widget_id_base( $id ) {
  *
  * @global array $sidebars_widgets
  */
-function _wp_sidebars_changed() {
-	global $sidebars_widgets;
-
-	if ( ! is_array( $sidebars_widgets ) )
-		$sidebars_widgets = wp_get_sidebars_widgets();
-
-	retrieve_widgets(true);
-}
+//function _wp_sidebars_changed() {
+//	global $sidebars_widgets;
+//
+//	if ( ! is_array( $sidebars_widgets ) )
+//		$sidebars_widgets = wp_get_sidebars_widgets();
+//
+//	retrieve_widgets(true);
+//}
 
 /**
  * Look for "lost" widgets, this has to run at least on each theme change.
