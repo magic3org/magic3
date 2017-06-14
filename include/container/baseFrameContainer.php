@@ -719,13 +719,15 @@ class BaseFrameContainer extends Core
 			// テンプレート内のファイルを読み込む
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
 		
-			// コンテンツ取得用API
-			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');
+			// Magic3用インターフェイス
+			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');// コンテンツ取得用API
+			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値設定
 			
 
 			// ##### データ初期化 #####
-			wp_initial_constants();			// デフォルト値取得
-			
+			wp_initial_constants();			// 定義値取得
+			m3WpInit();						// Magic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
+
 			// プラグイン初期化
 			$GLOBALS['wp_plugin_paths'] = array();			// $wp_plugin_pathsは未使用?
 			foreach (wp_get_active_and_valid_plugins() as $plugin) {// プラグインロード

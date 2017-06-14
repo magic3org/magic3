@@ -28,13 +28,16 @@
  * @return mixed Value set for the option.
  */
 function get_option( $option, $default = false ) {
-//	global $wpdb;
 	global $gEnvManager;
+	global $m3WpOptions;		// 初期値取得用
 
 	$option = trim( $option );
 	if ( empty( $option ) )
 		return false;
 
+	// デフォルト値を取得
+	$value = $m3WpOptions[$option];
+	
 	/**
 	 * Filters the value of an existing option before it is retrieved.
 	 *
@@ -50,9 +53,9 @@ function get_option( $option, $default = false ) {
 	 *                               Default false to skip it.
 	 * @param string     $option     Option name.
 	 */
-	$pre = apply_filters( "pre_option_{$option}", false, $option );
-	if ( false !== $pre )
-		return $pre;
+//	$pre = apply_filters( "pre_option_{$option}", false, $option );
+//	if ( false !== $pre )
+//		return $pre;
 
 //	if ( defined( 'WP_SETUP_CONFIG' ) )
 //		return false;
@@ -124,12 +127,6 @@ function get_option( $option, $default = false ) {
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );
 	
-	// Maigc3追加
-	switch ($option){
-	case 'blog_charset':
-		$value = M3_HTML_CHARSET;
-		break;
-	}
 	/**
 	 * Filters the value of an existing option.
 	 *
