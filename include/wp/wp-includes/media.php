@@ -183,7 +183,7 @@ function image_hwstring( $width, $height ) {
  *                     the image is an intermediate size. False on failure.
  */
 function image_downsize( $id, $size = 'medium' ) {
-	$is_image = wp_attachment_is_image( $id );
+	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
 
 	/**
 	 * Filters whether to preempt the output of image_downsize().
@@ -210,7 +210,7 @@ function image_downsize( $id, $size = 'medium' ) {
 
 	// If the file isn't an image, attempt to replace its URL with a rendered image from its meta.
 	// Otherwise, a non-image type could be returned.
-	if ( ! $is_image ) {
+/*	if ( ! $is_image ) {
 		if ( ! empty( $meta['sizes'] ) ) {
 			$img_url = str_replace( $img_url_basename, $meta['sizes']['full']['file'], $img_url );
 			$img_url_basename = $meta['sizes']['full']['file'];
@@ -219,10 +219,10 @@ function image_downsize( $id, $size = 'medium' ) {
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	// try for a new style intermediate size
-	if ( $intermediate = image_get_intermediate_size($id, $size) ) {
+	if ( $intermediate = image_get_intermediate_size($id, $size) ) {		// 画像サイズ名から画像ファイル名とサイズを取得
 		$img_url = str_replace($img_url_basename, $intermediate['file'], $img_url);
 		$width = $intermediate['width'];
 		$height = $intermediate['height'];

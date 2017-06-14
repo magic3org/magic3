@@ -5235,7 +5235,8 @@ function wp_attachment_is( $type, $post = null ) {
  * @return bool Whether the attachment is an image.
  */
 function wp_attachment_is_image( $post = null ) {
-	return wp_attachment_is( 'image', $post );
+	//return wp_attachment_is( 'image', $post );
+	return true;
 }
 
 /**
