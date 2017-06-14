@@ -125,8 +125,10 @@ function get_option( $option, $default = false ) {
 		$value = untrailingslashit( $value );
 	
 	// Maigc3追加
-	if ($option == 'blog_charset'){
-		$value = 'UTF-8';
+	switch ($option){
+	case 'blog_charset':
+		$value = M3_HTML_CHARSET;
+		break;
 	}
 	/**
 	 * Filters the value of an existing option.

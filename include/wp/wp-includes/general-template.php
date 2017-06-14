@@ -702,9 +702,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			$output = get_option('admin_email');
 			break;
 		case 'charset':
-//			$output = get_option('blog_charset');
-//			if ('' == $output) $output = 'UTF-8';
-			$output = M3_HTML_CHARSET;
+			$output = get_option('blog_charset');
 			break;
 		case 'html_type' :
 			$output = get_option('html_type');
