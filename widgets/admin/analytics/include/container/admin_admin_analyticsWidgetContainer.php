@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -54,6 +54,9 @@ class admin_admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => '3ヶ月',	'value' => '3month'),
 										array(	'name' => '6ヶ月',	'value' => '6month'),
 										array(	'name' => '1年',	'value' => '1year'),
+										array(	'name' => '2年',	'value' => '2year'),
+										array(	'name' => '3年',	'value' => '3year'),
+										array(	'name' => '5年',	'value' => '5year'),
 										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
 	}
 	/**
