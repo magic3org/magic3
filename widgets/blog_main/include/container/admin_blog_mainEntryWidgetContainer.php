@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -466,6 +466,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// サムネール画像を取得
 				$thumbFilename = '';
+				$thumbSrcPath = '';			// サムネール画像の元のファイル
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					// 次の記事IDを取得
 					$nextEntryId = self::$_mainDb->getNextEntryId();
@@ -477,6 +478,9 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $nextEntryId, $thumbPath, $destFilename);
 							if ($ret) $thumbFilename = implode(';', $destFilename);
 						}
+						
+						// サムネールの元の画像を取得
+						$thumbSrcPath = str_replace($this->gEnv->getResourcePath(), '', $thumbPath);
 					}
 				}
 				
@@ -485,6 +489,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
 										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'be_thumb_src'			=> $thumbSrcPath,		// サムネール画像の元のファイル
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
 
@@ -581,6 +586,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// サムネール画像を取得
 				$thumbFilename = '';
+				$thumbSrcPath = '';			// サムネール画像の元のファイル
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
 						// コンテンツからアイキャッチ画像を作成
@@ -598,6 +604,9 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
 							$thumbFilename = implode(';', $destFilename);
 						}
+						
+						// サムネールの元の画像を取得
+						$thumbSrcPath = str_replace($this->gEnv->getResourcePath(), '', $thumbPath);
 					} else {		// 記事非公開の場合
 						// 公開ディレクトリのアイキャッチ画像を削除
 						blog_mainCommonDef::removeEyecatchImageInPublicDir($this->entryId);
@@ -609,6 +618,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
 										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'be_thumb_src'			=> $thumbSrcPath,		// サムネール画像の元のファイル
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
 
