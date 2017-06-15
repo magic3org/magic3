@@ -5023,16 +5023,18 @@ function wp_update_attachment_metadata( $post_id, $data ) {
  * @return string|false Attachment URL, otherwise false.
  */
 function wp_get_attachment_url( $post_id = 0 ) {
+	global $gEnvManager;
+		
 	$post_id = (int) $post_id;
 	if ( !$post = get_post( $post_id ) )
 		return false;
 
-	if ( 'attachment' != $post->post_type )
-		return false;
+//	if ( 'attachment' != $post->post_type )
+//		return false;
 
 	$url = '';
 	// Get attached file.
-	if ( $file = get_post_meta( $post->ID, '_wp_attached_file', true ) ) {
+/*	if ( $file = get_post_meta( $post->ID, '_wp_attached_file', true ) ) {
 		// Get upload directory.
 		if ( ( $uploads = wp_get_upload_dir() ) && false === $uploads['error'] ) {
 			// Check that the upload base exists in the file location.
@@ -5047,20 +5049,25 @@ function wp_get_attachment_url( $post_id = 0 ) {
 				$url = $uploads['baseurl'] . "/$file";
 			}
 		}
+	}*/
+	// サムネール作成元の画像を取得
+	if (!empty($post->thumb_src)){
+		$imagePath = $gEnvManager->getResourcePath() . $post->thumb_src;		// 画像パス
+		if (file_exists($imagePath)) $url = $gEnvManager->getResourceUrl() . $post->thumb_src;
 	}
 
 	/*
 	 * If any of the above options failed, Fallback on the GUID as used pre-2.7,
 	 * not recommended to rely upon this.
 	 */
-	if ( empty($url) ) {
-		$url = get_the_guid( $post->ID );
-	}
+//	if ( empty($url) ) {
+//		$url = get_the_guid( $post->ID );
+//	}
 
 	// On SSL front end, URLs should be HTTPS.
-	if ( is_ssl() && ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
-		$url = set_url_scheme( $url );
-	}
+//	if ( is_ssl() && ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
+//		$url = set_url_scheme( $url );
+//	}
 
 	/**
 	 * Filters the attachment URL.

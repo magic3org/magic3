@@ -183,7 +183,7 @@ function image_hwstring( $width, $height ) {
  *                     the image is an intermediate size. False on failure.
  */
 function image_downsize( $id, $size = 'medium' ) {
-	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
+//	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
 
 	/**
 	 * Filters whether to preempt the output of image_downsize().
@@ -202,9 +202,10 @@ function image_downsize( $id, $size = 'medium' ) {
 		return $out;
 	}
 
-	$img_url = wp_get_attachment_url($id);
-	$meta = wp_get_attachment_metadata($id);
-	$width = $height = 0;
+//	$img_url = wp_get_attachment_url($id);
+	$img_url = wp_get_attachment_url();				// カレントのコンテンツデータ($GLOBALS['post'])から取得
+//	$meta = wp_get_attachment_metadata($id);
+//	$width = $height = 0;
 	$is_intermediate = false;
 	$img_url_basename = wp_basename($img_url);
 
@@ -237,11 +238,11 @@ function image_downsize( $id, $size = 'medium' ) {
 			$is_intermediate = true;
 		}
 	}
-	if ( !$width && !$height && isset( $meta['width'], $meta['height'] ) ) {
+/*	if ( !$width && !$height && isset( $meta['width'], $meta['height'] ) ) {
 		// any other type: use the real image
 		$width = $meta['width'];
 		$height = $meta['height'];
-	}
+	}*/
 
 	if ( $img_url) {
 		// we have the actual image size, but might need to further constrain it if content_width is narrower

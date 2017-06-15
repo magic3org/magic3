@@ -23,4 +23,9 @@ INSERT INTO _system_config
 ('default_content_type', 'blog',     'デフォルトコンテンツタイプ');
 
 -- *** システム標準テーブル ***
+-- 汎用コンテンツマスター
+ALTER TABLE content ADD cn_thumb_src     TEXT                                         NOT NULL;      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
+
+-- ブログエントリー(記事)マスター
+ALTER TABLE blog_entry ADD be_thumb_src     TEXT                                         NOT NULL;      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
 

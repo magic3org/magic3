@@ -299,6 +299,9 @@ class ContentApi
 		// Magic3設定値追加
 		$post->post_title = $title;
 		$post->post_content = $entryHtml;
+		// Magic3用パラメータ
+		$post->thumb_src = $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+		
 		$wpPostObj = new WP_Post($post);
 		$this->contentArray[] = $wpPostObj;
 		return true;
