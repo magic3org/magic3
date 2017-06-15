@@ -37,7 +37,7 @@ function get_option( $option, $default = false ) {
 
 	// デフォルト値を取得
 	$value = $m3WpOptions[$option];
-	
+
 	/**
 	 * Filters the value of an existing option before it is retrieved.
 	 *

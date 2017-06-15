@@ -39,8 +39,8 @@ function m3WpInit()
 			
 //	$options = array(
 	$GLOBALS['m3WpOptions'] = array(
-									'siteurl' => $guessurl,
-									'home' => $guessurl,
+									'siteurl' => $gEnvManager->getRootUrl(),
+									'home' => $gEnvManager->getRootUrl(),
 									'blogname' => __('My Site'),
 									/* translators: site tagline */
 									'blogdescription' => __('Just another WordPress site'),
