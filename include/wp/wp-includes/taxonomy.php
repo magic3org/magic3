@@ -3053,6 +3053,8 @@ function clean_term_cache($ids, $taxonomy = '', $clean_taxonomy = true) {
  *                             WP_Error if get_term() returns an error object for any term.
  */
 function get_object_term_cache( $id, $taxonomy ) {
+	return array();
+	
 	$_term_ids = wp_cache_get( $id, "{$taxonomy}_relationships" );
 
 	// We leave the priming of relationship caches to upstream functions.

@@ -518,7 +518,7 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 
 	if ( $post instanceof WP_Post ) {
 		$_post = $post;
-	} elseif ( is_object( $post ) ) {
+	} else if ( is_object( $post ) ) {
 		if ( empty( $post->filter ) ) {
 			$_post = sanitize_post( $post, 'raw' );
 			$_post = new WP_Post( $_post );
@@ -528,7 +528,9 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 			$_post = WP_Post::get_instance( $post->ID );
 		}
 	} else {
-		$_post = WP_Post::get_instance( $post );
+//		$_post = WP_Post::get_instance( $post );
+		// IDをチェック
+		if ((int)$post == (int)$GLOBALS['post']->ID) $_post = $GLOBALS['post'];
 	}
 
 	if ( ! $_post )

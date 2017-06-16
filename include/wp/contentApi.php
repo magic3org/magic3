@@ -278,6 +278,7 @@ class ContentApi
 		
 //		$this->tmpl->addVars('itemlist', $row);
 //		$this->tmpl->parseTemplate('itemlist', 'a');
+		$post_type = 'post';
 		$post = new stdClass;
 		$post->ID = $id;
 		$post->post_author = '';
@@ -286,7 +287,7 @@ class ContentApi
 		$post->post_password = '';
 		$post->post_name = $title;		// エンコーディングが必要?
 		$post->post_type = $post_type;
-//		$post->post_status = 'draft';	// デフォルトはpublish
+		$post->post_status = 'publish';
 		$post->to_ping = '';
 		$post->pinged = '';
 /*		$post->comment_status = get_default_comment_status( $post_type );
