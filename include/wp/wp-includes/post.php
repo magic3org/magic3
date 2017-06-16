@@ -1562,7 +1562,8 @@ function get_all_post_type_supports( $post_type ) {
 function post_type_supports( $post_type, $feature ) {
 	global $_wp_post_type_features;
 
-	return ( isset( $_wp_post_type_features[$post_type][$feature] ) );
+//	return ( isset( $_wp_post_type_features[$post_type][$feature] ) );
+	return true;
 }
 
 /**
