@@ -346,5 +346,32 @@ class ContentApi
 		$dest = $gInstanceManager->getTextConvManager()->deleteM3Tag($dest);
 		return $dest;
 	}
+	/**
+	 * デフォルトのサムネール画像の情報を取得
+	 *
+	 * @return array						画像パス,画像URL,画像幅,画像高さの配列
+	 */
+	function getDefaultThumbInfo()
+	{
+		global $gInstanceManager;
+		static $thumbInfoArray;
+		
+		if (!isset($thumbInfoArray)){
+			// アイキャッチ画像の情報を取得
+			$formats = $gInstanceManager->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
+			$ret = $gInstanceManager->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
+		
+			$filename = $gInstanceManager->getImageManager()->getThumbFilename(0, $formats[0]);		// デフォルト画像ファイル名
+			$thumbPath = $gInstanceManager->getImageManager()->getSystemThumbPath($this->contentType, 0/*PC用*/, $filename);
+			if (file_exists($thumbPath)){
+				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl($this->contentType, 0/*PC用*/, $filename);
+				$thumbInfoArray = array($thumbPath, $thumbUrl, $imageSize, $imageSize);
+			} else {
+				$msgDetail = '画像パス:' . $thumbPath;
+				$gOpeLogManager->writeError(__METHOD__, 'アイキャッチ用のデフォルト画像が見つかりません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
+			}
+		}
+		return $thumbInfoArray;
+	}
 }
 ?>
