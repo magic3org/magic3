@@ -184,6 +184,7 @@ function image_hwstring( $width, $height ) {
  */
 function image_downsize( $id, $size = 'medium' ) {
 	global $gEnvManager;
+	global $gContentApi;
 	
 //	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
 
@@ -209,13 +210,17 @@ function image_downsize( $id, $size = 'medium' ) {
 	if (!$post) return false;
 
 	// サムネール作成元の画像を取得
-	$img_url = '';
+	$imgUrl = '';
 	$width = 0;
 	$height = 0;
-	if (!empty($post->thumb_src)){
+	if (empty($post->thumb_src)){		// サムネール画像が設定されていないとき
+		// 各コンテンツごとのデフォルトのサムネール画像を取得
+		$retVals = $gContentApi->getDefaultThumbInfo();
+		if (is_array($retVals)) list($imgPath, $imgUrl, $width, $height) = $retVals;
+	} else {
 		$imagePath = $gEnvManager->getResourcePath() . $post->thumb_src;		// 画像パス
 		if (file_exists($imagePath)){
-			$img_url = $gEnvManager->getResourceUrl() . $post->thumb_src;
+			$imgUrl = $gEnvManager->getResourceUrl() . $post->thumb_src;
 			
 			// 画像サイズ取得
 			$imageSize = @getimagesize($imagePath);
@@ -226,18 +231,18 @@ function image_downsize( $id, $size = 'medium' ) {
 			}
 		}
 	}
-//	$img_url = wp_get_attachment_url($id);
-//	$img_url = wp_get_attachment_url();				// カレントのコンテンツデータ($GLOBALS['post'])から取得
+//	$imgUrl = wp_get_attachment_url($id);
+//	$imgUrl = wp_get_attachment_url();				// カレントのコンテンツデータ($GLOBALS['post'])から取得
 //	$meta = wp_get_attachment_metadata($id);
 //	$width = $height = 0;
 	$is_intermediate = false;
-	$img_url_basename = wp_basename($img_url);
+	$img_url_basename = wp_basename($imgUrl);
 
 	// If the file isn't an image, attempt to replace its URL with a rendered image from its meta.
 	// Otherwise, a non-image type could be returned.
 /*	if ( ! $is_image ) {
 		if ( ! empty( $meta['sizes'] ) ) {
-			$img_url = str_replace( $img_url_basename, $meta['sizes']['full']['file'], $img_url );
+			$imgUrl = str_replace( $img_url_basename, $meta['sizes']['full']['file'], $imgUrl );
 			$img_url_basename = $meta['sizes']['full']['file'];
 			$width = $meta['sizes']['full']['width'];
 			$height = $meta['sizes']['full']['height'];
@@ -248,7 +253,7 @@ function image_downsize( $id, $size = 'medium' ) {
 
 	// try for a new style intermediate size
 	if ( $intermediate = image_get_intermediate_size($id, $size) ) {		// 画像サイズ名から画像ファイル名とサイズを取得
-		$img_url = str_replace($img_url_basename, $intermediate['file'], $img_url);
+		$imgUrl = str_replace($img_url_basename, $intermediate['file'], $imgUrl);
 		$width = $intermediate['width'];
 		$height = $intermediate['height'];
 		$is_intermediate = true;
@@ -256,7 +261,7 @@ function image_downsize( $id, $size = 'medium' ) {
 	elseif ( $size == 'thumbnail' ) {
 		// fall back to the old thumbnail
 		if ( ($thumb_file = wp_get_attachment_thumb_file($id)) && $info = getimagesize($thumb_file) ) {
-			$img_url = str_replace($img_url_basename, wp_basename($thumb_file), $img_url);
+			$imgUrl = str_replace($img_url_basename, wp_basename($thumb_file), $imgUrl);
 			$width = $info[0];
 			$height = $info[1];
 			$is_intermediate = true;
@@ -268,12 +273,12 @@ function image_downsize( $id, $size = 'medium' ) {
 		$height = $meta['height'];
 	}*/
 
-	if ( $img_url) {
+	if ( $imgUrl) {
 		// 画像サイズを$sizeの範囲内に収める
 		// we have the actual image size, but might need to further constrain it if content_width is narrower
 		list( $width, $height ) = image_constrain_size_for_editor( $width, $height, $size );
 //$width=660;$height=577;
-		return array( $img_url, $width, $height, $is_intermediate );
+		return array($imgUrl, $width, $height, $is_intermediate);
 	}
 	return false;
 
