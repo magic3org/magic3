@@ -552,7 +552,7 @@ function wp_extract_urls( $content ) {
  * @param int    $post_ID Post ID.
  */
 function do_enclose( $content, $post_ID ) {
-	global $wpdb;
+/*	global $wpdb;
 
 	//TODO: Tidy this ghetto code up and make the debug code optional
 	include_once( ABSPATH . WPINC . '/class-IXR.php' );
@@ -581,7 +581,7 @@ function do_enclose( $content, $post_ID ) {
 			elseif ( isset($test['path']) && ( $test['path'] != '/' ) &&  ($test['path'] != '' ) )
 				$post_links[] = $link_test;
 		}
-	}
+	}*/
 
 	/**
 	 * Filters the list of enclosure links before querying the database.
@@ -594,7 +594,7 @@ function do_enclose( $content, $post_ID ) {
 	 * @param array $post_links An array of enclosure links.
 	 * @param int   $post_ID    Post ID.
 	 */
-	$post_links = apply_filters( 'enclosure_links', $post_links, $post_ID );
+/*	$post_links = apply_filters( 'enclosure_links', $post_links, $post_ID );
 
 	foreach ( (array) $post_links as $url ) {
 		if ( $url != '' && !$wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post_ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
@@ -624,7 +624,7 @@ function do_enclose( $content, $post_ID ) {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 /**
@@ -1179,10 +1179,10 @@ function cache_javascript_headers() {
  *
  * @return int Number of database queries.
  */
-function get_num_queries() {
+/*function get_num_queries() {
 	global $wpdb;
 	return $wpdb->num_queries;
-}
+}*/
 
 /**
  * Whether input is yes or no.
@@ -1350,13 +1350,14 @@ function do_robots() {
  * @return bool Whether the site is already installed.
  */
 function is_blog_installed() {
-	global $wpdb;
+	return true;
+//	global $wpdb;
 
 	/*
 	 * Check cache first. If options table goes away and we have true
 	 * cached, oh well.
 	 */
-	if ( wp_cache_get( 'is_blog_installed' ) )
+/*	if ( wp_cache_get( 'is_blog_installed' ) )
 		return true;
 
 	$suppress = $wpdb->suppress_errors();
@@ -1381,13 +1382,13 @@ function is_blog_installed() {
 		return true;
 
 	$suppress = $wpdb->suppress_errors();
-
+*/
 	/*
 	 * Loop over the WP tables. If none exist, then scratch install is allowed.
 	 * If one or more exist, suggest table repair since we got here because the
 	 * options table could not be accessed.
 	 */
-	$wp_tables = $wpdb->tables();
+/*	$wp_tables = $wpdb->tables();
 	foreach ( $wp_tables as $table ) {
 		// The existence of custom user tables shouldn't suggest an insane state or prevent a clean install.
 		if ( defined( 'CUSTOM_USER_TABLE' ) && CUSTOM_USER_TABLE == $table )
@@ -1404,8 +1405,9 @@ function is_blog_installed() {
 
 		// Die with a DB error.
 		$wpdb->error = sprintf(
+		*/
 			/* translators: %s: database repair URL */
-			__( 'One or more database tables are unavailable. The database may need to be <a href="%s">repaired</a>.' ),
+/*			__( 'One or more database tables are unavailable. The database may need to be <a href="%s">repaired</a>.' ),
 			'maint/repair.php?referrer=is_blog_installed'
 		);
 
@@ -1416,7 +1418,7 @@ function is_blog_installed() {
 
 	wp_cache_set( 'is_blog_installed', false );
 
-	return false;
+	return false;*/
 }
 
 /**
@@ -3669,7 +3671,7 @@ function wp_list_sort( $list, $orderby = array(), $order = 'ASC', $preserve_keys
  *
  * @since 2.2.0
  */
-function wp_maybe_load_widgets() {
+//function wp_maybe_load_widgets() {
 	/**
 	 * Filters whether to load the Widgets library.
 	 *
@@ -3681,14 +3683,14 @@ function wp_maybe_load_widgets() {
 	 * @param bool $wp_maybe_load_widgets Whether to load the Widgets library.
 	 *                                    Default true.
 	 */
-	if ( ! apply_filters( 'load_default_widgets', true ) ) {
+/*	if ( ! apply_filters( 'load_default_widgets', true ) ) {
 		return;
 	}
 
 	require_once( ABSPATH . WPINC . '/default-widgets.php' );
 
 	add_action( '_admin_menu', 'wp_widgets_add_menu' );
-}
+}*/
 
 /**
  * Append the Widgets menu to the themes main menu.
@@ -3714,11 +3716,11 @@ function wp_widgets_add_menu() {
  *
  * @since 2.2.0
  */
-function wp_ob_end_flush_all() {
+/*function wp_ob_end_flush_all() {
 	$levels = ob_get_level();
 	for ($i=0; $i<$levels; $i++)
 		ob_end_flush();
-}
+}*/
 
 /**
  * Load custom DB error or display WordPress DB error.
@@ -3739,7 +3741,7 @@ function wp_ob_end_flush_all() {
  * @global wpdb $wpdb WordPress database abstraction object.
  */
 function dead_db() {
-	global $wpdb;
+/*	global $wpdb;
 
 	wp_load_translations_early();
 
@@ -3771,6 +3773,7 @@ function dead_db() {
 </html>
 <?php
 	die();
+*/
 }
 
 /**
@@ -4719,7 +4722,7 @@ function _cleanup_header_comment( $str ) {
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  */
-function wp_scheduled_delete() {
+/*function wp_scheduled_delete() {
 	global $wpdb;
 
 	$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
@@ -4758,7 +4761,7 @@ function wp_scheduled_delete() {
 		}
 	}
 }
-
+*/
 /**
  * Retrieve metadata from a file.
  *

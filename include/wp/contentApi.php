@@ -301,6 +301,7 @@ class ContentApi
 		$post->post_title = $title;
 		$post->post_content = $entryHtml;
 		$post->guid = $this->getContentUrl($id);	// 詳細画面URL
+		$post->filter = 'raw';
 		// Magic3用パラメータ
 		$post->thumb_src = $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 		

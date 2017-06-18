@@ -846,7 +846,7 @@ function the_comment() {
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  */
-function wp_old_slug_redirect() {
+/*function wp_old_slug_redirect() {
 	if ( is_404() && '' !== get_query_var( 'name' ) ) {
 		global $wpdb;
 
@@ -900,7 +900,7 @@ function wp_old_slug_redirect() {
 		} elseif( is_embed() ) {
 			$link = user_trailingslashit( trailingslashit( $link ) . 'embed' );
 		}
-
+*/
 		/**
 		 * Filters the old slug redirect URL.
 		 *
@@ -908,7 +908,7 @@ function wp_old_slug_redirect() {
 		 *
 		 * @param string $link The redirect URL.
 		 */
-		$link = apply_filters( 'old_slug_redirect_url', $link );
+/*		$link = apply_filters( 'old_slug_redirect_url', $link );
 
 		if ( ! $link ) {
 			return;
@@ -917,7 +917,7 @@ function wp_old_slug_redirect() {
 		wp_redirect( $link, 301 ); // Permanent redirect
 		exit;
 	}
-}
+}*/
 
 /**
  * Set up global post data.

@@ -5396,7 +5396,7 @@ function wp_mime_type_icon( $mime = 0 ) {
  * @param WP_Post $post        The Post Object
  * @param WP_Post $post_before The Previous Post Object
  */
-function wp_check_for_changed_slugs( $post_id, $post, $post_before ) {
+/*function wp_check_for_changed_slugs( $post_id, $post, $post_before ) {
 	// Don't bother if it hasn't changed.
 	if ( $post->post_name == $post_before->post_name ) {
 		return;
@@ -5418,7 +5418,7 @@ function wp_check_for_changed_slugs( $post_id, $post, $post_before ) {
 	if ( in_array( $post->post_name, $old_slugs ) ) {
 		delete_post_meta( $post_id, '_wp_old_slug', $post->post_name );
 	}
-}
+}*/
 
 /**
  * Retrieve the private post SQL based on capability.
