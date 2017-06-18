@@ -389,5 +389,14 @@ class ContentApi
 		$url = $linkInfoObj->getContentUrl($gEnvManager->getAccessDir()/*アクセスポイント*/, $this->contentType, $id, $this->langId);
 		return $url;
 	}
+	/**
+	 * コンテンツタイプを取得
+	 *
+	 * @return string						コンテンツタイプ
+	 */
+	function getContentType()
+	{
+		return $this->contentType;
+	}
 }
 ?>

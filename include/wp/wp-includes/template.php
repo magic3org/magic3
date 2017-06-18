@@ -38,7 +38,7 @@ function get_query_template( $type, $templates = array() ) {
 	 *
 	 * @param array $templates A list of template candidates, in descending order of priority.
 	 */
-	$templates = apply_filters( "{$type}_template_hierarchy", $templates );
+//	$templates = apply_filters( "{$type}_template_hierarchy", $templates );
 
 	$template = locate_template( $templates );
 
@@ -627,7 +627,7 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 	foreach ( (array) $template_names as $template_name ) {
 		if ( !$template_name )
 			continue;
-		if ( file_exists(STYLESHEETPATH . '/' . $template_name)) {
+/*		if ( file_exists(STYLESHEETPATH . '/' . $template_name)) {
 			$located = STYLESHEETPATH . '/' . $template_name;
 			break;
 		} elseif ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
@@ -636,13 +636,18 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 		} elseif ( file_exists( ABSPATH . WPINC . '/theme-compat/' . $template_name ) ) {
 			$located = ABSPATH . WPINC . '/theme-compat/' . $template_name;
 			break;
+		}*/
+		if ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
+			$located = TEMPLATEPATH . '/' . $template_name;
+			break;
 		}
 	}
 
 	if ( $load && '' != $located )
 		load_template( $located, $require_once );
 
-	return $located;
+//	return $located;
+	return basename($located);				// Magic3仕様変更
 }
 
 /**

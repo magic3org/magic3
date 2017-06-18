@@ -223,7 +223,9 @@ function get_permalink( $post = 0, $leavename = false ) {
 		$permalink = home_url( str_replace($rewritecode, $rewritereplace, $permalink) );
 		$permalink = user_trailingslashit($permalink, 'single');
 	} else { // if they're not using the fancy permalink option
-		$permalink = home_url('?p=' . $post->ID);
+//		$permalink = home_url('?p=' . $post->ID);
+		// 詳細画面へのURL
+		$permalink = $post->guid;
 	}
 
 	/**

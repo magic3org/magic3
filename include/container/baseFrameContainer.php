@@ -630,6 +630,8 @@ class BaseFrameContainer extends Core
 	 */
 	function _createPage($request, $curTemplate, $subTemplateId = '')
 	{
+		$defaultIndexFile = 'index.php';			// テンプレートの起動ファイル
+		
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
 		
 		// カレントのテンプレートIDを設定
@@ -750,6 +752,41 @@ class BaseFrameContainer extends Core
 			do_action('after_setup_theme');
 			do_action('wp_loaded');
 			wp();
+			
+			// ##### 起動ページを設定 #####
+			// URLパラメータからコンテンツ形式を取得し、ページを選択
+			$params = $this->gRequest->getQueryArray();
+			$paramCount = count($params);
+			reset($params);
+			$firstKey = key($params);
+			$firstValue = $params[$firstKey];
+			
+			$contentType = $GLOBALS['gContentApi']->getContentType();
+			switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+				if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT){	// コンテンツIDのとき
+					$defaultIndexFile = get_page_template();
+				}
+				break;
+			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				break;
+			case M3_VIEW_TYPE_BBS:	// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:	// ブログ
+				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
+					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
+					$defaultIndexFile = get_page_template();
+				}
+				break;
+			case M3_VIEW_TYPE_WIKI:	// Wiki
+				break;
+			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:	// イベント
+				break;
+			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				break;
+			}
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
@@ -816,7 +853,8 @@ class BaseFrameContainer extends Core
 
 		// ################### テンプレート読み込み ###################
 		// テンプレートのポジションタグからウィジェットが実行される
-		$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/index.php';
+		//$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/index.php';
+		$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . $defaultIndexFile;
 		if (file_exists($templateIndexFile)){
 			require_once($templateIndexFile);
 		} else {		// テンプレートが存在しないとき
