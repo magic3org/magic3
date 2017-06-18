@@ -765,7 +765,7 @@ class BaseFrameContainer extends Core
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 				if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT){	// コンテンツIDのとき
-					$defaultIndexFile = get_page_template();
+					$defaultIndexFile = get_page_template();		// 固定ページテンプレート
 				}
 				break;
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
@@ -773,9 +773,10 @@ class BaseFrameContainer extends Core
 			case M3_VIEW_TYPE_BBS:	// BBS
 				break;
 			case M3_VIEW_TYPE_BLOG:	// ブログ
-				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
-					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
-					$defaultIndexFile = get_page_template();
+//				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
+//					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
+				if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
+					$defaultIndexFile = get_single_template();		// 記事詳細テンプレート
 				}
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki

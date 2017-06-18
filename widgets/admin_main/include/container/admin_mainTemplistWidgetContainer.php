@@ -33,6 +33,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 //	const BREADCRUMB_TITLE			= 'テンプレート管理';		// 画面タイトル名(パンくずリスト)
 	const TITLE_INFO_URL			= 'テンプレートの情報';		// テンプレート情報URLのタイトル
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
+	const TEMPLATE_THUMBNAIL_FILENAME_WP = 'screenshot.png';				// テンプレートサムネール(WordPressテンプレート)
 	const previewImageSizeHeight = 27;
 	const previewImageSizeWidth = 42;
 	const imageSizeHeight = 135;
@@ -502,7 +503,12 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		// 画面イメージ表示設定
 		$name = $this->convertToDispString($fetchedRow['tm_name']);			// テンプレート名
 		$templateIndexFile = $templateDir . '/index.php';						// テンプレートindex.phpファイル
-		$imgUrl = $this->gEnv->getTemplatesUrl() . '/' . $templateId . '/' . self::TEMPLATE_THUMBNAIL_FILENAME;
+		
+		if ($fetchedRow['tm_type'] == 100){		// WordPressテンプレートの場合
+			$imgUrl = $this->gEnv->getTemplatesUrl() . '/' . $templateId . '/' . self::TEMPLATE_THUMBNAIL_FILENAME_WP;			// WordPressテンプレート
+		} else {
+			$imgUrl = $this->gEnv->getTemplatesUrl() . '/' . $templateId . '/' . self::TEMPLATE_THUMBNAIL_FILENAME;
+		}
 		
 		// 新規に追加されたテンプレートかチェック
 		$idText = $this->convertToDispString($templateId);
