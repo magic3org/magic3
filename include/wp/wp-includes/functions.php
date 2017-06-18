@@ -954,8 +954,8 @@ function wp( $query_vars = '' ) {
 	global $wp, $wp_query, $wp_the_query;
 	$wp->main( $query_vars );
 
-	if ( !isset($wp_the_query) )
-		$wp_the_query = $wp_query;
+//	if ( !isset($wp_the_query) )
+//		$wp_the_query = $wp_query;
 }
 
 /**

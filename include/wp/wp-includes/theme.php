@@ -1666,6 +1666,8 @@ function wp_custom_css_cb() {
  * @return WP_Post|null The custom_css post or null if none exists.
  */
 function wp_get_custom_css_post( $stylesheet = '' ) {
+	return null;
+	
 	if ( empty( $stylesheet ) ) {
 		$stylesheet = get_stylesheet();
 	}

@@ -2858,6 +2858,8 @@ class WP_Query {
 		global $gContentApi;
 		$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
 		$this->posts = $gContentApi->getContentList();
+//echo '---'.$this->is_singular.'---';
+//echo '####LOAD....';
 //var_dump($this->posts);
 //		if ( ! $q['suppress_filters'] ) {
 			/**
@@ -3239,8 +3241,9 @@ class WP_Query {
 	 * @return array List of posts.
 	 */
 	public function query( $query ) {
-		$this->init();
-		$this->query = $this->query_vars = wp_parse_args( $query );
+		// このメソッドはリクエストに対し1回だけ実行
+//		$this->init();
+//		$this->query = $this->query_vars = wp_parse_args( $query );
 		return $this->get_posts();
 	}
 
@@ -3350,9 +3353,9 @@ class WP_Query {
 	 */
 	public function __construct( $query = '' ) {
 		// $queryが空のパターンはquery()を呼び出して実行
-		if ( ! empty( $query ) ) {
-			$this->query( $query );
-		}
+//		if ( ! empty( $query ) ) {
+//			$this->query( $query );
+//		}
 	}
 
 	/**
