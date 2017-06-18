@@ -33,6 +33,7 @@ class ContentApi
 	const ADDON_OBJ_ID_CONTENT	= 'contentlib';
 	const ADDON_OBJ_ID_BLOG		= 'bloglib';
 	const ADDON_OBJ_ID_PRODUCT	= 'eclib';
+	const LINKINFO_OBJ_ID		= 'linkinfo';				// リンク情報取得用
 
 	/**
 	 * コンストラクタ
@@ -80,28 +81,28 @@ class ContentApi
 		global $gInstanceManager;
 		
 		switch ($this->contentType){
-			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
-				$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_CONTENT);
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_CONTENT);
 //				$this->db->getContentList($contentType, $this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*降順*/, array($this, 'contentLoop'));
-				break;
-			case M3_VIEW_TYPE_PRODUCT:	// 製品
-				$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_PRODUCT);
+			break;
+		case M3_VIEW_TYPE_PRODUCT:	// 製品
+			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_PRODUCT);
 //				$this->db->getProductList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
-				break;
-			case M3_VIEW_TYPE_BBS:	// BBS
-				break;
-			case M3_VIEW_TYPE_BLOG:	// ブログ
-				$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_BLOG);
+			break;
+		case M3_VIEW_TYPE_BBS:	// BBS
+			break;
+		case M3_VIEW_TYPE_BLOG:	// ブログ
+			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_BLOG);
 //				$this->db->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
-				break;
-			case M3_VIEW_TYPE_WIKI:	// Wiki
-				break;
-			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
-				break;
-			case M3_VIEW_TYPE_EVENT:	// イベント
-				break;
-			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
-				break;
+			break;
+		case M3_VIEW_TYPE_WIKI:	// Wiki
+			break;
+		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+			break;
+		case M3_VIEW_TYPE_EVENT:	// イベント
+			break;
+		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+			break;
 		}
 		
 		return $addonObj;
@@ -130,9 +131,8 @@ class ContentApi
 	 *
 	 * @return array     				WP_Postオブジェクトの配列
 	 */
-	function getContent()
+	function getContentList()
 	{
-//echo '###getContent()-start ';
 		$entryId = 0;
 		$addonObj = $this->_getAddonObj();
 //		$idArray = $addonObj->getPublicContent($this->langId, $this->limit, $this->pageNo);
@@ -300,6 +300,7 @@ class ContentApi
 		// Magic3設定値追加
 		$post->post_title = $title;
 		$post->post_content = $entryHtml;
+		$post->guid = $this->getContentUrl($id);	// 詳細画面URL
 		// Magic3用パラメータ
 		$post->thumb_src = $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 		
@@ -372,6 +373,21 @@ class ContentApi
 			}
 		}
 		return $thumbInfoArray;
+	}
+	/**
+	 * コンテンツ詳細画面のURLを取得
+	 *
+	 * @param string $id					コンテンツID
+	 * @return string						URL
+	 */
+	function getContentUrl($id)
+	{
+		global $gInstanceManager;
+		global $gEnvManager;
+		
+		$linkInfoObj = $gInstanceManager->getObject(self::LINKINFO_OBJ_ID);
+		$url = $linkInfoObj->getContentUrl($gEnvManager->getAccessDir()/*アクセスポイント*/, $this->contentType, $id, $this->langId);
+		return $url;
 	}
 }
 ?>

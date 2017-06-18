@@ -2855,12 +2855,9 @@ class WP_Query {
 		}
 
 		// ##### DBからコンテンツを取得 ###
-//		global $gInstanceManager;
-//		$apiObj = $gInstanceManager->getContentApiManager();
-//		$apiObj = new ContentApi();
 		global $gContentApi;
 		$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
-		$this->posts = $gContentApi->getContent();
+		$this->posts = $gContentApi->getContentList();
 //var_dump($this->posts);
 //		if ( ! $q['suppress_filters'] ) {
 			/**

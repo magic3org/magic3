@@ -276,6 +276,7 @@ class linkInfo
 		}
 		return $contentTypeList;
 	}
+	
 	/**
 	 * コンテンツプレビュー用のテキストを作成
 	 *
@@ -306,6 +307,71 @@ class linkInfo
 			$contentText = substr($contentText, 0, self::CONTENT_LENGTH) . '...';
 		}
 		return $contentText;
+	}
+	
+	/**
+	 * コンテンツ詳細画面のURLを取得
+	 *
+	 * @param strint $accessPoint	アクセスポイント(空文字列=PC用,m=携帯用,s=スマートフォン用)
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @param string $langId		言語ID(デフォルト言語の場合は空文字列)
+	 * @return string				URL。取得できない場合は空文字列。
+	 */
+	function getContentUrl($accessPoint, $contentType, $contentId, $langId = '')
+	{
+		global $gEnvManager;
+		
+		$url = '';
+		
+		switch ($accessPoint){
+		case '':			// PC用
+		default:
+			$url = $gEnvManager->getDefaultUrl();
+			break;
+		case 'm':			// 携帯用
+			$url = $gEnvManager->getDefaultMobileUrl();
+			break;
+		case 's':			// スマートフォン用
+			$url = $gEnvManager->getDefaultSmartphoneUrl();
+			break;
+		}
+		
+		// コンテンツごとのパラメータ追加
+		switch ($contentType){
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツの場合
+			$url .= '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_USER:		// ユーザ作成コンテンツの場合
+			// コンテンツへのリンクを作成
+			$url .= '?' . M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_BLOG:			// ブログコンテンツの場合
+			$url .= '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_PRODUCT:			// 商品情報の場合
+			$url .= '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_EVENT:			// イベント情報の場合
+			$url .= '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_BBS:			// BBSスレッド情報の場合
+			$url .= '?' . M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_PHOTO:			// フォト情報の場合
+			$url .= '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentId;
+			break;
+		case M3_VIEW_TYPE_WIKI:			// Wikiコンテンツの場合
+			$url .= '?' . $contentId;
+			break;
+		default:
+			break;
+		}
+		
+		if (!empty($url) || !empty($langId)){
+			if ($langId != $gEnvManager->getDefaultLanguage()) $url .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId;
+		}
+		return $url;
 	}
 	
 	/**
