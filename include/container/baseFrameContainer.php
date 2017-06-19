@@ -752,9 +752,8 @@ class BaseFrameContainer extends Core
 			load_default_textdomain();
 			do_action('after_setup_theme');
 			do_action('wp_loaded');
-			wp();
 			
-			// ##### 起動ページを設定 #####
+			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
 			// URLパラメータからコンテンツ形式を取得し、ページを選択
 			$params = $this->gRequest->getQueryArray();
 			$paramCount = count($params);
@@ -797,6 +796,9 @@ class BaseFrameContainer extends Core
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 				break;
 			}
+			
+			// WordPressオブジェクト作成
+			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み

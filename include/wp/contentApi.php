@@ -135,11 +135,18 @@ class ContentApi
 	 */
 	function getContentList()
 	{
-		$entryId = 0;
+		$this->contentArray = array();			// 取得コンテンツ初期化
+		
+		// 取得条件作成。コンテンツIDが設定されている場合は指定したコンテンツのみ取得。
+		if (empty($this->contentId)){
+			$entryId = 0;		// コンテンツID以外の条件で取得
+		} else {
+			$entryId = $this->contentId;		// コンテンツIDを指定。コンテンツIDは複数あり。
+		}
+	
+		// データ取得
 		$addonObj = $this->_getAddonObj();
-//		$idArray = $addonObj->getPublicContent($this->langId, $this->limit, $this->pageNo);
-		$this->contentArray = array();			// 取得コンテンツ
-		$addonObj->getPublicEntryItems($this->limit, $this->pageNo, $this->now, $entryId, $startDt, $endDt, $keywords, $this->langId, $order, array($this, '_itemListLoop'), null/*ブログID*/);
+		$addonObj->getPublicEntryItems($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $order, array($this, '_itemListLoop'), null/*ブログID*/);
 		
 		return $this->contentArray;
 	}
@@ -433,7 +440,7 @@ class ContentApi
 			$this->contentId = $id;
 			break;
 		}
-		
+
 		return true;
 	}
 }

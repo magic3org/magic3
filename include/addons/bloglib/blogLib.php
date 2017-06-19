@@ -202,8 +202,8 @@ class blogLib extends Addon
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
+	 * @param int,array	$entryId			エントリーID(0のときは期間で取得)
 	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
-	 * @param int		$entryId			エントリーID(0のときは期間で取得)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
 	 * @param array		$keywords			検索キーワード
@@ -213,12 +213,12 @@ class blogLib extends Addon
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
+	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
 	{
 		global $gEnvManager;
 		
 		$userId = $gEnvManager->getCurrentUserId();
-		$this->db->getPublicEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $userId, $blogId);
+		$this->db->getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $userId, $blogId);
 	}
 }
 ?>
