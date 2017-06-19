@@ -4781,7 +4781,7 @@ function wp_basename( $path, $suffix = '' ) {
  * @param string $text The text to be modified.
  * @return string The modified text.
  */
-function capital_P_dangit( $text ) {
+/*function capital_P_dangit( $text ) {
 	// Simple replacement for titles
 	$current_filter = current_filter();
 	if ( 'the_title' === $current_filter || 'wp_title' === $current_filter )
@@ -4795,7 +4795,7 @@ function capital_P_dangit( $text ) {
 		array( ' Wordpress', '&#8216;Wordpress', $dblq . 'Wordpress', '>Wordpress', '(Wordpress' ),
 		array( ' WordPress', '&#8216;WordPress', $dblq . 'WordPress', '>WordPress', '(WordPress' ),
 	$text );
-}
+}*/
 
 /**
  * Sanitize a mime type

@@ -16,6 +16,7 @@
  * @link       http://www.magic3.org
  */
 //require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
+require_once(M3_SYSTEM_INCLUDE_PATH . '//common/valueCheck.php');
 
 //class ContentApiManager extends Core
 class ContentApi
@@ -25,6 +26,7 @@ class ContentApi
 	private $limit;					// コンテンツ取得数(コンテンツ取得用)
 	private $pageNo;				// ページ番号(1～)(コンテンツ取得用)
 	private $contentArray;			// 取得コンテンツ
+	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -174,13 +176,12 @@ class ContentApi
 	 */
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
-//echo 'inloop....';
 		// レコード値取得
 		$serial = $fetchedRow['be_serial'];
 		$id		= $fetchedRow['be_id'];
 		$title	= $fetchedRow['be_name'];
 		$entryHtml = $fetchedRow['be_html'];
-//echo $id.'*';
+
 		// カテゴリーを取得
 		$categoryArray = array();
 //		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
@@ -398,6 +399,42 @@ class ContentApi
 	function getContentType()
 	{
 		return $this->contentType;
+	}
+	/**
+	 * コンテンツIDを設定
+	 *
+	 * @param string $idStr			コンテンツID文字列
+	 * @return bool					true=正常終了、false=異常終了
+	 */
+	function setContentId($idStr)
+	{
+		global $gOpeLogManager;
+		
+		// IDを解析しエラーチェック。複数の場合は配列に格納する。
+		switch ($this->contentType){
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+		case M3_VIEW_TYPE_PRODUCT:	// 製品
+		case M3_VIEW_TYPE_BBS:	// BBS
+		case M3_VIEW_TYPE_BLOG:	// ブログ
+		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+		case M3_VIEW_TYPE_EVENT:	// イベント
+		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+			// 数値型、複数可
+			// すべて数値であるかチェック
+			$contentIdArray = explode(',', $idStr);
+			if (ValueCheck::isNumeric($contentIdArray)){
+				$this->contentId = $contentIdArray;
+			} else {
+				return false;
+			}
+			break;
+		case M3_VIEW_TYPE_WIKI:	// Wiki
+			// 文字列型、単一のみ
+			$this->contentId = $id;
+			break;
+		}
+		
+		return true;
 	}
 }
 ?>

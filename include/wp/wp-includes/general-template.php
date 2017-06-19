@@ -1057,7 +1057,7 @@ function wp_get_document_title() {
 	$title = wptexturize( $title );
 	$title = convert_chars( $title );
 	$title = esc_html( $title );
-	$title = capital_P_dangit( $title );
+//	$title = capital_P_dangit( $title );
 
 	return $title;
 }

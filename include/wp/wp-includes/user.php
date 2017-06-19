@@ -80,7 +80,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 	global $auth_secure_cookie; // XXX ugly hack to pass this to wp_authenticate_cookie
 	$auth_secure_cookie = $secure_cookie;
 
-	add_filter('authenticate', 'wp_authenticate_cookie', 30, 3);
+//	add_filter('authenticate', 'wp_authenticate_cookie', 30, 3);
 
 	$user = wp_authenticate($credentials['user_login'], $credentials['user_password']);
 
@@ -115,7 +115,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
  * @param string                $password Password for authentication.
  * @return WP_User|WP_Error WP_User on success, WP_Error on failure.
  */
-function wp_authenticate_username_password($user, $username, $password) {
+/*function wp_authenticate_username_password($user, $username, $password) {
 	if ( $user instanceof WP_User ) {
 		return $user;
 	}
@@ -145,7 +145,7 @@ function wp_authenticate_username_password($user, $username, $password) {
 			'</a>'
 		);
 	}
-
+*/
 	/**
 	 * Filters whether the given user can be authenticated with the provided $password.
 	 *
@@ -155,15 +155,16 @@ function wp_authenticate_username_password($user, $username, $password) {
 	 *                                   callback failed authentication.
 	 * @param string           $password Password to check against the user.
 	 */
-	$user = apply_filters( 'wp_authenticate_user', $user, $password );
+/*	$user = apply_filters( 'wp_authenticate_user', $user, $password );
 	if ( is_wp_error($user) )
 		return $user;
 
 	if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
 		return new WP_Error( 'incorrect_password',
 			sprintf(
+			*/
 				/* translators: %s: user name */
-				__( '<strong>ERROR</strong>: The password you entered for the username %s is incorrect.' ),
+/*				__( '<strong>ERROR</strong>: The password you entered for the username %s is incorrect.' ),
 				'<strong>' . $username . '</strong>'
 			) .
 			' <a href="' . wp_lostpassword_url() . '">' .
@@ -173,7 +174,7 @@ function wp_authenticate_username_password($user, $username, $password) {
 	}
 
 	return $user;
-}
+}*/
 
 /**
  * Authenticates a user using the email and password.
@@ -186,7 +187,7 @@ function wp_authenticate_username_password($user, $username, $password) {
  * @param string                $password Password for authentication.
  * @return WP_User|WP_Error WP_User on success, WP_Error on failure.
  */
-function wp_authenticate_email_password( $user, $email, $password ) {
+/*function wp_authenticate_email_password( $user, $email, $password ) {
 	if ( $user instanceof WP_User ) {
 		return $user;
 	}
@@ -223,9 +224,9 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 			'</a>'
 		);
 	}
-
+*/
 	/** This filter is documented in wp-includes/user.php */
-	$user = apply_filters( 'wp_authenticate_user', $user, $password );
+/*	$user = apply_filters( 'wp_authenticate_user', $user, $password );
 
 	if ( is_wp_error( $user ) ) {
 		return $user;
@@ -234,8 +235,9 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 	if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
 		return new WP_Error( 'incorrect_password',
 			sprintf(
+*/
 				/* translators: %s: email address */
-				__( '<strong>ERROR</strong>: The password you entered for the email address %s is incorrect.' ),
+/*				__( '<strong>ERROR</strong>: The password you entered for the email address %s is incorrect.' ),
 				'<strong>' . $email . '</strong>'
 			) .
 			' <a href="' . wp_lostpassword_url() . '">' .
@@ -245,7 +247,7 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 	}
 
 	return $user;
-}
+}*/
 
 /**
  * Authenticate the user using the WordPress auth cookie.
@@ -259,7 +261,7 @@ function wp_authenticate_email_password( $user, $email, $password ) {
  * @param string                $password Password. If not empty, cancels the cookie authentication.
  * @return WP_User|WP_Error WP_User on success, WP_Error on failure.
  */
-function wp_authenticate_cookie($user, $username, $password) {
+/*function wp_authenticate_cookie($user, $username, $password) {
 	if ( $user instanceof WP_User ) {
 		return $user;
 	}
@@ -284,7 +286,7 @@ function wp_authenticate_cookie($user, $username, $password) {
 
 	return $user;
 }
-
+*/
 /**
  * For Multisite blogs, check if the authenticated user has been marked as a
  * spammer, or if the user's primary blog has been marked as spam.
@@ -294,8 +296,8 @@ function wp_authenticate_cookie($user, $username, $password) {
  * @param WP_User|WP_Error|null $user WP_User or WP_Error object from a previous callback. Default null.
  * @return WP_User|WP_Error WP_User on success, WP_Error if the user is considered a spammer.
  */
-function wp_authenticate_spam_check( $user ) {
-	if ( $user instanceof WP_User && is_multisite() ) {
+//function wp_authenticate_spam_check( $user ) {
+//	if ( $user instanceof WP_User && is_multisite() ) {
 		/**
 		 * Filters whether the user has been marked as a spammer.
 		 *
@@ -304,13 +306,13 @@ function wp_authenticate_spam_check( $user ) {
 		 * @param bool    $spammed Whether the user is considered a spammer.
 		 * @param WP_User $user    User to check against.
 		 */
-		$spammed = apply_filters( 'check_is_user_spammed', is_user_spammy( $user ), $user );
+/*		$spammed = apply_filters( 'check_is_user_spammed', is_user_spammy( $user ), $user );
 
 		if ( $spammed )
 			return new WP_Error( 'spammer_account', __( '<strong>ERROR</strong>: Your account has been marked as a spammer.' ) );
 	}
 	return $user;
-}
+}*/
 
 /**
  * Validates the logged-in cookie.
@@ -327,7 +329,7 @@ function wp_authenticate_spam_check( $user ) {
  * @return int|false User ID if validated, false otherwise. If a user ID from
  *                   an earlier filter callback is received, that value is returned.
  */
-function wp_validate_logged_in_cookie( $user_id ) {
+/*function wp_validate_logged_in_cookie( $user_id ) {
 	if ( $user_id ) {
 		return $user_id;
 	}
@@ -337,7 +339,7 @@ function wp_validate_logged_in_cookie( $user_id ) {
 	}
 
 	return wp_validate_auth_cookie( $_COOKIE[LOGGED_IN_COOKIE], 'logged_in' );
-}
+}*/
 
 /**
  * Number of posts user has written.

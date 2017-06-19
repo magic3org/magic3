@@ -733,14 +733,14 @@ function is_admin() {
  *
  * @return bool True if inside WordPress blog administration pages.
  */
-function is_blog_admin() {
+/*function is_blog_admin() {
 	if ( isset( $GLOBALS['current_screen'] ) )
 		return $GLOBALS['current_screen']->in_admin( 'site' );
 	elseif ( defined( 'WP_BLOG_ADMIN' ) )
 		return WP_BLOG_ADMIN;
 
 	return false;
-}
+}*/
 
 /**
  * Whether the current request is for the network administrative interface.

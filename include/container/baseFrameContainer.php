@@ -662,7 +662,7 @@ class BaseFrameContainer extends Core
 		// サブクラスの前処理を実行
 		if (method_exists($this, '_preBuffer')) $this->_preBuffer($request);
 	
-		if ($convType == 100){		// Wordpressテンプレートのとき
+		if ($convType == 100){		// WordPressテンプレートのとき
 			// WordPress用定義値
 			define('WPINC', 'wp-includes');
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
@@ -760,13 +760,17 @@ class BaseFrameContainer extends Core
 			$paramCount = count($params);
 			reset($params);
 			$firstKey = key($params);
-			$firstValue = $params[$firstKey];
+//			$firstValue = $params[$firstKey];
 			
 			$contentType = $GLOBALS['gContentApi']->getContentType();
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 				if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT){	// コンテンツIDのとき
 					$defaultIndexFile = get_page_template();		// 固定ページテンプレート
+					
+					// コンテンツID設定
+					$firstValue = $this->gRequest->trimValueOf($firstKey);
+					$GLOBALS['gContentApi']->setContentId($firstValue);
 				}
 				break;
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
@@ -778,6 +782,10 @@ class BaseFrameContainer extends Core
 //					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 				if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 					$defaultIndexFile = get_single_template();		// 記事詳細テンプレート
+					
+					// コンテンツID設定
+					$firstValue = $this->gRequest->trimValueOf($firstKey);
+					$GLOBALS['gContentApi']->setContentId($firstValue);
 				}
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki
