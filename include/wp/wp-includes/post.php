@@ -4517,8 +4517,9 @@ function get_page_uri( $page = 0 ) {
  * @return array|false List of pages matching defaults or `$args`.
  */
 function get_pages( $args = array() ) {
-	global $wpdb;
-
+	// メニュー階層をWP_Post型にして返す
+//	global $wpdb;
+/*
 	$defaults = array(
 		'child_of'     => 0,
 		'sort_order'   => 'ASC',
@@ -4575,7 +4576,9 @@ function get_pages( $args = array() ) {
 	if ( $cache = wp_cache_get( $cache_key, 'posts' ) ) {
 		// Convert to WP_Post instances.
 		$pages = array_map( 'get_post', $cache );
+*/
 		/** This filter is documented in wp-includes/post.php */
+/*
 		$pages = apply_filters( 'get_pages', $pages, $r );
 		return $pages;
 	}
@@ -4717,7 +4720,9 @@ function get_pages( $args = array() ) {
 	$pages = $wpdb->get_results($query);
 
 	if ( empty($pages) ) {
+*/
 		/** This filter is documented in wp-includes/post.php */
+/*
 		$pages = apply_filters( 'get_pages', array(), $r );
 		return $pages;
 	}
@@ -4761,7 +4766,7 @@ function get_pages( $args = array() ) {
 
 	// Convert to WP_Post instances
 	$pages = array_map( 'get_post', $pages );
-
+*/
 	/**
 	 * Filters the retrieved list of pages.
 	 *
@@ -4770,7 +4775,9 @@ function get_pages( $args = array() ) {
 	 * @param array $pages List of pages to retrieve.
 	 * @param array $r     Array of get_pages() arguments.
 	 */
+/*
 	return apply_filters( 'get_pages', $pages, $r );
+	*/
 }
 
 //
