@@ -452,17 +452,17 @@ class InstanceManager extends Core
 		return $manager;
 	}
 	/**
-	 * コンテンツAPIマネージャー取得
+	 * メニューマネージャー取得
 	 *
 	 * @return object			取得したオブジェクト
 	 */
-	static public function getContentApiManager()
+	static public function getMenuManager()
 	{
 		static $manager;// マネージャーオブジェクト
 		
 		if (!isset($manager)){
-			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/contentApiManager.php');
-			$manager 		= new ContentApiManager();
+			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/menuManager.php');
+			$manager 		= new MenuManager();
 		}
 		return $manager;
 	}
