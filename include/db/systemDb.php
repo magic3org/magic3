@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -4516,6 +4516,55 @@ class SystemDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * メニュー項目を取得
+	 *
+	 * @param string $menuId		メニュー識別ID
+	 * @param string $parentId		親項目ID(0～)
+	 * @param string $langId		言語ID
+	 * @param timestamp $now		現在日時
+	 * @param array  $rows			取得レコード
+	 * @return						true=取得、false=取得せず
+	 */
+	function getChildMenuItems($menuId, $parentId, $langId, $now, &$rows)
+	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM _menu_def ';
+		if ($this->getDbType() == M3_DB_TYPE_PGSQL){		// PostgreSQLの場合
+			$queryStr .=   'LEFT JOIN content ON md_content_type = ? AND md_content_id = cn_id::text AND cn_type = ? AND cn_language_id = ? AND cn_deleted = false ';
+		} else {		// MySQLの場合
+			$queryStr .=   'LEFT JOIN content ON md_content_type = ? AND md_content_id = cn_id AND cn_type = ? AND cn_language_id = ? AND cn_deleted = false ';
+		}
+		$params[] = M3_VIEW_TYPE_CONTENT;		// 汎用コンテンツ
+		$params[] = '';				// PC用コンテンツ
+		$params[] = $langId;
+		
+		// 共通の取得条件
+		$queryStr .=   'WHERE md_menu_id = ? ';
+		$queryStr .=     'AND md_parent_id = ? ';
+		$params[] = $menuId;
+		$params[] = $parentId;
+		
+		// 汎用コンテンツの表示条件
+		$queryStr .=    'AND (md_content_type != ? OR (md_content_type = ? ';
+		$queryStr .=    'AND cn_visible = true ';
+		$queryStr .=    'AND (cn_active_start_dt = ? OR (cn_active_start_dt != ? AND cn_active_start_dt <= ?)) ';
+		$queryStr .=    'AND (cn_active_end_dt = ? OR (cn_active_end_dt != ? AND cn_active_end_dt > ?)))) ';
+		$params[] = M3_VIEW_TYPE_CONTENT;		// 汎用コンテンツ
+		$params[] = M3_VIEW_TYPE_CONTENT;		// 汎用コンテンツ
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+		
+		$queryStr .=   'ORDER BY md_index';
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
 	}
 }
 ?>

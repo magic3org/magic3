@@ -451,20 +451,5 @@ class InstanceManager extends Core
 		}
 		return $manager;
 	}
-	/**
-	 * メニューマネージャー取得
-	 *
-	 * @return object			取得したオブジェクト
-	 */
-	static public function getMenuManager()
-	{
-		static $manager;// マネージャーオブジェクト
-		
-		if (!isset($manager)){
-			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/menuManager.php');
-			$manager 		= new MenuManager();
-		}
-		return $manager;
-	}
 }
 ?>
