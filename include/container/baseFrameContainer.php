@@ -686,6 +686,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-page.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
@@ -724,7 +725,8 @@ class BaseFrameContainer extends Core
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
 		
 			// Magic3用インターフェイス
-			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');// コンテンツ取得用API
+			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');	// コンテンツ取得API
+			require_once($this->gEnv->getWordpressRootPath() . '/menuApi.php');		// メニュー情報取得API
 			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値設定
 			
 
@@ -745,7 +747,8 @@ class BaseFrameContainer extends Core
 			$GLOBALS['wp'] = new WP();
 			$GLOBALS['wp_the_query'] = new WP_Query();
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
-			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツアクセスクラス
+			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
+			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
 			
 			// 初期処理
 			do_action('setup_theme');
