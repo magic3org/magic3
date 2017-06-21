@@ -306,13 +306,13 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	 * メニューツリー作成
 	 *
 	 * @param string	$menuId		メニューID
-	 * @param int		$parantId	親メニュー項目ID
+	 * @param int		$parentId	親メニュー項目ID
 	 * @param int		$level		階層数
 	 * @param bool		$hasSelectedChild	現在選択状態の子項目があるかどうか
 	 * @param array     $parentTree	現在の階層パス
 	 * @return string				ツリーメニュータグ
 	 */
-	function createMenu($menuId, $parantId, $level, &$hasSelectedChild, &$parentTree)
+	function createMenu($menuId, $parentId, $level, &$hasSelectedChild, &$parentTree)
 	{
 		static $index = 0;		// インデックス番号
 		$hasSelectedChild = false;
@@ -321,7 +321,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		if ($level >= self::MAX_MENU_TREE_LEVEL) return '';
 		
 		$treeHtml = '';
-		if ($this->db->getChildMenuItems($menuId, $parantId, $this->langId, $rows)){
+		if ($this->db->getChildMenuItems($menuId, $parentId, $this->langId, $rows)){
 			$itemCount = count($rows);
 			for ($i = 0; $i < $itemCount; $i++){
 				$row = $rows[$i];

@@ -22,7 +22,10 @@ class MenuApi extends BaseApi
 	private $db;				// システムDBオブジェクト
 	private $menuId;			// メニューID
 	private $langId;
-	private $now;				// 現在日次
+	private $now;					// 現在日時
+	private $currentUserLogined;	// 現在のユーザはログイン中かどうか
+	private $menuData;			// メニューデータ
+	private $menuTree;			// メニュー階層データ
 	const CF_DEFAULT_MENU_ID = 'default_menu_id';		// メニューID取得用
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	
@@ -31,10 +34,6 @@ class MenuApi extends BaseApi
 	 */
 	function __construct()
 	{
-//		global $gInstanceManager;
-		global $gSystemManager;
-		global $gEnvManager;
-		
 		// 親クラスを呼び出す
 		parent::__construct();
 		
@@ -42,11 +41,12 @@ class MenuApi extends BaseApi
 		$this->db = $this->gInstance->getSytemDbObject();
 		
 		// メニューIDを取得
-		$this->menuId = $gSystemManager->getSystemConfig(self::CF_DEFAULT_MENU_ID);
+		$this->menuId = $this->gSystem->getSystemConfig(self::CF_DEFAULT_MENU_ID);
 		
 		// その他
-		$this->langId = $gEnvManager->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
+		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
 		$this->now = date("Y/m/d H:i:s");	// 現在日時
+		$this->currentUserLogined = $this->gEnv->isCurrentUserLogined();	// 現在のユーザはログイン中かどうか
 	}
 	/**
 	 * [WordPressテンプレート用API]メニュー情報を取得
@@ -55,20 +55,56 @@ class MenuApi extends BaseApi
 	 */
 	function getMenuItemList()
 	{
+		$this->menuData = array();			// Joomla用のメニューデータ
+		$this->menuTree = array();			// Joomla用のメニュー階層データ
 		$parentTree = array();			// 選択されている項目までの階層パス
 		$menuHtml = $this->_createMenu($this->menuId, 0, 0, $tmp, $parentTree);
+
+		$menuItems = array();
+		for ($i = 0; $i < count($this->menuTree); $i++){
+			$item = $this->menuTree[$i];
+		
+			$post_type = 'page';
+			$post = new stdClass;
+			$post->ID = $item->id;
+			$post->post_author = '';
+			$post->post_date = '';
+			$post->post_date_gmt = '';
+			$post->post_password = '';
+			$post->post_name = $item->title;		// エンコーディングが必要?
+			$post->post_type = $post_type;
+			$post->post_status = 'publish';
+			$post->to_ping = '';
+			$post->pinged = '';
+	/*		$post->comment_status = get_default_comment_status( $post_type );
+			$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
+			$post->post_pingback = get_option( 'default_pingback_flag' );
+			$post->post_category = get_option( 'default_category' );*/
+	//		$post->page_template = 'default';
+			$post->post_parent = $item->parentId;		// 親ID
+			$post->menu_order = 0;
+			// Magic3設定値追加
+			$post->post_title = $item->title;
+			$post->post_content = '';
+			$post->guid = $item->flink;	// 詳細画面URL
+			$post->filter = 'raw';
+		
+			$wpPostObj = new WP_Post($post);
+			$menuItems[] = $wpPostObj;
+		}
+		return $menuItems;
 	}
 	/**
 	 * メニューツリー作成
 	 *
 	 * @param string	$menuId		メニューID
-	 * @param int		$parantId	親メニュー項目ID
+	 * @param int		$parentId	親メニュー項目ID
 	 * @param int		$level		階層数
 	 * @param bool		$hasSelectedChild	現在選択状態の子項目があるかどうか
 	 * @param array     $parentTree	現在の階層パス
-	 * @return string				ツリーメニュータグ
+	 * @return 			なし
 	 */
-	function _createMenu($menuId, $parantId, $level, &$hasSelectedChild, &$parentTree)
+	function _createMenu($menuId, $parentId, $level, &$hasSelectedChild, &$parentTree)
 	{
 		static $index = 0;		// インデックス番号
 		$hasSelectedChild = false;
@@ -76,8 +112,7 @@ class MenuApi extends BaseApi
 		// メニューの階層を制限
 		if ($level >= self::MAX_MENU_TREE_LEVEL) return '';
 		
-		$treeHtml = '';
-		if ($this->db->getChildMenuItems($menuId, $parantId, $this->langId, $this->now, $rows)){
+		if ($this->db->getChildMenuItems($menuId, $parentId, $this->langId, $this->now, $rows)){
 			$itemCount = count($rows);
 			for ($i = 0; $i < $itemCount; $i++){
 				$row = $rows[$i];
@@ -88,10 +123,11 @@ class MenuApi extends BaseApi
 				$menuItem = new stdClass;		// Joomla用メニューデータ
 				$menuItem->type = 'alias';		// 内部リンク。外部リンク(url)
 				$menuItem->id = $index + 1;
+				$menuItem->parentId = $parentId;
 				$menuItem->level = $level + 1;
 				$menuItem->active = false;
 				$menuItem->parent = false;
-				// 階層作成用
+/*				// 階層作成用
 				$menuItem->deeper = false;
 				$menuItem->shallower = false;
 				$menuItem->level_diff = 0;
@@ -101,7 +137,7 @@ class MenuApi extends BaseApi
 					$menuLastItem->deeper = ($menuItem->level > $menuLastItem->level);
 					$menuLastItem->shallower = ($menuItem->level < $menuLastItem->level);
 					$menuLastItem->level_diff = $menuLastItem->level - $menuItem->level;
-				}
+				}*/
 									
 				// 非表示のときは処理を飛ばす
 				if (!$row['md_visible']) continue;
@@ -114,9 +150,6 @@ class MenuApi extends BaseApi
 					// ログインユーザに表示制限されている場合はメニューを追加しない
 					if (!empty($row['cn_user_limited']) && !$this->currentUserLogined) continue;
 				}
-						
-				// Joomla1.0対応
-				if ($this->renderType == 'JOOMLA_OLD') $linkClassArray[] = 'mainlevel';
 				
 				// リンク先の作成
 				$linkUrl = $row['md_link_url'];
@@ -174,74 +207,37 @@ class MenuApi extends BaseApi
 						
 						// ##### Joomla用メニュー階層更新 #####
 						$this->menuTree[] = $menuItem;
-						
-						// ##### タグ作成 #####
-						if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-						//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $this->convertToDispString($name) . '</span></a></li>' . M3_NL;
-						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
 						break;
 					case 1:			// フォルダのとき
-						if (!empty($this->isHierMenu)){	// 階層化メニューを使用する場合
-							// Joomla用メニューデータ作成
-							//$menuItem->title = $name;
-							$menuItem->title = $title;
-							$menuItem->flink = $linkUrl;
-							$menuItem->parent = true;
-							// 階層作成用
-							//$menuItem->deeper = true;
-							//$menuItem->level_diff = 1;
+						// Joomla用メニューデータ作成
+						//$menuItem->title = $name;
+						$menuItem->title = $title;
+						$menuItem->flink = $linkUrl;
+						$menuItem->parent = true;
+						// 階層作成用
+						//$menuItem->deeper = true;
+						//$menuItem->level_diff = 1;
 
-							// ##### Joomla用メニュー階層更新 #####
-							$this->menuTree[] = $menuItem;
+						// ##### Joomla用メニュー階層更新 #####
+						$this->menuTree[] = $menuItem;
+					
+						// 階層を更新
+						//array_push($parentTree, $index + 1);
+						array_push($parentTree, $index);
 						
-							// 階層を更新
-							//array_push($parentTree, $index + 1);
-							array_push($parentTree, $index);
-							
-							// サブメニュー作成
-							$menuText = $this->_createMenu($menuId, $row['md_id'], $level + 1, $hasSelectedChild, $parentTree);
-							
-							// 階層を戻す
-							array_pop($parentTree);
-							
-							// 子項目が選択中のときは「active」に設定
-							if ($hasSelectedChild) $classArray[] = 'active';
+						// サブメニュー作成
+						$menuText = $this->_createMenu($menuId, $row['md_id'], $level + 1, $hasSelectedChild, $parentTree);
+						
+						// 階層を戻す
+						array_pop($parentTree);
+						
+						// 子項目が選択中のときは「active」に設定
+						if ($hasSelectedChild) $classArray[] = 'active';
 
-							// 先頭に「parent」クラスを追加
-							array_unshift($classArray, 'parent');
-							
-							// ##### タグ作成 #####
-							if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
-								//$classArray[] = 'dropdown';
-								$dropDownCaret = '';
-								if ($level == 0){
-									$dropDownCaret = ' <b class="caret"></b>';
-								} else {
-									$classArray[] = 'dropdown-submenu';
-								}
-								
-								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
-								if (!empty($menuText)){
-									$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
-									$treeHtml .= $menuText;
-									$treeHtml .= '</ul>' . M3_NL;
-								}
-								$treeHtml .= '</li>' . M3_NL;
-							} else {
-								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
-								if (!empty($menuText)){
-									$treeHtml .= '<ul>' . M3_NL;
-									$treeHtml .= $menuText;
-									$treeHtml .= '</ul>' . M3_NL;
-								}
-								$treeHtml .= '</li>' . M3_NL;
-							}
-						}
+						// 先頭に「parent」クラスを追加
+						array_unshift($classArray, 'parent');
 						break;
 					case 2:			// テキストのとき
-						$treeHtml .= '<li><span>' . $title . '</span></li>' . M3_NL;
 						break;
 					case 3:			// セパレータのとき
 						// Joomla用メニューデータ作成
@@ -251,37 +247,18 @@ class MenuApi extends BaseApi
 						
 						// ##### Joomla用メニュー階層更新 #####
 						$this->menuTree[] = $menuItem;
-						
-						// ##### タグ作成 #####
-						if ($this->renderType == 'BOOTSTRAP_NAV' || $this->renderType == 'BOOTSTRAP'){// Bootstrapメニューのとき
-							$treeHtml .= '<li class="divider"></li>' . M3_NL;
-						} else {
-							$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
-						}
 						break;
 				}
 				
-				if ($this->renderType == 'JOOMLA_OLD'){			// Joomla!v1.0のとき
-					$itemRow = array(
-						'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-						//'name' => $this->convertToDispString($name),			// タイトル
-						'name' => $title,			// タイトル
-						'attr' => $attr,			// liタグ追加属性
-						'option' => $linkOption			// Aタグ追加属性
-					);
-					$this->tmpl->addVars('itemlist', $itemRow);
-					$this->tmpl->parseTemplate('itemlist', 'a');
-				}
-				$menuTreeCount = count($this->menuTree);
+/*				$menuTreeCount = count($this->menuTree);
 				if ($menuTreeCount > 0){		// 前データがあるときは取得
 					$menuLastItem = $this->menuTree[$menuTreeCount -1];
 					$menuLastItem->deeper = (1 > $menuLastItem->level);
 					$menuLastItem->shallower = (1 < $menuLastItem->level);
 					$menuLastItem->level_diff = $menuLastItem->level - 1;
-				}
+				}*/
 			}
 		}
-		return $treeHtml;
 	}
 	/**
 	 * メニュー項目の選択条件をチェック
