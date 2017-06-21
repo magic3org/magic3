@@ -24,7 +24,10 @@ class BaseApi extends Core
 	 */
 	function __construct()
 	{
+		// 親クラスを呼び出す
+		parent::__construct();
 	}
+	
 	/**
 	 * URLを作成
 	 *
@@ -145,6 +148,74 @@ class BaseApi extends Core
 			}
 		}
 		return $destPath;
+	}
+	/**
+	 * 多言語対応文字列から現在の言語の文字列を取得
+	 *
+	 * @param string $str		多言語対応文字列
+	 * @return string			現在の言語文字列(存在しない場合はデフォルト言語文字列)
+	 */
+	function getCurrentLangString($str)
+	{
+		$langs = $this->unserializeLangArray($str);
+		$langStr = $langs[$this->gEnv->getCurrentLanguage()];
+		if (isset($langStr)){
+			return $langStr;
+		} else {
+			$langStr = $langs[$this->gEnv->getDefaultLanguage()];
+			if (isset($langStr)){
+				return $langStr;
+			} else {
+				return '';
+			}
+		}
+	}
+	/**
+	 * 多言語対応文字列をテキストの連想配列に変換
+	 *
+	 * @param string $str		多言語対応文字列
+	 * @return array			言語ごとの文字列の連想配列
+	 */
+	function unserializeLangArray($str)
+	{
+		$langs = array();
+		if (empty($str)) return $langs;
+		
+		$itemArray = explode(M3_TAG_START . M3_TAG_MACRO_SEPARATOR . M3_TAG_END, $str);		// セパレータ分割
+		for ($i = 0; $i < count($itemArray); $i++){
+			$line = $itemArray[$i];
+			if (empty($line)) continue;
+			$pos = strpos($line, M3_LANG_SEPARATOR);		// 言語ID取得
+			if ($pos === false){		// 言語IDがないときはデフォルトの言語IDを使用
+				$langId = $this->gEnv->getDefaultLanguage();
+				$langStr = $line;
+			} else {
+				list($langId, $langStr) = explode(M3_LANG_SEPARATOR, $line, 2);
+				if (empty($langId)) continue;
+			}
+			$langs[$langId] = $langStr;
+		}
+		return $langs;
+	}
+	/**
+	 * 表示用文字列に変換
+	 *
+	 * @param string $src 		変換元文字列
+	 * @param bool $keepTags	HTMLタグを変換するかどうか
+	 * @return string			変換後文字列
+	 */
+	function convertToDispString($src, $keepTags = false)
+	{
+		// 変換文字「&<>"」
+		return convertToHtmlEntity($src, $keepTags);
+	}
+	/**
+	 * URLをエンティティ文字に変換
+	 */
+	function convertUrlToHtmlEntity($src)
+	{
+		// 変換文字「&<>"'」
+		return convertUrlToHtmlEntity($src);
 	}
 }
 ?>

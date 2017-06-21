@@ -15,11 +15,10 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
-require_once(M3_SYSTEM_INCLUDE_PATH . '//common/valueCheck.php');
+require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
+require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 
-//class ContentApiManager extends Core
-class ContentApi
+class ContentApi extends BaseApi
 {
 	private $contentType;			// コンテンツタイプ
 	private $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -48,8 +47,8 @@ class ContentApi
 		global $gRequestManager;
 		global $gOpeLogManager;
 		
-//		// 親クラスを呼び出す
-//		parent::__construct();
+		// 親クラスを呼び出す
+		parent::__construct();
 		
 		// コンテンツタイプを取得
 		$this->contentType = $gSystemManager->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ

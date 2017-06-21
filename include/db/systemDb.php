@@ -4529,7 +4529,9 @@ class SystemDb extends BaseDb
 	 */
 	function getChildMenuItems($menuId, $parentId, $langId, $now, &$rows)
 	{
-		$initDt = $this->gEnv->getInitValueOfTimestamp();
+		global $gEnvManager;
+		
+		$initDt = $gEnvManager->getInitValueOfTimestamp();
 		$params = array();
 		
 		$queryStr  = 'SELECT * FROM _menu_def ';

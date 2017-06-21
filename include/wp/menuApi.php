@@ -15,7 +15,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-class MenuApi
+require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
+
+class MenuApi extends BaseApi
 {
 	private $db;				// システムDBオブジェクト
 	private $menuId;			// メニューID
@@ -29,12 +31,15 @@ class MenuApi
 	 */
 	function __construct()
 	{
-		global $gInstanceManager;
+//		global $gInstanceManager;
 		global $gSystemManager;
 		global $gEnvManager;
 		
+		// 親クラスを呼び出す
+		parent::__construct();
+		
 		// システムDBオブジェクトを取得
-		$this->db = $gInstanceManager->getSytemDbObject();
+		$this->db = $this->gInstance->getSytemDbObject();
 		
 		// メニューIDを取得
 		$this->menuId = $gSystemManager->getSystemConfig(self::CF_DEFAULT_MENU_ID);
@@ -119,7 +124,7 @@ class MenuApi
 				if (empty($linkUrl)) $linkUrl = '#';
 				
 				// 選択状態の設定
-				if ($this->checkMenuItemUrl($linkUrl)){
+				if ($this->_checkMenuItemUrl($linkUrl)){
 					$attr = ' id="current"';		// メニュー項目を選択状態にする
 					$classArray[] = 'active';
 					$hasSelectedChild = true;
@@ -277,6 +282,70 @@ class MenuApi
 			}
 		}
 		return $treeHtml;
+	}
+	/**
+	 * メニュー項目の選択条件をチェック
+	 *
+	 * @param string $url	チェック対象のURL
+	 * @return bool			true=アクティブ、false=非アクティブ
+	 */
+	function _checkMenuItemUrl($url)
+	{
+		$currentUrl = $this->gEnv->getCurrentRequestUri();
+		
+		// 同じURLのとき
+		if ($url == $currentUrl) return true;
+		
+		// URLを解析
+		$queryArray = array();
+		$parsedUrl = parse_url($url);
+		if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
+
+		// ルートかどうかチェック(クエリー文字列なし)
+		if ($this->_isRootUrl($url)){
+			$parsedUrl = parse_url($currentUrl);
+			if (empty($parsedUrl['query'])){		// クエリ文字列がないことが条件。「#」はあっても良い。
+				// ページサブIDで比較
+				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId()) return true;
+			}
+		}
+		
+		// パラメータがサブページIDだけの場合はページサブIDで比較
+		if (count($queryArray) == 1 && isset($queryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){
+			if ($this->gEnv->getCurrentPageSubId() == $queryArray[M3_REQUEST_PARAM_PAGE_SUB_ID]) return true;
+		}
+		return false;
+	}
+	/**
+	 * URLがルートを指しているかどうか取得
+	 *
+	 * @param string $url	チェック対象のURL
+	 * @return bool			true=ルート、false=ルート以外
+	 */
+	function _isRootUrl($url)
+	{
+		$url = str_replace('https://', 'http://', $url);		// 一旦httpに統一
+		$systemUrl = str_replace('https://', 'http://', $this->gEnv->getRootUrl());		// 一旦httpに統一
+		$systemSslUrl = str_replace('https://', 'http://', $this->gEnv->getSslRootUrl());		// 一旦httpに統一
+
+		$parsedUrl = parse_url($url);
+		if (empty($parsedUrl['query'])){		// クエリ文字列がないことが条件。「#」はあっても良い。
+			// パスを解析
+			$relativePath = str_replace($systemUrl, '', $url);		// ルートURLからの相対パスを取得
+			if (empty($relativePath)){			// Magic3のルートURLの場合
+				return true;
+			} else if (strStartsWith($relativePath, '/') || strStartsWith($relativePath, '/' . M3_FILENAME_INDEX)){		// ルートURL配下のとき
+				return true;
+			} else {		// ルートURL以外のURLのとき(SSL用のURL以下かどうかチェック)
+				$relativePath = str_replace($systemSslUrl, '', $url);		// ルートURLからの相対パスを取得
+				if (empty($relativePath)){			// Magic3のルートURLの場合
+					return true;
+				} else if (strStartsWith($relativePath, '/') || strStartsWith($relativePath, '/' . M3_FILENAME_INDEX)){		// ルートURL配下のとき
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
 ?>

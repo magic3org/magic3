@@ -1209,8 +1209,11 @@ function wp_list_pages( $args = '' ) {
 
 	// Query pages.
 	$r['hierarchical'] = 0;
-	$pages = get_pages( $r );
-
+//	$pages = get_pages( $r );
+	// ##### DBからメニュー情報を取得 ###
+	global $gMenuApi;
+	$pages = $gMenuApi->getMenuItemList();
+		
 	if ( ! empty( $pages ) ) {
 		if ( $r['title_li'] ) {
 			$output .= '<li class="pagenav">' . $r['title_li'] . '<ul>';
@@ -1224,14 +1227,15 @@ function wp_list_pages( $args = '' ) {
 				$current_page = $queried_object->ID;
 			}
 		}
-
+		// この関数の前後でメニュー用HTMLが作成される?
 		$output .= walk_page_tree( $pages, $r['depth'], $current_page, $r );
 
 		if ( $r['title_li'] ) {
 			$output .= '</ul></li>';
 		}
 	}
-
+	// この時点で$outputにメニュー用のHTMLが作成されている
+	
 	/**
 	 * Filters the HTML output of the pages to list.
 	 *
@@ -1329,7 +1333,8 @@ function wp_page_menu( $args = array() ) {
 	$list_args = $args;
 
 	// Show Home in the menu
-	if ( ! empty($args['show_home']) ) {
+	// メニュー項目の「ホーム」は非表示
+/*	if ( ! empty($args['show_home']) ) {
 		if ( true === $args['show_home'] || '1' === $args['show_home'] || 1 === $args['show_home'] )
 			$text = __('Home');
 		else
@@ -1347,7 +1352,7 @@ function wp_page_menu( $args = array() ) {
 			}
 			$list_args['exclude'] .= get_option('page_on_front');
 		}
-	}
+	}*/
 
 	$list_args['echo'] = false;
 	$list_args['title_li'] = '';
