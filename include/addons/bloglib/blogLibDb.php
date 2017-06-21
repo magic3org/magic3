@@ -291,12 +291,12 @@ class blogLibDb extends BaseDb
 	 * @param array		$keywords			検索キーワード
 	 * @param string	$langId				言語
 	 * @param int		$order				取得順(0=昇順,1=降順)
-	 * @param function	$callback			コールバック関数
 	 * @param int       $userId				参照制限用ユーザID
+	 * @param function	$callback			コールバック関数
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $userId, $blogId = null)
+	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $blogId = null)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -308,6 +308,8 @@ class blogLibDb extends BaseDb
 		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
 		$queryStr .=     'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
+		
+		// ##### IDで取得コンテンツを指定 #####
 		if (!empty($entryId)){
 			if (is_array($entryId)){		// 配列で複数指定の場合
 				$queryStr .=    'AND be_id in (' . implode(",", $entryId) . ') ';
@@ -316,6 +318,7 @@ class blogLibDb extends BaseDb
 			}
 		}
 		
+		// ##### 任意設定の検索条件 #####
 		// タイトルと記事、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
 			for ($i = 0; $i < count($keywords); $i++){
@@ -328,12 +331,22 @@ class blogLibDb extends BaseDb
 			}
 		}
 	
+		// 期間で指定
+		if (!empty($startDt)){
+			$queryStr .=    'AND ? <= be_regist_dt ';
+			$params[] = $startDt;
+		}
+		if (!empty($endDt)){
+			$queryStr .=    'AND be_regist_dt < ? ';
+			$params[] = $endDt;
+		}
+		
 		// ブログID
 		if (isset($blogId)){
 			$queryStr .=    'AND be_blog_id = ? ';		$params[] = $blogId;
 		}
 	
-		// ##### ユーザ参照制限 #####
+		// ##### ユーザによる参照制限 #####
 		// ゲストユーザはユーザ制限のない記事のみ参照可能
 		if (empty($userId)){
 			$queryStr .= 'AND be_user_limited = false ';		// ユーザ制限のないデータ
@@ -345,18 +358,9 @@ class blogLibDb extends BaseDb
 		$queryStr .=     'OR bl_user_limited = false ';
 		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id = \'\' AND 0 != ' . $userId . ') ';
 		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id != \'\' AND bl_limited_user_id LIKE \'%' . M3_USER_ID_SEPARATOR . $userId . M3_USER_ID_SEPARATOR . '%\')))) ';
-	
-		// 検索条件
-		if (!empty($startDt)){
-			$queryStr .=    'AND ? <= be_regist_dt ';
-			$params[] = $startDt;
-		}
-		if (!empty($endDt)){
-			$queryStr .=    'AND be_regist_dt < ? ';
-			$params[] = $endDt;
-		}
 		
-		// ##### アクティブな記事のみ取得 #####
+		// ##### コンテンツの参照制限 #####
+		// アクティブな記事のみ取得
 		$queryStr .=     'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=     'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
 	

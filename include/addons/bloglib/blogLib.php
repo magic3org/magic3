@@ -218,7 +218,7 @@ class blogLib extends Addon
 		global $gEnvManager;
 		
 		$userId = $gEnvManager->getCurrentUserId();
-		$this->db->getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $userId, $blogId);
+		$this->db->getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $blogId);
 	}
 }
 ?>

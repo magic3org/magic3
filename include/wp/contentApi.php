@@ -84,17 +84,14 @@ class ContentApi extends BaseApi
 		switch ($this->contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_CONTENT);
-//				$this->db->getContentList($contentType, $this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*降順*/, array($this, 'contentLoop'));
 			break;
 		case M3_VIEW_TYPE_PRODUCT:	// 製品
 			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_PRODUCT);
-//				$this->db->getProductList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 			break;
 		case M3_VIEW_TYPE_BBS:	// BBS
 			break;
 		case M3_VIEW_TYPE_BLOG:	// ブログ
 			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_BLOG);
-//				$this->db->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 			break;
 		case M3_VIEW_TYPE_WIKI:	// Wiki
 			break;
@@ -183,134 +180,50 @@ class ContentApi extends BaseApi
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
 		// レコード値取得
-		$serial = $fetchedRow['be_serial'];
-		$id		= $fetchedRow['be_id'];
-		$title	= $fetchedRow['be_name'];
-		$entryHtml = $fetchedRow['be_html'];
+		// IDを解析しエラーチェック。複数の場合は配列に格納する。
+		switch ($this->contentType){
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+			$serial = $fetchedRow['cn_serial'];
+			$id		= $fetchedRow['cn_id'];
+			$title	= $fetchedRow['cn_name'];
+			$date	= $fetchedRow['cn_create_dt'];
+			$contentHtml	= $fetchedRow['cn_html'];
+			$thumbSrc		= $fetchedRow['cn_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			break;
+		case M3_VIEW_TYPE_BLOG:	// ブログ
+			$serial = $fetchedRow['be_serial'];
+			$id		= $fetchedRow['be_id'];
+			$title	= $fetchedRow['be_name'];
+			$date	= $fetchedRow['be_regist_dt'];
+			$contentHtml	= $fetchedRow['be_html'];
+			$thumbSrc		= $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			break;
+		}
 
-		// カテゴリーを取得
-		$categoryArray = array();
-//		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
-		if ($ret){
-			for ($i = 0; $i < count($categoryRow); $i++){
-				if (function_exists('mb_strimwidth')){
-					$categoryArray[] = mb_strimwidth($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE, '…');
-				} else {
-					$categoryArray[] = substr($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE) . '...';
-				}
-			}
-		}
-		$category = implode(',', $categoryArray);
-		
-		// 公開状態
-		switch ($fetchedRow['be_status']){
-			case 1:	$status = '<font color="orange">編集中</font>';	break;
-			case 2:	$status = '<font color="green">公開</font>';	break;
-			case 3:	$status = '非公開';	break;
-		}
-		// 参照数
-//		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);		// 更新後からの参照数
-//		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, 0, $id);		// 新規作成からの参照数
-//		$viewCountStr = $updateViewCount;
-//		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
-		
-		// ユーザからの参照状況
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$startDt = $fetchedRow['be_active_start_dt'];
-		$endDt = $fetchedRow['be_active_end_dt'];
-		
-//		$isActive = false;		// 公開状態
-//		if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $now);// 表示可能
-		
-/*		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
-			if ($isActive){		// コンテンツが公開状態のとき
-				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_ACTIVE_ICON_FILE;			// 公開中アイコン
-				$iconTitle = '公開中';
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_INACTIVE_ICON_FILE;		// 非公開アイコン
-				$iconTitle = '非公開';
-			}
-			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SMALL_ICON_SIZE . '" height="' . self::SMALL_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		} else {
-			if ($isActive){		// コンテンツが公開状態のとき
-				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-				$iconTitle = '公開中';
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-				$iconTitle = '非公開';
-			}
-			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		}*/
-		
-		// アイキャッチ画像
-//		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
-		if (empty($fetchedRow['be_thumb_filename'])){
-			$iconTitle = 'アイキャッチ画像未設定';
-		} else {
-			$iconTitle = 'アイキャッチ画像';
-		}
-//		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		
-		// 投稿日時
-//		$outputDate = $fetchedRow['be_regist_dt'];
-//		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
-//			if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){		// 年号が今日の年号のとき
-//				$dispDate = $this->convertToDispDate($outputDate, 11/*年省略,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
-//			} else {
-//				$dispDate = $this->convertToDispDate($outputDate, 3/*短縮年,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
-//			}
-//		} else {
-//			$dispDate = $this->convertToDispDateTime($outputDate, 0/*ロングフォーマット*/, 10/*時分*/);
-//		}
-		
-		$row = array(
-			'index' => $index,		// 項目番号
-			'no' => $index + 1,													// 行番号
-			'serial' => $serial,			// シリアル番号
-//			'id' => $this->convertToDispString($id),			// 記事ID
-//			'name' => $this->convertToDispString($fetchedRow['be_name']),		// 名前
-			'lang' => $lang,													// 対応言語
-			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
-			'status_img' => $statusImg,												// 公開状態
-			'status' => $status,													// 公開状況
-			'category' => $category,											// 記事カテゴリー
-			//'view_count' => $totalViewCount,									// 参照数
-//			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
-//			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-//			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
-			'reg_date' => $dispDate
-		);
 		// コンテンツマクロ変換
-		$entryHtml = $this->_convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/);
+		$contentHtml = $this->_convertM3ToHtml($contentHtml, true/*改行コーをbrタグに変換*/);
 		
-//		$this->tmpl->addVars('itemlist', $row);
-//		$this->tmpl->parseTemplate('itemlist', 'a');
-		$post_type = 'post';
+		// WP_Postオブジェクトに変換して格納
 		$post = new stdClass;
 		$post->ID = $id;
 		$post->post_author = '';
-		$post->post_date = $fetchedRow['be_regist_dt'];
+		$post->post_date = $date;
 		$post->post_date_gmt = '';
 		$post->post_password = '';
 		$post->post_name = $title;		// エンコーディングが必要?
-		$post->post_type = $post_type;
+		$post->post_type = 'post';
 		$post->post_status = 'publish';
 		$post->to_ping = '';
 		$post->pinged = '';
-/*		$post->comment_status = get_default_comment_status( $post_type );
-		$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
-		$post->post_pingback = get_option( 'default_pingback_flag' );
-		$post->post_category = get_option( 'default_category' );*/
-//		$post->page_template = 'default';
 		$post->post_parent = 0;
 		$post->menu_order = 0;
 		// Magic3設定値追加
 		$post->post_title = $title;
-		$post->post_content = $entryHtml;
+		$post->post_content = $contentHtml;
 		$post->guid = $this->getContentUrl($id);	// 詳細画面URL
 		$post->filter = 'raw';
 		// Magic3用パラメータ
-		$post->thumb_src = $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+		$post->thumb_src = $thumbSrc;
 		
 		$wpPostObj = new WP_Post($post);
 		$this->contentArray[] = $wpPostObj;

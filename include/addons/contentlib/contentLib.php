@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: contentLib.php 5897 2013-04-02 01:12:56Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(dirname(__FILE__) . '/contentLibDb.php');
@@ -125,6 +125,28 @@ class contentLib
 		} else {
 			return $this->configArray[$key];
 		}
+	}
+	/**
+	 * 公開中のエントリー項目を取得。アクセス制限も行う。
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param int,array	$contentId			コンテンツID(0のときは期間で取得)
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getPublicEntryItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$this->db->getPublicEntryItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback);
 	}
 }
 ?>
