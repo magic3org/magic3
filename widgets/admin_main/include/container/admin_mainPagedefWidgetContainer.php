@@ -53,6 +53,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const HELP_SELECT_BUTTON = 'rel="m3help" title="ページに固定"';			// テンプレート一覧付加用ボタンのヘルプ(ページ専用テンプレート)
 	const TEMPLATE_TYPE_LABEL_BOOTSTRAP = ' <span class="label label-info" rel="m3help" title="Bootstrap型">B</span>';			// Boostrap型テンプレートラベル
 	const TEMPLATE_TYPE_LABEL_THEMLER = ' <span class="label label-info" rel="m3help" title="Themler製">T</span>';			// Themler製テンプレートラベル
+	const TEMPLATE_TYPE_LABEL_WORDPRESS = ' <span class="label label-info" rel="m3help" title="WordPress型">W</span>';			// WordPress型テンプレートラベル
 	
 	/**
 	 * コンストラクタ
@@ -734,6 +735,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				// テンプレートタイプのアイコンを付加
 				if (10 <= $type && $type < 20){			// Bootstrap型
 					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+				} else if ($type == 100){				// WordPress型
+					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_WORDPRESS;
 				} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
 					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
 				}
@@ -758,6 +761,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// テンプレートタイプのアイコンを付加
 			if (10 <= $type && $type < 20){			// Bootstrap型
 				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+			} else if ($type == 100){				// WordPress型
+				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_WORDPRESS;
 			} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
 				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
 			}
