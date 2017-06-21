@@ -25,6 +25,13 @@ INSERT INTO _system_config
 ('mobile_default_menu_id',     'm_main_menu',  '携帯画面用デフォルトメニューID'),            -- WordPressテンプレートで使用
 ('smartphone_default_menu_id', 's_main_menu',  'スマートフォン画面用デフォルトメニューID');  -- WordPressテンプレートで使用
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'wisteria';
+INSERT INTO _templates
+(tm_id,                     tm_name,          tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_info_url, tm_create_dt) VALUES
+('wisteria',                'wisteria',       100,       0,              false,     false,             true,        0,             'https://wpfriendship.com/',          now());
+
+
 -- *** システム標準テーブル ***
 -- 汎用コンテンツマスター
 ALTER TABLE content ADD cn_thumb_src     TEXT                                         NOT NULL;      -- サムネールの元のファイル(リソースディレクトリからの相対パス)

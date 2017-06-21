@@ -1,0 +1,311 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Wisteria\n"
+"POT-Creation-Date: 2017-03-29 19:25+0500\n"
+"PO-Revision-Date: 2017-03-19 18:39+0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.12\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: style.css\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: 404.php:19
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: 404.php:23
+msgid ""
+"It looks like nothing was found at this location. Maybe try one of the links "
+"below or a search?"
+msgstr ""
+
+#: 404.php:31
+#, php-format
+msgid "Try looking in the monthly archives. %1$s"
+msgstr ""
+
+#: comments.php:36
+#, php-format
+msgctxt "comments title"
+msgid "One Reply to &ldquo;%s&rdquo;"
+msgstr ""
+
+#: comments.php:43
+#, php-format
+msgctxt "comments title"
+msgid "%1$s Reply to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s Replies to &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:58 comments.php:78
+msgid "Comment navigation"
+msgstr ""
+
+#: comments.php:60 comments.php:80
+msgid "Older Comments"
+msgstr ""
+
+#: comments.php:61 comments.php:81
+msgid "Newer Comments"
+msgstr ""
+
+#: comments.php:94
+msgid "Comments are closed."
+msgstr ""
+
+#: functions.php:62
+msgid "Primary Menu"
+msgstr ""
+
+#: functions.php:115
+msgid "Main Sidebar"
+msgstr ""
+
+#: header.php:47 header.php:48
+msgid "Menu"
+msgstr ""
+
+#: header.php:66
+msgid "Skip to content"
+msgstr ""
+
+#: image.php:75 template-parts/content-page.php:20
+#: template-parts/content-single.php:28
+msgid "Pages:"
+msgstr ""
+
+#: image.php:85
+msgid "Edit"
+msgstr ""
+
+#: image.php:93
+msgid "Previous Image"
+msgstr ""
+
+#: image.php:94
+msgid "Next Image"
+msgstr ""
+
+#: inc/customizer.php:22
+msgid "Theme Options"
+msgstr ""
+
+#: inc/customizer.php:28
+msgid "General Options"
+msgstr ""
+
+#: inc/customizer.php:40
+msgid "Main Sidebar Position (if active)"
+msgstr ""
+
+#: inc/customizer.php:45
+msgid "Right"
+msgstr ""
+
+#: inc/customizer.php:46
+msgid "Left"
+msgstr ""
+
+#: inc/customizer.php:54
+msgid "Footer Options"
+msgstr ""
+
+#: inc/customizer.php:57
+msgid "Personalize the footer settings of your theme."
+msgstr ""
+
+#: inc/customizer.php:68
+msgid "Copyright"
+msgstr ""
+
+#: inc/customizer.php:82
+msgid "Display Designer Credit"
+msgstr ""
+
+#: inc/customizer.php:90
+msgid "Theme Support"
+msgstr ""
+
+#: inc/customizer.php:91
+msgid ""
+"Thanks for your interest in Wisteria! If you have any questions or run into "
+"any trouble, please visit us the following links. We will get you fixed up!"
+msgstr ""
+
+#: inc/customizer.php:106
+msgid "Wisteria Theme"
+msgstr ""
+
+#: inc/customizer.php:127
+msgid "Wisteria Support"
+msgstr ""
+
+#: inc/extras.php:20
+msgid "Y"
+msgstr ""
+
+#: inc/extras.php:59
+msgctxt "Montserrat font: on or off"
+msgid "on"
+msgstr ""
+
+#: inc/extras.php:67
+msgctxt "Lato font: on or off"
+msgid "on"
+msgstr ""
+
+#: inc/extras.php:75
+msgctxt "Add new subset (cyrillic, greek, devanagari, vietnamese)"
+msgid "no-subset"
+msgstr ""
+
+#: inc/extras.php:268
+msgid "Powered by"
+msgstr ""
+
+#: inc/template-tags.php:21
+msgid "Previous Page"
+msgstr ""
+
+#: inc/template-tags.php:22
+msgid "Next Page"
+msgstr ""
+
+#: inc/template-tags.php:23
+msgid "Page"
+msgstr ""
+
+#: inc/template-tags.php:40
+msgid "Next"
+msgstr ""
+
+#: inc/template-tags.php:41
+msgid "Prev"
+msgstr ""
+
+#: inc/template-tags.php:65
+msgctxt "post date"
+msgid "Posted on"
+msgstr ""
+
+#: inc/template-tags.php:99
+#, php-format
+msgctxt "post author"
+msgid "by %s"
+msgstr ""
+
+#: inc/template-tags.php:135
+#, php-format
+msgid "All %s posts"
+msgstr ""
+
+#: inc/template-tags.php:217 inc/template-tags.php:223
+msgid ", "
+msgstr ""
+
+#: inc/template-tags.php:219
+#, php-format
+msgid "Posted in %1$s"
+msgstr ""
+
+#: inc/template-tags.php:225
+#, php-format
+msgid "Tagged %1$s"
+msgstr ""
+
+#: inc/template-tags.php:232
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: search.php:19
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: searchform.php:11 searchform.php:12
+msgctxt "label"
+msgid "Search for:"
+msgstr ""
+
+#: searchform.php:12
+msgctxt "placeholder"
+msgid "Search &hellip;"
+msgstr ""
+
+#: searchform.php:14
+msgctxt "submit button"
+msgid "Search"
+msgstr ""
+
+#: template-parts/biography.php:25
+msgid "Author:"
+msgstr ""
+
+#: template-parts/biography.php:30
+#, php-format
+msgid "View all posts by %s"
+msgstr ""
+
+#: template-parts/content-none.php:13
+msgid "Nothing Found"
+msgstr ""
+
+#: template-parts/content-none.php:19
+#, php-format
+msgid ""
+"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: template-parts/content-none.php:23
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr ""
+
+#: template-parts/content-none.php:28
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
+"searching can help."
+msgstr ""
+
+#: template-parts/content.php:24
+msgid "Featured"
+msgstr ""
+
+#. Theme Name of the plugin/theme
+msgid "Wisteria"
+msgstr ""
+
+#. Theme URI of the plugin/theme
+msgid "https://wpfriendship.com/wisteria/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Wisteria is a charming and modern blog WordPress theme. It has a responsive "
+"layout having clean and content focused design with straightforward "
+"functionality. Wisteria is a perfect solution for sharing your valuable "
+"content and creativity with the world. Wisteria is a versatile, "
+"sophisticated WordPress theme designed for creatives and bloggers."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WPFriendship"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://wpfriendship.com/"
+msgstr ""
