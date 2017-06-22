@@ -677,8 +677,6 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/load.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-constants.php');		// デフォルト値取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/plugin.php');
-//wp_initial_constants();
-//wp_set_lang_dir();
 
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/functions.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
@@ -797,6 +795,10 @@ class BaseFrameContainer extends Core
 			case M3_VIEW_TYPE_EVENT:	// イベント
 				break;
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				break;
+			default:
+				// コンテンツタイプが設定されていないページに場合は、固定ページ用のテンプレートを使用
+				$defaultIndexFile = get_page_template();		// 固定ページテンプレート
 				break;
 			}
 			

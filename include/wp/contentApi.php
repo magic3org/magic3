@@ -51,8 +51,10 @@ class ContentApi extends BaseApi
 		parent::__construct();
 		
 		// コンテンツタイプを取得
-		$this->contentType = $gSystemManager->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ
-		if (empty($this->contentType)) $this->contentType = self::DEFAULT_CONTENT_TYPE;
+		// コンテンツタイプが設定されているページの場合は該当するコンテンツタイプのデータでWordPressの画面処理を行い、コンテンツタイプがない場合はMagic3のウィジェット処理で出力
+//		$this->contentType = $gSystemManager->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ
+//		if (empty($this->contentType)) $this->contentType = self::DEFAULT_CONTENT_TYPE;
+		$this->contentType = '';
 			
 		// 現在のページにコンテンツタイプがある場合は取得
 		$contentType = $gPageManager->getContentType();

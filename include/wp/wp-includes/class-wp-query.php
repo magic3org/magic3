@@ -1664,10 +1664,40 @@ class WP_Query {
 	 * @return array List of posts.
 	 */
 	public function get_posts() {
-		// ##### DBからコンテンツを取得 ###
 		global $gContentApi;
-		$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
-		$this->posts = $gContentApi->getContentList();
+		
+		// ##### DBからコンテンツを取得 ###
+		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
+		$contentType = $gContentApi->getContentType();
+		if (empty($contentType)){
+			// WP_Postオブジェクトに変換して格納
+			$post = new stdClass;
+/*			$post->ID = $id;
+			$post->post_author = '';
+			$post->post_date = $date;
+			$post->post_date_gmt = '';
+			$post->post_password = '';
+			$post->post_name = $title;		// エンコーディングが必要?
+			$post->post_type = 'post';
+			$post->post_status = 'publish';
+			$post->to_ping = '';
+			$post->pinged = '';
+			$post->post_parent = 0;
+			$post->menu_order = 0;
+			// Magic3設定値追加
+			$post->post_title = $title;
+			$post->post_content = $contentHtml;
+			$post->guid = $this->getContentUrl($id);	// 詳細画面URL
+			$post->filter = 'raw';
+			// Magic3用パラメータ
+			$post->thumb_src = $thumbSrc;*/
+		
+			$wpPostObj = new WP_Post($post);
+			$this->posts = array($wpPostObj);
+		} else {
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
+			$this->posts = $gContentApi->getContentList();
+		}
 
 		// Ensure that any posts added/modified via one of the filters above are
 		// of the type WP_Post and are filtered.
@@ -2642,9 +2672,10 @@ class WP_Query {
 	public function setup_postdata( $post ) {
 		global $id, $authordata, $currentday, $currentmonth, $page, $pages, $multipage, $more, $numpages;
 
+/*
 		if ( ! ( $post instanceof WP_Post ) ) {
 			$post = get_post( $post );
-		}
+		}*/
 
 		if ( ! $post ) {
 			return;

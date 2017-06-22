@@ -144,6 +144,25 @@ function get_sidebar( $name = null ) {
  * @param string $name The name of the specialised template.
  */
 function get_template_part( $slug, $name = null ) {
+	// ##### メインループ内でのコンテンツ出力処理 #####
+	// コンテンツタイプが設定されていない場合はMagic3のメインエリア出力に変更
+	global $gContentApi;
+	global $gPageManager;
+	
+	// メインエリアの前にポジションブロックを配置
+	static $isFirst;
+	if (!isset($isFirst)){
+		echo $gPageManager->getContents('main-top');
+		$isFirst = true;
+	}
+	
+	// メインエリア表示
+	$contentType = $gContentApi->getContentType();
+	if (empty($contentType)){
+		echo $gPageManager->getContents('main');
+		return;
+	}
+	
 	/**
 	 * Fires before the specified template part file is loaded.
 	 *
