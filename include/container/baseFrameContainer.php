@@ -122,29 +122,29 @@ class BaseFrameContainer extends Core
 			$errMessage = '';	// エラーメッセージ
 			$messageDetail = '';	// 詳細メッセージ
 			
-			// ページID,ページサブIDからアクセス権をチェック
-			$isPublicUrl = $this->gPage->canAccessUrl($isActivePage, $errCode);
-			if (!$isPublicUrl && !$isSystemManageUser){// システム運用可能ユーザかどうか
-				$canAccess = false;
-				$isErrorAccess = true;		// 不正アクセスかどうか
-				$errMessage = 'ユーザに公開されていないページへのアクセス。';
-				
-				if (!$isActivePage){
-					if ($errCode == 1){			// ページIDが不正な場合
-						$toAdminType = 4;
-					} else {
-						$toAdminType = 3;		// 有効なアクセスポイント、ページでない場合は存在しないページとする
-					}
-				}
-			}
-
 			// ページID,ページサブID以外のURLパラメータをチェック。ページマネージャーでの処理(startPage())の結果を反映。
+			$ret = $this->gPage->isSystemPage();		// システム制御ページへ遷移するかどうか
+			if ($ret){
+				// ページが見つかりません画面へ遷移
+				$canAccess = false;
+				$toAdminType = 4;
+			}
+			
+			// ページID,ページサブIDからアクセス権をチェック
 			if ($canAccess){
-				$ret = $this->gPage->isSystemPage();		// システム制御ページへ遷移するかどうか
-				if ($ret){
-					// ページが見つかりません画面へ遷移
+				$isPublicUrl = $this->gPage->canAccessUrl($isActivePage, $errCode);
+				if (!$isPublicUrl && !$isSystemManageUser){// システム運用可能ユーザかどうか
 					$canAccess = false;
-					$toAdminType = 4;
+					$isErrorAccess = true;		// 不正アクセスかどうか
+					$errMessage = 'ユーザに公開されていないページへのアクセス。';
+				
+					if (!$isActivePage){
+						if ($errCode == 1){			// ページIDが不正な場合
+							$toAdminType = 4;
+						} else {
+							$toAdminType = 3;		// 有効なアクセスポイント、ページでない場合は存在しないページとする
+						}
+					}
 				}
 			}
 			

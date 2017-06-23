@@ -1421,7 +1421,7 @@ class PageManager extends Core
 								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
-								
+		
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BLOG;		// ページのコンテンツタイプ
 								
@@ -1493,7 +1493,7 @@ class PageManager extends Core
 			}
 		}
 		$gEnvManager->setCurrentPageSubId($subId);// サブページIDを設定
-
+		
 		// SSL通信機能がオンの場合は、アクセスされたURLのSSLをチェックし不正の場合は正しいURLにリダイレクト
 		// 設定に間違いがある場合、管理画面にアクセスできなくなるので、フロント画面のみ制御
 //		if ($gEnvManager->getUseSsl() || $gEnvManager->getUseSslAdmin()){
