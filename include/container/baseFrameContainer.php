@@ -138,6 +138,16 @@ class BaseFrameContainer extends Core
 				}
 			}
 
+			// ページID,ページサブID以外のURLパラメータをチェック。ページマネージャーでの処理(startPage())の結果を反映。
+			if ($canAccess){
+				$ret = $this->gPage->isSystemPage();		// システム制御ページへ遷移するかどうか
+				if ($ret){
+					// ページが見つかりません画面へ遷移
+					$canAccess = false;
+					$toAdminType = 4;
+				}
+			}
+			
 			// ################### ユーザアクセス制御 ######################
 			// クッキーがないため権限を識別できない場合でも、管理者として処理する場合があるので、サブクラスの_checkAccess()メソッドは必ず通るようにする
 			if ($canAccess){		// アクセス可能な場合はユーザをチェック
