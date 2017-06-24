@@ -94,10 +94,10 @@ function set_query_var( $var, $value ) {
  * @param array|string $query Array or string of WP_Query arguments.
  * @return array List of post objects.
  */
-function query_posts($query) {
+/*function query_posts($query) {
 	$GLOBALS['wp_query'] = new WP_Query();
 	return $GLOBALS['wp_query']->query($query);
-}
+}*/
 
 /**
  * Destroys the previous query and sets up a new query.

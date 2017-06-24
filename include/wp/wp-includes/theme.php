@@ -108,7 +108,7 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 	}
 
-//	return new WP_Theme( $stylesheet, $theme_root );
+	return new WP_Theme( $stylesheet, $theme_root );
 }
 
 /**
