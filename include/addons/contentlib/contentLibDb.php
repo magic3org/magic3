@@ -68,7 +68,7 @@ class contentLibDb extends BaseDb
 	 * @param string	$contentType		コンテンツタイプ(空文字列=汎用コンテンツ)
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $contentType = '')
+	function getPublicContentItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $contentType = '')
 	{
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$offset = $limit * ($page -1);

@@ -112,19 +112,30 @@ class ContentApi extends BaseApi
 	 *
 	 * @param array $params			クエリー作成用パラメータ(連想配列)
 	 * @param strin $langId			言語ID。空の場合は現在の言語。
-	 * @param int   $limit			取得する項目数最大値
+	 * @param int   $limit			取得する項目数最大値(0の場合はデフォルト値)
 	 * @param int	$pageNo			取得するページ番号(1～)
 	 * @return						なし
 	 */
 	public function setCondition($params, $langId, $limit, $pageNo)
 	{
 		global $gEnvManager;
-			
-		if (empty($langId)) $langId = $gEnvManager->getCurrentLanguage();
-		$this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
-		$this->limit = $limit;					// コンテンツ取得数(コンテンツ取得用)
-		$this->pageNo = $pageNo;				// ページ番号(コンテンツ取得用)
+
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj();
+		
+		// 一覧の表示項目数取得
+		$viewCount = $addonObj->getPublicContentViewCount();
+		
+		// 初期値設定
+		$this->langId = $gEnvManager->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
+		$this->limit = $viewCount;					// コンテンツ取得数(コンテンツ取得用)
+		$this->pageNo = 1;				// ページ番号(コンテンツ取得用)
 		$this->now = date("Y/m/d H:i:s");	// 現在日時
+		
+		// パラメータ値で更新
+		if (!empty($langId)) $this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
+		if (!empty($limit))$this->limit = $limit;					// コンテンツ取得数(コンテンツ取得用)
+		if (!empty($pageNo))$this->pageNo = $pageNo;				// ページ番号(コンテンツ取得用)
 	}
 	/**
 	 * [WordPressテンプレート用API]コンテンツを取得
@@ -141,10 +152,11 @@ class ContentApi extends BaseApi
 		} else {
 			$entryId = $this->contentId;		// コンテンツIDを指定。コンテンツIDは複数あり。
 		}
-	
-		// データ取得
+		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
-		$addonObj->getPublicEntryItems($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $order, array($this, '_itemListLoop'), null/*ブログID*/);
+		
+		// データ取得
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $order, array($this, '_itemListLoop'), null/*ブログID*/);
 		
 		return $this->contentArray;
 	}
@@ -212,7 +224,7 @@ class ContentApi extends BaseApi
 		$post->post_date = $date;
 		$post->post_date_gmt = '';
 		$post->post_password = '';
-		$post->post_name = $title;		// エンコーディングが必要?
+		$post->post_name = '';		// スラッグ等で使用されるので設定しない
 		$post->post_type = 'post';
 		$post->post_status = 'publish';
 		$post->to_ping = '';

@@ -21,6 +21,7 @@ class blogLib extends Addon
 	private $db;	// DB接続オブジェクト
 	private $blogId = '';	// ブログID
 	private $templateId = '';	// テンプレートID
+	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
 	
 	/**
 	 * コンストラクタ
@@ -198,6 +199,16 @@ class blogLib extends Addon
 		return true;
 	}
 	/**
+	 * 記事一覧の表示項目数を取得
+	 *
+	 * @return int				表示項目数
+	 */
+	function getPublicContentViewCount()
+	{
+		$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
+		return $itemCount;
+	}
+	/**
 	 * 公開中のエントリー項目を取得。アクセス制限も行う。
 	 *
 	 * @param int		$limit				取得する項目数
@@ -213,7 +224,7 @@ class blogLib extends Addon
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
+	function getPublicContentList($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
 	{
 		global $gEnvManager;
 		

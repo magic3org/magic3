@@ -127,6 +127,17 @@ class contentLib
 		}
 	}
 	/**
+	 * コンテンツ一覧の表示項目数を取得
+	 *
+	 * @return int				表示項目数
+	 */
+	function getPublicContentViewCount()
+	{
+	//	$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
+		$itemCount = 10;
+		return $itemCount;
+	}
+	/**
 	 * 公開中のエントリー項目を取得。アクセス制限も行う。
 	 *
 	 * @param int		$limit				取得する項目数
@@ -141,12 +152,12 @@ class contentLib
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback)
+	function getPublicContentList($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback)
 	{
 		global $gEnvManager;
 		
 		$userId = $gEnvManager->getCurrentUserId();
-		$this->db->getPublicEntryItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback);
+		$this->db->getPublicContentItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback);
 	}
 }
 ?>
