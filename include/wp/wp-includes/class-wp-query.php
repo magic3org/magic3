@@ -2574,12 +2574,14 @@ class WP_Query {
 	 * @return bool Whether the query is for an existing single post of any of the given post types.
 	 */
 	public function is_singular( $post_types = '' ) {
-		if ( empty( $post_types ) || !$this->is_singular )
+/*		if ( empty( $post_types ) || !$this->is_singular )
 			return (bool) $this->is_singular;
 
 		$post_obj = $this->get_queried_object();
 
 		return in_array( $post_obj->post_type, (array) $post_types );
+		*/
+		return $this->is_single || $this->is_page || $this->is_attachment;
 	}
 
 	/**
