@@ -1695,7 +1695,7 @@ class WP_Query {
 			$wpPostObj = new WP_Post($post);
 			$this->posts = array($wpPostObj);
 		} else {
-			$gContentApi->setCondition(array(), ''/*現在の言語*/, 10/*最大取得数*/, 1/*ページ番号*/);
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, 1/*ページ番号*/);
 			$this->posts = $gContentApi->getContentList();
 		}
 
@@ -2527,7 +2527,7 @@ class WP_Query {
 	 * @return bool Whether the query is for an existing single post.
 	 */
 	public function is_single( $post = '' ) {
-		if ( !$this->is_single )
+/*		if ( !$this->is_single )
 			return false;
 
 		if ( empty($post) )
@@ -2556,8 +2556,9 @@ class WP_Query {
 			}
 		}
 		return false;
+		*/
+		return $this->is_single;
 	}
-
 	/**
 	 * Is the query for an existing single post of any post type (post, attachment, page, ... )?
 	 *

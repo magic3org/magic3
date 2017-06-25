@@ -342,6 +342,7 @@ class ContentApi extends BaseApi
 	function setContentId($idStr)
 	{
 		global $gOpeLogManager;
+		global $wp_query;
 		
 		// IDを解析しエラーチェック。複数の場合は配列に格納する。
 		switch ($this->contentType){
@@ -357,6 +358,9 @@ class ContentApi extends BaseApi
 			$contentIdArray = explode(',', $idStr);
 			if (ValueCheck::isNumeric($contentIdArray)){
 				$this->contentId = $contentIdArray;
+				
+				// 記事が単体の場合は単体記事表示を指定
+				if (count($this->contentId) == 1) $wp_query->is_single = true;
 			} else {
 				return false;
 			}
