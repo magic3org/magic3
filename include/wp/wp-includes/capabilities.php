@@ -519,7 +519,7 @@ function map_meta_cap( $cap, $user_id ) {
  *              passed, whether the current user has the given meta capability for the given object.
  */
 function current_user_can( $capability ) {
-	$current_user = wp_get_current_user();
+/*	$current_user = wp_get_current_user();
 
 	if ( empty( $current_user ) )
 		return false;
@@ -528,6 +528,8 @@ function current_user_can( $capability ) {
 	$args = array_merge( array( $capability ), $args );
 
 	return call_user_func_array( array( $current_user, 'has_cap' ), $args );
+	*/
+	return false;		// Magic3暫定
 }
 
 /**
