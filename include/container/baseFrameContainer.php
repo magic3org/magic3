@@ -695,6 +695,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-page.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-theme.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
@@ -728,15 +729,11 @@ class BaseFrameContainer extends Core
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/option.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/mo.php');
-
-			// テンプレート内のファイルを読み込む
-			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
 		
 			// Magic3用インターフェイス
+			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値取得
 			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');	// コンテンツ取得API
 			require_once($this->gEnv->getWordpressRootPath() . '/menuApi.php');		// メニュー情報取得API
-			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値設定
-			
 
 			// ##### データ初期化 #####
 			wp_initial_constants();			// 定義値取得
@@ -758,10 +755,13 @@ class BaseFrameContainer extends Core
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
 			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
 			
+			// テンプレート初期処理
+			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
+			
 			// 初期処理
 			do_action('setup_theme');
 			load_default_textdomain();
-			do_action('after_setup_theme');
+			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('wp_loaded');
 			
 			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
@@ -776,7 +776,8 @@ class BaseFrameContainer extends Core
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 				if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT){	// コンテンツIDのとき
-					$defaultIndexFile = get_page_template();		// 固定ページテンプレート
+					// フルパスで返るので相対パスに修正
+					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 					
 					// コンテンツID設定
 					$firstValue = $this->gRequest->trimValueOf($firstKey);
@@ -791,7 +792,8 @@ class BaseFrameContainer extends Core
 //				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
 //					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 				if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
-					$defaultIndexFile = get_single_template();		// 記事詳細テンプレート
+					// フルパスで返るので相対パスに修正
+					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
 					
 					// コンテンツID設定
 					$firstValue = $this->gRequest->trimValueOf($firstKey);
@@ -808,7 +810,8 @@ class BaseFrameContainer extends Core
 				break;
 			default:
 				// コンテンツタイプが設定されていないページに場合は、固定ページ用のテンプレートを使用
-				$defaultIndexFile = get_page_template();		// 固定ページテンプレート
+				// フルパスで返るので相対パスに修正
+				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 				break;
 			}
 			
@@ -886,7 +889,7 @@ class BaseFrameContainer extends Core
 			require_once($templateIndexFile);
 		} else {		// テンプレートが存在しないとき
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザのとき
-				echo 'template not found error: ' . $curTemplate;
+				echo 'template not found error: ' . $curTemplate . ', path=' . $templateIndexFile;
 			} else {
 				// 一般向けにはメンテナンス画面を表示
 				$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
@@ -1248,6 +1251,23 @@ class BaseFrameContainer extends Core
 		} else {
 			$this->_script[strtolower($type)] .= chr(13).$content;
 		}
+	}
+	/**
+	 * WordPressテンプレートの起動ファイルパスを相対パスに変換
+	 *
+	 * @param string $templateId	テンプレートID
+	 * @param string $path			テンプレートの起動ファイル絶対パス
+	 * @return string				テンプレート内での相対パス。エラー発生の場合はデフォルト(index.php)を返す。
+	 */
+	function _getRelativeTemplateIndexPath($templateId, $path)
+	{
+		$savedPath = $path;
+		$templatePath = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/';
+		
+		// テンプレートまでのパスを削除
+		$path = str_replace($templatePath, '', $path);
+		if ($path == $savedPath) $path = 'index.php';
+		return $path;
 	}
 }
 ?>

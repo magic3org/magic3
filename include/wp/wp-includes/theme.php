@@ -95,7 +95,7 @@ function wp_get_themes( $args = array() ) {
  * @return WP_Theme Theme object. Be sure to check the object's exists() method if you need to confirm the theme's existence.
  */
 function wp_get_theme( $stylesheet = null, $theme_root = null ) {
-	global $wp_theme_directories;
+/*	global $wp_theme_directories;
 
 	if ( empty( $stylesheet ) )
 		$stylesheet = get_stylesheet();
@@ -107,7 +107,10 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 		elseif ( ! in_array( $theme_root, (array) $wp_theme_directories ) )
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 	}
-
+*/
+	global $gEnvManager;
+	$stylesheet = $gEnvManager->getCurrentTemplateId();
+	$theme_root = $gEnvManager->getTemplatesPath();
 	return new WP_Theme( $stylesheet, $theme_root );
 }
 

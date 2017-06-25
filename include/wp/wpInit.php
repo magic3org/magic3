@@ -85,8 +85,9 @@ function m3WpInit()
 									// 1.5
 									'default_email_category' => 1,
 									'recently_edited' => '',
-								//	'template' => $template,
-								//	'stylesheet' => $stylesheet,
+									// Magic3にはテンプレートの親子関係はないのでtemplate,stylesheetは常に同じもの示す
+									'template' => $gEnvManager->getCurrentTemplateId(),
+									'stylesheet' => $gEnvManager->getCurrentTemplateId(),
 									'comment_whitelist' => 1,
 									'blacklist_keys' => '',
 									'comment_registration' => 0,

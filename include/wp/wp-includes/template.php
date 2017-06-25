@@ -39,7 +39,6 @@ function get_query_template( $type, $templates = array() ) {
 	 * @param array $templates A list of template candidates, in descending order of priority.
 	 */
 //	$templates = apply_filters( "{$type}_template_hierarchy", $templates );
-
 	$template = locate_template( $templates );
 
 	/**
@@ -622,6 +621,7 @@ function get_attachment_template() {
  * @param bool         $require_once   Whether to require_once or require. Default true. Has no effect if $load is false.
  * @return string The template filename if one is located.
  */
+// 個別のテンプレート内のPHPテンプレートファイルを取得する
 function locate_template($template_names, $load = false, $require_once = true ) {
 	$located = '';
 	foreach ( (array) $template_names as $template_name ) {
@@ -646,8 +646,7 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 	if ( $load && '' != $located )
 		load_template( $located, $require_once );
 
-//	return $located;
-	return basename($located);				// Magic3仕様変更
+	return $located;		// フルパスを返す
 }
 
 /**
