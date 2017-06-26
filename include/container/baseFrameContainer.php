@@ -692,11 +692,13 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-user.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');				// コンテンツデータ取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-comment-query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-page.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-theme.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-list-util.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得

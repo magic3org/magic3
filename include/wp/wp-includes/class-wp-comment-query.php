@@ -373,8 +373,8 @@ class WP_Comment_Query {
 		$this->parse_query();
 
 		// Parse meta query
-		$this->meta_query = new WP_Meta_Query();
-		$this->meta_query->parse_query_vars( $this->query_vars );
+//		$this->meta_query = new WP_Meta_Query();
+//		$this->meta_query->parse_query_vars( $this->query_vars );
 
 		/**
 		 * Fires before comments are retrieved.
@@ -386,10 +386,10 @@ class WP_Comment_Query {
 		do_action_ref_array( 'pre_get_comments', array( &$this ) );
 
 		// Reparse query vars, in case they were modified in a 'pre_get_comments' callback.
-		$this->meta_query->parse_query_vars( $this->query_vars );
+/*		$this->meta_query->parse_query_vars( $this->query_vars );
 		if ( ! empty( $this->meta_query->queries ) ) {
 			$this->meta_query_clauses = $this->meta_query->get_sql( 'comment', $wpdb->comments, 'comment_ID', $this );
-		}
+		}*/
 
 		// $args can include anything. Only use the args defined in the query_var_defaults to compute the key.
 		$key = md5( serialize( wp_array_slice_assoc( $this->query_vars, array_keys( $this->query_var_defaults ) ) ) );
@@ -830,17 +830,17 @@ class WP_Comment_Query {
 			$join .= "JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->comments.comment_post_ID";
 		}
 
-		if ( ! empty( $this->meta_query_clauses ) ) {
+/*		if ( ! empty( $this->meta_query_clauses ) ) {
 			$join .= $this->meta_query_clauses['join'];
-
+*/
 			// Strip leading 'AND'.
-			$this->sql_clauses['where']['meta_query'] = preg_replace( '/^\s*AND\s*/', '', $this->meta_query_clauses['where'] );
-
+//			$this->sql_clauses['where']['meta_query'] = preg_replace( '/^\s*AND\s*/', '', $this->meta_query_clauses['where'] );
+/*
 			if ( ! $this->query_vars['count'] ) {
 				$groupby = "{$wpdb->comments}.comment_ID";
 			}
 		}
-
+*/
 		if ( ! empty( $this->query_vars['date_query'] ) && is_array( $this->query_vars['date_query'] ) ) {
 			$this->date_query = new WP_Date_Query( $this->query_vars['date_query'], 'comment_date' );
 			$this->sql_clauses['where']['date_query'] = preg_replace( '/^\s*AND\s*/', '', $this->date_query->get_sql() );
@@ -1127,11 +1127,11 @@ class WP_Comment_Query {
 			$allowed_keys[] = 'meta_value_num';
 		}
 
-		$meta_query_clauses = $this->meta_query->get_clauses();
+/*		$meta_query_clauses = $this->meta_query->get_clauses();
 		if ( $meta_query_clauses ) {
 			$allowed_keys = array_merge( $allowed_keys, array_keys( $meta_query_clauses ) );
 		}
-
+*/
 		$parsed = false;
 		if ( $orderby == $this->query_vars['meta_key'] || $orderby == 'meta_value' ) {
 			$parsed = "$wpdb->commentmeta.meta_value";
