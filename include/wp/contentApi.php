@@ -229,6 +229,12 @@ class ContentApi extends BaseApi
 		$post->post_status = 'publish';
 		$post->to_ping = '';
 		$post->pinged = '';
+	$post->comment_status = 'closed';// コメント欄の表示設定
+	$post->ping_status = 'closed';
+	/*		$post->comment_status = get_default_comment_status( $post_type );
+			$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
+			$post->post_pingback = get_option( 'default_pingback_flag' );
+			$post->post_category = get_option( 'default_category' );*/
 		$post->post_parent = 0;
 		$post->menu_order = 0;
 		// Magic3設定値追加
@@ -370,7 +376,6 @@ class ContentApi extends BaseApi
 			$this->contentId = $id;
 			break;
 		}
-
 		return true;
 	}
 }

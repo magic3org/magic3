@@ -23,19 +23,19 @@ if ( !function_exists('wp_set_current_user') ) :
  * @param string $name User's username
  * @return WP_User Current user User object
  */
-function wp_set_current_user($id, $name = '') {
+function wp_set_current_user($id = 0, $name = '') {
 	global $current_user;
 
 	// If `$id` matches the user who's already current, there's nothing to do.
 	if ( isset( $current_user )
 		&& ( $current_user instanceof WP_User )
-		&& ( $id == $current_user->ID )
-		&& ( null !== $id )
+//		&& ( $id == $current_user->ID )
+//		&& ( null !== $id )
 	) {
 		return $current_user;
 	}
 
-//	$current_user = new WP_User( $id, $name );
+	$current_user = new WP_User( $id, $name );
 //
 //	setup_userdata( $current_user->ID );
 
@@ -44,7 +44,7 @@ function wp_set_current_user($id, $name = '') {
 	 *
 	 * @since 2.0.1
 	 */
-	do_action( 'set_current_user' );
+//	do_action( 'set_current_user' );
 
 	return $current_user;
 }
@@ -108,7 +108,7 @@ function get_user_by( $field, $value ) {
 }
 endif;
 
-if ( !function_exists('cache_users') ) :
+//if ( !function_exists('cache_users') ) :
 /**
  * Retrieve info for user lists to prevent multiple queries by get_userdata()
  *
@@ -118,7 +118,7 @@ if ( !function_exists('cache_users') ) :
  *
  * @param array $user_ids User ID numbers list
  */
-function cache_users( $user_ids ) {
+/*function cache_users( $user_ids ) {
 	global $wpdb;
 
 	$clean = _get_non_cached_ids( $user_ids, 'users' );
@@ -136,8 +136,8 @@ function cache_users( $user_ids ) {
 		$ids[] = $user->ID;
 	}
 	update_meta_cache( 'user', $ids );
-}
-endif;
+}*/
+//endif;
 
 if ( !function_exists( 'wp_mail' ) ) :
 /**

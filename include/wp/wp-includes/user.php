@@ -2490,7 +2490,7 @@ function _wp_get_current_user() {
 		if ( $current_user instanceof WP_User ) {
 			return $current_user;
 		}
-
+/*
 		// Upgrade stdClass to WP_User
 		if ( is_object( $current_user ) && isset( $current_user->ID ) ) {
 			$cur_id = $current_user->ID;
@@ -2503,13 +2503,15 @@ function _wp_get_current_user() {
 		$current_user = null;
 		wp_set_current_user( 0 );
 		return $current_user;
+		*/
 	}
 
+/*
 	if ( defined('XMLRPC_REQUEST') && XMLRPC_REQUEST ) {
 		wp_set_current_user( 0 );
 		return $current_user;
 	}
-
+*/
 	/**
 	 * Filters the current user.
 	 *
@@ -2523,13 +2525,15 @@ function _wp_get_current_user() {
 	 *
 	 * @param int|bool $user_id User ID if one has been determined, false otherwise.
 	 */
-	$user_id = apply_filters( 'determine_current_user', false );
+/*	$user_id = apply_filters( 'determine_current_user', false );
 	if ( ! $user_id ) {
 		wp_set_current_user( 0 );
 		return $current_user;
 	}
 
-	wp_set_current_user( $user_id );
+	wp_set_current_user( $user_id );*/
 
+	$current_user = wp_set_current_user();		// Magic3’Ç‰Á
+	
 	return $current_user;
 }

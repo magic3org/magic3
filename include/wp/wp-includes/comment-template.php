@@ -1188,7 +1188,6 @@ function trackback_rdf( $deprecated = '' ) {
  * @return bool True if the comments are open.
  */
 function comments_open( $post_id = null ) {
-
 	$_post = get_post($post_id);
 
 	$open = ( 'open' == $_post->comment_status );

@@ -84,14 +84,14 @@ final class WP_Post {
 	 *
 	 * @var string
 	 */
-	public $comment_status = 'open';
+	public $comment_status = 'closed';		// Magic3デフォルト値「open」を変更
 
 	/**
 	 * Whether pings are allowed.
 	 *
 	 * @var string
 	 */
-	public $ping_status = 'open';
+	public $ping_status = 'closed';			// Magic3デフォルト値「open」を変更
 
 	/**
 	 * The post's password in plain text.

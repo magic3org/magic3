@@ -59,8 +59,8 @@ function m3WpInit()
 									'mailserver_pass' => 'password',
 									'mailserver_port' => 110,
 									'default_category' => 1,
-									'default_comment_status' => 'open',
-									'default_ping_status' => 'open',
+									'default_comment_status' => 'closed',		// 「open」から変更
+									'default_ping_status' => 'closed',		// 「open」から変更
 									'default_pingback_flag' => 1,
 									'posts_per_page' => 10,
 									/* translators: default date format, see https://secure.php.net/date */

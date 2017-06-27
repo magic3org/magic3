@@ -101,7 +101,7 @@ class WP_User {
 	 * @access private
 	 * @var array
 	 */
-	private static $back_compat_keys;
+//	private static $back_compat_keys;
 
 	/**
 	 * Constructor.
@@ -118,7 +118,7 @@ class WP_User {
 	 * @param int $blog_id Optional Site ID, defaults to current site.
 	 */
 	public function __construct( $id = 0, $name = '', $blog_id = '' ) {
-		if ( ! isset( self::$back_compat_keys ) ) {
+/*		if ( ! isset( self::$back_compat_keys ) ) {
 			$prefix = $GLOBALS['wpdb']->prefix;
 			self::$back_compat_keys = array(
 				'user_firstname' => 'first_name',
@@ -128,7 +128,7 @@ class WP_User {
 				$prefix . 'usersettings' => $prefix . 'user-settings',
 				$prefix . 'usersettingstime' => $prefix . 'user-settings-time',
 			);
-		}
+		}*/
 
 		if ( $id instanceof WP_User ) {
 			$this->init( $id->data, $blog_id );
@@ -166,7 +166,7 @@ class WP_User {
 		$this->data = $data;
 		$this->ID = (int) $data->ID;
 
-		$this->for_blog( $blog_id );
+//		$this->for_blog( $blog_id );
 	}
 
 	/**
@@ -284,8 +284,8 @@ class WP_User {
 		if ( isset( $this->data->$key ) )
 			return true;
 
-		if ( isset( self::$back_compat_keys[ $key ] ) )
-			$key = self::$back_compat_keys[ $key ];
+//		if ( isset( self::$back_compat_keys[ $key ] ) )
+//			$key = self::$back_compat_keys[ $key ];
 
 		return metadata_exists( 'user', $this->ID, $key );
 	}
@@ -314,8 +314,8 @@ class WP_User {
 		if ( isset( $this->data->$key ) ) {
 			$value = $this->data->$key;
 		} else {
-			if ( isset( self::$back_compat_keys[ $key ] ) )
-				$key = self::$back_compat_keys[ $key ];
+//			if ( isset( self::$back_compat_keys[ $key ] ) )
+//				$key = self::$back_compat_keys[ $key ];
 			$value = get_user_meta( $this->ID, $key, true );
 		}
 
@@ -377,9 +377,9 @@ class WP_User {
 			unset( $this->data->$key );
 		}
 
-		if ( isset( self::$back_compat_keys[ $key ] ) ) {
-			unset( self::$back_compat_keys[ $key ] );
-		}
+//		if ( isset( self::$back_compat_keys[ $key ] ) ) {
+//			unset( self::$back_compat_keys[ $key ] );
+//		}
 	}
 
 	/**
