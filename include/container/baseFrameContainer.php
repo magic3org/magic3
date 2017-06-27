@@ -673,7 +673,7 @@ class BaseFrameContainer extends Core
 		if (method_exists($this, '_preBuffer')) $this->_preBuffer($request);
 	
 		if ($convType == 100){		// WordPressテンプレートのとき
-			// WordPress用定義値
+			// WordPress用ベース定義値
 			define('WPINC', 'wp-includes');
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
 			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
@@ -741,9 +741,8 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/menuApi.php');		// メニュー情報取得API
 
 			// ##### データ初期化 #####
-			wp_initial_constants();			// 定義値取得
-			m3WpInit();						// Magic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
-
+			wp_initial_constants();			// WordPressその他定義値設定
+			
 			// プラグイン初期化
 			$GLOBALS['wp_plugin_paths'] = array();			// $wp_plugin_pathsは未使用?
 			foreach (wp_get_active_and_valid_plugins() as $plugin) {// プラグインロード
@@ -753,19 +752,18 @@ class BaseFrameContainer extends Core
 			unset($plugin);
 
 			// WordPressメインオブジェクト作成
-			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();
-			$GLOBALS['wp'] = new WP();
+			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();		// 表示言語を設定
 			$GLOBALS['wp_the_query'] = new WP_Query();
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
+			$GLOBALS['wp'] = new WP();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
 			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
 			
 			// テンプレート初期処理
-			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');
-			
-			// 初期処理
 			do_action('setup_theme');
-			load_default_textdomain();
+			load_default_textdomain();			// 言語リソースを読み込む
+			m3WpInit();							// 言語リソース読み込み後にMagic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
+			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');// テンプレート初期処理
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('wp_loaded');
 			

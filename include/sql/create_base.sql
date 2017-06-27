@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2016 Magic3 Project.
+-- * @copyright  Copyright 2006-2017 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -32,7 +32,7 @@ CREATE TABLE _system_config (
 -- 多言語対応文字列マスター
 DROP TABLE IF EXISTS _language_string;
 CREATE TABLE _language_string (
-    ls_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- 文字列(0=メッセージ,1=共通用語,2=コンテンツ種別,10=Joomla!用)
+    ls_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- 文字列(0=メッセージ,1=共通用語,2=コンテンツ種別,10=Joomla!用,100=WordPress用)
     ls_id                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ID(Key)
     ls_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     
