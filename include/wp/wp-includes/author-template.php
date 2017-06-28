@@ -124,13 +124,17 @@ function the_modified_author() {
 function get_the_author_meta( $field = '', $user_id = false ) {
 //	$original_user_id = $user_id;
 
-//	if ( ! $user_id ) {
-//		global $authordata;
-//		$user_id = isset( $authordata->ID ) ? $authordata->ID : 0;
-//	} else {
+	// Magic3では取得可能なユーザの情報は現在取得中の記事の登録者に限定する
+	// ここに来るまでにWP_Queryのsetup_postdata()が必ず実行されている。setup_postdata()で$authordataが最新に更新される。
+	if ( ! $user_id ) {
+		global $authordata;
+		$user_id = isset( $authordata->ID ) ? $authordata->ID : 0;
+	} else {
+		// *** ここではWP_Userオブジェクトを不必要に生成する可能性あり ***
 		$authordata = get_userdata( $user_id );
-//	}
+	}
 
+	// 取得フィールド名修正
 	if ( in_array( $field, array( 'login', 'pass', 'nicename', 'email', 'url', 'registered', 'activation_key', 'status' ) ) )
 		$field = 'user_' . $field;
 

@@ -2686,6 +2686,7 @@ class WP_Query {
 
 		$id = (int) $post->ID;
 
+		// ##### 現在取得中の記事に関連するユーザ情報を取得する #####
 		$authordata = get_userdata($post->post_author);
 
 		$currentday = mysql2date('d.m.y', $post->post_date, false);
