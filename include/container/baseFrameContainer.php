@@ -734,6 +734,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/translations.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pomo/mo.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/capabilities.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/meta.php');
 		
 			// Magic3用インターフェイス
 			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値取得
