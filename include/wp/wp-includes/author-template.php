@@ -122,20 +122,20 @@ function the_modified_author() {
  * @return string The author's field from the current author's DB object.
  */
 function get_the_author_meta( $field = '', $user_id = false ) {
-	$original_user_id = $user_id;
+//	$original_user_id = $user_id;
 
-	if ( ! $user_id ) {
-		global $authordata;
-		$user_id = isset( $authordata->ID ) ? $authordata->ID : 0;
-	} else {
+//	if ( ! $user_id ) {
+//		global $authordata;
+//		$user_id = isset( $authordata->ID ) ? $authordata->ID : 0;
+//	} else {
 		$authordata = get_userdata( $user_id );
-	}
+//	}
 
 	if ( in_array( $field, array( 'login', 'pass', 'nicename', 'email', 'url', 'registered', 'activation_key', 'status' ) ) )
 		$field = 'user_' . $field;
 
 	$value = isset( $authordata->$field ) ? $authordata->$field : '';
-
+	return $value;
 	/**
 	 * Filters the value of the requested user metadata.
 	 *
@@ -148,7 +148,7 @@ function get_the_author_meta( $field = '', $user_id = false ) {
 	 * @param int      $user_id          The user ID for the value.
 	 * @param int|bool $original_user_id The original user ID, as passed to the function.
 	 */
-	return apply_filters( 'get_the_author_' . $field, $value, $user_id, $original_user_id );
+//	return apply_filters( 'get_the_author_' . $field, $value, $user_id, $original_user_id );
 }
 
 /**

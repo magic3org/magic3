@@ -184,13 +184,13 @@ class WP_User {
 	 * @return object|false Raw user object
 	 */
 	public static function get_data_by( $field, $value ) {
-		global $wpdb;
-
+//		global $wpdb;
 		// 'ID' is an alias of 'id'.
 		if ( 'ID' === $field ) {
 			$field = 'id';
 		}
 
+		// ユーザIDのみ指定可能
 		if ( 'id' == $field ) {
 			// Make sure the value is numeric to avoid casting objects, for example,
 			// to int 1.
@@ -200,9 +200,23 @@ class WP_User {
 			if ( $value < 1 )
 				return false;
 		} else {
-			$value = trim( $value );
+//			$value = trim( $value );
+			return false;
 		}
+		$id = $value;
 
+		// WP_Postデータの登録ユーザIDとパラメータのユーザIDをチェック
+		$post = get_post();
+		if (!$post) return false;
+
+		if ($post->post_author != $id) return false;		// ユーザが異なる場合は終了
+
+		// 現在のWP_Postデータからユーザ情報を取得
+		$data = new stdClass;
+		$data->ID = $id;
+		$data->display_name = $post->display_name;			// ユーザ名
+		$data->user_nicename = $post->display_name;			// ユーザ名
+/*
 		if ( !$value )
 			return false;
 
@@ -227,8 +241,8 @@ class WP_User {
 			default:
 				return false;
 		}
-
-		if ( false !== $user_id ) {
+*/
+/*		if ( false !== $user_id ) {
 			if ( $user = wp_cache_get( $user_id, 'users' ) )
 				return $user;
 		}
@@ -239,8 +253,8 @@ class WP_User {
 			return false;
 
 		update_user_caches( $user );
-
-		return $user;
+*/
+		return $data;
 	}
 
 	/**

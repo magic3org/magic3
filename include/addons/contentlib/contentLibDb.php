@@ -75,7 +75,7 @@ class contentLibDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
-		$queryStr = 'SELECT * FROM content ';
+		$queryStr = 'SELECT * FROM content LEFT JOIN _login_user ON cn_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=  'WHERE cn_visible = true ';
 		$queryStr .=    'AND cn_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND cn_search_target = true ';		// 検索対象

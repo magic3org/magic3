@@ -200,7 +200,10 @@ class ContentApi extends BaseApi
 			$serial = $fetchedRow['cn_serial'];
 			$id		= $fetchedRow['cn_id'];
 			$title	= $fetchedRow['cn_name'];
-			$date	= $fetchedRow['cn_create_dt'];
+			$authorId		= $fetchedRow['cn_create_user_id'];		// コンテンツ登録者
+			$authorName		= $fetchedRow['lu_name'];				// コンテンツ登録者名
+			$authorUrl		= '';			// コンテンツ登録者URL
+			$date			= $fetchedRow['cn_create_dt'];
 			$contentHtml	= $fetchedRow['cn_html'];
 			$thumbSrc		= $fetchedRow['cn_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
@@ -208,7 +211,10 @@ class ContentApi extends BaseApi
 			$serial = $fetchedRow['be_serial'];
 			$id		= $fetchedRow['be_id'];
 			$title	= $fetchedRow['be_name'];
-			$date	= $fetchedRow['be_regist_dt'];
+			$authorId		= $fetchedRow['be_regist_user_id'];		// コンテンツ登録者
+			$authorName		= $fetchedRow['lu_name'];				// コンテンツ登録者名
+			$authorUrl		= '';			// コンテンツ登録者URL
+			$date			= $fetchedRow['be_regist_dt'];
 			$contentHtml	= $fetchedRow['be_html'];
 			$thumbSrc		= $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
@@ -220,7 +226,7 @@ class ContentApi extends BaseApi
 		// WP_Postオブジェクトに変換して格納
 		$post = new stdClass;
 		$post->ID = $id;
-		$post->post_author = '';
+		$post->post_author = $authorId;		// 登録者のユーザID
 		$post->post_date = $date;
 		$post->post_date_gmt = '';
 		$post->post_password = '';
@@ -229,8 +235,8 @@ class ContentApi extends BaseApi
 		$post->post_status = 'publish';
 		$post->to_ping = '';
 		$post->pinged = '';
-	$post->comment_status = 'closed';// コメント欄の表示設定
-	$post->ping_status = 'closed';
+		$post->comment_status = 'closed';// コメント欄の表示設定
+		$post->ping_status = 'closed';
 	/*		$post->comment_status = get_default_comment_status( $post_type );
 			$post->ping_status = get_default_comment_status( $post_type, 'pingback' );
 			$post->post_pingback = get_option( 'default_pingback_flag' );
@@ -242,8 +248,10 @@ class ContentApi extends BaseApi
 		$post->post_content = $contentHtml;
 		$post->guid = $this->getContentUrl($id);	// 詳細画面URL
 		$post->filter = 'raw';
-		// Magic3用パラメータ
+		// Magic3独自パラメータ
 		$post->thumb_src = $thumbSrc;
+		$post->display_name = $authorName;			// コンテンツ登録者名
+		$post->authorUrl = $authorUrl;				// コンテンツ登録者URL
 		
 		$wpPostObj = new WP_Post($post);
 		$this->contentArray[] = $wpPostObj;
