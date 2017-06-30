@@ -28,6 +28,7 @@ class ContentApi extends BaseApi
 	private $contentArray;			// 取得コンテンツ
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
 	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
+	private $relativePosts;			// 現在のコンテンツに関連したWP_Postオブジェクト
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -75,6 +76,9 @@ class ContentApi extends BaseApi
 			// エラー処理
 			$this->contentType = '';
 		}
+		
+		// メンバー変数初期化
+		$this->relativePosts = array();			// 現在のコンテンツに関連したWP_Postオブジェクト
 	}
 	/**
 	 * 対象のコンテンツタイプのアドオンオブジェクトを取得
@@ -179,6 +183,9 @@ class ContentApi extends BaseApi
 		$row = $addonObj->getPublicPrevNextEntry(0/*前方データ*/, $this->prevNextBaseValue, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, null/*カテゴリーID*/, null/*ブログID*/);
 		if ($row) $wpPostObj = $this->_createWP_Post($row);
 
+		// 取得オブジェクト保存
+		if ($wpPostObj) $this->relativePosts[$wpPostObj->ID] = $wpPostObj;
+		
 		return $wpPostObj;
 	}
 	/**
@@ -197,7 +204,20 @@ class ContentApi extends BaseApi
 		$row = $addonObj->getPublicPrevNextEntry(1/*後方データ*/, $this->prevNextBaseValue, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, null/*カテゴリーID*/, null/*ブログID*/);
 		if ($row) $wpPostObj = $this->_createWP_Post($row);
 
+		// 取得オブジェクト保存
+		if ($wpPostObj) $this->relativePosts[$wpPostObj->ID] = $wpPostObj;
+		
 		return $wpPostObj;
+	}
+	/**
+	 * [WordPressテンプレート用API]関連オブジェクト取得
+	 *
+	 * @param int $id					WP_PostオブジェクトのID
+	 * @return object     				WP_Postオブジェクト
+	 */
+	function getRelativePost($id)
+	{
+		return $this->relativePosts[$id];
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

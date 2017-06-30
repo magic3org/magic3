@@ -1591,18 +1591,28 @@ function get_next_post( $in_same_term = false, $excluded_terms = '', $taxonomy =
  *                             corresponding post exists.
  */
 function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'category' ) {
-	global $wpdb;
+	global $gContentApi;
+//	global $wpdb;
 
 	if ( ( ! $post = get_post() ) || ! taxonomy_exists( $taxonomy ) )
 		return null;
 
-	$current_post_date = $post->post_date;
+	// 前方または次のコンテンツを取得
+	if ($previous){
+		$post = $gContentApi->getPrevContent();
+	} else {
+		$post = $gContentApi->getNextContent();
+	}
+			
+	return $post;
+/*	$current_post_date = $post->post_date;
 
 	$join = '';
 	$where = '';
 	$adjacent = $previous ? 'previous' : 'next';
+*/
 
-	if ( $in_same_term || ! empty( $excluded_terms ) ) {
+/*	if ( $in_same_term || ! empty( $excluded_terms ) ) {
 		if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) {
 			// back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
 			if ( false !== strpos( $excluded_terms, ' and ' ) ) {
@@ -1632,7 +1642,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 
 			$where .= " AND tt.term_id IN (" . implode( ',', $term_array ) . ")";
 		}
-
+*/
 		/**
 		 * Filters the IDs of terms excluded from adjacent post queries.
 		 *
@@ -1643,13 +1653,13 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 		 *
 		 * @param string $excluded_terms Array of excluded term IDs.
 		 */
-		$excluded_terms = apply_filters( "get_{$adjacent}_post_excluded_terms", $excluded_terms );
+/*		$excluded_terms = apply_filters( "get_{$adjacent}_post_excluded_terms", $excluded_terms );
 
 		if ( ! empty( $excluded_terms ) ) {
 			$where .= " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (" . implode( ',', array_map( 'intval', $excluded_terms ) ) . ') )';
 		}
-	}
-
+	}*/
+/*
 	// 'post_status' clause depends on the current user.
 	if ( is_user_logged_in() ) {
 		$user_id = get_current_user_id();
@@ -1661,12 +1671,12 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 		} else {
 			$read_private_cap = $post_type_object->cap->read_private_posts;
 		}
-
+*/
 		/*
 		 * Results should include private posts belonging to the current user, or private posts where the
 		 * current user has the 'read_private_posts' cap.
 		 */
-		$private_states = get_post_stati( array( 'private' => true ) );
+/*		$private_states = get_post_stati( array( 'private' => true ) );
 		$where .= " AND ( p.post_status = 'publish'";
 		foreach ( (array) $private_states as $state ) {
 			if ( current_user_can( $read_private_cap ) ) {
@@ -1682,7 +1692,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 
 	$op = $previous ? '<' : '>';
 	$order = $previous ? 'DESC' : 'ASC';
-
+*/
 	/**
 	 * Filters the JOIN clause in the SQL for an adjacent post query.
 	 *
@@ -1698,7 +1708,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 	 * @param string  $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
 	 * @param WP_Post $post           WP_Post object.
 	 */
-	$join = apply_filters( "get_{$adjacent}_post_join", $join, $in_same_term, $excluded_terms, $taxonomy, $post );
+//	$join = apply_filters( "get_{$adjacent}_post_join", $join, $in_same_term, $excluded_terms, $taxonomy, $post );
 
 	/**
 	 * Filters the WHERE clause in the SQL for an adjacent post query.
@@ -1715,7 +1725,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 	 * @param string $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
 	 * @param WP_Post $post           WP_Post object.
 	 */
-	$where = apply_filters( "get_{$adjacent}_post_where", $wpdb->prepare( "WHERE p.post_date $op %s AND p.post_type = %s $where", $current_post_date, $post->post_type ), $in_same_term, $excluded_terms, $taxonomy, $post );
+//	$where = apply_filters( "get_{$adjacent}_post_where", $wpdb->prepare( "WHERE p.post_date $op %s AND p.post_type = %s $where", $current_post_date, $post->post_type ), $in_same_term, $excluded_terms, $taxonomy, $post );
 
 	/**
 	 * Filters the ORDER BY clause in the SQL for an adjacent post query.
@@ -1729,7 +1739,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 	 * @param string $order_by The `ORDER BY` clause in the SQL.
 	 * @param WP_Post $post    WP_Post object.
 	 */
-	$sort  = apply_filters( "get_{$adjacent}_post_sort", "ORDER BY p.post_date $order LIMIT 1", $post );
+/*	$sort  = apply_filters( "get_{$adjacent}_post_sort", "ORDER BY p.post_date $order LIMIT 1", $post );
 
 	$query = "SELECT p.ID FROM $wpdb->posts AS p $join $where $sort";
 	$query_key = 'adjacent_post_' . md5( $query );
@@ -1748,8 +1758,8 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 
 	if ( $result )
 		$result = get_post( $result );
-
-	return $result;
+		
+	return $result;*/
 }
 
 /**

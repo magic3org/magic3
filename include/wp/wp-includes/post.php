@@ -513,6 +513,8 @@ function get_extended( $post ) {
  *                            When $output is OBJECT, a `WP_Post` instance is returned.
  */
 function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
+	global $gContentApi;
+			
 	if ( empty( $post ) && isset( $GLOBALS['post'] ) )
 		$post = $GLOBALS['post'];
 
@@ -530,7 +532,11 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 	} else {
 //		$_post = WP_Post::get_instance( $post );
 		// IDをチェック
-		if ((int)$post == (int)$GLOBALS['post']->ID) $_post = $GLOBALS['post'];
+		if ((int)$post == (int)$GLOBALS['post']->ID){
+			$_post = $GLOBALS['post'];
+		} else {		// 関連WP_Postオブジェクトを取得
+			$_post = $gContentApi->getRelativePost((int)$post);
+		}
 	}
 
 	if ( ! $_post )
