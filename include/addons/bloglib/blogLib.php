@@ -221,15 +221,39 @@ class blogLib extends Addon
 	 * @param string	$langId				言語
 	 * @param int		$order				取得順(0=昇順,1=降順)
 	 * @param function	$callback			コールバック関数
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return 			なし
 	 */
-	function getPublicContentList($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null)
+	function getPublicContentList($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $categoryId = null, $blogId = null)
 	{
 		global $gEnvManager;
 		
 		$userId = $gEnvManager->getCurrentUserId();
-		$this->db->getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $blogId);
+		$this->db->getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId, $blogId);
+	}
+	/**
+	 * 公開中のエントリーの前後のエントリー項目を取得
+	 *
+	 * @param int       $type				前後記事のタイプ(0=前方,1=後方)
+	 * @param timestamp $regDate			基準となる記事の登録日時
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @return array 						記事のレコード。取得なしの場合はfalseを返す。
+	 */
+	function getPublicPrevNextEntry($type, $regDate, $now, $startDt, $endDt, $keywords, $langId, $order, $categoryId = null, $blogId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$row = $this->db->getPublicPrevNextEntry($type, $regDate, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $categoryId, $blogId);
+		return $row;
 	}
 }
 ?>

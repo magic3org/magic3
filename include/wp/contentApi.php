@@ -24,8 +24,10 @@ class ContentApi extends BaseApi
 	private $langId;				// コンテンツの言語(コンテンツ取得用)
 	private $limit;					// コンテンツ取得数(コンテンツ取得用)
 	private $pageNo;				// ページ番号(1～)(コンテンツ取得用)
+	private $order;					// コンテンツ並び順(0=昇順,1=降順)
 	private $contentArray;			// 取得コンテンツ
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
+	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -129,8 +131,9 @@ class ContentApi extends BaseApi
 		// 初期値設定
 		$this->langId = $gEnvManager->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
 		$this->limit = $viewCount;					// コンテンツ取得数(コンテンツ取得用)
-		$this->pageNo = 1;				// ページ番号(コンテンツ取得用)
-		$this->now = date("Y/m/d H:i:s");	// 現在日時
+		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
+		$this->order = 1;							// コンテンツ並び順。デフォルトは降順。
+		$this->now = date("Y/m/d H:i:s");			// 現在日時
 		
 		// パラメータ値で更新
 		if (!empty($langId)) $this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -156,33 +159,46 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj();
 		
 		// データ取得
-		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $order, array($this, '_itemListLoop'), null/*ブログID*/);
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, array($this, '_itemListLoop'),  null/*カテゴリーID*/, null/*ブログID*/);
 		
 		return $this->contentArray;
 	}
 	/**
-	 * [WordPressテンプレート用API]総コンテンツ数を取得
+	 * [WordPressテンプレート用API]現在取得中のコンテンツ基準で前のコンテンツを取得
 	 *
-	 * @return int     					コンテンツ数
+	 * @return object     				WP_Postオブジェクト
 	 */
-/*	function getContentCount()
+	function getPrevContent()
 	{
+		// 戻り値初期化
+		$wpPostObj = false;
+		
+		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
-		$idArray = $addonObj->getPublicContentCount($this->langId, $this->limit, $this->pageNo);
-		return $idArray;
-	}*/
+		
+		$row = $addonObj->getPublicPrevNextEntry(0/*前方データ*/, $this->prevNextBaseValue, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, null/*カテゴリーID*/, null/*ブログID*/);
+		if ($row) $wpPostObj = $this->_createWP_Post($row);
+
+		return $wpPostObj;
+	}
 	/**
-	 * [WordPressテンプレート用API]コンテンツ取得
+	 * [WordPressテンプレート用API]現在取得中のコンテンツ基準で次のコンテンツを取得
 	 *
-	 * @param array     $ids				コンテンツID
-	 * @return array						コンテンツデータ
+	 * @return object     				WP_Postオブジェクト
 	 */
-/*	function selectContent($ids)
+	function getNextContent()
 	{
+		// 戻り値初期化
+		$wpPostObj = false;
+		
+		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
-		$retValue = $addonObj->getList($langId, $limit, $pageNo, $rows);
-		return $retValue;
-	}*/
+		
+		$row = $addonObj->getPublicPrevNextEntry(1/*後方データ*/, $this->prevNextBaseValue, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, null/*カテゴリーID*/, null/*ブログID*/);
+		if ($row) $wpPostObj = $this->_createWP_Post($row);
+
+		return $wpPostObj;
+	}
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
@@ -193,30 +209,51 @@ class ContentApi extends BaseApi
 	 */
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
-		// レコード値取得
+		$wpPostObj = $this->_createWP_Post($fetchedRow);
+		$this->contentArray[] = $wpPostObj;
+		
+		// 前後のコンテンツ取得用のベース値を保存。単一コンテンツ表示の場合に使用。
+		switch ($this->contentType){
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+			$this->prevNextBaseValue = $wpPostObj->ID;		// 前後のコンテンツ取得用のベース値(ID)
+			break;
+		case M3_VIEW_TYPE_BLOG:	// ブログ
+			$this->prevNextBaseValue = $wpPostObj->post_date;		// 前後のコンテンツ取得用のベース値(登録日時)
+			break;
+		}
+		return true;
+	}
+	/**
+	 * テーブル行データからWP_Postオブジェクトを作成
+	 *
+	 * @param array $row			テーブル行データ
+	 * @return object				WP_Postオブジェクト
+	 */
+	function _createWP_Post($row)
+	{
 		// IDを解析しエラーチェック。複数の場合は配列に格納する。
 		switch ($this->contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
-			$serial = $fetchedRow['cn_serial'];
-			$id		= $fetchedRow['cn_id'];
-			$title	= $fetchedRow['cn_name'];
-			$authorId		= $fetchedRow['cn_create_user_id'];		// コンテンツ登録者
-			$authorName		= $fetchedRow['lu_name'];				// コンテンツ登録者名
+			$serial = $row['cn_serial'];
+			$id		= $row['cn_id'];
+			$title	= $row['cn_name'];
+			$authorId		= $row['cn_create_user_id'];		// コンテンツ登録者
+			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
-			$date			= $fetchedRow['cn_create_dt'];
-			$contentHtml	= $fetchedRow['cn_html'];
-			$thumbSrc		= $fetchedRow['cn_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			$date			= $row['cn_create_dt'];
+			$contentHtml	= $row['cn_html'];
+			$thumbSrc		= $row['cn_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
 		case M3_VIEW_TYPE_BLOG:	// ブログ
-			$serial = $fetchedRow['be_serial'];
-			$id		= $fetchedRow['be_id'];
-			$title	= $fetchedRow['be_name'];
-			$authorId		= $fetchedRow['be_regist_user_id'];		// コンテンツ登録者
-			$authorName		= $fetchedRow['lu_name'];				// コンテンツ登録者名
+			$serial = $row['be_serial'];
+			$id		= $row['be_id'];
+			$title	= $row['be_name'];
+			$authorId		= $row['be_regist_user_id'];		// コンテンツ登録者
+			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
-			$date			= $fetchedRow['be_regist_dt'];
-			$contentHtml	= $fetchedRow['be_html'];
-			$thumbSrc		= $fetchedRow['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			$date			= $row['be_regist_dt'];
+			$contentHtml	= $row['be_html'];
+			$thumbSrc		= $row['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
 		}
 
@@ -254,8 +291,7 @@ class ContentApi extends BaseApi
 		$post->authorUrl = $authorUrl;				// コンテンツ登録者URL
 		
 		$wpPostObj = new WP_Post($post);
-		$this->contentArray[] = $wpPostObj;
-		return true;
+		return $wpPostObj;
 	}
 	/**
 	 * Magic3マクロを変換してHTMLを作成

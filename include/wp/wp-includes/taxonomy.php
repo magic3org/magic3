@@ -253,9 +253,10 @@ function get_taxonomy( $taxonomy ) {
  * @return bool Whether the taxonomy exists.
  */
 function taxonomy_exists( $taxonomy ) {
-	global $wp_taxonomies;
+//	global $wp_taxonomies;
 
-	return isset( $wp_taxonomies[$taxonomy] );
+//	return isset( $wp_taxonomies[$taxonomy] );
+	return true;
 }
 
 /**

@@ -293,10 +293,11 @@ class blogLibDb extends BaseDb
 	 * @param int		$order				取得順(0=昇順,1=降順)
 	 * @param int       $userId				参照制限用ユーザID
 	 * @param function	$callback			コールバック関数
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return 			なし
 	 */
-	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $blogId = null)
+	function getPublicEntryItems($limit, $page, $entryId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId = null, $blogId = null)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -319,60 +320,9 @@ class blogLibDb extends BaseDb
 		}
 		
 		// ##### 任意設定の検索条件 #####
-		// タイトルと記事、ユーザ定義フィールドを検索
-		if (!empty($keywords)){
-			for ($i = 0; $i < count($keywords); $i++){
-				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
-				$queryStr .=    'AND (be_name LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR be_html LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR be_html_ext LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR be_description LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR be_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
-			}
-		}
-	
-		// 期間で指定
-		if (!empty($startDt)){
-			$queryStr .=    'AND ? <= be_regist_dt ';
-			$params[] = $startDt;
-		}
-		if (!empty($endDt)){
-			$queryStr .=    'AND be_regist_dt < ? ';
-			$params[] = $endDt;
-		}
-		
-		// ブログID
-		if (isset($blogId)){
-			$queryStr .=    'AND be_blog_id = ? ';		$params[] = $blogId;
-		}
-	
-		// ##### ユーザによる参照制限 #####
-		// ゲストユーザはユーザ制限のない記事のみ参照可能
-		if (empty($userId)){
-			$queryStr .= 'AND be_user_limited = false ';		// ユーザ制限のないデータ
-		}
-		// ブログごとの参照制限
-		$queryStr .=     'AND (be_blog_id = \'\' ';
-		$queryStr .=     'OR (be_blog_id != \'\' ';
-		$queryStr .=     'AND ((bl_owner_id = ? AND bl_owner_id != 0) ';	$params[] = $userId;
-		$queryStr .=     'OR bl_user_limited = false ';
-		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id = \'\' AND 0 != ' . $userId . ') ';
-		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id != \'\' AND bl_limited_user_id LIKE \'%' . M3_USER_ID_SEPARATOR . $userId . M3_USER_ID_SEPARATOR . '%\')))) ';
-		
-		// ##### コンテンツの参照制限 #####
-		// アクティブな記事のみ取得
-		$queryStr .=     'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
-		$queryStr .=     'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
-	
-		// 公開期間を指定
-		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
+		list($condQueryStr, $condParams) = $this->_createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId, $blogId);
+		$queryStr .= $condQueryStr;
+		$params = array_merge($params, $condParams);
 
 		if (empty($entryId)){
 			$ord = '';
@@ -390,10 +340,11 @@ class blogLibDb extends BaseDb
 	 * @param array		$keywords			検索キーワード
 	 * @param string	$langId				言語
 	 * @param int       $userId				参照制限用ユーザID
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @return int							項目数
 	 */
-	function getPublicEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $userId, $blogId = null)
+	function getPublicEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $userId, $categoryId = null, $blogId = null)
 	{
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
@@ -402,6 +353,42 @@ class blogLibDb extends BaseDb
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=    'AND be_language_id = ? ';	$params[] = $langId;
+		
+		// ##### 任意設定の検索条件 #####
+		list($condQueryStr, $condParams) = $this->_createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId, $blogId);
+		$queryStr .= $condQueryStr;
+		$params = array_merge($params, $condParams);
+
+		return $this->selectRecordCount($queryStr, $params);
+	}
+	/**
+	 * 公開中のエントリー項目の検索条件を作成
+	 *
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param int       $userId				ユーザID
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @return array						クエリー文字列と配列パラメータの連想配列
+	 */
+	function _createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId = null, $blogId = null)
+	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
+		$queryStr = '';
+		$params = array();
+	
+		// ##### 検索条件 #####
+		// 取得期間
+		if (!empty($startDt)){
+			$queryStr .=    'AND ? <= be_regist_dt ';
+			$params[] = $startDt;
+		}
+		if (!empty($endDt)){
+			$queryStr .=    'AND be_regist_dt < ? ';
+			$params[] = $endDt;
+		}
 		
 		// タイトルと記事、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
@@ -414,40 +401,25 @@ class blogLibDb extends BaseDb
 				$queryStr .=    'OR be_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
 			}
 		}
-			
+		
 		// ブログID
 		if (isset($blogId)){
-			$queryStr .=    'AND be_blog_id = ? ';		$params[] = $blogId;
+			$queryStr .=    'AND be_blog_id = ? ';
+			$params[] = $blogId;
 		}
 		
-		// ##### ユーザ参照制限 #####
-		// ゲストユーザはユーザ制限のない記事のみ参照可能
-		if (empty($userId)){
-			$queryStr .= 'AND be_user_limited = false ';		// ユーザ制限のないデータ
+		// カテゴリー
+		if (isset($categoryId)){
+			$queryStr .=     'AND bw_category_id = ? ';
+			$params[] = $categoryId;// 記事カテゴリー
 		}
-		// ブログごとの参照制限
-		$queryStr .=     'AND (be_blog_id = \'\' ';
-		$queryStr .=     'OR (be_blog_id != \'\' ';
-		$queryStr .=     'AND ((bl_owner_id = ? AND bl_owner_id != 0) ';	$params[] = $userId;
-		$queryStr .=     'OR bl_user_limited = false ';
-		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id = \'\' AND 0 != ' . $userId . ') ';
-		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id != \'\' AND bl_limited_user_id LIKE \'%' . M3_USER_ID_SEPARATOR . $userId . M3_USER_ID_SEPARATOR . '%\')))) ';
-		
-		// 検索条件
-		if (!empty($startDt)){
-			$queryStr .=    'AND ? <= be_regist_dt ';
-			$params[] = $startDt;
-		}
-		if (!empty($endDt)){
-			$queryStr .=    'AND be_regist_dt < ? ';
-			$params[] = $endDt;
-		}
-		
-		// ##### アクティブな記事のみ取得 #####
-		$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
-		$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
+
+		// ##### コンテンツ参照制限 #####
+		// 公開状態
+		$queryStr .=     'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+		$queryStr .=     'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
 	
-		// 公開期間を指定
+		// 公開期間
 		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
 		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
 		$params[] = $initDt;
@@ -456,8 +428,91 @@ class blogLibDb extends BaseDb
 		$params[] = $initDt;
 		$params[] = $initDt;
 		$params[] = $now;
-
-		return $this->selectRecordCount($queryStr, $params);
+		
+		// ##### ユーザ参照制限 #####
+		// ゲストユーザはユーザ制限のない記事のみ参照可能
+		if (empty($userId)){
+			$queryStr .= 'AND be_user_limited = false ';		// ユーザ制限のないデータ
+		}
+		// ブログごとのユーザ参照制限
+		$queryStr .=     'AND (be_blog_id = \'\' ';
+		$queryStr .=     'OR (be_blog_id != \'\' ';
+		$queryStr .=     'AND ((bl_owner_id = ? AND bl_owner_id != 0) ';	$params[] = $userId;
+		$queryStr .=     'OR bl_user_limited = false ';
+		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id = \'\' AND 0 != ' . $userId . ') ';
+		$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id != \'\' AND bl_limited_user_id LIKE \'%' . M3_USER_ID_SEPARATOR . $userId . M3_USER_ID_SEPARATOR . '%\')))) ';
+		
+		return array($queryStr, $params);
 	}
+	/**
+	 * 公開中のエントリーの前後のエントリー項目を取得
+	 *
+	 * @param int       $type				前後記事のタイプ(0=前方,1=後方)
+	 * @param timestamp $regDate			基準となる記事の登録日時
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param int       $userId				参照制限用ユーザID
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @return array 						記事のレコード。取得なしの場合はfalseを返す。
+	 */
+	function getPublicPrevNextEntry($type, $regDate, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $categoryId = null, $blogId = null)
+	{
+		$retStatus = false;
+					
+		if ($regDate == $this->gEnv->getInitValueOfTimestamp()){
+			return false;
+		} else {
+			$isPrev = true;		// 前方データを取得するかどうか
+			$params = array();
+			$queryStr  = 'SELECT distinct(be_serial) FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
+			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
+			$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
+			
+			// ソート順を決める
+			if ($type == 1) $isPrev = false;
+			if ($order == 1) $isPrev = !$isPrev;
+			
+			if ($isPrev){			// 前の記事を取得する場合
+				$queryStr .=     'AND be_regist_dt < ? '; $params[] = $regDate;		// ***** 登録日時で前後を取得 *****
+			} else {
+				$queryStr .=     'AND ? < be_regist_dt '; $params[] = $regDate;		// ***** 登録日時で前後を取得 *****
+			}
+		
+			// 検索条件を付加
+			list($condQueryStr, $condParams) = $this->_createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId, $blogId);
+			$queryStr .= $condQueryStr;
+			$params = array_merge($params, $condParams);
+		
+			// シリアル番号を取得
+			$serialArray = array();
+			$ret = $this->selectRecords($queryStr, $params, $serialRows);
+			if ($ret){
+				for ($i = 0; $i < count($serialRows); $i++){
+					$serialArray[] = $serialRows[$i]['be_serial'];
+				}
+			}
+			$serialStr = implode(',', $serialArray);
+			if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
+			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
+			$queryStr .=   'WHERE be_serial in (' . $serialStr . ') ';
+		
+			$ord = '';
+			if ($isPrev) $ord = 'DESC ';
+			$queryStr .=   'ORDER BY be_regist_dt ' . $ord . 'LIMIT 1';// 投稿順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret) $retStatus = $row;
+		}
+		return $retStatus;
+	}
+
 }
 ?>
