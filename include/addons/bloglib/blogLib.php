@@ -209,7 +209,27 @@ class blogLib extends Addon
 		return $itemCount;
 	}
 	/**
-	 * 公開中のエントリー項目を取得。アクセス制限も行う。
+	 * 公開中の記事数を取得。アクセス制限も行う。
+	 *
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @return int							項目数
+	 */
+	function getPublicContentCount($now, $startDt, $endDt, $keywords, $langId, $categoryId = null, $blogId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$itemCount = $this->db->getPublicEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $userId, $categoryId, $blogId);
+		return $itemCount;
+	}
+	/**
+	 * 公開中の記事を取得。アクセス制限も行う。
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)

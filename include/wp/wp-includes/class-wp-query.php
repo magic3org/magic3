@@ -1697,6 +1697,11 @@ class WP_Query {
 		} else {
 			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, 1/*ページ番号*/);
 			$this->posts = $gContentApi->getContentList();
+			
+			// コンテンツ総数を取得
+			$viewCount = $gContentApi->getContentViewCount();		// １ページあたりの表示記事数
+			$this->found_posts = $gContentApi->getContentCount();		// コンテンツ総数
+			$this->max_num_pages = ceil($this->found_posts / $viewCount);		// 総ページ数
 		}
 
 		// Ensure that any posts added/modified via one of the filters above are

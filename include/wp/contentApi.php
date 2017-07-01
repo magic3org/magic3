@@ -168,6 +168,34 @@ class ContentApi extends BaseApi
 		return $this->contentArray;
 	}
 	/**
+	 * [WordPressテンプレート用API]コンテンツ総数を取得
+	 *
+	 * 機能: getContentList()の検索条件でコンテンツの総数を取得。
+	 *
+	 * @return int     			コンテンツ総数
+	 */
+	function getContentCount()
+	{
+		// 取得条件にコンテンツIDが設定されている場合は総数0を返す
+		if (!empty($this->contentId)) return 0;
+		
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj();
+		
+		// コンテンツ総数取得
+		$count = $addonObj->getPublicContentCount($this->now, $startDt, $endDt, $keywords, $this->langId, null/*カテゴリーID*/, null/*ブログID*/);
+		return $count;
+	}
+	/**
+	 * [WordPressテンプレート用API]1ページあたりのコンテンツ表示数を取得
+	 *
+	 * @return int     			コンテンツ数
+	 */
+	function getContentViewCount()
+	{
+		return $this->limit;
+	}
+	/**
 	 * [WordPressテンプレート用API]現在取得中のコンテンツ基準で前のコンテンツを取得
 	 *
 	 * @return object     				WP_Postオブジェクト
