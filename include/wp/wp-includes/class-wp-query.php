@@ -1665,8 +1665,15 @@ class WP_Query {
 	 */
 	public function get_posts() {
 		global $gContentApi;
+		global $gRequestManager;
 		
-		// ##### DBからコンテンツを取得 ###
+		// ##### URLパラメータを解析 #####
+		$this->query_vars = array();
+		$value = absint($gRequestManager->trimValueOf('page'));
+		$this->query_vars['paged'] = $value;
+		if ($value > 1) $this->is_paged = true;
+			
+		// ##### DBからコンテンツを取得 #####
 		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
 		$contentType = $gContentApi->getContentType();
 		if (empty($contentType)){

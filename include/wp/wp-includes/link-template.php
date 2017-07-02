@@ -2110,7 +2110,7 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 	$request = preg_replace('|^'. $home_root . '|i', '', $request);
 	$request = preg_replace('|^/+|', '', $request);
 
-	if ( !$wp_rewrite->using_permalinks() || is_admin() ) {
+//	if ( !$wp_rewrite->using_permalinks() || is_admin() ) {
 		$base = trailingslashit( get_bloginfo( 'url' ) );
 
 		if ( $pagenum > 1 ) {
@@ -2118,7 +2118,7 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 		} else {
 			$result = $base . $request;
 		}
-	} else {
+/*	} else {
 		$qs_regex = '|\?.*?$|';
 		preg_match( $qs_regex, $request, $qs_match );
 
@@ -2144,7 +2144,7 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 
 		$result = $base . $request . $query_string;
 	}
-
+*/
 	/**
 	 * Filters the page number link for the current request.
 	 *

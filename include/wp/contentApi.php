@@ -21,6 +21,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 class ContentApi extends BaseApi
 {
 	private $contentType;			// コンテンツタイプ
+	private $accessPoint;			// アクセスポイント(空文字列=PC用,m=携帯用,s=スマートフォン用)
 	private $langId;				// コンテンツの言語(コンテンツ取得用)
 	private $limit;					// コンテンツ取得数(コンテンツ取得用)
 	private $pageNo;				// ページ番号(1～)(コンテンツ取得用)
@@ -44,34 +45,28 @@ class ContentApi extends BaseApi
 	 */
 	function __construct()
 	{
-		global $gPageManager;
-		global $gSystemManager;
-		global $gEnvManager;
-		global $gRequestManager;
-		global $gOpeLogManager;
-		
 		// 親クラスを呼び出す
 		parent::__construct();
 		
 		// コンテンツタイプを取得
 		// コンテンツタイプが設定されているページの場合は該当するコンテンツタイプのデータでWordPressの画面処理を行い、コンテンツタイプがない場合はMagic3のウィジェット処理で出力
-//		$this->contentType = $gSystemManager->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ
+//		$this->contentType = $this->gSystem->getSystemConfig(self::CF_DEFAULT_CONTENT_TYPE);// デフォルトコンテンツタイプ
 //		if (empty($this->contentType)) $this->contentType = self::DEFAULT_CONTENT_TYPE;
 		$this->contentType = '';
 			
 		// 現在のページにコンテンツタイプがある場合は取得
-		$contentType = $gPageManager->getContentType();
+		$contentType = $this->gPage->getContentType();
 		if (!empty($contentType)){
 			// メインコンテンツタイプのみ対象とする
-			$mainContentTypes = $gPageManager->getMainContentTypes();
+			$mainContentTypes = $this->gPage->getMainContentTypes();
 			if (in_array($contentType, $mainContentTypes)) $this->contentType = $contentType;
 		}
 		
 		// コンテンツのアクセス権のチェック(メインウィジェットがページに配置されているか)
-		$widgetId = $gPageManager->getWidgetIdWithPageInfoByContentType($gEnvManager->getCurrentPageId(), $this->contentType);
+		$widgetId = $this->gPage->getWidgetIdWithPageInfoByContentType($this->gEnv->getCurrentPageId(), $this->contentType);
 		if (empty($widgetId)){
 			$msgDetail = '対策：画面構成機能を使用して、該当するコンテンツタイプのページ属性のページにそのコンテンツを処理するメインウィジェットを配置します。';
-			$gOpeLogManager->writeError(__METHOD__, 'デフォルトのコンテンツタイプに対応するメインウィジェットが配置されていません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
+			$this->gOpeLog->writeError(__METHOD__, 'デフォルトのコンテンツタイプに対応するメインウィジェットが配置されていません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
 			
 			// エラー処理
 			$this->contentType = '';
@@ -87,19 +82,17 @@ class ContentApi extends BaseApi
 	 */
 	function _getAddonObj()
 	{
-		global $gInstanceManager;
-		
 		switch ($this->contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
-			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_CONTENT);
+			$addonObj = $this->gInstance->getObject(self::ADDON_OBJ_ID_CONTENT);
 			break;
 		case M3_VIEW_TYPE_PRODUCT:	// 製品
-			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_PRODUCT);
+			$addonObj = $this->gInstance->getObject(self::ADDON_OBJ_ID_PRODUCT);
 			break;
 		case M3_VIEW_TYPE_BBS:	// BBS
 			break;
 		case M3_VIEW_TYPE_BLOG:	// ブログ
-			$addonObj = $gInstanceManager->getObject(self::ADDON_OBJ_ID_BLOG);
+			$addonObj = $this->gInstance->getObject(self::ADDON_OBJ_ID_BLOG);
 			break;
 		case M3_VIEW_TYPE_WIKI:	// Wiki
 			break;
@@ -124,8 +117,6 @@ class ContentApi extends BaseApi
 	 */
 	public function setCondition($params, $langId, $limit, $pageNo)
 	{
-		global $gEnvManager;
-
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
 		
@@ -133,7 +124,8 @@ class ContentApi extends BaseApi
 		$viewCount = $addonObj->getPublicContentViewCount();
 		
 		// 初期値設定
-		$this->langId = $gEnvManager->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
+		$this->accessPoint = $this->gEnv->getAccessDir();		// アクセスポイント
+		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
 		$this->limit = $viewCount;					// コンテンツ取得数(コンテンツ取得用)
 		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
 		$this->order = 1;							// コンテンツ並び順。デフォルトは降順。
@@ -353,31 +345,27 @@ class ContentApi extends BaseApi
 	 */
 	function _convertM3ToHtml($src, $convBr = true, $contentInfo = array())
 	{
-		global $gInstanceManager;
-		global $gPageManager;
-		global $gEnvManager;
-		
 		// ### コンテンツ内容のチェック ###
 		// Googleマップが含まれている場合はコンテンツ情報として登録->Googleマップライブラリの読み込み指示
 		$pos = strpos($src, self::DETECT_GOOGLEMAPS);
-		if ($pos !== false) $gPageManager->setIsContentGooglemaps(true);
+		if ($pos !== false) $this->gPage->setIsContentGooglemaps(true);
 		
 		// URLを求める
-		$rootUrl = $gEnvManager->getRootUrlByCurrentPage();
-//		$widgetUrl = str_replace($gEnvManager->getRootUrl(), $rootUrl, $gEnvManager->getCurrentWidgetRootUrl());
+		$rootUrl = $this->gEnv->getRootUrlByCurrentPage();
+//		$widgetUrl = str_replace($this->gEnv->getRootUrl(), $rootUrl, $this->gEnv->getCurrentWidgetRootUrl());
 		
 		// パスを変換
 		$dest = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $src);// アプリケーションルートを変換
 //		$dest = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_URL . M3_TAG_END, $widgetUrl, $dest);// ウィジェットルートを変換
 		
 		// コンテンツマクロ変換
-		$dest = $gInstanceManager->getTextConvManager()->convContentMacro($dest, $convBr/*改行コードをbrタグに変換*/, $contentInfo, true/*変換後の値をHTMLエスケープ処理*/);
+		$dest = $this->gInstance->getTextConvManager()->convContentMacro($dest, $convBr/*改行コードをbrタグに変換*/, $contentInfo, true/*変換後の値をHTMLエスケープ処理*/);
 		
 		// ウィジェット埋め込みタグを変換
-		$gInstanceManager->getTextConvManager()->convWidgetTag($dest, $dest);
+		$this->gInstance->getTextConvManager()->convWidgetTag($dest, $dest);
 		
 		// 残っているMagic3タグ削除
-		$dest = $gInstanceManager->getTextConvManager()->deleteM3Tag($dest);
+		$dest = $this->gInstance->getTextConvManager()->deleteM3Tag($dest);
 		return $dest;
 	}
 	/**
@@ -387,22 +375,21 @@ class ContentApi extends BaseApi
 	 */
 	function getDefaultThumbInfo()
 	{
-		global $gInstanceManager;
 		static $thumbInfoArray;
 		
 		if (!isset($thumbInfoArray)){
 			// アイキャッチ画像の情報を取得
-			$formats = $gInstanceManager->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
-			$ret = $gInstanceManager->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
+			$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
+			$ret = $this->gInstance->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
 		
-			$filename = $gInstanceManager->getImageManager()->getThumbFilename(0, $formats[0]);		// デフォルト画像ファイル名
-			$thumbPath = $gInstanceManager->getImageManager()->getSystemThumbPath($this->contentType, 0/*PC用*/, $filename);
+			$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $formats[0]);		// デフォルト画像ファイル名
+			$thumbPath = $this->gInstance->getImageManager()->getSystemThumbPath($this->contentType, 0/*PC用*/, $filename);
 			if (file_exists($thumbPath)){
-				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl($this->contentType, 0/*PC用*/, $filename);
+				$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl($this->contentType, 0/*PC用*/, $filename);
 				$thumbInfoArray = array($thumbPath, $thumbUrl, $imageSize, $imageSize);
 			} else {
 				$msgDetail = '画像パス:' . $thumbPath;
-				$gOpeLogManager->writeError(__METHOD__, 'アイキャッチ用のデフォルト画像が見つかりません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
+				$this->gOpeLog->writeError(__METHOD__, 'アイキャッチ用のデフォルト画像が見つかりません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
 			}
 		}
 		return $thumbInfoArray;
@@ -415,11 +402,8 @@ class ContentApi extends BaseApi
 	 */
 	function getContentUrl($id)
 	{
-		global $gInstanceManager;
-		global $gEnvManager;
-		
-		$linkInfoObj = $gInstanceManager->getObject(self::LINKINFO_OBJ_ID);
-		$url = $linkInfoObj->getContentUrl($gEnvManager->getAccessDir()/*アクセスポイント*/, $this->contentType, $id, $this->langId);
+		$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
+		$url = $linkInfoObj->getContentUrl($this->accessPoint/*アクセスポイント*/, $this->contentType, $id, $this->langId);
 		return $url;
 	}
 	/**
@@ -439,7 +423,6 @@ class ContentApi extends BaseApi
 	 */
 	function setContentId($idStr)
 	{
-		global $gOpeLogManager;
 		global $wp_query;
 		
 		// IDを解析しエラーチェック。複数の場合は配列に格納する。
@@ -469,6 +452,38 @@ class ContentApi extends BaseApi
 			break;
 		}
 		return true;
+	}
+	/**
+	 * ページリンク用URL取得
+	 *
+	 * @param int $pageNo			ページ番号(1～)。
+	 * @return string				URL
+	 */
+	function getPageLinkUrl($pageNo)
+	{
+		$baseUrl = '';
+		$urlParams = '';
+		
+		// デフォルトページの場合はページIDは付加しない
+		$subId = $this->gEnv->getCurrentPageSubId();
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = '&' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		
+		// ベースURLを取得
+		switch ($this->accessPoint){
+		case '':			// PC用
+		default:
+			$baseUrl = $this->gEnv->getDefaultUrl();
+			break;
+		case 'm':			// 携帯用
+			$baseUrl = $this->gEnv->getDefaultMobileUrl();
+			break;
+		case 's':			// スマートフォン用
+			$baseUrl = $this->gEnv->getDefaultSmartphoneUrl();
+			break;
+		}
+		
+		$url = $this->getUrl($baseUrl . '?' . M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo . $urlParams);
+		return $url;
 	}
 }
 ?>
