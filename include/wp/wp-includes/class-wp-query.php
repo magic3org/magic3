@@ -1669,9 +1669,10 @@ class WP_Query {
 		
 		// ##### URLパラメータを解析 #####
 		$this->query_vars = array();
-		$value = absint($gRequestManager->trimValueOf('page'));
-		$this->query_vars['paged'] = $value;
-		if ($value > 1) $this->is_paged = true;
+		// ページ番号
+		$pageNo = absint($gRequestManager->trimValueOf('page'));
+		$this->query_vars['paged'] = $pageNo;
+		if ($pageNo > 1) $this->is_paged = true;
 			
 		// ##### DBからコンテンツを取得 #####
 		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
@@ -1702,7 +1703,7 @@ class WP_Query {
 			$wpPostObj = new WP_Post($post);
 			$this->posts = array($wpPostObj);
 		} else {
-			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, 1/*ページ番号*/);
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/);
 			$this->posts = $gContentApi->getContentList();
 			
 			// コンテンツ総数を取得
