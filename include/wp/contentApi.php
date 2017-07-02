@@ -466,7 +466,7 @@ class ContentApi extends BaseApi
 		
 		// デフォルトページの場合はページIDは付加しない
 		$subId = $this->gEnv->getCurrentPageSubId();
-		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = '&' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
 		
 		// ベースURLを取得
 		switch ($this->accessPoint){
@@ -482,7 +482,12 @@ class ContentApi extends BaseApi
 			break;
 		}
 		
-		$url = $this->getUrl($baseUrl . '?' . M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo . $urlParams);
+		$baseUrl .= '?';
+		if (!empty($urlParams)){
+			$baseUrl .= '?' . $urlParams . '&';
+		}
+		$baseUrl .= M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo;
+		$url = $this->getUrl($baseUrl);
 		return $url;
 	}
 }
