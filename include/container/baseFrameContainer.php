@@ -55,10 +55,23 @@ class BaseFrameContainer extends Core
 			if (($this->gEnv->canUseDb() && $this->gSystem->canInitSystem()) ||		// システム初期化モードのとき
 				!$this->gConfig->isConfigured()){									// 設定ファイルに設定がないとき(初回インストール)
 				
-				// インストーラファイルがない場合は回復
-				$this->gInstance->getFileManager()->recoverInstaller();
+				// 旧システムがある場合はadminディレクトリまでアクセスしてインストーラを実行。
+				$isRedirect = false;
+				if ($this->_isExistsOldSystemDir()){
+					if ($this->gEnv->isAdminDirAccess()) $isRedirect = true;
+				} else {
+					$isRedirect = true;
+				}
+				
+				if ($isRedirect){
+					// インストーラファイルがない場合は回復
+					$this->gInstance->getFileManager()->recoverInstaller();
 
-				$this->gPage->redirectToInstall();
+					$this->gPage->redirectToInstall();
+				} else {
+					// サイト非公開(システムメンテナンス)表示
+					$this->gPage->showError(503);
+				}
 				return;
 			} else if ($this->gConfig->isConfigured() && !$this->gEnv->canUseDb()){		// DB接続失敗のとき
 				if ($this->gEnv->isAdminDirAccess()){		// 管理画面の場合のみインストーラ起動
@@ -754,7 +767,7 @@ class BaseFrameContainer extends Core
 
 			// WordPressメインオブジェクト作成
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();		// 表示言語を設定
-			$GLOBALS['wp_the_query'] = new WP_Query();
+			$GLOBALS['wp_the_query'] = new WP_Query();				// $wp_the_queryは変更不可変数で$wp_queryは変更可変数
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 			$GLOBALS['wp'] = new WP();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
@@ -1272,6 +1285,23 @@ class BaseFrameContainer extends Core
 		$path = str_replace($templatePath, '', $path);
 		if ($path == $savedPath) $path = 'index.php';
 		return $path;
+	}
+	/**
+	 * 旧システムディレクトリが存在するかどうかを取得
+	 *
+	 * @return bool				true=存在する、false=存在しない
+	 */
+	function _isExistsOldSystemDir()
+	{
+		// 旧システムディレクトリは同ディレクト階層に存在し、ディレクトリ名の先頭に「_」が付加されているディレクトリ
+		$currentDir = $this->gEnv->getSystemRootPath();
+		$parentDir = dirname($currentDir);
+		$dirName = basename($currentDir);
+		if (is_dir($parentDir . '/_' . $dirName)){
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

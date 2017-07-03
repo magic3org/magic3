@@ -112,8 +112,8 @@ function set_query_var( $var, $value ) {
  * @global WP_Query $wp_the_query Copy of the global WP_Query instance created during wp_reset_query().
  */
 function wp_reset_query() {
-	$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
-	wp_reset_postdata();
+//	$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
+//	wp_reset_postdata();
 }
 
 /**
@@ -125,11 +125,11 @@ function wp_reset_query() {
  * @global WP_Query $wp_query Global WP_Query instance.
  */
 function wp_reset_postdata() {
-	global $wp_query;
+/*	global $wp_query;
 
 	if ( isset( $wp_query ) ) {
 		$wp_query->reset_postdata();
-	}
+	}*/
 }
 
 /*

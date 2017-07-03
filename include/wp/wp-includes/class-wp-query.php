@@ -1738,7 +1738,7 @@ class WP_Query {
 	 * @param array  $q      Query variables.
 	 * @param string $limits LIMIT clauses of the query.
 	 */
-	private function set_found_posts( $q, $limits ) {
+/*	private function set_found_posts( $q, $limits ) {
 		global $wpdb;
 		// Bail if posts is an empty array. Continue if posts is an empty string,
 		// null, or false to accommodate caching plugins that fill posts later.
@@ -1746,6 +1746,7 @@ class WP_Query {
 			return;
 
 		if ( ! empty( $limits ) ) {
+		*/
 			/**
 			 * Filters the query to run for retrieving the found posts.
 			 *
@@ -1755,9 +1756,9 @@ class WP_Query {
 			 * @param WP_Query &$this       The WP_Query instance (passed by reference).
 			 */
 //			$this->found_posts = $wpdb->get_var( apply_filters_ref_array( 'found_posts_query', array( 'SELECT FOUND_ROWS()', &$this ) ) );
-		} else {
+/*		} else {
 			$this->found_posts = count( $this->posts );
-		}
+		}*/
 
 		/**
 		 * Filters the number of found posts for the query.
@@ -1768,10 +1769,10 @@ class WP_Query {
 		 * @param WP_Query &$this       The WP_Query instance (passed by reference).
 		 */
 //		$this->found_posts = apply_filters_ref_array( 'found_posts', array( $this->found_posts, &$this ) );
-
+/*
 		if ( ! empty( $limits ) )
 			$this->max_num_pages = ceil( $this->found_posts / $q['posts_per_page'] );
-	}
+	}*/
 
 	/**
 	 * Set up the next post and iterate current post index.
