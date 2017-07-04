@@ -1709,6 +1709,10 @@ class WP_Query {
 			$pageType = $gContentApi->getPageType();
 			if ($pageType == 'search'){
 				$keywords = $gRequestManager->trimValueOf('s');
+				$this->query_vars['s'] = $keywords;
+				
+				// 半角スペースで分割
+				$keywords = explode(' ', $keywords);
 			}
 			
 			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords);

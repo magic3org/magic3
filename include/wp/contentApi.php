@@ -185,7 +185,7 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj();
 		
 		// コンテンツ総数取得
-		$count = $addonObj->getPublicContentCount($this->now, $startDt, $endDt, $keywords, $this->langId, null/*カテゴリーID*/, null/*ブログID*/);
+		$count = $addonObj->getPublicContentCount($this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, null/*カテゴリーID*/, null/*ブログID*/);
 		return $count;
 	}
 	/**
