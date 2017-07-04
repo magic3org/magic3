@@ -490,6 +490,8 @@ class ContentApi extends BaseApi
 	 */
 	function getPageLinkUrl($pageNo)
 	{
+		global $wp_query;
+				
 		$baseUrl = '';
 		$urlParams = '';
 		
@@ -516,6 +518,11 @@ class ContentApi extends BaseApi
 			$baseUrl .= '?' . $urlParams . '&';
 		}
 		$baseUrl .= M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo;
+		
+		// 検索条件が設定されている場合は付加
+		$searchParam = $wp_query->get('s');
+		if (!empty($searchParam)) $baseUrl .= '&s=' . $searchParam;
+		
 		$url = $this->getUrl($baseUrl);
 		return $url;
 	}

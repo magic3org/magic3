@@ -1666,14 +1666,14 @@ class WP_Query {
 	public function get_posts() {
 		global $gContentApi;
 		global $gRequestManager;
-		
+					
 		// ##### URLパラメータを解析 #####
 		$this->query_vars = array();
 		// ページ番号
 		$pageNo = absint($gRequestManager->trimValueOf('page'));
 		$this->query_vars['paged'] = $pageNo;
 		if ($pageNo > 1) $this->is_paged = true;
-			
+		
 		// ##### DBからコンテンツを取得 #####
 		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
 		$contentType = $gContentApi->getContentType();
@@ -1706,7 +1706,7 @@ class WP_Query {
 			$keywords = '';
 			
 			// 検索結果表示の場合はキーワードを取得
-			$pageType = $gContentApi->getPageType();
+			$pageType = $gContentApi->getPageType();		// ページタイプ取得
 			if ($pageType == 'search'){
 				$keywords = $gRequestManager->trimValueOf('s');
 				$this->query_vars['s'] = $keywords;
