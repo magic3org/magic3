@@ -793,6 +793,9 @@ class BaseFrameContainer extends Core
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 				if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT){	// コンテンツIDのとき
+					// ページタイプを設定
+					$GLOBALS['gContentApi']->setPageType('page');
+					
 					// フルパスで返るので相対パスに修正
 					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 					
@@ -809,12 +812,25 @@ class BaseFrameContainer extends Core
 //				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
 //					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 				if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
+					// ページタイプを設定
+					$GLOBALS['gContentApi']->setPageType('single');
+					
 					// フルパスで返るので相対パスに修正
 					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
 					
 					// コンテンツID設定
 					$firstValue = $this->gRequest->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
+				} else {
+					// 検索条件が設定されている場合は検索ページを表示
+					$value = $this->gRequest->trimValueOf('s');
+					if (!empty($value)){
+						// ページタイプを設定
+						$GLOBALS['gContentApi']->setPageType('search');			// 検索結果表示
+					
+						// フルパスで返るので相対パスに修正
+						$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+					}
 				}
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki
@@ -827,6 +843,9 @@ class BaseFrameContainer extends Core
 				break;
 			default:
 				// コンテンツタイプが設定されていないページに場合は、固定ページ用のテンプレートを使用
+				// ページタイプを設定
+				$GLOBALS['gContentApi']->setPageType('page');
+					
 				// フルパスで返るので相対パスに修正
 				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 				break;

@@ -21,11 +21,15 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 class ContentApi extends BaseApi
 {
 	private $contentType;			// コンテンツタイプ
+	private $pageType;				// ページタイプ(WordPressテンプレートのpage,single,search)
 	private $accessPoint;			// アクセスポイント(空文字列=PC用,m=携帯用,s=スマートフォン用)
 	private $langId;				// コンテンツの言語(コンテンツ取得用)
 	private $limit;					// コンテンツ取得数(コンテンツ取得用)
 	private $pageNo;				// ページ番号(1～)(コンテンツ取得用)
 	private $order;					// コンテンツ並び順(0=昇順,1=降順)
+	private $keywords;				// 検索条件(キーワード)
+	private $startDt;				// 検索条件(期間開始日時)
+	private $endDt;					// 検索条件(期間終了日時)
 	private $contentArray;			// 取得コンテンツ
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
 	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
@@ -109,13 +113,16 @@ class ContentApi extends BaseApi
 	/**
 	 * [WordPressテンプレート用API]SQLクエリー用のパラメータを設定
 	 *
-	 * @param array $params			クエリー作成用パラメータ(連想配列)
-	 * @param strin $langId			言語ID。空の場合は現在の言語。
-	 * @param int   $limit			取得する項目数最大値(0の場合はデフォルト値)
-	 * @param int	$pageNo			取得するページ番号(1～)
-	 * @return						なし
+	 * @param array $params				クエリー作成用パラメータ(連想配列)
+	 * @param strin $langId				言語ID。空の場合は現在の言語。
+	 * @param int   $limit				取得する項目数最大値(0の場合はデフォルト値)
+	 * @param int	$pageNo				取得するページ番号(1～)
+	 * @param string,array $keywords	検索条件(キーワード)
+	 * @param timestamp $startDt		検索条件(期間開始日時)
+	 * @param timestamp $endDt			検索条件(期間終了日時)
+	 * @return							なし
 	 */
-	public function setCondition($params, $langId, $limit, $pageNo)
+	public function setCondition($params, $langId, $limit, $pageNo, $keywords = '', $startDt = null, $endDt = null)
 	{
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
@@ -130,6 +137,9 @@ class ContentApi extends BaseApi
 		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
 		$this->order = 1;							// コンテンツ並び順。デフォルトは降順。
 		$this->now = date("Y/m/d H:i:s");			// 現在日時
+		$this->keywords = $keywords;		// 検索条件(キーワード)
+		$this->startDt = $startDt;			// 検索条件(期間開始日時)
+		$this->endDt = $endDt;				// 検索条件(期間終了日時)
 		
 		// パラメータ値で更新
 		if (!empty($langId)) $this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -155,7 +165,7 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj();
 		
 		// データ取得
-		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $startDt, $endDt, $keywords, $this->langId, $this->order, array($this, '_itemListLoop'),  null/*カテゴリーID*/, null/*ブログID*/);
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->order, array($this, '_itemListLoop'),  null/*カテゴリーID*/, null/*ブログID*/);
 		
 		return $this->contentArray;
 	}
@@ -414,6 +424,25 @@ class ContentApi extends BaseApi
 	function getContentType()
 	{
 		return $this->contentType;
+	}
+	/**
+	 * ページタイプを設定
+	 *
+	 * @param string $type					ページタイプ(page,single,search)
+	 * @return								なし
+	 */
+	function setPageType($type)
+	{
+		$this->pageType = $type;
+	}
+	/**
+	 * ページタイプを取得
+	 *
+	 * @return string						ページタイプ(page,single,search)
+	 */
+	function getPageType()
+	{
+		return $this->pageType;
 	}
 	/**
 	 * コンテンツIDを設定

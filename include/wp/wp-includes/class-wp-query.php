@@ -1703,7 +1703,15 @@ class WP_Query {
 			$wpPostObj = new WP_Post($post);
 			$this->posts = array($wpPostObj);
 		} else {
-			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/);
+			$keywords = '';
+			
+			// 検索結果表示の場合はキーワードを取得
+			$pageType = $gContentApi->getPageType();
+			if ($pageType == 'search'){
+				$keywords = $gRequestManager->trimValueOf('s');
+			}
+			
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords);
 			$this->posts = $gContentApi->getContentList();
 			
 			// コンテンツ総数を取得
