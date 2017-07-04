@@ -60,7 +60,7 @@ class contentLibDb extends BaseDb
 	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$keywords			検索キーワード
+	 * @param string,array	$keywords		検索キーワード
 	 * @param string	$langId				言語
 	 * @param int		$order				取得順(0=昇順,1=降順)
 	 * @param int       $userId				参照制限用ユーザID
@@ -110,7 +110,7 @@ class contentLibDb extends BaseDb
 	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$keywords			検索キーワード
+	 * @param string,array	$keywords		検索キーワード
 	 * @param string	$langId				言語
 	 * @param int       $userId				参照制限用ユーザID
 	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
@@ -142,7 +142,7 @@ class contentLibDb extends BaseDb
 	 * @param timestamp $now				現在日時
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$keywords			検索キーワード
+	 * @param string,array	$keywords		検索キーワード
 	 * @param int       $userId				ユーザID
 	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
 	 * @return array						クエリー文字列と配列パラメータの連想配列
@@ -166,6 +166,8 @@ class contentLibDb extends BaseDb
 		
 		// タイトル、本文、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
+			if (is_string($keywords)) $keywords = array($keywords);
+			
 			for ($i = 0; $i < count($keywords); $i++){
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 				$queryStr .=    'AND (cn_name LIKE \'%' . $keyword . '%\' ';

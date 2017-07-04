@@ -143,7 +143,7 @@ class contentLib
 	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$keywords			検索キーワード
+	 * @param string,array	$keywords		検索キーワード
 	 * @param string	$langId				言語
 	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
 	 * @return int							項目数
@@ -165,7 +165,7 @@ class contentLib
 	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$keywords			検索キーワード
+	 * @param string,array	$keywords		検索キーワード
 	 * @param string	$langId				言語
 	 * @param int		$order				取得順(0=昇順,1=降順)
 	 * @param function	$callback			コールバック関数
