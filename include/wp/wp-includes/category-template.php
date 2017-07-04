@@ -1159,7 +1159,7 @@ function term_description( $term = 0, $taxonomy = 'post_tag' ) {
 function get_the_terms( $post, $taxonomy ) {
 	if ( ! $post = get_post( $post ) )
 		return false;
-
+/*
 	$terms = get_object_term_cache( $post->ID, $taxonomy );
 	if ( false === $terms ) {
 		$terms = wp_get_object_terms( $post->ID, $taxonomy );
@@ -1167,7 +1167,10 @@ function get_the_terms( $post, $taxonomy ) {
 			$term_ids = wp_list_pluck( $terms, 'term_id' );
 			wp_cache_add( $post->ID, $term_ids, $taxonomy . '_relationships' );
 		}
-	}
+	}*/
+
+	// カテゴリーの場合のみ処理
+	if ($taxonomy == 'category') $terms = array(get_term($post->ID, $taxonomy));
 
 	/**
 	 * Filters the list of terms attached to the given post.
@@ -1178,8 +1181,8 @@ function get_the_terms( $post, $taxonomy ) {
 	 * @param int            $post_id  Post ID.
 	 * @param string         $taxonomy Name of the taxonomy.
 	 */
-	$terms = apply_filters( 'get_the_terms', $terms, $post->ID, $taxonomy );
-
+//	$terms = apply_filters( 'get_the_terms', $terms, $post->ID, $taxonomy );
+//
 	if ( empty( $terms ) )
 		return false;
 
