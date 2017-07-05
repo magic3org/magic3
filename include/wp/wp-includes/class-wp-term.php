@@ -123,15 +123,15 @@ final class WP_Term {
 	 *                                False for other failures.
 	 */
 	public static function get_instance( $term_id, $taxonomy = null ) {
-		global $wpdb;
+//		global $wpdb;
 
 		$term_id = (int) $term_id;
 		if ( ! $term_id ) {
 			return false;
 		}
 
-		$_term = wp_cache_get( $term_id, 'terms' );
-
+//		$_term = wp_cache_get( $term_id, 'terms' );
+/*
 		// If there isn't a cached version, hit the database.
 		if ( ! $_term || ( $taxonomy && $taxonomy !== $_term->taxonomy ) ) {
 			// Grab all matching terms, in case any are shared between taxonomies.
@@ -186,7 +186,7 @@ final class WP_Term {
 				wp_cache_add( $term_id, $_term, 'terms' );
 			}
 		}
-
+*/
 		$term_obj = new WP_Term( $_term );
 		$term_obj->filter( $term_obj->filter );
 

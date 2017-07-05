@@ -723,8 +723,14 @@ function get_tax_sql( $tax_query, $primary_table, $primary_id_column ) {
  *                                     returned. Returns null for miscellaneous failure.
  */
 function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
+	// $termには、stdClassオブジェクトまたはint値が来る。1の場合「未分類」のWP_Termオブジェクトが返る。
+	// 0の場合は空のWP_Termオブジェクトを生成し、0で「未分類」の意味に変更。
+//	if ( empty( $term ) ) {
+//		return new WP_Error( 'invalid_term', __( 'Empty Term' ) );
+//	}
 	if ( empty( $term ) ) {
-		return new WP_Error( 'invalid_term', __( 'Empty Term' ) );
+		$_term = new WP_Term(0);
+		return $_term;
 	}
 
 	if ( $taxonomy && ! taxonomy_exists( $taxonomy ) ) {
@@ -3859,7 +3865,7 @@ function wp_term_is_shared( $term_id ) {
  * @return string|WP_Error HTML link to taxonomy term archive on success, WP_Error if term does not exist.
  */
 function get_term_link( $term, $taxonomy = '' ) {
-	global $wp_rewrite;
+//	global $wp_rewrite;
 
 	if ( !is_object($term) ) {
 		if ( is_int( $term ) ) {
@@ -3877,7 +3883,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 
 	$taxonomy = $term->taxonomy;
 
-	$termlink = $wp_rewrite->get_extra_permastruct($taxonomy);
+//	$termlink = $wp_rewrite->get_extra_permastruct($taxonomy);
 
 	$slug = $term->slug;
 	$t = get_taxonomy($taxonomy);
