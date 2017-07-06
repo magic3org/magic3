@@ -264,7 +264,7 @@ class ContentApi extends BaseApi
 		if ($contentId == 0){
 			// カテゴリー情報をWP_Termオブジェクトに変換して格納
 			$term = new stdClass;
-			$term->term_id = 0;			// カテゴリーID
+			$term->term_id = -1;			// カテゴリーID。カテゴリーIDが0の場合カテゴリーラベルが非表示になるので0以外を設定。
 			$term->name = __('Uncategorized');		// カテゴリー名
 			$term->taxonomy = 'category';		// 種別はカテゴリーに設定
 

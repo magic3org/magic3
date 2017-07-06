@@ -1176,7 +1176,7 @@ function get_the_terms( $post, $taxonomy ) {
 		// コンテンツに関連したカテゴリーを取得
 		$categoryArray = $gContentApi->getCategory($post->ID);
 		if (empty($categoryArray)){
-			$terms = $gContentApi->getCategory(0);		// 「未分類」カテゴリーを取得
+//			$terms = $gContentApi->getCategory(0);		// 「未分類」カテゴリーを取得
 		} else {
 			$terms = $categoryArray;
 		}
