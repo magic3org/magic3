@@ -1157,6 +1157,8 @@ function term_description( $term = 0, $taxonomy = 'post_tag' ) {
  *                              or the post does not exist, WP_Error on failure.
  */
 function get_the_terms( $post, $taxonomy ) {
+	global $gContentApi;
+		
 	if ( ! $post = get_post( $post ) )
 		return false;
 /*
@@ -1170,7 +1172,15 @@ function get_the_terms( $post, $taxonomy ) {
 	}*/
 
 	// カテゴリーの場合のみ処理
-	if ($taxonomy == 'category') $terms = array(get_term($post->ID, $taxonomy));
+	if ($taxonomy == 'category'){
+		// コンテンツに関連したカテゴリーを取得
+		$categoryArray = $gContentApi->getCategory($post->ID);
+		if (empty($categoryArray)){
+			$terms = $gContentApi->getCategory(0);		// 「未分類」カテゴリーを取得
+		} else {
+			$terms = $categoryArray;
+		}
+	}
 
 	/**
 	 * Filters the list of terms attached to the given post.

@@ -515,6 +515,30 @@ class blogLibDb extends BaseDb
 		}
 		return $retStatus;
 	}
-
+	/**
+	 * 記事に関連したカテゴリーを取得
+	 *
+	 * @param int,array		$serial			シリアル番号
+	 * @return array						取得レコード、false=取得なし
+	 */
+	function getContentCategoryBySerial($serial)
+	{
+		if (!is_array($serial)) $serial = array($serial);
+		
+		// CASE文作成
+		$caseStr = 'CASE be_serial ';
+		for ($i = 0; $i < count($serial); $i++){
+			$caseStr .= 'WHEN ' . $serial[$i] . ' THEN ' . $i . ' ';
+		}
+		$caseStr .= 'END AS no';
+		
+		// シリアル番号に対応したカテゴリーをすべて取得
+		$queryStr  = 'SELECT *, ' . $caseStr . ' FROM blog_entry RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial LEFT JOIN blog_category ON bw_category_id = bc_id AND bc_deleted = false ';
+		$queryStr .=   'WHERE be_serial in (' . implode(",", $serial) . ') ';
+		$queryStr .=   'ORDER BY no, bc_sort_order, bc_id ';		// カテゴリー並び順
+		$ret = $this->selectRecords($queryStr, array(), $rows);
+		if ($ret) $ret = $rows;
+		return $ret;
+	}
 }
 ?>

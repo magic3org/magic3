@@ -31,6 +31,8 @@ class ContentApi extends BaseApi
 	private $startDt;				// 検索条件(期間開始日時)
 	private $endDt;					// 検索条件(期間終了日時)
 	private $contentArray;			// 取得コンテンツ
+	private $serialArray;			// 取得したコンテンツのシリアル番号
+	private $categoryArray;			// 取得コンテンツに関連したカテゴリー
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
 	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
 	private $relativePosts;			// 現在のコンテンツに関連したWP_Postオブジェクト
@@ -78,6 +80,7 @@ class ContentApi extends BaseApi
 		
 		// メンバー変数初期化
 		$this->relativePosts = array();			// 現在のコンテンツに関連したWP_Postオブジェクト
+		$this->serialArray = array();			// 取得したコンテンツのシリアル番号
 	}
 	/**
 	 * 対象のコンテンツタイプのアドオンオブジェクトを取得
@@ -250,6 +253,89 @@ class ContentApi extends BaseApi
 		return $this->relativePosts[$id];
 	}
 	/**
+	 * 取得コンテンツに関連付けされているカテゴリーを取得
+	 *
+	 * @param string $id					コンテンツID
+	 * @return array						関連付けされているカテゴリー
+	 */
+	function getCategory($contentId)
+	{
+		// コンテンツIDが0のときは「未分類」カテゴリーを返す
+		if ($contentId == 0){
+			// カテゴリー情報をWP_Termオブジェクトに変換して格納
+			$term = new stdClass;
+			$term->term_id = 0;			// カテゴリーID
+			$term->name = __('Uncategorized');		// カテゴリー名
+			$term->taxonomy = 'category';		// 種別はカテゴリーに設定
+
+			// WP_Termオブジェクトに変換
+			$wpTermObj = new WP_Term($term);
+					
+			return array($wpTermObj);
+		}
+		
+		// 初回取得時にDBからデータを取得
+		if (!isset($this->categoryArray)){			// 取得コンテンツに関連したカテゴリー
+			// 取得カテゴリー初期化
+			$this->categoryArray = array();
+			
+			// アドオンオブジェクト取得
+			$addonObj = $this->_getAddonObj();
+		
+			// コンテンツのシリアル番号でカテゴリーを取得
+			$rows = $addonObj->getContentCategoryBySerial($this->serialArray);
+			if ($rows){
+				$savedContentId = 0;		// コンテンツID退避用
+				$categoryArray = array();
+				$rowCount = count($rows);
+				for ($i = 0; $i < $rowCount; $i++){
+					$row = $rows[$i];
+
+					// IDを解析しエラーチェック。複数の場合は配列に格納する。
+					switch ($this->contentType){
+					case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+						$id		= $row['cn_id'];			// コンテンツID
+	//					$categoryId = ;// カテゴリーID
+	//					$categoryTitle	= ;	// カテゴリー名
+						break;
+					case M3_VIEW_TYPE_BLOG:	// ブログ
+						$id				= $row['be_id'];	// コンテンツID
+						$categoryId		= $row['bc_id'];	// カテゴリーID
+						$categoryTitle	= $row['bc_name'];	// カテゴリー名
+						break;
+					}
+		
+					// カテゴリー情報をWP_Termオブジェクトに変換して格納
+					$term = new stdClass;
+					$term->term_id = $categoryId;			// カテゴリーID
+					$term->name = $categoryTitle;		// カテゴリー名
+					$term->taxonomy = 'category';		// 種別はカテゴリーに設定
+		
+					// WP_Termオブジェクトに変換
+					$wpTermObj = new WP_Term($term);
+					
+					if ($id != $savedContentId){
+						// コンテンツが変更された場合は一旦保存
+						if ($savedContentId > 0) $this->categoryArray[$savedContentId] = $categoryArray;
+						
+						// 現在のコンテンツIDを更新
+						$categoryArray = array();
+						$savedContentId = $id;
+					}
+					
+					// WP_Termオブジェクトを追加
+					$categoryArray[] = $wpTermObj;
+					
+					// 最後の項目の処理
+					if ($i == $rowCount -1){
+						if (count($categoryArray) > 0) $this->categoryArray[$savedContentId] = $categoryArray;
+					}
+				}
+			}
+		}
+		return $this->categoryArray[$contentId];
+	}
+	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
@@ -340,7 +426,12 @@ class ContentApi extends BaseApi
 		$post->display_name = $authorName;			// コンテンツ登録者名
 		$post->authorUrl = $authorUrl;				// コンテンツ登録者URL
 		
+		// WP_Postオブジェクトに変換
 		$wpPostObj = new WP_Post($post);
+		
+		// シリアル番号を保存
+		$this->serialArray[] = $serial;			// 取得したコンテンツのシリアル番号
+		
 		return $wpPostObj;
 	}
 	/**

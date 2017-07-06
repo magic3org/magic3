@@ -275,5 +275,16 @@ class blogLib extends Addon
 		$row = $this->db->getPublicPrevNextEntry($type, $regDate, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $categoryId, $blogId);
 		return $row;
 	}
+	/**
+	 * 記事に関連したカテゴリーを取得
+	 *
+	 * @param int,array		$serial			シリアル番号
+	 * @return array						取得レコード、false=取得なし
+	 */
+	function getContentCategoryBySerial($serial)
+	{
+		$rows = $this->db->getContentCategoryBySerial($serial);
+		return $rows;
+	}
 }
 ?>
