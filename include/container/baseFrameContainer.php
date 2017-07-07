@@ -824,14 +824,29 @@ class BaseFrameContainer extends Core
 					$firstValue = $this->gRequest->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
 				} else {
-					// 検索条件が設定されている場合は検索ページを表示
-					$value = $this->gRequest->trimValueOf('s');
+					// カテゴリーが設定されている場合はカテゴリー画面を表示
+					$value = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);
 					if (!empty($value)){
 						// ページタイプを設定
-						$GLOBALS['gContentApi']->setPageType('search');			// 検索結果表示
-					
+						$GLOBALS['gContentApi']->setPageType('category');			// カテゴリー表示
+				
+						// カテゴリー用テンプレート取得
+						$template = get_category_template();
+						if (empty($template)) $template = get_archive_template();		// カテゴリー用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
+						
 						// フルパスで返るので相対パスに修正
-						$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+						$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);		// カテゴリーテンプレート
+					}
+					// 検索条件が設定されている場合は検索画面を表示
+					if (empty($value)){
+						$value = $this->gRequest->trimValueOf('s');
+						if (!empty($value)){
+							// ページタイプを設定
+							$GLOBALS['gContentApi']->setPageType('search');			// 検索結果表示
+					
+							// フルパスで返るので相対パスに修正
+							$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+						}
 					}
 				}
 				break;

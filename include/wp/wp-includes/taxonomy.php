@@ -3865,9 +3865,10 @@ function wp_term_is_shared( $term_id ) {
  * @return string|WP_Error HTML link to taxonomy term archive on success, WP_Error if term does not exist.
  */
 function get_term_link( $term, $taxonomy = '' ) {
+	global $gContentApi;
 //	global $wp_rewrite;
 
-	if ( !is_object($term) ) {
+/*	if ( !is_object($term) ) {
 		if ( is_int( $term ) ) {
 			$term = get_term( $term, $taxonomy );
 		} else {
@@ -3881,21 +3882,33 @@ function get_term_link( $term, $taxonomy = '' ) {
 	if ( is_wp_error( $term ) )
 		return $term;
 
-	$taxonomy = $term->taxonomy;
-
+	$taxonomy = $term->taxonomy;*/
+	
+	// Magic3修正
+	if (empty($taxonomy)){
+		if (is_object($term)) $taxonomy = $term->taxonomy;
+	}
+	if (is_object($term)){
+		$term_id = $term->term_id;
+	} else {
+		$term_id = intval($term);
+	}
+		
 //	$termlink = $wp_rewrite->get_extra_permastruct($taxonomy);
 
 	$slug = $term->slug;
 	$t = get_taxonomy($taxonomy);
 
 	if ( empty($termlink) ) {
-		if ( 'category' == $taxonomy )
-			$termlink = '?cat=' . $term->term_id;
-		elseif ( $t->query_var )
+		if ( 'category' == $taxonomy ){			// カテゴリー画面へのURL
+//			$termlink = '?cat=' . $term->term_id;
+			$termlink = $gContentApi->getCategoryUrl($term_id);
+/*		} elseif ( $t->query_var ){
 			$termlink = "?$t->query_var=$slug";
-		else
-			$termlink = "?taxonomy=$taxonomy&term=$slug";
-		$termlink = home_url($termlink);
+		} else {
+			$termlink = "?taxonomy=$taxonomy&term=$slug";*/
+		}
+		if (empty($termlink)) $termlink = home_url($termlink);
 	} else {
 		if ( $t->rewrite['hierarchical'] ) {
 			$hierarchical_slugs = array();
@@ -3948,7 +3961,8 @@ function get_term_link( $term, $taxonomy = '' ) {
 	 * @param object $term     Term object.
 	 * @param string $taxonomy Taxonomy slug.
 	 */
-	return apply_filters( 'term_link', $termlink, $term, $taxonomy );
+//	return apply_filters( 'term_link', $termlink, $term, $taxonomy );
+	return $termlink;
 }
 
 /**
