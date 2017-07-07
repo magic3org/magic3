@@ -1706,14 +1706,17 @@ class WP_Query {
 			$keywords = '';
 			$category = null;			// カテゴリー。設定なしの場合はnullを設定。
 			
-			// 検索結果表示の場合はキーワードを取得
+			// ページタイプごとの処理
 			$pageType = $gContentApi->getPageType();		// ページタイプ取得
 			switch ($pageType){
 			case 'category':
 				$value = absint($gRequestManager->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID));
-				if ($value > 0) $category = $value;
+				if ($value > 0){
+					$category = $value;
+					$this->query_vars['cat'] = $category;
+				}
 				break;
-			case 'search':
+			case 'search':		// 検索結果表示の場合はキーワードを取得
 				$keywords = $gRequestManager->trimValueOf('s');
 				$this->query_vars['s'] = $keywords;
 				

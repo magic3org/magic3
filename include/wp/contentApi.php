@@ -651,8 +651,10 @@ class ContentApi extends BaseApi
 		$baseUrl .= M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo;
 		
 		// 検索条件が設定されている場合は付加
-		$searchParam = $wp_query->get('s');
-		if (!empty($searchParam)) $baseUrl .= '&s=' . $searchParam;
+		$urlParam = $wp_query->get('cat');
+		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $urlParam;		// カテゴリーを付加
+		$urlParam = $wp_query->get('s');		// 任意の検索キーワードは最後に付加
+		if ($urlParam != '') $baseUrl .= '&s=' . $urlParam;
 		
 		$url = $this->getUrl($baseUrl);
 		return $url;
