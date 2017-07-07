@@ -306,6 +306,7 @@ class blogLibDb extends BaseDb
 		
 		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 		$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
+		if (isset($categoryId)) $queryStr .=   'RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
 		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
 		$queryStr .=     'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
@@ -350,6 +351,7 @@ class blogLibDb extends BaseDb
 		$params = array();
 		
 		$queryStr = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+		if (isset($categoryId)) $queryStr .=   'RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=    'AND be_language_id = ? ';	$params[] = $langId;

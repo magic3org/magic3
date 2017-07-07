@@ -30,6 +30,7 @@ class ContentApi extends BaseApi
 	private $keywords;				// 検索条件(キーワード)
 	private $startDt;				// 検索条件(期間開始日時)
 	private $endDt;					// 検索条件(期間終了日時)
+	private $category;				// 検索条件(カテゴリー)
 	private $contentArray;			// 取得コンテンツ
 	private $serialArray;			// 取得したコンテンツのシリアル番号
 	private $categoryArray;			// 取得コンテンツに関連したカテゴリー
@@ -125,7 +126,7 @@ class ContentApi extends BaseApi
 	 * @param timestamp $endDt			検索条件(期間終了日時)
 	 * @return							なし
 	 */
-	public function setCondition($params, $langId, $limit, $pageNo, $keywords = '', $startDt = null, $endDt = null)
+	public function setCondition($params, $langId, $limit, $pageNo, $keywords = '', $startDt = null, $endDt = null, $category = null)
 	{
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
@@ -143,6 +144,7 @@ class ContentApi extends BaseApi
 		$this->keywords = $keywords;		// 検索条件(キーワード)
 		$this->startDt = $startDt;			// 検索条件(期間開始日時)
 		$this->endDt = $endDt;				// 検索条件(期間終了日時)
+		$this->category = $category;				// 検索条件(カテゴリー)
 		
 		// パラメータ値で更新
 		if (!empty($langId)) $this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -168,7 +170,7 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj();
 		
 		// データ取得
-		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->order, array($this, '_itemListLoop'),  null/*カテゴリーID*/, null/*ブログID*/);
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->order, array($this, '_itemListLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
 		
 		return $this->contentArray;
 	}
@@ -188,7 +190,7 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj();
 		
 		// コンテンツ総数取得
-		$count = $addonObj->getPublicContentCount($this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, null/*カテゴリーID*/, null/*ブログID*/);
+		$count = $addonObj->getPublicContentCount($this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->category/*カテゴリーID*/, null/*ブログID*/);
 		return $count;
 	}
 	/**
@@ -334,6 +336,23 @@ class ContentApi extends BaseApi
 			}
 		}
 		return $this->categoryArray[$contentId];
+	}
+	/**
+	 * 現在のページのカテゴリー情報を取得
+	 *
+	 * @return array					WP_Termオブジェクト
+	 */
+	function getCategoryTerm()
+	{
+		global $wp_query;
+		
+		$wpTermObj = null;
+		$categoryArray = $this->getCategory($wp_query->post->ID);
+		for ($i = 0; $i < count($categoryArray); $i++){
+			$wpTermObj = $categoryArray[$i];
+			if ($wpTermObj->term_id == intval($this->category)) break;
+		}
+		return $wpTermObj;
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
@@ -524,7 +543,28 @@ class ContentApi extends BaseApi
 	 */
 	function setPageType($type)
 	{
+		global $wp_query;
+		
 		$this->pageType = $type;
+		
+		switch ($type){
+			case 'single':			// ブログ単体記事ページの場合
+				break;
+			case 'page':			// 汎用コンテンツページの場合
+				$wp_query->is_paged = true;
+				break;
+			case 'category':		// カテゴリーページの場合
+				$wp_query->is_category = true;
+				$wp_query->is_archive = true;
+				break;
+			case 'search':			// 検索ページの場合
+				$wp_query->is_search = true;
+				break;
+			case 'author':		// 会員ページの場合
+				$wp_query->is_author = true;
+				$wp_query->is_archive = true;
+				break;
+		}
 	}
 	/**
 	 * ページタイプを取得

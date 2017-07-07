@@ -1704,18 +1704,25 @@ class WP_Query {
 			$this->posts = array($wpPostObj);
 		} else {
 			$keywords = '';
+			$category = null;			// カテゴリー。設定なしの場合はnullを設定。
 			
 			// 検索結果表示の場合はキーワードを取得
 			$pageType = $gContentApi->getPageType();		// ページタイプ取得
-			if ($pageType == 'search'){
+			switch ($pageType){
+			case 'category':
+				$value = absint($gRequestManager->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID));
+				if ($value > 0) $category = $value;
+				break;
+			case 'search':
 				$keywords = $gRequestManager->trimValueOf('s');
 				$this->query_vars['s'] = $keywords;
 				
 				// 半角スペースで分割
 				$keywords = explode(' ', $keywords);
+				break;
 			}
 			
-			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords);
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, null/*期間開始日時*/, null/*期間終了日時*/, $category);
 			$this->posts = $gContentApi->getContentList();
 			
 			// コンテンツ総数を取得

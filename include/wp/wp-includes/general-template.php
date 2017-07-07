@@ -1372,12 +1372,15 @@ function single_tag_title( $prefix = '', $display = true ) {
  * @return string|void Title when retrieving.
  */
 function single_term_title( $prefix = '', $display = true ) {
-	$term = get_queried_object();
+/*	$term = get_queried_object();
 
 	if ( !$term )
-		return;
+		return;*/
+	global $gContentApi;
 
 	if ( is_category() ) {
+		// 先頭の記事に関連付けられているカテゴリー情報を取得
+		$term = $gContentApi->getCategoryTerm();
 		/**
 		 * Filters the category archive page title.
 		 *
@@ -1394,7 +1397,7 @@ function single_term_title( $prefix = '', $display = true ) {
 		 *
 		 * @param string $term_name Tag name for archive being displayed.
 		 */
-		$term_name = apply_filters( 'single_tag_title', $term->name );
+//		$term_name = apply_filters( 'single_tag_title', $term->name );
 	} elseif ( is_tax() ) {
 		/**
 		 * Filters the custom taxonomy archive page title.
@@ -1403,7 +1406,7 @@ function single_term_title( $prefix = '', $display = true ) {
 		 *
 		 * @param string $term_name Term name for archive being displayed.
 		 */
-		$term_name = apply_filters( 'single_term_title', $term->name );
+//		$term_name = apply_filters( 'single_term_title', $term->name );
 	} else {
 		return;
 	}
