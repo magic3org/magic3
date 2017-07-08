@@ -1823,6 +1823,7 @@ class WP_Query {
 	 *
 	 * @global WP_Post $post
 	 */
+	/***** テンプレートのからループで毎回実行され、グローバルの$postが行進される *****/
 	public function the_post() {
 		global $post;
 		$this->in_the_loop = true;
@@ -2806,12 +2807,12 @@ class WP_Query {
 	 *
 	 * @global WP_Post $post
 	 */
-	public function reset_postdata() {
+/*	public function reset_postdata() {
 		if ( ! empty( $this->post ) ) {
 			$GLOBALS['post'] = $this->post;
 			$this->setup_postdata( $this->post );
 		}
-	}
+	}*/
 
 	/**
 	 * Lazyload term meta for posts in the loop.

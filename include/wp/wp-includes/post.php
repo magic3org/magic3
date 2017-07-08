@@ -514,7 +514,7 @@ function get_extended( $post ) {
  */
 function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 	global $gContentApi;
-			
+
 	if ( empty( $post ) && isset( $GLOBALS['post'] ) )
 		$post = $GLOBALS['post'];
 
@@ -921,7 +921,7 @@ function post_type_exists( $post_type ) {
 function get_post_type( $post = null ) {
 	if ( $post = get_post( $post ) )
 		return $post->post_type;
-
+	
 	return false;
 }
 

@@ -577,15 +577,15 @@ class WP {
 /*	public function register_globals() {
 		global $wp_query;
 
-		// Extract updated query vars back into global namespace.
-		foreach ( (array) $wp_query->query_vars as $key => $value ) {
-			$GLOBALS[ $key ] = $value;
-		}
+//		// Extract updated query vars back into global namespace.
+//		foreach ( (array) $wp_query->query_vars as $key => $value ) {
+//			$GLOBALS[ $key ] = $value;
+//		}
 
-		$GLOBALS['query_string'] = $this->query_string;
-		$GLOBALS['posts'] = & $wp_query->posts;
+//		$GLOBALS['query_string'] = $this->query_string;
+//		$GLOBALS['posts'] = & $wp_query->posts;
 		$GLOBALS['post'] = isset( $wp_query->post ) ? $wp_query->post : null;
-		$GLOBALS['request'] = $wp_query->request;
+//		$GLOBALS['request'] = $wp_query->request;
 
 		if ( $wp_query->is_single() || $wp_query->is_page() ) {
 			$GLOBALS['more']   = 1;
@@ -594,8 +594,8 @@ class WP {
 
 		if ( $wp_query->is_author() && isset( $wp_query->post ) )
 			$GLOBALS['authordata'] = get_userdata( $wp_query->post->post_author );
-	}*/
-
+	}
+*/
 	/**
 	 * Set up the current user.
 	 *
@@ -732,13 +732,13 @@ class WP {
 	 * @param string|array $query_args Passed to parse_request().
 	 */
 	public function main($query_args = '') {
-		// query_posts()のみ実行。その他は必要なし?
+		// 起動時に１度のみ実行される
 //		$this->init();
 //		$this->parse_request($query_args);
 //		$this->send_headers();
-		$this->query_posts();
+		$this->query_posts();				// DBからコンテンツデータ取得
 //		$this->handle_404();
-//		$this->register_globals();
+//		$this->register_globals();			// グローバル値初期化。テンプレートのループからthe_post()が呼ばれてグローバル$postが更新されるので必要なし?
 
 		/**
 		 * Fires once the WordPress environment has been set up.
