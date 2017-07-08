@@ -262,6 +262,9 @@ class ContentApi extends BaseApi
 	 */
 	function getCategory($contentId)
 	{
+		// ##### 現在ブログコンテンツのみ対応 #####
+		if ($this->contentType != M3_VIEW_TYPE_BLOG) return array();
+		
 		// コンテンツIDが0のときは「未分類」カテゴリーを返す
 		if ($contentId == 0){
 			// カテゴリー情報をWP_Termオブジェクトに変換して格納
