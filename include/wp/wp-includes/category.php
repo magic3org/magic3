@@ -24,11 +24,15 @@
  * @return array List of categories.
  */
 function get_categories( $args = '' ) {
-	$defaults = array( 'taxonomy' => 'category' );
+	global $gContentApi;
+
+	if (!$post = get_post()) return false;
+	
+/*	$defaults = array( 'taxonomy' => 'category' );
 	$args = wp_parse_args( $args, $defaults );
 
 	$taxonomy = $args['taxonomy'];
-
+*/
 	/**
 	 * Filters the taxonomy used to retrieve terms when calling get_categories().
 	 *
@@ -37,11 +41,11 @@ function get_categories( $args = '' ) {
 	 * @param string $taxonomy Taxonomy to retrieve terms from.
 	 * @param array  $args     An array of arguments. See get_terms().
 	 */
-	$taxonomy = apply_filters( 'get_categories_taxonomy', $taxonomy, $args );
+//	$taxonomy = apply_filters( 'get_categories_taxonomy', $taxonomy, $args );
 
 	// Back compat
-	if ( isset($args['type']) && 'link' == $args['type'] ) {
-		/* translators: 1: "type => link", 2: "taxonomy => link_category" alternative */
+/*	if ( isset($args['type']) && 'link' == $args['type'] ) {
+		// translators: 1: "type => link", 2: "taxonomy => link_category" alternative
 		_deprecated_argument( __FUNCTION__, '3.0.0',
 			sprintf( __( '%1$s is deprecated. Use %2$s instead.' ),
 				'<code>type => link</code>',
@@ -51,8 +55,11 @@ function get_categories( $args = '' ) {
 		$taxonomy = $args['taxonomy'] = 'link_category';
 	}
 
-	$categories = get_terms( $taxonomy, $args );
+	$categories = get_terms( $taxonomy, $args );*/
 
+	// カテゴリー情報を取得
+	$categories = $gContentApi->getCategory($post->ID);
+	
 	if ( is_wp_error( $categories ) ) {
 		$categories = array();
 	} else {

@@ -131,10 +131,10 @@ function get_the_category_by_ID( $cat_ID ) {
  */
 function get_the_category_list( $separator = '', $parents='', $post_id = false ) {
 	global $wp_rewrite;
-	if ( ! is_object_in_taxonomy( get_post_type( $post_id ), 'category' ) ) {
-		/** This filter is documented in wp-includes/category-template.php */
-		return apply_filters( 'the_category', '', $separator, $parents );
-	}
+//	if ( ! is_object_in_taxonomy( get_post_type( $post_id ), 'category' ) ) {
+//		/** This filter is documented in wp-includes/category-template.php */
+//		return apply_filters( 'the_category', '', $separator, $parents );
+//	}
 
 	/**
 	 * Filters the categories before building the category list.

@@ -21,10 +21,12 @@ UPDATE _system_config SET sc_value = 'wisteria' WHERE sc_id = 'default_template'
 -- サイト定義マスター
 DELETE FROM _site_def WHERE sd_id = 'site_name';
 DELETE FROM _site_def WHERE sd_id = 'site_slogan';
+DELETE FROM _site_def WHERE sd_id = 'head_title';
 INSERT INTO _site_def
 (sd_id,                  sd_language_id, sd_value,         sd_name) VALUES
 ('site_name',            'ja',           'ブログサンプル',               'サイト名'),
-('site_slogan',          'ja',           'WordPressテンプレートテスト中',               'スローガン');
+('site_slogan',          'ja',           'WordPressテンプレートテスト中',               'スローガン'),
+('head_title',           'ja',           'ブログサンプル',               'HTMLヘッダtitle');
 
 -- 管理画面ページデータ(デフォルトを変更)
 UPDATE _page_id SET pg_default_sub_id = 'blog' WHERE pg_id = 'index' AND pg_type = 0;
