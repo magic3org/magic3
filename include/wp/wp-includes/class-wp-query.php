@@ -2428,7 +2428,7 @@ class WP_Query {
 		
 		// ?以降のパラメータがない場合はフロントページとする
 		$isFront = $gContentApi->isRootUrl();
-		return true;
+		return $isFront;
 	}
 
 	/**
