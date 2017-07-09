@@ -768,6 +768,7 @@ class BaseFrameContainer extends Core
 			unset($plugin);
 
 			// WordPressメインオブジェクト作成
+			$GLOBALS['wp_version'] = '4.7.0';			// 下位互換性チェックで引っかかるのでv4.7.0に定める
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();		// 表示言語を設定
 			$GLOBALS['wp_the_query'] = new WP_Query();				// $wp_the_queryは変更不可変数で$wp_queryは変更可変数
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];

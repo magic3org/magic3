@@ -217,5 +217,31 @@ class BaseApi extends Core
 		// 変換文字「&<>"'」
 		return convertUrlToHtmlEntity($src);
 	}
+	/**
+	 * URLがルートを指しているかどうか取得
+	 *
+	 * @param string $url	チェック対象のURL。空の場合は現在のURL
+	 * @return bool			true=ルート、false=ルート以外
+	 */
+	function isRootUrl($url = '')
+	{
+		if (empty($url)) $url = $this->gEnv->getCurrentRequestUri();
+		
+		// マクロURLに変換
+		$url = $this->gEnv->getMacroPath($url);
+		
+		list($tmp, $query) = explode('?', $url);
+		if (!empty($query)) list($query, $tmp) = explode('#', $query);
+		if (empty($query)){				// クエリ文字列がないことが条件。「#」はあっても良い。
+			// パスを解析
+			$relativePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, '', $url);		// ルートURLからの相対パスを取得
+			if (empty($relativePath)){			// Magic3のルートURLの場合
+				return true;
+			} else if (strStartsWith($relativePath, '/') || strStartsWith($relativePath, '/' . M3_FILENAME_INDEX)){		// ルートURL配下のとき
+				return true;
+			}
+		}
+		return false;
+	}
 }
 ?>

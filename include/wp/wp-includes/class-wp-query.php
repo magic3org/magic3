@@ -2416,13 +2416,19 @@ class WP_Query {
 	 * @return bool True, if front of site.
 	 */
 	public function is_front_page() {
-		// most likely case
+/*		// most likely case
 		if ( 'posts' == get_option( 'show_on_front') && $this->is_home() )
 			return true;
 		elseif ( 'page' == get_option( 'show_on_front') && get_option( 'page_on_front' ) && $this->is_page( get_option( 'page_on_front' ) ) )
 			return true;
 		else
 			return false;
+		*/
+		global $gContentApi;
+		
+		// ?以降のパラメータがない場合はフロントページとする
+		$isFront = $gContentApi->isRootUrl();
+		return true;
 	}
 
 	/**
@@ -2442,7 +2448,8 @@ class WP_Query {
 	 * @return bool True if blog view homepage.
 	 */
 	public function is_home() {
-		return (bool) $this->is_home;
+//		return (bool) $this->is_home;
+		return $this->is_front_page();
 	}
 
 	/**
