@@ -4390,7 +4390,7 @@ class PageManager extends Core
 	 */
 	function getContents($position, $style = '', $templateVer = 0, $attr = array())
 	{
-		static $render;		// Joomla!v1.5テンプレート用
+		static $render;		// HTML生成オブジェクト
 		global $gRequestManager;
 		global $gEnvManager;
 		
@@ -4509,8 +4509,31 @@ class PageManager extends Core
 							if (!$ret) break;
 							$widgetContent = ob_get_contents();
 
+							// オブジェクト作成
+							if (!isset($render)) $render = new WPRender();		// WordPress用HTML生成オブジェクト
+							
+							// デフォルトのウィジェットタイトル取得
+							$defaultTitle = $gEnvManager->getCurrentWidgetTitle();
+					
+							// Joomla用のパラメータを取得
+							//$joomlaParam = $gEnvManager->getCurrentWidgetJoomlaParam();
+
+							// 遅延ウィジェットのときはタイトルタグを埋め込む
+							if (!empty($titleTag)) $defaultTitle = $titleTag;
+					
+							// タイトルが空でタイトル表示を行う場合は、デフォルトタイトルを使用
+							$title = $this->pageDefRows[$i]['pd_title'];
+							if ($this->pageDefRows[$i]['pd_title_visible']){		// タイトル表示のとき
+								if (empty($title)) $title = $defaultTitle;
+							} else {
+								$title = '';			// タイトルは非表示
+							}
+							
+							// ウィジェット生成
+							$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+							
 							// ウィジェット共通のコンテンツ処理
-							$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
+						//	$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
 
 							// ウィジェットの内枠(コンテンツ外枠)を設定
 						//	$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';

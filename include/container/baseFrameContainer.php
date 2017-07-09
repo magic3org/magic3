@@ -755,6 +755,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wpInit.php');		// 初期値取得
 			require_once($this->gEnv->getWordpressRootPath() . '/contentApi.php');	// コンテンツ取得API
 			require_once($this->gEnv->getWordpressRootPath() . '/menuApi.php');		// メニュー情報取得API
+			require_once($this->gEnv->getWordpressRootPath() . '/WPRender.php');		// ウィジェット描画クラス
 
 			// ##### データ初期化 #####
 			wp_initial_constants();			// WordPressその他定義値設定
