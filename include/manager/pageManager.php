@@ -4417,7 +4417,7 @@ class PageManager extends Core
 				// ウィジェットを実行
 				$count = count($this->pageDefRows);
 				
-				if ($templateVer == 0){			// echo出力のとき(Joomla!v1.0テンプレートの場合)
+				if ($templateVer == 0){			// ########## Joomla!v1.0テンプレートの場合 ##########
 					ob_start();// バッファ作成
 
 					// ウィジェットヘッダ(Joomla!1.0用)を出力するテンプレートかどうかチェック
@@ -4488,7 +4488,81 @@ class PageManager extends Core
 					ob_end_clean();		// バッファ破棄
 					
 					if ($i < $count) return '';// 処理中断のときは終了
-				} else {			// Joomla!v1.5テンプレートの場合
+				} else if ($templateVer == 100){			// ########## WordPressテンプレートの場合 ##########
+					ob_start();// バッファ作成
+
+					// ウィジェットヘッダ(Joomla!1.0用)を出力するテンプレートかどうかチェック
+					//$widgetHeaderType = $this->getTemplateWidgetHeaderType();
+					for ($i = 0; $i < $count; $i++){
+						$pageDefParam = $this->pageDefRows[$i];			// 画面定義パラメータ
+						$widgetId = $this->pageDefRows[$i]['wd_id'];
+						
+						// ### 遅延実行ウィジェットはキャッシュしない ###
+						// キャッシュデータがあるときはキャッシュデータを使用
+						$cacheData = $this->gCache->getWidgetCache($request, $this->pageDefRows[$i], $metaTitle, $metaDesc, $metaKeyword);
+
+						if (empty($cacheData)){		// キャッシュデータがないとき
+
+							ob_clean();
+					//		$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, 0/*タイトル出力なし*/);
+							if (!$ret) break;
+							$widgetContent = ob_get_contents();
+
+							// ウィジェット共通のコンテンツ処理
+							$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
+
+							// ウィジェットの内枠(コンテンツ外枠)を設定
+						//	$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+										
+							// キャッシュデータを設定
+							$this->gCache->setWidgetCache($gRequestManager, $this->pageDefRows[$i], $widgetContent,
+															$this->lastHeadTitle, $this->lastHeadDescription, $this->lastHeadKeywords);
+															
+							// ウィジェットの外枠タグを設定
+					//		$widgetClassSuffix = $this->pageDefRows[$i]['pd_suffix'];		// 追加CSSクラスサフィックス
+					//		$widgetOuterClass = self::WIDGET_OUTER_CLASS . ' ' . self::WIDGET_OUTER_CLASS_WIDGET_TAG . str_replace('/', '_', $widgetId);// ウィジェットの外枠のクラス
+					//		if (!empty($widgetClassSuffix)) $widgetOuterClass .= ' ' . $widgetOuterClass . '_' . $widgetClassSuffix;	// 追加CSSクラス
+					//		$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;		// ポジションブロッククラス
+					//		$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
+					
+							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
+								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
+								$hasAdmin = '0';		// 管理画面があるかどうか
+								if ($this->pageDefRows[$i]['wd_has_admin']) $hasAdmin = '1';
+								$shared = '0';		// 共通属性があるかどうか
+								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
+								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
+								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+							} else {
+						//		$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+						//		$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
+							}
+						} else {		// キャッシュデータがあるとき
+							$widgetContent = $cacheData;
+							
+							// HTMLのメタタグを設定
+							if (!empty($metaTitle)) $this->setHeadSubTitle($metaTitle);
+							if (!empty($metaDesc)) $this->setHeadDescription($metaDesc);
+							if (!empty($metaKeyword)) $this->setHeadKeywords($metaKeyword);
+						}
+						$contents .= $widgetContent;
+						
+						// ##### 外部出力用のCSSがある場合は追加 #####
+						$exportCss = $this->pageDefRows[$i]['pd_css'];
+						if (!empty($exportCss)){
+							// ウィジェットのタグIDを変換
+							$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+							$exportCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_CSS_ID . M3_TAG_END, $widgetTag, $exportCss);
+							$this->addExportCss($exportCss);
+						}
+					}
+					ob_end_clean();		// バッファ破棄
+					
+					if ($i < $count) return '';// 処理中断のときは終了
+				} else {			// ########## Joomla!v1.5テンプレートの場合 ##########
 					// テンプレート側で指定されたメニューの表示属性を設定
 					$gEnvManager->setMenuAttr($attr);
 					
@@ -4724,6 +4798,16 @@ class PageManager extends Core
 		$this->viewPositions[] = $position;
 
 		return $contents;
+	}
+	/**
+	 * 各部品のHTML出力(WordPressテンプレート専用)
+	 *
+	 * @param string $position			HTMLテンプレート上の書き出し位置
+	 * @return string					出力コンテンツ
+	 */
+	function getWPContents($position)
+	{
+		return $this->getContents($position, '', 100/*WordPressテンプレート*/);
 	}
 	/**
 	 * その他のポジションブロックデータを取得

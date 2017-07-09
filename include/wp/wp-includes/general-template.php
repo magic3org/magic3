@@ -152,14 +152,14 @@ function get_template_part( $slug, $name = null ) {
 	// メインエリアの前にポジションブロックを配置
 	static $isFirst;
 	if (!isset($isFirst)){
-		echo $gPageManager->getContents('main-top');
+		echo $gPageManager->getWPContents('main-top');
 		$isFirst = true;
 	}
 	
 	// メインエリア表示
 	$contentType = $gContentApi->getContentType();
 	if (empty($contentType)){
-		echo $gPageManager->getContents('main');
+		echo $gPageManager->getWPContents('main');
 		return;
 	}
 	
