@@ -963,7 +963,7 @@ class BaseFrameContainer extends Core
 		ob_clean();
 
 		// Joomla!タグの変換処理(ウィジェット実行)
-		if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
+		if ($convType >= 1 && $convType < 100){		// Joomla!v1.5,v2.5テンプレートのとき
 			$srcContents = $this->gPage->launchWidgetByJoomlaTag($srcContents, $convType);
 		}
 	
