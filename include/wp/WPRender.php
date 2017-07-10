@@ -17,6 +17,8 @@
 class WPRender
 {
 
+	const DEFAULT_POSITION = 'sidebar-1';
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -24,7 +26,7 @@ class WPRender
 	{
 	}
 	/**
-	 * Joomlaモジュール用コンテンツ取得
+	 * WordPressウィジェット用コンテンツ取得
 	 * 
 	 * @param string $style			表示スタイル
 	 * @param string $content		ウィジェット出力
@@ -37,20 +39,53 @@ class WPRender
 	 */
 	public function getModuleContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
 	{
-		global $gEnvManager;
+		global $wp_registered_sidebars;
 
+		// 現在のポジション取得
+		$position = $pageDefParam['pd_position_id'];
+		
+		// 配置ブロック用のパラメータを取得
+		$blockParam = $wp_registered_sidebars[$position];
+		if (empty($blockParam)) $blockParam = $wp_registered_sidebars[self::DEFAULT_POSITION];			// 存在しない場合はデフォルトを取得
+		if (empty($blockParam)) return $content;
 
+ /*			ob_clean();
+//		var_dump($wp_registered_sidebars[$position]);
+var_dump($blockParam);
+echo '---'.$blockParam['before_title'];
+			$contents = ob_get_contents();
+			ob_clean();
+$content.= $contents;*/
 
+		/*
+		// Substitute HTML id and class attributes into before_widget
+		$classname_ = '';
+		foreach ( (array) $wp_registered_widgets[$id]['classname'] as $cn ) {
+			if ( is_string($cn) )
+				$classname_ .= '_' . $cn;
+			elseif ( is_object($cn) )
+				$classname_ .= '_' . get_class($cn);
+		}
+		$classname_ = ltrim($classname_, '_');
+		$params[0]['before_widget'] = sprintf($params[0]['before_widget'], $id, $classname_);
+		*/
+		
+		// メインコンテンツにタグを付加
+		 $content = $blockParam['before_widget'] . $content . $blockParam['after_widget'];
+		
+		// タイトルを追加
+		if (!empty($title)) $content = $blockParam['before_title'] . convertToHtmlEntity($title) . $blockParam['after_title'] . $content;
+		
 		// 前後コンテンツ追加
-		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
+//		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
 		// 「もっと読む」ボタンを追加
-		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
+//		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
 		// ウィジェットの内枠(コンテンツ外枠)を設定
 //		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 指定された表示スタイルでウィジェットを出力
-		$chromeMethod = 'modChrome_' . $style;
+/*		$chromeMethod = 'modChrome_' . $style;
 		if (function_exists($chromeMethod))
 		{
 			$module = new stdClass;
@@ -69,8 +104,8 @@ class WPRender
 			$chromeMethod($module, $params, $attribs);
 			$contents = ob_get_contents();
 			ob_clean();
-		}
-		return $contents;
+		}*/
+		return $content;
 	}
 
 }
