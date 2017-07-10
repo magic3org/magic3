@@ -370,7 +370,7 @@ function is_taxonomy_hierarchical($taxonomy) {
  * @return WP_Error|void WP_Error, if errors.
  */
 function register_taxonomy( $taxonomy, $object_type, $args = array() ) {
-	global $wp_taxonomies;
+/*	global $wp_taxonomies;
 
 	if ( ! is_array( $wp_taxonomies ) )
 		$wp_taxonomies = array();
@@ -389,7 +389,7 @@ function register_taxonomy( $taxonomy, $object_type, $args = array() ) {
 
 	$taxonomy_object->add_hooks();
 
-
+*/
 	/**
 	 * Fires after a taxonomy is registered.
 	 *
@@ -399,7 +399,7 @@ function register_taxonomy( $taxonomy, $object_type, $args = array() ) {
 	 * @param array|string $object_type Object type or array of object types.
 	 * @param array        $args        Array of taxonomy registration arguments.
 	 */
-	do_action( 'registered_taxonomy', $taxonomy, $object_type, (array) $taxonomy_object );
+//	do_action( 'registered_taxonomy', $taxonomy, $object_type, (array) $taxonomy_object );
 }
 
 /**
@@ -416,7 +416,7 @@ function register_taxonomy( $taxonomy, $object_type, $args = array() ) {
  * @return bool|WP_Error True on success, WP_Error on failure or if the taxonomy doesn't exist.
  */
 function unregister_taxonomy( $taxonomy ) {
-	if ( ! taxonomy_exists( $taxonomy ) ) {
+/*	if ( ! taxonomy_exists( $taxonomy ) ) {
 		return new WP_Error( 'invalid_taxonomy', __( 'Invalid taxonomy.' ) );
 	}
 
@@ -434,7 +434,7 @@ function unregister_taxonomy( $taxonomy ) {
 
 	// Remove the taxonomy.
 	unset( $wp_taxonomies[ $taxonomy ] );
-
+*/
 	/**
 	 * Fires after a taxonomy is unregistered.
 	 *
@@ -442,7 +442,7 @@ function unregister_taxonomy( $taxonomy ) {
 	 *
 	 * @param string $taxonomy Taxonomy name.
 	 */
-	do_action( 'unregistered_taxonomy', $taxonomy );
+//	do_action( 'unregistered_taxonomy', $taxonomy );
 
 	return true;
 }

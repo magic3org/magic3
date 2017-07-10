@@ -283,8 +283,8 @@ foreach ( array( 'rss2_head', 'commentsrss2_head', 'rss_head', 'rdf_header', 'at
 
 
 // WP Cron
-if ( !defined( 'DOING_CRON' ) )
-	add_action( 'init', 'wp_cron' );
+//if ( !defined( 'DOING_CRON' ) )
+//	add_action( 'init', 'wp_cron' );
 
 // 2 Actions 2 Furious
 //add_action( 'do_feed_rdf',                'do_feed_rdf',                             10, 1 );
@@ -300,7 +300,7 @@ add_action( 'sanitize_comment_cookies',   'sanitize_comment_cookies'            
 //add_action( 'admin_print_footer_scripts', '_wp_footer_scripts'                             );
 //add_action( 'admin_print_styles',         'print_emoji_styles'                             );
 //add_action( 'admin_print_styles',         'print_admin_styles',                      20    );
-add_action( 'init',                       'smilies_init',                             5    );
+//add_action( 'init',                       'smilies_init',                             5    );
 //add_action( 'plugins_loaded',             'wp_maybe_load_widgets',                    0    );
 add_action( 'plugins_loaded',             'wp_maybe_load_embeds',                     0    );
 //add_action( 'shutdown',                   'wp_ob_end_flush_all',                      1    );
@@ -332,7 +332,7 @@ add_action( 'end_fetch_post_thumbnail_html',   '_wp_post_thumbnail_class_filter_
 //add_action( 'attachment_updated', 'wp_check_for_changed_slugs', 12, 3 );
 
 // Nonce check for Post Previews
-add_action( 'init', '_show_post_preview' );
+//add_action( 'init', '_show_post_preview' );
 
 // Output JS to reset window.name for previews
 add_action( 'wp_head', 'wp_post_preview_js', 1 );
@@ -407,11 +407,11 @@ add_action( 'update_option_gmt_offset', 'delete_get_calendar_cache' );
 add_action( 'transition_post_status', '__clear_multi_author_cache' );
 
 // Post
-add_action( 'init', 'create_initial_post_types', 0 ); // highest priority
-add_action( 'admin_menu', '_add_post_type_submenus' );
-add_action( 'before_delete_post', '_reset_front_page_settings_for_post' );
-add_action( 'wp_trash_post',      '_reset_front_page_settings_for_post' );
-add_action( 'change_locale', 'create_initial_post_types' );
+//add_action( 'init', 'create_initial_post_types', 0 ); // highest priority
+//add_action( 'admin_menu', '_add_post_type_submenus' );
+//add_action( 'before_delete_post', '_reset_front_page_settings_for_post' );
+//add_action( 'wp_trash_post',      '_reset_front_page_settings_for_post' );
+//add_action( 'change_locale', 'create_initial_post_types' );
 
 // Post Formats
 add_filter( 'request', '_post_format_request' );
@@ -421,8 +421,8 @@ add_filter( 'get_terms', '_post_format_get_terms', 10, 3 );
 add_filter( 'wp_get_object_terms', '_post_format_wp_get_object_terms' );
 
 // KSES
-add_action( 'init', 'kses_init' );
-add_action( 'set_current_user', 'kses_init' );
+//add_action( 'init', 'kses_init' );
+//add_action( 'set_current_user', 'kses_init' );
 
 // Script Loader
 add_action( 'wp_default_scripts', 'wp_default_scripts' );
@@ -436,8 +436,8 @@ add_action( 'wp_default_styles', 'wp_default_styles' );
 add_filter( 'style_loader_src', 'wp_style_loader_src', 10, 2 );
 
 // Taxonomy
-add_action( 'init', 'create_initial_taxonomies', 0 ); // highest priority
-add_action( 'change_locale', 'create_initial_taxonomies' );
+//add_action( 'init', 'create_initial_taxonomies', 0 ); // highest priority
+//add_action( 'change_locale', 'create_initial_taxonomies' );
 
 // Canonical
 add_action( 'template_redirect', 'redirect_canonical' );
@@ -454,7 +454,7 @@ add_action( 'customize_controls_enqueue_scripts', 'wp_plupload_default_settings'
 add_filter( 'nav_menu_item_id', '_nav_menu_item_id_use_once', 10, 2 );
 
 // Widgets
-add_action( 'init', 'wp_widgets_init', 1 );
+//add_action( 'init', 'wp_widgets_init', 1 );
 
 // Admin Bar
 // Don't remove. Wrong way to disable.

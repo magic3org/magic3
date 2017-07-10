@@ -1446,9 +1446,9 @@ function wp_widget_rss_process( $widget_rss, $check_feed = true ) {
  * @since 2.2.0
  */
 function wp_widgets_init() {
-	if ( !is_blog_installed() )
-		return;
-
+//	if ( !is_blog_installed() )
+//		return;
+/*
 	register_widget('WP_Widget_Pages');
 
 	register_widget('WP_Widget_Calendar');
@@ -1475,11 +1475,12 @@ function wp_widgets_init() {
 	register_widget('WP_Widget_Tag_Cloud');
 
 	register_widget('WP_Nav_Menu_Widget');
-
+*/
 	/**
 	 * Fires after all default WordPress widgets have been registered.
 	 *
 	 * @since 2.2.0
 	 */
+	// テンプレートからのウィジェットの登録
 	do_action( 'widgets_init' );
 }

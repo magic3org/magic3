@@ -1111,7 +1111,7 @@ function get_post_types( $args = array(), $output = 'names', $operator = 'and' )
  * @return WP_Post_Type|WP_Error The registered post type object, or an error object.
  */
 function register_post_type( $post_type, $args = array() ) {
-	global $wp_post_types;
+/*	global $wp_post_types;
 
 	if ( ! is_array( $wp_post_types ) ) {
 		$wp_post_types = array();
@@ -1134,7 +1134,7 @@ function register_post_type( $post_type, $args = array() ) {
 
 	$post_type_object->add_hooks();
 	$post_type_object->register_taxonomies();
-
+*/
 	/**
 	 * Fires after a post type is registered.
 	 *
@@ -1144,9 +1144,10 @@ function register_post_type( $post_type, $args = array() ) {
 	 * @param string       $post_type        Post type.
 	 * @param WP_Post_Type $post_type_object Arguments used to register the post type.
 	 */
-	do_action( 'registered_post_type', $post_type, $post_type_object );
-
-	return $post_type_object;
+//	do_action( 'registered_post_type', $post_type, $post_type_object );
+//
+//	return $post_type_object;
+	return null;
 }
 
 /**
@@ -1162,7 +1163,7 @@ function register_post_type( $post_type, $args = array() ) {
  * @return bool|WP_Error True on success, WP_Error on failure or if the post type doesn't exist.
  */
 function unregister_post_type( $post_type ) {
-	global $wp_post_types;
+/*	global $wp_post_types;
 
 	if ( ! post_type_exists( $post_type ) ) {
 		return new WP_Error( 'invalid_post_type', __( 'Invalid post type.' ) );
@@ -1182,7 +1183,7 @@ function unregister_post_type( $post_type ) {
 	$post_type_object->unregister_taxonomies();
 
 	unset( $wp_post_types[ $post_type ] );
-
+*/
 	/**
 	 * Fires after a post type was unregistered.
 	 *
@@ -1190,7 +1191,7 @@ function unregister_post_type( $post_type ) {
 	 *
 	 * @param string $post_type Post type key.
 	 */
-	do_action( 'unregistered_post_type', $post_type );
+//	do_action( 'unregistered_post_type', $post_type );
 
 	return true;
 }
