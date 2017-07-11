@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -72,6 +72,7 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 		$act			= $request->trimValueOf('act');
 		$itemCount		= $request->trimValueOf('item_count');			// 表示項目数
 		$useRss			= $request->trimCheckedValueOf('item_use_rss');		// RSS配信を行うかどうか
+		$showDate		= $request->trimCheckedValueOf('item_show_date');		// 日付を表示するかどうか
 		$optionPassage	= $request->trimCheckedValueOf('item_option_passage');		// 表示オプション(経過日時)
 		$showImage		= $request->trimCheckedValueOf('item_show_image');		// 画像を表示するかどうか
 		$this->imageType	= $request->trimValueOf('item_image_type');				// 画像タイプ
@@ -88,6 +89,7 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 				$paramObj = new stdClass;
 				$paramObj->itemCount		= $itemCount;
 				$paramObj->useRss			= $useRss;
+				$paramObj->showDate			= $showDate;		// 日付を表示するかどうか
 				$paramObj->optionPassage	= $optionPassage;		// 表示オプション(経過日時)
 				$paramObj->showImage		= $showImage;		// 画像を表示するかどうか
 				$paramObj->imageType		= $this->imageType;				// 画像タイプ
@@ -106,6 +108,7 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 			// デフォルト値設定
 			$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 			$useRss = 1;							// RSS配信を行うかどうか
+			$showDate = 0;							// 日付を表示するかどうか
 			$optionPassage = 0;						// 表示オプション(経過日時)
 			$showImage		= 0;		// 画像を表示するかどうか
 			$this->imageType	= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
@@ -117,7 +120,9 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 				$itemCount	= $paramObj->itemCount;
 				$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 				if (!isset($useRss)) $useRss = 1;
-				$optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
+				$showDate			= $paramObj->showDate;		// 日付を表示するかどうか
+				if (!isset($showDate)) $showDate = 0;
+				$optionPassage		= $paramObj->optionPassage;		// 表示オプション(経過日時)
 				if (!isset($optionPassage)) $optionPassage = 0;
 				$showImage			= $paramObj->showImage;		// 画像を表示するかどうか
 				$this->imageType	= $paramObj->imageType;				// 画像タイプ
@@ -131,7 +136,8 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "item_count",	$itemCount);
 		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
-		$this->tmpl->addVar("_widget", "option_passage",	$this->convertToCheckedString($optionPassage));// 表示オプション(経過日時)
+		$this->tmpl->addVar("_widget", "show_date_checked",	$this->convertToCheckedString($showDate));// 日付を表示するかどうか
+		$this->tmpl->addVar("_widget", "option_passage_checked",	$this->convertToCheckedString($optionPassage));// 表示オプション(経過日時)
 		$this->tmpl->addVar("_widget", "show_image_checked",	$this->convertToCheckedString($showImage));// 画像を表示するかどうか
 		$imageWidth = empty($imageWidth) ? '' : $imageWidth;
 		$imageHeight = empty($imageHeight) ? '' : $imageHeight;

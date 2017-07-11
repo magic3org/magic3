@@ -57,12 +57,12 @@ foreach ( array( 'comment_author_email', 'user_email' ) as $filter ) {
 }
 
 // Save URL
-foreach ( array( 'pre_comment_author_url', 'pre_user_url', 'pre_link_url', 'pre_link_image',
+/*foreach ( array( 'pre_comment_author_url', 'pre_user_url', 'pre_link_url', 'pre_link_image',
 	'pre_link_rss', 'pre_post_guid' ) as $filter ) {
 	add_filter( $filter, 'wp_strip_all_tags' );
 	add_filter( $filter, 'esc_url_raw'       );
 	add_filter( $filter, 'wp_filter_kses'    );
-}
+}*/
 
 // Display URL
 foreach ( array( 'user_url', 'link_url', 'link_image', 'link_rss', 'comment_url', 'post_guid' ) as $filter ) {
@@ -122,7 +122,7 @@ foreach ( array( 'term_description' ) as $filter ) {
 }
 
 // Format for RSS
-add_filter( 'term_name_rss', 'convert_chars' );
+//add_filter( 'term_name_rss', 'convert_chars' );
 
 // Pre save hierarchy
 //add_filter( 'wp_insert_post_parent', 'wp_check_post_hierarchy_for_loops', 10, 2 );
@@ -169,29 +169,29 @@ add_filter( 'widget_text', 'balanceTags' );
 add_filter( 'date_i18n', 'wp_maybe_decline_date' );
 
 // RSS filters
-add_filter( 'the_title_rss',      'strip_tags'                    );
-add_filter( 'the_title_rss',      'ent2ncr',                    8 );
-add_filter( 'the_title_rss',      'esc_html'                      );
-add_filter( 'the_content_rss',    'ent2ncr',                    8 );
+//add_filter( 'the_title_rss',      'strip_tags'                    );
+//add_filter( 'the_title_rss',      'ent2ncr',                    8 );
+//add_filter( 'the_title_rss',      'esc_html'                      );
+//add_filter( 'the_content_rss',    'ent2ncr',                    8 );
 //add_filter( 'the_content_feed',   'wp_staticize_emoji'            );
-add_filter( 'the_content_feed',   '_oembed_filter_feed_content'   );
-add_filter( 'the_excerpt_rss',    'convert_chars'                 );
-add_filter( 'the_excerpt_rss',    'ent2ncr',                    8 );
-add_filter( 'comment_author_rss', 'ent2ncr',                    8 );
-add_filter( 'comment_text_rss',   'ent2ncr',                    8 );
-add_filter( 'comment_text_rss',   'esc_html'                      );
+//add_filter( 'the_content_feed',   '_oembed_filter_feed_content'   );
+//add_filter( 'the_excerpt_rss',    'convert_chars'                 );
+//add_filter( 'the_excerpt_rss',    'ent2ncr',                    8 );
+//add_filter( 'comment_author_rss', 'ent2ncr',                    8 );
+//add_filter( 'comment_text_rss',   'ent2ncr',                    8 );
+//add_filter( 'comment_text_rss',   'esc_html'                      );
 //add_filter( 'comment_text_rss',   'wp_staticize_emoji'            );
-add_filter( 'bloginfo_rss',       'ent2ncr',                    8 );
-add_filter( 'the_author',         'ent2ncr',                    8 );
-add_filter( 'the_guid',           'esc_url'                       );
+//add_filter( 'bloginfo_rss',       'ent2ncr',                    8 );
+//add_filter( 'the_author',         'ent2ncr',                    8 );
+//add_filter( 'the_guid',           'esc_url'                       );
 
 // Email filters
 //add_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 
 // Mark site as no longer fresh
-foreach ( array( 'publish_post', 'publish_page', 'wp_ajax_save-widget', 'wp_ajax_widgets-order', 'customize_save_after' ) as $action ) {
+/*foreach ( array( 'publish_post', 'publish_page', 'wp_ajax_save-widget', 'wp_ajax_widgets-order', 'customize_save_after' ) as $action ) {
 	add_action( $action, '_delete_option_fresh_site' );
-}
+}*/
 
 // Misc filters
 add_filter( 'option_ping_sites',        'privacy_ping_filter'                 );
@@ -199,8 +199,8 @@ add_filter( 'option_blog_charset',      '_wp_specialchars'                    );
 add_filter( 'option_blog_charset',      '_canonical_charset'                  );
 add_filter( 'option_home',              '_config_wp_home'                     );
 add_filter( 'option_siteurl',           '_config_wp_siteurl'                  );
-add_filter( 'tiny_mce_before_init',     '_mce_set_direction'                  );
-add_filter( 'teeny_mce_before_init',    '_mce_set_direction'                  );
+//add_filter( 'tiny_mce_before_init',     '_mce_set_direction'                  );
+//add_filter( 'teeny_mce_before_init',    '_mce_set_direction'                  );
 add_filter( 'pre_kses',                 'wp_pre_kses_less_than'               );
 add_filter( 'sanitize_title',           'sanitize_title_with_dashes',   10, 3 );
 add_action( 'check_comment_flood',      'check_comment_flood_db',       10, 4 );
@@ -265,17 +265,17 @@ if ( isset( $_GET['replytocom'] ) )
     add_action( 'wp_head', 'wp_no_robots' );
 
 // Login actions
-add_filter( 'login_head',          'wp_resource_hints',             8     );
-add_action( 'login_head',          'wp_print_head_scripts',         9     );
-add_action( 'login_head',          'print_admin_styles',            9     );
-add_action( 'login_head',          'wp_site_icon',                  99    );
-add_action( 'login_footer',        'wp_print_footer_scripts',       20    );
-add_action( 'login_init',          'send_frame_options_header',     10, 0 );
+//add_filter( 'login_head',          'wp_resource_hints',             8     );
+//add_action( 'login_head',          'wp_print_head_scripts',         9     );
+//add_action( 'login_head',          'print_admin_styles',            9     );
+//add_action( 'login_head',          'wp_site_icon',                  99    );
+//add_action( 'login_footer',        'wp_print_footer_scripts',       20    );
+//add_action( 'login_init',          'send_frame_options_header',     10, 0 );
 
 // Feed Generator Tags
-foreach ( array( 'rss2_head', 'commentsrss2_head', 'rss_head', 'rdf_header', 'atom_head', 'comments_atom_head', 'opml_head', 'app_head' ) as $action ) {
+/*foreach ( array( 'rss2_head', 'commentsrss2_head', 'rss_head', 'rdf_header', 'atom_head', 'comments_atom_head', 'opml_head', 'app_head' ) as $action ) {
 	add_action( $action, 'the_generator' );
-}
+}*/
 
 // Feed Site Icon
 //add_action( 'atom_head', 'atom_site_icon' );
@@ -311,10 +311,10 @@ add_action( 'plugins_loaded',             'wp_maybe_load_embeds',               
 //add_action( 'transition_post_status',     '_update_term_count_on_transition_post_status', 10, 3 );
 add_action( 'comment_form',               'wp_comment_form_unfiltered_html_nonce'          );
 //add_action( 'wp_scheduled_delete',        'wp_scheduled_delete'                            );
-add_action( 'wp_scheduled_auto_draft_delete', 'wp_delete_auto_drafts'                      );
+//add_action( 'wp_scheduled_auto_draft_delete', 'wp_delete_auto_drafts'                      );
 //add_action( 'admin_init',                 'send_frame_options_header',               10, 0 );
-add_action( 'importer_scheduled_cleanup', 'wp_delete_attachment'                           );
-add_action( 'upgrader_scheduled_cleanup', 'wp_delete_attachment'                           );
+//add_action( 'importer_scheduled_cleanup', 'wp_delete_attachment'                           );
+//add_action( 'upgrader_scheduled_cleanup', 'wp_delete_attachment'                           );
 add_action( 'welcome_panel',              'wp_welcome_panel'                               );
 
 // Navigation menu actions

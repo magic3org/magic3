@@ -100,12 +100,12 @@ DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,       pd_menu_id,  pd_title_visible, pd_view_page_state, pd_update_dt) VALUES
 ('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',             'main_menu', true,             0,                  now()),
-('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',             '',          true,             0,                  now()),
-('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',             '',          true,             0,                  now()),
-('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',             '',          true,             0,                  now()),
-('index', '',        'left',         7,        'blog_new_box',       0,            '',                   '',             '',          true,             0,                  now()),
-('index', '',        'left',         9,        'blog_calendar_box',  0,            '',                   '',             '',          true,             0,                  now()),
-('index', '',        'left',         11,       'blog_search_box',    0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',        5,        'blog_category_menu', 0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',        7,        'blog_archive_menu',  0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',        9,        'default_login_box',  0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',         7,        'blog_new_box',       0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',         9,        'blog_calendar_box',  0,            '',                   '',             '',          true,             0,                  now()),
+('index', '',        'sidebar-1',         11,       'blog_search_box',    0,            '',                   '',             '',          true,             0,                  now()),
 ('index', '',        'banner3',      3,        'banner3',            1,            '',                   '',             '',          false,            0,                  now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',             '',          true,             0,                  now()),
 ('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報',     '',          true,             1,                  now()),
