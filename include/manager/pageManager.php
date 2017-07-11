@@ -4533,7 +4533,8 @@ class PageManager extends Core
 								}
 							
 								// ウィジェット生成
-								$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . ($i + 1);				// ウィジェット識別用ユニークタグ
+								$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer, $widgetTag);
 							
 								// ウィジェット共通のコンテンツ処理
 							//	$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);

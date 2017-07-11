@@ -584,6 +584,9 @@ class BaseWidgetContainer extends Core
 			case 20:
 				$renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート
 				break;
+			case 100:
+				$renderType = M3_RENDER_WORDPRESS;		// WordPressテンプレート
+				break;
 			default:
 				$renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
 				break;

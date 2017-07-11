@@ -35,9 +35,10 @@ class WPRender
 	 * @param array $paramsOther	その他パラメータ
 	 * @param array $pageDefParam	画面定義パラメータ
 	 * @param int   $templateVer	テンプレートバージョン(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+	 * @param string $widgetTag		ウィジェット識別用タグ
 	 * @return string				モジュール出力
 	 */
-	public function getModuleContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
+	public function getModuleContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0, $widgetTag = '')
 	{
 		global $wp_registered_sidebars;
 
@@ -47,10 +48,9 @@ class WPRender
 		// 配置ブロック用のパラメータを取得
 		$blockParam = $wp_registered_sidebars[$position];
 		if (empty($blockParam)) $blockParam = $wp_registered_sidebars[self::DEFAULT_POSITION];			// 存在しない場合はデフォルトを取得
-		if (empty($blockParam)) return $content;
 		
-		// メインコンテンツにタグを付加
-		 $content = $blockParam['before_widget'] . $content . $blockParam['after_widget'];
+		// WordPress側から初期パラメータを取得できない場合は終了
+		if (empty($blockParam)) return $content;
 		
 		// タイトルを追加
 		if (!empty($title)) $content = $blockParam['before_title'] . convertToHtmlEntity($title) . $blockParam['after_title'] . $content;
@@ -60,6 +60,11 @@ class WPRender
 		// 「もっと読む」ボタンを追加
 //		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
+		// コンテンツ全体をウィジェット用タグで囲む
+		$widgetClass = 'widget_' . $pageDefParam['pd_widget_id'];		// ウィジェットIDからクラス名作成
+		$blockParam['before_widget'] = sprintf($blockParam['before_widget'], $widgetTag, $widgetClass);		// ウィジェット識別用IDとウィジェットクラス名
+		$content = $blockParam['before_widget'] . $content . $blockParam['after_widget'];
+		 
 		return $content;
 	}
 

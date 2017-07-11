@@ -219,6 +219,7 @@ define('M3_TEMPLATE_GENERATOR_THEMLER',		'themler');		// Themler
 define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート
 define('M3_RENDER_JOOMLA_NEW',		'joomla_new');		// Joomla! 1.5以上のテンプレート
 define('M3_RENDER_BOOTSTRAP',		'bootstrap');		// Bootstrap 3.0テンプレート
+define('M3_RENDER_WORDPRESS',		'wordpress');		// WordPressテンプレート
 define('M3_RENDER_JQUERY_MOBILE',	'jquery mobile');	// jQuery Mobileテンプレート
 	
 // ファイル拡張子
