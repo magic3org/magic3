@@ -105,8 +105,8 @@ INSERT INTO _widgets
 ('blog_search_box', 'ブログ-検索', 'blog',         'bootstrap',      '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'ブログ記事を検索するためのボックス。',          true,         true,        false,         false,               false,true,               0, 1, -1, '2014-04-14', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'blog_new_box';
 INSERT INTO _widgets
-(wd_id,          wd_name,         wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('blog_new_box', 'ブログ-最新', 'blog',         '2.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログの最新記事一覧を表示。', true,        false,               false,true,               1, -1, true, '2015-02-23', now(),    now());
+(wd_id,          wd_name,         wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('blog_new_box', 'ブログ-最新', 'blog',        'wordpress', '2.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログの最新記事一覧を表示。', true,        false,               false,true,               1, -1, true, '2015-02-23', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'blog_update_box';
 INSERT INTO _widgets
 (wd_id,          wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

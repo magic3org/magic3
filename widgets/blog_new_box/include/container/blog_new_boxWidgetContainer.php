@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,6 +23,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 	private $isEntry;	// 記事の投稿があるかどうか
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
+	private $showDate;					// 日付を表示するかどうか
 	private $optionPassage;						// 表示オプション(経過日時)
 	private $showImage;		// 画像を表示するかどうか
 	private $imageType;				// 画像タイプ
@@ -73,6 +74,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		// 初期値設定
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 		$useRss = 1;							// RSS配信を行うかどうか
+		$this->showDate			= 0;					// 日付を表示するかどうか
 		$this->optionPassage	= 0;						// 表示オプション(経過日時)
 		$this->showImage		= 0;				// 画像を表示するかどうか
 		$this->imageType		= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
@@ -84,6 +86,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		if (!empty($paramObj)){
 			if (isset($paramObj->itemCount))	$itemCount	= $paramObj->itemCount;
 			if (isset($paramObj->useRss))		$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
+			if (isset($paramObj->showDate))		$this->showDate	= $paramObj->showDate;					// 日付を表示するかどうか
 			if (isset($paramObj->optionPassage)) $this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
 			if (isset($paramObj->showImage))	$this->showImage		= $paramObj->showImage;				// 画像を表示するかどうか
 			if (isset($paramObj->imageType))	$this->imageType		= $paramObj->imageType;				// 画像タイプ
@@ -172,15 +175,30 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'];
 		$escapedLinkUrl = $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/));
 
-		// オプション項目
+		// 日付
 		$optionStr = '';
-		if ($this->optionPassage){
-			$time = strtotime($fetchedRow['be_regist_dt']);
-			if ($time != strtotime($this->gEnv->getInitValueOfTimestamp())){
-				$time = time() - $time;
-				$optionStr = '<div style="text-align:right;font-size:smaller;">' . $this->convertToDispString($this->convertToDispPassageTime($time) . '前') . '</div>';
+		if ($this->showDate){		// 日付表示の場合
+			if ($fetchedRow['be_regist_dt'] != $this->gEnv->getInitValueOfTimestamp()){
+				if ($this->optionPassage){			// 経過日時表示
+					$time = strtotime($fetchedRow['be_regist_dt']);
+					$time = time() - $time;
+					
+					if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
+						$optionStr = ' <span class="post-date">' . $this->convertToDispString($this->convertToDispPassageTime($time) . '前') . '</span>';
+					} else {
+						$optionStr = '<div style="text-align:right;font-size:smaller;">' . $this->convertToDispString($this->convertToDispPassageTime($time) . '前') . '</div>';
+					}
+				} else {		// 投稿日表示
+					if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
+						$formatedDate = mysql2date(get_option('date_format'), $fetchedRow['be_regist_dt']);
+						$optionStr = ' <span class="post-date">' . $formatedDate . '</span>';
+					} else {
+						$optionStr = '<div style="text-align:right;font-size:smaller;">' . $this->convertToDispDate($fetchedRow['be_regist_dt']) . '</div>';
+					}
+				}
 			}
 		}
+
 		
 		// 画像
 		$imageTag = '';

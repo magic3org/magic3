@@ -183,6 +183,7 @@ class PageManager extends Core
 	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メイン型" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メイン型ウィジェット)
 	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
 	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型テンプレート対応" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
+	const WIDGET_FUNCTION_MARK_WORDPRESS = ' <span class="label label-warning" rel="m3help" title="WordPress型テンプレート対応" data-placement="auto">W</span>';			// ウィジェット機能マーク(WordPress型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
 			
 	// アドオンオブジェクト用
@@ -5084,6 +5085,7 @@ class PageManager extends Core
 					if (!empty($rows[$i]['wd_template_type'])){		// 対応テンプレートタイプ
 						$templateTypeArray = explode(',', $rows[$i]['wd_template_type']);
 						if (in_array('bootstrap', $templateTypeArray)) $functionMark .= self::WIDGET_FUNCTION_MARK_BOOTSTRAP;		// Bootstrap型テンプレート対応
+						if (in_array('wordpress', $templateTypeArray)) $functionMark .= self::WIDGET_FUNCTION_MARK_WORDPRESS;		// WordPress型テンプレート対応
 					}
 			
 					echo '<dl class="m3_widgetlist_item" id="' . $widgetTag . '">' . M3_NL;

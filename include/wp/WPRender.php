@@ -61,7 +61,7 @@ class WPRender
 //		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
 		// コンテンツ全体をウィジェット用タグで囲む
-		$widgetClass = 'widget_' . $pageDefParam['pd_widget_id'];		// ウィジェットIDからクラス名作成
+		$widgetClass = 'm3widget_' . $pageDefParam['pd_widget_id'];		// ウィジェットIDからクラス名作成
 		$blockParam['before_widget'] = sprintf($blockParam['before_widget'], $widgetTag, $widgetClass);		// ウィジェット識別用IDとウィジェットクラス名
 		$content = $blockParam['before_widget'] . $content . $blockParam['after_widget'];
 		 
