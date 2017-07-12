@@ -382,6 +382,9 @@ class BaseFrameContainer extends Core
 					$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
 					echo $pageData;
 				} else {
+					// ***** WordPressテンプレートの場合は非共通のウィジェットが使用されていなくても表示可とする *****
+					if ($this->gEnv->getCurrentTemplateType() == 100) $nonSharedWidgetCount = 1;
+					
 					if ($isSystemAdmin || $nonSharedWidgetCount > 0){
 						$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
 						echo $pageData;
