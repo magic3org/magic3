@@ -214,9 +214,9 @@ add_filter( 'option_category_base',     '_wp_filter_taxonomy_base'            );
 //add_filter( 'pings_open',               '_close_comments_for_old_post', 10, 2 );
 add_filter( 'editable_slug',            'urldecode'                           );
 add_filter( 'editable_slug',            'esc_textarea'                        );
-add_filter( 'nav_menu_meta_box_object', '_wp_nav_menu_meta_box_object'        );
-add_filter( 'pingback_ping_source_uri', 'pingback_ping_source_uri'            );
-add_filter( 'xmlrpc_pingback_error',    'xmlrpc_pingback_error'               );
+//add_filter( 'nav_menu_meta_box_object', '_wp_nav_menu_meta_box_object'        );
+//add_filter( 'pingback_ping_source_uri', 'pingback_ping_source_uri'            );
+//add_filter( 'xmlrpc_pingback_error',    'xmlrpc_pingback_error'               );
 add_filter( 'title_save_pre',           'trim'                                );
 
 add_action( 'transition_comment_status', '_clear_modified_cache_on_transition_comment_status', 10, 2 );
@@ -451,7 +451,7 @@ add_action( 'wp_playlist_scripts', 'wp_playlist_scripts' );
 add_action( 'customize_controls_enqueue_scripts', 'wp_plupload_default_settings' );
 
 // Nav menu
-add_filter( 'nav_menu_item_id', '_nav_menu_item_id_use_once', 10, 2 );
+//add_filter( 'nav_menu_item_id', '_nav_menu_item_id_use_once', 10, 2 );
 
 // Widgets
 //add_action( 'init', 'wp_widgets_init', 1 );

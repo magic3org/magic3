@@ -121,11 +121,11 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
  * @param bool $clear_update_cache Whether to clear the Theme updates cache
  */
 function wp_clean_themes_cache( $clear_update_cache = true ) {
-	if ( $clear_update_cache )
+/*	if ( $clear_update_cache )
 		delete_site_transient( 'update_themes' );
 	search_theme_directories( true );
 	foreach ( wp_get_themes( array( 'errors' => null ) ) as $theme )
-		$theme->cache_delete();
+		$theme->cache_delete();*/
 }
 
 /**
@@ -806,7 +806,7 @@ function validate_current_theme() {
 	 *
 	 * @param bool $validate Whether to validate the current theme. Default true.
 	 */
-	if ( wp_installing() || ! apply_filters( 'validate_current_theme', true ) )
+/*	if ( wp_installing() || ! apply_filters( 'validate_current_theme', true ) )
 		return true;
 
 	if ( ! file_exists( get_template_directory() . '/index.php' ) ) {
@@ -825,7 +825,7 @@ function validate_current_theme() {
 		switch_theme( WP_DEFAULT_THEME );
 		return false;
 	}
-
+*/
 	/**
 	 * If we're in an invalid state but WP_DEFAULT_THEME doesn't exist,
 	 * switch to the latest core default theme that's installed.
@@ -835,13 +835,15 @@ function validate_current_theme() {
 	 * checks against WP_DEFAULT_THEME above, also.) We also can't do anything
 	 * if it turns out there is no default theme installed. (That's `false`.)
 	 */
-	$default = WP_Theme::get_core_default_theme();
+/*	$default = WP_Theme::get_core_default_theme();
 	if ( false === $default || get_stylesheet() == $default->get_stylesheet() ) {
 		return true;
 	}
 
 	switch_theme( $default->get_stylesheet() );
 	return false;
+	*/
+	return true;
 }
 
 /**

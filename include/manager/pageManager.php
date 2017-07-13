@@ -6265,22 +6265,50 @@ class PageManager extends Core
 		return $url;
 	}
 	/**
-	 * 指定のページ属性のページURLを生成
+	 * 現在のアクセスポイントの指定のページ属性のページURLを生成
 	 *
 	 * @param string $contentType	コンテンツタイプ
-	 * @param string $param		実行パラメータ
-	 * @return string			生成したURL
+	 * @param string $param			追加パラメータ
+	 * @param bool $omitPageId		ページID省略形を使用するかどうか
+	 * @return string				生成したURL
 	 */
-	function createContentPageUrl($contentType, $param = '')
+	function createContentPageUrl($contentType, $param = '', $omitPageId = true)
 	{
 		global $gEnvManager;
+		static $urlArray = array();
 		
-		$pageSubId = $this->getPageSubIdByContentType($contentType, $gEnvManager->getCurrentPageId());
-		if (empty($pageSubId)) $pageSubId = $gEnvManager->getDefaultPageSubId();
+		// 複数回呼ばれるのでコンテンツタイプごとにページまでのURLは保存しておく
+		$baseUrl = $urlArray[$contentType];
+		if (!isset($baseUrl)){
+			// コンテンツタイプからページサブIDを取得
+			$pageSubId = $this->getPageSubIdByContentType($contentType, $gEnvManager->getCurrentPageId());		// DBから取得
 		
-		$url = $gEnvManager->createPageUrl();
-		$url .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId;
-		if (!empty($param)) $url .= '&' . $param;
+			if (empty($pageSubId)){	// ページサブIDが取得できない場合はデフォルトのページサブIDを取得
+				$pageSubId = $gEnvManager->getDefaultPageSubId();
+			} else if ($pageSubId == $gEnvManager->getDefaultPageSubId()){		// デフォルトページの場合
+				if ($omitPageId) $pageSubId = '';	// ページID省略形を使用する場合はページサブIDを省略
+			}
+			
+			// 現在のアクセスポイントのURLを取得
+			$baseUrl = $gEnvManager->createPageUrl();
+			
+			// ページサブIDを付加
+			if (!empty($pageSubId)) $baseUrl .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId;
+			
+			// URLを保存
+			$urlArray[$contentType] = $baseUrl;
+		}
+		
+		// 追加パラメータ
+		$url = $baseUrl;
+		if (!empty($param)){
+			if (strEndsWith($url, '.php') || strEndsWith($url, '/')){
+				$url .= '?';
+			} else {
+				$url .= '&';
+			}
+			$url .= $param;
+		}
 		return $url;
 	}
 	/**
