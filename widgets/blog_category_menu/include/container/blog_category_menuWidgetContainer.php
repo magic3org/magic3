@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/blog_category_menuDb.php
 class blog_category_menuWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
-	private $langId;		// 言語
 	private $isExistsList;	// 一覧表示項目があるかどうか
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログカテゴリー';		// デフォルトのウィジェットタイトル名
@@ -47,7 +46,7 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'menu.tmpl.html';
+		return 'index.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -60,10 +59,8 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		
 		// #### カテゴリーリストを作成 ####
-		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
+		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->_langId);// デフォルト言語で取得
 		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 	}
 	/**
@@ -87,12 +84,22 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 	 */
 	function categoryListLoop($index, $fetchedRow, $param)
 	{
-		// リンク先の作成
+		$categoryId = $fetchedRow['bc_id'];
 		$name = $fetchedRow['bc_name'];
-		$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, M3_REQUEST_PARAM_CATEGORY_ID . '=' . $fetchedRow['bc_id']);
+		
+		// リンク先の作成
+		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryId);// カテゴリー画面へのURLを作成
+		
+		// クラス名
+		$classAttr = '';
+		if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
+			$classAttr = 'class="cat-item cat-item-' . $categoryId . '"';
+		}
+		
 		$row = array(
-			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
-			'name' => $this->convertToDispString($name)			// タイトル
+			'link_url'	=> $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+			'name'		=> $this->convertToDispString($name),			// タイトル
+			'class'		=> $classAttr									// クラス名
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
