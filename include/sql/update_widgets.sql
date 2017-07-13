@@ -121,8 +121,8 @@ INSERT INTO _widgets
 ('blog_category_menu', 'ブログ-カテゴリーメニュー', 'blog', 'wordpress',        '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログカテゴリメニュー',          false,           false,       true,         true,        false,         false,               false,true,           '2017-07-12',now(), now());
 DELETE FROM _widgets WHERE wd_id = 'blog_archive_menu';
 INSERT INTO _widgets
-(wd_id,               wd_name,                     wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('blog_archive_menu', 'ブログ-アーカイブメニュー', 'blog',         '2.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログアーカイブメニュー',        true,         false,               true,true,           '2015-10-02', now(), now());
+(wd_id,               wd_name,                     wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('blog_archive_menu', 'ブログ-アーカイブメニュー', 'blog',         'wordpress',      '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログアーカイブメニュー',        true,         false,               true,true,           '2017-07-13', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'blog_list';
 INSERT INTO _widgets
 (wd_id,         wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,            wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
