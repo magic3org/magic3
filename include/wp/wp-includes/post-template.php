@@ -595,8 +595,10 @@ function get_body_class( $class = '' ) {
 		$classes[] = 'error404';
 
 	if ( is_singular() ) {
-		$post_id = $wp_query->get_queried_object_id();
-		$post = $wp_query->get_queried_object();
+//		$post_id = $wp_query->get_queried_object_id();
+//		$post = $wp_query->get_queried_object();
+		$post_id = $wp_query->post->ID;
+		$post = $wp_query->post;
 		$post_type = $post->post_type;
 
 		if ( is_page_template() ) {
@@ -639,7 +641,8 @@ function get_body_class( $class = '' ) {
 		} elseif ( is_page() ) {
 			$classes[] = 'page';
 
-			$page_id = $wp_query->get_queried_object_id();
+	//		$page_id = $wp_query->get_queried_object_id();
+			$page_id = $wp_query->post->ID;
 
 			$post = get_post($page_id);
 
