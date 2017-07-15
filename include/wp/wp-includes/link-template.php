@@ -2097,7 +2097,7 @@ function adjacent_post_link( $format, $link, $in_same_term = false, $excluded_te
  * @return string The link URL for the given page number.
  */
 function get_pagenum_link($pagenum = 1, $escape = true ) {
-	global $wp_rewrite;
+//	global $wp_rewrite;
 
 	$pagenum = (int) $pagenum;
 
@@ -2112,9 +2112,9 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 
 //	if ( !$wp_rewrite->using_permalinks() || is_admin() ) {
 		$base = trailingslashit( get_bloginfo( 'url' ) );
-
 		if ( $pagenum > 1 ) {
-			$result = add_query_arg( 'paged', $pagenum, $base . $request );
+//			$result = add_query_arg( 'paged', $pagenum, $base . $request );
+			$result = add_query_arg( 'page', $pagenum, $base . $request );
 		} else {
 			$result = $base . $request;
 		}

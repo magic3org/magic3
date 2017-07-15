@@ -1666,12 +1666,14 @@ class WP_Query {
 	public function get_posts() {
 		global $gContentApi;
 		global $gRequestManager;
+		global $paged;
 					
 		// ##### URLパラメータを解析 #####
 		$this->query_vars = array();
 		// ページ番号
 		$pageNo = absint($gRequestManager->trimValueOf('page'));
-		$this->query_vars['paged'] = $pageNo;
+		$this->query_vars['paged'] = $pageNo;			// 一覧でのページ番号は$paged、１記事を複数分割した場合のページ番号は$page
+		$paged = $pageNo;				// グローバル変数へ代入
 		if ($pageNo > 1) $this->is_paged = true;
 		
 		// ##### DBからコンテンツを取得 #####
