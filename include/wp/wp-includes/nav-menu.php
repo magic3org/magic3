@@ -164,14 +164,35 @@ function get_nav_menu_locations() {
  * @return bool Whether location has a menu.
  */
 function has_nav_menu( $location ) {
-	$has_nav_menu = false;
+	global $_wp_registered_nav_menus;
+	global $gMenuApi;
+	global $gPageManager;
+	
+	// パラメータエラーチェック
+	if (empty($location)) return false;
+	
+	// 最初のメニューをメインメニューとし、メインメニューの存在のみをチェックする
+	$firstLocation = key(array_slice($_wp_registered_nav_menus, 0/*最初のメニュー位置*/, 1, true));
+	if ($location == $firstLocation){
+		$ret = $gMenuApi->isExistsMenu();
+		return $ret;
+	}
+	
+	// メインメニュー以外の場合はMagic3の配置ブロックを表示
+	$count = $gPageManager->getWidgetsCount($location);		// ウィジェット数取得
+	if ($count > 0){
+		return true;
+	} else {
+		return false;
+	}
+/*	$has_nav_menu = false;
 
 	$registered_nav_menus = get_registered_nav_menus();
 	if ( isset( $registered_nav_menus[ $location ] ) ) {
 		$locations = get_nav_menu_locations();
 		$has_nav_menu = ! empty( $locations[ $location ] );
 	}
-
+*/
 	/**
 	 * Filters whether a nav menu is assigned to the specified location.
 	 *
@@ -180,7 +201,7 @@ function has_nav_menu( $location ) {
 	 * @param bool   $has_nav_menu Whether there is a menu assigned to a location.
 	 * @param string $location     Menu location.
 	 */
-	return apply_filters( 'has_nav_menu', $has_nav_menu, $location );
+//	return apply_filters( 'has_nav_menu', $has_nav_menu, $location );
 }
 
 /**

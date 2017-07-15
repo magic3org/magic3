@@ -46,8 +46,21 @@ require_once ABSPATH . WPINC . '/class-walker-nav-menu.php';
  * @return object|false|void Menu output if $echo is false, false if there are no items or no menu was found.
  */
 function wp_nav_menu( $args = array() ) {
-	static $menu_id_slugs = array();
+	global $_wp_registered_nav_menus;
+	global $gPageManager;
 
+	// 最初のメニューをメインメニューとする
+	$position = $args['theme_location'];
+	$firstLocation = key(array_slice($_wp_registered_nav_menus, 0/*最初のメニュー位置*/, 1, true));
+	if ($position != $firstLocation){		// メインメニュー以外の場合
+		// 配置ブロックを表示
+		if (!empty($position)) echo $gPageManager->getWPContents($position);
+
+		return;
+	}
+	
+	static $menu_id_slugs = array();
+	
 	$defaults = array( 'menu' => '', 'container' => 'div', 'container_class' => '', 'container_id' => '', 'menu_class' => 'menu', 'menu_id' => '',
 	'echo' => true, 'fallback_cb' => 'wp_page_menu', 'before' => '', 'after' => '', 'link_before' => '', 'link_after' => '', 'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>', 'item_spacing' => 'preserve',
 	'depth' => 0, 'walker' => '', 'theme_location' => '' );

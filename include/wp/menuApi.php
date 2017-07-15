@@ -49,6 +49,19 @@ class MenuApi extends BaseApi
 		$this->currentUserLogined = $this->gEnv->isCurrentUserLogined();	// 現在のユーザはログイン中かどうか
 	}
 	/**
+	 * [WordPressテンプレート用API]メインメニューが存在するか確認
+	 *
+	 * @return bool				true=存在する、false=存在しない
+	 */
+	function isExistsMenu()
+	{
+		if ($this->db->getChildMenuItems($this->menuId, 0/*親ID*/, $this->langId, $this->now, $rows)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * [WordPressテンプレート用API]メニュー情報を取得
 	 *
 	 * @return array     				WP_Postオブジェクトの配列
