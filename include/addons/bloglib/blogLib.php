@@ -22,6 +22,8 @@ class blogLib extends Addon
 	private $blogId = '';	// ブログID
 	private $templateId = '';	// テンプレートID
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
+	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向
+	const CF_SHOW_ENTRY_LIST_IMAGE	= 'show_entry_list_image';		// 記事一覧に画像を表示するかどうか
 	
 	/**
 	 * コンストラクタ
@@ -199,14 +201,16 @@ class blogLib extends Addon
 		return true;
 	}
 	/**
-	 * 記事一覧の表示項目数を取得
+	 * 記事一覧の表示設定を取得
 	 *
-	 * @return int				表示項目数
+	 * @return array				表示項目数,ソート順(0=昇順,1=降順),サムネール表示可否の配列
 	 */
-	function getPublicContentViewCount()
+	function getPublicContentViewConfig()
 	{
 		$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
-		return $itemCount;
+		$order = $this->getConfig(self::CF_ENTRY_VIEW_ORDER);
+		$showThumb = $this->getConfig(self::CF_SHOW_ENTRY_LIST_IMAGE);
+		return array($itemCount, $order, $showThumb);
 	}
 	/**
 	 * 公開中の記事数を取得。アクセス制限も行う。

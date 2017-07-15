@@ -37,6 +37,7 @@ class ContentApi extends BaseApi
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
 	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
 	private $relativePosts;			// 現在のコンテンツに関連したWP_Postオブジェクト
+	private $showThumb;				// コンテンツ表示制御(サムネールを表示するかどうか)
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -131,20 +132,21 @@ class ContentApi extends BaseApi
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
 		
-		// 一覧の表示項目数取得
-		$viewCount = $addonObj->getPublicContentViewCount();
+		// 一覧の表示設定を取得
+		list($viewCount, $order, $showThumb) = $addonObj->getPublicContentViewConfig();
 		
 		// 初期値設定
 		$this->accessPoint = $this->gEnv->getAccessDir();		// アクセスポイント
 		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
 		$this->limit = $viewCount;					// コンテンツ取得数(コンテンツ取得用)
 		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
-		$this->order = 1;							// コンテンツ並び順。デフォルトは降順。
+		$this->order = $order;							// コンテンツ並び順(0=昇順,1=降順)
 		$this->now = date("Y/m/d H:i:s");			// 現在日時
 		$this->keywords = $keywords;		// 検索条件(キーワード)
 		$this->startDt = $startDt;			// 検索条件(期間開始日時)
 		$this->endDt = $endDt;				// 検索条件(期間終了日時)
 		$this->category = $category;				// 検索条件(カテゴリー)
+		$this->showThumb = $showThumb;				// コンテンツ表示制御(サムネールを表示するかどうか)
 		
 		// パラメータ値で更新
 		if (!empty($langId)) $this->langId = $langId;				// コンテンツの言語(コンテンツ取得用)
@@ -702,6 +704,15 @@ class ContentApi extends BaseApi
 		
 		$url = $this->getUrl($baseUrl);
 		return $url;
+	}
+	/**
+	 * コンテンツ表示制御(サムネールを表示するかどうか)を取得
+	 *
+	 * @return bool				true=表示、false=表示しない
+	 */
+	function getShowThumb()
+	{
+		return $this->showThumb;
 	}
 }
 ?>

@@ -127,15 +127,16 @@ class contentLib
 		}
 	}
 	/**
-	 * コンテンツ一覧の表示項目数を取得
+	 * コンテンツ一覧の表示設定を取得
 	 *
-	 * @return int				表示項目数
+	 * @return array				表示項目数,ソート順(0=昇順,1=降順),サムネール表示可否の配列
 	 */
-	function getPublicContentViewCount()
+	function getPublicContentViewConfig()
 	{
 	//	$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
 		$itemCount = 10;
-		return $itemCount;
+		$showThumb = 0;
+		return array($itemCount, 1, $showThumb);
 	}
 	/**
 	 * 公開中の記事数を取得。アクセス制限も行う。

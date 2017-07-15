@@ -186,6 +186,9 @@ function image_downsize( $id, $size = 'medium' ) {
 	global $gEnvManager;
 	global $gContentApi;
 	
+	// サムネール表示しない場合は終了
+	if (!$gContentApi->getShowThumb()) return false;
+	
 //	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
 
 	/**
