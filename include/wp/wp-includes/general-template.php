@@ -3041,13 +3041,13 @@ function user_can_richedit() {
  *
  * @return string Either 'tinymce', or 'html', or 'test'
  */
-function wp_default_editor() {
+/*function wp_default_editor() {
 	$r = user_can_richedit() ? 'tinymce' : 'html'; // defaults
 	if ( wp_get_current_user() ) { // look for cookie
 		$ed = get_user_setting('editor', 'tinymce');
 		$r = ( in_array($ed, array('tinymce', 'html', 'test') ) ) ? $ed : $r;
 	}
-
+*/
 	/**
 	 * Filters which editor should be displayed by default.
 	 *
@@ -3055,8 +3055,8 @@ function wp_default_editor() {
 	 *
 	 * @param string $r Which editor should be displayed by default. Either 'tinymce', 'html', or 'test'.
 	 */
-	return apply_filters( 'wp_default_editor', $r );
-}
+/*	return apply_filters( 'wp_default_editor', $r );
+}*/
 
 /**
  * Renders an editor.
@@ -3077,11 +3077,11 @@ function wp_default_editor() {
  * @param string $editor_id HTML ID attribute value for the textarea and TinyMCE. Can only be /[a-z]+/.
  * @param array  $settings  See _WP_Editors::editor().
  */
-function wp_editor( $content, $editor_id, $settings = array() ) {
+/*function wp_editor( $content, $editor_id, $settings = array() ) {
 	if ( ! class_exists( '_WP_Editors', false ) )
 		require( ABSPATH . WPINC . '/class-wp-editor.php' );
 	_WP_Editors::editor($content, $editor_id, $settings);
-}
+}*/
 
 /**
  * Retrieves the contents of the search WordPress query variable.
@@ -3438,6 +3438,7 @@ function paginate_links( $args = '' ) {
  *     @type string $current SVG icon color of current admin menu link.
  * }
  */
+/*
 function wp_admin_css_color( $key, $name, $url, $colors = array(), $icons = array() ) {
 	global $_wp_admin_css_colors;
 
@@ -3450,14 +3451,14 @@ function wp_admin_css_color( $key, $name, $url, $colors = array(), $icons = arra
 		'colors' => $colors,
 		'icon_colors' => $icons,
 	);
-}
+}*/
 
 /**
  * Registers the default Admin color schemes
  *
  * @since 3.0.0
  */
-function register_admin_color_schemes() {
+/*function register_admin_color_schemes() {
 	$suffix = is_rtl() ? '-rtl' : '';
 	$suffix .= SCRIPT_DEBUG ? '' : '.min';
 
@@ -3515,7 +3516,7 @@ function register_admin_color_schemes() {
 	);
 
 }
-
+*/
 /**
  * Displays the URL of a WordPress admin CSS file.
  *
@@ -3526,14 +3527,14 @@ function register_admin_color_schemes() {
  * @param string $file file relative to wp-admin/ without its ".css" extension.
  * @return string
  */
-function wp_admin_css_uri( $file = 'wp-admin' ) {
+/*function wp_admin_css_uri( $file = 'wp-admin' ) {
 	if ( defined('WP_INSTALLING') ) {
 		$_file = "./$file.css";
 	} else {
 		$_file = admin_url("$file.css");
 	}
 	$_file = add_query_arg( 'version', get_bloginfo( 'version' ),  $_file );
-
+*/
 	/**
 	 * Filters the URI of a WordPress admin CSS file.
 	 *
@@ -3542,8 +3543,8 @@ function wp_admin_css_uri( $file = 'wp-admin' ) {
 	 * @param string $_file Relative path to the file with query arguments attached.
 	 * @param string $file  Relative path to the file, minus its ".css" extension.
 	 */
-	return apply_filters( 'wp_admin_css_uri', $_file, $file );
-}
+/*	return apply_filters( 'wp_admin_css_uri', $_file, $file );
+}*/
 
 /**
  * Enqueues or directly prints a stylesheet link to the specified CSS file.
@@ -3565,6 +3566,7 @@ function wp_admin_css_uri( $file = 'wp-admin' ) {
  * 	                         to wp-admin/. Defaults to 'wp-admin'.
  * @param bool   $force_echo Optional. Force the stylesheet link to be printed rather than enqueued.
  */
+/*
 function wp_admin_css( $file = 'wp-admin', $force_echo = false ) {
 	// For backward compatibility
 	$handle = 0 === strpos( $file, 'css/' ) ? substr( $file, 4 ) : $file;
@@ -3576,7 +3578,7 @@ function wp_admin_css( $file = 'wp-admin', $force_echo = false ) {
 			wp_enqueue_style( $handle );
 		return;
 	}
-
+*/
 	/**
 	 * Filters the stylesheet link to the specified CSS file.
 	 *
@@ -3588,14 +3590,15 @@ function wp_admin_css( $file = 'wp-admin', $force_echo = false ) {
 	 * @param string $file Style handle name or filename (without ".css" extension)
 	 *                     relative to wp-admin/. Defaults to 'wp-admin'.
 	 */
-	echo apply_filters( 'wp_admin_css', "<link rel='stylesheet' href='" . esc_url( wp_admin_css_uri( $file ) ) . "' type='text/css' />\n", $file );
+/*	echo apply_filters( 'wp_admin_css', "<link rel='stylesheet' href='" . esc_url( wp_admin_css_uri( $file ) ) . "' type='text/css' />\n", $file );
 
 	if ( function_exists( 'is_rtl' ) && is_rtl() ) {
+	*/
 		/** This filter is documented in wp-includes/general-template.php */
-		echo apply_filters( 'wp_admin_css', "<link rel='stylesheet' href='" . esc_url( wp_admin_css_uri( "$file-rtl" ) ) . "' type='text/css' />\n", "$file-rtl" );
+/*		echo apply_filters( 'wp_admin_css', "<link rel='stylesheet' href='" . esc_url( wp_admin_css_uri( "$file-rtl" ) ) . "' type='text/css' />\n", "$file-rtl" );
 	}
 }
-
+*/
 /**
  * Enqueues the default ThickBox js and css.
  *

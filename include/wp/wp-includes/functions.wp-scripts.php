@@ -64,6 +64,7 @@ function _wp_scripts_maybe_doing_it_wrong( $function ) {
  * @return array On success, a processed array of WP_Dependencies items; otherwise, an empty array.
  */
 function wp_print_scripts( $handles = false ) {
+	// ##### WordPress非奨励 使用しない #####
 	/**
 	 * Fires before scripts in the $handles queue are printed.
 	 *

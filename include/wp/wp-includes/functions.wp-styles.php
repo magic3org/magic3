@@ -40,6 +40,7 @@ function wp_styles() {
  * @return array On success, a processed array of WP_Dependencies items; otherwise, an empty array.
  */
 function wp_print_styles( $handles = false ) {
+	// ##### WordPress”ñ§—ã g—p‚µ‚È‚¢? #####
 	if ( '' === $handles ) { // for wp_head
 		$handles = false;
 	}

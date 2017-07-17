@@ -935,7 +935,6 @@ function wp_prototype_before_jquery( $js_array ) {
  * @since 2.5.0
  */
 function wp_just_in_time_script_localization() {
-
 	wp_localize_script( 'autosave', 'autosaveL10n', array(
 		'autosaveInterval' => AUTOSAVE_INTERVAL,
 		'blog_id' => get_current_blog_id(),
