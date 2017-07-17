@@ -42,7 +42,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const TEMPLATE_NORMAL32_ICON_FILE = '/images/system/layout32.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN32_ICON_FILE = '/images/system/layout_plain32.png';		// デザインなしテンプレートアイコン
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
-	const TEMPLATE_THUMBNAIL_FILENAME_WP = 'screenshot.png';				// テンプレートサムネール(WordPressテンプレート)
+	const TEMPLATE_THUMBNAIL_FILENAME_WP = 'screenshot';				// テンプレートサムネール(WordPressテンプレート)
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
 	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
 	const TITLE_PRE_ICON_LOCK = '<i class="glyphicon glyphicon-lock" rel="m3help" title="SSL"></i> ';		// タイトル付加用アイコン(鍵)
@@ -744,7 +744,14 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// テンプレート画像
 		if ($type == 100){		// WordPressテンプレートの場合
-			$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/' . self::TEMPLATE_THUMBNAIL_FILENAME_WP;
+			// 画像を検索
+			foreach (array('png', 'gif', 'jpg', 'jpeg') as $ext){
+				$imgPath = $this->gEnv->getTemplatesPath() . '/' . $value . '/' . self::TEMPLATE_THUMBNAIL_FILENAME_WP . '.' . $ext;
+				if (file_exists($imgPath)){
+					$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/' . self::TEMPLATE_THUMBNAIL_FILENAME_WP . '.' . $ext;
+					break;
+				}
+			}
 		} else {
 			$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/' . self::TEMPLATE_THUMBNAIL_FILENAME;
 		}
