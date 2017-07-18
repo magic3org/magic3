@@ -454,7 +454,7 @@ add_action( 'customize_controls_enqueue_scripts', 'wp_plupload_default_settings'
 //add_filter( 'nav_menu_item_id', '_nav_menu_item_id_use_once', 10, 2 );
 
 // Widgets
-//add_action( 'init', 'wp_widgets_init', 1 );
+add_action( 'init', 'wp_widgets_init', 1 );		// ウィジェットのCSSの初期化等
 
 // Admin Bar
 // Don't remove. Wrong way to disable.

@@ -506,13 +506,14 @@ function wp_default_scripts( &$scripts ) {
 	$scripts->add( 'media-audiovideo', "/scripts/wp/media-audiovideo$suffix.js", array( 'media-editor' ), false, 1 );
 	$scripts->add( 'mce-view', "/scripts/wp/mce-view$suffix.js", array( 'shortcode', 'jquery', 'media-views', 'media-audiovideo' ), false, 1 );
 
+/*
 	$scripts->add( 'wp-api', "/scripts/wp/wp-api$suffix.js", array( 'jquery', 'backbone', 'underscore' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize( 'wp-api', 'wpApiSettings', array(
 		'root'          => esc_url_raw( get_rest_url() ),
 		'nonce'         => ( wp_installing() && ! is_multisite() ) ? '' : wp_create_nonce( 'wp_rest' ),
 		'versionString' => 'wp/v2/',
 	) );
-
+*/
 	if ( is_admin() ) {
 		$scripts->add( 'admin-tags', "/wp-admin/js/tags$suffix.js", array( 'jquery', 'wp-ajax-response' ), false, 1 );
 		did_action( 'init' ) && $scripts->localize( 'admin-tags', 'tagsl10n', array(

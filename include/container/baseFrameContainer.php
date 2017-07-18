@@ -786,9 +786,7 @@ class BaseFrameContainer extends Core
 			m3WpInit();							// 言語リソース読み込み後にMagic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');// テンプレート初期処理
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
-//			do_action('init');
-//			do_action('widgets_init');			// テンプレートで設定されているWordPressウィジェットの設定値を取得。init()を呼び出すと余計な処理が呼ばれるのでwidgets_initを個別に実行する。
-			wp_widgets_init();
+			do_action('init');					// テンプレート側からの初期処理(ウィジェットのCSSの初期化等)
 			do_action('wp_loaded');
 			
 			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
