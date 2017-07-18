@@ -40,7 +40,7 @@ function wp_styles() {
  * @return array On success, a processed array of WP_Dependencies items; otherwise, an empty array.
  */
 function wp_print_styles( $handles = false ) {
-	// ##### WordPress非奨励 使用しない? #####
+	// ##### WordPressでは非推奨なので直接は実行しないが、wp_headイベント時にヘッダ部にスタイルシートを読み込むのに使用する。#####
 	if ( '' === $handles ) { // for wp_head
 		$handles = false;
 	}

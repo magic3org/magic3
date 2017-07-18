@@ -1079,7 +1079,7 @@ function print_head_scripts() {
 	if ( apply_filters( 'print_head_scripts', true ) ) {
 		_print_scripts();
 	}
-
+		
 	$wp_scripts->reset();
 	return $wp_scripts->done;
 }
@@ -1178,7 +1178,18 @@ function wp_print_head_scripts() {
 	if ( ! ( $wp_scripts instanceof WP_Scripts ) ) {
 		return array(); // no need to run if nothing is queued
 	}
-	return print_head_scripts();
+	
+	// ##### Javascript呼び出しのヘッダ部出力はMagic3側で出力するために出力を抑止する #####
+	global $gEnvManager;
+	
+	ob_start();
+	$ret = print_head_scripts();
+	$contents = ob_get_contents();
+	ob_end_clean();
+	
+	$gEnvManager->setWpHeadScriptsData($contents);
+
+	return $ret;
 }
 
 /**

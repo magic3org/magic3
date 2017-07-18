@@ -85,6 +85,7 @@ class EnvManager extends Core
 	private $joomlaPageNavData;		// Joomla!v2.5用ページ前後遷移データ
 	private $joomlaPaginationData;	// Joomla!v2.5用ページ番号遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
+	private $wpHeadScriptsData;		// WordPressヘッダ部出力データ(Javascript)
 	private $remoteContent = array();			// リモート表示コンテンツ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
@@ -3112,11 +3113,30 @@ class EnvManager extends Core
 	/**
 	 * Joomla!用ビュー作成用データを取得
 	 *
-	 * @return array		メニューデータ
+	 * @return array		ビュー作成データ
 	 */
 	public function getJoomlaViewData()
 	{
 		return $this->joomlaViewData;
+	}
+	/**
+	 * WordPressヘッダ部出力データ(Javascript)を設定
+	 *
+	 * @param string $headData		ヘッダ部出力データ
+	 * @return 						なし
+	 */
+	public function setWpHeadScriptsData($headData)
+	{
+		$this->wpHeadScriptsData = $headData;
+	}
+	/**
+	 * WordPressヘッダ部出力データ(Javascript)を取得
+	 *
+	 * @return string			ヘッダ部出力データ
+	 */
+	public function getWpHeadScriptsData()
+	{
+		return $this->wpHeadScriptsData;
 	}
 	/**
 	 * リモート表示コンテンツを設定

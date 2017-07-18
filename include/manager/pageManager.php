@@ -3823,6 +3823,10 @@ class PageManager extends Core
 						}
 					}
 				}
+				
+				// ***** [WordPressテンプレート] jQueryの読み込み後、ヘッダ部に出力するテンプレート用のJavascriptがあれば読み込む *****
+				$headData = $this->gEnv->getWpHeadScriptsData();
+				if (!empty($headData)) $replaceStr .= $headData;
 			}
 			// ##### ウィジェットごとのJavaScript読み込み #####
 			// スクリプトがあるウィジェットを取得

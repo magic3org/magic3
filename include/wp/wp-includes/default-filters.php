@@ -247,8 +247,8 @@ add_action( 'wp_head',             'locale_stylesheet'                      );
 add_action( 'publish_future_post', 'check_and_publish_future_post',   10, 1 );
 add_action( 'wp_head',             'noindex',                          1    );
 //add_action( 'wp_head',             'print_emoji_detection_script',     7    );
-//add_action( 'wp_head',             'wp_print_styles',                  8    );		// 非奨励?
-add_action( 'wp_head',             'wp_print_head_scripts',            9    );			// WordPressヘッダ出力。Javascriptの取り込み。
+add_action( 'wp_head',             'wp_print_styles',                  8    );			// ヘッダ部でWordPressスタイルシート読み込み
+add_action( 'wp_head',             'wp_print_head_scripts',            9    );			// ヘッダ部でWordPressJavascriptファイル読み込み
 add_action( 'wp_head',             'wp_generator'                           );			// Magic3ヘッダ出力
 add_action( 'wp_head',             'rel_canonical'                          );
 add_action( 'wp_head',             'wp_shortlink_wp_head',            10, 0 );
