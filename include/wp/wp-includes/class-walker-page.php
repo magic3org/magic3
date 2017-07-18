@@ -122,7 +122,10 @@ class Walker_Page extends Walker {
 			$css_class[] = 'page_item_has_children';
 		}
 
-		if ( ! empty( $current_page ) ) {
+		// 現在のページがカレントかどうか判断
+		if ($page->active) $css_class[] = 'current_page_item';
+
+/*		if ( ! empty( $current_page ) ) {
 			$_current_page = get_post( $current_page );
 			if ( $_current_page && in_array( $page->ID, $_current_page->ancestors ) ) {
 				$css_class[] = 'current_page_ancestor';
@@ -134,7 +137,7 @@ class Walker_Page extends Walker {
 			}
 		} elseif ( $page->ID == get_option('page_for_posts') ) {
 			$css_class[] = 'current_page_parent';
-		}
+		}*/
 
 		/**
 		 * Filters the list of CSS classes to include with each page item in the list.
@@ -164,7 +167,7 @@ class Walker_Page extends Walker {
 			'<li class="%s"><a href="%s">%s%s%s</a>',
 			$css_classes,
 //			get_permalink( $page->ID ),
-			$page->guid,			// Magic3修正
+			$page->guid,			// Magic3菫ｮ豁｣
 			$args['link_before'],
 			/** This filter is documented in wp-includes/post-template.php */
 			apply_filters( 'the_title', $page->post_title, $page->ID ),

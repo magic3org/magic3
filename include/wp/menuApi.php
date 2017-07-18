@@ -100,6 +100,7 @@ class MenuApi extends BaseApi
 			$post->post_title = $item->title;
 			$post->post_content = '';
 			$post->guid = $item->flink;	// 詳細画面URL
+			$post->active = $item->active;
 			$post->filter = 'raw';
 		
 			$wpPostObj = new WP_Post($post);
