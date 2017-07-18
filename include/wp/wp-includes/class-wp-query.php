@@ -1744,6 +1744,9 @@ class WP_Query {
 //			$this->posts = array_map( 'get_post', $this->posts );
 
 			$this->post = reset( $this->posts );
+			
+			// the_post()の前にget_post()が呼ばれることがあるのでグローバル変数に保存
+			$GLOBALS['post'] = $this->post;
 		} else {
 			$this->post_count = 0;
 			$this->posts = array();

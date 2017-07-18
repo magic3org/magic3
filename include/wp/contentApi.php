@@ -556,7 +556,7 @@ class ContentApi extends BaseApi
 			case 'single':			// ブログ単体記事ページの場合
 				break;
 			case 'page':			// 汎用コンテンツページの場合
-				$wp_query->is_paged = true;
+//				$wp_query->is_paged = true;			// pagedは複数ページの意味
 				break;
 			case 'category':		// カテゴリーページの場合
 				$wp_query->is_category = true;
@@ -606,7 +606,13 @@ class ContentApi extends BaseApi
 				$this->contentId = $contentIdArray;
 				
 				// 記事が単体の場合は単体記事表示を指定
-				if (count($this->contentId) == 1) $wp_query->is_single = true;
+				if (count($this->contentId) == 1){
+					if ($this->contentType == M3_VIEW_TYPE_BLOG){		// ブログ記事のみ?
+						$wp_query->is_single = true;
+					} else {
+						$wp_query->is_page = true;		// WordPress固定ページ型
+					}
+				}
 			} else {
 				return false;
 			}
