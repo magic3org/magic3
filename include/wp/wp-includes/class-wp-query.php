@@ -1711,12 +1711,17 @@ class WP_Query {
 			// ページタイプごとの処理
 			$pageType = $gContentApi->getPageType();		// ページタイプ取得
 			switch ($pageType){
-			case 'category':
+			case 'category':	// カテゴリー
 				$value = absint($gRequestManager->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID));
 				if ($value > 0){
 					$category = $value;
 					$this->query_vars['cat'] = $category;
 				}
+				break;
+			case 'date':		// 年月日アーカイブ
+				$year = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_YEAR);		// 年指定
+				$month = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_MONTH);		// 月指定
+				$day = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DAY);		// 日指定
 				break;
 			case 'search':		// 検索結果表示の場合はキーワードを取得
 				$keywords = $gRequestManager->trimValueOf('s');

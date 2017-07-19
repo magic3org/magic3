@@ -463,7 +463,7 @@ class BaseFrameContainer extends Core
 			// ################# パラメータチェック ################
 			if (!$isSystemManageUser && !$this->gAccess->isValidAdminKey() && $this->gEnv->isServerConnector()){		// サーバ接続の場合
 				// クエリーパラメータはウィジェットIDのみ正常とする
-				$params = $this->gRequest->getQueryArray();
+				$params = $request->getQueryArray();
 				$paramCount = count($params);
 				if (!($paramCount == 1 && !empty($params[M3_REQUEST_PARAM_WIDGET_ID]))){
 					// アクセスエラーのログを残す
@@ -791,12 +791,13 @@ class BaseFrameContainer extends Core
 			
 			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
 			// URLパラメータからコンテンツ形式を取得し、ページを選択
-			$params = $this->gRequest->getQueryArray();
+			$params = $request->getQueryArray();
 			$paramCount = count($params);
 			reset($params);
 			$firstKey = key($params);
 //			$firstValue = $params[$firstKey];
 			
+			// コンテンツタイプに合わせて起動PHPファイルを決める。デフォルトはindex.phpで一覧形式で表示。
 			$contentType = $GLOBALS['gContentApi']->getContentType();
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
@@ -808,7 +809,7 @@ class BaseFrameContainer extends Core
 					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 					
 					// コンテンツID設定
-					$firstValue = $this->gRequest->trimValueOf($firstKey);
+					$firstValue = $request->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
 				}
 				break;
@@ -827,11 +828,12 @@ class BaseFrameContainer extends Core
 					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
 					
 					// コンテンツID設定
-					$firstValue = $this->gRequest->trimValueOf($firstKey);
+					$firstValue = $request->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
 				} else {
 					// カテゴリーが設定されている場合はカテゴリー画面を表示
-					$value = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);
+					$pageTypeDefined = false;		// ページタイプ確定したかどうか
+					$value = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);
 					if (!empty($value)){
 						// ページタイプを設定
 						$GLOBALS['gContentApi']->setPageType('category');			// カテゴリー表示
@@ -842,10 +844,31 @@ class BaseFrameContainer extends Core
 						
 						// フルパスで返るので相対パスに修正
 						$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);		// カテゴリーテンプレート
+						
+						$pageTypeDefined = true;		// ページタイプ確定
+					}
+					if (!$pageTypeDefined){
+						$year = $request->trimValueOf(M3_REQUEST_PARAM_YEAR);		// 年指定
+						$month = $request->trimValueOf(M3_REQUEST_PARAM_MONTH);		// 月指定
+						$day = $request->trimValueOf(M3_REQUEST_PARAM_DAY);		// 日指定
+
+						if (!empty($year)){			// 年月日指定のとき
+							// ページタイプを設定
+							$GLOBALS['gContentApi']->setPageType('date');			// 年月日表示
+				
+							// 年月日用テンプレート取得
+							$template = get_date_template();
+							if (empty($template)) $template = get_archive_template();		// 年月日用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
+						
+							// フルパスで返るので相対パスに修正
+							$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);
+
+							$pageTypeDefined = true;		// ページタイプ確定
+						}
 					}
 					// 検索条件が設定されている場合は検索画面を表示
-					if (empty($value)){
-						$value = $this->gRequest->trimValueOf('s');
+					if (!$pageTypeDefined){
+						$value = $request->trimValueOf('s');
 						if (!empty($value)){
 							// ページタイプを設定
 							$GLOBALS['gContentApi']->setPageType('search');			// 検索結果表示
@@ -865,7 +888,7 @@ class BaseFrameContainer extends Core
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 				break;
 			default:
-				// コンテンツタイプが設定されていないページに場合は、固定ページ用のテンプレートを使用
+				// コンテンツタイプが設定されていないページ(お問合わせページ等)に場合は、固定ページ用のテンプレートを使用
 				// ページタイプを設定
 				$GLOBALS['gContentApi']->setPageType('page');
 					
