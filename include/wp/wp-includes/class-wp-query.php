@@ -1292,7 +1292,7 @@ class WP_Query {
 	 * @param array $q Query variables.
 	 * @return string WHERE clause.
 	 */
-	protected function parse_search( &$q ) {
+/*	protected function parse_search( &$q ) {
 		global $wpdb;
 
 		$search = '';
@@ -1321,7 +1321,7 @@ class WP_Query {
 		$n = ! empty( $q['exact'] ) ? '' : '%';
 		$searchand = '';
 		$q['search_orderby_title'] = array();
-
+*/
 		/**
 		 * Filters the prefix that indicates that a search term should be excluded from results.
 		 *
@@ -1330,7 +1330,7 @@ class WP_Query {
 		 * @param string $exclusion_prefix The prefix. Default '-'. Returning
 		 *                                 an empty value disables exclusions.
 		 */
-		$exclusion_prefix = apply_filters( 'wp_query_search_exclusion_prefix', '-' );
+/*		$exclusion_prefix = apply_filters( 'wp_query_search_exclusion_prefix', '-' );
 
 		foreach ( $q['search_terms'] as $term ) {
 			// If there is an $exclusion_prefix, terms prefixed with it should be excluded.
@@ -1363,7 +1363,7 @@ class WP_Query {
 
 		return $search;
 	}
-
+*/
 	/**
 	 * Check if the terms are suitable for searching.
 	 *
@@ -1376,7 +1376,7 @@ class WP_Query {
 	 * @param array $terms Terms to check.
 	 * @return array Terms that are not stopwords.
 	 */
-	protected function parse_search_terms( $terms ) {
+/*	protected function parse_search_terms( $terms ) {
 		$strtolower = function_exists( 'mb_strtolower' ) ? 'mb_strtolower' : 'strtolower';
 		$checked = array();
 
@@ -1400,7 +1400,7 @@ class WP_Query {
 		}
 
 		return $checked;
-	}
+	}*/
 
 	/**
 	 * Retrieve stopwords used when parsing search terms.
@@ -1409,15 +1409,15 @@ class WP_Query {
 	 *
 	 * @return array Stopwords.
 	 */
-	protected function get_search_stopwords() {
+/*	protected function get_search_stopwords() {
 		if ( isset( $this->stopwords ) )
 			return $this->stopwords;
-
+*/
 		/* translators: This is a comma-separated list of very common words that should be excluded from a search,
 		 * like a, an, and the. These are usually called "stopwords". You should not simply translate these individual
 		 * words into your language. Instead, look for and provide commonly accepted stopwords in your language.
 		 */
-		$words = explode( ',', _x( 'about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www',
+/*		$words = explode( ',', _x( 'about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www',
 			'Comma-separated list of search stopwords in your language' ) );
 
 		$stopwords = array();
@@ -1426,7 +1426,7 @@ class WP_Query {
 			if ( $word )
 				$stopwords[] = $word;
 		}
-
+*/
 		/**
 		 * Filters stopwords used when parsing search terms.
 		 *
@@ -1434,17 +1434,17 @@ class WP_Query {
 		 *
 		 * @param array $stopwords Stopwords.
 		 */
-		$this->stopwords = apply_filters( 'wp_search_stopwords', $stopwords );
+/*		$this->stopwords = apply_filters( 'wp_search_stopwords', $stopwords );
 		return $this->stopwords;
 	}
-
+*/
 	/**
 	 * Generate SQL for the ORDER BY condition based on passed search terms.
 	 *
 	 * @param array $q Query variables.
 	 * @return string ORDER BY clause.
 	 */
-	protected function parse_search_order( &$q ) {
+/*	protected function parse_search_order( &$q ) {
 		global $wpdb;
 
 		if ( $q['search_terms_count'] > 1 ) {
@@ -1489,7 +1489,7 @@ class WP_Query {
 
 		return $search_orderby;
 	}
-
+*/
 	/**
 	 * If the passed orderby value is allowed, convert the alias to a
 	 * properly-prefixed orderby value.
@@ -1500,7 +1500,7 @@ class WP_Query {
 	 * @param string $orderby Alias for the field to order by.
 	 * @return string|false Table-prefixed value to used in the ORDER clause. False otherwise.
 	 */
-	protected function parse_orderby( $orderby ) {
+/*	protected function parse_orderby( $orderby ) {
 		global $wpdb;
 
 		// Used to filter values.
@@ -1582,7 +1582,7 @@ class WP_Query {
 
 		return $orderby_clause;
 	}
-
+*/
 	/**
 	 * Parse an 'order' query variable and cast it to ASC or DESC as necessary.
 	 *
@@ -1592,7 +1592,7 @@ class WP_Query {
 	 * @param string $order The 'order' query variable.
 	 * @return string The sanitized 'order' query variable.
 	 */
-	protected function parse_order( $order ) {
+/*	protected function parse_order( $order ) {
 		if ( ! is_string( $order ) || empty( $order ) ) {
 			return 'DESC';
 		}
@@ -1602,7 +1602,7 @@ class WP_Query {
 		} else {
 			return 'DESC';
 		}
-	}
+	}*/
 
 	/**
 	 * Sets the 404 property and saves whether query is feed.
@@ -1707,11 +1707,20 @@ class WP_Query {
 		} else {
 			$keywords = '';
 			$category = null;			// カテゴリー。設定なしの場合はnullを設定。
-			
+		
 			// ページタイプごとの処理
 			$pageType = $gContentApi->getPageType();		// ページタイプ取得
 			switch ($pageType){
+			case 'single':			// ブログ単体記事ページの場合
+				break;
+			case 'page':			// 汎用コンテンツページの場合
+//				$this->is_paged = true;			// pagedは複数ページの意味
+				break;
 			case 'category':	// カテゴリー
+				// ページの表示パラメータを設定
+				$this->is_category = true;
+				$this->is_archive = true;
+				
 				$value = absint($gRequestManager->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID));
 				if ($value > 0){
 					$category = $value;
@@ -1719,20 +1728,49 @@ class WP_Query {
 				}
 				break;
 			case 'date':		// 年月日アーカイブ
+				// ページの表示パラメータを設定
+				$this->is_date = true;
+				$this->is_archive = true;
+				
 				$year = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_YEAR);		// 年指定
 				$month = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_MONTH);		// 月指定
 				$day = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DAY);		// 日指定
+				
+				if (!empty($month) && !empty($day)){		// 日指定のとき
+					$this->is_day = true;
+					
+					$startDt = $year . '/' . $month . '/' . $day;
+					$endDt = $gContentApi->getNextDay($year . '/' . $month . '/' . $day);
+				} else if (!empty($month)){		// 月指定のとき
+					$this->is_month = true;
+					
+					$startDt = $year . '/' . $month . '/1';
+					$endDt = $gContentApi->getNextMonth($year . '/' . $month) . '/1';
+				} else {		// 年指定のとき
+					$this->is_year = true;
+					
+					$startDt = $year . '/1/1';
+					$endDt = ($year + 1) . '/1/1';
+				}
 				break;
 			case 'search':		// 検索結果表示の場合はキーワードを取得
+				// ページの表示パラメータを設定
+				$this->is_search = true;
+				
 				$keywords = $gRequestManager->trimValueOf('s');
 				$this->query_vars['s'] = $keywords;
 				
 				// 半角スペースで分割
 				$keywords = explode(' ', $keywords);
 				break;
+			case 'author':		// 会員ページの場合
+				// ページの表示パラメータを設定
+				$this->is_author = true;
+				$this->is_archive = true;
+				break;
 			}
 			
-			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, null/*期間開始日時*/, null/*期間終了日時*/, $category);
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, $startDt/*期間開始日時*/, $endDt/*期間終了日時*/, $category);
 			$this->posts = $gContentApi->getContentList();
 			
 			// コンテンツ総数を取得
@@ -1751,7 +1789,7 @@ class WP_Query {
 			$this->post = reset( $this->posts );
 			
 			// the_post()の前にget_post()が呼ばれることがあるのでグローバル変数に保存
-		//	$GLOBALS['post'] = $this->post;
+			$GLOBALS['post'] = $this->post;			// ########## 注意 ##### the_post()の実行前に初期値を設定しておくのがよいか実験中 ##### 注意 ##########
 		} else {
 			$this->post_count = 0;
 			$this->posts = array();

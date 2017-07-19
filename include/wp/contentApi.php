@@ -555,29 +555,6 @@ class ContentApi extends BaseApi
 		
 		// ページタイプを設定。ページタイプのデフォルトは空文字列。
 		$this->pageType = $type;
-		
-		switch ($type){
-			case 'single':			// ブログ単体記事ページの場合
-				break;
-			case 'page':			// 汎用コンテンツページの場合
-//				$wp_query->is_paged = true;			// pagedは複数ページの意味
-				break;
-			case 'category':		// カテゴリーページの場合
-				$wp_query->is_category = true;
-				$wp_query->is_archive = true;
-				break;
-			case 'date':		// 年月日ページのとき
-				$wp_query->is_date = true;
-				$wp_query->is_archive = true;
-				break;
-			case 'search':			// 検索ページの場合
-				$wp_query->is_search = true;
-				break;
-			case 'author':		// 会員ページの場合
-				$wp_query->is_author = true;
-				$wp_query->is_archive = true;
-				break;
-		}
 	}
 	/**
 	 * ページタイプを取得

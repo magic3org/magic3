@@ -243,5 +243,49 @@ class BaseApi extends Core
 		}
 		return false;
 	}
+	/**
+	 * 年月日(yyyy/mm/dd)から前日を求める
+	 *
+	 * @param string $strYMD		年月日
+	 * @return string				前日
+	 */
+	function getForeDay($srcstr)
+	{
+		list($yyyy, $mm, $dd) = preg_split('/[\/\.\-]/', $srcstr);
+		return date("Y/m/d", mktime(0, 0, 0, $mm, $dd - 1, $yyyy));
+	}
+	/**
+	 * 年月日(yyyy/mm/dd)から翌日を求める
+	 *
+	 * @param string $strYMD		年月日(時刻付きも可)
+	 * @return string				翌日
+	 */
+	function getNextDay($srcstr)
+	{
+		list($yyyy, $mm, $dd) = preg_split('/[\/\.\- ]/', $srcstr);
+		return date("Y/m/d", mktime(0, 0, 0, $mm, $dd + 1, $yyyy));
+	}
+	/**
+	 * 年月日(yyyy/mm/dd)から前月を求める
+	 *
+	 * @param string $strYMD		年月日
+	 * @return string				前月
+	 */
+	function getForeMonth($srcstr)
+	{
+		list($yyyy, $mm) = preg_split('/[\/\.\-]/', $srcstr);
+		return date("Y/m", mktime(0, 0, 0, $mm -1, 1, $yyyy));
+	}
+	/**
+	 * 年月日(yyyy/mm/dd)から翌月を求める
+	 *
+	 * @param string $strYMD		年月日
+	 * @return string				翌月
+	 */
+	function getNextMonth($srcstr)
+	{
+		list($yyyy, $mm) = preg_split('/[\/\.\-]/', $srcstr);
+		return date("Y/m", mktime(0, 0, 0, $mm +1, 1, $yyyy));
+	}
 }
 ?>
