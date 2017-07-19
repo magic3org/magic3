@@ -3259,7 +3259,8 @@ function language_attributes( $doctype = 'html' ) {
  */
 function paginate_links( $args = '' ) {
 	global $gContentApi;
-	global $wp_query, $wp_rewrite;
+//	global $wp_query, $wp_rewrite;
+	global $wp_query;
 
 	// Setting up default values based on the current URL.
 	$pagenum_link = html_entity_decode( get_pagenum_link() );
@@ -3296,7 +3297,7 @@ function paginate_links( $args = '' ) {
 	);
 
 	$args = wp_parse_args( $args, $defaults );
-
+/*
 	if ( ! is_array( $args['add_args'] ) ) {
 		$args['add_args'] = array();
 	}
@@ -3318,7 +3319,7 @@ function paginate_links( $args = '' ) {
 
 		$args['add_args'] = array_merge( $args['add_args'], urlencode_deep( $url_query_args ) );
 	}
-
+*/
 	// Who knows what else people pass in $args
 	$total = (int) $args['total'];
 	if ( $total < 2 ) {
@@ -3333,7 +3334,7 @@ function paginate_links( $args = '' ) {
 	if ( $mid_size < 0 ) {
 		$mid_size = 2;
 	}
-	$add_args = $args['add_args'];
+//	$add_args = $args['add_args'];
 	$r = '';
 	$page_links = array();
 	$dots = false;

@@ -647,9 +647,20 @@ class ContentApi extends BaseApi
 		$baseUrl .= M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo;
 		
 		// 検索条件が設定されている場合は付加
+		// カテゴリーを付加
 		$urlParam = $wp_query->get('cat');
-		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $urlParam;		// カテゴリーを付加
-		$urlParam = $wp_query->get('s');		// 任意の検索キーワードは最後に付加
+		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $urlParam;
+		
+		// 年月日を付加
+		$urlParam = $wp_query->get('year');
+		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_YEAR . '=' . $urlParam;
+		$urlParam = $wp_query->get('monthnum');
+		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_MONTH . '=' . $urlParam;
+		$urlParam = $wp_query->get('day');
+		if ($urlParam != '') $baseUrl .= '&' . M3_REQUEST_PARAM_DAY . '=' . $urlParam;
+		
+		// 任意の検索キーワードは最後に付加
+		$urlParam = $wp_query->get('s');		
 		if ($urlParam != '') $baseUrl .= '&s=' . $urlParam;
 		
 		$url = $this->getUrl($baseUrl);

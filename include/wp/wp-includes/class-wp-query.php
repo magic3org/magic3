@@ -1732,23 +1732,37 @@ class WP_Query {
 				$this->is_date = true;
 				$this->is_archive = true;
 				
+				// パラメータエラーチェック
 				$year = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_YEAR);		// 年指定
+				if ($year <= 0) $year = '';
 				$month = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_MONTH);		// 月指定
+				if ($month <= 0) $month = '';
 				$day = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DAY);		// 日指定
+				if ($day <= 0) $day = '';
 				
+				// $this->query_varsの値はget_query_var()等WordPress用のインターフェイスとして残す
 				if (!empty($month) && !empty($day)){		// 日指定のとき
 					$this->is_day = true;
-					
+					$this->query_vars['year'] = $year;
+					$this->query_vars['monthnum'] = $month;
+					$this->query_vars['day'] = $day;
+		
+					// データ取得用日時範囲
 					$startDt = $year . '/' . $month . '/' . $day;
 					$endDt = $gContentApi->getNextDay($year . '/' . $month . '/' . $day);
 				} else if (!empty($month)){		// 月指定のとき
 					$this->is_month = true;
+					$this->query_vars['year'] = $year;
+					$this->query_vars['monthnum'] = $month;
 					
+					// データ取得用日時範囲
 					$startDt = $year . '/' . $month . '/1';
 					$endDt = $gContentApi->getNextMonth($year . '/' . $month) . '/1';
 				} else {		// 年指定のとき
 					$this->is_year = true;
+					$this->query_vars['year'] = $year;
 					
+					// データ取得用日時範囲
 					$startDt = $year . '/1/1';
 					$endDt = ($year + 1) . '/1/1';
 				}
