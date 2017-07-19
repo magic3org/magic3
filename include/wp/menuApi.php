@@ -26,6 +26,7 @@ class MenuApi extends BaseApi
 	private $currentUserLogined;	// 現在のユーザはログイン中かどうか
 	private $menuData;			// メニューデータ
 	private $menuTree;			// メニュー階層データ
+	private $activeMenuItemTitle;		// 選択中のメニュー項目のタイトル
 	const CF_DEFAULT_MENU_ID = 'default_menu_id';		// メニューID取得用
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	
@@ -107,6 +108,21 @@ class MenuApi extends BaseApi
 			$menuItems[] = $wpPostObj;
 		}
 		return $menuItems;
+	}
+	/**
+	 * [WordPressテンプレート用API]現在のページのメニュー項目のタイトルを取得
+	 *
+	 * @return string     				タイトル名
+	 */
+	function getActiveMenuItemTitle()
+	{
+/*		$title = '';
+		for ($i = 0; $i < count($this->menuTree); $i++){
+			$item = $this->menuTree[$i];
+			if ($item->active) $title = $item->title;
+		}
+		return $title;*/
+		return $this->activeMenuItemTitle;
 	}
 	/**
 	 * メニューツリー作成
@@ -205,6 +221,9 @@ class MenuApi extends BaseApi
 				$title = $this->getCurrentLangString($row['md_title']);		// タイトル(HTML可)
 				if (empty($title)) $title = $name;
 				if (empty($title)) continue;
+				
+				// 選択中であればメニュー項目のタイトルを取得
+				if ($menuItem->active) $this->activeMenuItemTitle = $title;
 				
 				// メニュータイトルの処理。タグが含まれていない場合は文字をエスケープする。
 				$stripName = strip_tags($title);

@@ -394,6 +394,7 @@ class ContentApi extends BaseApi
 		// IDを解析しエラーチェック。複数の場合は配列に格納する。
 		switch ($this->contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+			$postType	= 'page';
 			$serial = $row['cn_serial'];
 			$id		= $row['cn_id'];
 			$title	= $row['cn_name'];
@@ -405,6 +406,7 @@ class ContentApi extends BaseApi
 			$thumbSrc		= $row['cn_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
 		case M3_VIEW_TYPE_BLOG:	// ブログ
+			$postType	= 'post';
 			$serial = $row['be_serial'];
 			$id		= $row['be_id'];
 			$title	= $row['be_name'];
@@ -428,7 +430,8 @@ class ContentApi extends BaseApi
 		$post->post_date_gmt = '';
 		$post->post_password = '';
 		$post->post_name = '';		// スラッグ等で使用されるので設定しない
-		$post->post_type = 'post';
+//		$post->post_type = 'post';
+		$post->post_type = $postType;
 		$post->post_status = 'publish';
 		$post->to_ping = '';
 		$post->pinged = '';

@@ -147,6 +147,11 @@ function get_the_title( $post = 0 ) {
 		}
 	}
 
+	// ##### タイトルが取得できない場合はメニューから取得 #####
+	if (empty($title)){
+		global $gMenuApi;
+		$title = $gMenuApi->getActiveMenuItemTitle();
+	}
 	/**
 	 * Filters the post title.
 	 *

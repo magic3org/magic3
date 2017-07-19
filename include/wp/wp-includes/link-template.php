@@ -350,15 +350,15 @@ function get_page_link( $post = false, $leavename = false, $sample = false ) {
  * @return string The page permalink.
  */
 function _get_page_link( $post = false, $leavename = false, $sample = false ) {
-	global $wp_rewrite;
+//	global $wp_rewrite;
 
 	$post = get_post( $post );
 
-	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) );
+//	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) );
 
-	$link = $wp_rewrite->get_page_permastruct();
+//	$link = $wp_rewrite->get_page_permastruct();
 
-	if ( !empty($link) && ( ( isset($post->post_status) && !$draft_or_pending ) || $sample ) ) {
+/*	if ( !empty($link) && ( ( isset($post->post_status) && !$draft_or_pending ) || $sample ) ) {
 		if ( ! $leavename ) {
 			$link = str_replace('%pagename%', get_page_uri( $post ), $link);
 		}
@@ -367,7 +367,9 @@ function _get_page_link( $post = false, $leavename = false, $sample = false ) {
 		$link = user_trailingslashit($link, 'page');
 	} else {
 		$link = home_url( '?page_id=' . $post->ID );
-	}
+	}*/
+	
+	$link = $post->guid;
 
 	/**
 	 * Filters the permalink for a non-page_on_front page.
