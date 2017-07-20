@@ -39,6 +39,7 @@ class EnvManager extends Core
 	private $currentPageDefRec;		// 現在処理中のウィジェットのページ定義レコード
 	private $defaultPageSubId;	// デフォルトのページサブId
 	private $currentPageDeviceType;		// 現在のページの端末タイプ
+	private $currentWidgetHeadTitle;		// 現在作成中のウィジェットのヘッドタイトル文字列
 	private $currentWidgetPrefix;	// 現在作成中のウィジェットのプレフィックス文字列
 	private $currentWidgetTitle;	// 現在作成中のウィジェットのタイトル文字列
 	private $currentWidgetStyle;	// 現在作成中のウィジェットのスタイル文字列
@@ -1697,6 +1698,25 @@ class EnvManager extends Core
 	public function getCurrentWidgetPrefix()
 	{
 		return $this->currentWidgetPrefix;
+	}
+	/**
+	 * 現在処理中のウィジェットのヘッドタイトル文字列を設定
+	 *
+	 * @param string $val	タイトル文字列
+	 * @return 				なし
+	 */
+	public function setCurrentWidgetHeadTitle($val)
+	{
+		$this->currentWidgetHeadTitle = $val;
+	}
+	/**
+	 * 現在処理中のウィジェットのヘッドタイトル文字列を取得
+	 *
+	 * @return string	タイトル文字列
+	 */
+	public function getCurrentWidgetHeadTitle()
+	{
+		return $this->currentWidgetHeadTitle;
 	}
 	/**
 	 * 現在処理中のウィジェットのタイトル文字列

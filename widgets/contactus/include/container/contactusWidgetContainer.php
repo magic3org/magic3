@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -239,7 +239,8 @@ class contactusWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		// HTMLサブタイトルを設定
-		$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
+//		$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
+		$this->gPage->setHeadSubTitle();			// 共通設定画面の「タイトル」値を使用する
 			
 		// タイトルの表示
 		if ($showTitle){

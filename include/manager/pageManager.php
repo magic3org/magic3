@@ -554,12 +554,19 @@ class PageManager extends Core
 	 * @param string $str   出力文字列
 	 * @param string $url   リンク先
 	 */
-	function setHeadSubTitle($str, $url='')
+	function setHeadSubTitle($str = '', $url = '')
 	{
-		if (is_string($str) && !empty($str)){
-			$this->headSubTitle[] = $str;
-			$this->headSubTitleUrl[] = $url;
-			$this->lastHeadTitle = $str;	// 最後に設定した値を退避
+		global $gEnvManager;
+		
+		if (is_string($str)){
+			// 空の場合はウィジェットのヘッドタイトルから取得
+			if (empty($str)) $str = $gEnvManager->getCurrentWidgetHeadTitle();
+
+			if (!empty($str)){
+				$this->headSubTitle[] = $str;
+				$this->headSubTitleUrl[] = $url;
+				$this->lastHeadTitle = $str;	// 最後に設定した値を退避
+			}
 		}
 	}
 	/**
@@ -5409,6 +5416,8 @@ class PageManager extends Core
 		$prefix = $fetchedRow['wd_suffix'];		// サフィックス文字列
 		$title = $fetchedRow['wd_name'];		// デフォルトのウィジェットタイトル
 		if (empty($title)) $title = $fetchedRow['wd_id'];
+		$widgetHeadTitle = $fetchedRow['pd_title'];		// ウィジェットのヘッドタイトル
+		if (empty($widgetHeadTitle)) $widgetHeadTitle = $title;			// ウィジェットのヘッドタイトルが空の場合はウィジェットタイトルを取得
 		$serial = $fetchedRow['pd_serial'];		// シリアル番号
 		$cssStyle	= $fetchedRow['pd_style'];		// CSS
 		$lateLaunchIndex = $fetchedRow['wd_launch_index'];		// 遅延実行インデックス
@@ -5500,6 +5509,9 @@ class PageManager extends Core
 				// パラメータを設定
 				$gEnvManager->setCurrentWidgetPrefix($prefix);		// プレフィックス文字列
 			
+				// ウィジェットのヘッドタイトルを設定
+				$gEnvManager->setCurrentWidgetHeadTitle($widgetHeadTitle);
+
 				// ウィジェットのタイトルを設定
 				$gEnvManager->setCurrentWidgetTitle($title);
 				
