@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -62,7 +62,6 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$langId = $this->gEnv->getCurrentLanguage();
 		$year = $request->trimValueOf('year');		// 年指定
 		if (!(is_numeric($year) && 1 <= $year)){			// エラー値のとき
 			$year = date('Y');
@@ -94,14 +93,16 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 		$this->db->getEntryItems($startDt, $endDt, $this->gEnv->getCurrentLanguage(), array($this, 'itemLoop'));
 		
 		// 前後の月のリンク作成
-		$ret = $this->db->getOldEntry($langId, $row);		// 最も古い記事を取得
+		$ret = $this->db->getOldEntry($this->_langId, $row);		// 最も古い記事を取得
 		if ($ret){
 			if (strtotime($year . '/' . $month . '/1') > strtotime($row['be_regist_dt'])){
-				$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $prevYear . '&month=' . $prevMonth);
+//				$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $prevYear . '&month=' . $prevMonth);
+				$prevUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $prevYear . '&month=' . $prevMonth);
 			}
 		}
 		if (strtotime($year . '/' . $month . '/1') < strtotime(date('Y/m/1'))){
-			$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $nextYear . '&month=' . $nextMonth);
+//			$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $nextYear . '&month=' . $nextMonth);
+			$nextUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $nextYear . '&month=' . $nextMonth);
 		}
 		
 		$calendarData = '';
@@ -137,7 +138,8 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 		        $calendarData .= "<td>&nbsp;</td>" . M3_NL;
 		    } else {
 				if (in_array($Day->thisDay(), $this->entryDays)){			// 投稿記事あり
-					$dayUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
+//					$dayUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
+					$dayUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
 					$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $Day->thisDay(). '</a>';
 					$calendarData .= '<td>'. $dayLink ."</td>" . M3_NL;
 				} else {

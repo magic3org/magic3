@@ -113,8 +113,8 @@ INSERT INTO _widgets
 ('blog_update_box', 'ブログ-更新', 'blog',         '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'コメントを含むブログの更新状況を一覧表示。', true,        false,               false,true,               1, -1, true, '2012-10-04', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'blog_calendar_box';
 INSERT INTO _widgets
-(wd_id,               wd_name,               wd_category_id, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('blog_calendar_box', 'ブログ-カレンダー', 'blog',         '1.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'カレンダーからブログ記事にアクセスするためのボックス。',        false,           false,       true,         true,        false,         false,               false,true,               '2015-10-02', now(),    now());
+(wd_id,               wd_name,             wd_category_id, wd_template_type, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('blog_calendar_box', 'ブログ-カレンダー', 'blog',         'wordpress',      '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'カレンダーからブログ記事にアクセスするためのボックス。',        false,           false,       true,         true,        false,         false,               false,true,               '2017-07-20', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'blog_category_menu';
 INSERT INTO _widgets
 (wd_id,                wd_name,                     wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
