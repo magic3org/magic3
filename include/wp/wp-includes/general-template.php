@@ -1070,6 +1070,7 @@ function wp_get_document_title() {
 	 *     @type string $site    Optional. Site title when not on home page.
 	 * }
 	 */
+	// ##### 画面タイトル生成(get_posts())用にMagic3からフィルターdocument_title_partsを使用 #####
 	$title = apply_filters( 'document_title_parts', $title );
 
 	$title = implode( " $sep ", array_filter( $title ) );

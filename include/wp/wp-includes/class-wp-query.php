@@ -487,6 +487,11 @@ class WP_Query {
 	private $compat_methods = array( 'init_query_flags', 'parse_tax_query' );
 
 	/**
+	 * Magic3追加
+	 */
+	public $headTitle;			// HTMLヘッダのタイトル作成用
+	
+	/**
 	 * Resets query flags to false.
 	 *
 	 * The query flags are what page info WordPress was able to figure out.
@@ -1666,6 +1671,7 @@ class WP_Query {
 	public function get_posts() {
 		global $gContentApi;
 		global $gRequestManager;
+		global $gPageManager;
 		global $paged;
 					
 		// ##### URLパラメータを解析 #####
@@ -1713,7 +1719,7 @@ class WP_Query {
 			switch ($pageType){
 			case 'single':			// ブログ単体記事ページの場合
 				break;
-			case 'page':			// 汎用コンテンツページの場合
+			case 'page':			// ページタイプなしページまたは汎用コンテンツページの場合
 //				$this->is_paged = true;			// pagedは複数ページの意味
 				break;
 			case 'category':	// カテゴリー
@@ -1809,6 +1815,31 @@ class WP_Query {
 			$this->posts = array();
 		}
 
+		// ##### 画面のサブタイトルを設定。メインタイトルはサイト名。#####
+		if ($this->is_singular()){			// 単体ページの場合
+			// 表示するコンテンツデータから取得
+			$gPageManager->setHeadSubTitle($this->post->post_title);
+		} else {		// ページタイプ属性が設定されていないページはこちらで処理される
+			// WordPressのwp_get_document_title()を使用してタイトルを作成
+			$this->headTitle = '';			// HTMLヘッダのタイトル作成用
+			add_filter('document_title_parts', 'get_simple_title');		// フィルター関数で出力を調整
+			
+			function get_simple_title($title){
+				global $wp_query;
+			
+				// トップページはサブタイトルなし
+				if (!is_front_page()) $wp_query->headTitle = html_entity_decode($title['title']);			// エスケープ文字を戻す
+				return $title;
+			}
+			
+			wp_get_document_title();		// タイトル生成
+			remove_filter('document_title_parts', 'get_simple_title');
+
+			// サブタイトルを設定
+			if (!empty($this->headTitle)) $gPageManager->setHeadSubTitle($this->headTitle);
+			
+			// お問合わせ画面等ページタイプ属性がないページの場合はwp_get_document_title()で空文字列が返り、ウィジェット側でサブタイトルを設定する
+		}
 		return $this->posts;
 	}
 
