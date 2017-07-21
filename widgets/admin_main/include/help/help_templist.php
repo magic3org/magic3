@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_templist.php 4834 2012-04-10 23:42:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()				. '/helpConv.php' );
@@ -49,7 +49,7 @@ class help_templist extends HelpConv
 			),
 			'templist_format' => array(	
 				'title' =>	$this->_('Template Format'),			// テンプレート形式
-				'body' =>	$this->_('Available formats are below.<br /><strong>J10</strong> - Joomla! v1.0 format.<br /><strong>J15</strong> - Joomla! v1.5 format.<br /><strong>J25</strong> - Joomla! v1.7-v2.5 format.<br /><strong>B30</strong> - Bootstrap v3.0 format.')		// テンプレートの形式です。<br />利用可能な形式は以下の通りです。<br />●J10<br />Joomla! v1.0用テンプレート<br />●J15<br />Joomla! v1.5用テンプレート<br />●J25<br />Joomla! v1.7-v2.5用テンプレート<br />●B30<br />Bootstrap v3.0テンプレート
+				'body' =>	$this->_('Available formats are below.<br /><strong>J10</strong> - Joomla! v1.0 format.<br /><strong>J15</strong> - Joomla! v1.5 format.<br /><strong>J25</strong> - Joomla! v1.7-v2.5 format.<br /><strong>B30</strong> - Bootstrap v3.0 format.<br /><strong>W00</strong> - WordPress format.')		// テンプレートの形式です。<br />利用可能な形式は以下の通りです。<br />●J10<br />Joomla! v1.0用テンプレート<br />●J15<br />Joomla! v1.5用テンプレート<br />●J25<br />Joomla! v1.7-v2.5用テンプレート<br />●B30<br />Bootstrap v3.0テンプレート<br />●W00<br />WordPress用テンプレート
 			),
 			'templist_default' => array(	
 				'title' =>	$this->_('Default Template'),			// デフォルト

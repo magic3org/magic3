@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 09:50+0900\n"
-"PO-Revision-Date: 2017-04-16 09:50+0900\n"
+"POT-Creation-Date: 2017-07-21 10:16+0900\n"
+"PO-Revision-Date: 2017-07-21 10:16+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0.2\n"
 "X-Poedit-SearchPath-0: ../container\n"
 "X-Poedit-SearchPath-1: ../help\n"
 
@@ -77,7 +77,7 @@ msgid "Margin Right"
 msgstr "マージン右"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:226
-#: ../container/admin_mainPagedefWidgetContainer.php:163
+#: ../container/admin_mainPagedefWidgetContainer.php:169
 #: ../help/help_widgetlist.php:43
 msgid "Widget ID"
 msgstr "ウィジェットID"
@@ -121,7 +121,7 @@ msgid "Calendar"
 msgstr "カレンダー"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:684
-#: ../container/admin_mainPagedefWidgetContainer.php:152
+#: ../container/admin_mainPagedefWidgetContainer.php:158
 msgid "Default Value"
 msgstr "デフォルト値"
 
@@ -155,7 +155,7 @@ msgstr "タイトル"
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:729
 #: ../container/admin_mainMenudefWidgetContainer.php:177
 #: ../container/admin_mainMenudefWidgetContainer.php:202
-#: ../container/admin_mainPagedefWidgetContainer.php:166
+#: ../container/admin_mainPagedefWidgetContainer.php:172
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:195
 #: ../help/help_menudef.php:63 ../help/help_pagedef.php:91
@@ -315,20 +315,13 @@ msgstr "追加CSSクラス"
 msgid "H Tag Level"
 msgstr "Hタグレベル"
 
-#: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
+#: ../container/admin_mainAnalyzegraphWidgetContainer.php:85
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:76
 #: ../container/admin_mainOpelogWidgetContainer.php:156
 #: ../container/admin_mainTempimageWidgetContainer.php:299
 #: ../container/admin_mainUserlistWidgetContainer.php:162
 msgid "Range:"
 msgstr "範囲："
-
-#: ../container/admin_mainAnalyzegraphWidgetContainer.php:246
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:162
-#: ../container/admin_mainUserlistWidgetContainer.php:237
-#, php-format
-msgid "%d Total"
-msgstr "全 %d 件"
 
 #: ../container/admin_mainConfigmailWidgetContainer.php:122
 #: ../container/admin_mainConfigsiteWidgetContainer.php:185
@@ -357,21 +350,21 @@ msgstr "メール送信に失敗しました。メールアドレス:"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:168
 #: ../container/admin_mainOpelogWidgetContainer.php:285
-#: ../container/admin_mainPagedefWidgetContainer.php:478
+#: ../container/admin_mainPagedefWidgetContainer.php:484
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:170
 #: ../container/admin_mainOpelogWidgetContainer.php:289
-#: ../container/admin_mainPagedefWidgetContainer.php:480
-#: ../container/admin_mainPagedefWidgetContainer.php:484
+#: ../container/admin_mainPagedefWidgetContainer.php:486
+#: ../container/admin_mainPagedefWidgetContainer.php:490
 #: ../container/admin_mainPortalWidgetContainer.php:120
 msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:182
-#: ../container/admin_mainWidgetContainer.php:419
+#: ../container/admin_mainWidgetContainer.php:424
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -488,7 +481,7 @@ msgid "Mail Server Cofiguration"
 msgstr "メールサーバ設定"
 
 #: ../container/admin_mainCreateconfigWidgetContainer.php:86
-#: ../container/admin_mainTemplistWidgetContainer.php:373
+#: ../container/admin_mainTemplistWidgetContainer.php:374
 #: ../container/admin_mainWidgetlistWidgetContainer.php:499
 #, php-format
 msgid "Failed in downloading file. (detail: %s)"
@@ -734,8 +727,8 @@ msgid "Configure page information."
 msgstr "ページの情報設定を行います。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:118
-#: ../container/admin_mainPagedefWidgetContainer.php:139
-#: ../container/admin_mainPagedefWidgetContainer.php:140
+#: ../container/admin_mainPagedefWidgetContainer.php:145
+#: ../container/admin_mainPagedefWidgetContainer.php:146
 #: ../help/help_pagedef.php:31
 msgid "Page Id"
 msgstr "ページID"
@@ -781,7 +774,7 @@ msgstr "管理メニューその他"
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:77
 #: ../container/admin_mainMenudefWidgetContainer.php:165
 #: ../container/admin_mainOpelogWidgetContainer.php:130
-#: ../container/admin_mainPagedefWidgetContainer.php:160
+#: ../container/admin_mainPagedefWidgetContainer.php:166
 #: ../container/admin_mainSmenudefWidgetContainer.php:159
 #: ../container/admin_mainUserlistWidgetContainer.php:137
 msgid "Go back"
@@ -828,7 +821,7 @@ msgstr "未設定"
 #: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:376
 #: ../container/admin_mainSmenudefWidgetContainer.php:419
-#: ../container/admin_mainTemplistWidgetContainer.php:463
+#: ../container/admin_mainTemplistWidgetContainer.php:464
 #: ../container/admin_mainUserlistWidgetContainer.php:122
 #: ../container/admin_mainUserlistWidgetContainer.php:150
 #: ../container/admin_mainUserlistWidgetContainer.php:301
@@ -866,7 +859,7 @@ msgid "Menu Definition Script"
 msgstr "管理メニュー定義ファイル"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:204
-#: ../container/admin_mainTemplistWidgetContainer.php:471
+#: ../container/admin_mainTemplistWidgetContainer.php:472
 #: ../container/admin_mainWidgetlistWidgetContainer.php:672
 msgid "Upload"
 msgstr "アップロード"
@@ -898,7 +891,7 @@ msgid "Failed in running script."
 msgstr "スクリプト実行に失敗しました"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:330
-#: ../container/admin_mainTemplistWidgetContainer.php:333
+#: ../container/admin_mainTemplistWidgetContainer.php:334
 #: ../container/admin_mainWidgetlistWidgetContainer.php:459
 #, php-format
 msgid ""
@@ -911,7 +904,7 @@ msgstr ""
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:35
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:414
+#: ../container/admin_mainWidgetContainer.php:419
 msgid "Login"
 msgstr "ログイン"
 
@@ -940,6 +933,12 @@ msgstr "ログインアカウント："
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:78
 msgid "Browser"
 msgstr "ブラウザ"
+
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:162
+#: ../container/admin_mainUserlistWidgetContainer.php:237
+#, php-format
+msgid "%d Total"
+msgstr "全 %d 件"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:76
 #: ../container/admin_mainMenudefWidgetContainer.php:790
@@ -1064,7 +1063,7 @@ msgstr "リンク先のコンテンツに連動"
 #: ../container/admin_mainSmenudefWidgetContainer.php:176
 #: ../container/admin_mainSmenudefWidgetContainer.php:189
 #: ../container/admin_mainTempimageWidgetContainer.php:286
-#: ../container/admin_mainTemplistWidgetContainer.php:565
+#: ../container/admin_mainTemplistWidgetContainer.php:582
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -1127,9 +1126,9 @@ msgid "Division"
 msgstr "区分"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:203
-#: ../container/admin_mainPagedefWidgetContainer.php:168
+#: ../container/admin_mainPagedefWidgetContainer.php:174
 #: ../container/admin_mainSmenudefWidgetContainer.php:196
-#: ../container/admin_mainTemplistWidgetContainer.php:468
+#: ../container/admin_mainTemplistWidgetContainer.php:469
 #: ../container/admin_mainWidgetlistWidgetContainer.php:668
 #: ../help/help_menudef.php:67 ../help/help_templist.php:59
 #: ../help/help_widgetlist.php:63
@@ -1224,7 +1223,7 @@ msgstr "コンテンツを編集"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:59
 #: ../container/admin_mainOpelogWidgetContainer.php:62
-#: ../container/admin_mainPagedefWidgetContainer.php:158
+#: ../container/admin_mainPagedefWidgetContainer.php:164
 msgid "All"
 msgstr "すべて"
 
@@ -1311,137 +1310,137 @@ msgstr "ステータス："
 msgid "Log No"
 msgstr "ログ番号"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:141
+#: ../container/admin_mainPagedefWidgetContainer.php:147
 msgid "Show Detail"
 msgstr "詳細"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:142
+#: ../container/admin_mainPagedefWidgetContainer.php:148
 #: ../help/help_pagedef.php:59 ../help/help_templist.php:55
 msgid "Default Template"
 msgstr "デフォルトテンプレート"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:143
+#: ../container/admin_mainPagedefWidgetContainer.php:149
 #: ../help/help_pagedef.php:63
 msgid "Change Template"
 msgstr "変更"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:144
+#: ../container/admin_mainPagedefWidgetContainer.php:150
 #: ../help/help_pagedef.php:71
 msgid "Page Layout"
 msgstr "画面デザイン"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:145
+#: ../container/admin_mainPagedefWidgetContainer.php:151
 msgid "Layout"
 msgstr "レイアウト"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:146
-#: ../container/admin_mainTemplistWidgetContainer.php:568
+#: ../container/admin_mainPagedefWidgetContainer.php:152
+#: ../container/admin_mainTemplistWidgetContainer.php:585
 msgid "Preview"
 msgstr "プレビュー"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:147
+#: ../container/admin_mainPagedefWidgetContainer.php:153
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:148
+#: ../container/admin_mainPagedefWidgetContainer.php:154
 #: ../help/help_pagedef.php:55
 msgid "Preview in other window"
 msgstr "別画面でプレビュー"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:149
+#: ../container/admin_mainPagedefWidgetContainer.php:155
 msgid "Site Preview"
 msgstr "実際の画面"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:150
+#: ../container/admin_mainPagedefWidgetContainer.php:156
 #: ../help/help_pagedef.php:101
 msgid "Page"
 msgstr "ページ"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:151
+#: ../container/admin_mainPagedefWidgetContainer.php:157
 #: ../help/help_pagedef.php:105
 msgid "Template"
 msgstr "テンプレート"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:155
+#: ../container/admin_mainPagedefWidgetContainer.php:161
 msgid "Update line data?"
 msgstr "データを更新しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:156
+#: ../container/admin_mainPagedefWidgetContainer.php:162
 msgid "Delete line data?"
 msgstr "データを削除しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:157
+#: ../container/admin_mainPagedefWidgetContainer.php:163
 msgid "Delete all line data?"
 msgstr "すべての項目を削除しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:159
+#: ../container/admin_mainPagedefWidgetContainer.php:165
 msgid "Page Definition Detail"
 msgstr "ページ定義詳細"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:161
+#: ../container/admin_mainPagedefWidgetContainer.php:167
 #: ../help/help_pagedef.php:79
 msgid "Position"
 msgstr "ポジション名"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:162
-#: ../container/admin_mainPagedefWidgetContainer.php:471
+#: ../container/admin_mainPagedefWidgetContainer.php:168
+#: ../container/admin_mainPagedefWidgetContainer.php:477
 #: ../help/help_pagedef.php:83
 msgid "Order"
 msgstr "表示順"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:164
+#: ../container/admin_mainPagedefWidgetContainer.php:170
 #: ../help/help_widgetlist.php:47
 msgid "Widget Name"
 msgstr "ウィジェット名"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:165
+#: ../container/admin_mainPagedefWidgetContainer.php:171
 #: ../help/help_pagedef.php:87
 msgid "Config ID"
 msgstr "定義ID"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:167
+#: ../container/admin_mainPagedefWidgetContainer.php:173
 msgid "Global"
 msgstr "グローバル"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:169
+#: ../container/admin_mainPagedefWidgetContainer.php:175
 msgid "Include global widgets."
 msgstr "グローバル属性ウィジェット含む"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:170
+#: ../container/admin_mainPagedefWidgetContainer.php:176
 msgid "Delete all"
 msgstr "すべて削除"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:491
-#: ../container/admin_mainPagedefWidgetContainer.php:501
+#: ../container/admin_mainPagedefWidgetContainer.php:497
+#: ../container/admin_mainPagedefWidgetContainer.php:507
 msgid "Data deleted."
 msgstr "データを削除しました"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:493
-#: ../container/admin_mainPagedefWidgetContainer.php:503
+#: ../container/admin_mainPagedefWidgetContainer.php:499
+#: ../container/admin_mainPagedefWidgetContainer.php:509
 msgid "Failed in deleting data."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:584
+#: ../container/admin_mainPagedefWidgetContainer.php:590
 #: ../container/admin_mainWidgetlistWidgetContainer.php:68
 msgid "Update line"
 msgstr "行を更新"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:585
+#: ../container/admin_mainPagedefWidgetContainer.php:591
 #: ../container/admin_mainWidgetlistWidgetContainer.php:69
 msgid "Delete line"
 msgstr "行を削除"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:589
+#: ../container/admin_mainPagedefWidgetContainer.php:595
 #: ../container/admin_mainWidgetlistWidgetContainer.php:70
 msgid "Show config window"
 msgstr "設定画面を表示"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:682
-#: ../container/admin_mainTemplistWidgetContainer.php:466
+#: ../container/admin_mainPagedefWidgetContainer.php:688
+#: ../container/admin_mainTemplistWidgetContainer.php:467
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:683
+#: ../container/admin_mainPagedefWidgetContainer.php:689
 msgid "Unpublished"
 msgstr "非公開"
 
@@ -1538,9 +1537,16 @@ msgstr "保存"
 
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
-#: ../container/admin_mainWidgetContainer.php:333
+#: ../container/admin_mainWidgetContainer.php:338
 msgid "Can not access the page."
 msgstr "アクセスできません"
+
+#: ../container/admin_mainTempgeneratecssWidgetContainer.php:299
+#: ../container/admin_mainTemplistWidgetContainer.php:666
+#: ../container/admin_mainTemplistWidgetContainer.php:731
+#: ../container/admin_mainTemplistWidgetContainer.php:756
+msgid "SimpleXML module not installed."
+msgstr "SimpleXML拡張モジュールがインストールされていません"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:172
 #, php-format
@@ -1598,7 +1604,7 @@ msgid "Size"
 msgstr "サイズ"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:291
-#: ../container/admin_mainTemplistWidgetContainer.php:467
+#: ../container/admin_mainTemplistWidgetContainer.php:468
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 msgid "Update Date"
 msgstr "更新日"
@@ -1624,7 +1630,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:298
-#: ../container/admin_mainTemplistWidgetContainer.php:472
+#: ../container/admin_mainTemplistWidgetContainer.php:473
 #: ../container/admin_mainWidgetlistWidgetContainer.php:673
 msgid "Cancel"
 msgstr "キャンセル"
@@ -1639,162 +1645,156 @@ msgstr "データを更新しました"
 msgid "Failed in updating item."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:61
+#: ../container/admin_mainTemplistWidgetContainer.php:62
 #: ../container/admin_mainWidgetlistWidgetContainer.php:58
 msgid "For PC"
 msgstr "PC用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:62
+#: ../container/admin_mainTemplistWidgetContainer.php:63
 #: ../container/admin_mainWidgetlistWidgetContainer.php:59
 msgid "For Mobile"
 msgstr "携帯用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:63
+#: ../container/admin_mainTemplistWidgetContainer.php:64
 #: ../container/admin_mainWidgetlistWidgetContainer.php:60
 msgid "For Smartphone"
 msgstr "スマートフォン用"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:187
+#: ../container/admin_mainTemplistWidgetContainer.php:188
 #, php-format
 msgid "New templates added. (templates count=%d)"
 msgstr "新規テンプレートを追加しました。(追加数=%d)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:190
+#: ../container/admin_mainTemplistWidgetContainer.php:191
 msgid "No new templates added."
 msgstr "新規テンプレートはありません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:195
-#: ../container/admin_mainTemplistWidgetContainer.php:381
+#: ../container/admin_mainTemplistWidgetContainer.php:196
+#: ../container/admin_mainTemplistWidgetContainer.php:382
 msgid "Template not selected."
 msgstr "テンプレートが選択されていません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:206
+#: ../container/admin_mainTemplistWidgetContainer.php:207
 #, php-format
 msgid "Template deleted. (template ID: %s)"
 msgstr "テンプレートを削除しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:209
+#: ../container/admin_mainTemplistWidgetContainer.php:210
 #, php-format
 msgid "Failed in deleting template. (template ID: %s)"
 msgstr "テンプレート削除に失敗しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:213
+#: ../container/admin_mainTemplistWidgetContainer.php:214
 #, php-format
 msgid "Failed in deleting template directory. (directory: %s)"
 msgstr "テンプレートのディレクトリが削除できませんでした。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:230
+#: ../container/admin_mainTemplistWidgetContainer.php:231
 #: ../container/admin_mainWidgetlistWidgetContainer.php:295
 msgid "Only zip format file is allowed to upload."
 msgstr "zip圧縮のファイルのみアップロード可能です"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:237
+#: ../container/admin_mainTemplistWidgetContainer.php:238
 #: ../container/admin_mainWidgetlistWidgetContainer.php:302
 #, php-format
 msgid "You are not allowed to write temporary directory. (directory: %s)"
 msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:289
+#: ../container/admin_mainTemplistWidgetContainer.php:290
 #, php-format
 msgid "The template already exists. (template ID: %s)"
 msgstr "テンプレートがすでに存在します。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:299
+#: ../container/admin_mainTemplistWidgetContainer.php:300
 #, php-format
 msgid "The template directory already exists. (directory: %s)"
 msgstr "テンプレートディレクトリがすでに存在します。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:310
+#: ../container/admin_mainTemplistWidgetContainer.php:311
 #, php-format
 msgid "File uploaded. (template ID: %s)"
 msgstr "ファイルのアップロードが完了しました。(テンプレートID： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:315
+#: ../container/admin_mainTemplistWidgetContainer.php:316
 #, php-format
 msgid "Failed in moving directory. (directory: %s)"
 msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:325
+#: ../container/admin_mainTemplistWidgetContainer.php:326
 #: ../container/admin_mainWidgetlistWidgetContainer.php:432
 #: ../container/admin_mainWidgetlistWidgetContainer.php:451
 msgid "Failed in uploading file."
 msgstr "ファイルのアップロードに失敗しました"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:454
+#: ../container/admin_mainTemplistWidgetContainer.php:455
 #: ../container/admin_mainWidgetlistWidgetContainer.php:651
 msgid "Update line?"
 msgstr "行を更新しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:455
+#: ../container/admin_mainTemplistWidgetContainer.php:456
 msgid "Delete tmplate?"
 msgstr "テンプレートを削除しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:456
+#: ../container/admin_mainTemplistWidgetContainer.php:457
 #: ../container/admin_mainWidgetlistWidgetContainer.php:653
 msgid "File not selected."
 msgstr "アップロードするファイルが選択されていません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:457
+#: ../container/admin_mainTemplistWidgetContainer.php:458
 #: ../container/admin_mainWidgetlistWidgetContainer.php:654
 msgid "Upload file."
 msgstr "ファイルをアップロードします"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:458
+#: ../container/admin_mainTemplistWidgetContainer.php:459
 #: ../help/help_templist.php:31
 msgid "Template List"
 msgstr "テンプレート一覧"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:460
+#: ../container/admin_mainTemplistWidgetContainer.php:461
 #: ../container/admin_mainWidgetlistWidgetContainer.php:658
 msgid "Install Directory:"
 msgstr "インストールディレクトリ:"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:461
+#: ../container/admin_mainTemplistWidgetContainer.php:462
 #: ../container/admin_mainWidgetlistWidgetContainer.php:659
 #: ../help/help_templist.php:71 ../help/help_widgetlist.php:75
 msgid "Reload directory"
 msgstr "ディレクトリ再読み込み"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:462
+#: ../container/admin_mainTemplistWidgetContainer.php:463
 #: ../help/help_templist.php:67
 msgid "Show detail"
 msgstr "詳細表示"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:464
+#: ../container/admin_mainTemplistWidgetContainer.php:465
 msgid "Format"
 msgstr "形式"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:465
+#: ../container/admin_mainTemplistWidgetContainer.php:466
 msgid "Genarator - Version"
 msgstr "生成ソフト - バージョン"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:469
+#: ../container/admin_mainTemplistWidgetContainer.php:470
 msgid "Template Upload (zip compressed file)"
 msgstr "テンプレートアップロード(zip圧縮ファイル)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:470
+#: ../container/admin_mainTemplistWidgetContainer.php:471
 #: ../container/admin_mainWidgetlistWidgetContainer.php:670
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:519
+#: ../container/admin_mainTemplistWidgetContainer.php:533
 msgid "Template not found."
 msgstr "テンプレートが見つかりません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:543
-#: ../container/admin_mainTemplistWidgetContainer.php:554
+#: ../container/admin_mainTemplistWidgetContainer.php:560
+#: ../container/admin_mainTemplistWidgetContainer.php:571
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:582
+#: ../container/admin_mainTemplistWidgetContainer.php:599
 msgid ".zip Download"
 msgstr ".zip ダウンロード"
-
-#: ../container/admin_mainTemplistWidgetContainer.php:640
-#: ../container/admin_mainTemplistWidgetContainer.php:697
-#: ../container/test/admin_mainTest_regexWidgetContainer.php:78
-msgid "SimpleXML module not installed."
-msgstr "SimpleXML拡張モジュールがインストールされていません"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:54
 #: ../container/admin_mainUserlistWidgetContainer.php:61
@@ -1857,12 +1857,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:416
+#: ../container/admin_mainWidgetContainer.php:421
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
-#: ../container/admin_mainWidgetContainer.php:417 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:422 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1886,7 +1886,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 #: ../container/admin_mainUserlistWidgetContainer.php:304
 #: ../container/admin_mainUserlistWidgetContainer.php:372
-#: ../container/admin_mainWidgetContainer.php:418 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:423 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1957,16 +1957,16 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:339
-#: ../container/admin_mainWidgetContainer.php:346
+#: ../container/admin_mainWidgetContainer.php:344
+#: ../container/admin_mainWidgetContainer.php:351
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:351
+#: ../container/admin_mainWidgetContainer.php:356
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:415
+#: ../container/admin_mainWidgetContainer.php:420
 msgid "Send Password"
 msgstr "パスワード送信"
 
@@ -2708,12 +2708,12 @@ msgid ""
 "Available formats are below.<br /><strong>J10</strong> - Joomla! v1.0 format."
 "<br /><strong>J15</strong> - Joomla! v1.5 format.<br /><strong>J25</strong> "
 "- Joomla! v1.7-v2.5 format.<br /><strong>B30</strong> - Bootstrap v3.0 "
-"format."
+"format.<br /><strong>W00</strong> - WordPress format."
 msgstr ""
 "テンプレートの形式です。<br />利用可能な形式は以下の通りです。<br />●J10<br /"
 ">Joomla! v1.0用テンプレート<br />●J15<br />Joomla! v1.5用テンプレート<br /"
 ">●J25<br />Joomla! v1.7-v2.5用テンプレート<br />●B30<br />Bootstrap v3.0テン"
-"プレート"
+"プレート<br />●W00<br />WordPress用テンプレート"
 
 #: ../help/help_templist.php:56
 msgid "The current selected template."
