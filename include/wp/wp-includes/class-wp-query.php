@@ -490,6 +490,7 @@ class WP_Query {
 	 * Magic3追加
 	 */
 	public $headTitle;			// HTMLヘッダのタイトル作成用
+	public $lastPostFound;		// 一覧の最後の項目を検出したかどうか
 	
 	/**
 	 * Resets query flags to false.
@@ -1814,6 +1815,7 @@ class WP_Query {
 			$this->post_count = 0;
 			$this->posts = array();
 		}
+		$this->lastPostFound = false;		// 一覧の最後の項目を検出したかどうかのフラグリセット。have_post()で更新。
 
 		// ##### 画面のサブタイトルを設定。メインタイトルはサイト名。#####
 		if ($this->is_singular()){			// 単体ページの場合
@@ -1947,6 +1949,8 @@ class WP_Query {
 	 */
 	public function have_posts() {
 		if ( $this->current_post + 1 < $this->post_count ) {
+			if ($this->current_post >= $this->post_count -2) $this->lastPostFound = true;		// ##### 一覧の最後の項目を検出 #####
+
 			return true;
 		} elseif ( $this->current_post + 1 == $this->post_count && $this->post_count > 0 ) {
 			/**

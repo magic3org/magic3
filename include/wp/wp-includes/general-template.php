@@ -146,22 +146,21 @@ function get_sidebar( $name = null ) {
 function get_template_part( $slug, $name = null ) {
 	// ##### メインループ内でのコンテンツ出力処理 #####
 	// コンテンツタイプが設定されていない場合はMagic3のメインエリア出力に変更
+	global $wp_query;
 	global $gContentApi;
 	global $gPageManager;
-	
-	// メインエリアの前にポジションブロックを配置
-	static $isFirst;
-	if (!isset($isFirst)){
-		echo $gPageManager->getWPContents('main-top');
-		$isFirst = true;
-	}
 	
 	// メインエリア表示
 	$contentType = $gContentApi->getContentType();
 	if (empty($contentType)){
+		// メインエリアの前後にポジションブロックを配置
+		echo $gPageManager->getWPContents('main-top');
 		echo $gPageManager->getWPContents('main');
+		echo $gPageManager->getWPContents('main-bottom');
 		return;
 	}
+	
+	if ($wp_query->current_post == 0) echo $gPageManager->getWPContents('main-top');
 	
 	/**
 	 * Fires before the specified template part file is loaded.
@@ -184,6 +183,9 @@ function get_template_part( $slug, $name = null ) {
 	$templates[] = "{$slug}.php";
 
 	locate_template($templates, true, false);
+	
+	// 一覧の最後のデータの場合
+	if ($wp_query->lastPostFound) echo $gPageManager->getWPContents('main-bottom');
 }
 
 /**
