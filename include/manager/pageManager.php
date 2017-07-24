@@ -5098,10 +5098,11 @@ class PageManager extends Core
 						if (in_array('bootstrap', $templateTypeArray)) $functionMark .= self::WIDGET_FUNCTION_MARK_BOOTSTRAP;		// Bootstrap型テンプレート対応
 						if (in_array('wordpress', $templateTypeArray)) $functionMark .= self::WIDGET_FUNCTION_MARK_WORDPRESS;		// WordPress型テンプレート対応
 					}
+					if (!empty($functionMark)) $functionMark = '<hr />' . $functionMark;
 			
 					echo '<dl class="m3_widgetlist_item" id="' . $widgetTag . '">' . M3_NL;
 					echo '<dt>' . $widgetMark . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
-					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>';
+					echo '<dd><table style="width:100%;"><tr style="vertical-align:top;"><td style="width:35px;">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>';
 					echo $functionMark . '</dd>' . M3_NL;
 					echo '</dl>' . M3_NL;
 					
@@ -5339,8 +5340,8 @@ class PageManager extends Core
 			
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
 			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '"><div class="m3widgettitle">' . $widgetMark . $rows[$i]['wd_name'] . '</div>' . $operationMenu . '</dt>' . M3_NL;
-			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>' . M3_NL;
-			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . '</td></tr></table></dd>' . M3_NL;
+			$contents .= '<dd><table style="width:100%;"><tr style="vertical-align:top;"><td style="width:35px;">' . $imageTag . '</td><td>' . $desc . '</td></tr></table><hr />' . M3_NL;
+			$contents .= '<table style="width:100%;"><tr><td>' . $configName . '</td><td style="text-align:right;">' . $configImg . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;
 		}
 		return $contents;

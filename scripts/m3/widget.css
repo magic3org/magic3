@@ -89,7 +89,11 @@ dl.m3_widget_sortable dd {
 	margin:0;
 	padding:3px 6px;
 }
-dl.m3_widget_sortable table, dl.m3_widget_sortable table td {
+dl.m3_widget_sortable dd hr {
+	margin:5px 0;
+}
+dl.m3_widget_sortable dd table, dl.m3_widget_sortable dd table td {
+	border:none;
 	background-color:#FFF !important;
 	font-size:15px;
 	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
@@ -176,9 +180,16 @@ dl.m3_widgetlist_item dd {
 	margin:0;
 	padding:3px 6px;
 }
+dl.m3_widgetlist_item dd table {
+	border:none;
+}
 dl.m3_widgetlist_item dd table td {
+	border:none;
 	background-color:#FFF !important;
 	padding:2px;
+}
+dl.m3_widgetlist_item dd hr {
+	margin:5px 0;
 }
 /*
 .ui-sortable h2 span.options { right:10px; top:8px; width:30px; }
