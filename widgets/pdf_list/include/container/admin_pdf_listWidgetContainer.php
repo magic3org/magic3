@@ -221,9 +221,6 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 			$previewUrl = $this->gEnv->getDefaultUrl();
 			if (!empty($subPageId)) $previewUrl .= '?sub=' . $subPageId;
 			$this->tmpl->addVar("_widget", "preview_url", $this->getUrl($previewUrl));
-			
-			// ヘルプの追加
-			$this->convertHelp('update_button');
 		}
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新

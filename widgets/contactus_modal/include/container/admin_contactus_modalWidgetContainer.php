@@ -191,9 +191,6 @@ class admin_contactus_modalWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
-			
-			// ヘルプの追加
-			$this->convertHelp('update_button');
 		}
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新

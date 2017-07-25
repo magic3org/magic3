@@ -28,6 +28,7 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_CSS = "input.button {\n    border:2px outset #FF3366;\n    background-color:#FF3366;\n}\n";
 	const CSS_DIR = '/resource/css';			// CSSファイル格納ディレクトリ
 	const FIELD_HEAD = 'item_file_';					// CSSファイル選択項目名ヘッダ
+	const CSS_MAX_LENGTH = 60000;					// CSS文字列の最大長
 	
 	/**
 	 * コンストラクタ
@@ -106,7 +107,6 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
-		$userId		= $this->gEnv->getCurrentUserId();
 		$this->cssDir	=  $this->gEnv->getSystemRootPath() . self::CSS_DIR;		// CSSファイル読み込みディレクトリ
 		
 		$act = $request->trimValueOf('act');
@@ -131,7 +131,8 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 		if ($act == 'add'){// 新規追加
 			// 入力チェック
 			$this->checkInput($name, '名前');
-			$this->checkInput($this->css, 'CSS');
+//			$this->checkInput($this->css, 'CSS');
+			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH);	// CSS文字列
 			
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
@@ -162,7 +163,8 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
-			$this->checkInput($this->css, 'CSS');
+			//$this->checkInput($this->css, 'CSS');
+			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH);	// CSS文字列
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
@@ -242,9 +244,6 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
-			
-			// ヘルプの追加
-			$this->convertHelp('update_button');
 		}
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新

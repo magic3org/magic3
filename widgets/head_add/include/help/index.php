@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 3257 2010-06-18 10:04:52Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -30,8 +30,8 @@ $HELP['head_name']['title'] = '名前';
 $HELP['head_name']['body'] = 'HEAD追加設定名です。';
 $HELP['head_name_input']['title'] = '名前';
 $HELP['head_name_input']['body'] = 'HEAD追加設定名です。新規に登録するか、登録済みの設定を選択します。';
-$HELP['head_add_text']['title'] = '追加文字列';
-$HELP['head_add_text']['body'] = 'HTMLのHEADタグに追加する文字列です。';
+$HELP['head_head_text']['title'] = 'ヘッダ部文字列';
+$HELP['head_head_text']['body'] = 'HTMLのHEADタグに追加する文字列です。';
 $HELP['head_id']['title'] = 'HEAD追加設定ID';
 $HELP['head_id']['body'] = '自動的に振られるHEAD追加設定IDです。';
 $HELP['head_ref']['title'] = '使用';

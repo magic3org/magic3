@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -830,23 +830,6 @@ class BaseWidgetContainer extends Core
 		return $help;
 	}
 	/**
-	 * ヘルプ文字列を変換
-	 *
-	 * @param string $templateName		テンプレート名
-	 * @return なし
-	 */
-	function convertHelp($templateName)
-	{
-		// ヘルプを設定
-		$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId());
-		for ($i = 0; $i < count($helpKeys); $i++){
-			$key = $helpKeys[$i];
-			$helpText = $this->gInstance->getHelpManager()->getHelpText($key);
-			$this->tmpl->addVar($templateName, self::HELP_HEAD . $key, $helpText);
-			//$this->tmpl->addGlobalVar(self::HELP_HEAD . $key, $helpText);
-		}
-	}
-	/**
 	 * patTemplateを使用した汎用データ変換処理
 	 *
 	 * ウィジェットのテンプレートディレクトリ内のテンプレートファイルを読み込みデータ変換後、文字列を返す。
@@ -1433,7 +1416,7 @@ class BaseWidgetContainer extends Core
 		}
 		if (strlen($str) > $maxSize){
 			//array_push($this->warningMessage, $title.'は半角'.$maxSize.'文字までの入力が可能です');
-			$msg = $this->_g('%s can be max byte length %s.');			// メッセージを取得「%sは半角%s文字までの入力が可能です」
+			$msg = $this->_g('%1$s can be max byte length %2$s.');			// メッセージを取得「%sは半角%s文字までの入力が可能です」
 			array_push($this->warningMessage, sprintf($msg, $title, $maxSize));
 			return false;
 		}
