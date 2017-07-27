@@ -100,10 +100,10 @@ class newsDb extends BaseDb
 		
 		// 新規レコード追加
 		$queryStr = 'INSERT INTO content ';
-		$queryStr .=  '(cn_type, cn_id, cn_language_id, cn_history_index, cn_name, cn_description, cn_html, cn_visible, cn_default, cn_key, cn_create_user_id, cn_create_dt) ';
+		$queryStr .=  '(cn_type, cn_id, cn_language_id, cn_history_index, cn_name, cn_description, cn_html, cn_visible, cn_key, cn_create_user_id, cn_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($contentType, $contId, $lang, $historyIndex, $name, $desc, $html, $visible, $default, $key, $userId, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($contentType, $contId, $lang, $historyIndex, $name, $desc, $html, $visible, $key, $userId, $now));
 
 		// 新規のシリアル番号取得
 		$queryStr = 'SELECT max(cn_serial) as ns FROM content ';
