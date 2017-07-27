@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -186,42 +186,8 @@ function addAttachFile(fileid, filename)
 	$('#attach_file_list').append(lineText);
 	
 	// 項目一覧を再設定
-	//setupList();
 	m3SetDragDropTable('attach_file_list');
 }
-/*
-function setupList()
-{
-	$("#attach_file_list").tableDnD({
-		onDrop: function(table, row){
-			setupNo();
-		},
-		dragHandle: ".m3drag_handle"
-	});
-	$("#attach_file_list tr").hover(function(){
-		$(this.cells[0]).addClass('m3drag_current');
-	}, function() {
-		$(this.cells[0]).removeClass('m3drag_current');
-	});
-	// 項目削除処理
-	$("#attach_file_list tr .m3drag_delrow").click(function(){
-		$(this).parents('.m3drag_row').remove();
-		setupNo();
-	});
-	// インデックスNo再設定
-	setupNo();
-	
-	// HELP追加
-	m3SetHelp($("#attach_file_list"));
-}*/
-/*
-function setupNo()
-{
-	// インデックスNo再設定
-	$("#attach_file_list tr .m3drag_rowno").each(function(index){
-		$(this).text(index + 1);
-	});
-}*/
 function createUploader(){
 	var uploader = new qq.FileUploader({
 		element: document.getElementById('file-uploader'),
@@ -287,9 +253,7 @@ $(function(){
 		return false;
 	});
 	// 添付ファイル項目一覧を初期化
-//	setupList();
 	m3SetDragDropTable('attach_file_list');
-		
 	
 	// 画像アップローダー作成
 	createUploader();
@@ -326,8 +290,8 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONTENT_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
-	    <th><span {_HELP_CONTENT_DEFAULT}>デフォルト項目</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_default" {SEL_ITEM_DEFAULT} /></label></div></td>
+	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_NAME}>名前</span></th>
@@ -350,12 +314,6 @@ $(function(){
 	    </patTemplate:tmpl><div class="col-sm-6 m3config_item form-control-static">{LANG}</div>
 	    </td>
 	</patTemplate:tmpl>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
-	    <th><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></label></div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_ACTIVE_TERM}>公開期間</span></th>
@@ -429,19 +387,17 @@ $(function(){
 	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr class="option_area" style="display:none;">
-	    <th><span {_HELP_CONTENT_PASSWORD}>パスワード</span></th>
-	    <td>
-		<input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="10" maxlength="15" autocomplete="off" {PASSWORD_DISABLED} />
-		</td>
-	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
-	    <td><input type="text" name="item_key" class="form-control" value="{SEL_ITEM_KEY}" size="20" maxlength="20" {KEY_DISABLED} /></td>
+	    <th><span {_HELP_CONTENT_ACCESS_CONTROL}>アクセス制御</span></th>
+	    <td colspan="3"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span><div class="checkbox"><label><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></label></div>
+		<span {_HELP_CONTENT_PASSWORD}>パスワード</span><input type="password" name="item_password" class="form-control" value="{PASSWORD}" maxlength="15" autocomplete="new-password" {PASSWORD_DISABLED} />
+            </td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_RELATED_CONTENT}>関連コンテンツ</span></th>
 	    <td colspan="3"><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" {RELATED_CONTENT_DISABLED} /></td>
 	</tr>
 <patTemplate:tmpl name="show_template" visibility="hidden">
-    <tr class="option_area" style="display:none;">
+        <tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_TEMPLATE}>テンプレート</span></th>
 	    <td colspan="3">
 		    <div class="col-sm-4 m3config_item">
@@ -459,12 +415,12 @@ $(function(){
 	    <th><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></th>
 	    <td colspan="3">
 	    <!--<table id="attach_file_list" class="simple-table simple-table-inner">-->
-		<table id="attach_file_list" class="table table-condensed table-bordered table-striped">
+            <table id="attach_file_list" class="table table-condensed table-bordered table-striped">
 	    <thead>
 	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">タイトル</th><th>ファイル名</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="attach_file_list">
-        <tr class="m3drag_row">
+            <tr class="m3drag_row">
 	    <td class="m3drag_handle"></td>
 	    <td align="center"><span class="m3drag_rowno"></span></td>
 	    <td><input type="text" name="item_filetitle[]" class="form-control" value="{TITLE}" size="20" maxlength="60" /></td>
@@ -475,6 +431,10 @@ $(function(){
 	    </tbody></table>
 	    <div id="file-uploader"></div>
 	    </td>
+	</tr>
+	<tr class="option_area" style="display:none;">
+	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
+	    <td colspan="3"><input type="text" name="item_key" class="form-control" value="{SEL_ITEM_KEY}" maxlength="20" {KEY_DISABLED} /></td>
 	</tr>
 	<tr>
 	    <td colspan="4"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
