@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_contentDb.php 5893 2013-04-01 13:27:22Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -73,7 +73,7 @@ class default_contentDb extends BaseDb
 		}
 	}
 	/**
-	 * コンテンツ項目を取得
+	 * コンテンツ項目を取得(表示用)
 	 *
 	 * @param string	$contentType		コンテンツタイプ
 	 * @param function	$callback			コールバック関数
@@ -89,11 +89,11 @@ class default_contentDb extends BaseDb
 		$params = array();
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		
-		// コンテンツIDの指定がない場合は、デフォルト値を取得
+		// コンテンツIDの指定がない場合は一覧を取得
 		if (empty($contentIdArray)){
 			$queryStr = 'SELECT * FROM content ';
 			$queryStr .=  'WHERE cn_deleted = false ';		// 削除されていない
-			$queryStr .=    'AND cn_default = true ';
+/*			$queryStr .=    'AND cn_default = true ';*/		// デフォルトフラグは使用しない
 			$queryStr .=    'AND cn_type = ? ';
 			$queryStr .=    'AND cn_language_id = ? ';
 			$params[] = $contentType;
@@ -113,7 +113,8 @@ class default_contentDb extends BaseDb
 				$params[] = $initDt;
 				$params[] = $now;
 			}
-			$queryStr .=  'ORDER BY cn_serial';
+//			$queryStr .=  'ORDER BY cn_serial';
+			$queryStr .=  'ORDER BY cn_id DESC';		// 降順
 			$this->selectLoop($queryStr, $params, $callback);
 		} else {
 			$contentId = implode(',', $contentIdArray);

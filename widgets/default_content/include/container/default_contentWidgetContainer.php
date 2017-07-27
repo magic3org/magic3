@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,6 +18,7 @@ require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 {
+	private $viewMode;					// 画面表示モード
 	private $_contentCreated;	// コンテンツが取得できたかどうか
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $sessionParamObj;		// セッションパラメータ
@@ -39,7 +40,8 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	private $useJQuery;						// jQueryスクリプト作成を行うかどうか
 	private $headScript;	// HTMLヘッダに埋め込むJavascript
 	private $addLib = array();		// 追加スクリプトライブラリ
-	const DEFAULT_SEARCH_LIST_COUNT = 20;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 10;			// 最大リスト表示数
+	const DEFAULT_SEARCH_LIST_COUNT = 20;			// 最大リスト表示数(検索用)
 	const MESSAGE_NO_CONTENT		= 'コンテンツが見つかりません';
 	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
 	const DEFAULT_MESSAGE_DENY = 'コンテンツを表示できません';		// アクセス不可の場合のメッセージ
@@ -54,6 +56,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
 	const PASSWORD_FORM_NAME = 'check_password';		// パスワードチェック用フォーム名
 	const LIB_MD5 = 'md5';
+	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
 	
 	/**
 	 * コンストラクタ
@@ -88,7 +91,10 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		if ($act == 'search'){
+		$keyword = $request->trimValueOf(M3_REQUEST_PARAM_KEYWORD);// 検索キーワード
+		
+		if ($act == 'search' || !empty($keyword)){
+			$this->viewMode = 'search';					// 画面表示モード(検索結果)
 			return 'search.tmpl.html';
 		} else {
 			// Joomlaテンプレートのバージョンに合わせて出力
@@ -171,7 +177,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		$contentId = $request->trimValueOf(M3_REQUEST_PARAM_CONTENT_ID);
 		if (empty($contentId)) $contentId = $request->trimValueOf(M3_REQUEST_PARAM_CONTENT_ID_SHORT);		// 略式コンテンツID
-		$keyword = $request->trimValueOf('keyword');// 検索キーワード
+		$keyword = $request->trimValueOf(M3_REQUEST_PARAM_KEYWORD);// 検索キーワード
 		$password = $request->trimValueOf('password');// パスワード
 		
 		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
@@ -241,7 +247,33 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			}
 			// システム強制終了
 			$this->gPage->exitSystem();
-		} else if ($act == 'search'){			// 検索
+		} else if ($act == 'checkpassword'){
+			// パスワードチェックが必要な場合のみ実行
+			if ($this->usePassword){
+				// パスワードのチェックはデフォルト言語で行う
+				$ret = self::$_mainDb->getContentByContentId(default_contentCommonDef::$_contentType, $contentId, $this->gEnv->getDefaultLanguage(), $row);
+				if ($ret){
+					if (!empty($row['cn_password']) && $row['cn_password'] == $password){		// パスワードチェックOKのとき
+						if (!in_array($contentId, $this->sessionParamObj->authContentId)){
+							$this->sessionParamObj->authContentId[] = $contentId;
+						}
+					} else {
+						if (in_array($contentId, $this->sessionParamObj->authContentId)){
+							$newAuthContentId = array();
+							for ($i = 0; $i < count($this->sessionParamObj->authContentId); $i++){
+								if ($this->sessionParamObj->authContentId[$i] != $contentId) $newAuthContentId[] = $this->sessionParamObj->authContentId[$i];
+							}
+							$this->sessionParamObj->authContentId = $newAuthContentId;
+						}
+					}
+					// セッション更新
+					$this->setWidgetSessionObj($this->sessionParamObj);
+				}
+				// 画面を全体を再表示
+				$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
+				return;
+			}
+		} else if ($this->viewMode == 'search'){			// 検索
 			$itemCount = self::DEFAULT_SEARCH_LIST_COUNT;		// 取得数
 			
 			// キーワード検索のとき
@@ -271,32 +303,6 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				$this->tmpl->addVar("show_title", "class", $headClassStr);
 				$this->tmpl->addVar("show_title", "title", $this->pageTitle);
 			}
-		} else if ($act == 'checkpassword'){
-			// パスワードチェックが必要な場合のみ実行
-			if ($this->usePassword){
-				// パスワードのチェックはデフォルト言語で行う
-				$ret = self::$_mainDb->getContentByContentId(default_contentCommonDef::$_contentType, $contentId, $this->gEnv->getDefaultLanguage(), $row);
-				if ($ret){
-					if (!empty($row['cn_password']) && $row['cn_password'] == $password){		// パスワードチェックOKのとき
-						if (!in_array($contentId, $this->sessionParamObj->authContentId)){
-							$this->sessionParamObj->authContentId[] = $contentId;
-						}
-					} else {
-						if (in_array($contentId, $this->sessionParamObj->authContentId)){
-							$newAuthContentId = array();
-							for ($i = 0; $i < count($this->sessionParamObj->authContentId); $i++){
-								if ($this->sessionParamObj->authContentId[$i] != $contentId) $newAuthContentId[] = $this->sessionParamObj->authContentId[$i];
-							}
-							$this->sessionParamObj->authContentId = $newAuthContentId;
-						}
-					}
-					// セッション更新
-					$this->setWidgetSessionObj($this->sessionParamObj);
-				}
-				// 画面を全体を再表示
-				$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
-				return;
-			}
 		} else {
 			// ##### コンテンツの表示 #####
 			// 検索以外で管理者権限がある場合は「新規」アイコンを表示
@@ -322,18 +328,23 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			}
 			$this->tmpl->addVar("_widget", "button_list", $buttonList);
 			
-			if (empty($contentId)){	// コンテンツIDがないときはデフォルトデータを取得
-				// 定義IDが0以外のときは、定義IDをコンテンツIDとする
+			if (empty($contentId)){	// コンテンツIDがないときは一覧を表示
+				// トップ画面用一覧を表示
+				$this->showTopList($request);
+				
+/*				// 定義IDが0以外のときは、定義IDをコンテンツIDとする
 				$contentIdArray = array();
 			
 				// 定義ID取得
 				$configId = $this->gEnv->getCurrentWidgetConfigId();
 				if (!empty($configId)) $contentIdArray[] = $configId;
-		
+
+				$contentIdArray = array();
 				self::$_mainDb->getContentItems(default_contentCommonDef::$_contentType, array($this, 'itemsLoop'), $contentIdArray, $this->gEnv->getCurrentLanguage(), $all, $now, $preview);
 				if (!$this->_contentCreated){		// コンテンツが取得できなかったときはデフォルト言語で取得
 					self::$_mainDb->getContentItems(default_contentCommonDef::$_contentType, array($this, 'itemsLoop'), $contentIdArray, $this->gEnv->getDefaultLanguage(), $all, $now, $preview);
 				}
+				*/
 			} else {	// コンテンツIDで指定
 				if ($historyIndex >= 0){		// 履歴表示のとき
 					self::$_mainDb->getContentItemsByHistory(default_contentCommonDef::$_contentType, array($this, 'itemsLoop'), $contentId, $this->gEnv->getCurrentLanguage(), $historyIndex);
@@ -373,7 +384,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		if (empty($this->headTitle)) $this->gPage->setHeadSubTitle($this->pageTitle);
 		
 		// 運用可能ユーザの場合は編集用ボタンを表示
-		if ($this->isSystemManageUser && $act != 'search'){		// 検索画面以外
+		if ($this->isSystemManageUser && $this->viewMode != 'search'){		// 検索画面以外
 			// 設定画面表示用のスクリプトを埋め込む
 			$editUrl = $this->getConfigAdminUrl('openby=simple&task=content_detail');
 			$this->tmpl->setAttribute('admin_script', 'visibility', 'visible');
@@ -386,6 +397,17 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		} else {
 			$this->setWidgetSessionObj(null);		// セッションデータ削除
 		}
+	}
+	/**
+	 * トップ一覧画面表示
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function showTopList($request)
+	{
+		$contentLibObj = $this->gInstance->getObject(self::CONTENT_OBJ_ID);
+		$contentLibObj->getPublicContentList(self::DEFAULT_LIST_COUNT, 1/*最初のページ*/, 0/*コンテンツID(一覧)*/, $this->_now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->_langId, 1/*降順*/, array($this, 'itemsLoop'));
 	}
 	/**
 	 * ヘッダ部メタタグの設定
@@ -506,10 +528,6 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			$this->addLib[] = self::LIB_MD5;		// 認証用の暗号化ライブラリを追加
 		} else {
 			// ビューカウントを更新
-/*			if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
-				!$this->_isCmdAccess){				// cmd付きアクセスでない
-				$this->gInstance->getAnalyzeManager()->updateContentViewCount(default_contentCommonDef::$_viewContentType, $fetchedRow['cn_serial'], $this->currentDay, $this->currentHour, $contentId);
-			}*/
 			$this->gInstance->getAnalyzeManager()->logContentView(default_contentCommonDef::$_viewContentType, $fetchedRow['cn_serial'], $contentId);
 		
 			// コンテンツタイトルの出力設定
