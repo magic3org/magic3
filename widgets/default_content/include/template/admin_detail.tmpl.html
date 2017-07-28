@@ -214,6 +214,28 @@ $(function(){
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300/* 高さ */);
 	
+	// 公開期間エリア表示制御
+	$("#{TAGID_ACTIVE_TERM}").click(function(){
+		var $tableRow = $('tr.active_term_area');
+		if ($tableRow.is(':hidden')){
+			$('#tmprow').remove();
+			$tableRow.slideToggle('slow');
+	    } else {
+			$tableRow.slideToggle('slow', function(){
+				$tableRow.after('<tr id="tmprow"></tr>');
+			});
+	    }
+	
+		// 表示エリアリサイズ
+		m3AdjustParentWindow();
+		return false;
+	});
+	if ({SHOW_ACTIVE_TERM_AREA}){
+		$('tr.active_term_area').show();
+	} else {
+		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
+	}
+	
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
@@ -290,7 +312,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONTENT_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
-	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
 	</tr>
 	<tr>
@@ -315,13 +337,11 @@ $(function(){
 	    </td>
 	</patTemplate:tmpl>
 	</tr>
-	<tr>
+	<tr class="active_term_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_ACTIVE_TERM}>公開期間</span></th>
 	    <td colspan="3">
 	    <div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
         <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
-<!--		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item">時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
-        <div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" >時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>-->
 		</td>
 	</tr>
     <tr>
@@ -387,10 +407,10 @@ $(function(){
 	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr class="option_area" style="display:none;">
-	    <th><span {_HELP_CONTENT_ACCESS_CONTROL}>アクセス制御</span></th>
-	    <td colspan="3"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span><div class="checkbox"><label><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></label></div>
-		<span {_HELP_CONTENT_PASSWORD}>パスワード</span><input type="password" name="item_password" class="form-control" value="{PASSWORD}" maxlength="15" autocomplete="new-password" {PASSWORD_DISABLED} />
-            </td>
+	    <th><span {_HELP_CONTENT_ACCESS_CONTROL}>閲覧制限</span></th>
+	    <td colspan="3"><div class="form-control-static col-sm-1 m3config_item" style="width:7em;"><span {_HELP_CONTENT_PASSWORD}>パスワード：</span></div><div class="col-sm-3 m3config_item"><input type="password" name="item_password" class="form-control" value="{PASSWORD}" maxlength="15" autocomplete="new-password" {PASSWORD_DISABLED} /></div>
+		<div class="checkbox m3config_inline_item following"><label><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></label></div>
+        </td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_RELATED_CONTENT}>関連コンテンツ</span></th>

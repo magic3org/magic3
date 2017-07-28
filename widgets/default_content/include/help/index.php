@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,8 +32,6 @@ $HELP['content_lang']['title'] = '言語';
 $HELP['content_lang']['body'] = 'コンテンツの対応言語です。';
 $HELP['content_visible']['title'] = '公開';
 $HELP['content_visible']['body'] = 'コンテンツをユーザに公開するかどうかを制御します。非公開に設定の場合はユーザから参照することはできません。';
-$HELP['content_limited']['title'] = 'ユーザ制限';
-$HELP['content_limited']['body'] = 'コンテンツの参照をログインしたユーザに限定するかどうかを設定します。チェックが入っているコンテンツはログインユーザだけが参照可能です。';
 $HELP['content_status']['title'] = '閲覧状態';
 $HELP['content_status']['body'] = 'コンテンツの現在の閲覧状態を示します。';
 $HELP['content_active_term']['title'] = '公開期間';
@@ -68,8 +66,10 @@ $HELP['content_meta_description']['title'] = 'ページ要約';
 $HELP['content_meta_description']['body'] = 'ヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。';
 $HELP['content_meta_keywords']['title'] = '検索キーワード';
 $HELP['content_meta_keywords']['body'] = 'ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを「,」区切りで10個以下で記述します。';
-$HELP['content_password']['title'] = 'パスワード';
-$HELP['content_password']['body'] = 'コンテンツにパスワードを掛けて閲覧制限を行うことができます。認証されたパスワードの有効期限はセッション期間(ブラウザウィンドウを閉じるまで)です。';
+$HELP['content_access_control']['title'] = '閲覧制限';
+$HELP['content_access_control']['body'] = 'コンテンツの閲覧を制限します。<br />●パスワード<br />パスワードを掛けて閲覧制限を行います。認証されたパスワードの有効期限はセッション期間(ブラウザウィンドウを閉じるまで)です。<br />●ユーザ制限<br />閲覧をログインしたユーザに限定するかどうかを設定します。';
+$HELP['content_limited']['title'] = 'ユーザ制限';
+$HELP['content_limited']['body'] = 'コンテンツの参照をログインしたユーザに限定するかどうかを設定します。チェックが入っているコンテンツはログインユーザだけが参照可能です。';
 $HELP['content_attach_file']['title'] = '添付ファイル';
 $HELP['content_attach_file']['body'] = 'コンテンツに添付するファイルを指定します。ファイルを追加するには、「ファイルアップロード」領域にファイルをドロップするか、クリックで表示したダイアログでファイルを選択します。';
 

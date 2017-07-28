@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -57,6 +57,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
 	const LIB_ITEM_HEAD = 'item_lib_';			// 選択ライブラリの項目名ヘッダ
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
+	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
+	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
 	
 	/**
 	 * コンストラクタ
@@ -308,7 +310,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$key = $request->trimValueOf('item_key');		// 外部参照用キー
 		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
 		$limited = ($request->trimValueOf('item_limited') == 'on') ? 1 : 0;		// チェックボックス
-		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// チェックボックス
+//		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// チェックボックス
 		$metaTitle = $request->trimValueOf('item_meta_title');		// ページタイトル名
 		$metaDesc = $request->trimValueOf('item_meta_desc');			// ページ要約
 		$metaKeyword = $request->trimValueOf('item_meta_keyword');	// ページキーワード
@@ -419,11 +421,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $nextContentId * (-1)/*次のコンテンツIDのチェック*/,
-														$this->langId, $name, $desc, $html, $visible, $default, $limited, $key, $password, 
+														$this->langId, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
 														$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $otherParams);
 				} else {
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $contentId, 
-														$this->langId, $name, $desc, $html, $visible, $default, $limited, $key, $password, 
+														$this->langId, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
 														$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $otherParams);
 				}
 				// ##### 添付ファイル情報を更新 #####
@@ -522,7 +524,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					// ### 履歴データを再取得すべき? ###
 				}
 				
-				$ret = self::$_mainDb->updateContentItem($this->serialNo, $name, $desc, $html, $visible, $default, $limited, $key, $password, 
+				$ret = self::$_mainDb->updateContentItem($this->serialNo, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
 															$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $oldRecord, $otherParams);
 				if ($ret){
 					// コンテンツに画像がなくなった場合は、サムネールを削除
@@ -774,15 +776,15 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			
 				// 項目表示、デフォルト値チェックボックス
 				$visible = $row['cn_visible'];
-				$default = $row['cn_default'];
+				$default = '0';			// 未使用(デフォルトかどうか)
 				$limited = $row['cn_user_limited'];		// ユーザ制限
 				$metaTitle = $row['cn_meta_title'];		// ページタイトル名(METAタグ)
 				$metaDesc = $row['cn_meta_description'];		// ページ要約(METAタグ)
 				$metaKeyword = $row['cn_meta_keywords'];		// ページキーワード(METAタグ)
-				$start_date = $row['cn_active_start_dt'];	// 公開期間開始日
-				$start_time = $row['cn_active_start_dt'];	// 公開期間開始時間
-				$end_date = $row['cn_active_end_dt'];	// 公開期間終了日
-				$end_time = $row['cn_active_end_dt'];	// 公開期間終了時間
+				$start_date = $this->convertToDispDate($row['cn_active_start_dt']);	// 公開期間開始日
+				$start_time = $this->convertToDispTime($row['cn_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
+				$end_date = $this->convertToDispDate($row['cn_active_end_dt']);	// 公開期間終了日
+				$end_time = $this->convertToDispTime($row['cn_active_end_dt'], 1/*時分*/);	// 公開期間終了時間
 				$relatedContent = $row['cn_related_content'];		// 関連コンテンツ
 				$jQueryScript = $row['cn_script'];	// jQueryスクリプト
 				if (!empty($row['cn_script_lib'])) $this->selectedPlugin = explode(',', $row['cn_script_lib']);		// jQueryプラグイン
@@ -815,7 +817,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				// 拡張エリアの状態を設定
-				if ($hasPassword || !empty($key) || !empty($relatedContent) || count($this->attachFileInfoArray) > 0) $this->isOpenOptionArea = true;
+				if ($hasPassword || !empty($limited) || !empty($key) || !empty($relatedContent) || count($this->attachFileInfoArray) > 0) $this->isOpenOptionArea = true;
 			} else {
 				$this->serialNo = 0;
 				
@@ -829,7 +831,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			
 				// 項目表示、デフォルト値チェックボックス
 				$visible = '1';
-				$default = '0';
+				$default = '0';		// 未使用(デフォルトかどうか)
 				$limited = '0';		// ユーザ制限
 				$metaTitle = '';		// ページタイトル名(METAタグ)
 				$metaDesc = '';		// ページ要約(METAタグ)
@@ -888,6 +890,17 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			$this->tmpl->setAttribute('show_singlelang', 'visibility', 'visible');
 			$this->tmpl->addVar("show_singlelang", "sel_item_name", $name);		// 名前
 		}
+		
+		// 公開期間エリア表示ボタン
+		$activeTermButton = $this->gDesign->createTermButton(''/*同画面*/, self::TOOLTIP_ACTIVE_TERM, self::TAG_ID_ACTIVE_TERM);
+		$this->tmpl->addVar("_widget", "active_term_button", $activeTermButton);
+		$this->tmpl->addVar("_widget", "tagid_active_term", self::TAG_ID_ACTIVE_TERM);
+		if (!empty($start_date) || !empty($start_time) || !empty($end_date) || !empty($end_time)){
+			$this->tmpl->addVar('_widget', 'show_active_term_area', 'true');		// 公開期間エリアの初期の表示状態
+		} else {
+			$this->tmpl->addVar('_widget', 'show_active_term_area', 'false');		// 公開期間エリアの初期の表示状態
+		}
+		
 		// ユーザ定義フィールドを作成
 		$this->createUserFields($fieldInfoArray);
 		
@@ -933,24 +946,27 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "meta_keyword", $this->convertToDispString($metaKeyword));		// ページキーワード(METAタグ)
 		$this->tmpl->addVar("_widget", "update_user", $this->convertToDispString($update_user));	// 更新者
 		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($update_dt));	// 更新日時
-		$this->tmpl->addVar("_widget", "start_date", $this->convertToDispDate($start_date));	// 公開期間開始日
-		$this->tmpl->addVar("_widget", "start_time", $this->convertToDispTime($start_time, 1/*時分*/));	// 公開期間開始時間
-		$this->tmpl->addVar("_widget", "end_date", $this->convertToDispDate($end_date));	// 公開期間終了日
-		$this->tmpl->addVar("_widget", "end_time", $this->convertToDispTime($end_time, 1/*時分*/));	// 公開期間終了時間
+		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 公開期間開始日
+		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
+		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
+		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		if ($hasPassword) $this->tmpl->addVar("_widget", "password", self::DEFAULT_PASSWORD);// 入力済みを示すパスワードの設定
 		$this->tmpl->addVar("_widget", "related_content", $this->convertToDispString($relatedContent));	// 関連コンテンツ
 		$this->tmpl->addVar("show_jquery", "jquery_script", $this->convertToDispString($jQueryScript));	// jQueryスクリプト
 
 		// 項目表示、項目利用可否チェックボックス
-		$visibleStr = '';
+/*		$visibleStr = '';
 		if ($visible) $visibleStr = 'checked';
 		$this->tmpl->addVar("_widget", "sel_item_visible", $visibleStr);
-		$defaultStr = '';
-		if ($default) $defaultStr = 'checked';
-		$this->tmpl->addVar("_widget", "sel_item_default", $defaultStr);
+//		$defaultStr = '';
+//		if ($default) $defaultStr = 'checked';
+//		$this->tmpl->addVar("_widget", "sel_item_default", $defaultStr);
 		$limitedStr = '';
 		if ($limited) $limitedStr = 'checked';
 		$this->tmpl->addVar("_widget", "sel_item_limited", $limitedStr);
+*/
+		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));		// コンテンツ公開
+		$this->tmpl->addVar("_widget", "sel_item_limited", $this->convertToCheckedString($limited));		// ユーザ制限
 	
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);		// 選択中のシリアル番号
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用
@@ -1074,12 +1090,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		// ユーザ制限
 		$limited = '';
 		if ($fetchedRow['cn_user_limited']) $limited = 'checked';
-
-		// デフォルト時の項目かどうか
-//		$default = '';
-//		if ($fetchedRow['cn_default']) $default = 'checked';
-		$defaultIcon = '';
-		if ($fetchedRow['cn_default']) $defaultIcon = '<i class="glyphicon glyphicon-flag" data-container="body" rel="m3help" title="デフォルト項目"></i>';
 		
 		// 対応言語を取得
 		$lang = '';
@@ -1144,8 +1154,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 			'limited' => $limited,											// ユーザ制限
-			'default_icon' => $defaultIcon,											// デフォルト項目
-		//	'default' => $default,											// デフォルト項目
 			'add_to_menu_img' => $addToMenuImg,											// メニューに追加用の画像
 			'add_to_menu_str' => $addToMenuStr,											// メニューに追加用の文字列
 			'status_url' => $statusUrl,											// 現在の表示画面用URL

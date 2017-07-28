@@ -93,7 +93,6 @@ class default_contentDb extends BaseDb
 		if (empty($contentIdArray)){
 			$queryStr = 'SELECT * FROM content ';
 			$queryStr .=  'WHERE cn_deleted = false ';		// 削除されていない
-/*			$queryStr .=    'AND cn_default = true ';*/		// デフォルトフラグは使用しない
 			$queryStr .=    'AND cn_type = ? ';
 			$queryStr .=    'AND cn_language_id = ? ';
 			$params[] = $contentType;
@@ -283,7 +282,7 @@ class default_contentDb extends BaseDb
 	 * @param string  $desc			説明
 	 * @param string  $html			HTML
 	 * @param bool    $visible		表示状態
-	 * @param bool    $default		デフォルトで使用するかどうか
+	 * @param bool    $default		デフォルトで使用するかどうか(未使用)
 	 * @param bool    $limited		ユーザ制限するかどうか
 	 * @param string  $key			外部参照用キー
 	 * @param string  $password		パスワード
@@ -341,20 +340,19 @@ class default_contentDb extends BaseDb
 			$historyIndex = $row['cn_history_index'] + 1;
 		}
 		// デフォルトを設定のときは他のデフォルトを解除
-		if ($default){
+/*		if ($default){
 			$queryStr  = 'UPDATE content ';
-			$queryStr .=   'SET cn_default = false, ';		// デフォルトをクリア
-			$queryStr .=     'cn_update_user_id = ?, ';
+			$queryStr .=   'SET cn_update_user_id = ?, ';
 			$queryStr .=     'cn_update_dt = ? ';
 			$queryStr .=   'WHERE cn_deleted = false ';
 			$queryStr .=     'AND cn_type = ? ';
 			$queryStr .=     'AND cn_language_id = ? ';
 			$this->execStatement($queryStr, array($user, $now, $contentType, $lang));
-		}
+		}*/
 		
 		// データを追加
 		$params = array($contentType, $contId, $lang, $historyIndex, $name, $desc, $html,
-								intval($visible), intval($default), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $user, $now);
+								intval($visible), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $user, $now);
 								
 		$queryStr  = 'INSERT INTO content ';
 		$queryStr .=   '(';
@@ -366,7 +364,6 @@ class default_contentDb extends BaseDb
 		$queryStr .=   'cn_description, ';
 		$queryStr .=   'cn_html, ';
 		$queryStr .=   'cn_visible, ';
-		$queryStr .=   'cn_default, ';
 		$queryStr .=   'cn_user_limited, ';
 		$queryStr .=   'cn_key, ';
 		$queryStr .=   'cn_password, ';
@@ -392,7 +389,7 @@ class default_contentDb extends BaseDb
 			}
 		}
 		$queryStr .=  ') VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
 		$this->execStatement($queryStr, $params);
 		
 		// 新規のシリアル番号取得
@@ -413,7 +410,7 @@ class default_contentDb extends BaseDb
 	 * @param string  $desc			説明
 	 * @param string  $html			HTML
 	 * @param bool    $visible		表示状態
-	 * @param bool    $default		デフォルトで使用するかどうか
+	 * @param bool    $default		デフォルトで使用するかどうか(未使用)
 	 * @param bool    $limited		ユーザ制限するかどうか
 	 * @param string  $key			外部参照用キー
 	 * @param string  $password		パスワード
@@ -454,16 +451,15 @@ class default_contentDb extends BaseDb
 			return false;
 		}
 		// デフォルトを設定のときは他のデフォルトを解除
-		if ($default){
+/*		if ($default){
 			$queryStr  = 'UPDATE content ';
-			$queryStr .=   'SET cn_default = false, ';		// デフォルトをクリア
-			$queryStr .=     'cn_update_user_id = ?, ';
+			$queryStr .=   'SET cn_update_user_id = ?, ';
 			$queryStr .=     'cn_update_dt = ? ';
 			$queryStr .=   'WHERE cn_deleted = false ';
 			$queryStr .=     'AND cn_type = ? ';
 			$queryStr .=     'AND cn_language_id = ? ';
 			$this->execStatement($queryStr, array($user, $now, $row['cn_type'], $row['cn_language_id']));
-		}
+		}*/
 		
 		// 古いレコードを削除
 		$queryStr  = 'UPDATE content ';
@@ -475,7 +471,7 @@ class default_contentDb extends BaseDb
 		
 		// 新規レコード追加
 		$params = array($row['cn_type'], $row['cn_id'], $row['cn_language_id'], $historyIndex, $name, $desc, $html,
-							intval($visible), intval($default), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $user, $now);
+							intval($visible), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $user, $now);
 							
 		$queryStr  = 'INSERT INTO content ';
 		$queryStr .=   '(cn_type, ';
@@ -486,7 +482,6 @@ class default_contentDb extends BaseDb
 		$queryStr .=   'cn_description, ';
 		$queryStr .=   'cn_html, ';
 		$queryStr .=   'cn_visible, ';
-		$queryStr .=   'cn_default, ';
 		$queryStr .=   'cn_user_limited, ';
 		$queryStr .=   'cn_key, ';
 		$queryStr .=   'cn_password, ';
@@ -512,7 +507,7 @@ class default_contentDb extends BaseDb
 			}
 		}
 		$queryStr .=   ') VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
 		$this->execStatement($queryStr, $params);
 
 		// 新規のシリアル番号取得
