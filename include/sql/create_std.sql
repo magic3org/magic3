@@ -123,7 +123,7 @@ CREATE TABLE content (
     cn_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
     cn_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 表示可能期間(開始)
     cn_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 表示可能期間(終了)
-    cn_default           BOOLEAN        DEFAULT false                 NOT NULL,      -- デフォルトフラグ
+    cn_default           BOOLEAN        DEFAULT false                 NOT NULL,      -- デフォルトフラグ(廃止予定)
     cn_key               VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 外部からの参照用キー
     cn_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
     cn_search_target     BOOLEAN        DEFAULT true                  NOT NULL,      -- 検索対象かどうか
