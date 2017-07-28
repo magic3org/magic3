@@ -201,7 +201,14 @@ function createUploader(){
 		debug: true
 	});
 }
-
+function setStatusColor(){
+	var status = $('#item_status').is(':checked');
+	if (status){		// 公開状態のとき
+		$('#status_field').removeClass('warning').addClass('success');
+	} else {
+		$('#status_field').removeClass('success').addClass('warning');
+	}
+}
 $(function(){
 	// 編集中の離脱を防止
 	m3SetSafeContentEdit();
@@ -213,6 +220,12 @@ $(function(){
 	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+	
+	// 公開状態のイベント設定
+	$('#item_status').change(function(){
+		setStatusColor();
+	});
+	setStatusColor();
 	
 	// 公開期間エリア表示制御
 	$("#{TAGID_ACTIVE_TERM}").click(function(){
@@ -313,7 +326,7 @@ $(function(){
 	    <th><span {_HELP_CONTENT_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
 	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
+	    <td id="status_field"><div class="checkbox"><label><input type="checkbox" id="item_status" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_NAME}>名前</span></th>
