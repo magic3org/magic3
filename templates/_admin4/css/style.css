@@ -821,6 +821,10 @@ span[rel="m3help"] { cursor: default; }
 	padding-right: 20px;
 	display:inline-block;
 }
+.m3config_inline_item.following {
+	padding-left: 20px;
+	padding-right: 0;
+}
 .m3config_sortable_box li {
 	cursor: move;
 }
