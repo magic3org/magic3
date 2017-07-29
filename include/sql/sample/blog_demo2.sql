@@ -155,15 +155,15 @@ INSERT INTO blog_config
 
 TRUNCATE TABLE blog_entry;
 INSERT INTO blog_entry
-(be_id, be_language_id, be_name, be_html, be_status, be_regist_user_id, be_regist_dt, be_related_content) VALUES 
-(1, 'ja', 'ブログ-A1', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top01.jpg" style="width: 288px; height: 193px;" />', 2, 1, '2014-04-10 00:00:00', '2,3'),
-(2, 'ja', 'ブログ-A2', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top02.jpg" style="width: 300px; height: 355px;" />', 2, 1, '2014-04-19 07:00:00', '1,3'),
-(3, 'ja', 'ブログ-A3', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top03.jpg" style="width: 150px; height: 207px;" />', 2, 1, '2014-05-01 01:00:00', '1,2'),
-(4, 'ja', 'ブログ-A4', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top04.jpg" style="width: 336px; height: 223px;" />', 2, 1, '2014-08-02 07:00:00', '5,8'),
-(5, 'ja', 'ブログ-A5', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top05.jpg" style="height: 200px; width: 300px;" />', 2, 1, '2014-09-19 07:00:00', '4,8'),
-(6, 'ja', 'ブログ-A6', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top06.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-01 12:00:00', '7'),
-(7, 'ja', 'ブログ-A7', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top07.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-19 04:00:00', '6'),
-(8, 'ja', 'ブログ-A8', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top08.jpg" style="width: 402px; height: 302px;" />', 2, 1, '2014-11-22 08:00:00', '4,5');
+(be_id, be_language_id, be_name, be_html, be_status, be_regist_user_id, be_regist_dt, be_related_content, be_thumb_src) VALUES 
+(1, 'ja', 'ブログ-A1', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top01.jpg" style="width: 288px; height: 193px;" />', 2, 1, '2014-04-10 00:00:00', '2,3', '/image/sample/animal/top01.jpg'),
+(2, 'ja', 'ブログ-A2', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top02.jpg" style="width: 300px; height: 355px;" />', 2, 1, '2014-04-19 07:00:00', '1,3', '/image/sample/animal/top02.jpg'),
+(3, 'ja', 'ブログ-A3', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top03.jpg" style="width: 150px; height: 207px;" />', 2, 1, '2014-05-01 01:00:00', '1,2', '/image/sample/animal/top03.jpg'),
+(4, 'ja', 'ブログ-A4', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top04.jpg" style="width: 336px; height: 223px;" />', 2, 1, '2014-08-02 07:00:00', '5,8', '/image/sample/animal/top04.jpg'),
+(5, 'ja', 'ブログ-A5', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top05.jpg" style="height: 200px; width: 300px;" />', 2, 1, '2014-09-19 07:00:00', '4,8', '/image/sample/animal/top05.jpg'),
+(6, 'ja', 'ブログ-A6', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top06.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-01 12:00:00', '7', '/image/sample/animal/top06.jpg'),
+(7, 'ja', 'ブログ-A7', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top07.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-19 04:00:00', '6', '/image/sample/animal/top07.jpg'),
+(8, 'ja', 'ブログ-A8', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top08.jpg" style="width: 402px; height: 302px;" />', 2, 1, '2014-11-22 08:00:00', '4,5', '/image/sample/animal/top08.jpg');
 
 TRUNCATE TABLE blog_category;
 INSERT INTO blog_category
