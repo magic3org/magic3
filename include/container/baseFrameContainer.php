@@ -708,6 +708,7 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/default-filters.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/l10n.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-locale.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-user.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-walker.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-query.php');				// コンテンツデータ取得
@@ -784,6 +785,7 @@ class BaseFrameContainer extends Core
 			do_action('setup_theme');
 			load_default_textdomain();			// 言語リソースを読み込む
 			m3WpInit();							// 言語リソース読み込み後にMagic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
+			$GLOBALS['wp_locale'] = new WP_Locale();		// 言語リソース読み込み後に生成
 			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');// テンプレート初期処理
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('init');					// テンプレート側からの初期処理(ウィジェットのCSSの初期化等)
