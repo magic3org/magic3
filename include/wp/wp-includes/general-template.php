@@ -161,7 +161,7 @@ function get_template_part( $slug, $name = null ) {
 		return;
 	}*/
 	
-	if ($wp_query->current_post == 0) echo $gPageManager->getWPContents('main-top');
+	if ($wp_query->in_the_loop && $wp_query->current_post == 0) echo $gPageManager->getWPContents('main-top');
 	
 	/**
 	 * Fires before the specified template part file is loaded.
@@ -185,7 +185,7 @@ function get_template_part( $slug, $name = null ) {
 	// ##### メインエリア生成 #####
 	// ページのコンテンツタイプが設定されていない場合はMagic3のレンダリング機能を使用する
 	$contentType = $gContentApi->getContentType();
-	if (empty($contentType) && $wp_query->in_the_loop){			// WordPressのメインループ内にある場合のみメイン部の処理と判断する
+	if ($wp_query->in_the_loop && empty($contentType)){			// WordPressのメインループ内にある場合のみメイン部の処理と判断する
 		$componentPath = locate_template($templates);
 		
 		// コンポーネント生成用スクリプトファイルを指定して、コンポーネントを生成
@@ -197,7 +197,7 @@ function get_template_part( $slug, $name = null ) {
 	}
 
 	// 一覧の最後のデータの場合
-	if ($wp_query->lastPostFound) echo $gPageManager->getWPContents('main-bottom');
+	if ($wp_query->in_the_loop && $wp_query->lastPostFound) echo $gPageManager->getWPContents('main-bottom');
 }
 
 /**

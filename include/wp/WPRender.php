@@ -26,7 +26,7 @@ class WPRender
 	{
 	}
 	/**
-	 * WordPressウィジェット用コンテンツ取得
+	 * WordPressモジュール用コンテンツ取得
 	 * 
 	 * @param string $style			表示スタイル
 	 * @param string $content		ウィジェット出力
@@ -67,6 +67,35 @@ class WPRender
 		 
 		return $content;
 	}
-
+	/**
+	 * WordPressコンポーネント用コンテンツ取得
+	 * 
+	 * @param string $style			表示スタイル
+	 * @param string $content		ウィジェット出力
+	 * @param string $title			タイトル(空のときはタイトル非表示)
+	 * @param array $attribs		その他タグ属性
+	 * @param array $paramsOther	その他パラメータ
+	 * @param array $pageDefParam	画面定義パラメータ
+	 * @param int   $templateVer	テンプレートバージョン(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+	 * @param string $widgetTag		ウィジェット識別用タグ
+	 * @return string				モジュール出力
+	 */
+	public function getComponentContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0, $widgetTag = '')
+	{
+		global $gEnvManager;
+		
+		// コンポーネント生成用スクリプトパス取得
+		$componentPath = $gEnvManager->getWpComponentPath();
+		if (file_exists($componentPath)){
+			ob_clean();
+			require($componentPath);		// 毎回実行する
+			$content = ob_get_contents();
+			ob_clean();
+		} else {
+			// コンポーネント生成用スクリプトがない場合はWordPressモジュール出力を使用
+			$content = $this->getModuleContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer, $widgetTag);
+		}
+		return $content;
+	}
 }
 ?>
