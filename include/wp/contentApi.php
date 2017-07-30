@@ -716,5 +716,20 @@ class ContentApi extends BaseApi
 	{
 		return $this->showThumb;
 	}
+	/**
+	 * WordPressコンポーネントにコンテンツを更新
+	 *
+	 * @param string $content				コンテンツテキスト
+	 * @return								なし
+	 */
+	function updateComponentContent($content)
+	{
+		global $post;
+		global $wp_query;
+		
+		// グローバルの$postのコンテンツを変更して、関連データを更新する
+		$post->post_content = $content;
+		$wp_query->setup_postdata();
+	}
 }
 ?>

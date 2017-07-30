@@ -1690,8 +1690,9 @@ class WP_Query {
 			// コンテンツタイプないページの場合はWordPressの「page」で画面を生成
 			// WP_Postオブジェクトに変換して格納
 			$post = new stdClass;
-			$post->post_type = 'page';
 			$post->ID = 0;
+			$post->post_type = 'page';
+			$post->post_status = 'publish';
 /*			$post->ID = $id;
 			$post->post_author = '';
 			$post->post_date = $date;
@@ -1827,7 +1828,9 @@ class WP_Query {
 		if ($this->is_singular()){			// 単体ページの場合
 			// 表示するコンテンツデータから取得
 			$gPageManager->setHeadSubTitle($this->post->post_title);
-		} else {		// ページタイプ属性が設定されていないページはこちらで処理される
+			
+			// *** お問合わせ画面等ページタイプ属性がないページの場合はウィジェット側でサブタイトルを設定する ***
+		} else {		// カテゴリーや年月アーカイブ、検索結果等の画面の場合
 			// WordPressのwp_get_document_title()を使用してタイトルを作成
 			$this->headTitle = '';			// HTMLヘッダのタイトル作成用
 			add_filter('document_title_parts', 'get_simple_title');		// フィルター関数で出力を調整
@@ -1845,8 +1848,6 @@ class WP_Query {
 
 			// サブタイトルを設定
 			if (!empty($this->headTitle)) $gPageManager->setHeadSubTitle($this->headTitle);
-			
-			// お問合わせ画面等ページタイプ属性がないページの場合はwp_get_document_title()で空文字列が返り、ウィジェット側でサブタイトルを設定する
 		}
 		return $this->posts;
 	}
@@ -2819,17 +2820,13 @@ class WP_Query {
 	 * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
 	 * @return true True when finished.
 	 */
-	public function setup_postdata( $post ) {
+	public function setup_postdata($post = null){
 		global $id, $authordata, $currentday, $currentmonth, $page, $pages, $multipage, $more, $numpages;
 
-/*
 		if ( ! ( $post instanceof WP_Post ) ) {
 			$post = get_post( $post );
-		}*/
-
-		if ( ! $post ) {
-			return;
 		}
+		if (!$post)return;
 
 		$id = (int) $post->ID;
 

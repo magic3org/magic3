@@ -16,7 +16,6 @@
 	
 class WPRender
 {
-
 	const DEFAULT_POSITION = 'sidebar-1';
 	
 	/**
@@ -83,10 +82,14 @@ class WPRender
 	public function getComponentContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0, $widgetTag = '')
 	{
 		global $gEnvManager;
+		global $gContentApi;
 		
 		// コンポーネント生成用スクリプトパス取得
 		$componentPath = $gEnvManager->getWpComponentPath();
 		if (file_exists($componentPath)){
+			// ウィジェットで生成されたデータでWordPressコンポーネント用のデータを更新
+			$gContentApi->updateComponentContent($content);
+			
 			ob_clean();
 			require($componentPath);		// 毎回実行する
 			$content = ob_get_contents();
