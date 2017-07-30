@@ -1687,8 +1687,11 @@ class WP_Query {
 		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
 		$contentType = $gContentApi->getContentType();
 		if (empty($contentType)){
+			// コンテンツタイプないページの場合はWordPressの「page」で画面を生成
 			// WP_Postオブジェクトに変換して格納
 			$post = new stdClass;
+			$post->post_type = 'page';
+			$post->ID = 0;
 /*			$post->ID = $id;
 			$post->post_author = '';
 			$post->post_date = $date;
@@ -1711,6 +1714,9 @@ class WP_Query {
 		
 			$wpPostObj = new WP_Post($post);
 			$this->posts = array($wpPostObj);
+			
+			// 単体ページ表示を指定
+			$this->is_page = true;
 		} else {
 			$keywords = '';
 			$category = null;			// カテゴリー。設定なしの場合はnullを設定。
