@@ -22,8 +22,6 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $entryDays = array();		// 投稿のあった日にち
 	private $css;	// カレンダー用CSS
-	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
-	const THIS_WIDGET_ID = 'blog_calendar_box';		// ウィジェットID
 	const DEFAULT_TITLE = 'ブログカレンダー';			// デフォルトのウィジェットタイトル
 		
 	/**
@@ -96,66 +94,163 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 		$ret = $this->db->getOldEntry($this->_langId, $row);		// 最も古い記事を取得
 		if ($ret){
 			if (strtotime($year . '/' . $month . '/1') > strtotime($row['be_regist_dt'])){
-//				$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $prevYear . '&month=' . $prevMonth);
 				$prevUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $prevYear . '&month=' . $prevMonth);
 			}
 		}
 		if (strtotime($year . '/' . $month . '/1') < strtotime(date('Y/m/1'))){
-//			$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $nextYear . '&month=' . $nextMonth);
 			$nextUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $nextYear . '&month=' . $nextMonth);
 		}
 		
+		// ##### カレンダーヘッダ部作成
 		$calendarData = '';
-		$calendarData .= '<div align="center">' . M3_NL;
-		if (empty($prevUrl)){		// 前の月のリンクなしのとき
-			$calendarData .= $prevMonth . M3_NL;
-		} else {
-			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth. '</a>' . M3_NL;
-		}
-		$calendarData .= ' | ' . $year . '/' . $month . ' | ' . M3_NL;
-		if (empty($nextUrl)){		// 次の月のリンクなしのとき
-			$calendarData .= $nextMonth . M3_NL;
-		} else {
-			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '</a>' . M3_NL;
-		}
-		$calendarData .= '</div>' . M3_NL;
-		$calendarData .= '<table id="blog_calendar">' . M3_NL;
-		$calendarData .= '<tr>' . M3_NL;
-		$calendarData .= '<th class="sun" style="background:none;">日</th>' . M3_NL;
-		$calendarData .= '<th style="background:none;">月</th>' . M3_NL;
-		$calendarData .= '<th style="background:none;">火</th>' . M3_NL;
-		$calendarData .= '<th style="background:none;">水</th>' . M3_NL;
-		$calendarData .= '<th style="background:none;">木</th>' . M3_NL;
-		$calendarData .= '<th style="background:none;">金</th>' . M3_NL;
-		$calendarData .= '<th class="sat" style="background:none;">土</th>' . M3_NL;
-		$calendarData .= '</tr>' . M3_NL;
-		while ($Day = $calendar->fetch()) {
-		    if ($Day->isFirst()) {
-		        $calendarData .= "<tr>" . M3_NL;
-		    }
+		if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
+			global $wp_locale;
+			
+			// 年月キャプション
+			$calendar_caption = _x('%1$s %2$s', 'calendar caption');
+			$calendarData = '<table id="wp-calendar">' . M3_NL;
+			$calendarData .= '<caption>' . sprintf($calendar_caption, $wp_locale->get_month($month), $year) . '</caption>' . M3_NL;
+			$calendarData .= '<thead>' . M3_NL;
+			$calendarData .= '<tr>' . M3_NL;
+			
+			// 曜日ヘッダ
+			for ( $wdcount = 0; $wdcount <= 6; $wdcount++ ) {
+				$myweek[] = $wp_locale->get_weekday( ( $wdcount + $week_begins ) % 7 );
+			}
+			foreach ( $myweek as $wd ) {
+//				$day_name = $initial ? $wp_locale->get_weekday_initial( $wd ) : $wp_locale->get_weekday_abbrev( $wd );
+				$day_name = $wp_locale->get_weekday_initial($wd);
+				$wd = esc_attr( $wd );
+				$calendarData .= "\n\t\t<th scope=\"col\" title=\"$wd\">$day_name</th>";
+			}
 
-		    if ($Day->isEmpty()) {
-		        $calendarData .= "<td>&nbsp;</td>" . M3_NL;
-		    } else {
-				if (in_array($Day->thisDay(), $this->entryDays)){			// 投稿記事あり
-//					$dayUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, self::THIS_WIDGET_ID, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
-					$dayUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
-					$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $Day->thisDay(). '</a>';
-					$calendarData .= '<td>'. $dayLink ."</td>" . M3_NL;
-				} else {
-		        	$calendarData .= '<td>'.$Day->thisDay()."</td>" . M3_NL;
-				}
-		    }
+			$calendarData .= '</tr>' . M3_NL;
+			$calendarData .= '</thead>' . M3_NL;
+			
+			// 前月、翌月遷移用フッタ
+			$calendarData .= '<tfoot>' . M3_NL;
+			$calendarData .= '<tr>' . M3_NL;
+			
+			if (empty($prevUrl)){		// 前の月のリンクなしのとき
+				$calendarData .= "\n\t\t".'<td colspan="3" id="prev" class="pad">&nbsp;</td>';
+			} else {
+				$calendarData .= "\n\t\t".'<td colspan="3" id="prev"><a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">&laquo; ' .
+									$wp_locale->get_month_abbrev($wp_locale->get_month($prevMonth)) . '</a></td>';
+			}
 
-		    if ($Day->isLast()) {
-		        $calendarData .= "</tr>" . M3_NL;
-		    }
+			$calendarData .= "\n\t\t".'<td class="pad">&nbsp;</td>';
+
+			if (empty($nextUrl)){		// 次の月のリンクなしのとき
+				$calendarData .= "\n\t\t".'<td colspan="3" id="next" class="pad">&nbsp;</td>';
+			} else {
+				$calendarData .= "\n\t\t".'<td colspan="3" id="next"><a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' .
+									$wp_locale->get_month_abbrev($wp_locale->get_month($nextMonth)) . ' &raquo;</a></td>';
+			}
+
+			$calendarData .= '</tr>' . M3_NL;
+			$calendarData .= '</tfoot>' . M3_NL;
+			$calendarData .= '<tbody>' . M3_NL;
+			
+			// ##### 日付ボディ部作成 #####
+			// 今日を取得
+			$nowYear = date("Y");
+			$nowMonth = date("m");
+			$nowDay = date("d");
+			
+			while ($Day = $calendar->fetch()) {
+			    if ($Day->isFirst()) {
+			        $calendarData .= '<tr>' . M3_NL;
+			    }
+
+			    if ($Day->isEmpty()) {
+			        $calendarData .= '<td class="pad">&nbsp;</td>' . M3_NL;
+			    } else {
+					$day = $Day->thisDay();
+					
+					// 今日かどうかチェック
+					if ($nowYear == $year && $nowMonth == $month && $nowDay == $day){
+						$calendarData .= '<td id="today">';
+					} else {
+						$calendarData .= '<td>';
+					}
+					if (in_array($day, $this->entryDays)){			// 投稿記事あり
+						$dayUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $year . '&month=' . $month . '&day=' . $day);
+//						$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $day. '</a>';
+						// リンクの説明文作成
+						$date_format = date(_x('F j, Y', 'daily archives date format'), strtotime("{$year}-{$month}-{$day}"));
+						$label = sprintf(__('Posts published on %s'), $date_format);
+						$dayLink = sprintf('<a href="%s" aria-label="%s">%s</a>', $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)), esc_attr($label), $day);
+						$calendarData .= $dayLink . '</td>' . M3_NL;
+					} else {
+			        	$calendarData .= $day . '</td>' . M3_NL;
+					}
+			    }
+
+			    if ($Day->isLast()) {
+			        $calendarData .= '</tr>' . M3_NL;
+			    }
+			}
+			
+			$calendarData .= '</tbody>' . M3_NL;
+			$calendarData .= '</table>' . M3_NL;
+			$calendarData = '<div class="calendar_wrap">' . $calendarData . '</div>';
+		} else {
+			$calendarData .= '<div align="center">' . M3_NL;
+			if (empty($prevUrl)){		// 前の月のリンクなしのとき
+				$calendarData .= $prevMonth . M3_NL;
+			} else {
+				$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth. '</a>' . M3_NL;
+			}
+			$calendarData .= ' | ' . $year . '/' . $month . ' | ' . M3_NL;
+			if (empty($nextUrl)){		// 次の月のリンクなしのとき
+				$calendarData .= $nextMonth . M3_NL;
+			} else {
+				$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '</a>' . M3_NL;
+			}
+			$calendarData .= '</div>' . M3_NL;
+			$calendarData .= '<table id="blog_calendar">' . M3_NL;
+			$calendarData .= '<tr>' . M3_NL;
+			$calendarData .= '<th class="sun" style="background:none;">日</th>' . M3_NL;
+			$calendarData .= '<th style="background:none;">月</th>' . M3_NL;
+			$calendarData .= '<th style="background:none;">火</th>' . M3_NL;
+			$calendarData .= '<th style="background:none;">水</th>' . M3_NL;
+			$calendarData .= '<th style="background:none;">木</th>' . M3_NL;
+			$calendarData .= '<th style="background:none;">金</th>' . M3_NL;
+			$calendarData .= '<th class="sat" style="background:none;">土</th>' . M3_NL;
+			$calendarData .= '</tr>' . M3_NL;
+			
+			// ##### 日付ボディ部作成 #####
+			while ($Day = $calendar->fetch()) {
+			    if ($Day->isFirst()) {
+			        $calendarData .= "<tr>" . M3_NL;
+			    }
+
+			    if ($Day->isEmpty()) {
+			        $calendarData .= "<td>&nbsp;</td>" . M3_NL;
+			    } else {
+					if (in_array($Day->thisDay(), $this->entryDays)){			// 投稿記事あり
+						$dayUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, 'year=' . $year . '&month=' . $month . '&day=' . $Day->thisDay());
+						$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $Day->thisDay(). '</a>';
+						$calendarData .= '<td>'. $dayLink ."</td>" . M3_NL;
+					} else {
+			        	$calendarData .= '<td>'.$Day->thisDay()."</td>" . M3_NL;
+					}
+			    }
+
+			    if ($Day->isLast()) {
+			        $calendarData .= "</tr>" . M3_NL;
+			    }
+			}
+			
+			$calendarData .= "</table>" . M3_NL;
 		}
-		$calendarData .= "</table>" . M3_NL;
+		
 		$this->tmpl->addVar("_widget", "calendar", $calendarData);
 		
-		// CSSを作成
-		$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));
+		// ##### CSSを作成 #####
+		if ($this->_renderType != M3_RENDER_WORDPRESS){		// WordPressテンプレート以外の場合
+			$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));
+		}
 	}
 	/**
 	 * ウィジェットのタイトルを設定
