@@ -149,16 +149,17 @@ function get_template_part( $slug, $name = null ) {
 	global $wp_query;
 	global $gContentApi;
 	global $gPageManager;
+	global $gEnvManager;
 	
 	// メインエリア表示
-	$contentType = $gContentApi->getContentType();
+/*	$contentType = $gContentApi->getContentType();
 	if (empty($contentType)){
 		// メインエリアの前後にポジションブロックを配置
 		echo $gPageManager->getWPContents('main-top');
 		echo $gPageManager->getWPContents('main');
 		echo $gPageManager->getWPContents('main-bottom');
 		return;
-	}
+	}*/
 	
 	if ($wp_query->current_post == 0) echo $gPageManager->getWPContents('main-top');
 	
@@ -177,13 +178,24 @@ function get_template_part( $slug, $name = null ) {
 
 	$templates = array();
 	$name = (string) $name;
-	if ( '' !== $name )
-		$templates[] = "{$slug}-{$name}.php";
+	if ( '' !== $name ) $templates[] = "{$slug}-{$name}.php";
 
 	$templates[] = "{$slug}.php";
 
-	locate_template($templates, true, false);
-	
+	// ##### メインエリア生成 #####
+	// ページのコンテンツタイプが設定されていない場合はMagic3のレンダリング機能を使用する
+	$contentType = $gContentApi->getContentType();
+	if (empty($contentType) && $wp_query->in_the_loop){			// WordPressのメインループ内にある場合のみメイン部の処理と判断する
+		$componentPath = locate_template($templates);
+		
+		// コンポーネント生成用スクリプトファイルを指定して、コンポーネントを生成
+		if (!empty($componentPath)) $gEnvManager->setWpComponentPath($componentPath);
+		echo $gPageManager->getWPContents('main');
+		$gEnvManager->setWpComponentPath('');
+	} else {
+		locate_template($templates, true, false);
+	}
+
 	// 一覧の最後のデータの場合
 	if ($wp_query->lastPostFound) echo $gPageManager->getWPContents('main-bottom');
 }

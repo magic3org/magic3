@@ -87,6 +87,7 @@ class EnvManager extends Core
 	private $joomlaPaginationData;	// Joomla!v2.5用ページ番号遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
 	private $wpHeadScriptsData;		// WordPressヘッダ部出力データ(Javascript)
+	private $wpComponentPath;		// WordPressコンポーネント生成ファイルパス
 	private $remoteContent = array();			// リモート表示コンテンツ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
@@ -3157,6 +3158,25 @@ class EnvManager extends Core
 	public function getWpHeadScriptsData()
 	{
 		return $this->wpHeadScriptsData;
+	}
+	/**
+	 * WordPressコンポーネント生成ファイルパスを設定
+	 *
+	 * @param string $path			ファイルパス
+	 * @return 						なし
+	 */
+	public function setWpComponentPath($path)
+	{
+		$this->wpComponentPath = $path;
+	}
+	/**
+	 * WordPressコンポーネント生成ファイルパスを取得
+	 *
+	 * @return string			ファイルパス
+	 */
+	public function getWpComponentPath()
+	{
+		return $this->wpComponentPath;
 	}
 	/**
 	 * リモート表示コンテンツを設定
