@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,6 +31,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	const TASK_MEMBER_SEND_PASSWORD	= 'sendpwd';		// パスワード送信
 	const TASK_MEMBER_PROFILE			= 'profile';		// プロフィール画面(要ログイン)
 	const TASK_MEMBER_CHANGE_PASSWORD	= 'changepwd';		// パスワード変更(要ログイン)
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -58,8 +59,9 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{	
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-		//if ($this->_renderType == M3_RENDER_BOOTSTRAP || $this->_templateGeneratorType == M3_TEMPLATE_GENERATOR_THEMLER){
 			return 'index_bootstrap.tmpl.html';
+		} else if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
+			return 'index_wordpress.tmpl.html';
 		} else {
 			return 'index.tmpl.html';
 		}

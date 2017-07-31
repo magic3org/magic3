@@ -1,0 +1,66 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function default_login_login(){
+	document.default_login.act.value = 'loginbox_login';
+	document.default_login.password.value = hex_md5(document.default_login.login_password.value);
+	document.default_login.login_password.value = document.default_login.login_password.value.replace(/./g, '*');
+	document.default_login.submit();
+	return true;
+}
+function default_login_logout(){
+	document.default_login.act.value = 'loginbox_logout';
+	document.default_login.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form name="default_login" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<!-- m3:PostParam -->
+<patTemplate:tmpl name="login_status" visibility="hidden"><p class="default_login_top">{MESSAGE}{USER_NAME}</p></patTemplate:tmpl>
+<patTemplate:tmpl name="login_field" visibility="hidden">
+<p class="login-username">
+<label for="account">アカウント</label> <input type="text" id="account" name="account" class="input" maxlength="40" />
+</p>
+<p class="login-password">
+<label for="login_password">パスワード</label> <input type="password" id="login_password" name="login_password" class="input" maxlength="10" />
+</p>
+<patTemplate:tmpl name="auto_login" visibility="hidden"><p class="login-remember"><label><input type="checkbox" name="autologin" checked /> ログイン状態を保持する</label></p></patTemplate:tmpl>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden"><p class="login-submit"><input type="submit" class="button button-primary" onclick="default_login_logout();" value="ログアウト" /></p></patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden"><p class="login-submit"><input type="submit" class="button button-primary" onclick="default_login_login();" value="ログイン" /></p></patTemplate:tmpl>
+</form>
+<patTemplate:tmpl name="regmember_button" visibility="hidden">
+<ul>
+<li><a href="{REGUSER_URL}">ユーザ登録</a></li>
+<li><a href="{SENDPWD_URL}">パスワード再送</a></li>
+</ul>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="member_button" visibility="hidden">
+<ul>
+<li><a href="{PROFILE_URL}">プロフィール</a></li>
+<li><a href="{CHANGEPWD_URL}">パスワード変更</a></li>
+</ul>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="blog_info" visibility="hidden">
+<p>投稿可能なブログ</p>
+<ul>
+<patTemplate:tmpl name="blog_list"><li><a href="{URL}">{NAME}</a></li></patTemplate:tmpl>
+</ul>
+</patTemplate:tmpl>
+</patTemplate:tmpl>
