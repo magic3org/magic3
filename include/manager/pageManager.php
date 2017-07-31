@@ -185,7 +185,8 @@ class PageManager extends Core
 	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型テンプレート対応" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_FUNCTION_MARK_WORDPRESS = ' <span class="label label-warning" rel="m3help" title="WordPress型テンプレート対応" data-placement="auto">W</span>';			// ウィジェット機能マーク(WordPress型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
-			
+	const WIDGET_STYLE_WORDPRESS = '_wordpress';		// ウィジェットの表示スタイル(WordPressテンプレート用出力)
+	
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
 	const BLOG_OBJ_ID		= 'bloglib';		// ブログオブジェクトID
@@ -4852,7 +4853,7 @@ class PageManager extends Core
 	 */
 	function getWPContents($position)
 	{
-		return $this->getContents($position, '', 100/*WordPressテンプレート*/);
+		return $this->getContents($position, self::WIDGET_STYLE_WORDPRESS/*WordPressテンプレート用出力*/, 100/*WordPressテンプレート*/);
 	}
 	/**
 	 * その他のポジションブロックデータを取得
