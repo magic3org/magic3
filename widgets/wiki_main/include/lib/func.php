@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -56,14 +56,16 @@ function is_url($str, $only_http = FALSE)
 	return preg_match('/^(' . $scheme . ')(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]*)$/', $str);
 }
 
+// WordPressのis_page()と関数名がぶつかるのでWikiPage::isPage()に変更。(2017/8/2)
 // If the page exists
 //function is_page($page, $clearcache = FALSE)
+/*
 function is_page($page)
 {
 	// 利用可能なすべてのページの配列を取得。DBを読み出さない。
 	return in_array($page, WikiPage::getPages());
 //	return WikiPage::isPage($page);
-}
+}*/
 
 function is_editable($page)
 {
@@ -88,7 +90,7 @@ function is_freeze($page, $clearcache = FALSE)
 	if ($clearcache === TRUE) $is_freeze = array();
 	if (isset($is_freeze[$page])) return $is_freeze[$page];
 
-	if (!is_page($page)){
+	if (!WikiPage::isPage($page)){
 		$is_freeze[$page] = FALSE;
 		return FALSE;
 	} else {
@@ -125,7 +127,7 @@ function auto_template($page)
 		if (! preg_match($rule_pattrn, $page, $matches)) continue;
 
 		$template_page = preg_replace($rule_pattrn, $template, $page);
-		if (! is_page($template_page)) continue;
+		if (! WikiPage::isPage($template_page)) continue;
 
 		//$body = join('', get_source($template_page));
 		$body = get_source($template_page, true);
@@ -445,9 +447,9 @@ function catrule()
 {
 	global $rule_page;
 
-	if (is_page($rule_page)){
+	if (WikiPage::isPage($rule_page)){
 		return convert_html(get_source($rule_page));
-	} else if (is_page(':' . $rule_page)){		// システム用ファイルがあれば取得
+	} else if (WikiPage::isPage(':' . $rule_page)){		// システム用ファイルがあれば取得
 		return convert_html(get_source(':' . $rule_page));
 	} else {
 		return '<p>Sorry, page \'' . htmlspecialchars($rule_page) . '\' unavailable.</p>';

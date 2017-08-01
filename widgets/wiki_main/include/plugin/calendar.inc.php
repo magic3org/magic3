@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: calendar.inc.php 1123 2008-10-25 03:36:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -126,7 +126,7 @@ EOD;*/
 
 		$refer = ($cmd == 'edit') ? '&amp;refer=' . rawurlencode($page) : '';
 
-		if ($cmd == 'read' && ! is_page($name)) {
+		if ($cmd == 'read' && ! WikiPage::isPage($name)) {
 			$link = '<strong>' . $day . '</strong>';
 		} else {
 			$link = '<a href="' . $script . WikiParam::convQuery('?cmd=' . $cmd . '&amp;page=' . $r_page . $refer) . '" title="' . $s_page . '"><strong>' . $day . '</strong></a>';

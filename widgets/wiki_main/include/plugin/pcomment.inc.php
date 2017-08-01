@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: pcomment.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // pcomment plugin - Show/Insert comments into specified (another) page
@@ -194,7 +194,7 @@ EOD;
 		}
 	}
 
-	if (! is_page($_page)) {
+	if (! WikiPage::isPage($_page)) {
 		$link   = make_pagelink($_page);
 		$recent = $_pcmt_messages['msg_none'];
 	} else {
@@ -280,12 +280,12 @@ function plugin_pcomment_insert()
 
 	//$reply_hash = isset($vars['reply']) ? $vars['reply'] : '';
 	$reply_hash = WikiParam::getVar('reply');
-	if ($reply_hash || ! is_page($page)) {
+	if ($reply_hash || ! WikiPage::isPage($page)) {
 		$msg = preg_replace('/^\-+/', '', $msg);
 	}
 	$msg = rtrim($msg);
 
-	if (! is_page($page)) {
+	if (! WikiPage::isPage($page)) {
 		$postdata = '[[' . htmlspecialchars(strip_bracket($refer)) . ']]' . "\n\n" .
 			'-' . $msg . "\n";
 	} else {
@@ -376,7 +376,7 @@ function plugin_pcomment_auto_log($page, $dir, $count, & $postdata)
 	do {
 		++$i;
 		$_page = $page . '/' . $i;
-	} while (is_page($_page));
+	} while (WikiPage::isPage($_page));
 
 	page_write($_page, '[[' . $page . ']]' . "\n\n" . join('', $old));
 

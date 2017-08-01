@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: topicpath.inc.php 1134 2008-10-26 11:12:03Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Show a link to $defaultpage or not
@@ -61,7 +61,7 @@ function plugin_topicpath_inline()
 			// This page ($_landing == $page)
 			$b_link = TRUE;
 			$topic_path[] = $element;
-		} else if (PKWK_READONLY && ! is_page($_landing)) {
+		} else if (PKWK_READONLY && ! WikiPage::isPage($_landing)) {
 			// Page not exists
 			$topic_path[] = $element;
 		} else {

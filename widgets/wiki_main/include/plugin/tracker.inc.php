@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: tracker.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // tracker_listで表示しないページ名(正規表現で)
@@ -66,7 +66,7 @@ function plugin_tracker_convert()
 	$fields = plugin_tracker_get_fields($base,$refer,$config);
 
 	$form = $config->page.'/'.$form;
-	if (!is_page($form))
+	if (!WikiPage::isPage($form))
 	{
 		return "<p>config file '".make_pagelink($form)."' not found.</p>";
 	}
@@ -130,7 +130,7 @@ function plugin_tracker_action()
 			'body'=>'page name ('.htmlspecialchars($refer).') is not valid.'
 		);
 	}
-	if (!is_page($source))
+	if (!WikiPage::isPage($source))
 	{
 		return array(
 			'msg'=>'cannot write',
@@ -158,7 +158,7 @@ function plugin_tracker_action()
 		$page = $base;
 	}
 
-	while (is_page($page))
+	while (WikiPage::isPage($page))
 	{
 		$real = ++$num;
 		$page = "$base/$real";
@@ -717,7 +717,7 @@ function plugin_tracker_getlist($page,$refer,$config_name,$list,$order='',$limit
 
 	$config->config_name = $config_name;
 
-	if (!is_page($config->page.'/'.$list))
+	if (!WikiPage::isPage($config->page.'/'.$list))
 	{
 		return "<p>config file '".make_pagelink($config->page.'/'.$list)."' not found.</p>";
 	}
@@ -796,7 +796,7 @@ class Tracker_list
 		if (preg_match('/move\sto\s(.+)/',$source[0],$matches))
 		{
 			$page = strip_bracket(trim($matches[1]));
-			if (array_key_exists($page,$moved) or !is_page($page))
+			if (array_key_exists($page,$moved) or !WikiPage::isPage($page))
 			{
 				return;
 			}

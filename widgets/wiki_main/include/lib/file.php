@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,7 +34,7 @@ define('LOG_MSG_DEL_CONTENT',		'Wikiコンテンツを削除しました。タ�
 function get_source($page, $join = false, &$serial = null)
 {
 	$result = $join ? '' : array();
-	if (is_page($page)){
+	if (WikiPage::isPage($page)){
 		// 改行コード(CR)を削除
 		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
 	}
@@ -48,7 +48,7 @@ function get_filetime($page)
 	
 	$fileTime = $fileTimes[$page];
 	if (!isset($fileTime)){
-		$fileTime = is_page($page) ? WikiPage::getPageTime($page) : 0;
+		$fileTime = WikiPage::isPage($page) ? WikiPage::getPageTime($page) : 0;
 		$fileTimes[$page] = $fileTime;
 	}
 	return $fileTime;
@@ -63,7 +63,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$postdata = make_str_rules($postdata);
 
 	// diffデータを作成
-	$isExistsPage = is_page($page);			// ページが存在するか
+	$isExistsPage = WikiPage::isPage($page);			// ページが存在するか
 	$oldpostdata = $isExistsPage ? get_source($page, true) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
@@ -141,7 +141,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		if ($notimestamp === FALSE) lastmodified_add($page);		// 更新日時を更新する場合
 	}
 	// キャッシュクリア
-	//is_page($page, TRUE); // Clear is_page() cache
+	//WikiPage::isPage($page, TRUE); // Clear WikiPage::isPage() cache
 	
 	// リンクを更新
 	links_update($page);
@@ -478,7 +478,7 @@ function header_lastmod($page = NULL)
 {
 	global $lastmod;
 
-	if ($lastmod && is_page($page)) {
+	if ($lastmod && WikiPage::isPage($page)) {
 		pkwk_headers_sent();
 		header('Last-Modified: ' .
 			date('D, d M Y H:i:s', get_filetime($page)) . ' GMT');

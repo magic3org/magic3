@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -64,7 +64,7 @@ function plugin_navi_convert()
 		// strip_bracket() is not necessary but compatible
 		$home    = get_fullname(strip_bracket($home), $current);
 		$is_home = ($home == $current);
-		if (! is_page($home)) {
+		if (! WikiPage::isPage($home)) {
 			return '#navi(contents-page-name): No such page: ' .
 				htmlspecialchars($home) . '<br />';
 		} else if (! $is_home &&

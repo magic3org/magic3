@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: counter.inc.php 1095 2008-10-21 08:51:41Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -72,7 +72,7 @@ function plugin_counter_get_count($page)
 			'yesterday' => 0,
 			'ip'        => '');
 
-	if (! is_page($page)) return $default;
+	if (! WikiPage::isPage($page)) return $default;
 	if (isset($counters[$page])) return $counters[$page];
 
 	// Set default

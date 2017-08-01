@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: include.inc.php 1115 2008-10-24 06:38:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 //--------
@@ -94,7 +94,7 @@ function plugin_include_convert()
 	// I'm stuffed
 	if (isset($included[$page])) {
 		return '#include(): Included already: ' . $link . '<br />' . "\n";
-	} if (! is_page($page)) {
+	} if (! WikiPage::isPage($page)) {
 		return '#include(): No such page: ' . $s_page . '<br />' . "\n";
 	} if ($count > PLUGIN_INCLUDE_MAX) {
 		return '#include(): Limit exceeded: ' . $link . '<br />' . "\n";

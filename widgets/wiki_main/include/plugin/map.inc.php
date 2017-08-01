@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: map.inc.php 1156 2008-10-29 10:13:32Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /*
@@ -34,12 +34,12 @@ function plugin_map_action()
 /*
 	$reverse = isset($vars['reverse']);
 	$refer   = isset($vars['refer']) ? $vars['refer'] : '';
-	if ($refer == '' || ! is_page($refer))
+	if ($refer == '' || ! WikiPage::isPage($refer))
 		$vars['refer'] = $refer = $defaultpage;
 */
 	$reverse = (WikiParam::getVar('reverse') != '');
 	$refer   = WikiParam::getRefer();
-	if ($refer == '' || !is_page($refer)){
+	if ($refer == '' || !WikiPage::isPage($refer)){
 		$refer = WikiConfig::getDefaultPage();
 		WikiParam::setRefer($refer);
 	}
@@ -132,7 +132,7 @@ class MapNode
 		static $id = 0;
 
 		$this->page    = $page;
-		$this->is_page = is_page($page);
+		$this->is_page = WikiPage::isPage($page);
 //		$this->cache   = CACHE_DIR . encode($page);
 		$this->done    = ! $this->is_page;
 		$this->link    = make_pagelink($page);

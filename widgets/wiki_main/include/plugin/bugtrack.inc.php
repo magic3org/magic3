@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: bugtrack.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright:
@@ -275,20 +275,20 @@ function plugin_bugtrack_write($base, $pagename, $summary, $name, $priority, $st
 
 	$id = $jump = 1;
 	$page = $base . '/' . sprintf(PLUGIN_BUGTRACK_NUMBER_FORMAT, $id);
-	while (is_page($page)) {
+	while (WikiPage::isPage($page)) {
 		$id   = $jump;
 		$jump += 50;
 		$page = $base . '/' . sprintf(PLUGIN_BUGTRACK_NUMBER_FORMAT, $jump);
 	}
 	$page = $base . '/' . sprintf(PLUGIN_BUGTRACK_NUMBER_FORMAT, $id);
-	while (is_page($page))
+	while (WikiPage::isPage($page))
 		$page = $base . '/' . sprintf(PLUGIN_BUGTRACK_NUMBER_FORMAT, ++$id);
 
 	if ($pagename == '') {
 		page_write($page, $postdata);
 	} else {
 		$pagename = get_fullname($pagename, $base);
-		if (is_page($pagename) || ! is_pagename($pagename)) {
+		if (WikiPage::isPage($pagename) || ! is_pagename($pagename)) {
 			$pagename = $page; // Set default
 		} else {
 			page_write($page, 'move to [[' . $pagename . ']]');

@@ -181,7 +181,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 								if (strncmp($page, ':', 1) == 0){
 									$this->setAppErrorMsg('ページ名が不正です。ページ=' . $page);
 									$ret = false;
-								} else if (is_page($page)){			// 既にページが存在しているか確認
+								} else if (WikiPage::isPage($page)){			// 既にページが存在しているか確認
 									if ($overwritePage){		// 上書きの場合
 										$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
 										if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);
@@ -273,7 +273,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 										$fileData = file_get_contents($path);		// ファイル読み込み
 										
 										$ret = true;
-										if (is_page($page)){			// 既にページが存在しているか確認
+										if (WikiPage::isPage($page)){			// 既にページが存在しているか確認
 											if ($overwritePage){		// 上書きの場合
 												$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
 												if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -205,7 +205,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if (isset($retvars['body']) && $retvars['body'] != ''){
 			$body = $retvars['body'];
 		} else {			// Wikiページ表示の場合
-			if ($base == '' || !is_page($base)){
+			if ($base == '' || !WikiPage::isPage($base)){
 				$base = WikiConfig::getDefaultPage();
 				//$headTitle = htmlspecialchars(strip_bracket($base));
 				$pageTitle  = make_search($base);		// 目的のページの場合はバックリンクを設定
@@ -390,7 +390,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 
 		// Init flags
 		$this->isPage = (is_pagename($page) && ! arg_check('backup') && $page != WikiConfig::getWhatsnewPage());
-		$this->isRead = (arg_check('read') && is_page($page));
+		$this->isRead = (arg_check('read') && WikiPage::isPage($page));
 		$this->isFreeze = is_freeze($page);
 
 		// 添付ファイル

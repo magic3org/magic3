@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: includesubmenu.inc.php 1135 2008-10-26 11:35:35Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 
@@ -46,10 +46,10 @@ function plugin_includesubmenu_convert()
 	//echo "$SubMenuPageName2 <br>";
 	//下階層にSubMenuがあるかチェック
 	//あれば、それを使用
-	if (is_page($SubMenuPageName1)) {
+	if (WikiPage::isPage($SubMenuPageName1)) {
 		//下階層にSubMenu有り
 		$SubMenuPageName = $SubMenuPageName1;
-	} else if (is_page($SubMenuPageName2)) {
+	} else if (WikiPage::isPage($SubMenuPageName2)) {
 		//同階層にSubMenu有り
 		$SubMenuPageName = $SubMenuPageName2;
 	} else {

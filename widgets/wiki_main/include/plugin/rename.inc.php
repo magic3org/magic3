@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -54,7 +54,7 @@ function plugin_rename_action()
 
 		if ($refer == '') {
 			return plugin_rename_phase1();
-		} else if (!is_page($refer)) {
+		} else if (!WikiPage::isPage($refer)) {
 			return plugin_rename_phase1('notpage', $refer);
 //		} else if ($refer == WikiConfig::getWhatsnewPage()) {
 		} else if ($refer == WikiConfig::getNoLinkPages() || !is_editable($refer)) {			// 凍結ファイルは変更不可
@@ -64,7 +64,7 @@ function plugin_rename_action()
 			return plugin_rename_phase2();
 		} else if (! is_pagename($page)) {
 			return plugin_rename_phase2('notvalid');
-		} else if (is_page($page)){				// 変更先のページが既に存在するとき add by magic3
+		} else if (WikiPage::isPage($page)){				// 変更先のページが既に存在するとき add by magic3
 			return plugin_rename_phase2('already', $page);
 		} else {
 			// ページ名変更処理
@@ -263,7 +263,7 @@ function plugin_rename_regex($arr_from, $arr_to)
 {
 	$exists = array();
 	foreach ($arr_to as $page){
-		if (is_page($page)) $exists[] = $page;
+		if (WikiPage::isPage($page)) $exists[] = $page;
 	}
 
 	if (! empty($exists)) {

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: back.inc.php 1102 2008-10-23 04:50:53Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -61,7 +61,7 @@ function plugin_back_convert()
 				$array[1] = ($array[1] != '') ? '#' . rawurlencode($array[1]) : '';
 				//$href = $script . '?' . $array[0] .  $array[1];
 				$href = $script . WikiParam::convQuery('?' . $array[0] .  $array[1]);
-				$link = is_page($array[0]);
+				$link = WikiPage::isPage($array[0]);
 			}
 		} else {
 			$href = rawurlencode($href);

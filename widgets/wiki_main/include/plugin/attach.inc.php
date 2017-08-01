@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -126,7 +126,7 @@ function plugin_attach_action()
 		case 'rename'   : return attach_rename();
 		case 'upload'   : return attach_showform();
 		}
-		if ($page == '' || ! is_page($page)) {
+		if ($page == '' || ! WikiPage::isPage($page)) {
 			return attach_list();
 		} else {
 			return attach_showform();
@@ -169,7 +169,7 @@ function attach_upload($file, $page, $pass = NULL)
 		pkwk_common_headers();
 		echo('Query string (page name and/or file name) too long');
 		exit;
-	} else if (! is_page($page)) {
+	} else if (! WikiPage::isPage($page)) {
 		die_message('No such page');
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
@@ -196,9 +196,9 @@ function attach_upload($file, $page, $pass = NULL)
 	if (move_uploaded_file($file['tmp_name'], $obj->filename))
 		chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 
-	//if (is_page($page)) touch(get_filename($page));
+	//if (WikiPage::isPage($page)) touch(get_filename($page));
 	// ページの更新日時を更新
-	if (is_page($page)) WikiPage::updatePageTime($page);
+	if (WikiPage::isPage($page)) WikiPage::updatePageTime($page);
 
 	// パスワードは使用しない
 /*
@@ -455,7 +455,7 @@ EOD;
 EOD;*/
 
 	if (! ini_get('file_uploads')) return '#attach(): file_uploads disabled<br />' . $navi;
-	if (! is_page($page))          return '#attach(): No such page<br />'          . $navi;
+	if (! WikiPage::isPage($page))          return '#attach(): No such page<br />'          . $navi;
 
 //	$maxsize = PLUGIN_ATTACH_MAX_FILESIZE;
 //	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], number_format($maxsize/1024) . 'KB');
@@ -910,9 +910,9 @@ class AttachFile
 			$this->putstatus();
 		}
 
-		//if (is_page($this->page)) touch(get_filename($this->page));
+		//if (WikiPage::isPage($this->page)) touch(get_filename($this->page));
 		// ページの更新日時を更新
-		if (is_page($this->page)) WikiPage::updatePageTime($this->page);
+		if (WikiPage::isPage($this->page)) WikiPage::updatePageTime($this->page);
 
 		if ($notify) {
 			$footer['ACTION']   = 'File deleted';

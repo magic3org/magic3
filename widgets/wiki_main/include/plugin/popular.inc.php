@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: popular.inc.php 1120 2008-10-25 03:20:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Popular pages plugin: Show an access ranking of this wiki
@@ -55,8 +55,8 @@ function plugin_popular_convert()
 	$pages = WikiPage::getCountPages();
 	foreach ($pages as $page){
 	//foreach (get_existpages(COUNTER_DIR, '.count') as $file=>$page) {
-		//if (($except != '' && ereg($except, $page)) || $page == $whatsnew || check_non_list($page) || ! is_page($page)) continue;
-		if (($except != '' && ereg($except, $page)) || $page == WikiConfig::getWhatsnewPage() || check_non_list($page) || ! is_page($page)) continue;
+		//if (($except != '' && ereg($except, $page)) || $page == $whatsnew || check_non_list($page) || ! WikiPage::isPage($page)) continue;
+		if (($except != '' && ereg($except, $page)) || $page == WikiConfig::getWhatsnewPage() || check_non_list($page) || ! WikiPage::isPage($page)) continue;
 
 		//$array = file(COUNTER_DIR . $file);
 		$array = WikiPage::getPageCount($page);

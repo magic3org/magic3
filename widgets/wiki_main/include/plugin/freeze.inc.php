@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -29,7 +29,7 @@ function plugin_freeze_action()
 	if (!empty($retStatus)) return $retStatus;
 	
 	$page = WikiParam::getPage();
-	if (!is_page($page)) return array('msg' => '', 'body' => '');
+	if (!WikiPage::isPage($page)) return array('msg' => '', 'body' => '');
 
 	$pass = WikiParam::getVar('pass');
 	$action = WikiParam::getVar('action');			// 次画面遷移用

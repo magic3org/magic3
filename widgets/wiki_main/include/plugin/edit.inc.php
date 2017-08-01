@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -70,7 +70,7 @@ function plugin_edit_preview()
 
 	// Loading template
 	$templatePage = WikiParam::getVar('template_page');
-	if ($templatePage != '' && is_page($templatePage)) {
+	if ($templatePage != '' && WikiPage::isPage($templatePage)) {
 /*		$vars['msg'] = join('', get_source($vars['template_page']));
 		// Cut fixed anchors
 		$vars['msg'] = preg_replace('/^(\*{1,3}.*)\[#[A-Za-z][\w-]+\](.*)$/m', '$1$2', $vars['msg']);*/
@@ -150,7 +150,7 @@ function plugin_edit_inline()
 
 	// $s_page fixed
 	$isfreeze = is_freeze($s_page);
-	$ispage   = is_page($s_page);
+	$ispage   = WikiPage::isPage($s_page);
 
 	// Paragraph edit enabled or not
 	$short = htmlspecialchars('Edit');

@@ -166,7 +166,7 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 
 			plugin_ls2_list_push($params, $level + strlen($level));
 			array_push($params['result'], '<li><a href="' . $href . $id . '">' . $line . '</a>');
-		} else if ($params['include'] && preg_match('/^#include\((.+)\)/', $line, $matches) && is_page($matches[1])){
+		} else if ($params['include'] && preg_match('/^#include\((.+)\)/', $line, $matches) && WikiPage::isPage($matches[1])){
 			plugin_ls2_get_headings($matches[1], $params, $level + 1, TRUE);
 		}
 	}

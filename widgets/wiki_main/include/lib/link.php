@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: link.php 1151 2008-10-29 02:34:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C) 2003-2006 PukiWiki Developers Team
@@ -66,7 +66,7 @@ function links_update($page)
 {
 	global $WikiName, $autolink, $nowikiname, $search_non_list;
 
-	//$time = is_page($page, TRUE) ? get_filetime($page) : 0;
+	//$time = WikiPage::isPage($page, TRUE) ? get_filetime($page) : 0;
 
 	/*$rel_old        = array();
 	$rel_file       = CACHE_DIR . encode($page) . '.rel';
@@ -134,7 +134,7 @@ function links_update($page)
 	// $pageが削除されたときに、
 	//if (! $time && file_exists($ref_file)) {
 	//if (!WikiPage::isPage($page)){
-	if (!is_page($page)){
+	if (!WikiPage::isPage($page)){
 		//foreach (file($ref_file) as $line) {
 		$refPage = WikiPage::getPageCacheRef($page);
 		foreach ($refPage as $line){
@@ -205,7 +205,7 @@ function links_add($page, $add, $rel_auto)
 		if (empty($value)) continue;
 		
 		$all_auto = isset($rel_auto[$_page]);
-		$is_page  = is_page($_page);
+		$is_page  = WikiPage::isPage($_page);
 		$ref      = $page . "\t" . ($all_auto ? 1 : 0) . "\n";
 
 		/*$ref_file = CACHE_DIR . encode($_page) . '.ref';
@@ -254,7 +254,7 @@ function links_delete($page, $del)
 		if (empty($refPage)) continue;
 
 		$all_auto = TRUE;
-		$is_page = is_page($_page);
+		$is_page = WikiPage::isPage($_page);
 
 		$ref = '';
 		//foreach (file($ref_file) as $line) {

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: new.inc.php 1088 2008-10-19 07:42:08Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Usage:
@@ -74,7 +74,7 @@ function plugin_new_inline()
 				return '&new(pagename/[,nolink]): No such pages;';
 		} else {
 			// Check a page
-			if (is_page($page)) {
+			if (WikiPage::isPage($page)) {
 				$timestamp = get_filetime($page);
 				$retval    = $nolink ? '' : make_pagelink($page, $name);
 			} else {

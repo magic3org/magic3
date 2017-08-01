@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -64,7 +64,7 @@ function plugin_backup_action()
 
 	//$href    = $script . '?cmd=backup&amp;page=' . $r_page . '&amp;age=' . $s_age;
 	$href    = $script . WikiParam::convQuery('?cmd=backup&amp;page=' . $r_page . '&amp;age=' . $s_age);
-	$is_page = is_page($page);
+	$is_page = WikiPage::isPage($page);
 
 	if ($is_page && $action != 'diff')
 		$body .= ' <li>' . str_replace('$1', '<a href="' . $href .

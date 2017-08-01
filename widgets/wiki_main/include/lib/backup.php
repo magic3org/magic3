@@ -1,22 +1,23 @@
 <?php
 /**
- *
- * PukiWiki - Yet another WikiWikiWeb clone.
- *
- * backup.php
- *
  * バックアップを管理する
  *
- * @package org.pukiwiki
- * @access  public
- * @author
- * @create
- * @version $Id: backup.php 1141 2008-10-27 06:10:58Z fishbone $
- * Copyright (C)
- *   2002-2006 PukiWiki Developers Team
- *   2001-2002 Originally written by yu-ji
- * License: GPL v2 or (at your option) any later version
- **/
+ * PHP versions 5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+// Copyright (C)
+//   2002-2006 PukiWiki Developers Team
+//   2001-2002 Originally written by yu-ji
+// License: GPL v2 or (at your option) any later version
+//
 
 /**
  * make_backup
@@ -41,7 +42,7 @@ function make_backup($page, $delete = FALSE)
 		return;
 	}
 
-	if (! is_page($page)) return;
+	if (! WikiPage::isPage($page)) return;
 
 	$lastmod = _backup_get_filetime($page);
 	if ($lastmod == 0 || UTIME - $lastmod > 60 * 60 * $cycle)

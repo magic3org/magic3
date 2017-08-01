@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: menu.inc.php 1114 2008-10-24 06:23:15Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // サブメニューを使用する
@@ -30,7 +30,7 @@ function plugin_menu_convert()
 		if ($num > 1)       return '#menu(): Zero or One argument needed';
 		if ($menu !== NULL) return '#menu(): Already set: ' . htmlspecialchars($menu);
 		$args = func_get_args();
-		if (! is_page($args[0])) {
+		if (! WikiPage::isPage($args[0])) {
 			return '#menu(): No such page: ' . htmlspecialchars($args[0]);
 		} else {
 			$menu = $args[0]; // Set
@@ -46,7 +46,7 @@ function plugin_menu_convert()
 			$path = explode('/', strip_bracket(WikiParam::getPage()));
 			while(! empty($path)) {
 				$_page = join('/', $path) . '/' . MENU_SUBMENUBAR;
-				if (is_page($_page)) {
+				if (WikiPage::isPage($_page)) {
 					$page = $_page;
 					break;
 				}
@@ -54,7 +54,7 @@ function plugin_menu_convert()
 			}
 		}
 
-		if (! is_page($page)) {
+		if (! WikiPage::isPage($page)) {
 			return '';
 		//} else if ($vars['page'] == $page) {
 		} else if (WikiParam::getPage() == $page){

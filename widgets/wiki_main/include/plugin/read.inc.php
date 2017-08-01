@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,7 +20,7 @@ function plugin_read_action()
 
 	$page = WikiParam::getPage();
 
-	if (is_page($page)) {
+	if (WikiPage::isPage($page)) {
 		// 「:」で始まるシステム用ページはアクセス権をチェックする
 		if (strncmp($page, ':', 1) == 0){
 			// ### パスワード認証フォーム表示 ###

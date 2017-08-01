@@ -10,9 +10,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: source.inc.php 1098 2008-10-22 11:43:09Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 function plugin_source_action()
@@ -28,7 +28,7 @@ function plugin_source_action()
 	$page = WikiParam::getPage();
 	WikiParam::setRefer($page);
 
-	if (! is_page($page) || ! check_readable($page, false, false))
+	if (! WikiPage::isPage($page) || ! check_readable($page, false, false))
 		return array('msg' => $_source_messages['msg_notfound'],
 			'body' => $_source_messages['err_notfound']);
 

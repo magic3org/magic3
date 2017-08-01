@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: make_link.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -704,7 +704,7 @@ class Link_autolink extends Link
 		list($name) = $this->splice($arr);
 
 		// Ignore pages listed, or Expire ones not found
-		if (in_array($name, $this->forceignorepages) || ! is_page($name))
+		if (in_array($name, $this->forceignorepages) || ! WikiPage::isPage($name))
 			return FALSE;
 		return parent::setParam($page, $name, '', 'pagename', $name);
 	}
@@ -747,10 +747,10 @@ return $s_alias;
 
 	$r_refer = ($refer == '') ? '' : '&amp;refer=' . rawurlencode($refer);
 
-//	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))
+//	if (! isset($related[$page]) && $page != $vars['page'] && WikiPage::isPage($page))
 //		$related[$page] = get_filetime($page);
 
-	if ($isautolink || is_page($page)) {
+	if ($isautolink || WikiPage::isPage($page)) {
 		// Hyperlink to the page
 		if ($link_compact) {
 			$title   = '';

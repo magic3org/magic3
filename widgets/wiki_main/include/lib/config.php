@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: config.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C) 2003-2005 PukiWiki Developers Team
@@ -48,7 +48,7 @@ class Config
 	// Load the configuration-page
 	function read()
 	{
-		if (! is_page($this->page)) return FALSE;
+		if (! WikiPage::isPage($this->page)) return FALSE;
 
 		$this->objs = array();
 		$obj        = new ConfigTable('');

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: calendar2.inc.php 1130 2008-10-26 02:43:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Usage:
@@ -144,7 +144,7 @@ EOD;*/
 			$style = 'style_td_sat';
 		}
 
-		if (is_page($page)) {
+		if (WikiPage::isPage($page)) {
 			//$link = '<a href="' . $script . '?' . $r_page . '" title="' . $s_page . '"><strong>' . $day . '</strong></a>';
 			$link = '<a href="' . $script . WikiParam::convQuery('?' . $r_page) . '" title="' . $s_page . '"><strong>' . $day . '</strong></a>';
 		} else {
@@ -175,7 +175,7 @@ EOD;*/
 		$tpage = $prefix . sprintf('%4d-%02d-%02d', $today['year'],
 			$today['mon'], $today['mday']);
 		$r_tpage = rawurlencode($tpage);
-		if (is_page($tpage)) {
+		if (WikiPage::isPage($tpage)) {
 			/*$_page = $vars['page'];
 			$get['page'] = $post['page'] = $vars['page'] = $tpage;*/
 			$_page = WikiParam::getPage();
