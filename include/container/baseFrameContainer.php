@@ -780,7 +780,9 @@ class BaseFrameContainer extends Core
 			$GLOBALS['wp'] = new WP();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
 			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
-			
+			// テンプレートから参照可能にする
+			global $wp_query;
+
 			// テンプレート初期処理
 			do_action('setup_theme');
 			load_default_textdomain();			// 言語リソースを読み込む
