@@ -151,6 +151,9 @@ function get_template_part( $slug, $name = null ) {
 	global $gPageManager;
 	global $gEnvManager;
 	
+	// ##### get_template_part()処理開始(メインポジション出力判断用) #####
+	$gContentApi->setIsTemplatePart(true);
+	
 	// メインエリア表示
 /*	$contentType = $gContentApi->getContentType();
 	if (empty($contentType)){
@@ -198,6 +201,9 @@ function get_template_part( $slug, $name = null ) {
 
 	// 一覧の最後のデータの場合
 	if ($wp_query->in_the_loop && $wp_query->lastPostFound) echo $gPageManager->getWPContents('main-bottom');
+	
+	// ##### get_template_part()処理終了(メインポジション出力判断用) #####
+	$gContentApi->setIsTemplatePart(false);
 }
 
 /**

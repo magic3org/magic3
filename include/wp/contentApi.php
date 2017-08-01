@@ -38,6 +38,7 @@ class ContentApi extends BaseApi
 	private $prevNextBaseValue;		// 前後のコンテンツ取得用のベース値
 	private $relativePosts;			// 現在のコンテンツに関連したWP_Postオブジェクト
 	private $showThumb;				// コンテンツ表示制御(サムネールを表示するかどうか)
+	private $isTemplatePart;		// get_template_part()内での処理かどうか(コンポーネント出力判断用)
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -730,6 +731,25 @@ class ContentApi extends BaseApi
 		// グローバルの$postのコンテンツを変更して、関連データを更新する
 		$post->post_content = $content;
 		$wp_query->setup_postdata();
+	}
+	/**
+	 * get_template_part()内での処理かどうか(コンポーネント出力判断用)を設定
+	 *
+	 * @param bool $inFunc			関数内かどうか
+	 * @return 						なし
+	 */
+	public function setIsTemplatePart($inFunc)
+	{
+		$this->isTemplatePart = $inFunc;
+	}
+	/**
+	 * get_template_part()内での処理かどうか(コンポーネント出力判断用)を取得
+	 *
+	 * @return bool			関数内かどうか
+	 */
+	public function getIsTemplatePart()
+	{
+		return $this->isTemplatePart;
 	}
 }
 ?>

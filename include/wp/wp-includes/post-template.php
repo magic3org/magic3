@@ -233,6 +233,20 @@ function get_the_guid( $post = 0 ) {
  * @param bool   $strip_teaser   Optional. Strip teaser content before the more text. Default is false.
  */
 function the_content( $more_link_text = null, $strip_teaser = false) {
+	global $gContentApi;
+	global $gPageManager;
+	
+	// WordPressメインループからget_template_part()が呼ばれずに直接呼ばれている場合はMagic3メインポジションの出力処理を行う
+	$isTemplatePart = $gContentApi->getIsTemplatePart();
+	if (!$isTemplatePart){
+		echo $gPageManager->getWPContents('main-top', false/*タイトル非表示*/);
+	
+		echo $gPageManager->getWPContents('main', false/*タイトル非表示*/);
+		
+		echo $gPageManager->getWPContents('main-bottom', false/*タイトル非表示*/);
+		return;
+	}
+	
 	$content = get_the_content( $more_link_text, $strip_teaser );
 
 	/**

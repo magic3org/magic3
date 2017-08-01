@@ -108,7 +108,7 @@ INSERT INTO _page_def
 ('index', '',        'sidebar-1',         11,       'blog_search_box',    0,            '',                   '',             '',          true,             0,                  now()),
 ('index', '',        'banner3',      3,        'banner3',            1,            '',                   '',             '',          false,            0,                  now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',             '',          true,             0,                  now()),
-('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報',     '',          true,             1,                  now()),
+('index', 'blog',    'main-top',     3,        'news_headline',      1,            '',                   '新着情報',     '',          true,             1,                  now()),
 ('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   '',             '',          true,             0,                  now()),
 ('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',             '',          false,            0,                  now()),
 ('index', 'contact', 'main',         5,        'contactus',          0,            '',                   'お問い合わせ', '',          true,             0,                  now());
