@@ -185,7 +185,8 @@ class PageManager extends Core
 	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型テンプレート対応" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_FUNCTION_MARK_WORDPRESS = ' <span class="label label-warning" rel="m3help" title="WordPress型テンプレート対応" data-placement="auto">W</span>';			// ウィジェット機能マーク(WordPress型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
-	const WIDGET_STYLE_WORDPRESS = '_wordpress';		// ウィジェットの表示スタイル(WordPressテンプレート用出力)
+	const WIDGET_STYLE_WORDPRESS = '_wordpress';						// ウィジェットの表示スタイル(WordPressテンプレート用出力)
+	const WIDGET_STYLE_WORDPRESS_NOTITLE = '_wordpress_notitle';		// ウィジェットの表示スタイル(WordPressテンプレート(タイトルなし)用出力)
 	
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
@@ -4849,11 +4850,16 @@ class PageManager extends Core
 	 * 各部品のHTML出力(WordPressテンプレート専用)
 	 *
 	 * @param string $position			HTMLテンプレート上の書き出し位置
+	 * @param bool $showTitle			タイトルを表示するかどうか
 	 * @return string					出力コンテンツ
 	 */
-	function getWPContents($position)
+	function getWPContents($position, $showTitle = true)
 	{
-		return $this->getContents($position, self::WIDGET_STYLE_WORDPRESS/*WordPressテンプレート用出力*/, 100/*WordPressテンプレート*/);
+		if ($showTitle){
+			return $this->getContents($position, self::WIDGET_STYLE_WORDPRESS/*WordPressテンプレート用出力*/, 100/*WordPressテンプレート*/);
+		} else {
+			return $this->getContents($position, self::WIDGET_STYLE_WORDPRESS_NOTITLE/*WordPressテンプレート(タイトルなし)用出力*/, 100/*WordPressテンプレート*/);
+		}
 	}
 	/**
 	 * その他のポジションブロックデータを取得

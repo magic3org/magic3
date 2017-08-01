@@ -52,7 +52,9 @@ class WPRender
 		if (empty($blockParam)) return $content;
 		
 		// タイトルを追加
-		if (!empty($title)) $content = $blockParam['before_title'] . convertToHtmlEntity($title) . $blockParam['after_title'] . $content;
+		if ($style == PageManager::WIDGET_STYLE_WORDPRESS){			// タイトルありの場合
+			if (!empty($title)) $content = $blockParam['before_title'] . convertToHtmlEntity($title) . $blockParam['after_title'] . $content;
+		}
 		
 		// 前後コンテンツ追加
 //		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
