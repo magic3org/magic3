@@ -1796,6 +1796,11 @@ class WP_Query {
 				$this->is_author = true;
 				$this->is_archive = true;
 				break;
+			case 'archive':		// 条件なし一覧の場合
+			default:			// デフォルトの画面表示は一覧にする?
+				// ページの表示パラメータを設定
+				$this->is_archive = true;
+				break;
 			}
 			
 			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, $startDt/*期間開始日時*/, $endDt/*期間終了日時*/, $category);
