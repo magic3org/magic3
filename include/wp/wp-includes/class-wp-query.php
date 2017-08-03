@@ -1717,6 +1717,7 @@ class WP_Query {
 			$this->posts = array($wpPostObj);
 			
 			// 単体ページ表示を指定
+			// ########## is_pageがtrueの場合のみMagic3のブロック出力を使用する。それ以外はWordPress側のレンダリング機能を使用する。
 			$this->is_page = true;
 		} else {
 			$keywords = '';
