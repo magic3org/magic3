@@ -1730,6 +1730,7 @@ class WP_Query {
 				break;
 			case 'page':			// ページタイプなしページまたは汎用コンテンツページの場合
 //				$this->is_paged = true;			// pagedは複数ページの意味
+				$this->is_page = true;
 				break;
 			case 'category':	// カテゴリー
 				// ページの表示パラメータを設定
