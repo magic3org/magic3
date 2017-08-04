@@ -605,6 +605,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'semrushbot'				=> 'semrush.png',
 			'scrapy'					=> 'scrapy.png',
 			'deusu'						=> 'deusu.png',
+			'yandex'					=> 'ya.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
