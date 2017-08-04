@@ -20,10 +20,10 @@
 -- システム設定マスター
 INSERT INTO _system_config 
 (sc_id,                        sc_value,       sc_name) VALUES
-('default_content_type',       'blog',         'デフォルトコンテンツタイプ'),                -- WordPressテンプレートで使用
-('default_menu_id',            'main_menu',    'フロント画面用デフォルトメニューID'),        -- WordPressテンプレートで使用
-('mobile_default_menu_id',     'm_main_menu',  '携帯画面用デフォルトメニューID'),            -- WordPressテンプレートで使用
-('smartphone_default_menu_id', 's_main_menu',  'スマートフォン画面用デフォルトメニューID');  -- WordPressテンプレートで使用
+('default_content_type',       'blog',         'デフォルトコンテンツタイプ'),                -- WordPressテンプレートで使用(現在未使用)
+('default_menu_id',            'main_menu',    'フロント画面用デフォルトメニューID'),        -- WordPressテンプレートで使用(現在未使用)
+('mobile_default_menu_id',     'm_main_menu',  '携帯画面用デフォルトメニューID'),            -- WordPressテンプレートで使用(現在未使用)
+('smartphone_default_menu_id', 's_main_menu',  'スマートフォン画面用デフォルトメニューID');  -- WordPressテンプレートで使用(現在未使用)
 
 -- テンプレート情報
 DELETE FROM _templates WHERE tm_id = 'wisteria';

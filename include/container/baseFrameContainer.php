@@ -500,7 +500,7 @@ class BaseFrameContainer extends Core
 				$this->gPage->startWidgetXml($cmd);
 
 				// 指定のウィジェットを実行
-				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/index.php';
+				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
 
 				if (file_exists($widgetIndexFile)){
 					// 実行のログを残す
@@ -520,7 +520,7 @@ class BaseFrameContainer extends Core
 				$this->gPage->startWidgetRss($cmd);
 				
 				// 指定のウィジェットを実行
-				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/index.php';
+				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
 
 				if (file_exists($widgetIndexFile)){
 					// ウィジェット定義ID、ページ定義のシリアル番号を取得
@@ -565,9 +565,9 @@ class BaseFrameContainer extends Core
 				
 				// 指定のウィジェットを実行
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット設定のとき
-					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/admin/index.php';		// 管理用画面
+					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/admin/' . M3_FILENAME_INDEX;		// 管理用画面
 				} else {
-					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/index.php';
+					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
 				}
 				if (file_exists($widgetIndexFile)){
 					// ウィジェット定義ID、ページ定義のシリアル番号を取得
@@ -656,7 +656,7 @@ class BaseFrameContainer extends Core
 	 */
 	function _createPage($request, $curTemplate, $subTemplateId = '')
 	{
-		$defaultIndexFile = 'index.php';			// テンプレートの起動ファイル
+		$defaultIndexFile = M3_FILENAME_INDEX;			// テンプレートの起動ファイル
 		
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
 		
@@ -901,6 +901,14 @@ class BaseFrameContainer extends Core
 				break;
 			}
 			
+			// 現在デフォルトページを表示している場合で「sub」パラメータがなくWordPressにフロントページ用のスクリプトがある場合はWordPressフロント画面を表示する
+			if ($defaultIndexFile == M3_FILENAME_INDEX){
+				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){
+					$frontPageTemplate = get_front_page_template();
+					if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
+				}
+			}
 			// WordPressオブジェクト作成
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
@@ -969,7 +977,7 @@ class BaseFrameContainer extends Core
 
 		// ################### テンプレート読み込み ###################
 		// テンプレートのポジションタグからウィジェットが実行される
-		//$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/index.php';
+		//$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . M3_FILENAME_INDEX;
 		$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . $defaultIndexFile;
 		if (file_exists($templateIndexFile)){
 			require_once($templateIndexFile);
@@ -1220,7 +1228,7 @@ class BaseFrameContainer extends Core
 					$curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
 				} else {
 					// テンプレートの存在チェック
-					$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplateId . '/index.php';
+					$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplateId . '/' . M3_FILENAME_INDEX;
 					if (!file_exists($templateIndexFile)) $curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
 				}
 			}
@@ -1352,7 +1360,7 @@ class BaseFrameContainer extends Core
 		
 		// テンプレートまでのパスを削除
 		$path = str_replace($templatePath, '', $path);
-		if ($path == $savedPath) $path = 'index.php';
+		if ($path == $savedPath) $path = M3_FILENAME_INDEX;
 		return $path;
 	}
 	/**
