@@ -86,7 +86,11 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 	{
 		$categoryId = $fetchedRow['bc_id'];
 		$name = $fetchedRow['bc_name'];
+		$entryCount = $fetchedRow['entrycount'];		// 記事数
 		
+		// 記事数追加
+		$name .= '(' . $entryCount . ')';
+
 		// リンク先の作成
 		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_BLOG, M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryId);// カテゴリー画面へのURLを作成
 		
