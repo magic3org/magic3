@@ -716,6 +716,8 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-term.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-page.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-theme.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-widget.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-widget-factory.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-list-util.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
@@ -778,6 +780,7 @@ class BaseFrameContainer extends Core
 			$GLOBALS['wp_the_query'] = new WP_Query();				// $wp_the_queryは変更不可変数で$wp_queryは変更可変数
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 			$GLOBALS['wp'] = new WP();
+			$GLOBALS['wp_widget_factory'] = new WP_Widget_Factory();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
 			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
 			// テンプレートから参照可能にする
