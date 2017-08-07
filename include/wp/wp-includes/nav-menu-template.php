@@ -81,7 +81,7 @@ function wp_nav_menu( $args = array() ) {
 	 *
 	 * @param array $args Array of wp_nav_menu() arguments.
 	 */
-	$args = apply_filters( 'wp_nav_menu_args', $args );
+//	$args = apply_filters( 'wp_nav_menu_args', $args );
 	$args = (object) $args;
 
 	/**
@@ -98,7 +98,7 @@ function wp_nav_menu( $args = array() ) {
 	 * @param string|null $output Nav menu output to short-circuit with. Default null.
 	 * @param stdClass    $args   An object containing wp_nav_menu() arguments.
 	 */
-	$nav_menu = apply_filters( 'pre_wp_nav_menu', null, $args );
+/*	$nav_menu = apply_filters( 'pre_wp_nav_menu', null, $args );
 
 	if ( null !== $nav_menu ) {
 		if ( $args->echo ) {
@@ -107,8 +107,8 @@ function wp_nav_menu( $args = array() ) {
 		}
 
 		return $nav_menu;
-	}
-
+	}*/
+/*
 	// Get the nav menu based on the requested menu
 	$menu = wp_get_nav_menu_object( $args->menu );
 
@@ -134,7 +134,10 @@ function wp_nav_menu( $args = array() ) {
 	// If the menu exists, get its items.
 	if ( $menu && ! is_wp_error($menu) && !isset($menu_items) )
 		$menu_items = wp_get_nav_menu_items( $menu->term_id, array( 'update_post_term_cache' => false ) );
-
+*/
+	// ##### どのメニューを使用するかどうかはMagic3側で管理する。ここでは単にメニュー項目だけ取得 #####
+	$menu_items = wp_get_nav_menu_items();
+	
 	/*
 	 * If no menu was found:
 	 *  - Fall back (if one was specified), or bail.
@@ -143,23 +146,23 @@ function wp_nav_menu( $args = array() ) {
 	 *  - Fall back, but only if no theme location was specified.
 	 *  - Otherwise, bail.
 	 */
-	if ( ( !$menu || is_wp_error($menu) || ( isset($menu_items) && empty($menu_items) && !$args->theme_location ) )
+	 // ##### $menu_itemsにメニュー項目(WP_Post型の配列)が設定されていない場合はコールバックが呼ばれる #####
+	 // ##### コールバックで呼ばれる関数($args->fallback_cb)はデフォルトはwp_page_menu()               #####
+//	if ( ( !$menu || is_wp_error($menu) || ( isset($menu_items) && empty($menu_items) && !$args->theme_location ) )
+	if ( ( isset($menu_items) && empty($menu_items) && !$args->theme_location ) 		// メニューはエラーチェックしない
 		&& isset( $args->fallback_cb ) && $args->fallback_cb && is_callable( $args->fallback_cb ) ){
 		// こちらが実行される
 			return call_user_func( $args->fallback_cb, (array) $args );
 	}
 	
-	return null;
-	
-	// ########## ここ以降は未使用 ##########
-/*	if ( ! $menu || is_wp_error( $menu ) )
-		return false;
+	// return null;			// 定義なしの場合
+	// ########## テンプレート側で描画処理を定義している場合はこれ以降を実行。定義していない場合はここまで実行。 ##########
+	//if ( ! $menu || is_wp_error( $menu ) ) return false;
 
 	$nav_menu = $items = '';
 
 	$show_container = false;
 	if ( $args->container ) {
-	*/
 		/**
 		 * Filters the list of HTML tags that are valid for use as menu containers.
 		 *
@@ -168,7 +171,7 @@ function wp_nav_menu( $args = array() ) {
 		 * @param array $tags The acceptable HTML tags for use as menu containers.
 		 *                    Default is array containing 'div' and 'nav'.
 		 */
-/*		$allowed_tags = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav' ) );
+		$allowed_tags = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav' ) );
 		if ( is_string( $args->container ) && in_array( $args->container, $allowed_tags ) ) {
 			$show_container = true;
 			$class = $args->container_class ? ' class="' . esc_attr( $args->container_class ) . '"' : ' class="menu-'. $menu->slug .'-container"';
@@ -177,6 +180,9 @@ function wp_nav_menu( $args = array() ) {
 		}
 	}
 
+	// ##### ソート処理は省略 #####
+	$sorted_menu_items = $menu_items;
+/*
 	// Set up the $menu_item variables
 //	_wp_menu_item_classes_by_context( $menu_items );
 
@@ -205,9 +211,9 @@ function wp_nav_menu( $args = array() ) {
 	 * @param array    $sorted_menu_items The menu items, sorted by each menu item's menu order.
 	 * @param stdClass $args              An object containing wp_nav_menu() arguments.
 	 */
-/*	$sorted_menu_items = apply_filters( 'wp_nav_menu_objects', $sorted_menu_items, $args );
+//	$sorted_menu_items = apply_filters( 'wp_nav_menu_objects', $sorted_menu_items, $args );
 
-//	$items .= walk_nav_menu_tree( $sorted_menu_items, $args->depth, $args );
+	$items .= walk_nav_menu_tree( $sorted_menu_items, $args->depth, $args );
 	unset($sorted_menu_items);
 
 	// Attributes
@@ -225,7 +231,7 @@ function wp_nav_menu( $args = array() ) {
 	$menu_id_slugs[] = $wrap_id;
 
 	$wrap_class = $args->menu_class ? $args->menu_class : '';
-*/
+
 	/**
 	 * Filters the HTML list content for navigation menus.
 	 *
@@ -247,7 +253,7 @@ function wp_nav_menu( $args = array() ) {
 	 * @param string   $items The HTML list content for the menu items.
 	 * @param stdClass $args  An object containing wp_nav_menu() arguments.
 	 */
-/*	$items = apply_filters( "wp_nav_menu_{$menu->slug}_items", $items, $args );
+//	$items = apply_filters( "wp_nav_menu_{$menu->slug}_items", $items, $args );
 
 	// Don't print any markup if there are no items at this point.
 	if ( empty( $items ) )
@@ -258,7 +264,7 @@ function wp_nav_menu( $args = array() ) {
 
 	if ( $show_container )
 		$nav_menu .= '</' . $args->container . '>';
-*/
+
 	/**
 	 * Filters the HTML content for navigation menus.
 	 *
@@ -269,13 +275,12 @@ function wp_nav_menu( $args = array() ) {
 	 * @param string   $nav_menu The HTML content for the navigation menu.
 	 * @param stdClass $args     An object containing wp_nav_menu() arguments.
 	 */
-/*	$nav_menu = apply_filters( 'wp_nav_menu', $nav_menu, $args );
+//	$nav_menu = apply_filters( 'wp_nav_menu', $nav_menu, $args );
 
 	if ( $args->echo )
 		echo $nav_menu;
 	else
 		return $nav_menu;
-		*/
 }
 
 /**
@@ -529,12 +534,12 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
  * @param stdClass $r     An object containing wp_nav_menu() arguments.
  * @return string The HTML list content for the menu items.
  */
-/*function walk_nav_menu_tree( $items, $depth, $r ) {
+function walk_nav_menu_tree( $items, $depth, $r ) {
 	$walker = ( empty($r->walker) ) ? new Walker_Nav_Menu : $r->walker;
 	$args = array( $items, $depth, $r );
 
 	return call_user_func_array( array( $walker, 'walk' ), $args );
-}*/
+}
 
 /**
  * Prevents a menu item ID from being used more than once.

@@ -168,18 +168,18 @@ function has_nav_menu( $location ) {
 	global $gMenuApi;
 	global $gPageManager;
 	
-	// ƒpƒ‰ƒ[ƒ^ƒGƒ‰[ƒ`ƒFƒbƒN
+	// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯
 	if (empty($location)) return false;
 	
-	// Å‰‚Ìƒƒjƒ…[‚ğƒƒCƒ“ƒƒjƒ…[‚Æ‚µAƒƒCƒ“ƒƒjƒ…[‚Ì‘¶İ‚Ì‚İ‚ğƒ`ƒFƒbƒN‚·‚é
-	$firstLocation = key(array_slice($_wp_registered_nav_menus, 0/*Å‰‚Ìƒƒjƒ…[ˆÊ’u*/, 1, true));
+	// æœ€åˆã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¨ã—ã€ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å­˜åœ¨ã®ã¿ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+	$firstLocation = key(array_slice($_wp_registered_nav_menus, 0/*æœ€åˆã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä½ç½®*/, 1, true));
 	if ($location == $firstLocation){
 		$ret = $gMenuApi->isExistsMenu();
 		return $ret;
 	}
 	
-	// ƒƒCƒ“ƒƒjƒ…[ˆÈŠO‚Ìê‡‚ÍMagic3‚Ì”z’uƒuƒƒbƒN‚ğ•\¦
-	$count = $gPageManager->getWidgetsCount($location);		// ƒEƒBƒWƒFƒbƒg”æ“¾
+	// ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä»¥å¤–ã®å ´åˆã¯Magic3ã®é…ç½®ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ç¤º
+	$count = $gPageManager->getWidgetsCount($location);		// ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ•°å–å¾—
 	if ($count > 0){
 		return true;
 	} else {
@@ -605,8 +605,15 @@ function _is_valid_nav_menu_item( $item ) {
  * @param array  $args Optional. Arguments to pass to get_posts().
  * @return false|array $items Array of menu items, otherwise false.
  */
-function wp_get_nav_menu_items( $menu, $args = array() ) {
-	$menu = wp_get_nav_menu_object( $menu );
+//function wp_get_nav_menu_items( $menu, $args = array() ) {
+function wp_get_nav_menu_items( $menu = null, $args = array() ) {
+
+	// ##### DBã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼æƒ…å ±(WP_Postå‹)ã‚’å–å¾— ###
+	global $gMenuApi;
+	$pages = $gMenuApi->getMenuItemList();
+	
+	return $pages;
+/*	$menu = wp_get_nav_menu_object( $menu );
 
 	if ( ! $menu ) {
 		return false;
@@ -679,7 +686,7 @@ function wp_get_nav_menu_items( $menu, $args = array() ) {
 			$items[$k]->{$args['output_key']} = $i++;
 		}
 	}
-
+*/
 	/**
 	 * Filters the navigation menu items being returned.
 	 *
@@ -689,7 +696,7 @@ function wp_get_nav_menu_items( $menu, $args = array() ) {
 	 * @param object $menu  The menu object.
 	 * @param array  $args  An array of arguments used to retrieve menu item objects.
 	 */
-	return apply_filters( 'wp_get_nav_menu_items', $items, $menu, $args );
+//	return apply_filters( 'wp_get_nav_menu_items', $items, $menu, $args );
 }
 
 /**

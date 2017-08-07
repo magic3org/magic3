@@ -97,13 +97,21 @@ class MenuApi extends BaseApi
 	//		$post->page_template = 'default';
 			$post->post_parent = $item->parentId;		// 親ID
 			$post->menu_order = 0;
+			// メニュー項目作成用
+			$post->title = $item->title;
+			$post->url = $item->flink;
+			if ($item->browserNav){
+				$post->target = '_blank';
+			} else {
+				$post->target = '';
+			}
 			// Magic3設定値追加
 			$post->post_title = $item->title;
 			$post->post_content = '';
 			$post->guid = $item->flink;	// 詳細画面URL
 			$post->active = $item->active;
 			$post->filter = 'raw';
-		
+			
 			$wpPostObj = new WP_Post($post);
 			$menuItems[] = $wpPostObj;
 		}
