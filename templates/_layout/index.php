@@ -100,7 +100,9 @@ $view->componentWrapper();
   echo $view->position('banner3', 'art-nostyle');
   if ($view->hasMessages())
     echo artxPost('<jdoc:include type="message" />');
+  echo $view->position('main-top', 'art-nostyle');
   echo '<jdoc:include type="component" />';
+  echo $view->position('main-bottom', 'art-nostyle');
   echo $view->position('banner4', 'art-nostyle');
   echo $view->positions(array('user4' => 50, 'user5' => 50), 'art-article');
   echo $view->position('banner5', 'art-nostyle');
