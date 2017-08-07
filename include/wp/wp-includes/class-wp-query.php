@@ -1840,25 +1840,15 @@ class WP_Query {
 		} else {		// カテゴリーや年月アーカイブ、検索結果等の画面の場合
 			// WordPressのwp_get_document_title()を使用してタイトルを作成
 			$this->headTitle = '';			// HTMLヘッダのタイトル作成用
-			add_filter('document_title_parts', 'get_simple_title');		// フィルター関数で出力を調整
-			
-			function get_simple_title($title){
-				global $wp_query;
-			
-				// トップページはサブタイトルなし
-				if (!is_front_page()) $wp_query->headTitle = html_entity_decode($title['title']);			// エスケープ文字を戻す
-				return $title;
-			}
-			
+			add_filter('document_title_parts', 'm3get_simple_title');		// フィルター関数で出力を調整
 			wp_get_document_title();		// タイトル生成
-			remove_filter('document_title_parts', 'get_simple_title');
+			remove_filter('document_title_parts', 'm3get_simple_title');
 
 			// サブタイトルを設定
 			if (!empty($this->headTitle)) $gPageManager->setHeadSubTitle($this->headTitle);
 		}
 		return $this->posts;
 	}
-
 	/**
 	 * Set up the amount of found posts and the number of pages (if limit clause was used)
 	 * for the current query.
@@ -2957,4 +2947,17 @@ class WP_Query {
 		_deprecated_function( __METHOD__, '4.5.0' );
 		return $check;
 	}
+}
+/**
+ * [WordPressテンプレート用API]タイトル変更用のフック関数
+ *
+ * @param string $src		元のタイトル
+ * @return string     		変更後のタイトル
+ */
+function m3get_simple_title($title){
+	global $wp_query;
+
+	// トップページはサブタイトルなし
+	if (!is_front_page()) $wp_query->headTitle = html_entity_decode($title['title']);			// エスケープ文字を戻す
+	return $title;
 }

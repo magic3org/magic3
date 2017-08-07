@@ -1380,6 +1380,8 @@ function wp_page_menu( $args = array() ) {
 
 	$list_args['echo'] = false;
 	$list_args['title_li'] = '';
+	
+	// ##### Magic3のAPIを使ってメニューのHTMLを生成 #####
 	$menu .= wp_list_pages( $list_args );
 
 	$container = sanitize_text_field( $args['container'] );

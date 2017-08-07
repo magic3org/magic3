@@ -836,14 +836,14 @@ function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
  *                             or `$term` was not found.
  */
 function get_term_by( $field, $value, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
-	global $wpdb;
+//	global $wpdb;
 
 	// 'term_taxonomy_id' lookups don't require taxonomy checks.
 	if ( 'term_taxonomy_id' !== $field && ! taxonomy_exists( $taxonomy ) ) {
 		return false;
 	}
 
-	$tax_clause = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
+//	$tax_clause = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
 
 	if ( 'slug' == $field ) {
 		$_field = 't.slug';
@@ -868,7 +868,7 @@ function get_term_by( $field, $value, $taxonomy = '', $output = OBJECT, $filter 
 		return $term;
 	}
 
-	$term = $wpdb->get_row( $wpdb->prepare( "SELECT t.*, tt.* FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE $_field = %s", $value ) . " $tax_clause LIMIT 1" );
+//	$term = $wpdb->get_row( $wpdb->prepare( "SELECT t.*, tt.* FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE $_field = %s", $value ) . " $tax_clause LIMIT 1" );
 	if ( ! $term )
 		return false;
 
@@ -877,7 +877,7 @@ function get_term_by( $field, $value, $taxonomy = '', $output = OBJECT, $filter 
 		$taxonomy = $term->taxonomy;
 	}
 
-	wp_cache_add( $term->term_id, $term, 'terms' );
+//	wp_cache_add( $term->term_id, $term, 'terms' );
 
 	return get_term( $term, $taxonomy, $output, $filter );
 }
