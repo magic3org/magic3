@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -69,6 +69,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$act = $request->trimValueOf('act');
+		$eyecatchSrc = $request->trimValueOf('eyecatch_src');		// 更新画像ソース
 		
 		$reloadData = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 項目更新の場合
@@ -78,7 +79,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			// 画像ファイル名、フォーマット取得
 			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
 	
-			// 画像の存在をチェック
+			// サムネール画像の存在をチェック
 			for ($i = 0; $i < count($filenames); $i++){
 				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenames[$i];
 				if (!file_exists($path)){
@@ -89,6 +90,9 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 					break;
 				}
 			}
+			// サムネール作成用の元の画像の存在をチェック
+			$eyecatchSrcPath = $this->gEnv->getAbsolutePath($this->gEnv->getDocumentRootUrl() . $eyecatchSrc);
+			if (!file_exists($eyecatchSrcPath)) $this->setAppErrorMsg('サムネール作成元の画像が見つかりません');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// アイキャッチ画像を非公開ディレクトリに保存
@@ -99,9 +103,12 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
 				if ($ret) $ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
 
+				// サムネール作成元画像のパスをresourceディレクトリからの相対パスに変換
+				$eyecatchSrcPath = str_replace($this->gEnv->getResourcePath(), '', $eyecatchSrcPath);
+				
 				// ブログ記事のサムネールファイル名を更新
 				$thumbFilename = implode(';', $filenames);
-				if ($ret) $ret = self::$_mainDb->updateThumbFilename($entryId, $langId, $thumbFilename);
+				if ($ret) $ret = self::$_mainDb->updateThumbFilename($entryId, $langId, $thumbFilename, $eyecatchSrcPath);
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -137,7 +144,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				rmDirectory($tmpDir);
 					
 				// ブログ記事のサムネールファイル名を更新
-				$ret = self::$_mainDb->updateThumbFilename($entryId, $langId, '');
+				$ret = self::$_mainDb->updateThumbFilename($entryId, $langId, '', ''/*サムネール作成元画像のパス*/);
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'アイキャッチ画像を削除しました');

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -151,6 +151,7 @@ function createEyecatch(url)
 							var innerText = '{MOVE_ICON_TAG}<img src="' + jsondata.url + '" />';
 							$('#eyecatch_new_area').html(innerText);
 							$('#delete_eyecatch_button').hide();			// 画像削除ボタンを非表示にする
+							document.main.eyecatch_src.value = url;			// 更新画像ソース
 							
 							// ヘルプ設定
 							m3SetHelp($('#eyecatch_new_area'));
@@ -197,6 +198,7 @@ $(function()
 <input type="hidden" name="task" value="image" />
 <input type="hidden" name="act" />
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="eyecatch_src" />
 <input type="hidden" name="originaleyecatchurl" value="{ORIGINAL_EYECATCH_URL}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGE_IMAGE}>ブログ記事画像</span></h3>

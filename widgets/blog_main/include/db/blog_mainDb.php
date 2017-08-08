@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -540,9 +540,10 @@ class blog_mainDb extends BaseDb
 	 * @param string $id			エントリーID
 	 * @param string $langId		言語ID
 	 * @param string $thumbFilename	サムネールファイル名
+	 * @param string $thumbSrc		サムネール作成元画像ファイル(resourceディレクトリからの相対パス)
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateThumbFilename($id, $langId, $thumbFilename)
+	function updateThumbFilename($id, $langId, $thumbFilename, $thumbSrc)
 	{
 		$serial = $this->getEntrySerialNoByContentId($id, $langId);
 		if (empty($serial)) return false;
@@ -569,10 +570,11 @@ class blog_mainDb extends BaseDb
 		// 日付を更新
 		$queryStr  = 'UPDATE blog_entry ';
 		$queryStr .=   'SET be_thumb_filename = ?, ';	// サムネールファイル名
+		$queryStr .=     'be_thumb_src = ?, ';			// サムネール作成元画像ファイル
 		$queryStr .=     'be_update_user_id = ?, ';
 		$queryStr .=     'be_update_dt = ? ';
 		$queryStr .=   'WHERE be_serial = ?';
-		$this->execStatement($queryStr, array($thumbFilename, $userId, $now, intval($serial)));
+		$this->execStatement($queryStr, array($thumbFilename, $thumbSrc, $userId, $now, intval($serial)));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();
