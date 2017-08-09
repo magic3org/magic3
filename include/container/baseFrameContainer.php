@@ -791,7 +791,10 @@ class BaseFrameContainer extends Core
 			load_default_textdomain();			// 言語リソースを読み込む
 			m3WpInit();							// 言語リソース読み込み後にMagic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
 			$GLOBALS['wp_locale'] = new WP_Locale();		// 言語リソース読み込み後に生成
-			if ( file_exists(TEMPLATEPATH . '/functions.php')) include(TEMPLATEPATH . '/functions.php');// テンプレート初期処理
+			
+			// functions.phpを読み込む。ファイル内で定義されている変数はグローバル変数に変換する。
+			$this->_loadFileAsGlobal(TEMPLATEPATH . '/functions.php');
+
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('init');					// テンプレート側からの初期処理(ウィジェットのCSSの初期化等)
 			do_action('wp_loaded');
@@ -1378,6 +1381,26 @@ class BaseFrameContainer extends Core
 		$parentDir = dirname($currentDir);
 		$dirName = basename($currentDir);
 		if (is_dir($parentDir . '/_' . $dirName)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * PHPファイルを読み込み、定義値をグローバル値に変換する
+	 *
+	 * @param string $path		ファイルパス
+	 * @return bool				true=ファイル読み込み完了、false=ファイル読み込み失敗
+	 */
+	function _loadFileAsGlobal($path)
+	{
+		if (file_exists($path)){
+			include($path);
+			
+			// グローバル変数に変換
+			$vars = get_defined_vars();
+			foreach($vars as $varName => $varValue) $GLOBALS[$varName] = $varValue;
+			
 			return true;
 		} else {
 			return false;
