@@ -31,7 +31,7 @@ class ContentApi extends BaseApi
 	private $startDt;				// 検索条件(期間開始日時)
 	private $endDt;					// 検索条件(期間終了日時)
 	private $category;				// 検索条件(カテゴリー)
-	private $contentArray;			// 取得コンテンツ
+	private $_contentArray;			// 取得コンテンツ(一時利用)
 	private $serialArray;			// 取得したコンテンツのシリアル番号
 	private $categoryArray;			// 取得コンテンツに関連したカテゴリー
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
@@ -161,7 +161,7 @@ class ContentApi extends BaseApi
 	 */
 	function getContentList()
 	{
-		$this->contentArray = array();			// 取得コンテンツ初期化
+		$this->_contentArray = array();			// 取得コンテンツ初期化
 		
 		// 取得条件作成。コンテンツIDが設定されている場合は指定したコンテンツのみ取得。
 		if (empty($this->contentId)){
@@ -175,7 +175,7 @@ class ContentApi extends BaseApi
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->order, array($this, '_itemListLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
 		
-		return $this->contentArray;
+		return $this->_contentArray;
 	}
 	/**
 	 * [WordPressテンプレート用API]コンテンツ総数を取得
@@ -255,7 +255,30 @@ class ContentApi extends BaseApi
 	 */
 	function getRelativePost($id)
 	{
-		return $this->relativePosts[$id];
+		$wpPostObj = $this->relativePosts[$id];
+		
+		// 見つからない場合は新規取得
+		if (!isset($wpPostObj)) $wpPostObj = $this->_getContent($id);
+
+		return $wpPostObj;
+	}
+	/**
+	 * コンテンツID指定でコンテンツを取得
+	 *
+	 * @param int $id				コンテンツID
+	 * @return object     			WP_Postオブジェクト
+	 */
+	function _getContent($id)
+	{
+		$this->_contentArray = array();			// 取得コンテンツ初期化
+		
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj();
+		
+		// データ取得
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
+		
+		return $this->_contentArray[0];
 	}
 	/**
 	 * 取得コンテンツに関連付けされているカテゴリーを取得
@@ -361,7 +384,7 @@ class ContentApi extends BaseApi
 		return $wpTermObj;
 	}
 	/**
-	 * 取得したデータをテンプレートに設定する
+	 * DBから取得したデータを退避する
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
@@ -371,7 +394,7 @@ class ContentApi extends BaseApi
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
 		$wpPostObj = $this->_createWP_Post($fetchedRow);
-		$this->contentArray[] = $wpPostObj;
+		$this->_contentArray[] = $wpPostObj;
 		
 		// 前後のコンテンツ取得用のベース値を保存。単一コンテンツ表示の場合に使用。
 		switch ($this->contentType){
@@ -382,6 +405,20 @@ class ContentApi extends BaseApi
 			$this->prevNextBaseValue = $wpPostObj->post_date;		// 前後のコンテンツ取得用のベース値(登録日時)
 			break;
 		}
+		return true;
+	}
+	/**
+	 * DBから取得したデータを退避する(単体取得用)
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function _itemLoop($index, $fetchedRow, $param)
+	{
+		$wpPostObj = $this->_createWP_Post($fetchedRow);
+		$this->_contentArray[] = $wpPostObj;
 		return true;
 	}
 	/**
