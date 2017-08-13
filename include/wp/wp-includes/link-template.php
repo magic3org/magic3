@@ -451,16 +451,19 @@ function get_attachment_link( $post = null, $leavename = false ) {
  * @return string The permalink for the specified year archive.
  */
 function get_year_link( $year ) {
-	global $wp_rewrite;
-	if ( !$year )
-		$year = gmdate('Y', current_time('timestamp'));
-	$yearlink = $wp_rewrite->get_year_permastruct();
+	global $gContentApi;
+//	global $wp_rewrite;
+
+	if ( !$year ) $year = gmdate('Y', current_time('timestamp'));
+	
+/*	$yearlink = $wp_rewrite->get_year_permastruct();
 	if ( !empty($yearlink) ) {
 		$yearlink = str_replace('%year%', $year, $yearlink);
 		$yearlink = home_url( user_trailingslashit( $yearlink, 'year' ) );
 	} else {
 		$yearlink = home_url( '?m=' . $year );
-	}
+	}*/
+	$yearlink = $gContentApi->getYearUrl($year);
 
 	/**
 	 * Filters the year archive permalink.

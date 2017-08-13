@@ -712,8 +712,6 @@ class ContentApi extends BaseApi
 	 */
 	function getCategoryUrl($id)
 	{
-		global $wp_query;
-				
 		$baseUrl = '';
 		$urlParams = '';
 		
@@ -741,6 +739,46 @@ class ContentApi extends BaseApi
 		}
 		// カテゴリーを付加
 		$baseUrl .= M3_REQUEST_PARAM_CATEGORY_ID . '=' . $id;
+		
+		$url = $this->getUrl($baseUrl);
+		return $url;
+	}
+	/**
+	 * 年画面のURLを取得
+	 *
+	 * @param int $year						年
+	 * @return string						URL
+	 */
+	function getYearUrl($year)
+	{
+		$baseUrl = '';
+		$urlParams = '';
+		
+		// デフォルトページの場合はページIDは付加しない
+		$subId = $this->gEnv->getCurrentPageSubId();
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		
+		// ベースURLを取得
+		switch ($this->accessPoint){
+		case '':			// PC用
+		default:
+			$baseUrl = $this->gEnv->getDefaultUrl();
+			break;
+		case 'm':			// 携帯用
+			$baseUrl = $this->gEnv->getDefaultMobileUrl();
+			break;
+		case 's':			// スマートフォン用
+			$baseUrl = $this->gEnv->getDefaultSmartphoneUrl();
+			break;
+		}
+		
+		$baseUrl .= '?';
+		if (!empty($urlParams)){
+			$baseUrl .= '?' . $urlParams . '&';
+		}
+
+		// 年を付加
+		$baseUrl .= M3_REQUEST_PARAM_YEAR . '=' . $year;
 		
 		$url = $this->getUrl($baseUrl);
 		return $url;
