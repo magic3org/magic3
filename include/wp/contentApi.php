@@ -744,12 +744,14 @@ class ContentApi extends BaseApi
 		return $url;
 	}
 	/**
-	 * 年画面のURLを取得
+	 * 年月日画面のURLを取得
 	 *
 	 * @param int $year						年
+	 * @param int $month					月
+	 * @param int $day						日
 	 * @return string						URL
 	 */
-	function getYearUrl($year)
+	function getYearMonthDayUrl($year, $month = null, $day = null)
 	{
 		$baseUrl = '';
 		$urlParams = '';
@@ -777,8 +779,10 @@ class ContentApi extends BaseApi
 			$baseUrl .= '?' . $urlParams . '&';
 		}
 
-		// 年を付加
+		// 年月日を付加
 		$baseUrl .= M3_REQUEST_PARAM_YEAR . '=' . $year;
+		if (isset($month))	$baseUrl .= '&'. M3_REQUEST_PARAM_MONTH . '=' . $month;
+		if (isset($day))	$baseUrl .= '&'. M3_REQUEST_PARAM_DAY . '=' . $day;
 		
 		$url = $this->getUrl($baseUrl);
 		return $url;

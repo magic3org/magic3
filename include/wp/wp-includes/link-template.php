@@ -463,7 +463,7 @@ function get_year_link( $year ) {
 	} else {
 		$yearlink = home_url( '?m=' . $year );
 	}*/
-	$yearlink = $gContentApi->getYearUrl($year);
+	$yearlink = $gContentApi->getYearMonthDayUrl($year);
 
 	/**
 	 * Filters the year archive permalink.
@@ -488,11 +488,14 @@ function get_year_link( $year ) {
  * @return string The permalink for the specified month and year archive.
  */
 function get_month_link($year, $month) {
-	global $wp_rewrite;
-	if ( !$year )
-		$year = gmdate('Y', current_time('timestamp'));
-	if ( !$month )
-		$month = gmdate('m', current_time('timestamp'));
+	global $gContentApi;
+//	global $wp_rewrite;
+
+	if ( !$year ) $year = gmdate('Y', current_time('timestamp'));
+	if ( !$month ) $month = gmdate('m', current_time('timestamp'));
+	
+	$monthlink = $gContentApi->getYearMonthDayUrl($year, $month);
+	/*
 	$monthlink = $wp_rewrite->get_month_permastruct();
 	if ( !empty($monthlink) ) {
 		$monthlink = str_replace('%year%', $year, $monthlink);
@@ -500,7 +503,7 @@ function get_month_link($year, $month) {
 		$monthlink = home_url( user_trailingslashit( $monthlink, 'month' ) );
 	} else {
 		$monthlink = home_url( '?m=' . $year . zeroise( $month, 2 ) );
-	}
+	}*/
 
 	/**
 	 * Filters the month archive permalink.
@@ -527,15 +530,15 @@ function get_month_link($year, $month) {
  * @return string The permalink for the specified day, month, and year archive.
  */
 function get_day_link($year, $month, $day) {
-	global $wp_rewrite;
-	if ( !$year )
-		$year = gmdate('Y', current_time('timestamp'));
-	if ( !$month )
-		$month = gmdate('m', current_time('timestamp'));
-	if ( !$day )
-		$day = gmdate('j', current_time('timestamp'));
+	global $gContentApi;
+//	global $wp_rewrite;
 
-	$daylink = $wp_rewrite->get_day_permastruct();
+	if ( !$year ) $year = gmdate('Y', current_time('timestamp'));
+	if ( !$month ) $month = gmdate('m', current_time('timestamp'));
+	if ( !$day ) $day = gmdate('j', current_time('timestamp'));
+
+	$daylink = $gContentApi->getYearMonthDayUrl($year, $month, $day);
+/*	$daylink = $wp_rewrite->get_day_permastruct();
 	if ( !empty($daylink) ) {
 		$daylink = str_replace('%year%', $year, $daylink);
 		$daylink = str_replace('%monthnum%', zeroise(intval($month), 2), $daylink);
@@ -543,7 +546,7 @@ function get_day_link($year, $month, $day) {
 		$daylink = home_url( user_trailingslashit( $daylink, 'day' ) );
 	} else {
 		$daylink = home_url( '?m=' . $year . zeroise( $month, 2 ) . zeroise( $day, 2 ) );
-	}
+	}*/
 
 	/**
 	 * Filters the day archive permalink.
