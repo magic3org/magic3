@@ -1674,7 +1674,7 @@ class WP_Query {
 		global $gRequestManager;
 		global $gPageManager;
 		global $paged;
-					
+
 		// ##### URLパラメータを解析 #####
 		$this->query_vars = array();
 		// ページ番号
@@ -2065,8 +2065,8 @@ class WP_Query {
 	 * @param string $query URL query string.
 	 * @return array List of posts.
 	 */
-	public function query( $query ) {
-		// このメソッドはリクエストに対し1回だけ実行
+	public function query($query = '') {
+		// ##### テンプレート起動前にwp()から$queryなしでグローバルで一度実行される。その後、テンプレート内で$query付きで任意に生成、実行される。#####
 //		$this->init();
 //		$this->query = $this->query_vars = wp_parse_args( $query );
 		return $this->get_posts();
@@ -2177,10 +2177,10 @@ class WP_Query {
 	 * @param string|array $query URL query string or array of vars.
 	 */
 	public function __construct( $query = '' ) {
-		// $queryが空のパターンはquery()を呼び出して実行
-//		if ( ! empty( $query ) ) {
-//			$this->query( $query );
-//		}
+		// ##### テンプレート起動前にwp()から$queryなしでグローバルで一度実行される。その後、テンプレート内で$query付きで任意に生成、実行される。#####
+		if ( ! empty( $query ) ) {
+			$this->query( $query );
+		}
 	}
 
 	/**
