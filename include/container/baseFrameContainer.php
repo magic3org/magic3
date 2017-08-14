@@ -808,6 +808,7 @@ class BaseFrameContainer extends Core
 //			$firstValue = $params[$firstKey];
 			
 			// コンテンツタイプに合わせて起動PHPファイルを決める。デフォルトはindex.phpで一覧形式で表示。
+			$pageTypeDefined = false;		// ページタイプ確定したかどうか
 			$contentType = $GLOBALS['gContentApi']->getContentType();
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
@@ -821,6 +822,8 @@ class BaseFrameContainer extends Core
 					// コンテンツID設定
 					$firstValue = $request->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
+					
+					$pageTypeDefined = true;		// ページタイプ確定
 				}
 				break;
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
@@ -840,9 +843,10 @@ class BaseFrameContainer extends Core
 					// コンテンツID設定
 					$firstValue = $request->trimValueOf($firstKey);
 					$GLOBALS['gContentApi']->setContentId($firstValue);
+					
+					$pageTypeDefined = true;		// ページタイプ確定
 				} else {
 					// カテゴリーが設定されている場合はカテゴリー画面を表示
-					$pageTypeDefined = false;		// ページタイプ確定したかどうか
 					$value = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);
 					if (!empty($value)){
 						// ページタイプを設定
@@ -885,6 +889,8 @@ class BaseFrameContainer extends Core
 					
 							// フルパスで返るので相対パスに修正
 							$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+							
+							$pageTypeDefined = true;		// ページタイプ確定
 						}
 					}
 				}
@@ -904,9 +910,17 @@ class BaseFrameContainer extends Core
 					
 				// フルパスで返るので相対パスに修正
 				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
+				
+				$pageTypeDefined = true;		// ページタイプ確定
 				break;
 			}
 			
+			// コンテンツタイプが設定されているページでページタイプが設定されていないページの場合はデフォルトテンプレート(index.php)の代わりにホーム用テンプレートを取得
+			if (!empty($contentType) && !$pageTypeDefined){
+				// フルパスで返るので相対パスに修正
+				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
+			}
+
 			// 現在デフォルトページを表示している場合で「sub」パラメータがなくWordPressにフロントページ用のスクリプトがある場合はWordPressフロント画面を表示する
 			if ($defaultIndexFile == M3_FILENAME_INDEX){
 				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
@@ -915,6 +929,7 @@ class BaseFrameContainer extends Core
 					if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
 				}
 			}
+			
 			// WordPressオブジェクト作成
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
