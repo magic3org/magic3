@@ -21,6 +21,7 @@ class blog_search_boxWidgetContainer extends BaseWidgetContainer
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const THIS_WIDGET_ID = 'blog_search_box';		// ウィジェットID
 	const DEFAULT_TITLE = 'ブログ検索';		// デフォルトのウィジェットタイトル名
+	const WORDPRESS_WIDGET_CLASS = 'widget_search';			// WordPress用ウィジェットクラス名
 	
 	/**
 	 * コンストラクタ
@@ -63,6 +64,9 @@ class blog_search_boxWidgetContainer extends BaseWidgetContainer
 	{
 		if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
 			get_search_form();
+			
+			// ##### ウィジェットクラス名追加 #####
+			$this->gEnv->setWpWidgetClass(self::WORDPRESS_WIDGET_CLASS);
 			return;
 		}
 		

@@ -22,7 +22,8 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $entryDays = array();		// 投稿のあった日にち
 	private $css;	// カレンダー用CSS
-	const DEFAULT_TITLE = 'ブログカレンダー';			// デフォルトのウィジェットタイトル
+	const DEFAULT_TITLE = 'ブログカレンダー';					// デフォルトのウィジェットタイトル
+	const WORDPRESS_WIDGET_CLASS = 'widget_calendar';			// WordPress用ウィジェットクラス名
 		
 	/**
 	 * コンストラクタ
@@ -196,7 +197,7 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 			$calendarData = '<div class="calendar_wrap">' . $calendarData . '</div>';
 			
 			// ##### ウィジェットクラス名追加 #####
-			$this->gEnv->setWpWidgetClass('widget_calendar');
+			$this->gEnv->setWpWidgetClass(self::WORDPRESS_WIDGET_CLASS);
 		} else {
 			$calendarData .= '<div align="center">' . M3_NL;
 			if (empty($prevUrl)){		// 前の月のリンクなしのとき
