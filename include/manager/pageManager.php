@@ -4516,13 +4516,18 @@ class PageManager extends Core
 						$cacheData = $this->gCache->getWidgetCache($request, $this->pageDefRows[$i], $metaTitle, $metaDesc, $metaKeyword);
 
 						if (empty($cacheData)){		// キャッシュデータがないとき
-
+							// WordPressウィジェット用のパラメータ設定
+							$gEnvManager->setWpWidgetClass('');				// ウィジェットクラス名初期化
+							
 							ob_clean();
 					//		$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
 							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, 0/*タイトル出力なし*/);
 							if (!$ret) break;
 							$widgetContent = ob_get_contents();
 
+							// WordPressウィジェット用のパラメータ設定
+							$widgetClassName = $gEnvManager->getWpWidgetClass();				// ウィジェットクラス名
+							
 							$trimContent = trim($widgetContent);
 							if (!empty($trimContent)){		// 出力が空でない場合
 							
@@ -4546,6 +4551,10 @@ class PageManager extends Core
 									$title = '';			// タイトルは非表示
 								}
 							
+								// WordPress用パラメータ作成
+								$params = array();				// ウィジェットごとの属性
+								if (!empty($widgetClassName))  $params['moduleclass'] = $widgetClassName;	// ウィジェットクラス名
+										
 								// ウィジェット生成
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . ($i + 1);				// ウィジェット識別用ユニークタグ
 								

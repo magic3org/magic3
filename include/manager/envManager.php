@@ -88,6 +88,7 @@ class EnvManager extends Core
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
 	private $wpHeadScriptsData;		// WordPressヘッダ部出力データ(Javascript)
 	private $wpComponentPath;		// WordPressコンポーネント生成ファイルパス
+	private $wpWidgetClass;			// WordPressウィジェットクラス名
 	private $remoteContent = array();			// リモート表示コンテンツ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
@@ -3177,6 +3178,25 @@ class EnvManager extends Core
 	public function getWpComponentPath()
 	{
 		return $this->wpComponentPath;
+	}
+	/**
+	 * WordPressウィジェットクラス名を設定
+	 *
+	 * @param string $class			クラス名
+	 * @return 						なし
+	 */
+	public function setWpWidgetClass($class)
+	{
+		$this->wpWidgetClass = $class;
+	}
+	/**
+	 * WordPressウィジェットクラス名を取得
+	 *
+	 * @return string			ファイルパス
+	 */
+	public function getWpWidgetClass()
+	{
+		return $this->wpWidgetClass;
 	}
 	/**
 	 * リモート表示コンテンツを設定

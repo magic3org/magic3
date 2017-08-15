@@ -194,6 +194,9 @@ class blog_calendar_boxWidgetContainer extends BaseWidgetContainer
 			$calendarData .= '</tbody>' . M3_NL;
 			$calendarData .= '</table>' . M3_NL;
 			$calendarData = '<div class="calendar_wrap">' . $calendarData . '</div>';
+			
+			// ##### ウィジェットクラス名追加 #####
+			$this->gEnv->setWpWidgetClass('widget_calendar');
 		} else {
 			$calendarData .= '<div align="center">' . M3_NL;
 			if (empty($prevUrl)){		// 前の月のリンクなしのとき

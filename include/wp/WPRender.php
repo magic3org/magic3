@@ -63,6 +63,7 @@ class WPRender
 		
 		// コンテンツ全体をウィジェット用タグで囲む
 		$widgetClass = 'm3widget_' . $pageDefParam['pd_widget_id'];		// ウィジェットIDからクラス名作成
+		if (!empty($paramsOther['moduleclass'])) $widgetClass .= ' ' . $paramsOther['moduleclass'];
 		$blockParam['before_widget'] = sprintf($blockParam['before_widget'], $widgetTag, $widgetClass);		// ウィジェット識別用IDとウィジェットクラス名
 		$content = $blockParam['before_widget'] . $content . $blockParam['after_widget'];
 		 
