@@ -921,13 +921,11 @@ class BaseFrameContainer extends Core
 				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
 			}
 
-			// 現在デフォルトページを表示している場合で「sub」パラメータがなくWordPressにフロントページ用のスクリプトがある場合はWordPressフロント画面を表示する
-			if ($defaultIndexFile == M3_FILENAME_INDEX){
-				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
-				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){
-					$frontPageTemplate = get_front_page_template();
-					if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
-				}
+			// サイトのトップページを表示する場合は最優先でフロント用テンプレートを表示する
+			$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
+			if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){		// デフォルトページを表示し「sub」なしに限定
+				$frontPageTemplate = get_front_page_template();
+				if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
 			}
 			
 			// WordPressオブジェクト作成
