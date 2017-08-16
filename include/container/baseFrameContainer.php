@@ -1017,6 +1017,11 @@ class BaseFrameContainer extends Core
 		// サブクラスの後処理の呼び出し
 		if (method_exists($this, '_postBuffer')) $this->_postBuffer($request);
 
+		// ##### WordPressテンプレートの場合は終了イベントを実行。WordPressのエラーメッセージは画面に出力させる。 #####
+		if ($convType == 100){		// WordPressテンプレートのとき
+			do_action('shutdown');
+		}
+		
 		// 現在の出力内容を取得し、一旦内容をクリア
 		$srcContents = ob_get_contents();
 		ob_clean();
@@ -1050,7 +1055,7 @@ class BaseFrameContainer extends Core
 		// バッファを破棄
 		//ob_end_flush();
 		ob_end_clean();
-
+		
 		// 送信データを返す
 		return $destContents;
 	}

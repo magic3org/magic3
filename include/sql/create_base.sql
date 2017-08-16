@@ -546,7 +546,7 @@ CREATE TABLE _templates (
     tm_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレート名
     tm_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     tm_url               TEXT                                         NOT NULL,      -- 取得先URL
-    tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ
+    tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ(廃止予定)
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
