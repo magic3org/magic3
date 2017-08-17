@@ -30,14 +30,21 @@
 function get_option( $option, $default = false ) {
 	global $gEnvManager;
 	global $m3WpOptions;		// 初期値取得用
+	global $m3WpCustomParams;	// カスタマイズ値取得用
 
 	$option = trim( $option );
 	if ( empty( $option ) )
 		return false;
 
-	// デフォルト値を取得
-	$value = $m3WpOptions[$option];
+	// カスタマイズ値を取得
+	$value = $m3WpCustomParams[$option];
+	
+	// カスタマイズ値がない時はデフォルト値を取得
+	if (!isset($value)) $value = $m3WpOptions[$option];
 
+	// 値が設定されていない場合は関数引数を設定
+	if (!isset($value)) $value = $default;
+	
 	/**
 	 * Filters the value of an existing option before it is retrieved.
 	 *
@@ -258,7 +265,8 @@ function wp_load_core_site_options( $site_id = null ) {
  * @return bool False if value was not updated and true if value was updated.
  */
 function update_option( $option, $value, $autoload = null ) {
-	global $wpdb;
+	global $gEnvManager;
+	global $m3WpCustomParams;	// カスタマイズ値取得用
 
 	$option = trim($option);
 	if ( empty($option) )
@@ -270,8 +278,15 @@ function update_option( $option, $value, $autoload = null ) {
 		$value = clone $value;
 
 	$value = sanitize_option( $option, $value );
-	$old_value = get_option( $option );
+//	$old_value = get_option( $option );
+	$old_value = $m3WpCustomParams[$option];
 
+	// ##### オプション値が存在しない場合、値が変更されている場合はDBを更新 #####
+	if ($value === $old_value) return false;
+
+	$m3WpCustomParams[$option] = $value;
+	$ret = $gEnvManager->updateCurrentTemplateCustomParam(serialize($m3WpCustomParams));		// 連想配列をシリアライズ
+	
 	/**
 	 * Filters a specific option before its value is (maybe) serialized and updated.
 	 *
@@ -284,7 +299,7 @@ function update_option( $option, $value, $autoload = null ) {
 	 * @param mixed  $old_value The old option value.
 	 * @param string $option    Option name.
 	 */
-	$value = apply_filters( "pre_update_option_{$option}", $value, $old_value, $option );
+//	$value = apply_filters( "pre_update_option_{$option}", $value, $old_value, $option );
 
 	/**
 	 * Filters an option before its value is (maybe) serialized and updated.
@@ -295,14 +310,14 @@ function update_option( $option, $value, $autoload = null ) {
 	 * @param string $option    Name of the option.
 	 * @param mixed  $old_value The old option value.
 	 */
-	$value = apply_filters( 'pre_update_option', $value, $option, $old_value );
+//	$value = apply_filters( 'pre_update_option', $value, $option, $old_value );
 
 	// If the new and old values are the same, no need to update.
-	if ( $value === $old_value )
-		return false;
+//	if ( $value === $old_value )
+//		return false;
 
 	/** This filter is documented in wp-includes/option.php */
-	if ( apply_filters( 'default_option_' . $option, false, $option, false ) === $old_value ) {
+/*	if ( apply_filters( 'default_option_' . $option, false, $option, false ) === $old_value ) {
 		// Default setting for new options is 'yes'.
 		if ( null === $autoload ) {
 			$autoload = 'yes';
@@ -312,7 +327,7 @@ function update_option( $option, $value, $autoload = null ) {
 	}
 
 	$serialized_value = maybe_serialize( $value );
-
+*/
 	/**
 	 * Fires immediately before an option value is updated.
 	 *
@@ -322,9 +337,9 @@ function update_option( $option, $value, $autoload = null ) {
 	 * @param mixed  $old_value The old option value.
 	 * @param mixed  $value     The new option value.
 	 */
-	do_action( 'update_option', $option, $old_value, $value );
+//	do_action( 'update_option', $option, $old_value, $value );
 
-	$update_args = array(
+/*	$update_args = array(
 		'option_value' => $serialized_value,
 	);
 
@@ -332,9 +347,9 @@ function update_option( $option, $value, $autoload = null ) {
 		$update_args['autoload'] = ( 'no' === $autoload || false === $autoload ) ? 'no' : 'yes';
 	}
 
-/*	$result = $wpdb->update( $wpdb->options, $update_args, array( 'option_name' => $option ) );
+	$result = $wpdb->update( $wpdb->options, $update_args, array( 'option_name' => $option ) );
 	if ( ! $result )
-		return false;*/
+		return false;
 
 	$notoptions = wp_cache_get( 'notoptions', 'options' );
 	if ( is_array( $notoptions ) && isset( $notoptions[$option] ) ) {
@@ -351,7 +366,7 @@ function update_option( $option, $value, $autoload = null ) {
 			wp_cache_set( $option, $serialized_value, 'options' );
 		}
 	}
-
+*/
 	/**
 	 * Fires after the value of a specific option has been successfully updated.
 	 *
@@ -364,7 +379,7 @@ function update_option( $option, $value, $autoload = null ) {
 	 * @param mixed  $value     The new option value.
 	 * @param string $option    Option name.
 	 */
-	do_action( "update_option_{$option}", $old_value, $value, $option );
+//	do_action( "update_option_{$option}", $old_value, $value, $option );
 
 	/**
 	 * Fires after the value of an option has been successfully updated.
@@ -375,8 +390,8 @@ function update_option( $option, $value, $autoload = null ) {
 	 * @param mixed  $old_value The old option value.
 	 * @param mixed  $value     The new option value.
 	 */
-	do_action( 'updated_option', $option, $old_value, $value );
-	return true;
+//	do_action( 'updated_option', $option, $old_value, $value );
+	return $ret;
 }
 
 /**
