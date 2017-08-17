@@ -856,7 +856,7 @@ function validate_current_theme() {
 function get_theme_mods() {
 	// WordPressテーマ名取得
 	$theme_slug = get_option( 'stylesheet' );
-	
+
 	$mods = get_option( "theme_mods_$theme_slug" );
 /*	if ( false === $mods ) {
 		$theme_name = get_option( 'current_theme' );
@@ -935,7 +935,7 @@ function set_theme_mod( $name, $value ) {
 	 * @param string $value     The new value of the theme mod.
 	 * @param string $old_value The current value of the theme mod.
 	 */
-//	$mods[ $name ] = apply_filters( "pre_set_theme_mod_{$name}", $value, $old_value );
+	$mods[ $name ] = apply_filters( "pre_set_theme_mod_{$name}", $value, $old_value );
 
 	$theme = get_option( 'stylesheet' );
 	update_option( "theme_mods_$theme", $mods );

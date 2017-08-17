@@ -38,7 +38,7 @@ function get_option( $option, $default = false ) {
 
 	// カスタマイズ値を取得
 	$value = $m3WpCustomParams[$option];
-	
+
 	// カスタマイズ値がない時はデフォルト値を取得
 	if (!isset($value)) $value = $m3WpOptions[$option];
 
