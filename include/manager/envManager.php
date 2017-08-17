@@ -27,6 +27,7 @@ class EnvManager extends Core
 	private $currentTemplateVersion;		// テンプレートバージョン
 	private $currentTemplateCleanType;	// 現在のテンプレートのクリーンタイプ
 	private $currentTemplateUseBootstrap;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
+	private $currentTemplateInfoRow;		// 現在のテンプレートの情報
 	private $currentRenderType;		// 現在のビュー作成タイプ
 	private $currentWidgetObj;		// 現在実行中のウィジェットオブジェクト
 	private $currentWidgetId;	// 現在作成中のウィジェットId
@@ -1346,6 +1347,7 @@ class EnvManager extends Core
 				$this->currentTemplateVersion = $row['tm_version'];		// テンプレートバージョン
 				$this->currentTemplateCleanType = $row['tm_clean_type'];	// 現在のテンプレートのクリーンタイプ
 				$this->currentTemplateUseBootstrap = $row['tm_use_bootstrap'];	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
+				$this->currentTemplateInfoRow = $row;		// 現在のテンプレートの情報
 				
 				// テンプレートが設定された段階でBootstrapの使用があればページマネージャーに反映する。ウィジェット側で使用状況を参照してビューを作成することがあるため。
 				if ($this->currentTemplateUseBootstrap) $gPageManager->useBootstrap();
@@ -1455,7 +1457,28 @@ class EnvManager extends Core
 		//return M3_SYSTEM_ROOT_URL . '/templates/' . $this->currentTemplateId;
 		return $this->currentDomainRootUrl . '/templates/' . $this->currentTemplateId;
 	}
-	
+	/**
+	 * 現在のテンプレートのカスタマイズパラメータを取得
+	 *
+	 * @return string			カスタマイズデータ(シリアライズ)
+	 */
+	public function getCurrentTemplateCustomParam()
+	{
+		return $this->currentTemplateInfoRow['tm_custom_params'];		// 現在のテンプレートの情報
+	}
+	/**
+	 * 現在のテンプレートのカスタマイズパラメータを更新
+	 *
+	 * @param string $params	カスタマイズデータ(シリアライズ)
+	 * @return bool				true=成功、false=失敗
+	 */
+	public function updateCurrentTemplateCustomParam($params)
+	{
+		$updateParam = array();
+		$updateParam['tm_custom_params'] = $params;
+		$ret = $this->db->updateTemplate($this->currentTemplateId, $updateParam);
+		return $ret;
+	}
 	// ##################### カレントのウィジェット関係 #####################
 	/**
 	 * 現在処理中のウィジェットのルートディレクトリへのパスを取得

@@ -169,5 +169,13 @@ function m3WpInit()
 								
 	// ### Magic3追加分 ###
 	$GLOBALS['m3WpOptions']['WPLANG'] = $gEnvManager->getDefaultLanguage();// 管理画面の言語
+	
+	// ##### テンプレート情報からカスタマイズ値を取得 #####
+	$optionParams = $gEnvManager->getCurrentTemplateCustomParam();
+	if (empty($optionParams)){
+		$GLOBALS['m3WpCustomParams'] = array();
+	} else {
+		$GLOBALS['m3WpCustomParams'] = unserialize($optionParams);		// 連想配列に変換
+	}
 }
 ?>

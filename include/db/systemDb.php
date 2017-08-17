@@ -731,6 +731,119 @@ class SystemDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * テンプレート情報の更新
+	 *
+	 * @param string  $id			テンプレートID
+	 * @param array $updateParams	更新パラメータ
+	 * @return bool					true=成功、false=失敗
+	 */
+	function updateTemplate($id, $updateParams)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$updateFields = array();	// 更新するフィールド名
+		$boolFields = array();		// boolタイプのフィールド名
+		
+		$updateFields[] = 'tm_type';			// テンプレート種別(0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,20=jQuery Mobile,100=WordPress)
+		$updateFields[] = 'tm_device_type';		// 端末タイプ(0=PC、1=携帯、2=スマートフォン)
+		$updateFields[] = 'tm_language';		// 対応言語ID(「,」区切りで複数指定可)
+		$updateFields[] = 'tm_generator';		// テンプレート作成アプリケーション(値=artisteer,themler)
+		$updateFields[] = 'tm_version';			// テンプレートバージョン文字列
+		$updateFields[] = 'tm_name';			// テンプレート名
+		$updateFields[] = 'tm_description';		// 説明
+		$updateFields[] = 'tm_url';				// 取得先URL
+	//	$updateFields[] = 'tm_joomla_params';				// joomla!用パラメータ(廃止予定)
+		$updateFields[] = 'tm_mobile'; $boolFields[] = 'tm_mobile';			// 携帯対応かどうか
+		$updateFields[] = 'tm_use_bootstrap'; $boolFields[] = 'tm_use_bootstrap';			// Bootstrapを使用するかどうか
+		$updateFields[] = 'tm_available'; $boolFields[] = 'tm_available';			// メニューから選択可能かどうか
+		$updateFields[] = 'tm_clean_type';			// 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)
+		$updateFields[] = 'tm_info_url';			// テンプレート情報URL
+		$updateFields[] = 'tm_custom_params';		// カスタマイズ用パラメータ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のレコードの履歴インデックス取得
+		$historyIndex = 0;		// 履歴番号
+		$queryStr  = 'SELECT * FROM _templates ';
+		$queryStr .=   'WHERE tm_id = ? ';
+		$queryStr .=     'AND tm_deleted = false';
+//		$queryStr .=  'ORDER BY tm_history_index DESC ';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		if ($ret){
+			$historyIndex = $row['tm_history_index'] + 1;
+		
+			// レコードが削除されていない場合は削除
+			if (!$row['tm_deleted']){
+				// 古いレコードを削除
+				$queryStr  = 'UPDATE _templates ';
+				$queryStr .=   'SET tm_deleted = true, ';	// 削除
+				$queryStr .=     'tm_update_user_id = ?, ';
+				$queryStr .=     'tm_update_dt = ? ';
+				$queryStr .=   'WHERE tm_serial = ?';
+				$ret = $this->execStatement($queryStr, array($userId, $now, $row['tm_serial']));
+				if (!$ret) return false;
+			}
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		
+		// ##### データ更新処理 #####
+		// 更新対象外を除く
+		$unsetParams = array('tm_serial', 'tm_id', 'tm_history_index', 'tm_create_user_id', 'tm_create_dt');
+		for ($i = 0; $i < count($unsetParams); $i++){
+			unset($updateParams[$unsetParams[$i]]);
+		}
+		$keys = array_keys($updateParams);// キーを取得
+		
+		// クエリー作成
+		$queryStr  = 'INSERT INTO _templates (';
+		$queryStr .=   'tm_id, ';
+		$queryStr .=   'tm_history_index, ';
+		$valueStr = '(?, ?, ';
+		$values = array($row['tm_id'], $historyIndex);
+		// 呼び出しパラメータから取得値を連結
+		for ($i = 0; $i < count($keys); $i++){
+			$fieldName = $keys[$i];
+			$queryStr .= $fieldName . ', ';
+			$valueStr .= '?, ';
+			if (in_array($fieldName, $boolFields)){
+				$values[] = intval($updateParams[$fieldName]);
+			} else {
+				$values[] = $updateParams[$fieldName];
+			}
+		}
+		
+		// 更新値を設定
+		for ($i = 0; $i < count($updateFields); $i++){
+			$fieldName = $updateFields[$i];
+			if (!in_array($fieldName, $keys)){		// フィールドがないとき
+				$queryStr .= $fieldName . ', ';
+				$valueStr .= '?, ';
+				if (in_array($fieldName, $boolFields)){
+					$values[] = intval($row[$fieldName]);
+				} else {
+					$values[] = $row[$fieldName];
+				}
+			}
+		}
+
+		// レコードを追加
+		$queryStr .= 'tm_create_user_id, tm_create_dt) ';
+		$valueStr .= '?, ?)';
+		$values = array_merge($values, array($userId, $now));
+		$queryStr .=  'VALUES ';
+		$queryStr .=  $valueStr;
+		$this->execStatement($queryStr, $values);
+
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * 1ページ上のすべての画面情報を取得
 	 *
 	 * @param string $pageId		ページID
