@@ -921,13 +921,15 @@ class BaseFrameContainer extends Core
 				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
 			}
 
-			// サイトのトップページを表示する場合は最優先でフロント用テンプレートを表示する
-			$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
-			if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){		// デフォルトページを表示し「sub」なしに限定
-				$frontPageTemplate = get_front_page_template();
-				if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
+			// サイトのトップページを表示する場合は優先してフロント用テンプレートを表示する(フロント用テンプレートが存在する場合のみ)
+			if ($defaultIndexFile == M3_FILENAME_INDEX){		// テンプレートの起動ファイル
+				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
+				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){		// デフォルトページを表示し「sub」なしに限定
+					$frontPageTemplate = get_front_page_template();
+					if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
+				}
 			}
-			
+
 			// WordPressオブジェクト作成
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
