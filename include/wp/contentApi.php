@@ -830,5 +830,18 @@ class ContentApi extends BaseApi
 	{
 		return $this->isTemplatePart;
 	}
+	/**
+	 * URLがホーム(コンテンツタイプが設定されているページ内でのトップページ)を指しているかどうか取得
+	 *
+	 * @return bool			true=ホーム、false=ホーム以外
+	 */
+	function isHomeUrl()
+	{
+		if (!empty($this->contentType) && empty($this->pageType)){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 ?>

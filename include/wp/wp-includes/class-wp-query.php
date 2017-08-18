@@ -2550,7 +2550,11 @@ class WP_Query {
 	 */
 	public function is_home() {
 //		return (bool) $this->is_home;
-		return $this->is_front_page();
+//		return $this->is_front_page();
+
+		global $gContentApi;
+		$isHome = $gContentApi->isHomeUrl();
+		return $isHome;
 	}
 
 	/**
