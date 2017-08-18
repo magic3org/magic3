@@ -3314,7 +3314,8 @@ function wp_enqueue_media( $args = array() ) {
 	if ( did_action( 'wp_enqueue_media' ) )
 		return;
 
-	global $content_width, $wpdb, $wp_locale;
+//	global $content_width, $wpdb, $wp_locale;
+	global $content_width, $wp_locale;
 
 	$defaults = array(
 		'post' => null,
@@ -3368,7 +3369,7 @@ function wp_enqueue_media( $args = array() ) {
 	 * @param bool|null Whether to show the button, or `null` for default behavior.
 	 */
 	$show_audio_playlist = apply_filters( 'media_library_show_audio_playlist', null );
-	if ( null === $show_audio_playlist ) {
+/*	if ( null === $show_audio_playlist ) {
 		$show_audio_playlist = $wpdb->get_var( "
 			SELECT ID
 			FROM $wpdb->posts
@@ -3376,7 +3377,7 @@ function wp_enqueue_media( $args = array() ) {
 			AND post_mime_type LIKE 'audio%'
 			LIMIT 1
 		" );
-	}
+	}*/
 
 	/**
 	 * Allows showing or hiding the "Create Video Playlist" button in the media library.
@@ -3393,7 +3394,7 @@ function wp_enqueue_media( $args = array() ) {
 	 * @param bool|null Whether to show the button, or `null` for default behavior.
 	 */
 	$show_video_playlist = apply_filters( 'media_library_show_video_playlist', null );
-	if ( null === $show_video_playlist ) {
+/*	if ( null === $show_video_playlist ) {
 		$show_video_playlist = $wpdb->get_var( "
 			SELECT ID
 			FROM $wpdb->posts
@@ -3401,7 +3402,7 @@ function wp_enqueue_media( $args = array() ) {
 			AND post_mime_type LIKE 'video%'
 			LIMIT 1
 		" );
-	}
+	}*/
 
 	/**
 	 * Allows overriding the list of months displayed in the media library.
@@ -3420,14 +3421,14 @@ function wp_enqueue_media( $args = array() ) {
 	 *                   for default behavior.
 	 */
 	$months = apply_filters( 'media_library_months_with_files', null );
-	if ( ! is_array( $months ) ) {
+/*	if ( ! is_array( $months ) ) {
 		$months = $wpdb->get_results( $wpdb->prepare( "
 			SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
 			FROM $wpdb->posts
 			WHERE post_type = %s
 			ORDER BY post_date DESC
 		", 'attachment' ) );
-	}
+	}*/
 	foreach ( $months as $month_year ) {
 		$month_year->text = sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month_year->month ), $month_year->year );
 	}
@@ -3903,7 +3904,7 @@ function wp_maybe_generate_attachment_metadata( $attachment ) {
  * @return int The found post ID, or 0 on failure.
  */
 function attachment_url_to_postid( $url ) {
-	global $wpdb;
+//	global $wpdb;
 
 	$dir = wp_get_upload_dir();
 	$path = $url;
@@ -3920,11 +3921,11 @@ function attachment_url_to_postid( $url ) {
 		$path = substr( $path, strlen( $dir['baseurl'] . '/' ) );
 	}
 
-	$sql = $wpdb->prepare(
+/*	$sql = $wpdb->prepare(
 		"SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value = %s",
 		$path
 	);
-	$post_id = $wpdb->get_var( $sql );
+	$post_id = $wpdb->get_var( $sql );*/
 
 	/**
 	 * Filters an attachment id found by URL.
