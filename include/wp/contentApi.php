@@ -88,11 +88,14 @@ class ContentApi extends BaseApi
 	/**
 	 * 対象のコンテンツタイプのアドオンオブジェクトを取得
 	 *
-	 * @return object 		アドオンオブジェクト
+	 * @param string $contentType	コンテンツタイプ。省略時はページのコンテンツタイプ。
+	 * @return object 				アドオンオブジェクト
 	 */
-	function _getAddonObj()
+	function _getAddonObj($contentType = '')
 	{
-		switch ($this->contentType){
+		if (empty($contentType)) $contentType = $this->contentType;
+		
+		switch ($contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 			$addonObj = $this->gInstance->getObject(self::ADDON_OBJ_ID_CONTENT);
 			break;
@@ -274,6 +277,24 @@ class ContentApi extends BaseApi
 		
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj();
+		
+		// データ取得
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
+		
+		return $this->_contentArray[0];
+	}
+	/**
+	 * ページ用のコンテンツ(汎用コンテンツ)をコンテンツIDで取得
+	 *
+	 * @param int $id				コンテンツID
+	 * @return object     			WP_Postオブジェクト
+	 */
+	function getPageContent($id)
+	{
+		$this->_contentArray = array();			// 取得コンテンツ初期化
+		
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_CONTENT);			// 汎用コンテンツ
 		
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);

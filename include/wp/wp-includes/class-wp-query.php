@@ -1850,6 +1850,69 @@ class WP_Query {
 		return $this->posts;
 	}
 	/**
+	 * [WordPressテンプレート用API]コンテンツデータ取得
+	 *
+	 * @param string $query		データ取得用クエリー
+	 * @return array			取得コンテンツ一覧
+	 */
+	public function get_direct_posts($query){
+		global $gContentApi;
+		global $gRequestManager;
+		global $gPageManager;
+//		global $paged;
+		
+		// ##### URLパラメータを解析 #####
+		$this->query_vars = array();
+//		// ページ番号
+//		$pageNo = absint($gRequestManager->trimValueOf('page'));
+//		$this->query_vars['paged'] = $pageNo;			// 一覧でのページ番号は$paged、１記事を複数分割した場合のページ番号は$page
+//		$paged = $pageNo;				// グローバル変数へ代入
+//		if ($pageNo > 1) $this->is_paged = true;
+		
+		$value = absint($query['page_id']);			// 汎用コンテンツID
+		if ($value > 0){
+			$this->query_vars['page_id'] = $value;
+			
+			// 汎用コンテンツ取得
+			$this->posts = $gContentApi->getPageContent($value);
+		}
+		
+		// Ensure that any posts added/modified via one of the filters above are
+		// of the type WP_Post and are filtered.
+		if ( $this->posts ) {
+			$this->post_count = count( $this->posts );
+
+//			$this->posts = array_map( 'get_post', $this->posts );
+
+			$this->post = reset( $this->posts );
+			
+			// the_post()の前にget_post()が呼ばれることがあるのでグローバル変数に保存
+//			$GLOBALS['post'] = $this->post;			// ########## 注意 ##### the_post()の実行前に初期値を設定しておくのがよいか実験中 ##### 注意 ##########
+		} else {
+			$this->post_count = 0;
+			$this->posts = array();
+		}
+/*		$this->lastPostFound = false;		// 一覧の最後の項目を検出したかどうかのフラグリセット。have_post()で更新。
+
+		// ##### 画面のサブタイトルを設定。メインタイトルはサイト名。#####
+		if ($this->is_singular()){			// 単体ページの場合
+			// 表示するコンテンツデータから取得
+			$gPageManager->setHeadSubTitle($this->post->post_title);
+			
+			// *** お問合わせ画面等ページタイプ属性がないページの場合はウィジェット側でサブタイトルを設定する ***
+		} else {		// カテゴリーや年月アーカイブ、検索結果等の画面の場合
+			// WordPressのwp_get_document_title()を使用してタイトルを作成
+			$this->headTitle = '';			// HTMLヘッダのタイトル作成用
+			add_filter('document_title_parts', 'm3get_simple_title');		// フィルター関数で出力を調整
+			wp_get_document_title();		// タイトル生成
+			remove_filter('document_title_parts', 'm3get_simple_title');
+
+			// サブタイトルを設定
+			if (!empty($this->headTitle)) $gPageManager->setHeadSubTitle($this->headTitle);
+		}*/
+		return $this->posts;
+	} 
+	/**
 	 * Set up the amount of found posts and the number of pages (if limit clause was used)
 	 * for the current query.
 	 *
@@ -2069,7 +2132,13 @@ class WP_Query {
 		// ##### テンプレート起動前にwp()から$queryなしでグローバルで一度実行される。その後、テンプレート内で$query付きで任意に生成、実行される。#####
 //		$this->init();
 //		$this->query = $this->query_vars = wp_parse_args( $query );
-		return $this->get_posts();
+		if (empty($query)){
+			return $this->get_posts();
+		} else {
+			$posts = $this->get_direct_posts($query);
+			if (empty($posts)) $posts = $this->get_posts();
+			return $posts;
+		}
 	}
 
 	/**
