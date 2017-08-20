@@ -548,7 +548,7 @@ class ContentApi extends BaseApi
 		// Magic3設定値追加
 		$post->post_title = $title;
 		$post->post_content = $contentHtml;
-		$post->guid = $this->getContentUrl($id);	// 詳細画面URL
+		$post->guid = $this->getContentUrl($contentType, $id);	// 詳細画面URL
 		$post->filter = 'raw';
 		// Magic3独自パラメータ
 		$post->thumb_src = $thumbSrc;
@@ -627,13 +627,15 @@ class ContentApi extends BaseApi
 	/**
 	 * コンテンツ詳細画面のURLを取得
 	 *
+	 * @param string $contentType			コンテンツタイプ
 	 * @param string $id					コンテンツID
 	 * @return string						URL
 	 */
-	function getContentUrl($id)
+	function getContentUrl($contentType, $id)
 	{
 		$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
-		$url = $linkInfoObj->getContentUrl($this->accessPoint/*アクセスポイント*/, $this->contentType, $id, $this->langId);
+//		$url = $linkInfoObj->getContentUrl($this->accessPoint/*アクセスポイント*/, $this->contentType, $id, $this->langId);
+		$url = $linkInfoObj->getContentUrl($this->accessPoint/*アクセスポイント*/, $contentType, $id, $this->langId);
 		return $url;
 	}
 	/**

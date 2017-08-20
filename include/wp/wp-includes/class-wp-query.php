@@ -1869,6 +1869,7 @@ class WP_Query {
 //		$paged = $pageNo;				// グローバル変数へ代入
 //		if ($pageNo > 1) $this->is_paged = true;
 		
+		// 汎用コンテンツ以外のパターンは?
 		$value = absint($query['page_id']);			// 汎用コンテンツID
 		if ($value > 0){
 			$this->query_vars['page_id'] = $value;
@@ -2129,13 +2130,16 @@ class WP_Query {
 	 * @return array List of posts.
 	 */
 	public function query($query = '') {
-		// ##### テンプレート起動前にwp()から$queryなしでグローバルで一度実行される。その後、テンプレート内で$query付きで任意に生成、実行される。#####
+		// ##### テンプレート起動前にwp()から$queryなしでグローバルで一度実行される。その後、テンプレート内でWP_Queryオブジェクトを生成し$query付きで実行される。#####
 //		$this->init();
 //		$this->query = $this->query_vars = wp_parse_args( $query );
 		if (empty($query)){
 			return $this->get_posts();
 		} else {
+			// 汎用コンテンツを取得
 			$posts = $this->get_direct_posts($query);
+			
+			// 汎用コンテンツが取得できない場合はデフォルトの取得方法でコンテンツを取得
 			if (empty($posts)) $posts = $this->get_posts();
 			return $posts;
 		}
