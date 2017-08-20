@@ -296,8 +296,16 @@ class ContentApi extends BaseApi
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_CONTENT);			// 汎用コンテンツ
 		
+		// 取得パラメータ作成
+		$value = absint($args['page_id']);			// 汎用コンテンツID指定の場合
+		if ($value > 0){
+			$contentId = $value;
+		} else {
+			$contentId = 0;
+		}
+		
 		// データ取得
-		$addonObj->getPublicContentList($this->limit, $this->pageNo, 0/*一覧を取得*/, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemPageListLoop'));
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, $contentId, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemPageListLoop'));
 		
 		return $this->_contentArray;
 	}
