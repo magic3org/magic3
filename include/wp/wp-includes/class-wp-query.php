@@ -1874,9 +1874,9 @@ class WP_Query {
 			$this->query_vars['page_id'] = $value;
 			
 			// 汎用コンテンツ取得
-			$this->posts = $gContentApi->getPageContent($value);
+			$this->posts = $gContentApi->getPageContentList($query);
 		}
-		
+
 		// Ensure that any posts added/modified via one of the filters above are
 		// of the type WP_Post and are filtered.
 		if ( $this->posts ) {

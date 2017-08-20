@@ -284,12 +284,12 @@ class ContentApi extends BaseApi
 		return $this->_contentArray[0];
 	}
 	/**
-	 * ページ用のコンテンツ(汎用コンテンツ)をコンテンツIDで取得
+	 * [WordPressテンプレート用API]ページ用のコンテンツ(汎用コンテンツ)を取得
 	 *
-	 * @param int $id				コンテンツID
-	 * @return object     			WP_Postオブジェクト
+	 * @param array $args				コンテンツ取得用のパラメータ
+	 * @return array     				WP_Postオブジェクトの配列
 	 */
-	function getPageContent($id)
+	function getPageContentList($args)
 	{
 		$this->_contentArray = array();			// 取得コンテンツ初期化
 		
@@ -297,10 +297,28 @@ class ContentApi extends BaseApi
 		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_CONTENT);			// 汎用コンテンツ
 		
 		// データ取得
-		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
+		$addonObj->getPublicContentList($this->limit, $this->pageNo, 0/*一覧を取得*/, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemPageListLoop'));
 		
-		return $this->_contentArray[0];
+		return $this->_contentArray;
 	}
+	/**
+	 * [WordPressテンプレート用API]ページ用のコンテンツ(汎用コンテンツ)をコンテンツIDで取得
+	 *
+	 * @param int $id				コンテンツID
+	 * @return object     			WP_Postオブジェクト
+	 */
+//	function getPageContent($id)
+//	{
+//		$this->_contentArray = array();			// 取得コンテンツ初期化
+//		
+//		// アドオンオブジェクト取得
+//		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_CONTENT);			// 汎用コンテンツ
+//		
+//		// データ取得
+//		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemPageListLoop'));
+//		
+//		return $this->_contentArray[0];
+//	}
 	/**
 	 * 取得コンテンツに関連付けされているカテゴリーを取得
 	 *
@@ -429,6 +447,20 @@ class ContentApi extends BaseApi
 		return true;
 	}
 	/**
+	 * DBから取得したデータを退避する(汎用コンテンツ専用)
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function _itemPageListLoop($index, $fetchedRow, $param)
+	{
+		$wpPostObj = $this->_createWP_Post($fetchedRow, M3_VIEW_TYPE_CONTENT);		// 汎用コンテンツをWP_post型の「page」タイプに変換
+		$this->_contentArray[] = $wpPostObj;
+		return true;
+	}
+	/**
 	 * DBから取得したデータを退避する(単体取得用)
 	 *
 	 * @param int $index			行番号(0～)
@@ -446,12 +478,15 @@ class ContentApi extends BaseApi
 	 * テーブル行データからWP_Postオブジェクトを作成
 	 *
 	 * @param array $row			テーブル行データ
+	 * @param string $contentType	コンテンツタイプ。空の場合はデフォルトのコンテンツタイプを使用。
 	 * @return object				WP_Postオブジェクト
 	 */
-	function _createWP_Post($row)
+	function _createWP_Post($row, $contentType = '')
 	{
+		if (empty($contentType)) $contentType = $this->contentType;
+		
 		// IDを解析しエラーチェック。複数の場合は配列に格納する。
-		switch ($this->contentType){
+		switch ($contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 			$postType	= 'page';		// データタイプ
 			$serial = $row['cn_serial'];

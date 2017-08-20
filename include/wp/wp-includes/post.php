@@ -4524,6 +4524,12 @@ function get_page_uri( $page = 0 ) {
  * @return array|false List of pages matching defaults or `$args`.
  */
 function get_pages( $args = array() ) {
+	global $gContentApi;
+
+	// 汎用コンテンツリストを取得
+	$pages = $gContentApi->getPageContentList($args);
+	return $pages;
+	
 	// メニュー階層をWP_Post型にして返す
 //	global $wpdb;
 /*
