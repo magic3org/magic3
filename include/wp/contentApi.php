@@ -84,6 +84,14 @@ class ContentApi extends BaseApi
 		// メンバー変数初期化
 		$this->relativePosts = array();			// 現在のコンテンツに関連したWP_Postオブジェクト
 		$this->serialArray = array();			// 取得したコンテンツのシリアル番号
+		
+		// 初期値設定
+		$this->accessPoint = $this->gEnv->getAccessDir();		// アクセスポイント
+		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
+		$this->limit = 10;					// コンテンツ取得数(コンテンツ取得用)
+		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
+		$this->order = 0;							// コンテンツ並び順(0=昇順,1=降順)
+		$this->now = date("Y/m/d H:i:s");			// 現在日時
 	}
 	/**
 	 * 対象のコンテンツタイプのアドオンオブジェクトを取得
@@ -140,8 +148,6 @@ class ContentApi extends BaseApi
 		list($viewCount, $order, $showThumb) = $addonObj->getPublicContentViewConfig();
 		
 		// 初期値設定
-		$this->accessPoint = $this->gEnv->getAccessDir();		// アクセスポイント
-		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語(コンテンツ取得用)
 		$this->limit = $viewCount;					// コンテンツ取得数(コンテンツ取得用)
 		$this->pageNo = 1;							// ページ番号(コンテンツ取得用)
 		$this->order = $order;							// コンテンツ並び順(0=昇順,1=降順)
@@ -303,10 +309,10 @@ class ContentApi extends BaseApi
 		} else {
 			$contentId = 0;
 		}
-		
+
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $contentId, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemPageListLoop'));
-		
+
 		return $this->_contentArray;
 	}
 	/**
