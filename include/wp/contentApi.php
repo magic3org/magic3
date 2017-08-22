@@ -752,7 +752,7 @@ class ContentApi extends BaseApi
 		
 		$baseUrl .= '?';
 		if (!empty($urlParams)){
-			$baseUrl .= '?' . $urlParams . '&';
+			$baseUrl .= $urlParams . '&';
 		}
 		$baseUrl .= M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo;
 		
@@ -807,7 +807,7 @@ class ContentApi extends BaseApi
 		
 		$baseUrl .= '?';
 		if (!empty($urlParams)){
-			$baseUrl .= '?' . $urlParams . '&';
+			$baseUrl .= $urlParams . '&';
 		}
 		// カテゴリーを付加
 		$baseUrl .= M3_REQUEST_PARAM_CATEGORY_ID . '=' . $id;
@@ -848,7 +848,7 @@ class ContentApi extends BaseApi
 		
 		$baseUrl .= '?';
 		if (!empty($urlParams)){
-			$baseUrl .= '?' . $urlParams . '&';
+			$baseUrl .= $urlParams . '&';
 		}
 
 		// 年月日を付加
