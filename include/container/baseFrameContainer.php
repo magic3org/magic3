@@ -921,8 +921,10 @@ class BaseFrameContainer extends Core
 				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
 			}
 
-			// サイトのトップページを表示する場合は優先してフロント用テンプレートを表示する(フロント用テンプレートが存在する場合のみ)
-			if ($defaultIndexFile == M3_FILENAME_INDEX){		// テンプレートの起動ファイル
+			// サイトのトップページを表示する場合(コンテンツタイプが設定されていないページをデフォルトで表示する場合)は優先してフロント用テンプレートを表示
+			if (empty($contentType)){
+			//if (!$GLOBALS['gContentApi']->isHomeUrl()){
+//			if ($defaultIndexFile == M3_FILENAME_INDEX){		// テンプレートの起動ファイル
 				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
 				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){		// デフォルトページを表示し「sub」なしに限定
 					$frontPageTemplate = get_front_page_template();
