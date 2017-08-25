@@ -23,6 +23,7 @@
 function m3WpInit()
 {
 	global $gEnvManager;
+	global $gContentApi;
 	
 	// ##### オプションデフォルト値 #####
 	$timezone_string = '';
@@ -177,5 +178,8 @@ function m3WpInit()
 	} else {
 		$GLOBALS['m3WpCustomParams'] = unserialize($optionParams);		// 連想配列に変換
 	}
+	
+	// WordPress以外のモジュールをロード
+	$gContentApi->loadModule();
 }
 ?>

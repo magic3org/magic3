@@ -2247,7 +2247,29 @@ class EnvManager extends Core
 	 */
 	public function getAllDefaultAccessPoint()
 	{
-		return array('', self::M3_DIR_NAME_MOBILE, self::M3_DIR_NAME_SMARTPHONE);
+		return array('', M3_DIR_NAME_MOBILE, M3_DIR_NAME_SMARTPHONE);
+	}
+	/**
+	 * 現在のアクセスポイント取得
+	 *
+	 * @return string			アクセスポイント(空文字列=PC,m=携帯,s=スマートフォン)
+	 */
+	public function getCurrentAccessPoint()
+	{
+		$accessPoint = '';
+		
+		switch ($this->currentPageId){
+		case self::DEFAULT_PAGE_ID:
+		default:
+			break;
+		case self::DEFAULT_MOBILE_PAGE_ID:
+			$accessPoint = M3_DIR_NAME_MOBILE;
+			break;
+		case self::DEFAULT_SMARTPHONE_PAGE_ID:
+			$accessPoint = DEFAULT_SMARTPHONE_PAGE_ID;
+			break;
+		}
+		return $accessPoint;
 	}
 	/**
 	 * 現在のページID
