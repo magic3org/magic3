@@ -128,6 +128,41 @@ class ContentApi extends BaseApi
 		return $addonObj;
 	}
 	/**
+	 * WordPress本体以外の主コンテンツ用のプラグインをロード
+	 *
+	 * @return								なし
+	 */
+	function loadPlugin()
+	{
+		// 現在使用しているコンテンツタイプを取得
+		$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
+		$accessPoint = $this->gEnv->getCurrentAccessPoint();
+		$infoArray = $linkInfoObj->getContentTypeList($this->gEnv->getCurrentAccessPoint());
+		for ($i = 0; $i < count($infoArray); $i++){
+			$contentType = $infoArray[$i][0];
+			
+			switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+				break;
+			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce.php');
+				break;
+			case M3_VIEW_TYPE_BBS:	// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:	// ブログ
+				break;
+			case M3_VIEW_TYPE_WIKI:	// Wiki
+				break;
+			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:	// イベント
+				break;
+			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				break;
+			}
+		}
+	}
+	/**
 	 * [WordPressテンプレート用API]SQLクエリー用のパラメータを設定
 	 *
 	 * @param array $params				クエリー作成用パラメータ(連想配列)

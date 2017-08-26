@@ -179,7 +179,7 @@ function m3WpInit()
 		$GLOBALS['m3WpCustomParams'] = unserialize($optionParams);		// 連想配列に変換
 	}
 	
-	// WordPress以外のモジュールをロード
-	$gContentApi->loadModule();
+	// WordPress以外の主コンテンツ用のプラグインをロード
+	$gContentApi->loadPlugin();
 }
 ?>
