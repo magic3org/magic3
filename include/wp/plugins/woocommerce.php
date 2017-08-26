@@ -163,11 +163,12 @@ final class WooCommerce {
 	 * WooCommerce Constructor.
 	 */
 	public function __construct() {
-		$this->define_constants();
+/*		$this->define_constants();
 		$this->includes();
 		$this->init_hooks();
 
 		do_action( 'woocommerce_loaded' );
+		*/
 	}
 
 	/**
@@ -376,8 +377,8 @@ final class WooCommerce {
 			include_once( WC_ABSPATH . 'includes/class-wc-tracker.php' );
 		}
 
-		$this->query = new WC_Query();
-		$this->api   = new WC_API();
+//		$this->query = new WC_Query();
+//		$this->api   = new WC_API();
 	}
 
 	/**
