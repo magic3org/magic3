@@ -156,7 +156,7 @@ class WC_Cart {
 	 * Loads the cart data from the PHP session during WordPress init and hooks in other methods.
 	 */
 	public function init() {
-		$this->get_cart_from_session();
+//		$this->get_cart_from_session();
 
 		add_action( 'woocommerce_check_cart_items', array( $this, 'check_cart_items' ), 1 );
 		add_action( 'woocommerce_check_cart_items', array( $this, 'check_cart_coupons' ), 1 );
@@ -677,12 +677,12 @@ class WC_Cart {
 	 * @return array contents of the cart
 	 */
 	public function get_cart() {
-		if ( ! did_action( 'wp_loaded' ) ) {
+/*		if ( ! did_action( 'wp_loaded' ) ) {
 			wc_doing_it_wrong( __FUNCTION__, __( 'Get cart should not be called before the wp_loaded action.', 'woocommerce' ), '2.3' );
 		}
 		if ( ! did_action( 'woocommerce_cart_loaded_from_session' ) ) {
 			$this->get_cart_from_session();
-		}
+		}*/
 		return array_filter( (array) $this->cart_contents );
 	}
 

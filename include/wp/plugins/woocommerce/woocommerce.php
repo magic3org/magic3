@@ -435,15 +435,13 @@ final class WooCommerce {
 		}*/
 
 		// Classes/actions loaded for the frontend and for ajax requests.
-echo '#####';
 		if ( $this->is_request( 'frontend' ) ) {
-echo '-setcart....';
 			$this->cart            = new WC_Cart();                                  // Cart class, stores the cart contents
 			$this->customer        = new WC_Customer( get_current_user_id(), true ); // Customer class, handles data such as customer location
 			add_action( 'shutdown', array( $this->customer, 'save' ), 10 );          // Customer should be saved during shutdown.
 		}
 
-		$this->load_webhooks();
+//		$this->load_webhooks();
 
 		// Init action.
 		do_action( 'woocommerce_init' );
@@ -569,7 +567,7 @@ echo '-setcart....';
 	 *
 	 * @since 2.2
 	 */
-	private function load_webhooks() {
+/*	private function load_webhooks() {
 
 		if ( ! is_blog_installed() ) {
 			return;
@@ -588,7 +586,7 @@ echo '-setcart....';
 			$webhook = new WC_Webhook( $webhook_id );
 			$webhook->enqueue();
 		}
-	}
+	}*/
 
 	/**
 	 * WooCommerce Payment Token Meta API and Term/Order item Meta - set table names.

@@ -89,7 +89,7 @@ class WC_Customer extends WC_Legacy_Customer {
 	 * @throws Exception if customer cannot be read/found and $data is set.
 	 */
 	public function __construct( $data = 0, $is_session = false ) {
-		parent::__construct( $data );
+/*		parent::__construct( $data );
 
 		if ( $data instanceof WC_Customer ) {
 			$this->set_id( absint( $data->get_id() ) );
@@ -115,7 +115,7 @@ class WC_Customer extends WC_Legacy_Customer {
 		if ( $is_session ) {
 			$this->data_store = WC_Data_Store::load( 'customer-session' );
 			$this->data_store->read( $this );
-		}
+		}*/
 	}
 
 	/**
