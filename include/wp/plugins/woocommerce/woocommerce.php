@@ -163,12 +163,10 @@ final class WooCommerce {
 	 * WooCommerce Constructor.
 	 */
 	public function __construct() {
-/*		$this->define_constants();
+		$this->define_constants();
 		$this->includes();
 		$this->init_hooks();
-
 		do_action( 'woocommerce_loaded' );
-		*/
 	}
 
 	/**
@@ -180,10 +178,10 @@ final class WooCommerce {
 		add_action( 'after_setup_theme', array( $this, 'setup_environment' ) );
 		add_action( 'after_setup_theme', array( $this, 'include_template_functions' ), 11 );
 		add_action( 'init', array( $this, 'init' ), 0 );
-		add_action( 'init', array( 'WC_Shortcodes', 'init' ) );
-		add_action( 'init', array( 'WC_Emails', 'init_transactional_emails' ) );
-		add_action( 'init', array( $this, 'wpdb_table_fix' ), 0 );
-		add_action( 'switch_blog', array( $this, 'wpdb_table_fix' ), 0 );
+//		add_action( 'init', array( 'WC_Shortcodes', 'init' ) );
+//		add_action( 'init', array( 'WC_Emails', 'init_transactional_emails' ) );
+//		add_action( 'init', array( $this, 'wpdb_table_fix' ), 0 );
+//		add_action( 'switch_blog', array( $this, 'wpdb_table_fix' ), 0 );
 	}
 
 	/**
@@ -427,17 +425,19 @@ final class WooCommerce {
 		$this->countries                           = new WC_Countries(); // Countries class
 		$this->integrations                        = new WC_Integrations(); // Integrations class
 		$this->structured_data                     = new WC_Structured_Data(); // Structured Data class, generates and handles structured data
-		$this->deprecated_hook_handlers['actions'] = new WC_Deprecated_Action_Hooks();
-		$this->deprecated_hook_handlers['filters'] = new WC_Deprecated_Filter_Hooks();
+//		$this->deprecated_hook_handlers['actions'] = new WC_Deprecated_Action_Hooks();
+//		$this->deprecated_hook_handlers['filters'] = new WC_Deprecated_Filter_Hooks();
 
 		// Session class, handles session data for users - can be overwritten if custom handler is needed.
-		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
+/*		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
 			$session_class  = apply_filters( 'woocommerce_session_handler', 'WC_Session_Handler' );
 			$this->session  = new $session_class();
-		}
+		}*/
 
 		// Classes/actions loaded for the frontend and for ajax requests.
+echo '#####';
 		if ( $this->is_request( 'frontend' ) ) {
+echo '-setcart....';
 			$this->cart            = new WC_Cart();                                  // Cart class, stores the cart contents
 			$this->customer        = new WC_Customer( get_current_user_id(), true ); // Customer class, handles data such as customer location
 			add_action( 'shutdown', array( $this->customer, 'save' ), 10 );          // Customer should be saved during shutdown.
