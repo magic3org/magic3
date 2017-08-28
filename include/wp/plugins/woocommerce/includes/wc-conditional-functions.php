@@ -122,7 +122,7 @@ if ( ! function_exists( 'is_wc_endpoint_url' ) ) {
 	 * @return bool
 	 */
 	function is_wc_endpoint_url( $endpoint = false ) {
-		global $wp;
+/*		global $wp;
 
 		$wc_endpoints = WC()->query->get_query_vars();
 
@@ -142,7 +142,8 @@ if ( ! function_exists( 'is_wc_endpoint_url' ) ) {
 			}
 
 			return false;
-		}
+		}*/
+		return false;
 	}
 }
 
