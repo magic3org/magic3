@@ -57,7 +57,7 @@ class BaseFrameContainer extends Core
 				
 				// 旧システムがある場合はadminディレクトリまでアクセスしてインストーラを実行。
 				$isRedirect = false;
-				if ($this->_isExistsOldSystemDir()){
+				if ($this->_isExistsOldSystemDir()){		// ディレクトリアクセス権がない場合も旧システムが存在するものとしてリダイレクトを行う
 					if ($this->gEnv->isAdminDirAccess()) $isRedirect = true;
 				} else {
 					$isRedirect = true;
@@ -1402,10 +1402,17 @@ class BaseFrameContainer extends Core
 		$currentDir = $this->gEnv->getSystemRootPath();
 		$parentDir = dirname($currentDir);
 		$dirName = basename($currentDir);
-		if (is_dir($parentDir . '/_' . $dirName)){
+		
+		// ##### open_basedir等のアクセス制限が掛かっていてディレクトリが見えない場合はis_dir()はfalseを返す #####
+		// 親ディレクトリへのアクセス権をチェック
+		if (@is_dir($parentDir)){
+			if (@is_dir($parentDir . '/_' . $dirName)){
+				return true;
+			} else {
+				return false;
+			}
+		} else {		// 親ディレクトリへのアクセス権がない場合は旧システムが存在すると判断する
 			return true;
-		} else {
-			return false;
 		}
 	}
 	/**
