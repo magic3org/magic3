@@ -33,8 +33,8 @@ class WC_Structured_Data {
 		add_action( 'woocommerce_email_order_details', array( $this, 'generate_order_data' ), 20, 3 );
 
 		// Output structured data.
-		add_action( 'woocommerce_email_order_details', array( $this, 'output_email_structured_data' ), 30, 3 );
-		add_action( 'wp_footer', array( $this, 'output_structured_data' ), 10 );
+//		add_action( 'woocommerce_email_order_details', array( $this, 'output_email_structured_data' ), 30, 3 );
+//		add_action( 'wp_footer', array( $this, 'output_structured_data' ), 10 );
 	}
 
 	/**
@@ -128,14 +128,14 @@ class WC_Structured_Data {
 	 * @param bool	    $sent_to_admin Send to admin (default: false).
 	 * @param bool	    $plain_text    Plain text email (default: false).
 	 */
-	public function output_email_structured_data( $order, $sent_to_admin = false, $plain_text = false ) {
+/*	public function output_email_structured_data( $order, $sent_to_admin = false, $plain_text = false ) {
 		if ( $plain_text ) {
 			return;
 		}
 		echo '<div style="display: none; font-size: 0; max-height: 0; line-height: 0; padding: 0; mso-hide: all;">';
 		$this->output_structured_data();
 		echo '</div>';
-	}
+	}*/
 
 	/**
 	 * Sanitizes, encodes and outputs structured data.
@@ -143,13 +143,13 @@ class WC_Structured_Data {
 	 * Hooked into `wp_footer` action hook.
 	 * Hooked into `woocommerce_email_order_details` action hook.
 	 */
-	public function output_structured_data() {
+/*	public function output_structured_data() {
 		$types = $this->get_data_type_for_page();
 
 		if ( $data = wc_clean( $this->get_structured_data( $types ) ) ) {
 			echo '<script type="application/ld+json">' . wp_json_encode( $data ) . '</script>';
 		}
-	}
+	}*/
 
 	/*
 	|--------------------------------------------------------------------------

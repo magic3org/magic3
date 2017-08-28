@@ -529,13 +529,13 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 		} else {
 			$_post = WP_Post::get_instance( $post->ID );
 		}
-	} else {
+	} else if (is_int($post)){
 //		$_post = WP_Post::get_instance( $post );
 		// IDをチェック
-		if ((int)$post == (int)$GLOBALS['post']->ID){
+		if ($post == $GLOBALS['post']->ID){
 			$_post = $GLOBALS['post'];
-		} else {		// 関連WP_Postオブジェクトを取得
-			$_post = $gContentApi->getRelativePost((int)$post);
+		} else if ($post > 0){		// 関連WP_Postオブジェクトを取得
+			$_post = $gContentApi->getRelativePost($post);
 		}
 	}
 
