@@ -1515,8 +1515,8 @@ function _wp_post_thumbnail_class_filter_remove( $attr ) {
 	remove_filter( 'wp_get_attachment_image_attributes', '_wp_post_thumbnail_class_filter' );
 }
 
-//add_shortcode('wp_caption', 'img_caption_shortcode');
-//add_shortcode('caption', 'img_caption_shortcode');
+add_shortcode('wp_caption', 'img_caption_shortcode');
+add_shortcode('caption', 'img_caption_shortcode');
 
 /**
  * Builds the Caption shortcode output.
@@ -1626,7 +1626,7 @@ function img_caption_shortcode( $attr, $content = null ) {
 	return $html;
 }
 
-//add_shortcode('gallery', 'gallery_shortcode');
+add_shortcode('gallery', 'gallery_shortcode');
 
 /**
  * Builds the Gallery shortcode output.
@@ -2155,7 +2155,7 @@ function wp_playlist_shortcode( $attr ) {
 	<?php
 	return ob_get_clean();
 }
-//add_shortcode( 'playlist', 'wp_playlist_shortcode' );
+add_shortcode( 'playlist', 'wp_playlist_shortcode' );
 
 /**
  * Provides a No-JS Flash fallback as a last resort for audio / video.
@@ -2408,7 +2408,7 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 	 */
 	return apply_filters( 'wp_audio_shortcode', $html, $atts, $audio, $post_id, $library );
 }
-//add_shortcode( 'audio', 'wp_audio_shortcode' );
+add_shortcode( 'audio', 'wp_audio_shortcode' );
 
 /**
  * Returns a filtered list of WP-supported video formats.
@@ -2666,7 +2666,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 	 */
 	return apply_filters( 'wp_video_shortcode', $output, $atts, $video, $post_id, $library );
 }
-//add_shortcode( 'video', 'wp_video_shortcode' );
+add_shortcode( 'video', 'wp_video_shortcode' );
 
 /**
  * Displays previous image link that has the same post parent.

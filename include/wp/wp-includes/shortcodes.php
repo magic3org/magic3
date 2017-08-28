@@ -39,7 +39,8 @@
  * @var array
  * @global array $shortcode_tags
  */
-$shortcode_tags = array();
+//$shortcode_tags = array();
+$GLOBALS['shortcode_tags'] = array();
 
 /**
  * Add hook for shortcode tag.
