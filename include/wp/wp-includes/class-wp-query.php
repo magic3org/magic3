@@ -1869,13 +1869,24 @@ class WP_Query {
 //		$paged = $pageNo;				// グローバル変数へ代入
 //		if ($pageNo > 1) $this->is_paged = true;
 		
-		// 汎用コンテンツ以外のパターンは?
-		$value = absint($query['page_id']);			// 汎用コンテンツID
-		if ($value > 0){
-			$this->query_vars['page_id'] = $value;
+		// データタイプを取得
+		$postType = 'post';
+		$value = $query['post_type'];
+		if (!empty($value)) $postType = $value;
+		
+		if ($postType == 'post'){			// ブログコンテンツの場合
+		} else if ($postType == 'product'){			// 製品の場合
+//			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, $startDt/*期間開始日時*/, $endDt/*期間終了日時*/, $category);
+			$this->posts = $gContentApi->getContentList(M3_VIEW_TYPE_PRODUCT);		// コンテンツタイプは製品を指定
+		} else {
+			// 汎用コンテンツ以外のパターンは?
+			$value = absint($query['page_id']);			// 汎用コンテンツID
+			if ($value > 0){
+				$this->query_vars['page_id'] = $value;
 			
-			// 汎用コンテンツ取得
-			$this->posts = $gContentApi->getPageContentList($query);
+				// 汎用コンテンツ取得
+				$this->posts = $gContentApi->getPageContentList($query);
+			}
 		}
 
 		// Ensure that any posts added/modified via one of the filters above are

@@ -201,20 +201,27 @@ class ContentApi extends BaseApi
 	/**
 	 * [WordPressテンプレート用API]コンテンツを取得
 	 *
+	 * @param string $contentType		コンテンツタイプ。空の場合はデフォルトのコンテンツタイプを使用。空の場合はデフォルトの処理あり。
 	 * @return array     				WP_Postオブジェクトの配列
 	 */
-	function getContentList()
+	function getContentList($contentType = '')
 	{
+		if (empty($contentType)){
+			$contentType = $this->contentType;
+			
+			// ##### 関数パラメータが空の場合のデフォルト処理 #####
+			// 取得条件作成。コンテンツIDが設定されている場合は指定したコンテンツのみ取得。
+			if (empty($this->contentId)){
+				$entryId = 0;		// コンテンツID以外の条件で取得
+			} else {
+				$entryId = $this->contentId;		// コンテンツIDを指定。コンテンツIDは複数あり。
+			}
+		}
+		
 		$this->_contentArray = array();			// 取得コンテンツ初期化
 		
-		// 取得条件作成。コンテンツIDが設定されている場合は指定したコンテンツのみ取得。
-		if (empty($this->contentId)){
-			$entryId = 0;		// コンテンツID以外の条件で取得
-		} else {
-			$entryId = $this->contentId;		// コンテンツIDを指定。コンテンツIDは複数あり。
-		}
 		// アドオンオブジェクト取得
-		$addonObj = $this->_getAddonObj();
+		$addonObj = $this->_getAddonObj($contentType);		// コンテンツタイプ指定
 		
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $entryId, $this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->order, array($this, '_itemListLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
@@ -226,15 +233,21 @@ class ContentApi extends BaseApi
 	 *
 	 * 機能: getContentList()の検索条件でコンテンツの総数を取得。
 	 *
-	 * @return int     			コンテンツ総数
+	 * @param string $contentType	コンテンツタイプ。空の場合はデフォルトのコンテンツタイプを使用。空の場合はデフォルトの処理あり。
+	 * @return int     				コンテンツ総数
 	 */
-	function getContentCount()
+	function getContentCount($contentType = '')
 	{
-		// 取得条件にコンテンツIDが設定されている場合は総数0を返す
-		if (!empty($this->contentId)) return 0;
+		if (empty($contentType)){
+			$contentType = $this->contentType;
+		
+			// ##### 関数パラメータが空の場合のデフォルト処理 #####
+			// 取得条件にコンテンツIDが設定されている場合は総数0を返す
+			if (!empty($this->contentId)) return 0;
+		}
 		
 		// アドオンオブジェクト取得
-		$addonObj = $this->_getAddonObj();
+		$addonObj = $this->_getAddonObj($contentType);		// コンテンツタイプ指定
 		
 		// コンテンツ総数取得
 		$count = $addonObj->getPublicContentCount($this->now, $this->startDt, $this->endDt, $this->keywords, $this->langId, $this->category/*カテゴリーID*/, null/*ブログID*/);
