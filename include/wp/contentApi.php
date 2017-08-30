@@ -32,6 +32,7 @@ class ContentApi extends BaseApi
 	private $endDt;					// 検索条件(期間終了日時)
 	private $category;				// 検索条件(カテゴリー)
 	private $_contentArray;			// 取得コンテンツ(一時利用)
+	private $_contentType;			// コンテンツタイプ(一時利用)
 	private $serialArray;			// 取得したコンテンツのシリアル番号
 	private $categoryArray;			// 取得コンテンツに関連したカテゴリー
 	private $contentId;				// 表示するコンテンツのID(複数の場合は配列)
@@ -221,6 +222,9 @@ class ContentApi extends BaseApi
 				$entryId = $this->contentId;		// コンテンツIDを指定。コンテンツIDは複数あり。
 			}
 		}
+		
+		// 取得コンテンツの変換用設定
+		$this->_contentType = $contentType;			// コンテンツタイプ(一時利用)
 		
 		$this->_contentArray = array();			// 取得コンテンツ初期化
 		
@@ -498,7 +502,7 @@ class ContentApi extends BaseApi
 	 */
 	function _itemListLoop($index, $fetchedRow, $param)
 	{
-		$wpPostObj = $this->_createWP_Post($fetchedRow);
+		$wpPostObj = $this->_createWP_Post($fetchedRow, $this->_contentType/*コンテンツ変換用*/);
 		$this->_contentArray[] = $wpPostObj;
 		
 		// 前後のコンテンツ取得用のベース値を保存。単一コンテンツ表示の場合に使用。
@@ -576,6 +580,18 @@ class ContentApi extends BaseApi
 			$date			= $row['be_regist_dt'];
 			$contentHtml	= $row['be_html'];
 			$thumbSrc		= $row['be_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			break;
+		case M3_VIEW_TYPE_PRODUCT:	// 製品
+			$postType	= 'product';	// データタイプ
+			$serial = $row['pt_serial'];
+			$id		= $row['pt_id'];
+			$title	= $row['pt_name'];
+			$authorId		= $row['pt_regist_user_id'];		// コンテンツ登録者
+			$authorName		= $row['lu_name'];				// コンテンツ登録者名
+			$authorUrl		= '';			// コンテンツ登録者URL
+			$date			= $row['pt_create_dt'];
+			$contentHtml	= $row['pt_description'];
+			$thumbSrc		= $row['pt_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			break;
 		}
 
