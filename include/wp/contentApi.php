@@ -172,12 +172,16 @@ class ContentApi extends BaseApi
 	 * @param string,array $keywords	検索条件(キーワード)
 	 * @param timestamp $startDt		検索条件(期間開始日時)
 	 * @param timestamp $endDt			検索条件(期間終了日時)
+	 * @param int		$categoryId		カテゴリーID(nullのとき指定なし)
+	 * @param string $contentType		コンテンツタイプ。空の場合はデフォルトのコンテンツタイプを使用。
 	 * @return							なし
 	 */
-	public function setCondition($params, $langId, $limit, $pageNo, $keywords = '', $startDt = null, $endDt = null, $category = null)
+	public function setCondition($params, $langId, $limit, $pageNo, $keywords = '', $startDt = null, $endDt = null, $category = null, $contentType = '')
 	{
+		if (empty($contentType)) $contentType = $this->contentType;
+			
 		// アドオンオブジェクト取得
-		$addonObj = $this->_getAddonObj();
+		$addonObj = $this->_getAddonObj($contentType);
 		
 		// 一覧の表示設定を取得
 		list($viewCount, $order, $showThumb) = $addonObj->getPublicContentViewConfig();

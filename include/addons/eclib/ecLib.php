@@ -258,6 +258,18 @@ class ecLib
 		return $retVal;
 	}
 	/**
+	 * コンテンツ一覧の表示設定を取得
+	 *
+	 * @return array				表示項目数,ソート順(0=昇順,1=降順),サムネール表示可否の配列
+	 */
+	function getPublicContentViewConfig()
+	{
+	//	$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
+		$itemCount = 10;
+		$showThumb = 0;
+		return array($itemCount, 1, $showThumb);
+	}
+	/**
 	 * 公開中の商品数を取得。アクセス制限も行う。
 	 *
 	 * @param timestamp $now				現在日時

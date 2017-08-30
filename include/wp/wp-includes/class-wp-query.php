@@ -1876,10 +1876,15 @@ class WP_Query {
 		
 		if ($postType == 'post'){			// ブログコンテンツの場合
 		} else if ($postType == 'product'){			// 製品の場合
-//			$gContentApi->setCondition(array(), ''/*現在の言語*/, 0/*最大取得数(デフォルト)*/, $pageNo/*ページ番号*/, $keywords, $startDt/*期間開始日時*/, $endDt/*期間終了日時*/, $category);
+			$itemCount = 0;		// 項目数デフォルト
+			$value = absint($query['posts_per_page']);			// 取得数
+			if ($value > 0) $itemCount = $value;
+		
+			$gContentApi->setCondition(array(), ''/*現在の言語*/, $itemCount/*最大取得数(デフォルト)*/, 1/*ページ番号*/,
+										''/*キーワード*/, null/*期間開始日時*/, null/*期間終了日時*/, null/*カテゴリー*/, M3_VIEW_TYPE_PRODUCT/*コンテンツタイプ*/);
 			$this->posts = $gContentApi->getContentList(M3_VIEW_TYPE_PRODUCT);		// コンテンツタイプは製品を指定
 		} else {
-			// 汎用コンテンツ以外のパターンは?
+			// 汎用コンテンツの場合
 			$value = absint($query['page_id']);			// 汎用コンテンツID
 			if ($value > 0){
 				$this->query_vars['page_id'] = $value;
