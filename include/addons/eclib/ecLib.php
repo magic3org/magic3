@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ecLib.php 5385 2012-11-16 01:27:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(dirname(__FILE__) . '/ecLibDb.php');
@@ -256,6 +256,48 @@ class ecLib
 			}
 		}
 		return $retVal;
+	}
+	/**
+	 * 公開中の商品数を取得。アクセス制限も行う。
+	 *
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return int							項目数
+	 */
+	function getPublicContentCount($now, $startDt, $endDt, $keywords, $langId, $categoryId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$itemCount = $this->db->getPublicProductItemsCount($now, $startDt, $endDt, $keywords, $langId, $userId, $categoryId);
+		return $itemCount;
+	}
+	/**
+	 * 公開中の商品を取得。アクセス制限も行う。
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param int,array	$productId			商品ID(0のときは期間で取得)
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param function	$callback			コールバック関数
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return 			なし
+	 */
+	function getPublicContentList($limit, $page, $productId, $now, $startDt, $endDt, $keywords, $langId, $order, $callback, $categoryId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$this->db->getPublicProductItems($limit, $page, $productId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId);
 	}
 }
 ?>

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ecLibDb.php 5450 2012-12-09 03:29:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -587,6 +587,146 @@ class ecLibDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		if ($ret) $status = $row['oe_status'];
 		return $status;
+	}
+	/**
+	 * 公開中の商品項目を取得。アクセス制限も行う。
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param int,array	$productId			商品ID(0のときは期間で取得)
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param int       $userId				参照制限用ユーザID
+	 * @param function	$callback			コールバック関数
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return 			なし
+	 */
+	function getPublicProductItems($limit, $page, $productId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId = null)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM product ';
+		if (isset($categoryId)) $queryStr .=   'RIGHT JOIN product_with_category ON pt_serial = pw_product_serial ';
+		$queryStr .=   'WHERE pt_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND pt_visible = true ';		// 表示する
+		$queryStr .=     'AND pt_history_index >= 0 ';		// 正規(Regular)記事を対象
+		$queryStr .=     'AND pt_language_id = ? ';	$params[] = $langId;
+		
+		// ##### IDで取得コンテンツを指定 #####
+		if (!empty($productId)){
+			if (is_array($productId)){		// 配列で複数指定の場合
+				$queryStr .=    'AND pt_id in (' . implode(",", $productId) . ') ';
+			} else {
+				$queryStr .=     'AND pt_id = ? ';		$params[] = $productId;
+			}
+		}
+		
+		// ##### 任意設定の検索条件 #####
+		list($condQueryStr, $condParams) = $this->_createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId);
+		$queryStr .= $condQueryStr;
+		$params = array_merge($params, $condParams);
+
+		if (empty($productId)){
+			$ord = '';
+			if (!empty($order)) $ord = 'DESC ';
+			$queryStr .=  'ORDER BY pt_id ' . $ord . 'LIMIT ' . $limit . ' OFFSET ' . $offset;			// 製品ID順
+		}
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * 公開中の商品項目数を取得
+	 *
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param string	$langId				言語
+	 * @param int       $userId				参照制限用ユーザID
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return int							項目数
+	 */
+	function getPublicProductItemsCount($now, $startDt, $endDt, $keywords, $langId, $userId, $categoryId = null)
+	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM product ';
+		if (isset($categoryId)) $queryStr .=   'RIGHT JOIN product_with_category ON pt_serial = pw_product_serial ';
+		$queryStr .=   'WHERE pt_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND pt_visible = true ';		// 表示する
+		$queryStr .=     'AND pt_history_index >= 0 ';		// 正規(Regular)記事を対象
+		$queryStr .=     'AND pt_language_id = ? ';	$params[] = $langId;
+		
+		// ##### 任意設定の検索条件 #####
+		list($condQueryStr, $condParams) = $this->_createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId);
+		$queryStr .= $condQueryStr;
+		$params = array_merge($params, $condParams);
+
+		return $this->selectRecordCount($queryStr, $params);
+	}
+	/**
+	 * 公開中の商品項目の検索条件を作成
+	 *
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param int       $userId				ユーザID
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return array						クエリー文字列と配列パラメータの連想配列
+	 */
+	function _createPublicSearchCondition($now, $startDt, $endDt, $keywords, $userId, $categoryId = null)
+	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
+		$queryStr = '';
+		$params = array();
+	
+		// ##### 検索条件 #####
+		// タイトルと記事、ユーザ定義フィールドを検索
+		if (!empty($keywords)){
+			if (is_string($keywords)) $keywords = array($keywords);
+			
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				$queryStr .=    'AND (pt_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_code LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_description_short LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+			}
+		}
+		
+		// カテゴリー
+		if (isset($categoryId)){
+			$queryStr .=     'AND pw_category_id = ? ';
+			$params[] = $categoryId;// 製品カテゴリー
+		}
+
+		// ##### コンテンツ参照制限 #####
+		// 公開期間
+		$queryStr .=    'AND (pt_active_start_dt = ? OR (pt_active_start_dt != ? AND pt_active_start_dt <= ?)) ';
+		$queryStr .=    'AND (pt_active_end_dt = ? OR (pt_active_end_dt != ? AND pt_active_end_dt > ?)) ';
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+		
+		// ##### ユーザ参照制限 #####
+		// ゲストユーザはユーザ制限のない記事のみ参照可能
+		if (empty($userId)){
+			$queryStr .= 'AND pt_user_limited = false ';		// ユーザ制限のないデータ
+		}
+		
+		return array($queryStr, $params);
 	}
 }
 ?>
