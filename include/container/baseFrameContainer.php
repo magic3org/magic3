@@ -959,7 +959,8 @@ class BaseFrameContainer extends Core
 			$wpIndexFile = apply_filters('template_include', $wpIndexFile);
 
 			// Magic3用のテンプレート起動ファイルパスに変換
-			$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $wpIndexFile);
+//			$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $wpIndexFile);
+			$defaultIndexFile = $wpIndexFile;
 			
 			// ##### テンプレート前処理(起動ファイル決定後に実行) #####
 			do_action('template_redirect');
@@ -1031,9 +1032,13 @@ class BaseFrameContainer extends Core
 		}
 
 		// ################### テンプレート読み込み ###################
-		// テンプレートのポジションタグからウィジェットが実行される
-		//$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . M3_FILENAME_INDEX;
-		$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . $defaultIndexFile;
+		// フルパスに変換
+		if (strStartsWith($defaultIndexFile, '/')){				// フルパス起動(WordPressテンプレート)のとき
+			$templateIndexFile = $defaultIndexFile;
+		} else {
+			$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplate . '/' . $defaultIndexFile;
+		}
+		
 		if (file_exists($templateIndexFile)){
 			require_once($templateIndexFile);
 		} else {		// テンプレートが存在しないとき
@@ -1043,7 +1048,7 @@ class BaseFrameContainer extends Core
 				// 一般向けにはメンテナンス画面を表示
 				$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
 				$this->_showSystemPage($request, 2/*サイト非公開画面*/);// システム制御画面を表示
-						
+					
 				// 運用ログに記録(一度だけ出力したい)
 				//$this->gOpeLog->writeFatal(__METHOD__, 'テンプレートが存在しません。メンテナンス画面を表示します。(テンプレートID=' . $curTemplate . ')', 1100);
 				return;
