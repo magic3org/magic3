@@ -798,7 +798,6 @@ class BaseFrameContainer extends Core
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('init');					// テンプレート側からの初期処理(ウィジェットのCSSの初期化等)
 			do_action('wp_loaded');
-			do_action('template_redirect');		// テンプレート前処理
 			
 			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
 			// URLパラメータからコンテンツ形式を取得し、ページを選択
@@ -962,6 +961,9 @@ class BaseFrameContainer extends Core
 			// Magic3用のテンプレート起動ファイルパスに変換
 			$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $wpIndexFile);
 			
+			// ##### テンプレート前処理(起動ファイル決定後に実行) #####
+			do_action('template_redirect');
+						
 			// WordPressオブジェクト作成
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき

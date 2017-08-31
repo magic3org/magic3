@@ -270,7 +270,7 @@ class ecLib
 		return array($itemCount, 1, $showThumb);
 	}
 	/**
-	 * 公開中の商品数を取得。アクセス制限も行う。
+	 * 公開中の製品数を取得。アクセス制限も行う。
 	 *
 	 * @param timestamp $now				現在日時
 	 * @param timestamp	$startDt			期間(開始日)
@@ -289,11 +289,11 @@ class ecLib
 		return $itemCount;
 	}
 	/**
-	 * 公開中の商品を取得。アクセス制限も行う。
+	 * 公開中の製品を取得。アクセス制限も行う。
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
-	 * @param int,array	$productId			商品ID(0のときは期間で取得)
+	 * @param int,array	$productId			製品ID(0のときは期間で取得)
 	 * @param timestamp $now				現在日時
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
@@ -311,5 +311,27 @@ class ecLib
 		$userId = $gEnvManager->getCurrentUserId();
 		$this->db->getPublicProductItems($limit, $page, $productId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId);
 	}
+	/**
+	 * 公開中の製品の前後の製品の項目を取得
+	 *
+	 * @param int       $type				前後製品のタイプ(0=前方,1=後方)
+	 * @param int       $contentId			基準となるコンテンツのID
+	 * @param timestamp $now				現在日時
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string,array	$keywords		検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param int		$categoryId			カテゴリーID(nullのとき指定なし)
+	 * @return array 						製品のレコード。取得なしの場合はfalseを返す。
+	 */
+/*	function getPublicPrevNextEntry($type, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $categoryId = null)
+	{
+		global $gEnvManager;
+		
+		$userId = $gEnvManager->getCurrentUserId();
+		$row = $this->db->getPublicPrevNextEntry($type, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $categoryId);
+		return $row;
+	}*/
 }
 ?>
