@@ -749,6 +749,27 @@ class ContentApi extends BaseApi
 		return $this->pageType;
 	}
 	/**
+	 * 現在のコンテンツタイプから生成されるWP_Postデータタイプを取得
+	 *
+	 * @return string						データタイプ(post)
+	 */
+	function getPostType()
+	{
+		switch ($this->contentType){
+		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+		default:
+			$postType	= 'page';		// データタイプ
+			break;
+		case M3_VIEW_TYPE_BLOG:	// ブログ
+			$postType	= 'post';	// データタイプ
+			break;
+		case M3_VIEW_TYPE_PRODUCT:	// 製品
+			$postType	= 'product';	// データタイプ
+			break;
+		}
+		return $postType;
+	}
+	/**
 	 * コンテンツIDを設定
 	 *
 	 * @param string $idStr			コンテンツID文字列

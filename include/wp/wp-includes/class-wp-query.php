@@ -2813,6 +2813,15 @@ class WP_Query {
 	 * @return bool Whether the query is for an existing single post of any of the given post types.
 	 */
 	public function is_singular( $post_types = '' ) {
+		//global $post;		// get_posts()が呼ばれていない、メインループに入っていない場合があるので使用不可
+		global $gContentApi;
+		
+		// データタイプが指定されている場合はWP_Postデータタイプもチェック
+		$postType = $gContentApi->getPostType();
+		if (empty($post_types) || $post_types == $postType){
+			return $this->is_single || $this->is_page || $this->is_attachment;
+		}
+		return false;
 /*		if ( empty( $post_types ) || !$this->is_singular )
 			return (bool) $this->is_singular;
 
@@ -2820,7 +2829,6 @@ class WP_Query {
 
 		return in_array( $post_obj->post_type, (array) $post_types );
 		*/
-		return $this->is_single || $this->is_page || $this->is_attachment;
 	}
 
 	/**
