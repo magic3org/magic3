@@ -278,7 +278,7 @@ function wp_default_scripts( &$scripts ) {
 	$scripts->add( 'swfobject', "/scripts/wp/swfobject.js", array(), '2.2-20120417');
 
 	// error message for both plupload and swfupload
-	$uploader_l10n = array(
+/*	$uploader_l10n = array(
 		'queue_limit_exceeded' => __('You have attempted to queue too many files.'),
 		'file_exceeds_size_limit' => __('%s exceeds the maximum upload size for this site.'),
 		'zero_byte_file' => __('This file is empty. Please try another.'),
@@ -290,9 +290,9 @@ function wp_default_scripts( &$scripts ) {
 		'missing_upload_url' => __('There was a configuration error. Please contact the server administrator.'),
 		'upload_limit_exceeded' => __('You may only upload 1 file.'),
 		'http_error' => __('HTTP error.'),
-		'upload_failed' => __('Upload failed.'),
+		'upload_failed' => __('Upload failed.'),*/
 		/* translators: 1: Opening link tag, 2: Closing link tag */
-		'big_upload_failed' => __('Please try uploading this file with the %1$sbrowser uploader%2$s.'),
+/*		'big_upload_failed' => __('Please try uploading this file with the %1$sbrowser uploader%2$s.'),
 		'big_upload_queued' => __('%s exceeds the maximum upload size for the multi-file uploader when used in your browser.'),
 		'io_error' => __('IO error.'),
 		'security_error' => __('Security error.'),
@@ -302,8 +302,8 @@ function wp_default_scripts( &$scripts ) {
 		'crunching' => __('Crunching&hellip;'),
 		'deleted' => __('moved to the trash.'),
 		'error_uploading' => __('&#8220;%s&#8221; has failed to upload.')
-	);
-
+	);*/
+/*
 	$scripts->add( 'plupload', '/scripts/wp/plupload/plupload.full.min.js', array(), '2.1.8' );
 	// Back compat handles:
 	foreach ( array( 'all', 'html5', 'flash', 'silverlight', 'html4' ) as $handle ) {
@@ -315,15 +315,16 @@ function wp_default_scripts( &$scripts ) {
 
 	$scripts->add( 'wp-plupload', "/scripts/wp/plupload/wp-plupload$suffix.js", array( 'plupload', 'jquery', 'json2', 'media-models' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize( 'wp-plupload', 'pluploadL10n', $uploader_l10n );
-
+*/
 	// keep 'swfupload' for back-compat.
-	$scripts->add( 'swfupload', '/scripts/wp/swfupload/swfupload.js', array(), '2201-20110113');
+/*	$scripts->add( 'swfupload', '/scripts/wp/swfupload/swfupload.js', array(), '2201-20110113');
 	$scripts->add( 'swfupload-swfobject', '/scripts/wp/swfupload/plugins/swfupload.swfobject.js', array('swfupload', 'swfobject'), '2201a');
 	$scripts->add( 'swfupload-queue', '/scripts/wp/swfupload/plugins/swfupload.queue.js', array('swfupload'), '2201');
 	$scripts->add( 'swfupload-speed', '/scripts/wp/swfupload/plugins/swfupload.speed.js', array('swfupload'), '2201');
 	$scripts->add( 'swfupload-all', false, array('swfupload', 'swfupload-swfobject', 'swfupload-queue'), '2201');
 	$scripts->add( 'swfupload-handlers', "/scripts/wp/swfupload/handlers$suffix.js", array('swfupload-all', 'jquery'), '2201-20110524');
 	did_action( 'init' ) && $scripts->localize( 'swfupload-handlers', 'swfuploadL10n', $uploader_l10n );
+	*/
 
 	$scripts->add( 'comment-reply', "/scripts/wp/comment-reply$suffix.js", array(), false, 1 );
 
