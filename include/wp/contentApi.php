@@ -508,6 +508,11 @@ class ContentApi extends BaseApi
 		// 前後のコンテンツ取得用のベース値を保存。単一コンテンツ表示の場合に使用。
 		switch ($this->contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+		case M3_VIEW_TYPE_PRODUCT:	// 製品
+		case M3_VIEW_TYPE_BBS:	// BBS
+		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+		case M3_VIEW_TYPE_EVENT:	// イベント
+		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 			$this->prevNextBaseValue = $wpPostObj->ID;		// 前後のコンテンツ取得用のベース値(ID)
 			break;
 		case M3_VIEW_TYPE_BLOG:	// ブログ
@@ -586,7 +591,7 @@ class ContentApi extends BaseApi
 			$serial = $row['pt_serial'];
 			$id		= $row['pt_id'];
 			$title	= $row['pt_name'];
-			$authorId		= $row['pt_regist_user_id'];		// コンテンツ登録者
+			$authorId		= $row['pt_create_user_id'];		// コンテンツ登録者
 			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
 			$date			= $row['pt_create_dt'];
@@ -770,7 +775,8 @@ class ContentApi extends BaseApi
 				
 				// 記事が単体の場合は単体記事表示を指定
 				if (count($this->contentId) == 1){
-					if ($this->contentType == M3_VIEW_TYPE_BLOG){		// ブログ記事のみ?
+					if ($this->contentType == M3_VIEW_TYPE_BLOG ||			// ブログ記事
+						$this->contentType == M3_VIEW_TYPE_PRODUCT){			// 製品
 						$wp_query->is_single = true;
 					} else {
 						$wp_query->is_page = true;		// WordPress固定ページ型

@@ -798,6 +798,7 @@ class BaseFrameContainer extends Core
 			do_action('after_setup_theme');		// wp-multibyte-patchプラグイン読み込み
 			do_action('init');					// テンプレート側からの初期処理(ウィジェットのCSSの初期化等)
 			do_action('wp_loaded');
+			do_action('template_redirect');		// テンプレート前処理
 			
 			// ##### 起動PHPファイル取得。データ取得用パラメータ設定。#####
 			// URLパラメータからコンテンツ形式を取得し、ページを選択
@@ -809,6 +810,7 @@ class BaseFrameContainer extends Core
 			
 			// コンテンツタイプに合わせて起動PHPファイルを決める。デフォルトはindex.phpで一覧形式で表示。
 			$pageTypeDefined = false;		// ページタイプ確定したかどうか
+			$wpIndexFile = get_index_template();		// WordPress用テンプレート起動ファイル
 			$contentType = $GLOBALS['gContentApi']->getContentType();
 			switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
@@ -817,7 +819,8 @@ class BaseFrameContainer extends Core
 					$GLOBALS['gContentApi']->setPageType('page');
 					
 					// フルパスで返るので相対パスに修正
-					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
+//					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
+					$wpIndexFile = get_page_template();		// 固定ページテンプレート
 					
 					// コンテンツID設定
 					$firstValue = $request->trimValueOf($firstKey);
@@ -827,18 +830,31 @@ class BaseFrameContainer extends Core
 				}
 				break;
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				if ($firstKey == M3_REQUEST_PARAM_PRODUCT_ID || $firstKey == M3_REQUEST_PARAM_PRODUCT_ID_SHORT){		// 製品IDのとき
+					// ページタイプを設定
+					$GLOBALS['gContentApi']->setPageType('single');
+					
+					// フルパスで返るので相対パスに修正
+					//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
+					$wpIndexFile = get_single_template();		// 記事詳細テンプレート
+					
+					// コンテンツID設定
+					$firstValue = $request->trimValueOf($firstKey);
+					$GLOBALS['gContentApi']->setContentId($firstValue);
+					
+					$pageTypeDefined = true;		// ページタイプ確定
+				}
 				break;
 			case M3_VIEW_TYPE_BBS:	// BBS
 				break;
 			case M3_VIEW_TYPE_BLOG:	// ブログ
-//				if ($firstKey == M3_REQUEST_PARAM_BLOG_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ID_SHORT ||			// ブログIDのとき
-//					$firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 				if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT){		// ブログ記事IDのとき
 					// ページタイプを設定
 					$GLOBALS['gContentApi']->setPageType('single');
 					
 					// フルパスで返るので相対パスに修正
-					$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
+					//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_single_template());		// 記事詳細テンプレート
+					$wpIndexFile = get_single_template();		// 記事詳細テンプレート
 					
 					// コンテンツID設定
 					$firstValue = $request->trimValueOf($firstKey);
@@ -855,9 +871,10 @@ class BaseFrameContainer extends Core
 						// カテゴリー用テンプレート取得
 						$template = get_category_template();
 						if (empty($template)) $template = get_archive_template();		// カテゴリー用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
+						$wpIndexFile = $template;
 						
 						// フルパスで返るので相対パスに修正
-						$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);		// カテゴリーテンプレート
+						//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);		// カテゴリーテンプレート
 						
 						$pageTypeDefined = true;		// ページタイプ確定
 					}
@@ -873,9 +890,10 @@ class BaseFrameContainer extends Core
 							// 年月日用テンプレート取得
 							$template = get_date_template();
 							if (empty($template)) $template = get_archive_template();		// 年月日用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
+							$wpIndexFile = $template;		// 記事詳細テンプレート
 						
 							// フルパスで返るので相対パスに修正
-							$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);
+							//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);
 
 							$pageTypeDefined = true;		// ページタイプ確定
 						}
@@ -888,7 +906,8 @@ class BaseFrameContainer extends Core
 							$GLOBALS['gContentApi']->setPageType('search');			// 検索結果表示
 					
 							// フルパスで返るので相対パスに修正
-							$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+							//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
+							$wpIndexFile = get_search_template();		// 検索結果テンプレート
 							
 							$pageTypeDefined = true;		// ページタイプ確定
 						}
@@ -909,7 +928,8 @@ class BaseFrameContainer extends Core
 				$GLOBALS['gContentApi']->setPageType('page');
 					
 				// フルパスで返るので相対パスに修正
-				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
+				//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
+				$wpIndexFile = get_page_template();		// 固定ページテンプレート
 				
 				$pageTypeDefined = true;		// ページタイプ確定
 				break;
@@ -918,7 +938,8 @@ class BaseFrameContainer extends Core
 			// コンテンツタイプが設定されているページでページタイプが設定されていないページの場合はデフォルトテンプレート(index.php)の代わりにホーム用テンプレートを取得
 			if (!empty($contentType) && !$pageTypeDefined){
 				// フルパスで返るので相対パスに修正
-				$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
+				//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_home_template());		// ホーム用テンプレート
+				$wpIndexFile = get_home_template();		// ホーム用テンプレート
 			}
 
 			// サイトのトップページを表示する場合(コンテンツタイプが設定されていないページをデフォルトで表示する場合)は優先してフロント用テンプレートを表示
@@ -928,10 +949,19 @@ class BaseFrameContainer extends Core
 				$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
 				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId() && empty($pageSubId)){		// デフォルトページを表示し「sub」なしに限定
 					$frontPageTemplate = get_front_page_template();
-					if (!empty($frontPageTemplate)) $defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
+					if (!empty($frontPageTemplate)){
+						//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $frontPageTemplate);	// フロントページテンプレート
+						$wpIndexFile = $frontPageTemplate;		// フロントページテンプレート
+					}
 				}
 			}
+			
+			// プラグインからの起動ファイルパス変換
+			$wpIndexFile = apply_filters('template_include', $wpIndexFile);
 
+			// Magic3用のテンプレート起動ファイルパスに変換
+			$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $wpIndexFile);
+			
 			// WordPressオブジェクト作成
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき

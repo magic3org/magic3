@@ -1724,6 +1724,7 @@ class WP_Query {
 			$category = null;			// カテゴリー。設定なしの場合はnullを設定。
 		
 			// ページタイプごとの処理
+			// $this->is_singleの設定は前もってcontentApi側で行う
 			$pageType = $gContentApi->getPageType();		// ページタイプ取得
 			switch ($pageType){
 			case 'single':			// ブログ単体記事ページの場合
