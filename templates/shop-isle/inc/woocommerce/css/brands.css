@@ -1,0 +1,22 @@
+.header-widget-region .widget_brand_thumbnails ul.brand-thumbnails {
+	text-align: center;
+}
+
+.header-widget-region .widget_brand_thumbnails ul.brand-thumbnails::after {
+	display: table;
+	clear: both;
+	content: "";
+}
+
+.header-widget-region .widget_brand_thumbnails ul.brand-thumbnails li {
+	display: inline-block;
+	float: none!important;
+	width: auto!important;
+	margin-bottom: 0!important;
+}
+
+.header-widget-region .widget_brand_thumbnails ul.brand-thumbnails li img {
+	display: block;
+	width: auto;
+	max-height: 16px;
+}

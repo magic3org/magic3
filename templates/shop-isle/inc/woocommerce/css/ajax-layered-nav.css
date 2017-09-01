@@ -1,0 +1,71 @@
+.widget_layered_nav ul.colors li a {
+	display: block;
+}
+
+.widget_layered_nav ul.colors li .box {
+	display: inline-block;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 1.618em;
+	height: 1.618em;
+	border: 0;
+	border-radius: 0.202em;
+}
+
+.widget_layered_nav ul.colors li.chosen a {
+	opacity: 1;
+}
+
+.widget_layered_nav ul.colors li.chosen a:hover {
+	opacity: 0.5;
+}
+
+.widget_layered_nav ul.checkboxes li input {
+	margin-right: 0.618em;
+}
+
+.widget_layered_nav ul.sizes li a {
+	opacity: 1;
+}
+
+.widget_layered_nav ul.sizes li .size-filter {
+	min-width: 1.618em;
+	height: 1.618em;
+	border: 0;
+	border-radius: 0.202em;
+	opacity: 0.5;
+	background-color: #fff;
+	font-size: 1em;
+	font-weight: 700;
+	line-height: 1.618;
+	text-align: center;
+}
+
+.widget_layered_nav ul.sizes li .size-filter:hover,
+.widget_layered_nav ul.sizes li.chosen .size-filter {
+	opacity: 1;
+}
+
+.widget_layered_nav ul.sizes li.chosen .size-filter:hover {
+	opacity: 0.5;
+}
+
+.widget_layered_nav ul.checkboxes li.chosen:before,
+.widget_layered_nav ul.colors li.chosen:before,
+.widget_layered_nav ul.sizes li.chosen:before {
+	display: none;
+}
+
+.widget_layered_nav ul.checkboxes li.show-count a,
+.widget_layered_nav ul.colors li.show-count a,
+.widget_layered_nav ul.sizes li.show-count a {
+	display: inline-block;
+}
+
+.widget_layered_nav ul.checkboxes li.show-count .count,
+.widget_layered_nav ul.colors li.show-count .count,
+.widget_layered_nav ul.sizes li.show-count .count {
+	float: right;
+	font-size: 1em;
+	line-height: 1.618;
+}

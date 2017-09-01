@@ -1,0 +1,216 @@
+/* -------------------------------------------------------------------
+General Styles - FlexSlider
+------------------------------------------------------------------- */
+
+.hero-slider .flex-direction-nav a,
+.hero-slider .flex-control-nav > li > a {
+	-webkit-transition: all 0.3s ease-in-out 0s;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+.hero-slider .flex-direction-nav a {
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	width: 50%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+}
+
+.hero-slider .flex-direction-nav .flex-prev {
+	left: 0;
+	opacity: 0;
+	cursor: grab;
+	cursor: -webkit-grab;
+	cursor: url(../images/prev-light.png) 40 40, url(../images/prev-light.cur) 40 40, e-resize;
+	/* standard: note the different path for the .cur file */
+	cursor: url(../images/prev-light.cur) 40 40, n-resize\9;
+	/* IE 8 and below */
+
+	*cursor: url(../images/prev-light.cur) 40 40, n-resize;
+	/* IE 7 and below */
+	_cursor: url(../images/prev-light.cur) 40 40, n-resize;
+	/* IE 6 */
+}
+
+.hero-slider .flex-direction-nav .flex-next {
+	right: 0;
+	opacity: 0;
+	cursor: grab;
+	cursor: -webkit-grab;
+	cursor: url(../images/next-light.png) 40 40, url(../images/next-light.cur) 40 40, e-resize;
+	/* standard: note the different path for the .cur file */
+	cursor: url(../images/next-light.cur) 40 40, n-resize\9;
+	/* IE 8 and below */
+
+	*cursor: url(../images/next-light.cur) 40 40, n-resize;
+	/* IE 7 and below */
+	_cursor: url(../images/next-light.cur) 40 40, n-resize;
+	/* IE 6 */
+}
+
+.hero-slider .flex-direction-nav li .flex-disabled {
+	cursor: default;
+}
+
+.hero-slider .flex-control-nav {
+	position: absolute;
+	z-index: 11;
+	bottom: 20px;
+	left: 50%;
+	width: auto;
+	text-align: center;
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+.hero-slider .flex-control-nav > li {
+	display: inline-block;
+	margin: 5px 3px;
+}
+
+.hero-slider .flex-control-nav > li > a {
+	display: block;
+	width: 6px;
+	height: 6px;
+	border: 1px solid #fff;
+	border-radius: 6px;
+	background: transparent;
+}
+
+.hero-slider .flex-control-nav > li > a:hover,
+.hero-slider .flex-control-nav > li > a.flex-active {
+	background: #fff;
+}
+
+.hero-slider .home-slider-overlay {
+	display: none;
+}
+
+#home .hero-slider {
+	width: 100%;
+	height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+	#home .hero-slider {
+		position: fixed;
+	}
+
+	.hero-slider .home-slider-overlay {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0.3;
+		background: rgba(0,0,0,1);
+	}
+}
+
+
+/* -------------------------------------------------------------------
+Hero Slider
+------------------------------------------------------------------- */
+
+.hero-slider {
+	margin: 0!important;
+}
+
+.hero-slider .slides > li {
+	display: none;
+	-webkit-backface-visibility: hidden;
+}
+
+.hero-slider,
+.hero-slider .flex-viewport {
+	width: 100%;
+	height: 100% !important;
+	margin: 0;
+	padding: 0;
+}
+
+.hero-slider .slides {
+	height: 100% !important;
+	-webkit-transition-delay: 1s;
+	transition-delay: 1s;
+}
+
+.hero-slider .flex-direction-nav a {
+	width: 15%;
+}
+
+.hero-slider .slides li {
+	width: 100%;
+	height: 100% !important;
+	margin: 0;
+	padding: 0;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+/* Caption */
+.hero-slider .hs-caption {
+	display: table;
+	position: relative;
+	width: 70%;
+	height: 100%;
+	margin: 0 auto;
+}
+
+.hero-slider .hs-caption {
+	display: table;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+}
+
+.hero-slider .caption-content {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+/* -------------------------------------------------------------------
+General Styles - Owlcarousel
+------------------------------------------------------------------- */
+
+.owl-controls {
+	margin-top: 40px;
+}
+
+.owl-pagination div {
+	display: inline-block;
+}
+
+.owl-controls .owl-page span {
+	display: block;
+	width: 6px;
+	height: 6px;
+	margin: 0 3px 5px;
+	border: 1px solid #111;
+	border-radius: 6px;
+	background: transparent;
+	-webkit-transition: all 0.3s ease-in-out 0s;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+.owl-controls .owl-page.active span,
+.owl-controls.clickable .owl-page:hover span {
+	background: #111;
+}
+
+.owl-controls .owl-buttons > div {
+	display: inline-block;
+	margin: 5px;
+	color: #111;
+	font-size: 14px;
+}

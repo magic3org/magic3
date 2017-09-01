@@ -1,0 +1,27 @@
+#customize-controls .control-section-shopisle-upsell .accordion-section-title:hover,
+#customize-controls .control-section-shopisle-upsell .accordion-section-title:focus {
+	background-color: #fff;
+}
+
+.control-section-shopisle-upsell .accordion-section-title .button {
+	margin-top: -4px;
+	margin-left: 8px;
+	font-weight: 400;
+}
+
+.rtl .control-section-shopisle-upsell .accordion-section-title .button {
+	margin-right: 8px;
+	margin-left: 0;
+}
+
+.frontpage-sections-upsell {
+	padding: 10px 10px 11px 14px;
+}
+
+.themeisle-boxed-section {
+	margin: 12px;
+}
+
+span.upsell-pro-label:before {
+	content: "pro";
+}

@@ -18,6 +18,11 @@
 
 -- *** システムベーステーブル ***
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'shop-isle';
+INSERT INTO _templates
+(tm_id,                     tm_name,          tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_info_url, tm_create_dt) VALUES
+('shop-isle',                'shop-isle',       100,       0,              false,     false,             true,        0,             'https://themeisle.com/',          now());
 
 -- *** システム標準テーブル ***
 -- 商品情報マスター

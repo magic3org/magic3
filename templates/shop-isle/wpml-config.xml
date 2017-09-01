@@ -1,0 +1,46 @@
+<wpml-config>
+	<admin-texts>
+		<key name="theme_mods_shop-isle-pro">
+			<key name="shop_isle_blog_header_title" />
+			<key name="shop_isle_blog_header_subtitle" />
+			<key name="shop_isle_homepage_slider_shortcode" />
+			<key name="shop_isle_banners_title" />
+			<key name="shop_isle_products_title" />
+			<key name="shop_isle_products_shortcode" />
+			<key name="shop_isle_products_category" />
+			<key name="shop_isle_video_title" />
+			<key name="shop_isle_yt_link" />
+			<key name="shop_isle_yt_thumbnail" />
+			<key name="shop_isle_video_section_padding" />
+			<key name="shop_isle_services_title" />
+			<key name="shop_isle_services_subtitle" />
+			<key name="shop_isle_ribbon_background" />
+			<key name="shop_isle_ribbon_text" />
+			<key name="shop_isle_ribbon_button_text" />
+			<key name="shop_isle_ribbon_button_link" />
+			<key name="shop_isle_products_slider_title" />
+			<key name="shop_isle_products_slider_subtitle" />
+			<key name="shop_isle_products_slider_category" />
+			<key name="shop_isle_map_shortcode" />
+			<key name="shop_isle_fp_categories_title" />
+			<key name="shop_isle_fp_categories_subtitle" />
+			<key name="shop_isle_fp_categories_list" />
+			<key name="shop_isle_copyright" />
+			<key name="shop_isle_font_size" />
+			<key name="shop_isle_404_background" />
+			<key name="shop_isle_404_title" />
+			<key name="shop_isle_404_text" />
+			<key name="shop_isle_404_link" />
+			<key name="shop_isle_404_label" />
+			<key name="shop_isle_contact_page_form_shortcode" />
+			<key name="shop_isle_contact_page_map_shortcode" />
+			<key name="shop_isle_our_team_title" />
+			<key name="shop_isle_our_team_subtitle" />
+			<key name="shop_isle_about_page_video_title" />
+			<key name="shop_isle_about_page_video_subtitle" />
+			<key name="shop_isle_about_page_video_background" />
+			<key name="shop_isle_about_page_video_link" />
+			<key name="shop_isle_our_advantages_title" />
+		</key>
+	</admin-texts>
+</wpml-config>

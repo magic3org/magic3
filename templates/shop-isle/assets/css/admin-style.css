@@ -1,0 +1,334 @@
+.customize-control-title {
+	color: rgb(0, 142, 214);
+}
+
+.shop_isle_repeater_container,
+.shop_isle_general_control_repeater_container {
+	float: left;
+	width: 100%;
+	padding: 5px 0;
+	cursor: move;
+}
+
+.shop_isle_repeater_container .shop-isle-customize-control-label,
+.shop_isle_general_control_repeater_container .shop-isle-customize-control-label {
+	padding: 5px;
+	padding-top: 0;
+	border: 1px solid #dfdfdf;
+	border-top: 0;
+}
+
+button.shop_isle_remove_field {
+	display: inline-block;
+	float: right;
+	width: 25% !important;
+	height: 57px !important;
+	line-height: 17px !important;
+	white-space: initial !important;
+}
+
+button.shop_isle_general_control_remove_field {
+	width: 100%;
+	margin-top: 10px!important;
+}
+
+button.shop_isle_general_control_remove_field:hover {
+	border: 0;
+	color: #fff!important;
+	background-color: #00a0d2!important;
+}
+
+.shop_isle_repeater_container .shop_isle_icon_link,
+.shop_isle_general_control_repeater_container .shop_isle_text_control,
+.shop_isle_general_control_repeater_container .shop_isle_link_control {
+	width: 100% !important;
+	margin: 3px 0 0 !important;
+}
+
+.shop_isle_repeater_container .shop_isle_icons,
+.shop_isle_general_control_repeater_container .shop_isle_icon_control {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#shop_isle_new_field,
+#shop_isle_general_control_new_field {
+	width: 100%;
+}
+
+.customize-control-widget_form .widget-control-save {
+	display: block !important;
+}
+
+.shop_isle_our_services_image_control {
+	display: none;
+}
+
+.shop_isle_our_services_icon_control {
+	display: none;
+}
+
+.shop_isle_general_control_repeater_container .shop-isle-customize-control-label {
+	display: none;
+}
+
+.shop-isle-customize-control-title {
+	overflow: hidden;
+	height: 40px;
+	padding: 0 10px !important;
+	border: 1px solid #dfdfdf;
+	border-radius: 3px;
+	color: #00a0d2;
+	background-color: #f1f1f1;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#ececec));
+	background-image: -webkit-linear-gradient(to bottom, #f9f9f9, #ececec);
+	background-image: -webkit-linear-gradient(top, #f9f9f9, #ececec);
+	background-image: linear-gradient(to bottom, #f9f9f9, #ececec);
+	-webkit-box-shadow: inset 0 1px 0 #fff;
+	box-shadow: inset 0 1px 0 #fff;
+	font-weight: bold;
+	line-height: 40px !important;
+	text-align: center;
+	cursor: move !important;
+}
+
+.shop_isle_image_control .custom_media_button_shop_isle {
+	margin-top: 5px;
+}
+
+#customize-control-shop_isle_contact_form_shortcode {
+	display: none;
+}
+
+.shop-isle-upgrade-to-pro-button {
+	padding: 3px 6px !important;
+	color: #fff !important;
+	background-color: #ea6f60;
+	font-size: 9px !important;
+	line-height: 1.5 !important;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+/***********************************/
+/***** Sections order control ******/
+/***********************************/
+
+.shop_isle_pro_order_ul li {
+	display: block;
+	width: 95%;
+	margin-bottom: 10px;
+	padding: 10px;
+	border: 1px solid #dfdfdf;
+	border-radius: 3px;
+	color: #008ed6;
+	background-color: #fff;
+	font-weight: bold;
+	cursor: move;
+}
+
+.shop_isle_pro_shake.ui-sortable-helper {
+	background-color: rgba(255, 255, 255, 0.8)!important;
+}
+
+@-webkit-keyframes spaceboots {
+	0% {
+		-webkit-transform: translate(0px, 0px) rotate(0deg);
+	}
+
+	0% {
+		-webkit-transform: translate(2px, 1px) rotate(0deg);
+	}
+
+	10% {
+		-webkit-transform: translate(-1px, -2px) rotate(-1deg);
+	}
+
+	20% {
+		-webkit-transform: translate(-3px, 0px) rotate(1deg);
+	}
+
+	30% {
+		-webkit-transform: translate(0px, 2px) rotate(0deg);
+	}
+
+	40% {
+		-webkit-transform: translate(1px, -1px) rotate(1deg);
+	}
+
+	50% {
+		-webkit-transform: translate(-1px, 2px) rotate(-1deg);
+	}
+
+	60% {
+		-webkit-transform: translate(-3px, 1px) rotate(0deg);
+	}
+
+	70% {
+		-webkit-transform: translate(2px, 1px) rotate(-1deg);
+	}
+
+	80% {
+		-webkit-transform: translate(-1px, -1px) rotate(1deg);
+	}
+
+	90% {
+		-webkit-transform: translate(2px, 2px) rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: translate(1px, -2px) rotate(-1deg);
+	}
+}
+
+.shop_isle_pro_shake {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation-name: spaceboots;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.shop_isle_pro_shake:nth-child(even) {
+	-webkit-animation-delay: 0.2s;
+	/* Chrome, Safari, Opera */
+	animation-delay: 0.2s;
+}
+
+.ui-sortable-placeholder {
+	visibility: visible!important;
+	border: 2px dashed #0590d6!important;
+}
+
+.shop_isle_pro_default {
+	width: 100%;
+	border: 1px solid #dfdfdf;
+	border-radius: 3px;
+	color: #fff;
+	background-color: #008ed6;
+	-webkit-transition: background-color 0.5s ease;
+	transition: background-color 0.5s ease;
+}
+
+.shop_isle_pro_default:hover {
+	width: 100%;
+	border: 1px solid #008ed6;
+	color: #008ed6;
+	background-color: #fff;
+}
+
+.shop_isle_pro_go_to_section {
+	float: right;
+	border: 1px solid #008ed6;
+	border-radius: 4px;
+	color: #008ed6;
+	background-color: #fff;
+	cursor: pointer;
+	-webkit-transition: background-color 0.5s ease;
+	transition: background-color 0.5s ease;
+}
+
+.shop_isle_pro_go_to_section:hover {
+	color: #fff;
+	background-color: #008ed6;
+}
+
+/* END Section Order Control*/
+
+/***********************************/
+/***** Palette picker control ******/
+/***********************************/
+
+#customize-control-metro_customizr_contact_form_shortcode {
+	display: none;
+}
+
+.metro_customizr_radio_control {
+	margin-top: 0;
+}
+
+.metro_customizr_general_control_repeater_container .metrox-box-content-hidden {
+	padding-top: 5px;
+}
+
+.shop_isle_pro_palette_picker li span {
+	display: inline-block;
+	width: 43px;
+	height: 40px;
+}
+
+.shop_isle_pro_palette_input {
+	float: left;
+	width: 209px;
+	height: 40px;
+	padding: 5px;
+	border: 1px solid #cfcfcf;
+	background-color: #fff;
+	font-size: 16px;
+	line-height: 40px;
+	cursor: pointer;
+}
+
+.shop_isle_pro_palette_input span {
+	display: block;
+	float: left;
+	width: 40px;
+	height: 40px;
+}
+
+.shop_isle_pro_dropdown {
+	float: left;
+	width: 20px;
+	height: 50px;
+	border: 1px solid #cfcfcf;
+	border-left: 0;
+	color: #fff;
+	background-color: #00a5f9;
+	font-size: 20px;
+	font-size: 12px;
+	line-height: 50px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.shop_isle_pro_dropdown span {
+	line-height: 50px;
+}
+
+.shop_isle_pro_palette_picker {
+	display: none;
+	clear: both;
+	width: 240px;
+	padding-top: 6px;
+	border: 1px solid #cfcfcf;
+	border-top: 0;
+	background-color: #fff;
+	text-align: center;
+}
+
+.shop_isle_pro_palette_picker li span {
+	cursor: pointer;
+}
+
+.shop_isle_pro_pallete_default {
+	line-height: 40px;
+	cursor: pointer;
+}
+
+.shop-isle-require-woo {
+	padding: 10px;
+	background-color: #f0ad4e;
+}
+
+.shopisle-theme-info {
+	text-align: center;
+}
+
+.shopisle-theme-info a {
+	text-decoration: none;
+}
+
+.shopisle-theme-info hr {
+	margin: 10px auto;
+}

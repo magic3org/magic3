@@ -1,0 +1,666 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ShopIsle\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-12 15:19+0200\n"
+"PO-Revision-Date: 2016-02-03 14:49+0100\n"
+"Last-Translator: Wp Trads <contact@wolforg.eu>\n"
+"Language-Team: Wp Trads <contact@wolforg.eu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_html__\n"
+"X-Poedit-Basepath: ../\n"
+"Language: fr_FR\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: inc\n"
+"X-Poedit-SearchPath-2: assets\n"
+
+#: 404.php:24
+msgid "Error 404"
+msgstr "Erreur 404"
+
+#: 404.php:41
+msgid "Back to home page"
+msgstr "Retour à la page d'accueil"
+
+#: archive.php:94 home.php:111 index.php:123
+msgid "Read more"
+msgstr "Lire la suite"
+
+#: archive.php:106 home.php:123 index.php:135
+msgid "<span class=\"meta-nav\">&laquo;</span> Older posts"
+msgstr "<span class=\"meta-nav\">&laquo;</span> Articles plus anciens"
+
+#: archive.php:107 home.php:124 index.php:136
+msgid "Newer posts <span class=\"meta-nav\">&raquo;</span>"
+msgstr "Articles plus récents <span class=\"meta-nav\">&raquo;</span>"
+
+#: comments.php:33 comments.php:51
+msgid "Comment navigation"
+msgstr "Navigation de commentaire"
+
+#: comments.php:34 comments.php:52
+msgid "&larr; Older Comments"
+msgstr "&larr; Commentaires plus anciens"
+
+#: comments.php:35 comments.php:53
+msgid "Newer Comments &rarr;"
+msgstr "Commentaires plus récents &rarr;"
+
+#: comments.php:60
+msgid "Comments are closed."
+msgstr "Les commentaires sont fermés."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "Rien de trouvé"
+
+#: content-none.php:19
+#, php-format
+msgid ""
+"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+"Prêt à publier votre 1er article ? <a href=\"%1$s\">Lancez vous ici</a>."
+
+#: content-none.php:23
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr "Désolé, mais rien ne correspond à vos critères."
+
+#: content-none.php:28
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
+"searching can help."
+msgstr "Il semble que rien ne soit trouvé pour votre recherche."
+
+#: front-page.php:20
+msgid "ShopIsle"
+msgstr "ShopIsle"
+
+#: front-page.php:20
+msgid "WooCommerce Theme"
+msgstr "Thème WooCommerce"
+
+#: front-page.php:20
+msgid "FIND OUT MORE"
+msgstr "EN SAVOIR PLUS"
+
+#: front-page.php:20
+msgid "Hight quality store"
+msgstr "Boutique de haute qualité"
+
+#: front-page.php:20
+msgid "Responsive Theme"
+msgstr "Thème Responsif"
+
+#: front-page.php:148
+msgid "Latest products"
+msgstr "Derniers produits"
+
+#: front-page.php:208 front-page.php:296
+msgid "Add To Cart"
+msgstr "Ajout au panier"
+
+#: front-page.php:246 front-page.php:334
+msgid "See all products"
+msgstr "Découvrez tous nos produits"
+
+#: front-page.php:255 front-page.php:343
+msgid "No products found."
+msgstr "Aucun produit trouvé"
+
+#: front-page.php:417
+msgid "Exclusive products"
+msgstr "Produits exclusifs"
+
+#: front-page.php:418
+msgid "Special category of products"
+msgstr "Catégorie spéciale de produits"
+
+#: header.php:35
+msgid "Loading..."
+msgstr "Chargement..."
+
+#: search.php:24
+#, php-format
+msgid "Search Results for: %s"
+msgstr "Résultats de recherche pour : %s"
+
+#: template-about.php:100 inc/customizer/customizer.php:463
+msgid "Meet our team"
+msgstr "Rencontrez notre équipe"
+
+#: template-about.php:101 inc/customizer/customizer.php:477
+msgid "An awesome way to introduce the members of your team."
+msgstr "Une jolie façon de présenter les membres de votre équipe."
+
+#: template-about.php:206 inc/customizer/customizer.php:531
+msgid "Presentation"
+msgstr "Présentation"
+
+#: template-about.php:207 inc/customizer/customizer.php:545
+msgid "What the video about our new products"
+msgstr "Regardez la vidéo de nos nouveaux produits"
+
+#: template-about.php:235 inc/customizer/customizer.php:586
+#: inc/customizer/customizer.php:603
+msgid "Our advantages"
+msgstr "Nos avantages"
+
+#: template-about.php:244 inc/customizer/customizer.php:617
+msgid "Ideas and concepts"
+msgstr "Idées et concepts"
+
+#: template-about.php:244 inc/customizer/customizer.php:617
+msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+msgstr "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+
+#: template-about.php:244 inc/customizer/customizer.php:617
+msgid "Designs & interfaces"
+msgstr "Désigns & interfaces"
+
+#: template-about.php:244 inc/customizer/customizer.php:617
+msgid "Highly customizable"
+msgstr "Facilement personnalisable"
+
+#: template-about.php:244 inc/customizer/customizer.php:617
+msgid "Easy to use"
+msgstr "Facile à utiliser"
+
+#: inc/init.php:9
+msgid "Shop isle Small Banner Homepage"
+msgstr "Petite bannière de page d'accueil Shop Isle"
+
+#: inc/customizer/customizer.php:27
+msgid "Header"
+msgstr "En-tête"
+
+#: inc/customizer/customizer.php:38
+msgid "Logo"
+msgstr "Logo"
+
+#: inc/customizer/customizer.php:48
+msgid "Slider section"
+msgstr "Section de diaporama"
+
+#: inc/customizer/customizer.php:62
+msgid "Hide slider section?"
+msgstr "Cacher la section de diaporama ?"
+
+#: inc/customizer/customizer.php:63
+msgid "If you check this box, the Slider section will disappear from homepage."
+msgstr ""
+"Si vous cochez cette case, la section diaporama disparaîtra de la page "
+"d'accueil."
+
+#: inc/customizer/customizer.php:76 inc/customizer/customizer.php:87
+#: inc/customizer/functions.php:164
+msgid "Add new slide"
+msgstr "Ajout de nouveau panneau"
+
+#: inc/customizer/customizer.php:86 inc/customizer/functions.php:158
+msgid "Slide"
+msgstr "Panneau"
+
+#: inc/customizer/customizer.php:95
+msgid "Banners section"
+msgstr "Section de bannière"
+
+#: inc/customizer/customizer.php:109
+msgid "Hide banners section?"
+msgstr "Cacher la section de bannières ?"
+
+#: inc/customizer/customizer.php:110
+msgid ""
+"If you check this box, the Banners section will disappear from homepage."
+msgstr ""
+"Si vous cochez cette case, la section de bannières disparaîtra de la page "
+"d'accueil."
+
+#: inc/customizer/customizer.php:123 inc/customizer/customizer.php:135
+msgid "Add new banner"
+msgstr "Ajout de nouvelle bannière"
+
+#: inc/customizer/customizer.php:134
+msgid "Banner"
+msgstr "Bannière"
+
+#: inc/customizer/customizer.php:144
+msgid "Products section"
+msgstr "Section de produits"
+
+#: inc/customizer/customizer.php:145
+msgid ""
+"If no shortcode or no category is selected , WooCommerce latest products are "
+"displaying."
+msgstr ""
+"Si pas de code court ou de catégorie choisie, les derniers produits "
+"WooCommerce seront affichés."
+
+#: inc/customizer/customizer.php:157
+msgid "Hide products section?"
+msgstr "Cacher la section de produits ?"
+
+#: inc/customizer/customizer.php:158
+msgid ""
+"If you check this box, the Products section will disappear from homepage."
+msgstr ""
+"Si vous cochez cette case, la section de produits disparaîtra de la page "
+"d'accueil."
+
+#: inc/customizer/customizer.php:171 inc/customizer/customizer.php:317
+msgid "Section title"
+msgstr "Titre de section"
+
+#: inc/customizer/customizer.php:183
+msgid "WooCommerce shortcode"
+msgstr "Code court WooCommerce"
+
+#: inc/customizer/customizer.php:185
+msgid "Insert a WooCommerce shortcode"
+msgstr "Insertion de code court WooCommerce"
+
+#: inc/customizer/customizer.php:189
+msgid "Select category"
+msgstr "Sélectionnez la catégorie"
+
+#: inc/customizer/customizer.php:210 inc/customizer/customizer.php:344
+msgid "Products category"
+msgstr "Catégorie de produits"
+
+#: inc/customizer/customizer.php:211
+msgid "OR pick a product category"
+msgstr "OU choisissez une catégorie de produit"
+
+#: inc/customizer/customizer.php:222
+msgid "Video section"
+msgstr "Section vidéo"
+
+#: inc/customizer/customizer.php:234
+msgid "Hide video section?"
+msgstr "Cacher la section vidéo ?"
+
+#: inc/customizer/customizer.php:235
+msgid "If you check this box, the Video section will disappear from homepage."
+msgstr ""
+"Si vous cochez cette case, la section vidéo disparaîtra de la page d'accueil."
+
+#: inc/customizer/customizer.php:247 inc/customizer/customizer.php:468
+#: inc/customizer/customizer.php:536 inc/customizer/customizer.php:608
+#: inc/customizer/customizer.php:667 inc/customizer/functions.php:208
+#: inc/customizer/functions.php:209 inc/customizer/functions.php:270
+#: inc/customizer/functions.php:271 inc/customizer/functions.php:334
+#: inc/customizer/functions.php:335
+msgid "Title"
+msgstr "Titre"
+
+#: inc/customizer/customizer.php:259
+msgid "Youtube link"
+msgstr "Lien Youtube"
+
+#: inc/customizer/customizer.php:269
+msgid "Products slider section"
+msgstr "Section de diaporama de produits"
+
+#: inc/customizer/customizer.php:270
+msgid ""
+"If no category is selected , WooCommerce products from the first category "
+"found are displaying."
+msgstr ""
+"Si pas de catégorie choisie, les produits WooCommerce de la première "
+"catégorie trouvée seront affichés."
+
+#: inc/customizer/customizer.php:284
+msgid "Hide products slider section on frontpage?"
+msgstr "Cachez la section de produits de la page d'accueil ?"
+
+#: inc/customizer/customizer.php:285
+msgid ""
+"If you check this box, the Products slider section will disappear from "
+"homepage."
+msgstr ""
+"Si vous cochez cette case, la section de diaporama de produits disparaîtra "
+"de la page d'accueil."
+
+#: inc/customizer/customizer.php:301
+msgid "Hide products slider section on single product page?"
+msgstr "Cachez la section de diaporama de produits sur la page produit ?"
+
+#: inc/customizer/customizer.php:302
+msgid ""
+"If you check this box, the Products slider section will disappear from each "
+"single product page."
+msgstr ""
+"Si vous cochez cette case, la section de diaporama de produits disparaîtra "
+"de la page du produit."
+
+#: inc/customizer/customizer.php:330
+msgid "Section subtitle"
+msgstr "Sous-titre de section"
+
+#: inc/customizer/customizer.php:356
+msgid "Footer"
+msgstr "Pied"
+
+#: inc/customizer/customizer.php:363 inc/structure/footer.php:82
+msgid "&copy; Themeisle, All rights reserved"
+msgstr ""
+"&copy; Themeisle, Tous droits réservés. Traduit par <a href=\"http://www."
+"wptrads.com/\">Wp Trads</a>."
+
+#: inc/customizer/customizer.php:368
+msgid "Copyright"
+msgstr "Copyright"
+
+#: inc/customizer/customizer.php:380 inc/customizer/customizer.php:392
+msgid "Add new social"
+msgstr "Ajout de nouveau social"
+
+#: inc/customizer/customizer.php:391
+msgid "Social"
+msgstr "Social"
+
+#: inc/customizer/customizer.php:400
+msgid "Contact page"
+msgstr "Page contact"
+
+#: inc/customizer/customizer.php:411
+msgid "Contact form shortcode"
+msgstr "Code court de formulaire de contact"
+
+#: inc/customizer/customizer.php:412
+msgid ""
+"Create a form, copy the shortcode generated and paste it here. We recommend "
+"<a href=\"https://wordpress.org/plugins/contact-form-7/\">Contact Form 7</a> "
+"but you can use any plugin you like."
+msgstr ""
+"Créez un formulaire, codiez le code court généré et collez le ici. Nous "
+"recommandons <a href=\"https://wordpress.org/plugins/contact-form-7/"
+"\">Contact Form 7</a> mais vous pouvez utiliser une autre extension"
+
+#: inc/customizer/customizer.php:425
+msgid "Map shortcode"
+msgstr "Code court de carte"
+
+#: inc/customizer/customizer.php:426
+msgid ""
+"To use this section please install <a href=\"https://wordpress.org/plugins/"
+"intergeo-maps/\">Intergeo Maps</a> plugin then use it to create a map and "
+"paste here the shortcode generated"
+msgstr ""
+"Pour utiliser cette section, merci d'installer l'extension <a href=\"https://"
+"wordpress.org/plugins/intergeo-maps/\">Intergeo Maps</a> puis de l'utiliser "
+"pour créer une carte et de coller ici le code court généré."
+
+#: inc/customizer/customizer.php:442
+msgid "About us page"
+msgstr "Page à propos de nous"
+
+#: inc/customizer/customizer.php:446
+msgid "Our team"
+msgstr "Notre équipe"
+
+#: inc/customizer/customizer.php:454
+msgid "About us page - our team"
+msgstr "Page à propos de nous - notre équipe"
+
+#: inc/customizer/customizer.php:482 inc/customizer/customizer.php:550
+#: inc/customizer/functions.php:214 inc/customizer/functions.php:215
+#: inc/customizer/functions.php:275 inc/customizer/functions.php:276
+#: inc/customizer/functions.php:339 inc/customizer/functions.php:340
+msgid "Subtitle"
+msgstr "Sous-titre"
+
+#: inc/customizer/customizer.php:495 inc/customizer/customizer.php:507
+msgid "Add new team member"
+msgstr "Ajout de nouveau membre d'équipe"
+
+#: inc/customizer/customizer.php:506
+msgid "Team member"
+msgstr "Membre d'équipe"
+
+#: inc/customizer/customizer.php:514 inc/customizer/customizer.php:577
+msgid "Video"
+msgstr "Vidéo"
+
+#: inc/customizer/customizer.php:522
+msgid "About us page - video"
+msgstr "Page à propos de nous - vidéo"
+
+#: inc/customizer/customizer.php:564
+msgid "Background"
+msgstr "Fond"
+
+#: inc/customizer/customizer.php:594
+msgid "About us page - our advantages"
+msgstr "Page à propos de nous - nos avantages"
+
+#: inc/customizer/customizer.php:622 inc/customizer/customizer.php:634
+msgid "Add new advantage"
+msgstr "Ajout de nouvel avantage"
+
+#: inc/customizer/customizer.php:633
+msgid "Advantage"
+msgstr "Avantage"
+
+#: inc/customizer/customizer.php:642
+msgid "404 Not found page"
+msgstr "404 - Page non trouvée"
+
+#: inc/customizer/customizer.php:654
+msgid "Background image"
+msgstr "Image de fond"
+
+#: inc/customizer/customizer.php:675
+msgid ""
+"The requested URL was not found on this server.<br> That is all we know."
+msgstr ""
+"L'URL demandée n'a pas été trouvée sur ce serveur.<br> C'est tout ce que "
+"nous savons."
+
+#: inc/customizer/customizer.php:681
+msgid "Text"
+msgstr "Texte"
+
+#: inc/customizer/customizer.php:694
+msgid "Button link"
+msgstr "Lien du bouton"
+
+#: inc/customizer/customizer.php:707
+msgid "Button label"
+msgstr "Libellé de bouton"
+
+#: inc/customizer/customizer.php:717
+msgid "Advanced options"
+msgstr "Options avancées"
+
+#: inc/customizer/customizer.php:769
+msgid "Disable preloader?"
+msgstr "Désactiver le préchargeur ?"
+
+#: inc/customizer/customizer.php:770
+msgid "If this box is checked, the preloader will be disabled from homepage."
+msgstr ""
+"Si cette case est cochée, le préchargeur sera désactivé de la page d'accueil."
+
+#: inc/customizer/functions.php:33
+msgid "Documentation"
+msgstr "Documentation"
+
+#: inc/customizer/functions.php:34
+msgid "Support Forum"
+msgstr "Forum de support"
+
+#: inc/customizer/functions.php:188 inc/customizer/functions.php:245
+#: inc/customizer/functions.php:309
+msgid "Icon"
+msgstr "Icône"
+
+#: inc/customizer/functions.php:199 inc/customizer/functions.php:262
+#: inc/customizer/functions.php:326
+msgid "Image"
+msgstr "Image"
+
+#: inc/customizer/functions.php:202 inc/customizer/functions.php:265
+#: inc/customizer/functions.php:329
+msgid "Upload Image"
+msgstr "Envoi d'image"
+
+#: inc/customizer/functions.php:219 inc/customizer/functions.php:220
+#: inc/customizer/functions.php:280 inc/customizer/functions.php:281
+#: inc/customizer/functions.php:344 inc/customizer/functions.php:345
+msgid "Description"
+msgstr "Description"
+
+#: inc/customizer/functions.php:224 inc/customizer/functions.php:225
+#: inc/customizer/functions.php:285 inc/customizer/functions.php:286
+#: inc/customizer/functions.php:349 inc/customizer/functions.php:350
+msgid "Button Label"
+msgstr "Libellé de bouton"
+
+#: inc/customizer/functions.php:229 inc/customizer/functions.php:230
+#: inc/customizer/functions.php:290 inc/customizer/functions.php:291
+#: inc/customizer/functions.php:354 inc/customizer/functions.php:355
+msgid "Button Link"
+msgstr "Lien du bouton"
+
+#: inc/customizer/functions.php:232 inc/customizer/functions.php:293
+#: inc/customizer/functions.php:358
+msgid "Delete field"
+msgstr "Supprimer le champ"
+
+#: inc/functions/setup.php:59
+msgid "Primary Menu"
+msgstr "Menu principal"
+
+#: inc/functions/setup.php:105
+msgid "Sidebar"
+msgstr "Barre"
+
+#: inc/functions/setup.php:114
+msgid "Footer area 1"
+msgstr "Zone de pied 1"
+
+#: inc/functions/setup.php:123
+msgid "Footer area 2"
+msgstr "Zone de pied 2"
+
+#: inc/functions/setup.php:132
+msgid "Footer area 3"
+msgstr "Zone de pied 3"
+
+#: inc/functions/setup.php:141
+msgid "Footer area 4"
+msgstr "Zone de pied 4"
+
+#: inc/structure/comments.php:40
+#, php-format
+msgid "<cite class=\"fn\">%s</cite>"
+msgstr "<cite class=\"fn\">%s</cite>"
+
+#: inc/structure/comments.php:43
+msgid "Your comment is awaiting moderation."
+msgstr "Votre commentaire est en attente de validation."
+
+#: inc/structure/comments.php:60
+msgid "Edit"
+msgstr "Modifier"
+
+#: inc/structure/footer.php:121
+msgid "powered by"
+msgstr "propulsé par"
+
+#: inc/structure/header.php:72
+msgid "Toggle navigation"
+msgstr "Déplier/replier la navigation"
+
+#: inc/structure/header.php:104
+msgid "Skip to navigation"
+msgstr "Aller à la navigation"
+
+#: inc/structure/header.php:105
+msgid "Skip to content"
+msgstr "Aller au contenu"
+
+#: inc/structure/page.php:18 inc/structure/post.php:40
+msgid "Pages:"
+msgstr "Pages :"
+
+#: inc/structure/post.php:34
+#, php-format
+msgid "Continue reading %s"
+msgstr "Lire la suite de %s"
+
+#: inc/structure/post.php:47
+msgid ", "
+msgstr ", "
+
+#: inc/structure/post.php:49
+#, php-format
+msgid "Tagged %1$s"
+msgstr "Étiquetté %1$s"
+
+#: inc/structure/post.php:79
+msgid "Posts navigation"
+msgstr "Navigation des articles"
+
+#: inc/structure/post.php:82
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr "<span class=\"meta-nav\">&larr;</span> Articles plus anciens"
+
+#: inc/structure/post.php:85
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Articles plus récents <span class=\"meta-nav\">&rarr;</span>"
+
+#: inc/structure/post.php:123
+msgid "By "
+msgstr "Par"
+
+#: inc/structure/post.php:143
+msgid "No Comments"
+msgstr "0 Commentaires"
+
+#: inc/structure/post.php:145
+msgid " Comments"
+msgstr " Commentaires"
+
+#: inc/structure/post.php:147
+msgid "1 Comment"
+msgstr "1 Commentaire"
+
+#: inc/structure/post.php:158
+#, php-format
+msgid "View all posts in %s"
+msgstr "Voir tout les articles dans %s"
+
+#: inc/structure/template-tags.php:26
+msgid "Product Categories"
+msgstr "Catégories de produit"
+
+#: inc/structure/template-tags.php:58
+msgid "Recent Products"
+msgstr "Produits récents"
+
+#: inc/structure/template-tags.php:92
+msgid "Featured Products"
+msgstr "Produits mis en avant"
+
+#: inc/structure/template-tags.php:124
+msgid "Top Rated Products"
+msgstr "Produits les mieux notés"
+
+#: inc/structure/template-tags.php:156
+msgid "On Sale"
+msgstr "Promotion"
+
+#: inc/woocommerce/functions.php:254
+msgid "Header description"
+msgstr "Description d'en-tête"
+
+#: inc/woocommerce/template-tags.php:18
+msgid "View your shopping cart"
+msgstr "Voir votre panier"
