@@ -180,6 +180,6 @@ function m3WpInit()
 	}
 	
 	// WordPress以外の主コンテンツ用のプラグインをロード
-	$gContentApi->loadPlugin();
+//	$gContentApi->loadPlugin();
 }
 ?>

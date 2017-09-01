@@ -786,6 +786,9 @@ class BaseFrameContainer extends Core
 			// テンプレートから参照可能にする
 			global $wp_query;
 
+			// ページに配置されているウィジェットの状況からWordPress以外の主コンテンツ用のプラグインをロード
+			$GLOBALS['gContentApi']->loadPlugin();
+
 			// テンプレート初期処理
 			do_action('setup_theme');
 			load_default_textdomain();			// 言語リソースを読み込む
