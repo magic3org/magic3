@@ -32,3 +32,13 @@ ALTER TABLE product ADD pt_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 
 ALTER TABLE product ADD pt_thumb_filename    TEXT                                         NOT NULL;      -- サムネールファイル名(「;」区切り)
 ALTER TABLE product ADD pt_thumb_src         TEXT                                         NOT NULL;      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
 ALTER TABLE product ADD pt_option_fields     TEXT                                         NOT NULL;      -- 追加フィールド
+
+-- 商品ステータス種別マスター
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('sale', 'ja', 'セール',     4);
+
+-- 商品ステータスマスター
+ALTER TABLE product_status ADD ps_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL;      -- 有効期間(開始)
+ALTER TABLE product_status ADD ps_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL;      -- 有期間(終了)
+
+-- 価格種別マスター
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale',   'ja', 11, 'セール価格',     7);

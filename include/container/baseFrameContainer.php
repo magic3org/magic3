@@ -690,6 +690,7 @@ class BaseFrameContainer extends Core
 	
 		if ($convType == 100){		// WordPressテンプレートのとき
 			// WordPress用ベース定義値
+			define('WP_DEBUG', true);			// ##### エラーメッセージ表示制御(true時noticeを表示) #####
 			define('WPINC', 'wp-includes');
 			define('ABSPATH', $this->gEnv->getWordpressRootPath() . '/' );
 			define('TEMPLATEPATH', $this->gEnv->getTemplatesPath() . '/' . $curTemplate);
