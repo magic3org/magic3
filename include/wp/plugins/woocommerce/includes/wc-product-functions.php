@@ -310,7 +310,16 @@ add_filter( 'post_type_link', 'wc_product_post_type_link', 10, 2 );
  * @return string
  */
 function wc_placeholder_img_src() {
-	return apply_filters( 'woocommerce_placeholder_img_src', WC()->plugin_url() . '/assets/images/placeholder.png' );
+//	return apply_filters( 'woocommerce_placeholder_img_src', WC()->plugin_url() . '/assets/images/placeholder.png' );
+	global $gEnvManager;
+	global $gContentApi;
+	
+	static $imageUrl;
+	
+	if (!isset($imageUrl)){
+		$imageUrl = $gContentApi->getUrl($gEnvManager->getRootUrl() . '/scripts/wp/woocommerce/assets/images/placeholder.png');
+	}
+	return $imageUrl;
 }
 
 /**
