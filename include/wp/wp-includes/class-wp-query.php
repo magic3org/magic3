@@ -2818,7 +2818,8 @@ class WP_Query {
 		
 		// データタイプが指定されている場合はWP_Postデータタイプもチェック
 		$postType = $gContentApi->getPostType();
-		if (empty($post_types) || $post_types == $postType){
+//		if (empty($post_types) || $post_types == $postType){
+		if (empty($post_types) || in_array($postType, (array)$post_types)){
 			return $this->is_single || $this->is_page || $this->is_attachment;
 		}
 		return false;
@@ -3001,7 +3002,8 @@ class WP_Query {
 		 * @param WP_Post  &$post The Post object (passed by reference).
 		 * @param WP_Query &$this The current Query object (passed by reference).
 		 */
-//		do_action_ref_array( 'the_post', array( &$post, &$this ) );
+		// ##### 製品情報(product)等の追加取得 #####
+		do_action_ref_array( 'the_post', array( &$post, &$this ) );
 
 		return true;
 	}
