@@ -723,6 +723,7 @@ class BaseFrameContainer extends Core
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-walker-nav-menu.php');
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post-type.php');
 
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
@@ -766,6 +767,7 @@ class BaseFrameContainer extends Core
 
 			// ##### データ初期化 #####
 			wp_initial_constants();			// WordPressその他定義値設定
+			create_initial_post_types();	// WP_Post型データ型登録
 			
 			// プラグイン初期化
 			$GLOBALS['wp_plugin_paths'] = array();			// $wp_plugin_pathsは未使用?

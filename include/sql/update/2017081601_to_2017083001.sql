@@ -34,11 +34,21 @@ ALTER TABLE product ADD pt_thumb_src         TEXT                               
 ALTER TABLE product ADD pt_option_fields     TEXT                                         NOT NULL;      -- 追加フィールド
 
 -- 商品ステータス種別マスター
-INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('sale', 'ja', 'セール',     4);
+DELETE FROM product_status_type;
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('new',     'ja', '新着',       0);
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('suggest', 'ja', 'おすすめ',   1);
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('few',     'ja', '残りわずか', 2);
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('limited', 'ja', '限定品',     3);
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('sale',    'ja', 'セール',     4);
 
 -- 商品ステータスマスター
 ALTER TABLE product_status ADD ps_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL;      -- 有効期間(開始)
 ALTER TABLE product_status ADD ps_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL;      -- 有期間(終了)
 
 -- 価格種別マスター
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale',   'ja', 11, 'セール価格',     7);
+DELETE FROM price_type;
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('selling', 'ja', 10, '通常価格',      0);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('bargain', 'ja', 10, '特価',          1);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('member',  'ja', 10, '会員価格',      2);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale',    'ja', 11, 'セール価格',    3);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 12, '仕入価格',      4);

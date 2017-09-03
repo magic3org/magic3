@@ -1115,7 +1115,7 @@ function register_post_type( $post_type, $args = array() ) {
 
 	if ( ! is_array( $wp_post_types ) ) {
 		$wp_post_types = array();
-	}
+	}*/
 
 	// Sanitize post type name
 	$post_type = sanitize_key( $post_type );
@@ -1127,7 +1127,7 @@ function register_post_type( $post_type, $args = array() ) {
 
 	$post_type_object = new WP_Post_Type( $post_type, $args );
 	$post_type_object->add_supports();
-	$post_type_object->add_rewrite_rules();
+/*	$post_type_object->add_rewrite_rules();
 	$post_type_object->register_meta_boxes();
 
 	$wp_post_types[ $post_type ] = $post_type_object;
@@ -1145,9 +1145,8 @@ function register_post_type( $post_type, $args = array() ) {
 	 * @param WP_Post_Type $post_type_object Arguments used to register the post type.
 	 */
 //	do_action( 'registered_post_type', $post_type, $post_type_object );
-//
-//	return $post_type_object;
-	return null;
+
+	return $post_type_object;
 }
 
 /**
@@ -1569,8 +1568,7 @@ function get_all_post_type_supports( $post_type ) {
 function post_type_supports( $post_type, $feature ) {
 	global $_wp_post_type_features;
 
-//	return ( isset( $_wp_post_type_features[$post_type][$feature] ) );
-	return true;
+	return ( isset( $_wp_post_type_features[$post_type][$feature] ) );
 }
 
 /**
