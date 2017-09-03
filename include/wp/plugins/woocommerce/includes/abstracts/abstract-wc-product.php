@@ -20,6 +20,7 @@ include_once( WC_ABSPATH . 'includes/legacy/abstract-wc-legacy-product.php' );
  * @author   WooThemes
  */
 class WC_Product extends WC_Abstract_Legacy_Product {
+//class WC_Product extends WC_Data {
 
 	/**
 	 * This is the name of this object type.
@@ -120,11 +121,11 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 		} else {
 			$this->set_object_read( true );
 		}
-
+/*
 		$this->data_store = WC_Data_Store::load( 'product-' . $this->get_type() );
 		if ( $this->get_id() > 0 ) {
 			$this->data_store->read( $this );
-		}
+		}*/
 	}
 
 	/**
