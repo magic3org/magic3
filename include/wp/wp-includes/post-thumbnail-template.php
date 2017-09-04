@@ -39,7 +39,8 @@ function get_post_thumbnail_id( $post = null ) {
 
 //	return get_post_meta( $post->ID, '_thumbnail_id', true );
 	// (Magic3仕様変更)単一ページの場合はサムネールを非表示
-	if (is_singular()){
+	//if (is_singular()){
+	if (is_single()){
 		return 0;
 	} else {
 		return $post->ID;
