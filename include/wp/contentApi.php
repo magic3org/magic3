@@ -680,28 +680,39 @@ class ContentApi extends BaseApi
 	/**
 	 * デフォルトのサムネール画像の情報を取得
 	 *
-	 * @return array						画像パス,画像URL,画像幅,画像高さの配列
+	 * @param string $contentType	コンテンツタイプ。空の場合はデフォルトのコンテンツタイプを使用。
+	 * @return array				画像パス,画像URL,画像幅,画像高さの配列
 	 */
-	function getDefaultThumbInfo()
+	function getDefaultThumbInfo($contentType = '')
 	{
 		static $thumbInfoArray;
 		
-		if (!isset($thumbInfoArray)){
-			// アイキャッチ画像の情報を取得
+		if (empty($contentType)) $contentType = $this->contentType;
+
+		$thumbInfo = $thumbInfoArray[$contentType];
+		if (!isset($thumbInfo)){
+			// コンテンツタイプ指定でアイキャッチ画像の情報を取得
 			$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
 			$ret = $this->gInstance->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
 		
 			$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $formats[0]);		// デフォルト画像ファイル名
-			$thumbPath = $this->gInstance->getImageManager()->getSystemThumbPath($this->contentType, 0/*PC用*/, $filename);
+			$thumbPath = $this->gInstance->getImageManager()->getSystemThumbPath($contentType, 0/*PC用*/, $filename);
 			if (file_exists($thumbPath)){
-				$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl($this->contentType, 0/*PC用*/, $filename);
-				$thumbInfoArray = array($thumbPath, $thumbUrl, $imageSize, $imageSize);
+				$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl($contentType, 0/*PC用*/, $filename);
+				$thumbInfo = array($thumbPath, $thumbUrl, $imageSize, $imageSize);
+				
+				// 取得したサムネール画像情報データを保存
+				$thumbInfoArray[$contentType] = $thumbInfo;
 			} else {
-				$msgDetail = '画像パス:' . $thumbPath;
-				$this->gOpeLog->writeError(__METHOD__, 'アイキャッチ用のデフォルト画像が見つかりません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
+				// コンテンツタイプ指定でサムネール画像が取得できない場合は汎用コンテンツのサムネール画像を取得
+				$thumbInfo = $this->getDefaultThumbInfo(M3_VIEW_TYPE_CONTENT);
+				if (!isset($thumbInfo)){
+					$msgDetail = '画像パス:' . $thumbPath;
+					$this->gOpeLog->writeError(__METHOD__, 'アイキャッチ用のデフォルト画像が見つかりません。(コンテンツタイプ=' . M3_VIEW_TYPE_CONTENT . ')', 2200, $msgDetail);
+				}
 			}
 		}
-		return $thumbInfoArray;
+		return $thumbInfo;
 	}
 	/**
 	 * コンテンツ詳細画面のURLを取得

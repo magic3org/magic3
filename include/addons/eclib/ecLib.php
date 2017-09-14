@@ -266,7 +266,7 @@ class ecLib
 	{
 	//	$itemCount = $this->getConfig(self::CF_ENTRY_VIEW_COUNT);
 		$itemCount = 10;
-		$showThumb = 0;
+		$showThumb = 1;
 		return array($itemCount, 1, $showThumb);
 	}
 	/**

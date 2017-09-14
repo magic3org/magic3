@@ -1905,7 +1905,8 @@ class WP_Query {
 			$this->post = reset( $this->posts );
 			
 			// the_post()の前にget_post()が呼ばれることがあるのでグローバル変数に保存
-//			$GLOBALS['post'] = $this->post;			// ########## 注意 ##### the_post()の実行前に初期値を設定しておくのがよいか実験中 ##### 注意 ##########
+			$GLOBALS['post'] = $this->post;			// ########## 注意 ##### the_post()の実行前に初期値を設定しておくのがよいか実験中 ##### 注意 ##########
+//			$GLOBALS['post_sub'] = $this->post;		// ########## サブループ用グローバルWP_Post型データ(Magic3で追加)                            ##########
 		} else {
 			$this->post_count = 0;
 			$this->posts = array();
@@ -2003,7 +2004,7 @@ class WP_Query {
 	 *
 	 * @global WP_Post $post
 	 */
-	/***** テンプレートのからループで毎回実行され、グローバルの$postが行進される *****/
+	/***** テンプレートのからループで毎回実行され、グローバルの$postが更新される *****/
 	public function the_post() {
 		global $post;
 		$this->in_the_loop = true;

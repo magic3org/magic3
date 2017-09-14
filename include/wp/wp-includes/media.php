@@ -185,10 +185,11 @@ function image_hwstring( $width, $height ) {
 function image_downsize( $id, $size = 'medium' ) {
 	global $gEnvManager;
 	global $gContentApi;
-	
-	// サムネール表示しない場合は終了
-	if (!$gContentApi->getShowThumb()) return false;
-	
+
+	// 現在のページのコンテンツタイプのサムネール出力設定を参照して、サムネール表示しない場合は終了
+	$contentType = $gContentApi->getContentType();
+	if (!empty($contentType) && !$gContentApi->getShowThumb()) return false;
+
 //	$is_image = wp_attachment_is_image( $id );	// 常に$is_imageにtrueが返る
 
 	/**
@@ -218,7 +219,11 @@ function image_downsize( $id, $size = 'medium' ) {
 	$height = 0;
 	if (empty($post->thumb_src)){		// サムネール画像が設定されていないとき
 		// 各コンテンツごとのデフォルトのサムネール画像を取得
-		$retVals = $gContentApi->getDefaultThumbInfo();
+		if ($post->post_type == 'product'){		// 製品情報の場合
+			$retVals = $gContentApi->getDefaultThumbInfo($post->post_type);
+		} else {
+			$retVals = $gContentApi->getDefaultThumbInfo();
+		}
 		if (is_array($retVals)) list($imgPath, $imgUrl, $width, $height) = $retVals;
 	} else {
 		$imagePath = $gEnvManager->getResourcePath() . $post->thumb_src;		// 画像パス
