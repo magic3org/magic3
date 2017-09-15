@@ -333,5 +333,28 @@ class ecLib
 		$row = $this->db->getPublicPrevNextEntry($type, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $categoryId);
 		return $row;
 	}*/
+	/**
+	 * コンテンツのサムネール画像パスを取得
+	 *
+	 * @param int $id			コンテンツID
+	 * @param string	$langId				言語
+	 * @return string			画像パス(resourceディレクトリからの相対パス)
+	 */
+	function getPublicContentThumb($id, $langId)
+	{
+		global $gEnvManager;
+		
+		$url = '';
+		
+		$ret = $this->db->getProductImage($id, $langId, $rows);
+		if ($ret){
+			// 最大の画像を取得
+			$url = $rows[0]['im_url'];
+			
+			// resourceディレクトリからの相対パスに変換
+			if (!strStartsWith($url, '/')) $url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_RESOURCE, '', $url);
+		}
+		return $url;
+	}
 }
 ?>

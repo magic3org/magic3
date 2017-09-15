@@ -597,6 +597,13 @@ class ContentApi extends BaseApi
 			$date			= $row['pt_create_dt'];
 			$contentHtml	= $row['pt_description'];
 			$thumbSrc		= $row['pt_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
+			
+			// サムネールが設定されていない場合は、製品の各種画像を取得
+			if (empty($thumbSrc)){
+				$addonObj = $this->_getAddonObj($contentType);
+				
+				$thumbSrc = $addonObj->getPublicContentThumb($id, $this->langId);
+			}
 			break;
 		}
 

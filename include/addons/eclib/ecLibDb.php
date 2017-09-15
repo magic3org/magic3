@@ -728,5 +728,24 @@ class ecLibDb extends BaseDb
 		
 		return array($queryStr, $params);
 	}
+	/**
+	 * 商品画像情報を商品ID、言語IDで取得
+	 *
+	 * @param int		$id					商品ID
+	 * @param string	$langId				言語ID
+	 * @param array     $rows				商品画像
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getProductImage($id, $langId, &$rows)
+	{
+		$queryStr  = 'SELECT * FROM product_image LEFT JOIN image_size ON im_size_id = is_id ';
+		$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
+		$queryStr .=     'AND im_type = 2 ';		// 商品画像
+		$queryStr .=     'AND im_id = ? ';
+		$queryStr .=     'AND im_language_id = ? ';
+		$queryStr .=   'ORDER BY is_sort_order DESC';
+		$ret = $this->selectRecords($queryStr, array($id, $langId), $rows);
+		return $ret;
+	}
 }
 ?>
