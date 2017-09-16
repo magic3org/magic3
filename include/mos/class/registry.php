@@ -397,7 +397,22 @@ class JRegistry extends JObject
 
 		return true;
 	}
-
+	/**
+	 * Load a string into the registry
+	 *
+	 * @param   string  $data     String to load into the registry
+	 * @param   string  $format   Format of the string
+	 * @param   array   $options  Options used by the formatter
+	 *
+	 * @return  Registry  Return this object to support chaining.
+	 *
+	 * @since   1.0
+	 */
+	public function loadString($data, $format = 'JSON', $options = array())
+	{
+		//return $this;
+		return true;
+	}
 	/**
 	 * Merge a JRegistry object into this one
 	 *
@@ -431,7 +446,6 @@ class JRegistry extends JObject
 		}
 		return false;
 	}
-
 	/**
 	 * Get a namespace in a given string format
 	 *
@@ -509,5 +523,35 @@ class JRegistry extends JObject
 	function __clone()
 	{
 		$this->_registry = unserialize(serialize($this->_registry));
+	}
+	
+	/**
+	 * Returns a property of the object or the default value if the property is not set.
+	 *
+	 * @access	public
+	 * @param	string $property The name of the property
+	 * @param	mixed  $default The default value
+	 * @return	mixed The value of the property
+	 * @see		getProperties()
+	 * @since	1.5
+ 	 */
+	function get($property, $default=null)
+	{
+/*		if(isset($this->$property)) {
+			return $this->$property;
+		}*/
+		global $gEnvManager;
+		global $gSystemManager;
+		
+		switch ($property){
+		case 'sitename':
+			$default = $gEnvManager->getSiteName();
+			break;
+		case 'siteSlogan':
+			$default = $gSystemManager->getSiteDef(M3_TB_FIELD_SITE_SLOGAN);			// サイトスローガン
+			break;
+		}
+		
+		return $default;
 	}
 }

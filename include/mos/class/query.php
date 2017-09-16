@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+//defined('JPATH_PLATFORM') or die;
 
 /**
  * Query Building Class.
@@ -406,7 +406,7 @@ class JDatabaseQuery
 	 */
 	public function call($columns)
 	{
-		$this->type = 'call';
+/*		$this->type = 'call';
 
 		if (is_null($this->call))
 		{
@@ -416,7 +416,7 @@ class JDatabaseQuery
 		{
 			$this->call->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -600,7 +600,7 @@ class JDatabaseQuery
 	 */
 	public function columns($columns)
 	{
-		if (is_null($this->columns))
+/*		if (is_null($this->columns))
 		{
 			$this->columns = new JDatabaseQueryElement('()', $columns);
 		}
@@ -608,7 +608,7 @@ class JDatabaseQuery
 		{
 			$this->columns->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -703,14 +703,14 @@ class JDatabaseQuery
 	 */
 	public function delete($table = null)
 	{
-		$this->type = 'delete';
+/*		$this->type = 'delete';
 		$this->delete = new JDatabaseQueryElement('DELETE', null);
 
 		if (!empty($table))
 		{
 			$this->from($table);
 		}
-
+*/
 		return $this;
 	}
 
@@ -758,7 +758,7 @@ class JDatabaseQuery
 	 */
 	public function exec($columns)
 	{
-		$this->type = 'exec';
+/*		$this->type = 'exec';
 
 		if (is_null($this->exec))
 		{
@@ -768,7 +768,7 @@ class JDatabaseQuery
 		{
 			$this->exec->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -793,7 +793,7 @@ class JDatabaseQuery
 	 */
 	public function from($tables, $subQueryAlias = null)
 	{
-		if (is_null($this->from))
+/*		if (is_null($this->from))
 		{
 			if ($tables instanceof $this)
 			{
@@ -811,7 +811,7 @@ class JDatabaseQuery
 		{
 			$this->from->append($tables);
 		}
-
+*/
 		return $this;
 	}
 
@@ -931,7 +931,7 @@ class JDatabaseQuery
 	 */
 	public function group($columns)
 	{
-		if (is_null($this->group))
+/*		if (is_null($this->group))
 		{
 			$this->group = new JDatabaseQueryElement('GROUP BY', $columns);
 		}
@@ -939,7 +939,7 @@ class JDatabaseQuery
 		{
 			$this->group->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -958,7 +958,7 @@ class JDatabaseQuery
 	 */
 	public function having($conditions, $glue = 'AND')
 	{
-		if (is_null($this->having))
+/*		if (is_null($this->having))
 		{
 			$glue = strtoupper($glue);
 			$this->having = new JDatabaseQueryElement('HAVING', $conditions, " $glue ");
@@ -967,7 +967,7 @@ class JDatabaseQuery
 		{
 			$this->having->append($conditions);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1009,10 +1009,10 @@ class JDatabaseQuery
 	 */
 	public function insert($table, $incrementField=false)
 	{
-		$this->type = 'insert';
+/*		$this->type = 'insert';
 		$this->insert = new JDatabaseQueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
-
+*/
 		return $this;
 	}
 
@@ -1031,13 +1031,13 @@ class JDatabaseQuery
 	 */
 	public function join($type, $conditions)
 	{
-		if (is_null($this->join))
+/*		if (is_null($this->join))
 		{
 			$this->join = array();
 		}
 
 		$this->join[] = new JDatabaseQueryElement(strtoupper($type) . ' JOIN', $conditions);
-
+*/
 		return $this;
 	}
 
@@ -1126,7 +1126,7 @@ class JDatabaseQuery
 	 */
 	public function order($columns)
 	{
-		if (is_null($this->order))
+/*		if (is_null($this->order))
 		{
 			$this->order = new JDatabaseQueryElement('ORDER BY', $columns);
 		}
@@ -1134,7 +1134,7 @@ class JDatabaseQuery
 		{
 			$this->order->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1258,7 +1258,7 @@ class JDatabaseQuery
 	 */
 	public function select($columns)
 	{
-		$this->type = 'select';
+/*		$this->type = 'select';
 
 		if (is_null($this->select))
 		{
@@ -1268,7 +1268,7 @@ class JDatabaseQuery
 		{
 			$this->select->append($columns);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1289,7 +1289,7 @@ class JDatabaseQuery
 	 */
 	public function set($conditions, $glue = ',')
 	{
-		if (is_null($this->set))
+/*		if (is_null($this->set))
 		{
 			$glue = strtoupper($glue);
 			$this->set = new JDatabaseQueryElement('SET', $conditions, "\n\t$glue ");
@@ -1298,7 +1298,7 @@ class JDatabaseQuery
 		{
 			$this->set->append($conditions);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1339,9 +1339,9 @@ class JDatabaseQuery
 	 */
 	public function update($table)
 	{
-		$this->type = 'update';
+/*		$this->type = 'update';
 		$this->update = new JDatabaseQueryElement('UPDATE', $table);
-
+*/
 		return $this;
 	}
 
@@ -1360,7 +1360,7 @@ class JDatabaseQuery
 	 */
 	public function values($values)
 	{
-		if (is_null($this->values))
+/*		if (is_null($this->values))
 		{
 			$this->values = new JDatabaseQueryElement('()', $values, '),(');
 		}
@@ -1368,7 +1368,7 @@ class JDatabaseQuery
 		{
 			$this->values->append($values);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1389,7 +1389,7 @@ class JDatabaseQuery
 	 */
 	public function where($conditions, $glue = 'AND')
 	{
-		if (is_null($this->where))
+/*		if (is_null($this->where))
 		{
 			$glue = strtoupper($glue);
 			$this->where = new JDatabaseQueryElement('WHERE', $conditions, " $glue ");
@@ -1398,7 +1398,7 @@ class JDatabaseQuery
 		{
 			$this->where->append($conditions);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1420,12 +1420,12 @@ class JDatabaseQuery
 	 */
 	public function extendWhere($outerGlue, $conditions, $innerGlue = 'AND')
 	{
-		// Replace the current WHERE with a new one which has the old one as an unnamed child.
+/*		// Replace the current WHERE with a new one which has the old one as an unnamed child.
 		$this->where = new JDatabaseQueryElement('WHERE', $this->where->setName('()'), " $outerGlue ");
 
 		// Append the new conditions as a new unnamed child.
 		$this->where->append(new JDatabaseQueryElement('()', $conditions, " $innerGlue "));
-
+*/
 		return $this;
 	}
 
@@ -1514,7 +1514,7 @@ class JDatabaseQuery
 	 */
 	public function union($query, $distinct = false, $glue = '')
 	{
-		// Set up the DISTINCT flag, the name with parentheses, and the glue.
+/*		// Set up the DISTINCT flag, the name with parentheses, and the glue.
 		if ($distinct)
 		{
 			$name = 'UNION DISTINCT ()';
@@ -1536,7 +1536,7 @@ class JDatabaseQuery
 		{
 			$this->union->append($query);
 		}
-
+*/
 		return $this;
 	}
 
@@ -1791,7 +1791,7 @@ class JDatabaseQuery
 	 */
 	public function unionAll($query, $distinct = false, $glue = '')
 	{
-		$glue = ')' . PHP_EOL . 'UNION ALL (';
+/*		$glue = ')' . PHP_EOL . 'UNION ALL (';
 		$name = 'UNION ALL ()';
 
 		// Get the JDatabaseQueryElement if it does not exist
@@ -1805,7 +1805,7 @@ class JDatabaseQuery
 		{
 			$this->unionAll->append($query);
 		}
-
+*/
 		return $this;
 	}
 

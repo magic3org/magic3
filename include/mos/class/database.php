@@ -775,7 +775,14 @@ class JDatabase extends JObject
 	*/
 	function loadObjectList( $key='' )
 	{
-		return;
+		$rows = array();
+		
+		switch ($key){
+		case 'id':
+			$rows[] = 'dummy';		// ダミー値を設定
+			break;
+		}
+		return $rows;
 	}
 
 	/**
