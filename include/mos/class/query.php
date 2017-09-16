@@ -22,7 +22,8 @@ defined('JPATH_PLATFORM') or die;
  * @property-read   JDatabaseQueryElement  $group
  * @property-read   JDatabaseQueryElement  $having
  */
-abstract class JDatabaseQuery
+//abstract class JDatabaseQuery
+class JDatabaseQuery
 {
 	/**
 	 * @var    JDatabaseDriver  The database driver.

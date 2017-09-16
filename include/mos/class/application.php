@@ -1118,12 +1118,14 @@ class JSite extends JApplication
 		if (!isset($params[$hash]))
 		{
 			// Get component parameters
-			if (!$option) {
+/*			if (!$option) {
 				$option = JRequest::getCmd('option');
-			}
-			$params[$hash] = JComponentHelper::getParams($option);
+			}*/
+//			$params[$hash] = JComponentHelper::getParams($option);
+			$param = new JParameter();
+			$params[$hash] = $param;
 
-			// Get menu parameters
+/*			// Get menu parameters
 			$menus	= JSite::getMenu();
 			$menu	= $menus->getActive();
 
@@ -1140,6 +1142,7 @@ class JSite extends JApplication
 
 			$params[$hash]->def( 'page_title'      , $title );
 			$params[$hash]->def( 'page_description', $description );
+			*/
 		}
 
 		return $params[$hash];

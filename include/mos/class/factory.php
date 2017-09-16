@@ -275,11 +275,11 @@ class JFactory
 		if (!is_object($instance))
 		{
 			//get the debug configuration setting
-			$conf = JFactory::getConfig();
-			$debug = $conf->getValue('config.debug');
+//			$conf = JFactory::getConfig();
+//			$debug = $conf->getValue('config.debug');
 
 			$instance = JFactory::_createDBO();
-			$instance->debug($debug);
+//			$instance->debug($debug);
 		}
 
 		return $instance;
@@ -568,6 +568,7 @@ class JFactory
 
 		// JDatabaseクラスを読み込む
 		require_once($gEnvManager->getJoomlaRootPath() . '/class/database.php');
+		require_once($gEnvManager->getJoomlaRootPath() . '/class/query.php');
 		
 		$conf = JFactory::getConfig();
 
@@ -582,7 +583,6 @@ class JFactory
 		$options	= array ( 'driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix );
 
 		$db = JDatabase::getInstance( $options );
-
 /*
 		if ( JError::isError($db) ) {
 			jexit('Database Error: ' . $db->toString() );
