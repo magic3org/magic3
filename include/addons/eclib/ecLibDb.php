@@ -743,7 +743,8 @@ class ecLibDb extends BaseDb
 		$queryStr .=     'AND im_type = 2 ';		// 商品画像
 		$queryStr .=     'AND im_id = ? ';
 		$queryStr .=     'AND im_language_id = ? ';
-		$queryStr .=   'ORDER BY is_sort_order DESC';
+//		$queryStr .=   'ORDER BY is_sort_order DESC';
+		$queryStr .=   'ORDER BY is_sort_order';
 		$ret = $this->selectRecords($queryStr, array($id, $langId), $rows);
 		return $ret;
 	}

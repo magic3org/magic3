@@ -348,7 +348,7 @@ class ecLib
 		
 		$ret = $this->db->getProductImage($id, $langId, $rows);
 		if ($ret){
-			// 最大の画像を取得
+			// 標準(standard)の画像を取得
 			$url = $rows[0]['im_url'];
 			
 			// resourceディレクトリからの相対パスに変換
