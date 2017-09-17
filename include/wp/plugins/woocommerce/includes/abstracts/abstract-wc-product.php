@@ -579,7 +579,10 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 	 * @return array
 	 */
 	public function get_gallery_image_ids( $context = 'view' ) {
-		return $this->get_prop( 'gallery_image_ids', $context );
+		// 商品のギャラリー画像を取得する
+		// 画像IDは-1(デフォルト画像)、-10以下(ギャラリー画像)とする
+		//return $this->get_prop( 'gallery_image_ids', $context );
+		return array(-1);
 	}
 
 	/**

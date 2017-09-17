@@ -391,3 +391,14 @@ DELETE FROM _language_string WHERE ls_type = 1 AND ls_id = 'word_account';
 INSERT INTO _language_string
 (ls_type, ls_id,                     ls_language_id, ls_value,                             ls_name) VALUES
 (1,       'word_account',         'ja',           'ID',                 'アカウント');
+
+-- 画像サイズマスター(旧サイズ)
+DELETE FROM image_size;
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('full-banner',      2, 'フルサイズバナー',     468, 60,  1);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('half-banner',      2, 'ハーフサイズバナー',   234, 60,  2);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('small-banner',     2, 'スモールサイズバナー', 200, 40,  3);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('micro-banner',     2, 'マイクロバナー',       88,  31,  4);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('standard-product', 3, '商品用標準サイズ',     100, 80,  5);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('small-product',    3, '商品用小サイズ',       50,  40,  6);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('large-product',    3, '商品用大サイズ',       200, 160, 7);
+INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('exlarge-product',  3, '商品用特大サイズ',     400, 320, 8);

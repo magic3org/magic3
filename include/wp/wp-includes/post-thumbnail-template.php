@@ -36,14 +36,19 @@ function get_post_thumbnail_id( $post = null ) {
 	if ( ! $post ) {
 		return '';
 	}
-
-//	return get_post_meta( $post->ID, '_thumbnail_id', true );
-	// (Magic3仕様変更)単一ページの場合はサムネールを非表示
-	//if (is_singular()){
-	if (is_single()){
-		return 0;
-	} else {
+	
+	// ページタイプやグローバル$postデータに合わせてサムネールの表示を制御
+	if ($post->post_type == 'product'){			// 製品情報の場合は常にサムネール表示
 		return $post->ID;
+	} else {
+//	return get_post_meta( $post->ID, '_thumbnail_id', true );
+		// (Magic3仕様変更)単一ページの場合はサムネールを非表示
+		//if (is_singular()){
+		if (is_single()){			// ページタイプを取得
+			return 0;
+		} else {
+			return $post->ID;
+		}
 	}
 }
 
