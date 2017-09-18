@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -16,7 +16,7 @@
  
 class blog_mainCommonDef
 {
-	static $_deviceType = 0;	// デバイスタイプ
+	static $_deviceType = 0;	// デバイスタイプ(PC)
 	
 	// ##### 定義値 #####
 	const VIEW_CONTENT_TYPE = 'bg';				// 記事参照数取得用
