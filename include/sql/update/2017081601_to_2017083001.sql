@@ -53,3 +53,16 @@ INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) 
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale',    'ja', 11, 'セール価格',    3);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 12, '仕入価格',      4);
 
+-- Eコマース設定マスター
+INSERT INTO commerce_config
+(cg_id,                    cg_value, cg_name,                        cg_index) VALUES
+('auto_stock',        '1',                '在庫自動処理',                           100),
+('accept_order',      '1',                '注文の受付',                             101),
+('use_member_address', '1',               '会員登録の住所使用',                     105),
+('auto_regist_member', '1',               '自動会員登録',                           106),
+('sell_product_photo', '0',               'フォト商品販売',                         107),
+('sell_product_download', '0',            'ダウンロード商品販売',                   108),
+('member_notice', '',                     '会員向けお知らせ',                       109),
+('email_to_order_product', '',            '商品受注時メール送信先',                 110),
+('thumb_type',              's=80c.jpg;mw=160x120c.jpg;l=200c.jpg', '製品サムネールタイプ定義', 111),
+('product_default_image',     '0_72c.jpg;0_80c.jpg;0_200c.jpg',       '製品デフォルト画像', 112);

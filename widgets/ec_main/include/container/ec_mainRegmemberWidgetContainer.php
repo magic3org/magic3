@@ -231,8 +231,8 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 				}
 				
 				// ####### 会員登録完了のメールを送信する #######
-				if ($this->_getConfig(photo_shopCommonDef::CF_USE_EMAIL)){// メール送信許可のときはメールを送信
-					$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);	// 自動送信送信元
+				if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_EMAIL)){// メール送信許可のときはメールを送信
+					$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 					if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 					$toAddress = $email;			// eメール(ログインアカウント)
 					//$url = $this->gEnv->createCurrentPageUrl() . sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($email), urlencode($password));		// ログイン用URL
@@ -240,7 +240,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 					$mailParam = array();
 					$mailParam['PASSWORD'] = $password;
 					$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-					$mailParam['SIGNATURE']	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+					$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 					$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', self::REGIST_MEMBER_FORM, $mailParam);// 自動送信
 					$this->tmpl->addVar("_widget", "message", '登録完了しました。指定のメールアドレス宛てにパスワードが送信されます。<br />再度ログインしてください。');
 				} else {

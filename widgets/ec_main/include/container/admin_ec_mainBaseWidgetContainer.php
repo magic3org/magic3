@@ -41,6 +41,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_ORDER_DETAIL		= 'order_detail';		// 受注管理(詳細)
 	const TASK_PRODUCT					= 'product';					// 商品管理(一覧)
 	const TASK_PRODUCT_DETAIL			= 'product_detail';				// 商品管理(詳細)
+	const TASK_IMAGE					= 'image';						// 商品画像
 	const TASK_PHOTOPRODUCT				= 'photoproduct';				// フォト関連商品(一覧)
 	const TASK_PHOTOPRODUCT_DETAIL		= 'photoproduct_detail';		// フォト関連商品(詳細)
 	const TASK_PRODUCTCATEGORY			= 'productcategory';			// 商品カテゴリー管理(一覧)
@@ -64,7 +65,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// DBオブジェクト作成
 		if (!isset(self::$_mainDb)) self::$_mainDb = new ec_mainDb();
 			
-		// ブログ定義を読み込む
+		// Eコマース定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = photo_shopCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
@@ -130,6 +131,12 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '商品管理';
 				$titles[] = '一般商品一覧';
 				$titles[] = '詳細';
+				break;
+			case self::TASK_IMAGE:			// 商品画像
+				$titles[] = '商品管理';
+				$titles[] = '一般商品一覧';
+				$titles[] = '詳細';
+				$titles[] = '画像';
 				break;
 			case self::TASK_PHOTOPRODUCT:				// フォト関連商品(一覧)
 				$titles[] = '商品管理';
@@ -236,6 +243,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'active'	=> (
 											$task == self::TASK_PRODUCT ||				// 商品管理(一覧)
 											$task == self::TASK_PRODUCT_DETAIL ||		// 商品管理(詳細)
+											$task == self::TASK_IMAGE ||				// 商品画像
 											$task == self::TASK_PHOTOPRODUCT ||			// フォト関連商品(一覧)
 											$task == self::TASK_PHOTOPRODUCT_DETAIL ||			// フォト関連商品(詳細)
 											$task == self::TASK_PRODUCTCATEGORY ||			// 商品カテゴリー管理(一覧)
@@ -249,7 +257,8 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 								'tagid'		=> '',
 								'active'	=> (
 													$task == self::TASK_PRODUCT ||				// 商品管理(一覧)
-													$task == self::TASK_PRODUCT_DETAIL			// 商品管理(詳細)
+													$task == self::TASK_PRODUCT_DETAIL ||		// 商品管理(詳細)
+													$task == self::TASK_IMAGE					// 商品画像
 												)
 							),
 /*							(Object)array(
@@ -469,7 +478,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link, true) .'"><span>商品カテゴリー</span></a></li>' . M3_NL;
 			
 			// フォト商品
-			if (self::$_mainDb->getConfig(photo_shopCommonDef::CF_SELL_PRODUCT_PHOTO)){		// フォト商品販売を行う場合
+			if (self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_PHOTO)){		// フォト商品販売を行う場合
 				$current = '';
 				$link = $this->_baseUrl . '&task=photoproduct';
 				if ($task == 'photoproduct' || $task == 'photoproduct_detail') $current = 'id="current"';

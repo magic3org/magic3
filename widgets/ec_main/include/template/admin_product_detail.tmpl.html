@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -52,6 +52,12 @@ function delId()
 }
 function cancelItem(){
 	document.main.task.value = 'product';
+	document.main.submit();
+	return true;
+}
+function configImage()
+{
+	document.main.task.value = 'image';
 	document.main.submit();
 	return true;
 }
@@ -131,6 +137,7 @@ $(function(){
 <input type="hidden" name="task" value="product_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="productid" value="{ID}" />
 <input type="hidden" name="sort" value="{SORT}" />
 <input type="hidden" name="current_image" />
 
@@ -138,12 +145,15 @@ $(function(){
 <div class="m3config_h_side_buttons pull-right"><div class="btn-group">
 <input type="button" class="button" onclick="cancelItem();" value="戻る" />
 </div></div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_PRODUCT_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="configImage();" value="画像" {IMAGE_BTN_DISABLED} />
+</div></div></div>
 
 <table id="mainconfig">
     <tbody>
     <tr>
 	    <th><span {_HELP_PRODUCT_ID}>商品ID</span></th>
-	    <td colspan="3"><div class="form-control-static">{ID}</div></td>
+	    <td colspan="3"><div class="pull-right">{EYECATCH_IMAGE}</div><div class="form-control-static">{ID}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_PRODUCT_NAME}>商品名</span></th>

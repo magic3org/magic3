@@ -329,7 +329,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 							$this->_userId, $this->now, $newOrderId, $newSerial, $row['or_discount_desc'], $payDt);
 						
 						// キャンセルの場合は在庫を戻す
-						if ($this->_getConfig(photo_shopCommonDef::CF_AUTO_STOCK) && $this->orderStatus == photo_shopCommonDef::ORDER_STATUS_CANCEL){
+						if ($this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK) && $this->orderStatus == photo_shopCommonDef::ORDER_STATUS_CANCEL){
 							$this->cancelStock = true;		// 在庫キャンセル処理を行うかどうか
 							$this->db->getOrderDetailList($row['or_id'], $this->_langId, array($this, '_defaultOrderItemLoop'));
 							$this->cancelStock = false;
@@ -1026,11 +1026,11 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$tmpl->addVar('_tmpl', 'deliv_address', $delivAddress);
 		
 		// 送信元
-		$shopName		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
-		$shopOwner		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
-		$shopZipcode	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
-		$shopAddress	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
-		$shopPhone		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
+		$shopName		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
+		$shopOwner		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
+		$shopZipcode	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
+		$shopAddress	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
+		$shopPhone		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
 
 		$fromAddress = '';
 		if (!empty($shopName)) $fromAddress .= $this->convertToDispString($shopName) . '<br />';

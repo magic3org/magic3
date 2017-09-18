@@ -23,7 +23,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_orderDb;			// DB接続オブジェクト
 	protected static $_ecObj;			// 価格計算用オブジェクト
-	protected static $_configArray;		// ブログ定義値
+	protected static $_configArray;		// Eコマース定義値
 	protected static $_task;			// 現在のタスク
 	protected $_langId;			// 現在の言語
 	protected $_userId;			// 現在のユーザ
@@ -82,7 +82,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		// 価格計算用オブジェクト取得
 		if (!isset(self::$_ecObj)) self::$_ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
 		
-		// ブログ定義を読み込む
+		// Eコマース定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = photo_shopCommonDef::loadConfig(self::$_mainDb);
 		
 		$this->_langId = $this->gEnv->getCurrentLanguage();
@@ -592,7 +592,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 													
 				// ##### 在庫数を更新 #####
 				if ($productClass == photo_shopCommonDef::PRODUCT_CLASS_DEFAULT){	// 一般商品のとき
-					if ($this->_getConfig(photo_shopCommonDef::CF_AUTO_STOCK)){
+					if ($this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK)){
 						$newStockCount = intval($row['pe_stock_count']) - $quantity;
 						if ($newStockCount < 0) $newStockCount = 0;
 						$updateParam = array('pe_stock_count' => $newStockCount);
@@ -702,7 +702,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 				$imageHeight = $this->_productImageHeight;
 				
 				// ##### 在庫自動処理 #####
-				if (!$this->_createEmailData/*Eメール出力でない場合*/ && $this->_getConfig(photo_shopCommonDef::CF_AUTO_STOCK)){
+				if (!$this->_createEmailData/*Eメール出力でない場合*/ && $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK)){
 					if (!$this->_useOrderDetail){		// カート内容を取得の場合
 						// カートの購入数と在庫数を比較し、在庫数が少ない場合はメッセージ出力
 						$stockCount = intval($row['pe_stock_count']);

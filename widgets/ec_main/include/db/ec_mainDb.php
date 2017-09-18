@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainDb.php 5613 2013-02-07 14:33:12Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -18,53 +18,17 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class ec_mainDb extends BaseDb
 {
 	/**
-	 * フォトギャラリー定義値を取得をすべて取得
+	 * Eコマース定義値を取得をすべて取得
 	 *
 	 * @param array  $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
 	function getAllConfig(&$rows)
 	{
-		$queryStr  = 'SELECT * FROM photo_config ';
-		$queryStr .=   'ORDER BY hg_index';
+		$queryStr  = 'SELECT * FROM commerce_config ';
+		$queryStr .=   'ORDER BY cg_index';
 		$retValue = $this->selectRecords($queryStr, array(), $rows);
 		return $retValue;
-	}
-	/**
-	 * フォトギャラリー定義値を取得
-	 *
-	 * @param string $key		キーとなる項目値
-	 * @return string $value	値
-	 */
-	function getConfig($key)
-	{
-		$retValue = '';
-		$queryStr = 'SELECT hg_value FROM photo_config ';
-		$queryStr .=  'WHERE hg_id  = ?';
-		$ret = $this->selectRecord($queryStr, array($key), $row);
-		if ($ret) $retValue = $row['hg_value'];
-		return $retValue;
-	}
-	/**
-	 * フォトギャラリー定義値を更新
-	 *
-	 * @param string $key		キーとなる項目値
-	 * @param string $value		値
-	 * @return					true = 正常、false=異常
-	 */
-	function updateConfig($key, $value)
-	{
-		// データの確認
-		$queryStr = 'SELECT hg_value FROM photo_config ';
-		$queryStr .=  'WHERE hg_id  = ?';
-		$ret = $this->isRecordExists($queryStr, array($key));
-		if ($ret){
-			$queryStr = "UPDATE photo_config SET hg_value = ? WHERE hg_id = ?";
-			return $this->execStatement($queryStr, array($value, $key));
-		} else {
-			$queryStr = "INSERT INTO photo_config (hg_id, hg_value) VALUES (?, ?)";
-			return $this->execStatement($queryStr, array($key, $value));
-		}
 	}
 	/**
 	 * Eコマース定義値を取得
@@ -72,7 +36,7 @@ class ec_mainDb extends BaseDb
 	 * @param string $key		キーとなる項目値
 	 * @return string $value	値
 	 */
-	function getCommerceConfig($key)
+	function getConfig($key)
 	{
 		$retValue = '';
 		$queryStr = 'SELECT cg_value FROM commerce_config ';
@@ -88,7 +52,7 @@ class ec_mainDb extends BaseDb
 	 * @param string $value		値
 	 * @return					true = 正常、false=異常
 	 */
-	function updateCommerceConfig($key, $value)
+	function updateConfig($key, $value)
 	{
 		// データの確認
 		$queryStr = 'SELECT cg_value FROM commerce_config ';

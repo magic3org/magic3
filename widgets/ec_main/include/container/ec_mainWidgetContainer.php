@@ -44,7 +44,7 @@ class ec_mainWidgetContainer extends ec_mainBaseWidgetContainer
 		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
 		
 		// ##### アクセス制御 #####
-		$canNonMemberOrder = $this->_getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);
+		$canNonMemberOrder = $this->_getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
 
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
@@ -72,7 +72,7 @@ class ec_mainWidgetContainer extends ec_mainBaseWidgetContainer
 				}
 			}
 			// 注文受付停止中はトップ画面へ遷移(システム管理者以外)
-			if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_ACCEPT_ORDER)){
+			if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER)){
 				$this->gPage->redirect($this->gEnv->createCurrentPageUrl());
 				return true;
 			}

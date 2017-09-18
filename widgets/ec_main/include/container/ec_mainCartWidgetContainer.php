@@ -176,7 +176,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('no_item_message', 'visibility', 'visible');
 		}
 		// 注文受付停止中は購入ボタンを不可にする(システム管理者以外)
-		if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_ACCEPT_ORDER)){
+		if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER)){
 			$this->tmpl->addVar("show_cart", "order_msg", 'ただ今、一時的に注文処理を停止しています');
 			$this->tmpl->addVar("show_cart", "order_disabled", 'disabled');
 		}

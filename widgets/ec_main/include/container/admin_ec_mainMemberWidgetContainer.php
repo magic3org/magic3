@@ -396,7 +396,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 					$ret = $this->_db->updateLoginUserPassword($loginUserId, $password);
 					if ($ret){
 						//$fromAddress = self::$_mainDb->getConfig(self::AUTO_EMAIL_SENDER);	// 自動送信送信元
-						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);	// 自動送信送信元
+						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 						if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 						$toAddress = $this->convertToDispString($row['pi_email']);			// eメール(ログインアカウント)
 						
@@ -409,7 +409,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 						$mailParam = array();
 						$mailParam['PASSWORD'] = $password;
 						$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-						$mailParam['SIGNATURE']	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 						$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '',
 																				photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 手動送信
 																				

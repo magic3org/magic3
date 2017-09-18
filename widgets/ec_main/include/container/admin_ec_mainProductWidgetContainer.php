@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -53,6 +53,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	const SORT_DOWN_ICON_FILE = '/images/system/arrow_down10.png';		// ソート昇順アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const SORT_ICON_SIZE = 10;		// ソートアイコンサイズ
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const CURRENT_TASK = 'product_detail';
 	const PRODUCT_IMAGE_DIR = '/widgets/product/image/';				// 商品画像格納ディレクトリ
 	const LOG_MSG_ADD_CONTENT = '商品情報を追加しました。商品名: %s';
@@ -76,7 +77,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		
 		$this->sortKeyType = array('index'/*表示順*/, 'stock'/*在庫数*/, 'id'/*商品ID*/, 'date'/*更新日時*/, 'name'/*商品名*/, 'code'/*商品コード*/, 'price'/*商品価格*/, 'visible'/*公開状態*/);
 		$this->imageTypes = array('s', 'm', 'l');			// 画像タイプ
-		$this->categoryCount = self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
+		$this->categoryCount = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
 		if ($this->categoryCount <= 0) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
 	}
 	/**
@@ -973,6 +974,15 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				
 					// 商品カテゴリー取得
 					$this->categoryArray = $this->getCategory($row5);
+					
+					// アイキャッチ画像
+					$iconUrl = photo_shopCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[photo_shopCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE], self::$_configArray[photo_shopCommonDef::CF_E_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+					if (empty($row['pt_thumb_filename'])){
+						$iconTitle = 'アイキャッチ画像未設定';
+					} else {
+						$iconTitle = 'アイキャッチ画像';
+					}
+					$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 				}
 			}
 		} else {	// データ再取得しないとき
@@ -1034,6 +1044,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->tmpl->addVar("_widget", "admin_note", $adminNote);			// 管理者用備考
 		$this->tmpl->addVar("_widget", "price", $price);		// 価格
 		$this->tmpl->addVar("_widget", "price_with_tax", $dispPrice);		// 税込価格
+		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
 		$visibleStr = '';
 		if ($visible){	// 項目の表示
@@ -1097,7 +1108,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
-			$this->tmpl->addVar("_widget", "id", $productId);
+			$this->tmpl->addVar("_widget", "id", $this->convertToDispString($productId));
 			
 			// データ更新、削除ボタン表示
 			if ($this->langId == $defaultLang){		// デフォルト言語のときは「ID削除」ボタン

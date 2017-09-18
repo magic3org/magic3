@@ -736,9 +736,9 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 	function sendOrderMail($mailType, $orderNo, $memberNo, $email, $memberName, $delivName, $nameKana, $zipcode, $state, $address1, $address2, $phone, 
 									$demandDt, $demandTime, $delivMethod, $payMethod, $note, $orderDetail, $orderText, $adminUrl)
 	{	
-		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);	// 自動送信送信元
+		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 		if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
-		$toAddress = $this->_getConfig(photo_shopCommonDef::CF_EMAIL_TO_ORDER_PRODUCT);	// 商品受注時送信先メールアドレス
+		$toAddress = $this->_getConfig(photo_shopCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);	// 商品受注時送信先メールアドレス
 		if (empty($toAddress)) $toAddress = $this->gEnv->getSiteEmail();// 送信先が取得できないときは、システムのデフォルトメールアドレスを使用
 		
 		// 件名の設定
@@ -786,16 +786,16 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 		// ##### 購入者にメールを送信 #####
 		if (empty($email)) return $ret;			// 送信先が設定されていないときは送信しない
 		
-		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);	// 自動送信送信元
+		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 		if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 		$toAddress = $email;
 
 		$mailParam = array();
 		$mailParam['NAME'] = $memberName;
-		$mailParam['SHOP_NAME']		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
+		$mailParam['SHOP_NAME']		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
 		$mailParam['DELIV_TEXT'] = $delivText;
 		$mailParam['ORDER_TEXT']	= $orderText;	// 注文内容
-		$mailParam['SIGNATURE']	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+		$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 		$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, ''/*返信先*/,
 											''/*件名*/, photo_shopCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_CUSTOMER, $mailParam);// 自動送信
 	}

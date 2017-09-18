@@ -119,7 +119,7 @@ class ec_mainLoginWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('field_regmember', 'visibility', 'hidden');// 会員登録への遷移を削除
 		} else {
 			// 非会員の購入を許可している場合は、遷移可能にする
-			$value = $this->_getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);
+			$value = $this->_getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
 			if (!empty($value)){
 				$this->tmpl->setAttribute('field_nonmember', 'visibility', 'visible');
 				//$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=order', true));				// 購入画面遷移用

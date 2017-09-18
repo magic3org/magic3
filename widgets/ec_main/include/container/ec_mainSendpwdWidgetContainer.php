@@ -54,7 +54,7 @@ class ec_mainSendpwdWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		$useEmail = $this->_getConfig(photo_shopCommonDef::CF_USE_EMAIL);
+		$useEmail = $this->_getConfig(photo_shopCommonDef::CF_E_USE_EMAIL);
 		if ($act == 'sendpassword'){			// パスワード再送信のとき
 			$account = $request->trimValueOf('photo_account');
 			if ($useEmail == '1'){		// メール送信可能のとき
@@ -67,7 +67,7 @@ class ec_mainSendpwdWidgetContainer extends ec_mainBaseWidgetContainer
 					// パスワード変更
 					$ret = $this->_db->updateLoginUserPassword($row['lu_id'], $password);
 					if ($ret){
-						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);	// 自動送信送信元
+						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 						if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 						$toAddress = $account;			// eメール(ログインアカウント)
 						
@@ -78,7 +78,7 @@ class ec_mainSendpwdWidgetContainer extends ec_mainBaseWidgetContainer
 						$mailParam = array();
 						$mailParam['PASSWORD'] = $password;
 						$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-						$mailParam['SIGNATURE']	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 						$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '',
 																				photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 自動送信
 						$isSend = true;		// 送信完了

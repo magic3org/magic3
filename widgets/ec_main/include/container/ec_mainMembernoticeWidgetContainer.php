@@ -51,7 +51,7 @@ class ec_mainMembernoticeWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// 会員向けお知らせを取得
-		$notice = $this->_getConfig(photo_shopCommonDef::CF_MEMBER_NOTICE);
+		$notice = $this->_getConfig(photo_shopCommonDef::CF_E_MEMBER_NOTICE);
 		$this->tmpl->addVar("_widget", "notice", $notice);
 	}
 }

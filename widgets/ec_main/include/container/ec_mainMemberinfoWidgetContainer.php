@@ -110,7 +110,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->checkInput($firstnameKana, '名前カナ(名)');
 			
 			// 住所登録が必要なとき追加分
-/*			if ($this->_getConfig(photo_shopCommonDef::CF_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
+/*			if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
 				$this->checkSingleByte($zipcode, '郵便番号');
 				$this->checkNumeric($this->state, '都道府県');
 				$this->checkInput($address, '住所');	
@@ -261,7 +261,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 		}
 		
 		// 住所入力エリア表示制御
-		if ($this->_getConfig(photo_shopCommonDef::CF_USE_MEMBER_ADDRESS)) $this->tmpl->setAttribute('input_address', 'visibility', 'visible');
+		if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)) $this->tmpl->setAttribute('input_address', 'visibility', 'visible');
 		
 		// 入力値を戻す
 		$this->tmpl->addVar("_widget", "firstname", $firstname);
@@ -271,7 +271,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "email", $email);
 		$this->tmpl->addVar("_widget", "email2", $email2);
 		$this->tmpl->addVar("_widget", "old_email", $oldemail);
-		if ($this->_getConfig(photo_shopCommonDef::CF_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
+		if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
 			$this->tmpl->addVar("input_address", "zipcode", $zipcode);
 			$this->tmpl->addVar("input_address", "address", $address);
 			$this->tmpl->addVar("input_address", "address2", $address2);

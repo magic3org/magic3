@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainOtherWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
@@ -80,55 +80,55 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				$isErr = false;
 
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_ACCEPT_ORDER, $acceptOrder)) $isErr = true;
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER, $acceptOrder)) $isErr = true;
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER, $nonMemberOrder)) $isErr = true;// 非会員からの注文受付
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER, $nonMemberOrder)) $isErr = true;// 非会員からの注文受付
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_AUTO_STOCK, $autoStock)) $isErr = true;
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_AUTO_STOCK, $autoStock)) $isErr = true;
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_USE_EMAIL, $useEmail)) $isErr = true;
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_USE_EMAIL, $useEmail)) $isErr = true;
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER, $autoEmailSender)) $isErr = true;
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER, $autoEmailSender)) $isErr = true;
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_SELL_PRODUCT_PHOTO, $sellProductPhoto)) $isErr = true;// フォト商品販売
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_PHOTO, $sellProductPhoto)) $isErr = true;// フォト商品販売
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_SELL_PRODUCT_DOWNLOAD, $sellProductDownload)) $isErr = true;// ダウンロード商品販売
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_DOWNLOAD, $sellProductDownload)) $isErr = true;// ダウンロード商品販売
 				}
 /*				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_CONTENT_NO_STOCK, $contentNoStock)) $isErr = true;		// 在庫なし時コンテンツ
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_CONTENT_NO_STOCK, $contentNoStock)) $isErr = true;		// 在庫なし時コンテンツ
 				}*/
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_MEMBER_NOTICE, $memberNotice)) $isErr = true;		// 会員向けお知らせ
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_MEMBER_NOTICE, $memberNotice)) $isErr = true;		// 会員向けお知らせ
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_EMAIL_TO_ORDER_PRODUCT, $emailToOrderProduct)) $isErr = true;		// 商品受注時送信先メールアドレス
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT, $emailToOrderProduct)) $isErr = true;		// 商品受注時送信先メールアドレス
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT, $categorySelectCount)) $isErr = true;		// 商品カテゴリー選択可能数
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT, $categorySelectCount)) $isErr = true;		// 商品カテゴリー選択可能数
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_NAME, $shopName)) $isErr = true;		// ショップ名
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_NAME, $shopName)) $isErr = true;		// ショップ名
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_OWNER, $shopOwner)) $isErr = true;		// ショップオーナー名
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_OWNER, $shopOwner)) $isErr = true;		// ショップオーナー名
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE, $shopZipcode)) $isErr = true;		// ショップ郵便番号
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE, $shopZipcode)) $isErr = true;		// ショップ郵便番号
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS, $shopAddress)) $isErr = true;		// ショップ住所
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS, $shopAddress)) $isErr = true;		// ショップ住所
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_PHONE, $shopPhone)) $isErr = true;		// ショップ電話番号
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_PHONE, $shopPhone)) $isErr = true;		// ショップ電話番号
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE, $shopSignature)) $isErr = true;		// ショップ署名
+					if (!self::$_mainDb->updateConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE, $shopSignature)) $isErr = true;		// ショップ署名
 				}
 				if (!$isErr){
 					if (!$this->updateMailForm(photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD, $mailFormSendPwd)) $isErr = true;// メールフォーム(パスワード送信)
@@ -142,44 +142,44 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				}
 				// 値を再取得
-				$acceptOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_ACCEPT_ORDER);
-				$nonMemberOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);			// 非会員からの注文受付
-				$autoStock = self::$_mainDb->getConfig(photo_shopCommonDef::CF_AUTO_STOCK);// 在庫自動処理を行うかどうか
-				$useEmail	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_USE_EMAIL);
-				$autoEmailSender	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);
-				$sellProductPhoto		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_SELL_PRODUCT_PHOTO);				// フォト商品販売
-				$sellProductDownload	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_SELL_PRODUCT_DOWNLOAD);		// ダウンロード商品販売
-//				$contentNoStock			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_CONTENT_NO_STOCK);						// 在庫なし時コンテンツ
-				$memberNotice			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_MEMBER_NOTICE);		// 会員向けお知らせ
-				$emailToOrderProduct	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_EMAIL_TO_ORDER_PRODUCT);		// 商品受注時送信先メールアドレス
-				$categorySelectCount = self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);		// 商品カテゴリー選択可能数
-				$shopName		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
-				$shopOwner		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
-				$shopZipcode	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
-				$shopAddress	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
-				$shopPhone		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
-				$shopSignature	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);		// ショップ署名
+				$acceptOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER);
+				$nonMemberOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);			// 非会員からの注文受付
+				$autoStock = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK);// 在庫自動処理を行うかどうか
+				$useEmail	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_USE_EMAIL);
+				$autoEmailSender	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);
+				$sellProductPhoto		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_PHOTO);				// フォト商品販売
+				$sellProductDownload	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_DOWNLOAD);		// ダウンロード商品販売
+//				$contentNoStock			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CONTENT_NO_STOCK);						// 在庫なし時コンテンツ
+				$memberNotice			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_MEMBER_NOTICE);		// 会員向けお知らせ
+				$emailToOrderProduct	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);		// 商品受注時送信先メールアドレス
+				$categorySelectCount = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);		// 商品カテゴリー選択可能数
+				$shopName		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
+				$shopOwner		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
+				$shopZipcode	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
+				$shopAddress	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
+				$shopPhone		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
+				$shopSignature	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);		// ショップ署名
 				$mailFormSendPwd		= $this->getMailForm(photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD);		// メールフォーム(パスワード送信)
 				$mailFormOrderProduct	= $this->getMailForm(photo_shopCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_CUSTOMER);		// メールフォーム(注文受付)
 			}
 		} else {		// 初期表示の場合
-			$acceptOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_ACCEPT_ORDER);
-			$nonMemberOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);			// 非会員からの注文受付
-			$autoStock = self::$_mainDb->getConfig(photo_shopCommonDef::CF_AUTO_STOCK);// 在庫自動処理を行うかどうか
-			$useEmail	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_USE_EMAIL);
-			$autoEmailSender	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_AUTO_EMAIL_SENDER);
-			$sellProductPhoto		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_SELL_PRODUCT_PHOTO);				// フォト商品販売
-			$sellProductDownload	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_SELL_PRODUCT_DOWNLOAD);		// ダウンロード商品販売
-//			$contentNoStock			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_CONTENT_NO_STOCK);						// 在庫なし時コンテンツ
-			$memberNotice			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_MEMBER_NOTICE);		// 会員向けお知らせ
-			$emailToOrderProduct	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_EMAIL_TO_ORDER_PRODUCT);		// 商品受注時送信先メールアドレス
-			$categorySelectCount = self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);		// 商品カテゴリー選択可能数
-			$shopName		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
-			$shopOwner		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
-			$shopZipcode	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
-			$shopAddress	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
-			$shopPhone		= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
-			$shopSignature	= self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);		// ショップ署名
+			$acceptOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER);
+			$nonMemberOrder = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);			// 非会員からの注文受付
+			$autoStock = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK);// 在庫自動処理を行うかどうか
+			$useEmail	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_USE_EMAIL);
+			$autoEmailSender	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);
+			$sellProductPhoto		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_PHOTO);				// フォト商品販売
+			$sellProductDownload	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_DOWNLOAD);		// ダウンロード商品販売
+//			$contentNoStock			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CONTENT_NO_STOCK);						// 在庫なし時コンテンツ
+			$memberNotice			= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_MEMBER_NOTICE);		// 会員向けお知らせ
+			$emailToOrderProduct	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);		// 商品受注時送信先メールアドレス
+			$categorySelectCount = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);		// 商品カテゴリー選択可能数
+			$shopName		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
+			$shopOwner		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
+			$shopZipcode	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
+			$shopAddress	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
+			$shopPhone		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
+			$shopSignature	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);		// ショップ署名
 			$mailFormSendPwd		= $this->getMailForm(photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD);		// メールフォーム(パスワード送信)
 			$mailFormOrderProduct	= $this->getMailForm(photo_shopCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_CUSTOMER);		// メールフォーム(注文受付)
 		}
