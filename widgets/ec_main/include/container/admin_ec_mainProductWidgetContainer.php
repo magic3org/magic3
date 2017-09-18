@@ -1106,6 +1106,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->addVar("_widget", "id", '新規');
 			
+			// トップボタン制御
+			$this->tmpl->addVar('_widget', 'image_btn_disabled', 'disabled');// 画像ボタン使用不可
+			
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
 			$this->tmpl->addVar("_widget", "id", $this->convertToDispString($productId));
