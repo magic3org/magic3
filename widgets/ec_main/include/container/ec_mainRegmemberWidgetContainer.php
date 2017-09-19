@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainRegmemberWidgetContainer.php 5572 2013-01-23 08:43:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -70,7 +70,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$countryId = photo_shopCommonDef::DEFAULT_COUNTRY_ID;			// デフォルト国ID
+		$countryId = ec_mainCommonDef::DEFAULT_COUNTRY_ID;			// デフォルト国ID
 		$firstname = $request->trimValueOf('item_firstname');			// 名前(名)
 		$familyname = $request->trimValueOf('item_familyname');			// 名前(姓)
 		$firstnameKana = $request->trimValueOf('item_firstname_kana');		// 名前カナ(名)
@@ -88,7 +88,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 		$fax = $request->trimValueOf('item_fax');	// FAX
 
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->gender = $request->trimValueOf('item_gender');		// 性別
 			$this->year = $request->trimValueOf('item_year');		// 生年月日(年)
 			$this->month = $request->trimValueOf('item_month');	// 生年月日(月)
@@ -123,7 +123,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 			}
 			
 			// フォトギャラリー追加分
-			if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+			if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 				$this->checkInput($this->gender, '性別');
 				if (empty($this->year) || empty($this->month) || empty($this->day)) $this->setUserErrorMsg('生年月日が入力されていません');
 				$this->checkInput($sports, '現在やっているスポーツ');
@@ -148,7 +148,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 					$this->tmpl->addVar("_widget", "state", $this->state);		// 都道府県の値は非表示パラメータに持つ
 				}
 				// フォトギャラリー追加分
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$this->tmpl->addVar("show_member_info_option", "gender_disabled", 'disabled');		// 性別
 					$this->tmpl->addVar("show_member_info_option", "year_disabled", 'disabled');		// 生年月日(年)
 					$this->tmpl->addVar("show_member_info_option", "month_disabled", 'disabled');		// 生年月日(月)
@@ -191,7 +191,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 
 			// 個人情報登録
 			$personOptions = array();
-			if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+			if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 				$personOptions[self::PERSON_INFO_OPT_SPORTS] = $sports;
 				$birthday = $this->convertToProperDate($this->year . '/' . $this->month . '/' . $this->day);
 			} else {
@@ -222,7 +222,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 					$this->tmpl->addVar("_widget", "state_disabled", 'disabled');
 				}
 				// フォトギャラリー追加分
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$this->tmpl->addVar("show_member_info_option", "gender_disabled", 'disabled');		// 性別
 					$this->tmpl->addVar("show_member_info_option", "year_disabled", 'disabled');		// 生年月日(年)
 					$this->tmpl->addVar("show_member_info_option", "month_disabled", 'disabled');		// 生年月日(月)
@@ -231,16 +231,16 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 				}
 				
 				// ####### 会員登録完了のメールを送信する #######
-				if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_EMAIL)){// メール送信許可のときはメールを送信
-					$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
+				if ($this->_getConfig(ec_mainCommonDef::CF_E_USE_EMAIL)){// メール送信許可のときはメールを送信
+					$fromAddress = $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 					if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 					$toAddress = $email;			// eメール(ログインアカウント)
-					//$url = $this->gEnv->createCurrentPageUrl() . sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($email), urlencode($password));		// ログイン用URL
-					$url = photo_shopCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
+					//$url = $this->gEnv->createCurrentPageUrl() . sprintf(ec_mainCommonDef::EMAIL_LOGIN_URL, urlencode($email), urlencode($password));		// ログイン用URL
+					$url = ec_mainCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
 					$mailParam = array();
 					$mailParam['PASSWORD'] = $password;
 					$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-					$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+					$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 					$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', self::REGIST_MEMBER_FORM, $mailParam);// 自動送信
 					$this->tmpl->addVar("_widget", "message", '登録完了しました。指定のメールアドレス宛てにパスワードが送信されます。<br />再度ログインしてください。');
 				} else {
@@ -260,7 +260,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('show_input', 'visibility', 'visible');
 		}
 		// ##### フォトギャラリー追加分 #####
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->tmpl->setAttribute('show_member_info_option', 'visibility', 'visible');
 			
 			// 性別選択メニュー作成
@@ -291,7 +291,7 @@ class ec_mainRegmemberWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->db->getAllState('JPN', $this->_langId, array($this, 'stateLoop'));
 		}
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->tmpl->addVar("show_member_info_option", "sports", $sports);		// 現在やっているスポーツ
 		}
 				

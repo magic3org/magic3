@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-class photo_shopCommonDef
+class ec_mainCommonDef
 {
 	static $_deviceType = 0;	// デバイスタイプ(PC)
 	

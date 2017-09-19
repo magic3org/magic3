@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainDelivmethodWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -62,7 +62,7 @@ class ec_mainDelivmethodWidgetContainer extends ec_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$defaultCurrency = photo_shopCommonDef::DEFAULT_CURRENCY;		// 通貨
+		$defaultCurrency = ec_mainCommonDef::DEFAULT_CURRENCY;		// 通貨
 
 		// 初期データ取得
 		// クッキー読み込み、カートIDを取得。カートの商品を集計する(配送料金の計算に必要)

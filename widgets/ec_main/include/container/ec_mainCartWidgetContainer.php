@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainCartWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -55,7 +55,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 		$this->request = $request;
 		$index = $request->trimValueOf('index');	// 処理対象項目インデックス
 		$backUrl = $request->trimValueOf('backurl');	// 戻り先URL
-		$defaultCurrency = photo_shopCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
+		$defaultCurrency = ec_mainCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
 				
 		// クッキー読み込み、カートIDを取得
 		$cartId = $request->getCookieValue(M3_COOKIE_CART_ID);
@@ -78,10 +78,10 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 							$checkVal = $request->trimValueOf('checkvalue_' . $index);
 							
 							switch ($productClass){
-								case photo_shopCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
+								case ec_mainCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
 									$checkId = $cartItemRow['ht_public_id'];
 									break;
-								case photo_shopCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
+								case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 									$checkId = $cartItemRow['pt_id'];
 									break;
 							}
@@ -132,7 +132,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 			// 画像情報を取得
 			$this->_productImageWidth = 0;		// 商品画像幅
 			$this->_productImageHeight = 0;		// 商品画像高さ
-			$ret = self::$_mainDb->getProductImageInfo(photo_shopCommonDef::PRODUCT_IMAGE_SMALL, $row);
+			$ret = self::$_mainDb->getProductImageInfo(ec_mainCommonDef::PRODUCT_IMAGE_SMALL, $row);
 			if ($ret){
 				$this->_productImageWidth = $row['is_width'];
 				$this->_productImageHeight = $row['is_height'];
@@ -176,7 +176,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('no_item_message', 'visibility', 'visible');
 		}
 		// 注文受付停止中は購入ボタンを不可にする(システム管理者以外)
-		if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER)){
+		if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(ec_mainCommonDef::CF_E_ACCEPT_ORDER)){
 			$this->tmpl->addVar("show_cart", "order_msg", 'ただ今、一時的に注文処理を停止しています');
 			$this->tmpl->addVar("show_cart", "order_disabled", 'disabled');
 		}
@@ -217,7 +217,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 		$itemIndex++;
 		
 		switch ($productClass){
-			case photo_shopCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
 				$checkId = $fetchedRow['ht_public_id'];
 				if ($checkVal != $checkId) return true;// 入力チェックエラーの場合は終了
 				
@@ -228,10 +228,10 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, photo_shopCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
 				
 				break;
-			case photo_shopCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				$checkId = $fetchedRow['pt_id'];
 				if ($checkVal != $checkId) return true;// 入力チェックエラーの場合は終了
 				
@@ -247,7 +247,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 			// 価格を取得
 			$price = $row['pp_price'];	// 価格
 			$currency = $row['pp_currency_id'];	// 通貨
-			$taxType = photo_shopCommonDef::TAX_TYPE;					// 税種別
+			$taxType = ec_mainCommonDef::TAX_TYPE;					// 税種別
 
 			// 価格作成
 			self::$_ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定

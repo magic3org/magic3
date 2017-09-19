@@ -77,7 +77,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		
 		$this->sortKeyType = array('index'/*表示順*/, 'stock'/*在庫数*/, 'id'/*商品ID*/, 'date'/*更新日時*/, 'name'/*商品名*/, 'code'/*商品コード*/, 'price'/*商品価格*/, 'visible'/*公開状態*/);
 		$this->imageTypes = array('s', 'm', 'l');			// 画像タイプ
-		$this->categoryCount = self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
+		$this->categoryCount = self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
 		if ($this->categoryCount <= 0) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
 	}
 	/**
@@ -423,9 +423,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$defaultImageLHeight = $row['is_height'];
 		}
 		// 作成画像フォーマット
-		$imageFormat_s = $defaultImageSWidth . 'x' . $defaultImageSHeight . photo_shopCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
-		$imageFormat_m = $defaultImageMWidth . 'x' . $defaultImageMHeight . photo_shopCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
-		$imageFormat_l = $defaultImageLWidth . 'x' . $defaultImageLHeight . photo_shopCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
+		$imageFormat_s = $defaultImageSWidth . 'x' . $defaultImageSHeight . ec_mainCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
+		$imageFormat_m = $defaultImageMWidth . 'x' . $defaultImageMHeight . ec_mainCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
+		$imageFormat_l = $defaultImageLWidth . 'x' . $defaultImageLHeight . ec_mainCommonDef::DEFAULT_PRODUCT_IMAGE_TYPE;
 		$imageFormat = $imageFormat_s . ';' . $imageFormat_m . ';' . $imageFormat_l;
 		
 		// 商品一覧へ戻す値
@@ -960,7 +960,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$this->categoryArray = $this->getCategory($row5);
 				
 				// アイキャッチ画像
-				$iconUrl = photo_shopCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[photo_shopCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE], self::$_configArray[photo_shopCommonDef::CF_E_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+				$iconUrl = ec_mainCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[ec_mainCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE], self::$_configArray[ec_mainCommonDef::CF_E_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
 				if (empty($row['pt_thumb_filename'])){
 					$iconTitle = 'アイキャッチ画像未設定';
 				} else {

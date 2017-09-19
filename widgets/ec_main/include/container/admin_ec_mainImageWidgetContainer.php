@@ -94,11 +94,11 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// アイキャッチ画像を非公開ディレクトリに保存
-				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
+				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, ec_mainCommonDef::$_deviceType);
 				$ret = mvFileToDir($tmpDir, $filenames, $privateThumbDir);
 
 				// 画像を公開ディレクトリにコピー
-				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
+				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_PRODUCT, ec_mainCommonDef::$_deviceType);
 				if ($ret) $ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
 
 				// サムネール作成元画像のパスをresourceディレクトリからの相対パスに変換
@@ -129,8 +129,8 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 公開ディレクトリ、非公開ディレクトリの画像を削除
-				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
-				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
+				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_PRODUCT, ec_mainCommonDef::$_deviceType);
+				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, ec_mainCommonDef::$_deviceType);
 				for ($i = 0; $i < count($filenames); $i++){
 					$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
 					$privateThumbPath = $privateThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
@@ -173,7 +173,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		
 			// ### 現在設定されているアイキャッチ画像 ###
 			// 最大サイズのアイキャッチ画像を取得。公開ディレクトリになければデフォルト画像を表示。
-			$eyecatchUrl = photo_shopCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[photo_shopCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE]);
+			$eyecatchUrl = ec_mainCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[ec_mainCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE]);
 			
 			// ### 置き換え用アイキャッチ画像 ###
 			// 画像ファイル名、フォーマット取得
@@ -195,7 +195,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			
 			// 記事内でアイキャッチ画像に使用した画像を取得
 /*			$originalEyecatchUrl = '';
-			$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
+			$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, ec_mainCommonDef::$_deviceType);
 			$imagePath = $privateThumbDir . '/' . $filename;
 			if (!empty($row['pt_thumb_filename']) && !file_exists($imagePath)){// 画像が作成されていて、非公開ディレクトリに画像がない場合
 				// アイキャッチを作成したソース画像を取得

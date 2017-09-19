@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainPurchasehistoryWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -55,12 +55,12 @@ class ec_mainPurchasehistoryWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$this->currency = photo_shopCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
+		$this->currency = ec_mainCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
 		
 		// 画像情報を取得
 		$this->_productImageWidth = 0;		// 商品画像幅
 		$this->_productImageHeight = 0;		// 商品画像高さ
-		$ret = self::$_mainDb->getProductImageInfo(photo_shopCommonDef::PRODUCT_IMAGE_SMALL, $row);
+		$ret = self::$_mainDb->getProductImageInfo(ec_mainCommonDef::PRODUCT_IMAGE_SMALL, $row);
 		if ($ret){
 			$this->_productImageWidth = $row['is_width'];
 			$this->_productImageHeight = $row['is_height'];

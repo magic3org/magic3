@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainLoginWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -100,7 +100,7 @@ class ec_mainLoginWidgetContainer extends ec_mainBaseWidgetContainer
 				
 				$this->tmpl->addVar("_widget", "message", 'ログインに失敗しました');
 			}
-		//} else if ($act == photo_shopCommonDef::EMAIL_LOGIN_ACT){			// メールからの会員ログインのとき
+		//} else if ($act == ec_mainCommonDef::EMAIL_LOGIN_ACT){			// メールからの会員ログインのとき
 		} else {		// 初期画面
 			// Eメールのリンクでのログインの場合
 			if ($task == 'emaillogin'){
@@ -119,7 +119,7 @@ class ec_mainLoginWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('field_regmember', 'visibility', 'hidden');// 会員登録への遷移を削除
 		} else {
 			// 非会員の購入を許可している場合は、遷移可能にする
-			$value = $this->_getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
+			$value = $this->_getConfig(ec_mainCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
 			if (!empty($value)){
 				$this->tmpl->setAttribute('field_nonmember', 'visibility', 'visible');
 				//$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=order', true));				// 購入画面遷移用

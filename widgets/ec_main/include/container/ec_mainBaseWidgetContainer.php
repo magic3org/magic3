@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainBaseWidgetContainer.php 5453 2012-12-09 12:27:50Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/ec_mainCommonDef.php');
@@ -83,15 +83,15 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		if (!isset(self::$_ecObj)) self::$_ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
 		
 		// Eコマース定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = photo_shopCommonDef::loadConfig(self::$_mainDb);
+		if (!isset(self::$_configArray)) self::$_configArray = ec_mainCommonDef::loadConfig(self::$_mainDb);
 		
 		$this->_langId = $this->gEnv->getCurrentLanguage();
 		$this->_userId = $this->gEnv->getCurrentUserId();
 		$this->_now = date("Y/m/d H:i:s");			// 現在日時
 		
 		// 商品クラス表示順
-		$productClassOrder = array(	photo_shopCommonDef::PRODUCT_CLASS_PHOTO,		// フォトギャラリー画像
-									photo_shopCommonDef::PRODUCT_CLASS_DEFAULT);	// 一般商品
+		$productClassOrder = array(	ec_mainCommonDef::PRODUCT_CLASS_PHOTO,		// フォトギャラリー画像
+									ec_mainCommonDef::PRODUCT_CLASS_DEFAULT);	// 一般商品
 		
 		// 注文処理プロセス
 		//if (!isset(self::$_orderProcessTasks)){
@@ -133,7 +133,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 				}
 			}
 		/*
-			if (in_array(photo_shopCommonDef::PRODUCT_CLASS_DEFAULT, self::$_productClass)){		// 一般商品を含むとき
+			if (in_array(ec_mainCommonDef::PRODUCT_CLASS_DEFAULT, self::$_productClass)){		// 一般商品を含むとき
 				self::$_orderProcessTasks = array(	'delivery',		// 配送先入力
 												'delivmethod',	// 配送方法選択
 												'payment',		// 支払い
@@ -390,7 +390,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		$appoint_dt = $this->gEnv->getInitValueOfTimestamp();		// 予定納期
 		
 		// 金額を初期化
-		$currency_id = photo_shopCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
+		$currency_id = ec_mainCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
 		$subtotal = 0;		// 商品合計
 		$deliv_fee = 0;		// 配送料
 		$charge = 0;		// 手数料
@@ -450,7 +450,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		$titleArray = array();
 		$descArray = array();		// 説明
 		
-		$ret = self::$_orderDb->getAllIWidgetMethod(photo_shopCommonDef::IWIDGET_METHOD_CALC_ORDER, $this->_langId, $rows);
+		$ret = self::$_orderDb->getAllIWidgetMethod(ec_mainCommonDef::IWIDGET_METHOD_CALC_ORDER, $this->_langId, $rows);
 		for ($i = 0; $i < count($rows); $i++){
 			$iWidgetId	= $rows[$i]['id_iwidget_id'];	// インナーウィジェットID
 			if (!empty($iWidgetId)){
@@ -511,12 +511,12 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		$postPrice = $this->convertToDispString($fetchedRow['cu_post_symbol']);	// 価格表示用
 		
 		switch ($productClass){
-			case photo_shopCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
 				$photoId = $fetchedRow['ht_public_id'];		// 公開画像ID
 				$title = $fetchedRow['ht_name'];		// サムネール画像タイトル
 				//$productTypeName = $fetchedRow['py_name'];		// 商品タイプ名
 				//$productTypeCode = $fetchedRow['py_code'];		// 商品タイプコード
-				if ($productType == photo_shopCommonDef::PRODUCT_TYPE_DOWNLOAD){		// ダウンロード商品の場合
+				if ($productType == ec_mainCommonDef::PRODUCT_TYPE_DOWNLOAD){		// ダウンロード商品の場合
 					$productTypeName = $fetchedRow['py_name'];		// 商品タイプ名
 					$productTypeCode = $fetchedRow['py_code'];		// 商品タイプコード
 				} else {							// フォト関連商品の場合
@@ -528,16 +528,16 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 				}
 
 				// 表示用の商品名、商品コード作成
-				$productName = sprintf(photo_shopCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
-				$productCode = sprintf(photo_shopCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
+				$productName = sprintf(ec_mainCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
+				$productCode = sprintf(ec_mainCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
 				
 				// 商品の状態
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, photo_shopCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
 				break;
-			case photo_shopCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				// 商品内容
 				$this->_isExistsDefaultProduct = true;		// 一般商品が含まれているかどうか
 				
@@ -557,7 +557,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 			// 価格を取得
 			$price = $row['pp_price'];	// 価格
 			$currency = $row['pp_currency_id'];	// 通貨
-			$taxType = photo_shopCommonDef::TAX_TYPE;					// 税種別
+			$taxType = ec_mainCommonDef::TAX_TYPE;					// 税種別
 
 			// 価格作成
 			self::$_ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
@@ -591,8 +591,8 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 													$productName, $productCode, $price, $quantity, $tax, $subtotal, $this->_userId, $this->_now);
 													
 				// ##### 在庫数を更新 #####
-				if ($productClass == photo_shopCommonDef::PRODUCT_CLASS_DEFAULT){	// 一般商品のとき
-					if ($this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK)){
+				if ($productClass == ec_mainCommonDef::PRODUCT_CLASS_DEFAULT){	// 一般商品のとき
+					if ($this->_getConfig(ec_mainCommonDef::CF_E_AUTO_STOCK)){
 						$newStockCount = intval($row['pe_stock_count']) - $quantity;
 						if ($newStockCount < 0) $newStockCount = 0;
 						$updateParam = array('pe_stock_count' => $newStockCount);
@@ -634,11 +634,11 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 		$postPrice = $this->convertToDispString($fetchedRow['cu_post_symbol']);	// 価格表示用
 
 		switch ($productClass){
-			case photo_shopCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
 				$photoId = $fetchedRow['ht_public_id'];		// 公開画像ID
 				$title = $fetchedRow['ht_name'];		// サムネール画像タイトル
 				$checkValue = $photoId;					// 項目チェック値
-				if ($productType == photo_shopCommonDef::PRODUCT_TYPE_DOWNLOAD){		// ダウンロード商品の場合
+				if ($productType == ec_mainCommonDef::PRODUCT_TYPE_DOWNLOAD){		// ダウンロード商品の場合
 					$productTypeName = $fetchedRow['py_name'];		// 商品タイプ名
 					$productTypeCode = $fetchedRow['py_code'];		// 商品タイプコード
 				} else {							// フォト関連商品の場合
@@ -651,25 +651,25 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 					$productName = $fetchedRow['od_product_name'];		// 商品名
 					$productCode = $fetchedRow['od_product_code'];		// 商品コード
 				} else {
-					$productName = sprintf(photo_shopCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
-					$productCode = sprintf(photo_shopCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
+					$productName = sprintf(ec_mainCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
+					$productCode = sprintf(ec_mainCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
 				}
 				
 				// 商品の状態
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, photo_shopCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
 				
 				// 画像詳細へのリンク
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;
 		
 				// 画像URL
-				$imageUrl = $this->gEnv->getResourceUrl() . photo_shopCommonDef::THUMBNAIL_DIR . '/' . $photoId . '_' . photo_shopCommonDef::DEFAULT_THUMBNAIL_SIZE . '.' . photo_shopCommonDef::DEFAULT_IMAGE_EXT;
-				$imageWidth = photo_shopCommonDef::CART_ICON_SIZE;
-				$imageHeight = photo_shopCommonDef::CART_ICON_SIZE;
+				$imageUrl = $this->gEnv->getResourceUrl() . ec_mainCommonDef::THUMBNAIL_DIR . '/' . $photoId . '_' . ec_mainCommonDef::DEFAULT_THUMBNAIL_SIZE . '.' . ec_mainCommonDef::DEFAULT_IMAGE_EXT;
+				$imageWidth = ec_mainCommonDef::CART_ICON_SIZE;
+				$imageHeight = ec_mainCommonDef::CART_ICON_SIZE;
 				break;
-			case photo_shopCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				$title = $fetchedRow['pt_name'];		// サムネール画像タイトル
 				$checkValue = $productId;					// 項目チェック値
 				
@@ -692,7 +692,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId;
 
 				// 画像URL
-				$imageArray = $this->_getImage($imageRows, photo_shopCommonDef::PRODUCT_IMAGE_SMALL);// 商品画像小
+				$imageArray = $this->_getImage($imageRows, ec_mainCommonDef::PRODUCT_IMAGE_SMALL);// 商品画像小
 				$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageArray['im_url']);
 				$imagePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getSystemRootPath(), $imageArray['im_url']);
 				if (!file_exists($imagePath)){
@@ -702,7 +702,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 				$imageHeight = $this->_productImageHeight;
 				
 				// ##### 在庫自動処理 #####
-				if (!$this->_createEmailData/*Eメール出力でない場合*/ && $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK)){
+				if (!$this->_createEmailData/*Eメール出力でない場合*/ && $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_STOCK)){
 					if (!$this->_useOrderDetail){		// カート内容を取得の場合
 						// カートの購入数と在庫数を比較し、在庫数が少ない場合はメッセージ出力
 						$stockCount = intval($row['pe_stock_count']);
@@ -719,7 +719,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 			// 価格を取得
 			$price = $row['pp_price'];	// 価格
 			$currency = $row['pp_currency_id'];	// 通貨
-			$taxType = photo_shopCommonDef::TAX_TYPE;					// 税種別
+			$taxType = ec_mainCommonDef::TAX_TYPE;					// 税種別
 
 			// 価格作成
 			self::$_ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定

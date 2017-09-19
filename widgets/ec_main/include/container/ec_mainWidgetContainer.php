@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -44,7 +44,7 @@ class ec_mainWidgetContainer extends ec_mainBaseWidgetContainer
 		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
 		
 		// ##### アクセス制御 #####
-		$canNonMemberOrder = $this->_getConfig(photo_shopCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
+		$canNonMemberOrder = $this->_getConfig(ec_mainCommonDef::CF_E_PERMIT_NON_MEMBER_ORDER);
 
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
@@ -72,7 +72,7 @@ class ec_mainWidgetContainer extends ec_mainBaseWidgetContainer
 				}
 			}
 			// 注文受付停止中はトップ画面へ遷移(システム管理者以外)
-			if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(photo_shopCommonDef::CF_E_ACCEPT_ORDER)){
+			if (!$this->gEnv->isSystemAdmin() && !$this->_getConfig(ec_mainCommonDef::CF_E_ACCEPT_ORDER)){
 				$this->gPage->redirect($this->gEnv->createCurrentPageUrl());
 				return true;
 			}
@@ -130,7 +130,7 @@ class ec_mainWidgetContainer extends ec_mainBaseWidgetContainer
 				break;
 		}
 		// 会員規約を承認していない場合は、規約ページを表示
-		if ($task == 'regmember' && $this->getWidgetSession(photo_shopCommonDef::SK_AGREE_MEMBER, '0') == '0'){
+		if ($task == 'regmember' && $this->getWidgetSession(ec_mainCommonDef::SK_AGREE_MEMBER, '0') == '0'){
 			$task = 'agreemember';		// 会員規約
 		}
 		

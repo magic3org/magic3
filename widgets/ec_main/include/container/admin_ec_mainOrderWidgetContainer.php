@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -297,15 +297,15 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 					$enableUpdate = true;		// データ更新可能かどうか
 					
 					// 入金日付がない場合は一旦入金済みを実行した後終了可能
-					if ($this->orderStatus == photo_shopCommonDef::ORDER_STATUS_CLOSE && $row['or_pay_dt'] == $this->gEnv->getInitValueOfTimestamp()){
+					if ($this->orderStatus == ec_mainCommonDef::ORDER_STATUS_CLOSE && $row['or_pay_dt'] == $this->gEnv->getInitValueOfTimestamp()){
 						$this->setAppErrorMsg('入金日時が設定されていません。一旦「受注ステータス」を「入金済み」に更新してから「終了」に変更してください。');
 						$enableUpdate = false;		// データ更新不可
 					}
 			
 					if ($enableUpdate){
 						$payUpdate = false;		// 入金状況を更新するかどうか
-						if ($row['or_order_status'] != photo_shopCommonDef::ORDER_STATUS_PAYMENT_COMPLETED && 
-							$this->orderStatus == photo_shopCommonDef::ORDER_STATUS_PAYMENT_COMPLETED) $payUpdate = true;
+						if ($row['or_order_status'] != ec_mainCommonDef::ORDER_STATUS_PAYMENT_COMPLETED && 
+							$this->orderStatus == ec_mainCommonDef::ORDER_STATUS_PAYMENT_COMPLETED) $payUpdate = true;
 					
 						// 受注状態が「入金済み」に設定のときは支払い日時を更新
 						$payDt = $row['or_pay_dt'];
@@ -329,7 +329,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 							$this->_userId, $this->now, $newOrderId, $newSerial, $row['or_discount_desc'], $payDt);
 						
 						// キャンセルの場合は在庫を戻す
-						if ($this->_getConfig(photo_shopCommonDef::CF_E_AUTO_STOCK) && $this->orderStatus == photo_shopCommonDef::ORDER_STATUS_CANCEL){
+						if ($this->_getConfig(ec_mainCommonDef::CF_E_AUTO_STOCK) && $this->orderStatus == ec_mainCommonDef::ORDER_STATUS_CANCEL){
 							$this->cancelStock = true;		// 在庫キャンセル処理を行うかどうか
 							$this->db->getOrderDetailList($row['or_id'], $this->_langId, array($this, '_defaultOrderItemLoop'));
 							$this->cancelStock = false;
@@ -663,7 +663,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$postPrice = $this->convertToDispString($fetchedRow['cu_post_symbol']);	// 価格表示用
 
 		switch ($productClass){
-			case photo_shopCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_PHOTO:		// フォトギャラリー画像のとき
 				$photoId = $fetchedRow['ht_public_id'];		// 公開画像ID
 				$title = $fetchedRow['ht_name'];		// サムネール画像タイトル
 				$checkValue = $photoId;					// 項目チェック値
@@ -678,15 +678,15 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, photo_shopCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
 				
 				// 画像詳細へのリンク
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;
 		
 				// 画像URL
-				$imageUrl = $this->gEnv->getResourceUrl() . photo_shopCommonDef::THUMBNAIL_DIR . '/' . $photoId . '_' . photo_shopCommonDef::DEFAULT_THUMBNAIL_SIZE . '.' . photo_shopCommonDef::DEFAULT_IMAGE_EXT;
+				$imageUrl = $this->gEnv->getResourceUrl() . ec_mainCommonDef::THUMBNAIL_DIR . '/' . $photoId . '_' . ec_mainCommonDef::DEFAULT_THUMBNAIL_SIZE . '.' . ec_mainCommonDef::DEFAULT_IMAGE_EXT;
 				break;
-			case photo_shopCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
+			case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				$title = $fetchedRow['pt_name'];		// サムネール画像タイトル
 				$checkValue = $productId;					// 項目チェック値
 				
@@ -704,7 +704,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId;
 
 				// 画像URL
-				$imageArray = $this->_getImage($imageRows, photo_shopCommonDef::PRODUCT_IMAGE_SMALL);// 商品画像小
+				$imageArray = $this->_getImage($imageRows, ec_mainCommonDef::PRODUCT_IMAGE_SMALL);// 商品画像小
 				$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageArray['im_url']);
 				
 				// 在庫キャンセル処理
@@ -720,7 +720,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			// 価格を取得
 			$price = $row['pp_price'];	// 価格
 			$currency = $row['pp_currency_id'];	// 通貨
-			$taxType = photo_shopCommonDef::TAX_TYPE;					// 税種別
+			$taxType = ec_mainCommonDef::TAX_TYPE;					// 税種別
 
 			// 価格作成
 			$this->ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
@@ -759,7 +759,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$nameLink = '<a href="' . $urlLink . '">' . $this->convertToDispString($productName) . '</a>';
 		
 		// サムネール
-		$photoImage = '<a href="' . $urlLink . '"><img src="' . $this->getUrl($imageUrl) . '" width="' . photo_shopCommonDef::CART_ICON_SIZE . '" height="' . photo_shopCommonDef::CART_ICON_SIZE . 
+		$photoImage = '<a href="' . $urlLink . '"><img src="' . $this->getUrl($imageUrl) . '" width="' . ec_mainCommonDef::CART_ICON_SIZE . '" height="' . ec_mainCommonDef::CART_ICON_SIZE . 
 								'" title="' . $this->convertToDispString($title) . '" alt="' . $this->convertToDispString($title) . '" style="border:none;" /></a>';
 		
 		if (!$this->cancelStock && empty($this->updateContentAccess)){		// コンテンツアクセス権の設定でないとき
@@ -938,8 +938,8 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			$selected = 'selected';
 		}
 		$optionStr = '';
-		if ($fetchedRow['os_id'] == photo_shopCommonDef::ORDER_STATUS_CANCEL ||
-			$fetchedRow['os_id'] == photo_shopCommonDef::ORDER_STATUS_PAYMENT_COMPLETED){
+		if ($fetchedRow['os_id'] == ec_mainCommonDef::ORDER_STATUS_CANCEL ||
+			$fetchedRow['os_id'] == ec_mainCommonDef::ORDER_STATUS_PAYMENT_COMPLETED){
 			$optionStr = '*';
 		}
 		$row = array(
@@ -978,8 +978,8 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 	{
 		// ダウンロードコンテンツのIDを取得
 		$this->updateContentAccess = true;		// コンテンツアクセス権の設定かどうか
-		$this->productClass	= photo_shopCommonDef::PRODUCT_CLASS_PHOTO;		// 商品クラス(フォトギャラリー画像)
-		$this->productType	= photo_shopCommonDef::PRODUCT_TYPE_DOWNLOAD;		// 商品タイプ(ダウンロード画像)
+		$this->productClass	= ec_mainCommonDef::PRODUCT_CLASS_PHOTO;		// 商品クラス(フォトギャラリー画像)
+		$this->productType	= ec_mainCommonDef::PRODUCT_TYPE_DOWNLOAD;		// 商品タイプ(ダウンロード画像)
 		$this->contentIdArray = array();		// コンテンツID
 		$this->db->getOrderDetailList($orderId, $this->gEnv->getCurrentLanguage(), array($this, '_defaultOrderItemLoop'));
 		$this->updateContentAccess = false;		// コンテンツアクセス権の設定かどうか
@@ -1026,11 +1026,11 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$tmpl->addVar('_tmpl', 'deliv_address', $delivAddress);
 		
 		// 送信元
-		$shopName		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
-		$shopOwner		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
-		$shopZipcode	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
-		$shopAddress	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
-		$shopPhone		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
+		$shopName		= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_NAME);		// ショップ名
+		$shopOwner		= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_OWNER);		// ショップオーナー名
+		$shopZipcode	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_ZIPCODE);		// ショップ郵便番号
+		$shopAddress	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_ADDRESS);		// ショップ住所
+		$shopPhone		= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_PHONE);		// ショップ電話番号
 
 		$fromAddress = '';
 		if (!empty($shopName)) $fromAddress .= $this->convertToDispString($shopName) . '<br />';

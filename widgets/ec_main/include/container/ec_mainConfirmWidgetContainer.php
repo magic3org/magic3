@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainConfirmWidgetContainer.php 5572 2013-01-23 08:43:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -61,7 +61,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$this->now = date("Y/m/d H:i:s");	// 現在日時
-		$this->currency = photo_shopCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
+		$this->currency = ec_mainCommonDef::DEFAULT_CURRENCY;		// デフォルト通貨
 		
 		// クッキー読み込み、カートIDを取得
 		$this->cartId = $request->getCookieValue(M3_COOKIE_CART_ID);
@@ -80,7 +80,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 		// 画像情報を取得
 		$this->_productImageWidth = 0;		// 商品画像幅
 		$this->_productImageHeight = 0;		// 商品画像高さ
-		$ret = self::$_mainDb->getProductImageInfo(photo_shopCommonDef::PRODUCT_IMAGE_SMALL, $row);
+		$ret = self::$_mainDb->getProductImageInfo(ec_mainCommonDef::PRODUCT_IMAGE_SMALL, $row);
 		if ($ret){
 			$this->_productImageWidth = $row['is_width'];
 			$this->_productImageHeight = $row['is_height'];
@@ -125,7 +125,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 						self::$_orderDb->startTransaction();
 
 						// 受注ヘッダ作成
-						$orderStatus = photo_shopCommonDef::ORDER_STATUS_REGIST;
+						$orderStatus = ec_mainCommonDef::ORDER_STATUS_REGIST;
 						$estimateDt = $this->gEnv->getInitValueOfTimestamp();
 						$registDt = $this->now;
 						$orderDt = $this->gEnv->getInitValueOfTimestamp();
@@ -262,7 +262,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 				$this->_orderText .= '合計 ' . $prePrice . self::$_ecObj->convertByCurrencyFormat($this->currency, $this->_langId, $total) . $postPrice . M3_NL;		// 合計
 				
 				// ######## 受注情報をメール送信 ########
-				$stateName = self::$_orderDb->getStateName(photo_shopCommonDef::DEFAULT_COUNTRY_ID, $this->_langId, $this->state);			// 都道府県
+				$stateName = self::$_orderDb->getStateName(ec_mainCommonDef::DEFAULT_COUNTRY_ID, $this->_langId, $this->state);			// 都道府県
 				$adminUrl = $this->gEnv->getDefaultAdminUrl() . '?task=configwidget_' . self::ORDER_ADMIN_WIDGET;		// 管理画面URL
 				$adminUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TODO . '=' . urlencode(M3_REQUEST_PARAM_OPERATION_TASK . '=order_detail&orderno=' . $orderNo);
 				$this->sendOrderMail(0/*新規登録*/, $orderNo, $memberNo, $email, $memberName/*会員名*/,
@@ -296,10 +296,10 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 					// 決済完了処理
 					if ($ret){
 						// 注文状態を支払い完了にする
-						$this->updateOrderStatus($this->orderId, photo_shopCommonDef::ORDER_STATUS_PAYMENT_COMPLETED);
+						$this->updateOrderStatus($this->orderId, ec_mainCommonDef::ORDER_STATUS_PAYMENT_COMPLETED);
 				
 						// 購入完了処理
-						//photo_shopCommonDef::purchaseProduct(self::$_orderDb, $this->orderId);
+						//ec_mainCommonDef::purchaseProduct(self::$_orderDb, $this->orderId);
 						$this->setDownloadContentAccess($this->_userId/*画像購入ユーザ*/, $this->orderId);
 					}
 				}
@@ -312,7 +312,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 			$ret = $this->cancelService($payMethodRow);
 
 			// 注文をキャンセル
-			if ($ret) $this->updateOrderStatus($this->orderId, photo_shopCommonDef::ORDER_STATUS_CANCEL);
+			if ($ret) $this->updateOrderStatus($this->orderId, ec_mainCommonDef::ORDER_STATUS_CANCEL);
 			
 			// カートの状態のオンライン決済中を終了
 			self::$_ecObj->db->updateOrderSheetStatus($this->_userId, 0);
@@ -665,7 +665,7 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 		
 			// 決済完了のときは支払い日時を設定
 			$payDt = $row['or_pay_dt'];
-			if ($status == photo_shopCommonDef::ORDER_STATUS_PAYMENT_COMPLETED) $payDt = $this->now;
+			if ($status == ec_mainCommonDef::ORDER_STATUS_PAYMENT_COMPLETED) $payDt = $this->now;
 			
 			// 受注ヘッダ作成
 			$ret = self::$_orderDb->updateOrder($row['or_serial'], $row['or_user_id'], $row['or_language_id'], $row['or_order_no'],
@@ -697,8 +697,8 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 		// ダウンロードコンテンツのIDを取得
 		$this->_useOrderDetail = true;		// カート内容でなく、受注内容を取得
 		$this->_updateContentAccess = true;		// コンテンツアクセス権の設定かどうか
-		$this->_selectProductClass	= photo_shopCommonDef::PRODUCT_CLASS_PHOTO;		// 商品クラス(フォトギャラリー画像)
-		$this->_selectProductType	= photo_shopCommonDef::PRODUCT_TYPE_DOWNLOAD;		// 商品タイプ(ダウンロード画像)
+		$this->_selectProductClass	= ec_mainCommonDef::PRODUCT_CLASS_PHOTO;		// 商品クラス(フォトギャラリー画像)
+		$this->_selectProductType	= ec_mainCommonDef::PRODUCT_TYPE_DOWNLOAD;		// 商品タイプ(ダウンロード画像)
 		$this->_contentIdArray = array();		// コンテンツID
 		self::$_orderDb->getOrderDetailList($orderId, $this->gEnv->getCurrentLanguage(), array($this, '_defaultCartLoop'));
 		$this->_useOrderDetail = false;		// カート内容でなく、受注内容を取得
@@ -736,9 +736,9 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 	function sendOrderMail($mailType, $orderNo, $memberNo, $email, $memberName, $delivName, $nameKana, $zipcode, $state, $address1, $address2, $phone, 
 									$demandDt, $demandTime, $delivMethod, $payMethod, $note, $orderDetail, $orderText, $adminUrl)
 	{	
-		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
+		$fromAddress = $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 		if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
-		$toAddress = $this->_getConfig(photo_shopCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);	// 商品受注時送信先メールアドレス
+		$toAddress = $this->_getConfig(ec_mainCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);	// 商品受注時送信先メールアドレス
 		if (empty($toAddress)) $toAddress = $this->gEnv->getSiteEmail();// 送信先が取得できないときは、システムのデフォルトメールアドレスを使用
 		
 		// 件名の設定
@@ -781,23 +781,23 @@ class ec_mainConfirmWidgetContainer extends ec_mainBaseWidgetContainer
 		$mailParam['ORDER_TEXT'] = $orderText;	// 注文内容
 		$mailParam['ADMIN_URL'] = $adminUrl . ' ';	// 管理画面URL
 		$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, ''/*返信先*/,
-											$subject/*件名*/, photo_shopCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_SHOP_MANAGER, $mailParam);// 自動送信
+											$subject/*件名*/, ec_mainCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_SHOP_MANAGER, $mailParam);// 自動送信
 											
 		// ##### 購入者にメールを送信 #####
 		if (empty($email)) return $ret;			// 送信先が設定されていないときは送信しない
 		
-		$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
+		$fromAddress = $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 		if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 		$toAddress = $email;
 
 		$mailParam = array();
 		$mailParam['NAME'] = $memberName;
-		$mailParam['SHOP_NAME']		= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_NAME);		// ショップ名
+		$mailParam['SHOP_NAME']		= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_NAME);		// ショップ名
 		$mailParam['DELIV_TEXT'] = $delivText;
 		$mailParam['ORDER_TEXT']	= $orderText;	// 注文内容
-		$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+		$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 		$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, ''/*返信先*/,
-											''/*件名*/, photo_shopCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_CUSTOMER, $mailParam);// 自動送信
+											''/*件名*/, ec_mainCommonDef::MAIL_FORM_ORDER_PRODUCT_TO_CUSTOMER, $mailParam);// 自動送信
 	}
 }
 ?>

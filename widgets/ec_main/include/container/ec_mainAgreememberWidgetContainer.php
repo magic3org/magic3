@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainAgreememberWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -53,7 +53,7 @@ class ec_mainAgreememberWidgetContainer extends ec_mainBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		if ($act == 'agree'){			// 会員規約に同意のとき
 			// セッションの会員規約同意状態を更新
-			$this->setWidgetSession(photo_shopCommonDef::SK_AGREE_MEMBER, 1);
+			$this->setWidgetSession(ec_mainCommonDef::SK_AGREE_MEMBER, 1);
 			
 			// 会員登録画面へ遷移
 			$regmemberPage = $this->gEnv->createCurrentPageUrl() . '&task=regmember';
@@ -62,7 +62,7 @@ class ec_mainAgreememberWidgetContainer extends ec_mainBaseWidgetContainer
 		}
 		// 会員規約を取得
 		$content = '';
-		if (self::$_mainDb->getContentByKey(photo_shopCommonDef::AGREE_MEMBER_TEXT_KEY, $this->_langId, $row)){
+		if (self::$_mainDb->getContentByKey(ec_mainCommonDef::AGREE_MEMBER_TEXT_KEY, $this->_langId, $row)){
 			$content = $row['cn_html'];
 		}
 		

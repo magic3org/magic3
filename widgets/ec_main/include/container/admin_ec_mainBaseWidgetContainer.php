@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -66,7 +66,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_mainDb)) self::$_mainDb = new ec_mainDb();
 			
 		// Eコマース定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = photo_shopCommonDef::loadConfig(self::$_mainDb);
+		if (!isset(self::$_configArray)) self::$_configArray = ec_mainCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
 	 * テンプレートに前処理
@@ -478,7 +478,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link, true) .'"><span>商品カテゴリー</span></a></li>' . M3_NL;
 			
 			// フォト商品
-			if (self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SELL_PRODUCT_PHOTO)){		// フォト商品販売を行う場合
+			if (self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SELL_PRODUCT_PHOTO)){		// フォト商品販売を行う場合
 				$current = '';
 				$link = $this->_baseUrl . '&task=photoproduct';
 				if ($task == 'photoproduct' || $task == 'photoproduct_detail') $current = 'id="current"';

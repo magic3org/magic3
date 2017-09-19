@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainMemberinfoWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -76,7 +76,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$countryId = photo_shopCommonDef::DEFAULT_COUNTRY_ID;			// デフォルト国ID
+		$countryId = ec_mainCommonDef::DEFAULT_COUNTRY_ID;			// デフォルト国ID
 				
 		$firstname = $request->trimValueOf('item_firstname');			// 名前(名)
 		$familyname = $request->trimValueOf('item_familyname');			// 名前(姓)
@@ -94,7 +94,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->gender = $request->trimValueOf('item_gender');		// 性別
 			$this->year = $request->trimValueOf('item_year');		// 生年月日(年)
 			$this->month = $request->trimValueOf('item_month');	// 生年月日(月)
@@ -110,7 +110,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->checkInput($firstnameKana, '名前カナ(名)');
 			
 			// 住所登録が必要なとき追加分
-/*			if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
+/*			if ($this->_getConfig(ec_mainCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
 				$this->checkSingleByte($zipcode, '郵便番号');
 				$this->checkNumeric($this->state, '都道府県');
 				$this->checkInput($address, '住所');	
@@ -133,7 +133,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 			}
 			
 			// フォトギャラリー追加分
-			if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+			if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 				$this->checkInput($this->gender, '性別');
 				if (empty($this->year) || empty($this->month) || empty($this->day)) $this->setUserErrorMsg('生年月日が入力されていません');
 				$this->checkInput($sports, '現在やっているスポーツ');
@@ -173,7 +173,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 
 				// 個人情報登録
 				$personOptions = array();
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$personOptions[self::PERSON_INFO_OPT_SPORTS] = $sports;
 					$birthday = $this->convertToProperDate($this->year . '/' . $this->month . '/' . $this->day);
 				} else {
@@ -237,7 +237,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 							$this->state = $addressRow['ad_state_id'];
 							
 							// フォトギャラリー追加分
-							if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+							if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 								$this->gender		= $personRow['pi_gender'];
 								$this->timestampToYearMonthDay($personRow['pi_birthday'], $this->year, $this->month, $this->day);
 								$sports				= $personOptions[self::PERSON_INFO_OPT_SPORTS];
@@ -250,7 +250,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 			}
 		}
 		// ##### フォトギャラリー追加分 #####
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->tmpl->setAttribute('show_member_info_option', 'visibility', 'visible');
 			
 			// 性別選択メニュー作成
@@ -261,7 +261,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 		}
 		
 		// 住所入力エリア表示制御
-		if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)) $this->tmpl->setAttribute('input_address', 'visibility', 'visible');
+		if ($this->_getConfig(ec_mainCommonDef::CF_E_USE_MEMBER_ADDRESS)) $this->tmpl->setAttribute('input_address', 'visibility', 'visible');
 		
 		// 入力値を戻す
 		$this->tmpl->addVar("_widget", "firstname", $firstname);
@@ -271,7 +271,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "email", $email);
 		$this->tmpl->addVar("_widget", "email2", $email2);
 		$this->tmpl->addVar("_widget", "old_email", $oldemail);
-		if ($this->_getConfig(photo_shopCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
+		if ($this->_getConfig(ec_mainCommonDef::CF_E_USE_MEMBER_ADDRESS)){			// 住所登録が必要なとき
 			$this->tmpl->addVar("input_address", "zipcode", $zipcode);
 			$this->tmpl->addVar("input_address", "address", $address);
 			$this->tmpl->addVar("input_address", "address2", $address2);
@@ -282,7 +282,7 @@ class ec_mainMemberinfoWidgetContainer extends ec_mainBaseWidgetContainer
 			$this->db->getAllState('JPN', $this->_langId, array($this, 'stateLoop'));
 		}
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->tmpl->addVar("show_member_info_option", "sports", $sports);		// 現在やっているスポーツ
 		}
 		

@@ -153,8 +153,8 @@ class product_lotbuyingWidgetContainer extends BaseIWidgetContainer
 				$productTypeCode = $fetchedRow['py_code'];		// 商品タイプコード
 
 				// 表示用の商品名、商品コード作成
-				$productName = sprintf(photo_shopCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
-				$productCode = sprintf(photo_shopCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
+				$productName = sprintf(ec_mainCommonDef::PRODUCT_NAME_FORMAT, $productTypeName, $title);		// 商品名
+				$productCode = sprintf(ec_mainCommonDef::PRODUCT_CODE_FORMAT, $photoId, $productTypeCode);		// 商品コード
 				
 				// 商品の状態
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする

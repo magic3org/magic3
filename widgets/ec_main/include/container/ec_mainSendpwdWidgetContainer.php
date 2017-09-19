@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainSendpwdWidgetContainer.php 5572 2013-01-23 08:43:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -54,7 +54,7 @@ class ec_mainSendpwdWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		$useEmail = $this->_getConfig(photo_shopCommonDef::CF_E_USE_EMAIL);
+		$useEmail = $this->_getConfig(ec_mainCommonDef::CF_E_USE_EMAIL);
 		if ($act == 'sendpassword'){			// パスワード再送信のとき
 			$account = $request->trimValueOf('photo_account');
 			if ($useEmail == '1'){		// メール送信可能のとき
@@ -67,20 +67,20 @@ class ec_mainSendpwdWidgetContainer extends ec_mainBaseWidgetContainer
 					// パスワード変更
 					$ret = $this->_db->updateLoginUserPassword($row['lu_id'], $password);
 					if ($ret){
-						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
+						$fromAddress = $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 						if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 						$toAddress = $account;			// eメール(ログインアカウント)
 						
-						//$url = $this->gEnv->createCurrentPageUrl() . sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($account), urlencode($password));		// ログイン用URL
+						//$url = $this->gEnv->createCurrentPageUrl() . sprintf(ec_mainCommonDef::EMAIL_LOGIN_URL, urlencode($account), urlencode($password));		// ログイン用URL
 						//$url = $this->gPage->getDefaultPageUrlByWidget($this->gEnv->getCurrentWidgetId(), 
-						//				sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password)));		// ログイン用URL
-						$url = photo_shopCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
+						//				sprintf(ec_mainCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password)));		// ログイン用URL
+						$url = ec_mainCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
 						$mailParam = array();
 						$mailParam['PASSWORD'] = $password;
 						$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 						$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '',
-																				photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 自動送信
+																				ec_mainCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 自動送信
 						$isSend = true;		// 送信完了
 					}
 				} else {

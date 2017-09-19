@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainMemberWidgetContainer.php 5572 2013-01-23 08:43:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
@@ -210,7 +210,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 		$fax				= $request->trimValueOf('fax');				// FAX
 		
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->gender			= $request->trimValueOf('gender');			// 性別
 			$birthday			= $request->trimValueOf('birthday');
 			if (!empty($birthday)) $birthday = $this->convertToProperDate($birthday);			// 生年月日
@@ -230,7 +230,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 			$this->checkMailAddress($email, 'Eメール');
 			
 			// フォトギャラリー追加分
-			if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+			if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 				$this->checkDate($birthday, '生年月日', true);
 			}
 			
@@ -259,7 +259,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 
 				// 個人情報登録
 				$personOptions = array();
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$personOptions[self::PERSON_INFO_OPT_SPORTS] = $sports;
 					if (empty($birthday)) $birthday = $this->gEnv->getInitValueOfDate();
 				} else {
@@ -320,7 +320,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 
 				// 個人情報登録
 				$personOptions = array();
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$personOptions[self::PERSON_INFO_OPT_SPORTS] = $sports;
 					if (empty($birthday)) $birthday = $this->gEnv->getInitValueOfDate();
 				} else {
@@ -396,22 +396,22 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 					$ret = $this->_db->updateLoginUserPassword($loginUserId, $password);
 					if ($ret){
 						//$fromAddress = self::$_mainDb->getConfig(self::AUTO_EMAIL_SENDER);	// 自動送信送信元
-						$fromAddress = $this->_getConfig(photo_shopCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
+						$fromAddress = $this->_getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);	// 自動送信送信元
 						if (empty($fromAddress)) $fromAddress = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
 						$toAddress = $this->convertToDispString($row['pi_email']);			// eメール(ログインアカウント)
 						
 						//$loginParam = 'task=login&act=ec_maillogin&account=' . urlencode($toAddress) . '&pwd=' . urlencode($password);// ログイン用パラメータ
 						//$url = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, ''/*送信元ウィジェット指定なし*/, $loginParam, $this->gEnv->getDefaultPageId());
-						//$url = $this->gEnv->createCurrentPageUrl() . sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password));		// ログイン用URL
+						//$url = $this->gEnv->createCurrentPageUrl() . sprintf(ec_mainCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password));		// ログイン用URL
 						//$url = $this->gPage->getDefaultPageUrlByWidget($this->gEnv->getCurrentWidgetId(), 
-						//				sprintf(photo_shopCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password)));		// ログイン用URL
-						$url = photo_shopCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
+						//				sprintf(ec_mainCommonDef::EMAIL_LOGIN_URL, urlencode($toAddress), urlencode($password)));		// ログイン用URL
+						$url = ec_mainCommonDef::createLoginUrl($toAddress, $password);		// ログイン用URL
 						$mailParam = array();
 						$mailParam['PASSWORD'] = $password;
 						$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(photo_shopCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
+						$mailParam['SIGNATURE']	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SHOP_SIGNATURE);	// ショップメール署名
 						$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '',
-																				photo_shopCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 手動送信
+																				ec_mainCommonDef::MAIL_FORM_SEND_PASSWORD, $mailParam);// 手動送信
 																				
 						// パスワード変更のメッセージ
 						$this->tmpl->addVar("_widget", "pwd_message", '新規パスワード: ' . $password);
@@ -489,7 +489,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 				$phone = $row['ad_phone'];			// 電話番号
 				$fax = $row['ad_fax'];				// FAX				
 				$updateUser = $row['lu_name'];	// 更新者
-				if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+				if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 					$this->gender = $row['pi_gender'];			// 性別
 					$birthday = $row['pi_birthday'];			// 生年月日
 				}
@@ -507,14 +507,14 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 				$ret = $this->db->getPersonInfo($personId, $row, $personOptions);
 				if ($ret){
 					// フォトギャラリー追加分
-					if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+					if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 						$sports	= $personOptions[self::PERSON_INFO_OPT_SPORTS];		// 現在やってるスポーツ
 					}
 				}
 			}
 		}
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			$this->tmpl->setAttribute('script_member_info_option', 'visibility', 'visible');		// スクリプト表示
 			$this->tmpl->setAttribute('show_member_info_option', 'visibility', 'visible');
 		}
@@ -539,7 +539,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($updateDt));	// 更新日時
 		
 		// フォトギャラリー追加分
-		if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+		if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 			// 性別
 			if ($this->gender == 0){		// 未設定のとき
 				$this->tmpl->addVar("show_member_info_option", "gender_none", 'selected');
@@ -569,7 +569,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 			$this->tmpl->addVar("_widget", "fax_disabled", 'disabled');		// FAX
 			$this->tmpl->addVar("_widget", "state_disabled", 'disabled');		// 都道府県
 			
-			if (photo_shopCommonDef::MEMBER_INFO_OPTION){
+			if (ec_mainCommonDef::MEMBER_INFO_OPTION){
 				$this->tmpl->addVar("show_member_info_option", "birthday_disabled", 'disabled');		// 生年月日
 				$this->tmpl->addVar("show_member_info_option", "calender_disabled", 'disabled');		// カレンダー
 				$this->tmpl->addVar("show_member_info_option", "gender_disabled", 'disabled');		// 性別

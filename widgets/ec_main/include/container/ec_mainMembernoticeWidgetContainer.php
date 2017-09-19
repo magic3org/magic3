@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainMembernoticeWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/ec_mainBaseWidgetContainer.php');
@@ -51,7 +51,7 @@ class ec_mainMembernoticeWidgetContainer extends ec_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// 会員向けお知らせを取得
-		$notice = $this->_getConfig(photo_shopCommonDef::CF_E_MEMBER_NOTICE);
+		$notice = $this->_getConfig(ec_mainCommonDef::CF_E_MEMBER_NOTICE);
 		$this->tmpl->addVar("_widget", "notice", $notice);
 	}
 }
