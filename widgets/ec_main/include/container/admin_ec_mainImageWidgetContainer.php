@@ -63,8 +63,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getDefaultLanguage();		// 表示言語を取得
+		$langId	= $this->gEnv->getDefaultLanguage();		// デフォルト言語を取得
 		$act = $request->trimValueOf('act');
 		$productId = $request->trimValueOf(M3_REQUEST_PARAM_PRODUCT_ID);
 		$act = $request->trimValueOf('act');
@@ -167,7 +166,6 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			rmDirectory($tmpDir);
 		}
 
-//		$ret = self::$_mainDb->getEntryItem($productId, $langId, $row);
 		$ret = $this->db->getProductByProductId($productId, $langId, $row, $row2, $row3, $row4, $row5);
 		if ($ret){
 //			$html		= $row['be_html'];				// HTML
@@ -210,11 +208,11 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			if (!empty($row['pt_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 		}
 		// Ajax用URL
-		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+//		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId();
-		} else {
-			$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId() . '&openby=other&blogid=' . $this->_blogId;
-		}
+//		} else {
+//			$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId() . '&openby=other&blogid=' . $this->_blogId;
+//		}
 		$this->tmpl->addVar("_widget", "ajax_url", $ajaxUrl);
 		
 		// アイキャッチ画像の情報を取得
@@ -236,7 +234,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "move_icon_tag", $moveIconTag);			// 画像変更表示用アイコン
 		$this->tmpl->addVar("_widget", "original_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($originalEyecatchUrl)));		// アイキャッチ画像の元の画像
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
-		$this->tmpl->addVar("_widget", "product_id", $productId);
+		$this->tmpl->addVar("_widget", "product_id", $this->convertToDispString($productId));
 	}
 	/**
 	 * クロップ画像を作成
@@ -342,14 +340,14 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 	 */
 	function getEyecatchUrl($productId)
 	{
-		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+//		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 			$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-		} else {
-			$imageUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;	// ウィジェット直接実行
-			$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-			$imageUrl .= '&openby=other&blogid=' . $this->_blogId;
-		}
+//		} else {
+//			$imageUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;	// ウィジェット直接実行
+//			$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+//			$imageUrl .= '&openby=other&blogid=' . $this->_blogId;
+//		}
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
 		$imageUrl .= '&' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId;

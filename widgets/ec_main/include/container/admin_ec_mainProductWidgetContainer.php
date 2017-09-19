@@ -432,6 +432,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$sort = $request->trimValueOf('sort');		// ソート順
 		
 		$act = $request->trimValueOf('act');
+		$productId = $request->trimValueOf(M3_REQUEST_PARAM_PRODUCT_ID);		// 製品IDが設定されている場合はシリアル番号に優先する
 		$this->serialNo = $request->trimValueOf('serial');			// 選択項目のシリアル番号
 //		if (empty($this->serialNo)) $this->serialNo = 0;
 //		$this->productId = $request->trimValueOf('productid');	// 商品ID
@@ -887,14 +888,88 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else {	// 初期表示
-			$reloadData = true;			// データを再取得
-
 			// アップロードファイル初期化
 			$this->resetUploadImage();
+			
+			if (empty($productId)){
+				if (!empty($this->serialNo)){		// シリアル番号で指定の場合
+					$reloadData = true;		// データの再読み込み
+				}
+			} else {
+				// 製品情報を取得
+				$ret = $this->db->getProductByProductId($productId, $this->langId, $row, $row2, $row3, $row4, $row5);
+				if ($ret){
+					$this->serialNo = $row['pt_serial'];		// シリアル番号
+					$reloadData = true;		// データの再読み込み
+				} else {
+					$this->serialNo = 0;
+				}
+			}
+			
+			// 初期画面用データ取得
+			if (empty($this->serialNo)) $reloadData = true;		// データの再読み込み
 		}
 		if ($reloadData){		// データ再取得のとき
-			if (empty($this->serialNo)){
-				// 入力値初期化
+			// データ再取得
+			$ret = $this->db->getProductBySerial($this->serialNo, $row, $row2, $row3, $row4, $row5);
+			if ($ret){
+				// 取得値を設定
+				$productId = $row['pt_id'];	// 商品ID
+				$this->langId = $row['pt_language_id'];
+				$name = $row['pt_name'];		// 名前
+				$code = $row['pt_code'];		// 商品コード
+				$index = $row['pt_sort_order'];	// 表示順
+				$visible = $row['pt_visible'];	// 表示状態
+				$this->unitTypeId = $row['pt_unit_type_id'];	// 単位
+				$unitQuantity = $row['pt_unit_quantity'];		// 数量
+				$stockCount	= $row['pe_stock_count'];		// 表示在庫数
+				if (empty($stockCount)) $stockCount = 0;
+				$delivType = $row['pt_deliv_type'];		// 配送タイプ
+				$delivPrice = $row['pt_deliv_fee'];		// 配送単価
+				$delivWeight = $row['pt_weight'];		// 配送基準重量
+				$description = $row['pt_description'];			// 説明
+				$description_short = $row['pt_description_short'];		// 簡易説明
+				//$keyword = $row['pt_search_keyword'];					// 検索キーワード
+				$metaKeyword = $row['pt_meta_keywords'];	// METAタグ用キーワード
+				$url = $row['pt_site_url'];							// 詳細情報URL
+				$this->taxType = $row['pt_tax_type_id'];					// 税種別
+				$adminNote = $row['pt_admin_note'];		// 管理者用備考
+				$updateUser = $this->convertToDispString($row['lu_name']);	// 更新者
+				$updateDt = $this->convertToDispDateTime($row['pt_create_dt']);	// 更新日時
+			
+				// 価格を取得
+				$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+				$price = $priceArray['pp_price'];	// 価格
+				$this->currency = $priceArray['pp_currency_id'];	// 通貨
+			
+				// 画像を取得
+				$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_SMALL);// 商品画像小
+				$imageUrl_s = $imageArray['im_url'];	// URL
+				$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_MEDIUM);// 商品画像中
+				$imageUrl_m = $imageArray['im_url'];	// URL
+				$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_LARGE);// 商品画像大
+				$imageUrl_l = $imageArray['im_url'];	// URL
+								
+				// 商品ステータスを取得
+				$statusArray = $this->getStatus($row4, self::PRODUCT_STATUS_NEW);// 新規
+				$new = $statusArray['ps_value'];
+				$statusArray = $this->getStatus($row4, self::PRODUCT_STATUS_SUGGEST);// おすすめ
+				$suggest = $statusArray['ps_value'];
+			
+				// 商品カテゴリー取得
+				$this->categoryArray = $this->getCategory($row5);
+				
+				// アイキャッチ画像
+				$iconUrl = photo_shopCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[photo_shopCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE], self::$_configArray[photo_shopCommonDef::CF_E_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+				if (empty($row['pt_thumb_filename'])){
+					$iconTitle = 'アイキャッチ画像未設定';
+				} else {
+					$iconTitle = 'アイキャッチ画像';
+				}
+				$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			} else {
+				// 初期値設定
+				$this->serialNo = 0;
 				$productId = 0;
 				$this->langId = $defaultLang;
 				$name = '';		// 名前
@@ -924,66 +999,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$imageUrl_s = '';		// 商品画像小
 				$imageUrl_m = '';		// 商品画像中
 				$imageUrl_l = '';		// 商品画像大
-				$this->categoryArray = array();		// 商品カテゴリー			
-			} else {
-				// データ再取得
-				$ret = $this->db->getProductBySerial($this->serialNo, $row, $row2, $row3, $row4, $row5);
-				if ($ret){
-					// 取得値を設定
-					$productId = $row['pt_id'];	// 商品ID
-					$this->langId = $row['pt_language_id'];
-					$name = $row['pt_name'];		// 名前
-					$code = $row['pt_code'];		// 商品コード
-					$index = $row['pt_sort_order'];	// 表示順
-					$visible = $row['pt_visible'];	// 表示状態
-					$this->unitTypeId = $row['pt_unit_type_id'];	// 単位
-					$unitQuantity = $row['pt_unit_quantity'];		// 数量
-					$stockCount	= $row['pe_stock_count'];		// 表示在庫数
-					if (empty($stockCount)) $stockCount = 0;
-					$delivType = $row['pt_deliv_type'];		// 配送タイプ
-					$delivPrice = $row['pt_deliv_fee'];		// 配送単価
-					$delivWeight = $row['pt_weight'];		// 配送基準重量
-					$description = $row['pt_description'];			// 説明
-					$description_short = $row['pt_description_short'];		// 簡易説明
-					//$keyword = $row['pt_search_keyword'];					// 検索キーワード
-					$metaKeyword = $row['pt_meta_keywords'];	// METAタグ用キーワード
-					$url = $row['pt_site_url'];							// 詳細情報URL
-					$this->taxType = $row['pt_tax_type_id'];					// 税種別
-					$adminNote = $row['pt_admin_note'];		// 管理者用備考
-					$updateUser = $this->convertToDispString($row['lu_name']);	// 更新者
-					$updateDt = $this->convertToDispDateTime($row['pt_create_dt']);	// 更新日時
-				
-					// 価格を取得
-					$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
-					$price = $priceArray['pp_price'];	// 価格
-					$this->currency = $priceArray['pp_currency_id'];	// 通貨
-				
-					// 画像を取得
-					$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_SMALL);// 商品画像小
-					$imageUrl_s = $imageArray['im_url'];	// URL
-					$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_MEDIUM);// 商品画像中
-					$imageUrl_m = $imageArray['im_url'];	// URL
-					$imageArray = $this->getImage($row3, self::PRODUCT_IMAGE_LARGE);// 商品画像大
-					$imageUrl_l = $imageArray['im_url'];	// URL
-									
-					// 商品ステータスを取得
-					$statusArray = $this->getStatus($row4, self::PRODUCT_STATUS_NEW);// 新規
-					$new = $statusArray['ps_value'];
-					$statusArray = $this->getStatus($row4, self::PRODUCT_STATUS_SUGGEST);// おすすめ
-					$suggest = $statusArray['ps_value'];
-				
-					// 商品カテゴリー取得
-					$this->categoryArray = $this->getCategory($row5);
-					
-					// アイキャッチ画像
-					$iconUrl = photo_shopCommonDef::getEyecatchImageUrl($row['pt_thumb_filename'], self::$_configArray[photo_shopCommonDef::CF_E_PRODUCT_DEFAULT_IMAGE], self::$_configArray[photo_shopCommonDef::CF_E_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
-					if (empty($row['pt_thumb_filename'])){
-						$iconTitle = 'アイキャッチ画像未設定';
-					} else {
-						$iconTitle = 'アイキャッチ画像';
-					}
-					$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-				}
+				$this->categoryArray = array();		// 商品カテゴリー
 			}
 		} else {	// データ再取得しないとき
 			// ##### 画像の再設定 #####
@@ -1015,7 +1031,6 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		}
 		
 		// カテゴリーメニューを作成
-//		$this->db->getAllCategory($defaultLang, $this->categoryListData);
 		$this->createCategoryMenu($this->categoryCount);
 		
 		// 各種価格を求める
@@ -1028,6 +1043,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		// 商品一覧へ戻す値
 		$this->tmpl->addVar("_widget", "sort", $sort);		// ソート順
 		
+		// ### 入力値を再設定 ###
+		$this->tmpl->addVar("_widget", "product_id", $this->convertToDispString($productId));		// 商品ID
 		$this->tmpl->addVar("_widget", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "code", $code);		// 商品コード
 		$this->tmpl->addVar("_widget", "index", $index);		// 表示順
@@ -1323,37 +1340,6 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		}
 		return $destArray;
 	}
-	/**
-	 * 商品カテゴリーメニューを作成
-	 *
-	 * @return なし						
-	 */
-/*	function createCategoryMenu()
-	{
-		for ($j = 0; $j < $this->catagorySelectCount; $j++){
-			// selectメニューの作成
-			$this->tmpl->clearTemplate('category_list');
-			for ($i = 0; $i < count($this->categoryListData); $i++){
-				$categoryId = $this->categoryListData[$i]['pc_id'];
-				$selected = '';
-				if ($j < count($this->categoryArray) && $this->categoryArray[$j] == $categoryId){
-					$selected = 'selected';
-				}
-				$menurow = array(
-					'value'		=> $categoryId,			// カテゴリーID
-					'name'		=> $this->categoryListData[$i]['pc_name'],			// カテゴリー名
-					'selected'	=> $selected														// 選択中かどうか
-				);
-				$this->tmpl->addVars('category_list', $menurow);
-				$this->tmpl->parseTemplate('category_list', 'a');
-			}
-			$itemRow = array(		
-					'index'		=> $j			// 項目番号											
-			);
-			$this->tmpl->addVars('category', $itemRow);
-			$this->tmpl->parseTemplate('category', 'a');
-		}
-	}*/
 	/**
 	 * 記事カテゴリーメニューを作成
 	 *
