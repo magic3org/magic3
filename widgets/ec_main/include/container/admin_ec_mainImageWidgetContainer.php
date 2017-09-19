@@ -96,7 +96,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				// アイキャッチ画像を非公開ディレクトリに保存
 				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
 				$ret = mvFileToDir($tmpDir, $filenames, $privateThumbDir);
-				
+
 				// 画像を公開ディレクトリにコピー
 				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
 				if ($ret) $ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
@@ -106,8 +106,8 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				
 				// 製品情報のサムネールファイル名を更新
 				$thumbFilename = implode(';', $filenames);
-				if ($ret) $ret = self::$_mainDb->updateThumbFilename($productId, $langId, $thumbFilename, $eyecatchSrcPath);
-				
+				if ($ret) $ret = $this->db->updateThumbFilename($productId, $langId, $thumbFilename, $eyecatchSrcPath);
+
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
@@ -142,7 +142,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				rmDirectory($tmpDir);
 					
 				// 製品情報のサムネールファイル名を更新
-				$ret = self::$_mainDb->updateThumbFilename($productId, $langId, '', ''/*サムネール作成元画像のパス*/);
+				$ret = $this->db->updateThumbFilename($productId, $langId, '', ''/*サムネール作成元画像のパス*/);
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'アイキャッチ画像を削除しました');
@@ -194,7 +194,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			}
 			
 			// 記事内でアイキャッチ画像に使用した画像を取得
-			$originalEyecatchUrl = '';
+/*			$originalEyecatchUrl = '';
 			$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_PRODUCT, photo_shopCommonDef::$_deviceType);
 			$imagePath = $privateThumbDir . '/' . $filename;
 			if (!empty($row['pt_thumb_filename']) && !file_exists($imagePath)){// 画像が作成されていて、非公開ディレクトリに画像がない場合
@@ -202,7 +202,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				$originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
 				if (empty($originalEyecatchPath) && !empty($html2)) $originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
 				if (!empty($originalEyecatchPath)) $originalEyecatchUrl = $this->gEnv->getUrlToPath($originalEyecatchPath);		// URLに変換
-			}
+			}*/
 			
 			// アイキャッチ画像削除用ボタンを表示
 			if (!empty($row['pt_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
@@ -232,7 +232,7 @@ class admin_ec_mainImageWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($eyecatchUrl . '?' . date('YmdHis'))));
 		$this->tmpl->addVar("_widget", "eyecatch_new_image", $eyecatchImagTag);			// 置き換え用アイキャッチ画像
 		$this->tmpl->addVar("_widget", "move_icon_tag", $moveIconTag);			// 画像変更表示用アイコン
-		$this->tmpl->addVar("_widget", "original_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($originalEyecatchUrl)));		// アイキャッチ画像の元の画像
+//		$this->tmpl->addVar("_widget", "original_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($originalEyecatchUrl)));		// アイキャッチ画像の元の画像
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "product_id", $this->convertToDispString($productId));
 	}

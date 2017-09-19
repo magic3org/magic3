@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1190,6 +1190,71 @@ class ec_mainProductDb extends BaseDb
 			$index = 0;
 		}
 		return $index;
+	}
+	/**
+	 * サムネールファイル名の更新
+	 *
+	 * @param string $id			製品ID
+	 * @param string $langId		言語ID
+	 * @param string $thumbFilename	サムネールファイル名
+	 * @param string $thumbSrc		サムネール作成元画像ファイル(resourceディレクトリからの相対パス)
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateThumbFilename($id, $langId, $thumbFilename, $thumbSrc)
+	{
+		$serial = $this->getProductSerialNoById($id, $langId);
+		if (empty($serial)) return false;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+						
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM product ';
+		$queryStr .=   'WHERE pt_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['pt_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 日付を更新
+		$queryStr  = 'UPDATE product ';
+		$queryStr .=   'SET pt_thumb_filename = ?, ';	// サムネールファイル名
+		$queryStr .=     'pt_thumb_src = ?, ';			// サムネール作成元画像ファイル
+		$queryStr .=     'pt_update_user_id = ?, ';
+		$queryStr .=     'pt_update_dt = ? ';
+		$queryStr .=   'WHERE pt_serial = ?';
+		$this->execStatement($queryStr, array($thumbFilename, $thumbSrc, $userId, $now, intval($serial)));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * 製品情報のシリアル番号を製品IDで取得
+	 *
+	 * @param string	$id					製品ID
+	 * @param string	$langId				言語ID
+	 * @return int							シリアル番号、取得できないときは0を返す
+	 */
+	function getProductSerialNoById($id, $langId)
+	{
+		$serial = 0;
+		$queryStr  = 'SELECT * FROM product ';
+		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND pt_history_index >= 0 ';		// 正規(Regular)記事を対象
+		$queryStr .=   'AND pt_id = ? ';
+		$queryStr .=   'AND pt_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		if ($ret) $serial = $row['pt_serial'];
+		return $serial;
 	}
 }
 ?>
