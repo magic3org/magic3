@@ -454,7 +454,7 @@ class JApplication extends JObject
 	{
 		global $gEnvManager;
 		
-		// �E�B�W�F�b�g���s��ɌĂ΂��B�Z�b�V��������l���擾����̂��悢?
+		// ウィジェット実行後に呼ばれる。セッションから値を取得するのがよい?
 /*		$widgetObj = $gEnvManager->getCurrentWidgetObj();
 		var_dump($widgetObj->errorMessage);
 		debug($gEnvManager->getCurrentWidgetId());
@@ -489,8 +489,17 @@ class JApplication extends JObject
 	 */
 	public function getCfg($varname, $default=null)
 	{
-		$config = JFactory::getConfig();
-		return $config->get('' . $varname, $default);
+//		$config = JFactory::getConfig();
+//		return $config->get('' . $varname, $default);
+		global $gEnvManager;
+		
+		$value = '';
+		switch ($varname){
+		case 'sitename':
+			$value = $gEnvManager->getSiteName();// サイト名称
+			break;
+		}
+		return $value;
 	}
 
 	/**
@@ -1112,6 +1121,9 @@ class JSite extends JApplication
 	 */
 	function getParams($option = null)
 	{
+		global $gPageManager;
+		global $gEnvManager;
+		
 		static $params = array();
 		$hash = '__default';
 		if(!empty($option)) $hash = $option;
@@ -1123,6 +1135,17 @@ class JSite extends JApplication
 			}*/
 //			$params[$hash] = JComponentHelper::getParams($option);
 			$param = new JParameter();
+			
+			// ページタイトルを取得
+			$title = '';
+			$titleArray = $gPageManager->getHeadSubTitle();
+			if (count($titleArray) > 0){
+				$title = $titleArray[count($titleArray) -1]['title'];			// 最後に追加されたタイトルを取得
+			}
+			// ページタイトルが取得できない場合は、サイト名を取得
+			if (empty($title)) $title = $gEnvManager->getSiteName();
+			
+			$param->def('page_title', $title);
 			$params[$hash] = $param;
 
 /*			// Get menu parameters
