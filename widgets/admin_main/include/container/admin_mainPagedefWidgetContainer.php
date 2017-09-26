@@ -314,7 +314,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 				if ($ret){
 					if (is_null($row['pn_template_id'])){		// ページ情報レコードがない場合
-						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId, $subTemplateId);
+						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, ''/*コンテンツタイプ*/, $templateId, $subTemplateId);
 					} else {
 						// 既存の設定値と同じ場合はリセット(トグルオフ)
 						if ($templateId == $row['pn_template_id']){
@@ -328,7 +328,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'changesubtemplate'){		// サブテンプレート選択
 			$subTemplateId = $request->trimValueOf('subtemplateid');		// サブテンプレートID
-						
 //			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 //			if ($ret){
 //				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
@@ -338,15 +337,21 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 //				}
 //			}
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
-			if ($ret && !is_null($row['pn_template_id'])){		// ページ情報レコードがある場合
-				$templateId = $row['pn_template_id'];
-				if (empty($templateId)){			// 個別にテンプレートが設定されていない場合
+			if ($ret){		// ページ情報レコードがある場合
+				if (is_null($row['pn_template_id'])){		// ページ情報部がない場合
 					// デフォルトのサブテンプレートを変更
 					$this->subTemplateId = $subTemplateId;
 					$this->gSystem->changeDefaultTemplate($this->templateId, $this->subTemplateId);
 				} else {
-					// 個別のページのサブテンプレートを変更
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+					$templateId = $row['pn_template_id'];
+					if (empty($templateId)){			// 個別にテンプレートが設定されていない場合
+						// デフォルトのサブテンプレートを変更
+						$this->subTemplateId = $subTemplateId;
+						$this->gSystem->changeDefaultTemplate($this->templateId, $this->subTemplateId);
+					} else {
+						// 個別のページのサブテンプレートを変更
+						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+					}
 				}
 			}
 		}
