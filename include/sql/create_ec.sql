@@ -548,7 +548,7 @@ CREATE TABLE product_price (
     pp_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     pp_product_class     VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品クラス
     pp_product_id        INT            DEFAULT 0                     NOT NULL,      -- 商品ID
-    pp_product_type_id   VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品タイプ
+    pp_product_type_id   VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品タイプ(ダウンロード商品等)
     pp_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     pp_price_type_id     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 価格の種別ID(price_typeテーブル)
     pp_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)

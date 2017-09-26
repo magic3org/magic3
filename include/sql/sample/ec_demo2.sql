@@ -193,8 +193,8 @@ INSERT INTO bn_item (bi_id, bi_name,    bi_image_url, bi_html) VALUES
 (18,    'きのこ',     '[#M3_ROOT_URL#]/resource/image/sample/banner/sample18.gif', '[#ITEM#]'),
 (19,    'すいか',     '[#M3_ROOT_URL#]/resource/image/sample/banner/sample19.gif', '[#ITEM#]');
 
-TRUNCATE TABLE `product_price`;
-INSERT INTO `product_price` (`pp_product_id`, `pp_language_id`, `pp_price_type_id`, `pp_currency_id`, `pp_price`, `pp_active_start_dt`, `pp_active_end_dt`) VALUES 
+TRUNCATE TABLE product_price;
+INSERT INTO product_price (pp_product_id, pp_language_id, pp_price_type_id, pp_currency_id, pp_price, pp_active_start_dt, pp_active_end_dt) VALUES 
 (1, 'ja', 'selling', 'JPY', 12000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 'ja', 'selling', 'JPY', 12000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (3, 'ja', 'selling', 'JPY', 11000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -214,7 +214,17 @@ INSERT INTO `product_price` (`pp_product_id`, `pp_language_id`, `pp_price_type_i
 (17, 'ja', 'selling', 'JPY', 11000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (18, 'ja', 'selling', 'JPY', 11000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (19, 'ja', 'selling', 'JPY', 11000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 'ja', 'selling', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(20, 'ja', 'selling', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 'ja', 'sale', 'JPY', 9000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(12, 'ja', 'sale', 'JPY', 8000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(13, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(14, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(15, 'ja', 'sale', 'JPY', 10000.0000, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 TRUNCATE TABLE `product_status`;
 INSERT INTO `product_status` (`ps_id`, `ps_language_id`, `ps_type`, `ps_value`) VALUES 
