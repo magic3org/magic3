@@ -692,6 +692,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				} else {
 					// 設定ファイルがない場合はWordPressテンプレートかどうかチェック
 					$content = file_get_contents($templateDir . '/header.php');
+					if (empty($content)) $content = file_get_contents($templateDir . '/index.php');		// Themlerテンプレート対応
 					$ret = $this->isWordpressTemplate($content);
 					if ($ret) $templType = 100;		// WordPress型
 				}
