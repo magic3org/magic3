@@ -876,8 +876,8 @@ class BaseFrameContainer extends Core
 						// カテゴリー用テンプレート取得
 						$template = get_category_template();
 						if (empty($template)) $template = get_archive_template();		// カテゴリー用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
-						$wpIndexFile = $template;
-						
+						if (!empty($template)) $wpIndexFile = $template;
+
 						// フルパスで返るので相対パスに修正
 						//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);		// カテゴリーテンプレート
 						
@@ -895,7 +895,7 @@ class BaseFrameContainer extends Core
 							// 年月日用テンプレート取得
 							$template = get_date_template();
 							if (empty($template)) $template = get_archive_template();		// 年月日用のテンプレートが取得できない場合はアーカイブ用テンプレートを取得
-							$wpIndexFile = $template;		// 記事詳細テンプレート
+							if (!empty($template)) $wpIndexFile = $template;
 						
 							// フルパスで返るので相対パスに修正
 							//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, $template);
@@ -912,7 +912,8 @@ class BaseFrameContainer extends Core
 					
 							// フルパスで返るので相対パスに修正
 							//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_search_template());		// 検索結果テンプレート
-							$wpIndexFile = get_search_template();		// 検索結果テンプレート
+							$template = get_search_template();		// 検索結果テンプレート
+							if (!empty($template)) $wpIndexFile = $template;
 							
 							$pageTypeDefined = true;		// ページタイプ確定
 						}
@@ -960,7 +961,7 @@ class BaseFrameContainer extends Core
 					}
 				}
 			}
-			
+
 			// プラグインからの起動ファイルパス変換
 			$wpIndexFile = apply_filters('template_include', $wpIndexFile);
 
