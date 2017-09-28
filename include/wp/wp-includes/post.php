@@ -512,7 +512,8 @@ function get_extended( $post ) {
  * @return WP_Post|array|null Type corresponding to $output on success or null on failure.
  *                            When $output is OBJECT, a `WP_Post` instance is returned.
  */
-function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
+//function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
+function get_post($post = null, $output = OBJECT, $filter = 'raw', $postType = '') {
 	global $gContentApi;
 
 	if ( empty( $post ) && isset( $GLOBALS['post'] ) )
@@ -535,7 +536,7 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 		if ((int)$post == (int)$GLOBALS['post']->ID){
 			$_post = $GLOBALS['post'];
 		} else if ((int)$post > 0){		// 関連WP_Postオブジェクトを取得。$postに負の値が来ることあり。
-			$_post = $gContentApi->getRelativePost((int)$post);
+			$_post = $gContentApi->getRelativePost((int)$post, $postType);			// データタイプ指定
 		}
 	}
 

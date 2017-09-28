@@ -314,7 +314,8 @@ function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
  * @return string The page permalink.
  */
 function get_page_link( $post = false, $leavename = false, $sample = false ) {
-	$post = get_post( $post );
+	//$post = get_post( $post );
+	$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, 'page');			// データタイプ「page」を指定
 
 	if ( 'page' == get_option( 'show_on_front' ) && $post->ID == get_option( 'page_on_front' ) )
 		$link = home_url('/');
@@ -352,7 +353,8 @@ function get_page_link( $post = false, $leavename = false, $sample = false ) {
 function _get_page_link( $post = false, $leavename = false, $sample = false ) {
 //	global $wp_rewrite;
 
-	$post = get_post( $post );
+	//$post = get_post( $post );
+	$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, 'page');			// データタイプ「page」を指定
 
 //	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) );
 

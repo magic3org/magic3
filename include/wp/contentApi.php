@@ -103,7 +103,7 @@ class ContentApi extends BaseApi
 	function _getAddonObj($contentType = '')
 	{
 		if (empty($contentType)) $contentType = $this->contentType;
-		
+
 		switch ($contentType){
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 			$addonObj = $this->gInstance->getObject(self::ADDON_OBJ_ID_CONTENT);
@@ -315,15 +315,16 @@ class ContentApi extends BaseApi
 	/**
 	 * [WordPressテンプレート用API]関連オブジェクト取得
 	 *
-	 * @param int $id					WP_PostオブジェクトのID
-	 * @return object     				WP_Postオブジェクト
+	 * @param int $id				WP_PostオブジェクトのID
+	 * @param string $postType		データタイプ(post,page,product等)
+	 * @return object     			WP_Postオブジェクト
 	 */
-	function getRelativePost($id)
+	function getRelativePost($id, $postType = '')
 	{
 		$wpPostObj = $this->relativePosts[$id];
 		
 		// 見つからない場合は新規取得
-		if (!isset($wpPostObj)) $wpPostObj = $this->_getContent($id);
+		if (!isset($wpPostObj)) $wpPostObj = $this->_getContent($id, $postType);
 
 		return $wpPostObj;
 	}
@@ -331,14 +332,34 @@ class ContentApi extends BaseApi
 	 * コンテンツID指定でコンテンツを取得
 	 *
 	 * @param int $id				コンテンツID
+	 * @param string $postType		データタイプ(post,page,product等)
 	 * @return object     			WP_Postオブジェクト
 	 */
-	function _getContent($id)
+	function _getContent($id, $postType = '')
 	{
 		$this->_contentArray = array();			// 取得コンテンツ初期化
 		
-		// アドオンオブジェクト取得
-		$addonObj = $this->_getAddonObj();
+		// データタイプから取得コンテンツタイプを決定
+		if (empty($postType)){		// コンテンツタイプが指定されていない場合は現在のコンテンツタイプで取得
+			// アドオンオブジェクト取得
+			$addonObj = $this->_getAddonObj();
+		} else {
+			switch ($postType){
+			case 'page':
+			default:
+				$contentType = M3_VIEW_TYPE_CONTENT;		// 汎用コンテンツ
+				break;
+			case 'post':
+				$contentType = M3_VIEW_TYPE_BLOG;		// ブログ
+				break;
+			case 'product':
+				$contentType = M3_VIEW_TYPE_PRODUCT;	// 製品
+				break;
+			}
+			
+			// アドオンオブジェクト取得
+			$addonObj = $this->_getAddonObj($contentType);
+		}
 		
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
