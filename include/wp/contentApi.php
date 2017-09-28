@@ -665,8 +665,9 @@ class ContentApi extends BaseApi
 		// WP_Postオブジェクトに変換
 		$wpPostObj = new WP_Post($post);
 		
-		// 現在のコンテンツタイプの場合はシリアル番号を保存
+		// 現在のコンテンツタイプの場合はシリアル番号を保存(カテゴリー取得用)
 		if ($contentType == $this->contentType){
+			// アドオンオブジェクトと取得対象のコンテンツタイプが合わない場合は$serialには値がセットされない
 			$serialVal = intval($serial);
 			if ($serialVal > 0 && !in_array($serialVal, $this->serialArray)) $this->serialArray[] = $serialVal;			// 取得したコンテンツのシリアル番号
 		}
