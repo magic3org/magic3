@@ -1182,10 +1182,11 @@ function cache_javascript_headers() {
  *
  * @return int Number of database queries.
  */
-/*function get_num_queries() {
-	global $wpdb;
-	return $wpdb->num_queries;
-}*/
+function get_num_queries() {
+//	global $wpdb;
+//	return $wpdb->num_queries;
+	return '';
+}
 
 /**
  * Whether input is yes or no.

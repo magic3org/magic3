@@ -665,8 +665,11 @@ class ContentApi extends BaseApi
 		// WP_Postオブジェクトに変換
 		$wpPostObj = new WP_Post($post);
 		
-		// シリアル番号を保存
-		$this->serialArray[] = $serial;			// 取得したコンテンツのシリアル番号
+		// 現在のコンテンツタイプの場合はシリアル番号を保存
+		if ($contentType == $this->contentType){
+			$serialVal = intval($serial);
+			if ($serialVal > 0 && !in_array($serialVal, $this->serialArray)) $this->serialArray[] = $serialVal;			// 取得したコンテンツのシリアル番号
+		}
 		
 		return $wpPostObj;
 	}
