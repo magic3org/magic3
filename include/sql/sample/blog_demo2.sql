@@ -37,7 +37,7 @@ UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
 DELETE FROM _page_id WHERE pg_type = 1 AND pg_priority < 100;
 INSERT INTO _page_id 
 (pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable) VALUES
-('front',        1,            'トップ画面',                       'トップ画面用',                       0,           false,      true,       true),
+('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true),
 ('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false),
 ('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           false,      true,       true),
 ('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           false,      true,       true),

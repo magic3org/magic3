@@ -536,7 +536,12 @@ function get_post($post = null, $output = OBJECT, $filter = 'raw', $postType = '
 		if ((int)$post == (int)$GLOBALS['post']->ID){
 			$_post = $GLOBALS['post'];
 		} else if ((int)$post > 0){		// 関連WP_Postオブジェクトを取得。$postに負の値が来ることあり。
-			$_post = $gContentApi->getRelativePost((int)$post, $postType);			// データタイプ指定
+			// データタイプが指定されていない場合は現在のページのコンテンツタイプで取得
+			if (empty($postType)){
+				$_post = $gContentApi->getRelativePost((int)$post);
+			} else {
+				$_post = $gContentApi->getContentPost($postType, (int)$post);		// データタイプ指定
+			}
 		}
 	}
 

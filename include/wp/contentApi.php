@@ -313,18 +313,33 @@ class ContentApi extends BaseApi
 		return $wpPostObj;
 	}
 	/**
+	 * [WordPressテンプレート用API]データタイプ指定でオブジェクト取得
+	 *
+	 * @param string $postType		データタイプ(post,page,product等)
+	 * @param int $id				WP_PostオブジェクトのID
+	 * @return object     			WP_Postオブジェクト
+	 */
+	function getContentPost($postType, $id)
+	{
+//		$wpPostObj = $this->relativePosts[$id];
+		
+		// 見つからない場合は新規取得
+		$wpPostObj = $this->_getContent($id, $postType);
+
+		return $wpPostObj;
+	}
+	/**
 	 * [WordPressテンプレート用API]関連オブジェクト取得
 	 *
 	 * @param int $id				WP_PostオブジェクトのID
-	 * @param string $postType		データタイプ(post,page,product等)
 	 * @return object     			WP_Postオブジェクト
 	 */
-	function getRelativePost($id, $postType = '')
+	function getRelativePost($id)
 	{
 		$wpPostObj = $this->relativePosts[$id];
 		
 		// 見つからない場合は新規取得
-		if (!isset($wpPostObj)) $wpPostObj = $this->_getContent($id, $postType);
+		if (!isset($wpPostObj)) $wpPostObj = $this->_getContent($id);
 
 		return $wpPostObj;
 	}
@@ -360,6 +375,9 @@ class ContentApi extends BaseApi
 			// アドオンオブジェクト取得
 			$addonObj = $this->_getAddonObj($contentType);
 		}
+		
+		// 取得コンテンツの変換用設定
+		$this->_contentType = $contentType;			// コンテンツタイプ(一時利用)
 		
 		// データ取得
 		$addonObj->getPublicContentList($this->limit, $this->pageNo, $id, $this->now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->langId, $this->order, array($this, '_itemLoop'), $this->category/*カテゴリーID*/, null/*ブログID*/);
@@ -566,7 +584,7 @@ class ContentApi extends BaseApi
 	 */
 	function _itemLoop($index, $fetchedRow, $param)
 	{
-		$wpPostObj = $this->_createWP_Post($fetchedRow);
+		$wpPostObj = $this->_createWP_Post($fetchedRow, $this->_contentType/*コンテンツ変換用*/);
 		$this->_contentArray[] = $wpPostObj;
 		return true;
 	}
