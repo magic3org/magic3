@@ -149,7 +149,7 @@ function get_registered_nav_menus() {
  * @return array Registered navigation menu locations and the menus assigned them.
  *               If none are registered, an empty array.
  */
-
+// メニューとメニューに設定されているメニュー定義IDのセットを返す
 function get_nav_menu_locations() {
 	$locations = get_theme_mod( 'nav_menu_locations' );
 	return ( is_array( $locations ) ) ? $locations : array();

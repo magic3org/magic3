@@ -24,6 +24,7 @@ function m3WpInit()
 {
 	global $gEnvManager;
 	global $gContentApi;
+	global $gMenuApi;
 	
 	// ##### オプションデフォルト値 #####
 	$timezone_string = '';
@@ -38,6 +39,8 @@ function m3WpInit()
 	elseif ( $offset_or_tz && in_array( $offset_or_tz, timezone_identifiers_list() ) )
 			$timezone_string = $offset_or_tz;
 			
+	$templateId = $gEnvManager->getCurrentTemplateId();
+	
 //	$options = array(
 	$GLOBALS['m3WpOptions'] = array(
 									'siteurl' => $gEnvManager->getRootUrl(),
@@ -87,8 +90,8 @@ function m3WpInit()
 									'default_email_category' => 1,
 									'recently_edited' => '',
 									// Magic3にはテンプレートの親子関係はないのでtemplate,stylesheetは常に同じもの示す
-									'template' => $gEnvManager->getCurrentTemplateId(),
-									'stylesheet' => $gEnvManager->getCurrentTemplateId(),
+									'template' => $templateId,
+									'stylesheet' => $templateId,
 									'comment_whitelist' => 1,
 									'blacklist_keys' => '',
 									'comment_registration' => 0,
@@ -170,6 +173,8 @@ function m3WpInit()
 								
 	// ### Magic3追加分 ###
 	$GLOBALS['m3WpOptions']['WPLANG'] = $gEnvManager->getDefaultLanguage();// 管理画面の言語
+//	$GLOBALS['m3WpOptions']['theme_mods_' . $templateId] = array('nav_menu_locations' => array('primary' => 2));		// Themlerメインメニュー調整用暫定(2はメニュー定義ID)
+	$GLOBALS['m3WpOptions']['theme_mods_' . $templateId] = array('nav_menu_locations' => array('primary' => $gMenuApi->getMenuId()));		// Themlerメインメニュー調整用暫定。Magic3のメニューIDは文字列型でWordPressのIDは数値型なので問題でないかどうか?
 	
 	// ##### テンプレート情報からカスタマイズ値を取得 #####
 	$optionParams = $gEnvManager->getCurrentTemplateCustomParam();
