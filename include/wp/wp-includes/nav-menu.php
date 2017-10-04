@@ -727,6 +727,7 @@ function wp_get_nav_menu_items( $menu = null, $args = array() ) {
  * @return object $menu_item The menu item with standard menu item properties.
  */
 function wp_setup_nav_menu_item( $menu_item ) {
+	return $menu_item;
 	if ( isset( $menu_item->post_type ) ) {
 		if ( 'nav_menu_item' == $menu_item->post_type ) {
 			$menu_item->db_id = (int) $menu_item->ID;
@@ -878,7 +879,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 	 *
 	 * @param object $menu_item The menu item object.
 	 */
-	return apply_filters( 'wp_setup_nav_menu_item', $menu_item );
+//	return apply_filters( 'wp_setup_nav_menu_item', $menu_item );
 }
 
 /**

@@ -72,6 +72,32 @@ class MenuApi extends BaseApi
 		}
 	}
 	/**
+	 * [WordPressテンプレート用API]メニュー情報取得
+	 *
+	 * @param string  $menuId			メニューID
+	 * @return object     				WP_Termオブジェクト
+	 */
+	function getMenu($menuId)
+	{
+		// メニュー情報をWP_Termオブジェクトに変換して格納
+		$term = new stdClass;
+		$term->term_id = 2;			// メニューのクラス名で利用される(暫定値)
+		$term->name = 'Menu 1';		// メニュー名
+		$term->slug = 'menu-1';
+		$term->term_group = 0;
+		$term->term_taxonomy_id = 2;		// (暫定値)
+		$term->taxonomy = 'nav_menu';		// 種別はナビゲーションメニューに設定
+		$term->description = '';
+		$term->parent = 0;
+		$term->count = 4;				// (暫定値)
+		$term->filter = 'raw';
+  
+		// WP_Termオブジェクトに変換
+		$wpTermObj = new WP_Term($term);
+					
+		return $wpTermObj;
+	}
+	/**
 	 * [WordPressテンプレート用API]メニュー情報を取得
 	 *
 	 * @return array     				WP_Postオブジェクトの配列
@@ -87,7 +113,8 @@ class MenuApi extends BaseApi
 		for ($i = 0; $i < count($this->menuTree); $i++){
 			$item = $this->menuTree[$i];
 		
-			$post_type = 'page';
+//			$post_type = 'page';
+			$post_type = 'nav_menu_item';
 			$post = new stdClass;
 			$post->ID = $item->id;
 			$post->post_author = '';
@@ -105,7 +132,7 @@ class MenuApi extends BaseApi
 			$post->post_category = get_option( 'default_category' );*/
 	//		$post->page_template = 'default';
 			$post->post_parent = $item->parentId;		// 親ID
-			$post->menu_order = 0;
+			$post->menu_order = $i + 1;			// 項目順
 			// メニュー項目作成用
 			$post->title = $item->title;
 			$post->url = $item->flink;
@@ -118,9 +145,21 @@ class MenuApi extends BaseApi
 			$post->post_title = $item->title;
 			$post->post_content = '';
 			$post->guid = $item->flink;	// 詳細画面URL
-			$post->active = $item->active;
+//			$post->active = $item->active;		// 不要?
 			$post->filter = 'raw';
-			
+			// 調整中
+			$post->db_id = $item->id;
+			$post->menu_item_parent = 0;
+			$post->classes = array();
+			if ($item->active) $post->classes[] = 'active';
+//			$post->object_id
+//			$post->object
+//			$post->type
+//			$post->type_label
+//			$post->attr_title
+//			$post->description
+//			$post->xfn
+
 			$wpPostObj = new WP_Post($post);
 			$menuItems[] = $wpPostObj;
 		}

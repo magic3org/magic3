@@ -723,6 +723,8 @@ function get_tax_sql( $tax_query, $primary_table, $primary_id_column ) {
  *                                     returned. Returns null for miscellaneous failure.
  */
 function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
+	global $gMenuApi;
+	
 	// $termには、stdClassオブジェクトまたはint値が来る。1の場合「未分類」のWP_Termオブジェクトが返る。
 	// 0の場合は空のWP_Termオブジェクトを生成し、0で「未分類」の意味に変更。
 //	if ( empty( $term ) ) {
@@ -747,7 +749,11 @@ function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
 			$_term = WP_Term::get_instance( $term->term_id );
 		}
 	} else {
-		$_term = WP_Term::get_instance( $term, $taxonomy );
+		if ($taxonomy == 'nav_menu'){			// メニューの場合
+			$_term = $gMenuApi->getMenu($term);
+		} else {
+			$_term = WP_Term::get_instance( $term, $taxonomy );
+		}
 	}
 
 	if ( is_wp_error( $_term ) ) {
