@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -385,6 +385,8 @@ $HELP['initwizard_site_name']['title'] = 'サイト名';
 $HELP['initwizard_site_name']['body'] = 'サイトの名前を設定します。';
 $HELP['initwizard_site_email']['title'] = 'Eメール';
 $HELP['initwizard_site_email']['body'] = 'このサイトのデフォルトのEメールアドレスです。このアドレスは必須項目です。「name@example.com」や「名前&lt; name@example.com&gt;」の設定が可能です。<br />このアドレスは、システムからユーザへ送信する場合の送信元アドレスとして、またはこのシステム上でユーザがメールを送信した場合に送信先アドレスとして使用されます。ユーザからのメール送信先は、次のフォーマットで「CC」や「BCC」でのメール送信も可能です。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」。';
+$HELP['initwizard_site_slogan']['title'] = 'スローガン';
+$HELP['initwizard_site_slogan']['body'] = 'ヘッダ画像上に表示するサイトスローガンを設定します。';
 $HELP['initwizard_site_description']['title'] = 'サイト説明';
 $HELP['initwizard_site_description']['body'] = 'サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。';
 $HELP['initwizard_site_keyword']['title'] = '検索キーワード';

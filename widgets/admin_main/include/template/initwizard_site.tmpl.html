@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -45,11 +45,15 @@ $(function(){
 <input type="hidden" name="act" />
 <div class="form-group">
 <label for="site_name" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_NAME}>サイト名</span></label>
-<div class="col-sm-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
+<div class="col-sm-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" maxlength="30" value="{SITE_NAME}" /></div>
 </div>
 <div class="form-group">
 <label for="site_email" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_EMAIL}>Eメール</span></label>
-<div class="col-sm-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
+<div class="col-sm-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" maxlength="30" value="{SITE_EMAIL}" /></div>
+</div>
+<div class="form-group">
+<label for="site_slogan" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_SLOGAN}>スローガン</span></label>
+<div class="col-sm-8"><input id="site_slogan" name="site_slogan" type="text" class="form-control textbox-imeoff" maxlength="60" value="{SITE_SLOGAN}" /></div>
 </div>
 <div class="form-group">
 <label for="site_description" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_DESCRIPTION}>サイト説明</span></label>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -59,6 +59,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 		$act = $request->trimValueOf('act');
 		$siteName			= $request->trimValueOf('site_name');		// サイト名称
 		$siteEmail			= trim($request->valueOf('site_email'));		// サイトEメール
+		$siteSlogan			= $request->trimValueOf('site_slogan');		// サイトスローガン
 		$siteDescription 	= $request->trimValueOf('site_description');		// サイト要約
 		$siteKeyword		= $request->trimValueOf('site_keyword');		// サイトキーワード
 		$siteOpen 			= $request->trimCheckedValueOf('site_open');		// サイト公開状態
@@ -68,6 +69,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 			$ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName);		// サイト名
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE, $siteName);	// 画面タイトル
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL, $siteEmail);	// Eメール
+			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_SLOGAN, $siteSlogan);		// サイトスローガン
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDescription);		// サイト説明
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);		// 検索キーワード
 			if ($ret) $ret = $this->_mainDb->updateSystemConfig(self::CF_SITE_IN_PUBLIC, $siteOpen);	// サイト公開状態
@@ -84,6 +86,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 		if ($reloadData){		// データ再取得のとき
 			$siteName			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_NAME);		// サイト名
 			$siteEmail			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL);
+			$siteSlogan			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_SLOGAN);// サイトスローガン
 			$siteDescription	= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION);		// サイト要約
 			$siteKeyword		= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS);		// サイトキーワード
 			$siteOpen 			= $this->gSystem->siteInPublic();			// サイト公開状態
@@ -91,6 +94,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 
 		$this->tmpl->addVar("_widget", "site_name",			$this->convertToDispString($siteName));		// サイト名
 		$this->tmpl->addVar("_widget", "site_email",		$this->convertToDispString($siteEmail));
+		$this->tmpl->addVar("_widget", "site_slogan",		$this->convertToDispString($siteSlogan));		// サイトスローガン
 		$this->tmpl->addVar("_widget", "site_description",	$this->convertToDispString($siteDescription));
 		$this->tmpl->addVar("_widget", "site_keyword",		$this->convertToDispString($siteKeyword));
 		$this->tmpl->addVar("_widget", "site_open_checked",	$this->convertToCheckedString($siteOpen));		// サイト公開状態
