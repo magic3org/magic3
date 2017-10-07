@@ -247,11 +247,12 @@ function plugin_rename_refer($page, $refer)
 	if (plugin_rename_getvar('related') != '') {
 		$from = strip_bracket($refer);		// 変更元ページ名
 		$to   = strip_bracket($page);		// 変更先ページ名
-		
+
 		// 関連ファイルを取得し、関連ファイルの新規ページ名を作成
 		foreach (plugin_rename_getrelated($refer) as $_page){
 			//$pages[encode($_page)] = encode(str_replace($from, $to, $_page));
-			$pages[$_page] = $to . substr($_page, strlen($from));
+			//$pages[$_page] = $to . substr($_page, strlen($from));
+			$pages[$_page] = str_replace($from, $to, $_page);				// 2017/10/7 変換バグ修正
 		}
 	}
 	// $pagesには、「$pages[旧ページ名]=[新規ページ名]」の形式で変更対象のページ名がすべて格納されている
@@ -554,7 +555,7 @@ function plugin_rename_getrelated($page)
 	$pages = get_existpages();
 	$pattern = '/(?:^|\/)' . preg_quote(strip_bracket($page), '/') . '(?:\/|$)/';
 	foreach ($pages as $name) {
-		if ($name == $page) continue;
+		if ($name === $page) continue;
 		if (preg_match($pattern, $name)) $related[] = $name;
 	}
 	return $related;
