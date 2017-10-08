@@ -2620,6 +2620,11 @@ function wp_head() {
 	 * @since 1.5.0
 	 */
 	do_action( 'wp_head' );
+	
+	// ##### Magic3のヘッダ出力用タグを出力 #####
+	global $gPageManager;
+	$gPageManager->enableReplaceHead();
+	echo '{{HEAD_TAGS}}';			// ヘッダ部マクロ
 }
 
 /**
@@ -3677,10 +3682,6 @@ function the_generator( $type ) {
 	 *                               'xhtml', 'atom', 'rss2', 'rdf', 'comment', 'export'.
 	 */
 //	echo apply_filters( 'the_generator', get_the_generator($type), $type ) . "\n";
-
-	global $gPageManager;
-	$gPageManager->enableReplaceHead();
-	echo '{{HEAD_TAGS}}';			// ヘッダ部マクロ
 }
 
 /**
