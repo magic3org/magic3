@@ -613,8 +613,16 @@ function wp_unregister_widget_control($id) {
 function dynamic_sidebar( $index = 1 ) {
 	// Magic3のウィジェットエリア出力に変更
 	global $gPageManager;
-	echo $gPageManager->getWPContents($index);
-return;
+	
+	$content = $gPageManager->getWPContents($index);
+	if (empty($content)){
+		return false;
+	} else {
+		echo $content;
+		return true;
+	}
+	// ##### ここで終了 #####
+	
 	global $wp_registered_sidebars, $wp_registered_widgets;
 
 	if ( is_int( $index ) ) {
