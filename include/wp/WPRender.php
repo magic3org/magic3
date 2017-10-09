@@ -47,7 +47,7 @@ class WPRender
 		// 配置ブロック用のパラメータを取得
 		$blockParam = $wp_registered_sidebars[$position];
 		if (empty($blockParam)) $blockParam = $wp_registered_sidebars[self::DEFAULT_POSITION];			// 存在しない場合はデフォルトを取得
-		
+
 		// WordPress側から初期パラメータを取得できない場合は終了
 		if (empty($blockParam)) return $content;
 		

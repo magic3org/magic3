@@ -1472,8 +1472,9 @@ class BaseFrameContainer extends Core
 			
 			// グローバル変数に変換
 			$vars = get_defined_vars();
-			foreach($vars as $varName => $varValue) $GLOBALS[$varName] = $varValue;
-			
+			foreach($vars as $varName => $varValue){
+				if (!isset($GLOBALS[$varName])) $GLOBALS[$varName] = $varValue;
+			}
 			return true;
 		} else {
 			return false;
