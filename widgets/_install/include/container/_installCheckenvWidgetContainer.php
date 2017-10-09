@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -84,6 +84,8 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 				if (preg_match('/^.*\s([.\d]+)-MariaDB/i', $cmdOutput, $matches)){
 					$version = $matches[1];
 					$isMariaDb = true;
+				} else if (preg_match('/^.*Distrib\s([.\d]+),/i', $cmdOutput, $matches)){
+					$version = $matches[1];
 				}
 			}
 			if (empty($version)){
