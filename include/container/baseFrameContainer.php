@@ -929,14 +929,34 @@ class BaseFrameContainer extends Core
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 				break;
 			default:
+				// 検索キーワードが設定されている場合は検索結果画面を表示
+				$value = $request->trimValueOf('s');
+				if (!empty($value)){
+					// ページ指定されていない場合(フロント画面等)、検索結果表示用ページがある場合はリダイレクト
+					$subId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);
+					if (empty($subId)){
+						$subId = $this->_db->getSubPageIdWithContent(M3_VIEW_TYPE_SEARCH, $this->gEnv->getCurrentPageId());// ページサブIDを取得
+						if (!empty($subId)){
+							// リダイレクト用URLを作成
+							$redirectUrl = $this->gEnv->createPageUrl();
+							$redirectUrl .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+							//$redirectUrl .= '&s=' . urlencode($value);							// 検索キーワード
+							$redirectUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=search&' . M3_REQUEST_PARAM_KEYWORD . '=' . urlencode($value);		// 検索キーワード
+							
+							$this->gPage->redirect($redirectUrl);
+							return;				// ここで終了
+						}
+					}
+				}
+				
 				// コンテンツタイプが設定されていないページ(お問合わせページ等)に場合は、固定ページ用のテンプレートを使用
 				// ページタイプを設定
 				$GLOBALS['gContentApi']->setPageType('page');
-					
+				
 				// フルパスで返るので相対パスに修正
 				//$defaultIndexFile = $this->_getRelativeTemplateIndexPath($curTemplate, get_page_template());		// 固定ページテンプレート
 				$wpIndexFile = get_page_template();		// 固定ページテンプレート
-				
+			
 				$pageTypeDefined = true;		// ページタイプ確定
 				break;
 			}
