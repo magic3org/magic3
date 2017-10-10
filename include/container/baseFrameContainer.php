@@ -947,6 +947,13 @@ class BaseFrameContainer extends Core
 							return;				// ここで終了
 						}
 					}
+				} else {
+					// 検索キーワードが設定されている場合は画面タイトルを設定
+					$value = $request->trimValueOf(M3_REQUEST_PARAM_KEYWORD);
+					if (!empty($value)){
+						// 検索画面のタイトルを設定
+						$GLOBALS['gContentApi']->setPostTitle('検索');
+					}
 				}
 				
 				// コンテンツタイプが設定されていないページ(お問合わせページ等)に場合は、固定ページ用のテンプレートを使用

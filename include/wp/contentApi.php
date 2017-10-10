@@ -40,6 +40,7 @@ class ContentApi extends BaseApi
 	private $relativePosts;			// 現在のコンテンツに関連したWP_Postオブジェクト
 	private $showThumb;				// コンテンツ表示制御(サムネールを表示するかどうか)
 	private $isTemplatePart;		// get_template_part()内での処理かどうか(コンポーネント出力判断用)
+	private $postTitle;				// コンテンツタイプが設定されていない場合の画面タイトル
 	
 	const CF_DEFAULT_CONTENT_TYPE = 'default_content_type';		// デフォルトコンテンツタイプ取得用
 	const DEFAULT_CONTENT_TYPE = 'blog';		// デフォルトコンテンツタイプのデフォルト値
@@ -1070,6 +1071,25 @@ class ContentApi extends BaseApi
 		} else {
 			return false;
 		}
+	}
+	/**
+	 * コンテンツタイプが設定されていない場合の画面タイトルを設定
+	 *
+	 * @param string $title			タイトル
+	 * @return 						なし
+	 */
+	public function setPostTitle($title)
+	{
+		$this->postTitle = $title;
+	}
+	/**
+	 * コンテンツタイプが設定されていない場合の画面タイトルを取得
+	 *
+	 * @return string			タイトル
+	 */
+	public function getPostTitle()
+	{
+		return $this->postTitle;
 	}
 }
 ?>

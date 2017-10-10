@@ -6655,6 +6655,15 @@ class PageManager extends Core
 		return $this->pageInfo[$pageId . self::PAGE_ID_SEPARATOR . $pageSubId];
 	}
 	/**
+	 * 現在のページのページ情報を取得
+	 *
+	 * @return array			ページ情報レコード
+	 */	
+	function getCurrentPageInfo()
+	{
+		return $this->currentPageInfo;
+	}
+	/**
 	 * 現在のページ情報からテンプレートIDを取得
 	 *
 	 * @param string $subTemplateId		テンプレートIDが取得できるときはサブページIDが返る
