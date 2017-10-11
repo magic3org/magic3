@@ -148,16 +148,18 @@ function get_the_title( $post = 0 ) {
 	}
 	// ##### コンテンツからタイトルを取得できない場合は画面のタイトルを取得 #####
 	// ##### この関数が呼ばれる時点ではまだウィジェットは実行されていないので$gPageManager->getHeadSubTitle()でタイトルは取得できない #####
+	// メニューから取得
+	if (empty($title)){
+		global $gMenuApi;
+		$title = $gMenuApi->getActiveMenuItemTitle();
+	}
+	
+	// 画面のデフォルトのタイトルを取得
 	if (empty($title)){
 		global $gContentApi;
 		$title = $gContentApi->getPostTitle();
 	}
 
-	// ##### タイトルが取得できない場合はメニューから取得 #####
-	if (empty($title)){
-		global $gMenuApi;
-		$title = $gMenuApi->getActiveMenuItemTitle();
-	}
 	/**
 	 * Filters the post title.
 	 *

@@ -1165,7 +1165,8 @@ class SystemDb extends BaseDb
 	 */
 	function getPageInfoRecords()
 	{
-		$queryStr = 'SELECT * FROM _page_info ';
+//		$queryStr = 'SELECT * FROM _page_info ';
+		$queryStr = 'SELECT * FROM _page_info LEFT JOIN _page_id ON pn_sub_id = pg_id AND pg_type = 1 ';		// 2017/10/11 ページID連結
 		$queryStr .=  'WHERE pn_deleted = false ';// 削除されていない
 		$queryStr .=    'AND pn_language_id = ? ';		// 言語ID(2010/2/23追加)
 		$queryStr .=  'ORDER BY pn_id, pn_sub_id';
