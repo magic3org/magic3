@@ -304,7 +304,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
-	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)
+//	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)→廃止
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 	
 	// elFinder v2.0版
@@ -504,8 +504,9 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			if (!empty($param)) $googleMapsParams = '?key=' . $param;
 			
 			// CKEditorのスクリプトファイルを取得
-			$ckeditorFile = self::CKEDITOR_FILENAME;		// CKEditor(デフォルト)
-			if (self::$ckeditorVer == 1) $ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
+//			$ckeditorFile = self::CKEDITOR_FILENAME;		// CKEditor(デフォルト)
+//			if (self::$ckeditorVer == 1) $ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
+			$ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
 			
 			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(
