@@ -376,7 +376,11 @@ class BaseFrameContainer extends Core
 				// 画面を作成
 				$pageData = $this->_createPage($request, $curTemplateId, $subTemplateId);
 				
-				// 使用した非共通ウィジェットの数をチェック
+				// ##### 非共通ウィジェットがページ上になくてもエラーとしない #####
+				$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
+				echo $pageData;
+					
+/*				// 使用した非共通ウィジェットの数をチェック
 				$nonSharedWidgetCount = $this->gPage->getNonSharedWidgetCount();
 				if ($nonSharedWidgetCount == -1){		// カウントなしの場合
 					$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
@@ -395,13 +399,8 @@ class BaseFrameContainer extends Core
 
 						// アクセス不可ページへ遷移
 						$this->gPage->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
-						// システム制御モードに変更
-						//$this->gPage->setSystemHandleMode(11/*アクセス不可*/);
-
-						// システム制御画面を表示
-						//$this->_showSystemPage($request, 0/*アクセス不可画面*/);
 					}
-				}
+				}*/
 			} else {
 				echo $cacheData;
 			}
