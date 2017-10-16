@@ -123,7 +123,6 @@ function addToMenu(selId)
 			// Ajaxでメニュー定義一覧を取得
 			m3_ajax_request_ex('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getmenu&contentid=' + selId, function(request, retcode, jsondata, html){		// 正常終了
 				// メニュー選択テーブルを作成
-				//if (jsondata.html) dialog.setMessage(jsondata.html);
 				if (html) dialog.setMessage(html);
 			}, function(request){		// 異常終了
 				alert('通信に失敗しました。');
@@ -287,6 +286,17 @@ $(function(){
 		m3AdjustParentWindow();
 		return false;
 	});
+	// テンプレート選択
+	$('#template_select').change(function(){
+		// Ajaxでサブテンプレート情報を取得
+		m3_ajax_request_ex('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getsubtemplate&templateid=' + document.main.templateid.value, function(request, retcode, jsondata, html){		// 正常終了
+			// サブテンプレートメニューを作成
+			if (html) $('#subtemplate_area').html(html);
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	});
+
 	// 添付ファイル項目一覧を初期化
 	m3SetDragDropTable('attach_file_list');
 	
@@ -433,14 +443,23 @@ $(function(){
         <tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_TEMPLATE}>テンプレート</span></th>
 	    <td colspan="3">
-		    <div class="col-sm-4 m3config_item">
-		    <select name="item_template_id" class="form-control">
+		    <div class="col-sm-4 m3config_item justify-3">
+		    <select id="template_select" name="templateid" class="form-control">
 			    <option value="">-- 選択なし --</option>
 		        <patTemplate:tmpl name="template_list">
 		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 		        </patTemplate:tmpl>
 		    </select>
 			</div>
+<div id="subtemplate_area" class="col-sm-4 m3config_item justify-3">
+<patTemplate:tmpl name="select_subtemplate" visibility="hidden">
+	    <select name="subtemplateid" class="form-control">
+	        <patTemplate:tmpl name="subtemplate_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+</patTemplate:tmpl>
+</div>
 		</td>
 	</tr>
 </patTemplate:tmpl>

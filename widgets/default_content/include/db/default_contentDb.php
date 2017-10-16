@@ -857,6 +857,20 @@ class default_contentDb extends BaseDb
 		return $this->selectRecordCount($queryStr, $params);
 	}
 	/**
+	 * テンプレート情報の取得
+	 *
+	 * @param string  $id			テンプレートID
+	 * @return						true=正常、false=異常
+	 */
+	function getTemplate($id, &$row)
+	{
+		$queryStr  = 'SELECT * FROM _templates ';
+		$queryStr .=   'WHERE tm_id = ? ';
+		$queryStr .=   'AND tm_deleted = false';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		return $ret;
+	}
+	/**
 	 * テンプレートリスト取得
 	 *
 	 * @param int      $type		テンプレートのタイプ(0=PC用、1=携帯用、2=スマートフォン)
