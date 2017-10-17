@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,6 +22,9 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $templateId;	// テンプレートID
+	private $subTemplateId;	// サブテンプレートID
+	private $subTemplateInfo;		// サブテンプレート情報
+	private $isExistsSubTemplate;		// サブテンプレートが存在するかどうか
 	private $ownerId;	// 所有者ID
 	private $limitedUserId;		// 制限ユーザID
 	
@@ -136,7 +139,8 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		$name	= $request->trimValueOf('item_name');	// 名前
 		$id		= $request->trimValueOf('item_id');	// ブログ識別ID
-		$this->templateId	= $request->trimValueOf('item_template_id');	// テンプレートID
+		$this->templateId	= $request->trimValueOf('templateid');	// テンプレートID
+		$this->subTemplateId = $request->trimValueOf('subtemplateid');	// サブテンプレートID
 		$this->ownerId	= $request->trimValueOf('item_owner_id');	// 所有者ID
 		$this->limitedUserId = $request->trimValueOf('item_limited_user_id');		// 制限ユーザID
 		$index	= $request->trimValueOf('item_index');		// 表示順
@@ -161,7 +165,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 				// 保存形式に変換
 				if (!empty($this->limitedUserId)) $this->limitedUserId = blog_mainCommonDef::USER_ID_SEPARATOR . $this->limitedUserId . blog_mainCommonDef::USER_ID_SEPARATOR;
 				
-				$ret = $this->mainDb->updateBlogInfo(0/*新規*/, $id, $name, $index, $this->templateId, $visible, $userLimited,
+				$ret = $this->mainDb->updateBlogInfo(0/*新規*/, $id, $name, $index, $this->templateId, $this->subTemplateId, $visible, $userLimited,
 													$metaTitle, $metaDesc, $metaKeyword, $this->ownerId, $this->limitedUserId, $newSerial);
 				
 				if ($ret){		// データ追加成功のとき
@@ -183,7 +187,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 				// 保存形式に変換
 				if (!empty($this->limitedUserId)) $this->limitedUserId = blog_mainCommonDef::USER_ID_SEPARATOR . $this->limitedUserId . blog_mainCommonDef::USER_ID_SEPARATOR;
 				
-				$ret = $this->mainDb->updateBlogInfo($this->serialNo, $id, $name, $index, $this->templateId, $visible, $userLimited,
+				$ret = $this->mainDb->updateBlogInfo($this->serialNo, $id, $name, $index, $this->templateId, $this->subTemplateId, $visible, $userLimited,
 													$metaTitle, $metaDesc, $metaKeyword, $this->ownerId, $this->limitedUserId, $newSerial);
 				
 				if ($ret){		// データ追加成功のとき
@@ -195,6 +199,17 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
+		} else if ($act == 'getsubtemplate'){		// サブテンプレート取得
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+			
+			// デフォルトのサブテンプレートを取得
+			$this->subTemplateId = $this->getDefaultSubTemplateId($this->templateId);
+			
+			$subTemplateMenu = $this->getParsedTemplateData('sub_template_menu.tmpl.html', array($this, 'createSubTemplateMenu'), $this->templateId);// サブテンプレートメニュー取得
+			if (!$this->isExistsSubTemplate) $subTemplateMenu = '';		// サブテンプレートが存在しない場合は空で返す
+			$this->gInstance->getAjaxManager()->addDataToBody($subTemplateMenu);
+			return;
 		} else {		// 初期状態
 			// シリアル番号からデータを取得
 			$ret = $this->mainDb->getBlogInfoBySerial($this->serialNo, $row);
@@ -206,6 +221,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 				$name	= '';	// 名前
 				$index = $this->mainDb->getBlogInfoMaxIndex() + 1;	// 表示順
 				$this->templateId	= '';	// テンプレートID
+				$this->subTemplateId = '';	// サブテンプレートID
 				$visible	= 1;		// 公開
 				$userLimited = 0;		// ユーザ制限
 				$metaTitle = '';		// ページタイトル名(METAタグ)
@@ -226,6 +242,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 				$name		= $row['bl_name'];
 				$index = $row['bl_index'];	// 表示順
 				$this->templateId	= $row['bl_template_id'];	// テンプレートID
+				$this->subTemplateId = $row['bl_sub_template_id'];	// サブテンプレートID
 				$visible	= $row['bl_visible'];		// 公開
 				$userLimited = $row['bl_user_limited'];		// ユーザ制限
 				$metaTitle = $row['bl_meta_title'];		// ページタイトル名(METAタグ)
@@ -244,6 +261,9 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		// テンプレート選択メニュー作成
 		$this->mainDb->getAllTemplateList(0/*PC用テンプレート*/, array($this, 'templateIdLoop'));
 		
+		// サブテンプレート選択メニュー作成
+		$this->createSubTemplateMenu($this->tmpl, $this->templateId);
+				
 		if (empty($this->serialNo)){		// シリアル番号が空のときは新規とする
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 新規登録ボタン表示
 			$this->tmpl->setAttribute('new_id_field', 'visibility', 'visible');// 新規ID入力フィールド表示
@@ -277,6 +297,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		
 		// 選択中のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
+		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用
 	}
 	/**
 	 * 取得したブログ情報をテンプレートに設定する
@@ -377,6 +398,100 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVars('template_list', $row);
 		$this->tmpl->parseTemplate('template_list', 'a');
 		return true;
+	}
+	/**
+	 * サブテンプレートメニュー作成
+	 *
+	 * @param object  $tmpl			テンプレートオブジェクト
+	 * @param string  $templateId	テンプレートID
+	 * @return						なし
+	 */
+	function createSubTemplateMenu($tmpl, $templateId)
+	{
+		if (empty($templateId)) return;
+		
+		// テンプレート情報取得
+		$ret = self::$_mainDb->getTemplate($templateId, $row);
+		if (!$ret) return;
+		
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		if ($generator != M3_TEMPLATE_GENERATOR_THEMLER) return;		// Themler
+		
+		// テンプレート選択メニューを表示
+		$tmpl->setAttribute('select_subtemplate', 'visibility', 'visible');
+		
+		$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/templates/list.php';
+		if (is_readable($subTemplateInfoFile)){
+			// サブテンプレート情報ファイル読み込み
+			require_once($subTemplateInfoFile);
+			
+			// $templatesInfoにサブテンプレートの情報が設定されているので取得
+			if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = array();
+			if (!empty($templatesInfo)) $this->subTemplateInfo = $templatesInfo;
+			
+			foreach ($this->subTemplateInfo as $key => $templateInfo){
+				$subTemplateId = $templateInfo['fileName'];
+				$type = $templateInfo['kind'];
+				if (empty($subTemplateId)) continue;
+				if ($type == 'error404') continue;		// エラーメッセージ表示用の404タイプのサブテンプレートは表示しない
+				
+				$selected = '';
+				if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
+				
+				$row = array(
+					'value'    => $this->convertToDispString($subTemplateId),
+					'name'     => $this->convertToDispString($templateInfo['defaultTemplateCaption'] . '(' . $templateInfo['fileName'] . ')'),
+					'selected' => $selected														// 選択中かどうか
+				);
+				$tmpl->addVars('subtemplate_list', $row);
+				$tmpl->parseTemplate('subtemplate_list', 'a');
+				
+				$this->isExistsSubTemplate = true;		// サブテンプレートが存在するかどうか
+			}
+		}
+	}
+	/**
+	 * デフォルトのサブテンプレートIDを取得
+	 *
+	 * @param string  $templateId	テンプレートID
+	 * @return string				サブテンプレートID
+	 */
+	function getDefaultSubTemplateId($templateId)
+	{
+		$subTemplateId = '';
+		
+		$ret = self::$_mainDb->getTemplate($templateId, $row);
+		if (!$ret) return $subTemplateId;
+		
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		switch ($generator){
+		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
+			// デフォルトのサブテンプレートIDを取得
+			$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/templates/list.php';
+			if (is_readable($subTemplateInfoFile)){
+				// サブテンプレート情報ファイル読み込み
+				require_once($subTemplateInfoFile);
+				
+				// $templatesInfoにサブテンプレートの情報が設定されているので取得
+				if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = array();
+				if (!empty($templatesInfo)) $this->subTemplateInfo = $templatesInfo;
+
+				foreach ($this->subTemplateInfo as $key => $templateInfo){
+					$id = $templateInfo['fileName'];
+					$type = $templateInfo['kind'];
+					if (empty($id)) continue;
+					
+					if ($type == 'default'){
+						$subTemplateId = $id;
+						break;
+					}
+				}
+			}
+			break;
+		}
+		return $subTemplateId;
 	}
 }
 ?>

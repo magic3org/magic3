@@ -1524,6 +1524,7 @@ class blog_mainDb extends BaseDb
 	 * @param string $name			名前
 	 * @param int    $index			表示順
 	 * @param string $templateId	テンプレートID
+	 * @param string $subTemplateId	サブテンプレートID
 	 * @param bool $visible			表示制御
 	 * @param bool $userLimited		ユーザ制限
 	 * @param string  $metaTitle	METAタグ、タイトル
@@ -1534,7 +1535,7 @@ class blog_mainDb extends BaseDb
 	 * @param int $newSerial	新規シリアル番号
 	 * @return					true = 正常、false=異常
 	 */
-	function updateBlogInfo($serial, $id, $name, $index, $templateId, $visible, $userLimited, $metaTitle, $metaDesc, $metaKeyword, $ownerId, $limitedUserId, &$newSerial)
+	function updateBlogInfo($serial, $id, $name, $index, $templateId, $subTemplateId, $visible, $userLimited, $metaTitle, $metaDesc, $metaKeyword, $ownerId, $limitedUserId, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -1593,10 +1594,10 @@ class blog_mainDb extends BaseDb
 		
 		// データを追加
 		$queryStr = 'INSERT INTO blog_id ';
-		$queryStr .=  '(bl_id, bl_history_index, bl_name, bl_index, bl_template_id, bl_visible, bl_user_limited, bl_meta_title, bl_meta_description, bl_meta_keywords, bl_owner_id, bl_limited_user_id, bl_content_update_dt, bl_create_user_id, bl_create_dt) ';
+		$queryStr .=  '(bl_id, bl_history_index, bl_name, bl_index, bl_template_id, bl_sub_template_id, bl_visible, bl_user_limited, bl_meta_title, bl_meta_description, bl_meta_keywords, bl_owner_id, bl_limited_user_id, bl_content_update_dt, bl_create_user_id, bl_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, $historyIndex, $name, $index, $templateId, intval($visible), intval($userLimited), $metaTitle, $metaDesc, $metaKeyword, intval($ownerId), $limitedUserId, $contentUpdateDt, $userId, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, $index, $templateId, $subTemplateId, intval($visible), intval($userLimited), $metaTitle, $metaDesc, $metaKeyword, intval($ownerId), $limitedUserId, $contentUpdateDt, $userId, $now));
 		
 		// 新規のシリアル番号取得
 		$queryStr = 'SELECT MAX(bl_serial) AS ns FROM blog_id ';
@@ -1692,6 +1693,20 @@ class blog_mainDb extends BaseDb
 		}
 		$queryStr .=  'ORDER BY tm_id';
 		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * テンプレート情報の取得
+	 *
+	 * @param string  $id			テンプレートID
+	 * @return						true=正常、false=異常
+	 */
+	function getTemplate($id, &$row)
+	{
+		$queryStr  = 'SELECT * FROM _templates ';
+		$queryStr .=   'WHERE tm_id = ? ';
+		$queryStr .=   'AND tm_deleted = false';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		return $ret;
 	}
 	/**
 	 * ユーザリスト取得
