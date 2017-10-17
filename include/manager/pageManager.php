@@ -4088,6 +4088,12 @@ class PageManager extends Core
 						$replaceStr .= '});' . M3_NL;
 					}
 				}
+			} else {			// 権限なしの場合
+				if (!$gEnvManager->isAdminDirAccess()){			// フロント画面のとき
+					// テンプレートタイプを追加(ファイルローダ等で使用)
+					$templateType = $gEnvManager->getCurrentTemplateType();
+					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
+				}
 			}
 			
 			// ##### パネルメニュー(フロント画面と管理画面の切り替え等)の表示 #####
