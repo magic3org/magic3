@@ -101,6 +101,7 @@ class PageManager extends Core
 	private $urlParamOrder;					// URLパラメータの並び順
 	private $wysiwygEditor;				// 管理画面用WYSIWYGエディター
 	private $optionTemplateId;			// 追加設定するテンプレートID
+	private $optionSubTemplateId;			// 追加設定するサブテンプレートID
 	private $isContentGooglemaps;		// コンテンツにGoogleマップが含むかどうか
 	private $useGooglemaps;				// Googleマップを使用するかどうか
 	private $useBootstrap;				// Bootstrapを使用するかどうか
@@ -1063,7 +1064,7 @@ class PageManager extends Core
 	/**
 	 * 追加設定するテンプレートIDを返す
 	 *
-	 * @return string						テンプレートID
+	 * @return array						テンプレートID,サブテンプレートIDの配列
 	 */
 	function getOptionTemplateId()
 	{
@@ -1076,17 +1077,17 @@ class PageManager extends Core
 			case M3_VIEW_TYPE_CONTENT:		// ページのコンテンツタイプ				
 				// コンテンツ単位のテンプレート設定
 				$contentLibObj = $this->gInstance->getObject(self::CONTENT_OBJ_ID);
-				if (isset($contentLibObj)) $this->optionTemplateId = $contentLibObj->getTemplate();
+				if (isset($contentLibObj)) list($this->optionTemplateId, $this->optionSubTemplateId) = $contentLibObj->getOptionTemplate();
 				break;
 			case M3_VIEW_TYPE_BLOG:		// ページがブログタイプのとき
 				if ($pageId == $this->gEnv->getDefaultPageId()){		// PCサイトのとき
 					// ブログライブラリオブジェクトからテンプレートを取得
 					$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
-					if (isset($blogLibObj)) $this->optionTemplateId = $blogLibObj->getOptionTemplate();
+					if (isset($blogLibObj)) list($this->optionTemplateId, $this->optionSubTemplateId) = $blogLibObj->getOptionTemplate();
 				}
 				break;
 		}
-		return $this->optionTemplateId;
+		return array($this->optionTemplateId, $this->optionSubTemplateId);
 	}
 	/**
 	 * 使用した非共通ウィジェットの数を取得

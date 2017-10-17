@@ -1236,9 +1236,10 @@ class BaseFrameContainer extends Core
 				}
 				
 				// オプションのテンプレートがある場合はオプションを優先
-				$optionTemplate = $this->gPage->getOptionTemplateId();
+				list($optionTemplate, $optionSubTemplate) = $this->gPage->getOptionTemplateId();
 				if (!empty($optionTemplate)){
 					$curTemplate = $optionTemplate;
+					$subTemplateId = $optionSubTemplate;
 					$templateDefined = true;		// テンプレート固定かどうか
 				}
 				

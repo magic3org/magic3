@@ -19,6 +19,7 @@ class contentLib
 {
 	private $db;	// DB接続オブジェクト
 	private $templateId;	// テンプレートID
+	private $subTemplateId;	// サブテンプレートID
 	private $configArray;	// 汎用コンテンツ定義値
 	const CF_USE_CONTENT_TEMPLATE	= 'use_content_template';		// コンテンツ単位のテンプレート設定を行うかどうか
 	
@@ -68,7 +69,10 @@ class contentLib
 		if (!empty($contentId)){
 			$ret = $this->db->getContent($contentType, $contentId, $langId, $row);
 			if ($ret){
-				if ($this->configArray[self::CF_USE_CONTENT_TEMPLATE]) $this->templateId = $row['cn_template_id'];
+				if ($this->configArray[self::CF_USE_CONTENT_TEMPLATE]){
+					$this->templateId = $row['cn_template_id'];
+					$this->subTemplateId = $row['cn_sub_template_id'];	// サブテンプレートID
+				}
 			}
 		}
 		$init = true;		// 初期化完了
@@ -100,14 +104,14 @@ class contentLib
 	/**
 	 * URLパラメータからオプションのテンプレートを取得
 	 *
-	 * @return string						テンプレートID
+	 * @return array					テンプレートID,サブテンプレートIDの配列
 	 */
-	function getTemplate()
+	function getOptionTemplate()
 	{
 		// 初期化
 		$this->_initData();
 		
-		return $this->templateId;
+		return array($this->templateId, $this->subTemplateId);
 	}
 	/**
 	 * 汎用コンテンツ定義値を取得

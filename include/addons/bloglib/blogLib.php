@@ -20,7 +20,8 @@ class blogLib extends Addon
 {
 	private $db;	// DB接続オブジェクト
 	private $blogId = '';	// ブログID
-	private $templateId = '';	// テンプレートID
+	private $templateId;	// テンプレートID
+	private $subTemplateId;	// サブテンプレートID
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
 	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向
 	const CF_SHOW_ENTRY_LIST_IMAGE	= 'show_entry_list_image';		// 記事一覧に画像を表示するかどうか
@@ -61,7 +62,8 @@ class blogLib extends Addon
 			$ret = $this->db->getEntryItem($entryId, $langId, $row);
 			if ($ret){
 				$this->templateId = $row['bl_template_id'];
-				$this->blogId = $row['bl_id'];;	// ブログID
+				$this->subTemplateId = $row['bl_sub_template_id'];	// サブテンプレートID
+				$this->blogId = $row['bl_id'];	// ブログID
 			}
 		} else {
 			// ブログIDからテンプレートIDを取得
@@ -71,7 +73,8 @@ class blogLib extends Addon
 				$ret = $this->db->getBlogInfoById($blogId, $row);
 				if ($ret){
 					$this->templateId = $row['bl_template_id'];
-					$this->blogId = $row['bl_id'];;	// ブログID
+					$this->subTemplateId = $row['bl_sub_template_id'];	// サブテンプレートID
+					$this->blogId = $row['bl_id'];	// ブログID
 				}
 			}
 		}
@@ -81,14 +84,14 @@ class blogLib extends Addon
 	/**
 	 * URLパラメータからオプションのテンプレートを取得
 	 *
-	 * @return string						テンプレートID
+	 * @return array						テンプレートID,サブテンプレートIDの配列
 	 */
 	function getOptionTemplate()
 	{
 		// 初期化
 		$this->_initData();
 		
-		return $this->templateId;
+		return array($this->templateId, $this->subTemplateId);	// サブテンプレートID;
 	}
 	/**
 	 * 現在のブログIDを取得
