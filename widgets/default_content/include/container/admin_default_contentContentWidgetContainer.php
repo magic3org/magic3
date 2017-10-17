@@ -32,6 +32,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	private $selectedPlugin = array();			// 選択しているjQueryプラグイン
 	private $addLib = array();		// 追加スクリプトライブラリ
 	private $templateId;	// テンプレートID
+	private $subTemplateId;	// サブテンプレートID
+	private $subTemplateInfo;		// サブテンプレート情報
+	private $isExistsSubTemplate;		// サブテンプレートが存在するかどうか
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const PANEL_BUTTON_SIZE = 32;	// 拡張エリア制御ボタンサイズ
 	const INC_INDEX = 1;		// メニュー項目表示順の増加分
@@ -317,7 +320,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$password = $request->trimValueOf('password');
 		$relatedContent = $request->trimValueOf('item_related_content');	// 関連コンテンツ
 		$jQueryScript = $request->valueOf('item_jquery_script');	// jQueryスクリプト
-		$this->templateId	= $request->trimValueOf('item_template_id');	// テンプレートID
+		$this->templateId	= $request->trimValueOf('templateid');	// テンプレートID
+		$this->subTemplateId = $request->trimValueOf('subtemplateid');	// サブテンプレートID
 		
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
 		if (!empty($start_date)) $start_date = $this->convertToProperDate($start_date);
@@ -417,7 +421,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 										'cn_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
 										'cn_script'				=> $jQueryScript,	// jQueryスクリプト
 										'cn_script_lib'			=> implode(',', $this->selectedPlugin),// jQueryプラグイン
-										'cn_template_id'		=> $this->templateId);		// テンプレートID
+										'cn_template_id'		=> $this->templateId,		// テンプレートID
+										'cn_sub_template_id'	=> $this->subTemplateId);	// サブテンプレートID
 				
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $nextContentId * (-1)/*次のコンテンツIDのチェック*/,
@@ -512,7 +517,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 										'cn_option_fields'		=> $this->serializeArray($this->fieldValueArray),	// ユーザ定義フィールド値
 										'cn_script'				=> $jQueryScript,	// jQueryスクリプト
 										'cn_script_lib'			=> implode(',', $this->selectedPlugin),			// jQueryプラグイン
-										'cn_template_id'		=> $this->templateId);		// テンプレートID
+										'cn_template_id'		=> $this->templateId,		// テンプレートID
+										'cn_sub_template_id'	=> $this->subTemplateId);	// サブテンプレートID
 										
 				// 履歴からのデータ取得の場合はシリアル番号を最新に変更
 				$mode = $request->trimValueOf('mode');			// データ更新モード
@@ -688,8 +694,19 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			$this->gPage->abortWidget();
 			
 			$menuList = $this->getParsedTemplateData('default_menulist.tmpl.html', array($this, 'makeMenuList'), $contentId);// メニュー定義一覧
-			//$this->gInstance->getAjaxManager()->addData('html', $menuList);
 			$this->gInstance->getAjaxManager()->addDataToBody($menuList);
+			return;
+		} else if ($act == 'getsubtemplate'){		// サブテンプレート取得
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+			
+			// デフォルトのサブテンプレートを取得
+			$this->subTemplateId = $this->getDefaultSubTemplateId($this->templateId);
+			
+//			$subTemplateMenu = $this->getParsedTemplateData('sub_template_menu.tmpl.html', array($this, 'makeSubTemplateMenu'), $this->templateId);// サブテンプレートメニュー取得
+			$subTemplateMenu = $this->getParsedTemplateData('sub_template_menu.tmpl.html', array($this, 'createSubTemplateMenu'), $this->templateId);// サブテンプレートメニュー取得
+			if (!$this->isExistsSubTemplate) $subTemplateMenu = '';		// サブテンプレートが存在しない場合は空で返す
+			$this->gInstance->getAjaxManager()->addDataToBody($subTemplateMenu);
 			return;
 		} else if ($act == 'addtomenu'){			// メニューに項目を追加
 			$serialList = $request->trimValueOf('seriallist');
@@ -789,6 +806,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$jQueryScript = $row['cn_script'];	// jQueryスクリプト
 				if (!empty($row['cn_script_lib'])) $this->selectedPlugin = explode(',', $row['cn_script_lib']);		// jQueryプラグイン
 				$this->templateId	= $row['cn_template_id'];	// テンプレートID
+				$this->subTemplateId = $row['cn_sub_template_id'];	// サブテンプレートID
 				
 				// パスワード
 				if (!empty($row['cn_password'])) $hasPassword = true;		// パスワードが設定されている
@@ -844,6 +862,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$jQueryScript = '';	// jQueryスクリプト
 				$this->selectedPlugin = array();		// jQueryプラグイン
 				$this->templateId	= '';	// テンプレートID
+				$this->subTemplateId = '';	// サブテンプレートID
 				
 				// パスワード
 				$hasPassword = false;		// パスワードが設定されている
@@ -934,6 +953,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				
 				// テンプレート選択メニュー作成
 				self::$_mainDb->getAllTemplateList(default_contentCommonDef::$_deviceType, array($this, 'templateIdLoop'));
+				
+				// サブテンプレート選択メニュー作成
+				$this->createSubTemplateMenu($this->tmpl, $this->templateId);
+				
+				// サブテンプレートが設定されている場合は拡張エリアを開く
+				if (!empty($this->templateId)) $this->isOpenOptionArea = true;
 			}
 		}
 		
@@ -1453,6 +1478,58 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		return true;
 	}
 	/**
+	 * サブテンプレートメニュー作成
+	 *
+	 * @param object  $tmpl			テンプレートオブジェクト
+	 * @param string  $templateId	テンプレートID
+	 * @return						なし
+	 */
+	function createSubTemplateMenu($tmpl, $templateId)
+	{
+		if (empty($templateId)) return;
+		
+		// テンプレート情報取得
+		$ret = self::$_mainDb->getTemplate($templateId, $row);
+		if (!$ret) return;
+		
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		if ($generator != M3_TEMPLATE_GENERATOR_THEMLER) return;		// Themler
+		
+		// テンプレート選択メニューを表示
+		$tmpl->setAttribute('select_subtemplate', 'visibility', 'visible');
+		
+		$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/templates/list.php';
+		if (is_readable($subTemplateInfoFile)){
+			// サブテンプレート情報ファイル読み込み
+			require_once($subTemplateInfoFile);
+			
+			// $templatesInfoにサブテンプレートの情報が設定されているので取得
+			if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = array();
+			if (!empty($templatesInfo)) $this->subTemplateInfo = $templatesInfo;
+			
+			foreach ($this->subTemplateInfo as $key => $templateInfo){
+				$subTemplateId = $templateInfo['fileName'];
+				$type = $templateInfo['kind'];
+				if (empty($subTemplateId)) continue;
+				if ($type == 'error404') continue;		// エラーメッセージ表示用の404タイプのサブテンプレートは表示しない
+				
+				$selected = '';
+				if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
+				
+				$row = array(
+					'value'    => $this->convertToDispString($subTemplateId),
+					'name'     => $this->convertToDispString($templateInfo['defaultTemplateCaption'] . '(' . $templateInfo['fileName'] . ')'),
+					'selected' => $selected														// 選択中かどうか
+				);
+				$tmpl->addVars('subtemplate_list', $row);
+				$tmpl->parseTemplate('subtemplate_list', 'a');
+				
+				$this->isExistsSubTemplate = true;		// サブテンプレートが存在するかどうか
+			}
+		}
+	}
+	/**
 	 * メニュー定義一覧データ作成処理コールバック
 	 *
 	 * @param object	$tmpl			テンプレートオブジェクト
@@ -1467,13 +1544,48 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 
 		$tmpl->addVar("_tmpl", "content_id", $param);// コンテンツID
 		$tmpl->addVar("_tmpl", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+	}
+	/**
+	 * デフォルトのサブテンプレートIDを取得
+	 *
+	 * @param string  $templateId	テンプレートID
+	 * @return string				サブテンプレートID
+	 */
+	function getDefaultSubTemplateId($templateId)
+	{
+		$subTemplateId = '';
 		
+		$ret = self::$_mainDb->getTemplate($templateId, $row);
+		if (!$ret) return $subTemplateId;
 		
-/*		$tmpl->addVar("_tmpl", "widget_url",	$this->gEnv->getCurrentWidgetRootUrl());		// ウィジェットのURL
-		$tmpl->addVar("_tmpl", "search_text_id",	$this->searchTextId);		// 検索用テキストフィールドのタグID
-		$tmpl->addVar("_tmpl", "search_button_id",	$this->searchButtonId);		// 検索用ボタンのタグID
-		$tmpl->addVar("_tmpl", "search_reset_id",	$this->searchResetId);		// 検索エリアリセットボタンのタグID
-		*/
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		switch ($generator){
+		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
+			// デフォルトのサブテンプレートIDを取得
+			$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/templates/list.php';
+			if (is_readable($subTemplateInfoFile)){
+				// サブテンプレート情報ファイル読み込み
+				require_once($subTemplateInfoFile);
+				
+				// $templatesInfoにサブテンプレートの情報が設定されているので取得
+				if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = array();
+				if (!empty($templatesInfo)) $this->subTemplateInfo = $templatesInfo;
+
+				foreach ($this->subTemplateInfo as $key => $templateInfo){
+					$id = $templateInfo['fileName'];
+					$type = $templateInfo['kind'];
+					if (empty($id)) continue;
+					
+					if ($type == 'default'){
+						$subTemplateId = $id;
+						break;
+					}
+				}
+			}
+			break;
+		}
+		return $subTemplateId;
 	}
 }
 ?>

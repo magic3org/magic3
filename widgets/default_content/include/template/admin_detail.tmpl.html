@@ -291,7 +291,7 @@ $(function(){
 		// Ajaxでサブテンプレート情報を取得
 		m3_ajax_request_ex('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getsubtemplate&templateid=' + document.main.templateid.value, function(request, retcode, jsondata, html){		// 正常終了
 			// サブテンプレートメニューを作成
-			if (html) $('#subtemplate_area').html(html);
+			$('#subtemplate_area').html(html);		// サブテンプレートが存在しない場合は空文字列を設定
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
 		});
