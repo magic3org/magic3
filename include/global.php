@@ -57,8 +57,8 @@ define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.21.4');		// システムのバージョン
-define('M3_SYSTEM_RELEASE_DATE',	'2017/10/12');	// システムのリリース日付
+define('M3_SYSTEM_VERSION',			'2.21.5');		// システムのバージョン
+define('M3_SYSTEM_RELEASE_DATE',	'2017/10/18');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
 define('M3_SYSTEM_MIN_MEMORY',		'16M');			// 最小メモリ使用量
