@@ -769,7 +769,7 @@ class ec_mainProductDb extends BaseDb
 	 * @param string     $langId		言語ID
 	 * @param string     $priceType		価格の種別ID(price_typeテーブル)
 	 * @param string     $currency		通貨種別
-	 * @param float      $price			単価(税抜)
+	 * @param float      $price			単価(税抜)。nullの場合はレコードを削除。
 	 * @param timestamp  $startDt		使用開始
 	 * @param timestamp  $endDt			使用終了
 	 * @param int        $userId		更新者ユーザID
@@ -802,6 +802,9 @@ class ec_mainProductDb extends BaseDb
 				if (!$ret) return false;
 			}
 		}
+		
+		// 価格がnullの場合はレコードを追加しない
+		if (is_null($price)) return true;
 		
 		// 新規レコード追加
 		$queryStr = 'INSERT INTO product_price ';
