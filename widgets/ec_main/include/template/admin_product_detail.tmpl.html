@@ -188,6 +188,14 @@ $(function(){
 	</div>
 	    </td>
 	</tr>
+<patTemplate:tmpl name="other_price" visibility="hidden">
+    <tr>
+	    <th><span {_HELP_PRODUCT_OTHER_PRICE}>その他価格</span></th>
+	    <td colspan="3">
+		<div class="form-control-static col-sm-2 m3config_item" style="width:6em;">基準価格：</div><div class="col-sm-2 m3config_item" style="width:7em;"><input type="text" name="item_base_price" value="{BASE_PRICE}" maxlength="10" onkeypress="return m3_numericKey(event,true);" /></div><div class="m3config_item form-control-static col-sm-1">円(税抜)</div>
+		</td>
+	</tr>
+</patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></th>
 	    <td>

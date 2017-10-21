@@ -1033,6 +1033,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		// カテゴリーメニューを作成
 		$this->createCategoryMenu($this->categoryCount);
 		
+		// その他価格の表示制御
+		if (!empty(self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE])) $this->tmpl->setAttribute('other_price', 'visibility', 'visible');
+		
 		// 各種価格を求める
 		$price = $this->ecObj->getCurrencyPrice($price);	// 端数調整
 		$this->ecObj->setCurrencyType($this->currency, $this->langId);		// 通貨設定
