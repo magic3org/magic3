@@ -224,20 +224,7 @@ INSERT INTO product_price (pp_product_id, pp_language_id, pp_price_type_id, pp_c
 (12, 'ja', 'sale', 'JPY', 8000.0000),
 (13, 'ja', 'sale', 'JPY', 10000.0000),
 (14, 'ja', 'sale', 'JPY', 10000.0000),
-(15, 'ja', 'sale', 'JPY', 10000.0000),
-(1, 'ja', 'base', 'JPY', 15000.0000),
-(2, 'ja', 'base', 'JPY', 13000.0000),
-(3, 'ja', 'base', 'JPY', 12000.0000),
-(4, 'ja', 'base', 'JPY', 15000.0000),
-(8, 'ja', 'base', 'JPY', 14000.0000),
-(9, 'ja', 'base', 'JPY', 12000.0000),
-(10, 'ja', 'base', 'JPY', 12000.0000),
-(11, 'ja', 'base', 'JPY', 12000.0000),
-(12, 'ja', 'base', 'JPY', 12000.0000),
-(13, 'ja', 'base', 'JPY', 15000.0000),
-(18, 'ja', 'base', 'JPY', 13000.0000),
-(19, 'ja', 'base', 'JPY', 13000.0000),
-(20, 'ja', 'base', 'JPY', 12000.0000);
+(15, 'ja', 'sale', 'JPY', 10000.0000);
 
 TRUNCATE TABLE `product_status`;
 INSERT INTO `product_status` (`ps_id`, `ps_language_id`, `ps_type`, `ps_value`) VALUES 

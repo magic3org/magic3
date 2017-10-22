@@ -122,9 +122,21 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			$this->set_object_read( true );
 		}
 		
-		$this->data['price'] = '10000';
-		$this->data['regular_price'] = '12000';		// 基準価格
-		$this->data['sale_price'] = '9000';
+		// 商品情報取得
+		global $gContentApi;
+		$ret = $gContentApi->getProductInfo($product, $rowProduct, $rowPrice, $rowImage, $rowStatus, $rowCategory);
+		if ($ret){
+			$priceInfo = $gContentApi->getProductPrice($rowPrice, 'regular');
+			$regularPrice = $priceInfo['pp_price'];	// 通常価格
+			$priceInfo = $gContentApi->getProductPrice($rowPrice, 'sale');
+			$salePrice = $priceInfo['pp_price'];	// セール価格
+			
+			$price = $regularPrice;
+			if (floatval($salePrice) > 0) $price = $salePrice;
+			$this->data['regular_price'] = $regularPrice;
+			$this->data['sale_price'] = $salePrice;
+			$this->data['price'] = $price;			// 実売価格
+		}
 /*
 		$this->data_store = WC_Data_Store::load( 'product-' . $this->get_type() );
 		if ( $this->get_id() > 0 ) {

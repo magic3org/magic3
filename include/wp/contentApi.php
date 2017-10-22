@@ -533,6 +533,41 @@ class ContentApi extends BaseApi
 		return $wpTermObj;
 	}
 	/**
+	 * 商品情報を取得
+	 *
+	 * @param int		$id					商品ID
+	 * @param array     $rowProduct			商品レコード
+	 * @param array     $rowPrice			商品価格
+	 * @param array     $rowImage			商品画像
+	 * @param array     $rowStatus			商品ステータス
+	 * @param array     $rowCategory		商品カテゴリー
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getProductInfo($id, &$rowProduct, &$rowPrice, &$rowImage, &$rowStatus, &$rowCategory)
+	{
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
+		
+		$ret = $addonObj->getProductInfo($id, $this->langId, $rowProduct, $rowPrice, $rowImage, $rowStatus, $rowCategory);
+		return $ret;
+	}
+	/**
+	 * 製品価格取得
+	 *
+	 * @param array  	$srcRows			価格リスト
+	 * @param string	$priceType			価格のタイプ
+	 * @return array						取得した価格行
+	 */
+	function getProductPrice($srcRows, $priceType)
+	{
+		for ($i = 0; $i < count($srcRows); $i++){
+			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+				return $srcRows[$i];
+			}
+		}
+		return array();
+	}
+	/**
 	 * DBから取得したデータを退避する
 	 *
 	 * @param int $index			行番号(0～)
