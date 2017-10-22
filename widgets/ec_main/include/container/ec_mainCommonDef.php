@@ -85,7 +85,7 @@ class ec_mainCommonDef
 	const CF_E_SHOP_PHONE				= 'shop_phone';		// ショップ電話番号
 	const CF_E_PRODUCT_DEFAULT_IMAGE	= 'product_default_image';		// 製品デフォルト画像
 	const CF_E_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ定義
-	const CF_E_USE_BASE_PRICE			= 'use_base_price';			// 価格(基準価格)を使用するかどうか
+	const CF_E_USE_SALE_PRICE			= 'use_sale_price';			// セール価格を使用するかどうか
 	
 	// フォトギャラリー設定マスター
 	const CF_P_THUMBNAIL_BG_COLOR		= 'thumbnail_bg_color';				// サムネール背景色

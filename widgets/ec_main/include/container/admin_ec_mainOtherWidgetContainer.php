@@ -59,7 +59,7 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$autoEmailSender		= $request->trimValueOf('auto_email');						// 自動送信メールの送信元アドレス
 		$sellProductPhoto		= ($request->trimValueOf('item_sell_product_photo') == 'on') ? 1 : 0;				// フォト商品販売
 		$sellProductDownload	= ($request->trimValueOf('item_sell_product_download') == 'on') ? 1 : 0;		// ダウンロード商品販売
-		$useBasePrice			= $request->trimCheckedValueOf('item_use_base_price');// 価格(基準価格)を使用するかどうか
+		$useSalePrice			= $request->trimCheckedValueOf('item_use_sale_price');// セール価格を使用するかどうか
 		$categorySelectCount	= $request->valueOf('item_category_select_count');		// 商品カテゴリー選択可能数
 //		$contentNoStock			= $request->valueOf('item_content_no_stock');						// 在庫なし時コンテンツ
 		$memberNotice			= $request->valueOf('item_member_notice');						// 会員向けお知らせ
@@ -102,7 +102,7 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 					if (!self::$_mainDb->updateConfig(ec_mainCommonDef::CF_E_SELL_PRODUCT_DOWNLOAD, $sellProductDownload)) $isErr = true;// ダウンロード商品販売
 				}
 				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(ec_mainCommonDef::CF_E_USE_BASE_PRICE, $useBasePrice)) $isErr = true;// 価格(基準価格)を使用するかどうか
+					if (!self::$_mainDb->updateConfig(ec_mainCommonDef::CF_E_USE_SALE_PRICE, $useSalePrice)) $isErr = true;// セール価格を使用するかどうか
 				}
 /*				if (!$isErr){
 					if (!self::$_mainDb->updateConfig(ec_mainCommonDef::CF_E_CONTENT_NO_STOCK, $contentNoStock)) $isErr = true;		// 在庫なし時コンテンツ
@@ -174,7 +174,7 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 			$autoEmailSender	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_AUTO_EMAIL_SENDER);
 			$sellProductPhoto		= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SELL_PRODUCT_PHOTO);				// フォト商品販売
 			$sellProductDownload	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_SELL_PRODUCT_DOWNLOAD);		// ダウンロード商品販売
-			$useBasePrice			= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_USE_BASE_PRICE);// 価格(基準価格)を使用するかどうか
+			$useSalePrice			= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_USE_SALE_PRICE);// セール価格を使用するかどうか
 //			$contentNoStock			= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_CONTENT_NO_STOCK);						// 在庫なし時コンテンツ
 			$memberNotice			= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_MEMBER_NOTICE);		// 会員向けお知らせ
 			$emailToOrderProduct	= self::$_mainDb->getConfig(ec_mainCommonDef::CF_E_EMAIL_TO_ORDER_PRODUCT);		// 商品受注時送信先メールアドレス
@@ -208,7 +208,7 @@ class admin_ec_mainOtherWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$checked = '';
 		if ($sellProductDownload) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "sell_product_download_checked", $checked);		// ダウンロード商品販売
-		$this->tmpl->addVar("_widget", "use_base_price_checked",	$this->convertToCheckedString($useBasePrice));// 価格(基準価格)を使用するかどうか
+		$this->tmpl->addVar("_widget", "use_sale_price_checked",	$this->convertToCheckedString($useSalePrice));// セール価格を使用するかどうか
 //		$this->tmpl->addVar("_widget", "content_no_stock", $contentNoStock);			// 在庫なし時コンテンツ
 		$this->tmpl->addVar("_widget", "member_notice", $memberNotice);// 会員向けお知らせ
 		$this->tmpl->addVar("_widget", "email_to_order_product", $emailToOrderProduct);// 商品受注時送信先メールアドレス

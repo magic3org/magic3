@@ -37,7 +37,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	private $categoryCount;	// カテゴリー選択可能数
 	const MAX_HIER_LEVEL = 20;		// カテゴリー階層最大値
 	const REGULAR_PRICE = 'regular';		// 販売価格
-	const BASE_PRICE = 'base';		// 基準価格
+	const SALE_PRICE = 'sale';		// セール価格
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
 	const PRODUCT_IMAGE_LARGE = 'large-product';		// 大サイズ商品画像ID
@@ -464,7 +464,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->taxType = $request->trimValueOf('item_tax_type');					// 税種別
 		$adminNote = $request->trimValueOf('item_admin_note');		// 管理者用備考
 		$price = $request->trimValueOf('item_price');		// 価格
-		$basePrice = $request->trimValueOf('item_base_price');		// 基準価格
+		$salePrice = $request->trimValueOf('item_sale_price');		// セール価格
 
 		// 画像のパスをマクロ表記パスに直す
 /*		$imageUrl_s = $request->trimValueOf('imageurl_s');		// 小画像
@@ -511,9 +511,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->checkNumericF($unitQuantity, '数量');
 			$this->checkNumeric($stockCount, '表示在庫数');
 			$this->checkNumericF($price, '商品価格');
-			$this->checkNumericF($basePrice, '商品基準価格', true);
-			if (!empty($basePrice) && floatval($basePrice) <= floatval($price)){
-				$this->setUserErrorMsg('基準価格は販売価格よりも大きく設定してください');
+			$this->checkNumericF($salePrice, 'セール価格', true);
+			if (!empty($salePrice) && floatval($salePrice) >= floatval($price)){
+				$this->setUserErrorMsg('セール価格は通常価格よりも小さく設定してください');
 			}
 			if (empty($this->unitTypeId)) $this->setUserErrorMsg('販売単位が選択されていません');
 
@@ -545,11 +545,11 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
 				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
-				// 基準価格
-				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE] && floatval($basePrice) > 0){
-					$priceArray[] = array(self::BASE_PRICE, $this->currency, floatval($basePrice), $startDt, $endDt);
+				// セール価格
+				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE] && floatval($salePrice) > 0){
+					$priceArray[] = array(self::SALE_PRICE, $this->currency, floatval($salePrice), $startDt, $endDt);
 				} else {
-					$priceArray[] = array(self::BASE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
+					$priceArray[] = array(self::SALE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
 				}
 				
 				// 画像情報の作成
@@ -630,9 +630,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->checkNumericF($unitQuantity, '数量');
 			$this->checkNumeric($stockCount, '表示在庫数');
 			$this->checkNumericF($price, '商品価格');
-			$this->checkNumericF($basePrice, '商品基準価格', true);
-			if (!empty($basePrice) && floatval($basePrice) <= floatval($price)){
-				$this->setUserErrorMsg('基準価格は販売価格よりも大きく設定してください');
+			$this->checkNumericF($salePrice, 'セール価格', true);
+			if (!empty($salePrice) && floatval($salePrice) >= floatval($price)){
+				$this->setUserErrorMsg('セール価格は通常価格よりも小さく設定してください');
 			}
 			if (empty($this->unitTypeId)) $this->setUserErrorMsg('販売単位が選択されていません');
 			
@@ -664,11 +664,11 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
 				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
-				// 基準価格
-				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE] && floatval($basePrice) > 0){
-					$priceArray[] = array(self::BASE_PRICE, $this->currency, floatval($basePrice), $startDt, $endDt);
+				// セール価格
+				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE] && floatval($salePrice) > 0){
+					$priceArray[] = array(self::SALE_PRICE, $this->currency, floatval($salePrice), $startDt, $endDt);
 				} else {
-					$priceArray[] = array(self::BASE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
+					$priceArray[] = array(self::SALE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
 				}
 				
 				// 画像情報の作成
@@ -961,11 +961,11 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 				$price = $priceArray['pp_price'];	// 価格
 				$this->currency = $priceArray['pp_currency_id'];	// 通貨
-				// 基準価格
-				$basePrice = '';
-				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE]){			// 基準価格を使用する場合
-					$priceArray = $this->getPrice($row2, self::BASE_PRICE);
-					if (floatval($priceArray['pp_price']) > 0) $basePrice = $priceArray['pp_price'];	// 価格
+				// セール価格
+				$salePrice = '';
+				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE]){			// セール価格を使用する場合
+					$priceArray = $this->getPrice($row2, self::SALE_PRICE);
+					if (floatval($priceArray['pp_price']) > 0) $salePrice = $priceArray['pp_price'];	// 価格
 				}
 
 				// 画像を取得
@@ -1006,7 +1006,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$new = 0;// 新規
 				$suggest = 0;// おすすめ
 				$price = '';	// 価格
-				$basePrice = '';// 基準価格
+				$salePrice = '';// セール価格
 				$this->currency	= $this->ecObj->getDefaultCurrency();		// 通貨
 				$this->unitTypeId = self::DEFAULT_UNIT_TYPE_ID;	// 単位
 				$unitQuantity = 1;		// 数量
@@ -1061,11 +1061,11 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->createCategoryMenu($this->categoryCount);
 		
 		// その他価格の表示制御
-		if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE]) $this->tmpl->setAttribute('other_price', 'visibility', 'visible');
+		if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE]) $this->tmpl->setAttribute('other_price', 'visibility', 'visible');
 		
 		// 各種価格を求める
 		$price = $this->ecObj->getCurrencyPrice($price);	// 端数調整
-		if ($basePrice != '') $basePrice = $this->ecObj->getCurrencyPrice($basePrice);	// 端数調整
+		if ($salePrice != '') $salePrice = $this->ecObj->getCurrencyPrice($salePrice);	// 端数調整
 		$this->ecObj->setCurrencyType($this->currency, $this->langId);		// 通貨設定
 		$this->ecObj->setTaxType($this->taxType, $this->langId);		// 税種別設定
 		$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
@@ -1091,7 +1091,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->tmpl->addVar("_widget", "url", $url);				// 詳細情報URL
 		$this->tmpl->addVar("_widget", "admin_note", $adminNote);			// 管理者用備考
 		$this->tmpl->addVar("_widget", "price", $price);		// 価格
-		$this->tmpl->addVar("other_price", "base_price", $basePrice);		// 基準価格
+		$this->tmpl->addVar("other_price", "sale_price", $salePrice);		// セール価格
 		$this->tmpl->addVar("_widget", "price_with_tax", $dispPrice);		// 税込価格
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
