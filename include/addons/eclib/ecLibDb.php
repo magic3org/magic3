@@ -589,6 +589,55 @@ class ecLibDb extends BaseDb
 		return $status;
 	}
 	/**
+	 * 商品情報を取得
+	 *
+	 * @param int		$id					商品ID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @param array     $row2				商品価格
+	 * @param array     $row3				商品画像
+	 * @param array     $row4				商品ステータス
+	 * @param array     $row5				商品カテゴリー
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getProductInfo($id, $langId, &$row, &$row2, &$row3, &$row4, &$row5)
+	{
+		$queryStr  = 'SELECT * FROM product LEFT JOIN product_record ON pt_id = pe_product_id AND pt_language_id = pe_language_id ';
+		$queryStr .=   'LEFT JOIN _login_user ON pt_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .= 'WHERE pt_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND pt_id = ? ';
+		$queryStr .=   'AND pt_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		if ($ret){
+			$queryStr  = 'SELECT * FROM product_price ';
+			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
+			$queryStr .=     'AND pp_product_id = ? ';
+			$queryStr .=     'AND pp_language_id = ? ';
+			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			
+			$queryStr  = 'SELECT * FROM product_image ';
+			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
+			$queryStr .=     'AND im_type = 2 ';		// 商品画像
+			$queryStr .=     'AND im_id = ? ';
+			$queryStr .=     'AND im_language_id = ? ';
+			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row3);
+			
+			// 商品ステータス
+			$queryStr  = 'SELECT * FROM product_status ';
+			$queryStr .=   'WHERE ps_deleted = false ';// 削除されていない
+			$queryStr .=     'AND ps_id = ? ';
+			$queryStr .=     'AND ps_language_id = ? ';
+			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row4);
+			
+			// 商品カテゴリー
+			$queryStr  = 'SELECT * FROM product_with_category ';
+			$queryStr .=   'WHERE pw_product_serial = ? ';
+			$queryStr .=  'ORDER BY pw_index ';
+			$this->selectRecords($queryStr, array($row['pt_serial']), $row5);
+		}
+		return $ret;
+	}
+	/**
 	 * 公開中の商品項目を取得。アクセス制限も行う。
 	 *
 	 * @param int		$limit				取得する項目数

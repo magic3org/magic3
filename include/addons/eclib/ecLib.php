@@ -258,6 +258,23 @@ class ecLib
 		return $retVal;
 	}
 	/**
+	 * 商品情報を取得
+	 *
+	 * @param int		$id					商品ID
+	 * @param string	$langId				言語
+	 * @param array     $rowProduct			商品レコード
+	 * @param array     $rowPrice			商品価格
+	 * @param array     $rowImage			商品画像
+	 * @param array     $rowStatus			商品ステータス
+	 * @param array     $rowCategory		商品カテゴリー
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getProductInfo($id, $langId, &$rowProduct, &$rowPrice, &$rowImage, &$rowStatus, &$rowCategory)
+	{
+		$ret = $this->db->getProductInfo($id, $langId, $rowProduct, $rowPrice, $rowImage, $rowStatus, $rowCategory);
+		return $ret;
+	}
+	/**
 	 * コンテンツ一覧の表示設定を取得
 	 *
 	 * @return array				表示項目数,ソート順(0=昇順,1=降順),サムネール表示可否の配列
