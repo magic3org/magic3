@@ -67,7 +67,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 	const PRODUCT_CLASS = 'photo';			// 商品クラス
 	const TAX_TYPE = 'sales';						// 課税タイプ(外税)
 	const PRODUCT_TYPE_DOWNLOAD = 'download';		// 商品タイプ
-	const STANDARD_PRICE = 'selling';				// 通常価格
+	const REGULAR_PRICE = 'regular';				// 通常価格
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
 	const DEFAULT_CURRENCY 		= 'JPY';			// デフォルト通貨
 	
@@ -765,7 +765,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 		}
 		// 商品情報を取得
 		$isValidItem = true;		// 現在のカートのデータが有効かどうか
-		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::STANDARD_PRICE, $this->_langId, $row);
+		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::REGULAR_PRICE, $this->_langId, $row);
 		if ($ret){
 			// 価格を取得
 			$productId = $row['ht_id'];	// 画像商品ID
@@ -1027,7 +1027,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 		if (!$ret) return true;
 
 		// 価格を取得
-		$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+		$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 		$price		= $priceArray['pp_price'];			// 価格
 		$currency	= $priceArray['pp_currency_id'];	// 通貨
 		$taxType	= $fetchedRow['hp_tax_type_id'];	// 税種別

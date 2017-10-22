@@ -634,7 +634,6 @@ abstract class WC_Data {
 
 		if ( array_key_exists( $prop, $this->data ) ) {
 			$value = array_key_exists( $prop, $this->changes ) ? $this->changes[ $prop ] : $this->data[ $prop ];
-
 			if ( 'view' === $context ) {
 				$value = apply_filters( $this->get_hook_prefix() . $prop, $value, $this );
 			}

@@ -45,7 +45,7 @@ class ec_mainCommonDef
 	const DEFAULT_COUNTRY_ID	= 'JPN';	// デフォルト国ID
 	const PRODUCT_CLASS_DEFAULT	= '';		// 商品クラス
 	const PRODUCT_CLASS_PHOTO	= 'photo';		// 商品クラス
-	const STANDARD_PRICE 		= 'selling';		// 通常価格
+	const REGULAR_PRICE 		= 'regular';		// 通常価格
 	const PRODUCT_TYPE_DOWNLOAD = 'download';		// 商品タイプ
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
 	const TAX_TYPE				= 'sales';						// 課税タイプ(外税)

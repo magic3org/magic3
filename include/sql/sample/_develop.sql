@@ -87,8 +87,8 @@ INSERT INTO _iwidget_method
 -- 商品価格マスター
 INSERT INTO product_price
 (pp_product_class, pp_product_id, pp_product_type_id, pp_language_id, pp_price_type_id, pp_currency_id, pp_price) VALUES 
-('photo',          0,             'download',         'ja',           'selling',        'JPY',          100);
--- ('photo',          1,             'download',         'ja',           'selling',        'JPY',          200);
+('photo',          0,             'download',         'ja',           'regular',        'JPY',          100);
+-- ('photo',          1,             'download',         'ja',           'regular',        'JPY',          200);
 
 -- 個人情報追加フィールド
 TRUNCATE TABLE person_info_opt_field;

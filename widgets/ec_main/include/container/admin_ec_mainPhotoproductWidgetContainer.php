@@ -27,7 +27,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 	private $taxType;			// 税種別
 	private $ecObj;			// 共通ECオブジェクト
 	const MAX_HIER_LEVEL = 20;		// カテゴリー階層最大値
-	const STANDARD_PRICE = 'selling';		// 通常価格
+	const REGULAR_PRICE = 'regular';		// 通常価格
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
 	const PRODUCT_IMAGE_LARGE = 'large-product';		// 大サイズ商品画像ID
@@ -315,7 +315,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::STANDARD_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
 				
 				// 画像情報の作成
 				$imageArray = array();
@@ -376,7 +376,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::STANDARD_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
 				
 				// 画像情報の作成
 				$imageArray = array();
@@ -494,7 +494,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 					$updateDt = $this->convertToDispDateTime($row['hp_create_dt']);	// 更新日時
 				
 					// 価格を取得
-					$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+					$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 					$price = $priceArray['pp_price'];	// 価格
 					$this->currency = $priceArray['pp_currency_id'];	// 通貨
 				
@@ -645,7 +645,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 			$langId = $row['hp_language_id'];
 			
 			// 価格を取得
-			$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 			$price = $priceArray['pp_price'];	// 価格
 			$currency = $priceArray['pp_currency_id'];	// 通貨
 			$taxType = $row['hp_tax_type_id'];					// 税種別			

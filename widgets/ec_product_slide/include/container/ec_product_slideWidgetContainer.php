@@ -27,7 +27,7 @@ class ec_product_slideWidgetContainer extends BaseWidgetContainer
 	private $imageHeight;		// 商品画像高さ
 	private $categoryId;	// カテゴリーID
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
-	const STANDARD_PRICE = 'selling';		// 通常価格
+	const REGULAR_PRICE = 'regular';		// 通常価格
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
 	const PRODUCT_IMAGE_LARGE = 'large-product';		// 大サイズ商品画像ID
@@ -210,7 +210,7 @@ class ec_product_slideWidgetContainer extends BaseWidgetContainer
 			if (empty($viewCount)) $viewCount = 0;
 		
 			// 価格を取得
-			$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 			$price = $priceArray['pp_price'];	// 価格
 			$currency = $priceArray['pp_currency_id'];	// 通貨
 			$taxType = $row['pt_tax_type_id'];					// 税種別

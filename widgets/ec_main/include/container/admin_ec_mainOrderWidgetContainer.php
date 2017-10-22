@@ -38,7 +38,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 	private $contentIdArray;		// コンテンツID
 	private $cancelStock;		// 在庫キャンセル処理を行うかどうか
 	
-	const STANDARD_PRICE = 'selling';		// 通常価格
+	const REGULAR_PRICE = 'regular';		// 通常価格
 	const ORDER_STATUS_CLOSE = 900;			// 受注処理終了
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
 	const DEFAULT_COUNTRY_ID = 'JPN';	// デフォルト国ID
@@ -678,7 +678,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::REGULAR_PRICE, $this->_langId, $row);
 				
 				// 画像詳細へのリンク
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;

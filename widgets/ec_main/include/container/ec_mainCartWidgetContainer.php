@@ -228,7 +228,7 @@ class ec_mainCartWidgetContainer extends ec_mainBaseWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::STANDARD_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::REGULAR_PRICE, $this->_langId, $row);
 				
 				break;
 			case ec_mainCommonDef::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき

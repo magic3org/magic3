@@ -41,7 +41,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 	private $postPrice;			// 価格表示用
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = '新着おすすめ';			// デフォルトのウィジェットタイトル
-	const STANDARD_PRICE = 'selling';		// 通常価格
+	const REGULAR_PRICE = 'regular';		// 通常価格
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
@@ -195,7 +195,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 		$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId;
 		
 		// 価格を取得
-		$priceArray = $this->getPrice($priceRows, self::STANDARD_PRICE);
+		$priceArray = $this->getPrice($priceRows, self::REGULAR_PRICE);
 		$price = $priceArray['pp_price'];	// 価格
 		$currency = $priceArray['pp_currency_id'];	// 通貨
 		$taxType = $fetchedRow['pt_tax_type_id'];					// 税種別

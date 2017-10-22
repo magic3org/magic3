@@ -36,7 +36,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	private $imageTypes;			// 画像タイプ
 	private $categoryCount;	// カテゴリー選択可能数
 	const MAX_HIER_LEVEL = 20;		// カテゴリー階層最大値
-	const STANDARD_PRICE = 'selling';		// 販売価格
+	const REGULAR_PRICE = 'regular';		// 販売価格
 	const BASE_PRICE = 'base';		// 基準価格
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
 	const PRODUCT_IMAGE_SMALL = 'small-product';		// 小サイズ商品画像ID
@@ -512,8 +512,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->checkNumeric($stockCount, '表示在庫数');
 			$this->checkNumericF($price, '商品価格');
 			$this->checkNumericF($basePrice, '商品基準価格', true);
-			if (!empty($basePrice) && floatval($basePrice) < floatval($price)){
-				$this->setUserErrorMsg('基準価格は販売価格以上に設定してください');
+			if (!empty($basePrice) && floatval($basePrice) <= floatval($price)){
+				$this->setUserErrorMsg('基準価格は販売価格よりも大きく設定してください');
 			}
 			if (empty($this->unitTypeId)) $this->setUserErrorMsg('販売単位が選択されていません');
 
@@ -544,7 +544,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::STANDARD_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
 				// 基準価格
 				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE] && floatval($basePrice) > 0){
 					$priceArray[] = array(self::BASE_PRICE, $this->currency, floatval($basePrice), $startDt, $endDt);
@@ -631,8 +631,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->checkNumeric($stockCount, '表示在庫数');
 			$this->checkNumericF($price, '商品価格');
 			$this->checkNumericF($basePrice, '商品基準価格', true);
-			if (!empty($basePrice) && floatval($basePrice) < floatval($price)){
-				$this->setUserErrorMsg('基準価格は販売価格以上に設定してください');
+			if (!empty($basePrice) && floatval($basePrice) <= floatval($price)){
+				$this->setUserErrorMsg('基準価格は販売価格よりも大きく設定してください');
 			}
 			if (empty($this->unitTypeId)) $this->setUserErrorMsg('販売単位が選択されていません');
 			
@@ -663,7 +663,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::STANDARD_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
 				// 基準価格
 				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_BASE_PRICE] && floatval($basePrice) > 0){
 					$priceArray[] = array(self::BASE_PRICE, $this->currency, floatval($basePrice), $startDt, $endDt);
@@ -958,7 +958,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$updateDt = $this->convertToDispDateTime($row['pt_create_dt']);	// 更新日時
 			
 				// 価格を取得
-				$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+				$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 				$price = $priceArray['pp_price'];	// 価格
 				$this->currency = $priceArray['pp_currency_id'];	// 通貨
 				// 基準価格
@@ -1190,7 +1190,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$langId = $row['pt_language_id'];
 			
 			// 価格を取得
-			$priceArray = $this->getPrice($row2, self::STANDARD_PRICE);
+			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
 			$price = $priceArray['pp_price'];	// 価格
 			$currency = $priceArray['pp_currency_id'];	// 通貨
 			$taxType = $row['pt_tax_type_id'];					// 税種別			

@@ -28,7 +28,7 @@ class lotbuyingWidgetContainer extends BaseIWidgetContainer
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
 	const PRODUCT_CLASS_DEFAULT	= '';		// 商品クラス
 	const PRODUCT_CLASS_PHOTO	= 'photo';		// 商品クラス
-	const STANDARD_PRICE 		= 'selling';		// 通常価格
+	const REGULAR_PRICE 		= 'regular';		// 通常価格
 	const PRODUCT_TYPE_DOWNLOAD = 'download';		// 商品タイプ
 	const TAX_TYPE				= 'sales';						// 課税タイプ(外税)
 	const PRODUCT_NAME_FORMAT	= '%s(%s)';		// 商品名表示フォーマット
@@ -144,7 +144,7 @@ class lotbuyingWidgetContainer extends BaseIWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = $this->db->getPhotoInfoWithPrice($productId, $productClass, $productType, self::STANDARD_PRICE, $this->langId, $row);
+				$ret = $this->db->getPhotoInfoWithPrice($productId, $productClass, $productType, self::REGULAR_PRICE, $this->langId, $row);
 				break;
 			case self::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				// 表示用の商品名、商品コード作成
