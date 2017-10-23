@@ -147,6 +147,12 @@ class ContentApi extends BaseApi
 			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 				break;
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				// ##### woocommerce.phpが呼ばれる前にWooCommerceで使用するオプション値は取得しておく #####
+				global $m3WpOptions;		// 初期値取得用
+				
+				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
+				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
+				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
 				break;
 			case M3_VIEW_TYPE_BBS:	// BBS

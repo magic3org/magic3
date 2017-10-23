@@ -137,11 +137,6 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			$this->data['sale_price'] = $salePrice;
 			$this->data['price'] = $price;			// 実売価格
 		}
-/*
-		$this->data_store = WC_Data_Store::load( 'product-' . $this->get_type() );
-		if ( $this->get_id() > 0 ) {
-			$this->data_store->read( $this );
-		}*/
 	}
 
 	/**
@@ -1666,11 +1661,11 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 	 * @return string
 	 */
 	public function get_price_html( $deprecated = '' ) {
-		if ( '' === $this->get_price() ) {
+		if ( '' === $this->get_price() ) {		// 価格が設定されていない場合
 			$price = apply_filters( 'woocommerce_empty_price_html', '', $this );
-		} elseif ( $this->is_on_sale() ) {
+		} elseif ( $this->is_on_sale() ) {		// セール価格が設定されている場合
 			$price = wc_format_sale_price( wc_get_price_to_display( $this, array( 'price' => $this->get_regular_price() ) ), wc_get_price_to_display( $this ) ) . $this->get_price_suffix();
-		} else {
+		} else {		// 通常価格のみの場合
 			$price = wc_price( wc_get_price_to_display( $this ) ) . $this->get_price_suffix();
 		}
 

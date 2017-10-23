@@ -785,18 +785,20 @@ class BaseFrameContainer extends Core
 			$GLOBALS['wp_widget_factory'] = new WP_Widget_Factory();
 			$GLOBALS['gContentApi'] = new contentApi();			// Magic3コンテンツAPIオブジェクト
 			$GLOBALS['gMenuApi'] = new menuApi();			// Magic3メニュー情報APIオブジェクト
+			$GLOBALS['m3WpOptions'] = array();				// 定義値初期化
 			// テンプレートから参照可能にする
 			global $wp_query;
 
-			// ページに配置されているウィジェットの状況からWordPress以外の主コンテンツ用のプラグインをロード
+			// ページに配置されているウィジェットの状況からWordPress以外の主コンテンツ用のプラグイン(WooCommerce等)をロード
+			// setup_themeイベント処理を設定
 			$GLOBALS['gContentApi']->loadPlugin();
-
+			
 			// テンプレート初期処理
 			do_action('setup_theme');
 			load_default_textdomain();			// 言語リソースを読み込む
 			m3WpInit();							// 言語リソース読み込み後にMagic3用インターフェイス初期化。$GLOBALS['m3WpOptions']を初期化し、get_option()はここから使用可能にする。
 			$GLOBALS['wp_locale'] = new WP_Locale();		// 言語リソース読み込み後に生成
-			
+
 			// functions.phpを読み込む。ファイル内で定義されている変数はグローバル変数に変換する。
 			$this->_loadFileAsGlobal(TEMPLATEPATH . '/functions.php');
 

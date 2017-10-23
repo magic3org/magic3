@@ -41,8 +41,7 @@ function m3WpInit()
 			
 	$templateId = $gEnvManager->getCurrentTemplateId();
 	
-//	$options = array(
-	$GLOBALS['m3WpOptions'] = array(
+	$GLOBALS['m3WpOptions'] = array_merge($GLOBALS['m3WpOptions'], array(
 									'siteurl' => $gEnvManager->getRootUrl(),
 									'home' => $gEnvManager->getRootUrl(),
 									'blogname' => __('My Site'),
@@ -169,13 +168,13 @@ function m3WpInit()
 									// 4.4.0
 									'medium_large_size_w' => 768,
 									'medium_large_size_h' => 0,
-								);
-								
+								));
+
 	// ### Magic3追加分 ###
 	$GLOBALS['m3WpOptions']['WPLANG'] = $gEnvManager->getDefaultLanguage();// 管理画面の言語
 //	$GLOBALS['m3WpOptions']['theme_mods_' . $templateId] = array('nav_menu_locations' => array('primary' => 2));		// Themlerメインメニュー調整用暫定(2はメニュー定義ID)
 	$GLOBALS['m3WpOptions']['theme_mods_' . $templateId] = array('nav_menu_locations' => array('primary' => $gMenuApi->getMenuId()));		// Themlerメインメニュー調整用暫定。Magic3のメニューIDは文字列型でWordPressのIDは数値型なので問題でないかどうか?
-	
+
 	// ##### テンプレート情報からカスタマイズ値を取得 #####
 	$optionParams = $gEnvManager->getCurrentTemplateCustomParam();
 	if (empty($optionParams)){
@@ -183,8 +182,5 @@ function m3WpInit()
 	} else {
 		$GLOBALS['m3WpCustomParams'] = unserialize($optionParams);		// 連想配列に変換
 	}
-	
-	// WordPress以外の主コンテンツ用のプラグインをロード
-//	$gContentApi->loadPlugin();
 }
 ?>
