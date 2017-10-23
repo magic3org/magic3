@@ -152,6 +152,8 @@ class ContentApi extends BaseApi
 				
 				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
 				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
+				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
+				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
 				break;
