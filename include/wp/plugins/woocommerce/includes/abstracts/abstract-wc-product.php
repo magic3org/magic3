@@ -104,6 +104,11 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 	protected $supports = array();
 
 	/**
+	 * Magic3追加分
+	 */
+	protected $taxType;				// 税タイプ(空の場合は課税なし)
+	 
+	/**
 	 * Get the product if ID is passed, otherwise the product is new and empty.
 	 * This class should NOT be instantiated, but the wc_get_product() function
 	 * should be used. It is possible, but the wc_get_product() is preferred.
@@ -138,9 +143,9 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			$this->data['sale_price'] = $salePrice;
 			$this->data['price'] = $price;			// 実売価格
 			
-			// 税
-			$taxType = $gContentApi->getProductTaxType($product);
-			if (empty($taxType)) $this->data['tax_status'] = 'none';			// 課税タイプが設定されていない場合は課税処理しない
+			// 税タイプ
+			$this->taxType = $gContentApi->getProductTaxType($rowProduct);
+			if (empty($this->taxType)) $this->data['tax_status'] = 'none';			// 課税タイプが設定されていない場合は課税処理しない
 		}
 	}
 
@@ -694,6 +699,18 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 		return $this->get_prop( 'review_count', $context );
 	}
 
+	/**
+	 * Magic3追加分
+	 */
+	/**
+	 * 税タイプ取得
+	 *
+	 * @return string			税タイプ(空の場合は課税なし)
+	 */
+	public function getTaxType() {
+		return $this->taxType;
+	}
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Setters

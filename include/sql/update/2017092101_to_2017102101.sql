@@ -31,6 +31,9 @@ INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) 
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('disposal','ja', 13, '処分価格',      4);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 20, '仕入価格',      5);
 
+-- 税率マスター
+UPDATE tax_rate SET tr_rate = '8.00' WHERE tr_id = 'rate_sales';
+
 -- Eコマース設定マスター
 INSERT INTO commerce_config
 (cg_id,                    cg_value, cg_name,                        cg_index) VALUES

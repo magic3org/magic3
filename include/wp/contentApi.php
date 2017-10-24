@@ -581,11 +581,29 @@ class ContentApi extends BaseApi
 	 * 製品税タイプ取得
 	 *
 	 * @param array  	$productRow			製品レコード
-	 * @return string						課税タイプ(sales(外税))
+	 * @return string						課税タイプ(sales=課税(外税),空=課税なし)
 	 */
 	function getProductTaxType($productRow)
 	{
-		return $productRow['pt_tax_type_id'];
+		$taxType = $productRow['pt_tax_type_id'];
+		if ($taxType == 'notax') $taxType = '';			// 課税なしの場合は空で返す
+		return $taxType;
+	}
+	/**
+	 * 税率を取得
+	 *
+	 * @param string	$taxType	税種別
+	 * @return float				税率
+	 */
+	public function getTaxRate($taxType)
+	{
+		if (empty($taxType)) return 0;
+		
+		// アドオンオブジェクト取得
+		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
+		
+		$rate = $addonObj->getTaxRate($taxType, $this->langId);
+		return $rate;
 	}
 	/**
 	 * DBから取得したデータを退避する
