@@ -126,6 +126,7 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 		global $gContentApi;
 		$ret = $gContentApi->getProductInfo($product, $rowProduct, $rowPrice, $rowImage, $rowStatus, $rowCategory);
 		if ($ret){
+			// 価格
 			$priceInfo = $gContentApi->getProductPrice($rowPrice, 'regular');
 			$regularPrice = $priceInfo['pp_price'];	// 通常価格
 			$priceInfo = $gContentApi->getProductPrice($rowPrice, 'sale');
@@ -136,6 +137,10 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			$this->data['regular_price'] = $regularPrice;
 			$this->data['sale_price'] = $salePrice;
 			$this->data['price'] = $price;			// 実売価格
+			
+			// 税
+			$taxType = $gContentApi->getProductTaxType($product);
+			if (empty($taxType)) $this->data['tax_status'] = 'none';			// 課税タイプが設定されていない場合は課税処理しない
 		}
 	}
 

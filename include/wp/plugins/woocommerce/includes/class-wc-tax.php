@@ -457,6 +457,7 @@ class WC_Tax {
 	public static function get_tax_location( $tax_class = '' ) {
 		$location = array();
 
+/*
 		if ( ! empty( WC()->customer ) ) {
 			$location = WC()->customer->get_taxable_address();
 		} elseif ( wc_prices_include_tax() || 'base' === get_option( 'woocommerce_default_customer_address' ) || 'base' === get_option( 'woocommerce_tax_based_on' ) ) {
@@ -467,7 +468,7 @@ class WC_Tax {
 				WC()->countries->get_base_city(),
 			);
 		}
-
+*/
 		return apply_filters( 'woocommerce_get_tax_location', $location, $tax_class );
 	}
 

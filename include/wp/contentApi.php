@@ -152,6 +152,7 @@ class ContentApi extends BaseApi
 				
 				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
 				$m3WpOptions['woocommerce_calc_taxes'] = 'yes';					// 税処理を行う
+				$m3WpOptions['woocommerce_tax_display_shop'] ='incl';			// 消費税表示方法(税込み)
 				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
 				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
@@ -575,6 +576,16 @@ class ContentApi extends BaseApi
 			}
 		}
 		return array();
+	}
+	/**
+	 * 製品税タイプ取得
+	 *
+	 * @param array  	$productRow			製品レコード
+	 * @return string						課税タイプ(sales(外税))
+	 */
+	function getProductTaxType($productRow)
+	{
+		return $productRow['pt_tax_type_id'];
 	}
 	/**
 	 * DBから取得したデータを退避する
