@@ -34,4 +34,5 @@ INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) 
 -- Eコマース設定マスター
 INSERT INTO commerce_config
 (cg_id,                    cg_value, cg_name,                        cg_index) VALUES
-('use_sale_price',        '0',                'セール価格使用',                           100);
+('use_sale_price',        '0',                'セール価格使用',                           100),
+('price_suffix',        '(税込)',                '価格表示接尾辞',                           100);

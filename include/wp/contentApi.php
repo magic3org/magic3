@@ -151,10 +151,11 @@ class ContentApi extends BaseApi
 				global $m3WpOptions;		// 初期値取得用
 				
 				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
+				$m3WpOptions['woocommerce_calc_taxes'] = 'yes';					// 税処理を行う
 				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
 				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
-				
+				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
 				break;
 			case M3_VIEW_TYPE_BBS:	// BBS

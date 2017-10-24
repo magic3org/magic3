@@ -408,7 +408,7 @@ INSERT INTO product (pt_id, pt_language_id, pt_name, pt_code, pt_product_type, p
 (20, 'ja', 'FOMA　SO703i', 'DO008', 1, '<p>デザイン</p>\r\n<p>本体フロント面は、着せかえのできる「Style-Up&reg;」パネルを採用しています。それぞれのパネルのテーマに合わせた「アロマシート<span class="sup">TM</span>」も付属しました。「アロマシート<span class="sup">TM</span>」を本体部分に貼り付けることで、パネルのデザインと香りを組み合わせてお楽しみいただけます。</p>\r\n<p>\r\n<li>アロマシート<span class="sup">TM</span>は香りのマイクロカプセルをシート状にしたもので、FOMA端末に取り付けて香りをお楽しみいただけます。</li>\r\n<li>香りが弱くなってきた場合は、アロマシート<span class="sup">TM</span>の表面を指で軽くこすると、マイクロカプセルがはじけ香りがします。</li>\r\n<li>アロマシート<span class="sup">TM</span>は消耗品です。マイクロカプセルがすべてはじけると、香りは出なくなります。香りの持続期間は約3ヶ月間ですが、温度、湿度などの環境やアロマシート<span class="sup">TM</span>をこする回数により変わります。</li>\r\n<li>香りの感じ方には個人差があります。</li>\r\n</p>', '香りもデザインも着せ替えられる、アロマケータイ', '', 1, '', 0, 8, '', true, '', '', 'ko', 1.00, 0, 0, 0, 0.00, 'sales', 0, '', '', '', '/image/sample/product/do8.png');
 
 -- Eコマース設定マスター
-UPDATE commerce_config SET cg_value = '1' WHERE cg_id = 'use_base_price';
+UPDATE commerce_config SET cg_value = '1' WHERE cg_id = 'use_sale_price';
 
 -- 多言語対応文字列マスター
 DELETE FROM _language_string WHERE ls_type = 1 AND ls_id = 'word_account';
