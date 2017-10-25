@@ -31,8 +31,18 @@ INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) 
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('disposal','ja', 13, '処分価格',      4);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 20, '仕入価格',      5);
 
--- 税率マスター
-UPDATE tax_rate SET tr_rate = '8.00' WHERE tr_id = 'rate_sales';
+-- 税率マスター(仕様変更)
+DROP TABLE IF EXISTS tax_rate;
+CREATE TABLE tax_rate (
+    tr_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 税率ID
+    tr_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
+    tr_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 名称
+    tr_rate              DECIMAL(7,4)   DEFAULT 0                     NOT NULL,      -- 税率(%)
+    tr_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限開始日時
+    tr_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限終了日時
+    PRIMARY KEY          (tr_id,        tr_index)
+) ENGINE=innodb;
+INSERT INTO tax_rate (tr_id, tr_name, tr_rate) VALUES ('rate_sales', '消費税率', '8.00');
 
 -- Eコマース設定マスター
 INSERT INTO commerce_config

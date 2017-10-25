@@ -74,7 +74,7 @@ class ecLibDb extends BaseDb
 	{
 		$queryStr  = 'SELECT * FROM tax_rate ';
 		$queryStr .=   'WHERE tr_id = ? ';
-		$queryStr .=   'ORDER BY tr_priority';
+		$queryStr .=   'ORDER BY tr_index DESC';
 		$ret = $this->selectRecord($queryStr, array($rateTypeId), $row);
 		if ($ret){
 			return $row['tr_rate'];
