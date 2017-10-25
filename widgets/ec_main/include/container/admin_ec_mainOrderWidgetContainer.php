@@ -724,7 +724,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 
 			// 価格作成
 			$this->ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
-			$this->ecObj->setTaxType($taxType, $this->_langId);		// 税種別設定
+			$this->ecObj->setTaxType($taxType);		// 税種別設定
 			$unitPrice = $this->ecObj->getPriceWithTax($price, $dispUnitPrice);	// 税込み価格取得
 			$dispUnitPriceNoSign = $dispUnitPrice;
 			$dispUnitPrice = $prePrice . $dispUnitPrice . $postPrice;

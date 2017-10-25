@@ -203,7 +203,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 
 		// 表示額作成
 		$this->ecObj->setCurrencyType($currency, $lang);		// 通貨設定
-		$this->ecObj->setTaxType($taxType, $lang);		// 税種別設定
+		$this->ecObj->setTaxType($taxType);		// 税種別設定
 		$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 	
 		// 画像を配列に保存

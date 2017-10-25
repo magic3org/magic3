@@ -602,7 +602,7 @@ class ContentApi extends BaseApi
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
 		
-		$rate = $addonObj->getTaxRate($taxType, $this->langId);
+		$rate = $addonObj->getTaxRate($taxType);
 		return $rate;
 	}
 	/**

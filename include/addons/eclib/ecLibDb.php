@@ -50,16 +50,14 @@ class ecLibDb extends BaseDb
 	 * 税情報を取得
 	 *
 	 * @param string	$id					税種別ID
-	 * @param string	$lang				言語ID
 	 * @param array     $row				レコード
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getTaxType($id, $lang, &$row)
+	function getTaxType($id, &$row)
 	{
 		$queryStr  = 'SELECT * FROM tax_type ';
 		$queryStr .=   'WHERE tt_id = ? ';
-		$queryStr .=   'AND tt_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $lang), $row);
+		$ret = $this->selectRecord($queryStr, array($id), $row);
 		return $ret;
 	}
 	

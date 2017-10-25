@@ -561,7 +561,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 
 			// 価格作成
 			self::$_ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
-			self::$_ecObj->setTaxType($taxType, $this->_langId);		// 税種別設定
+			self::$_ecObj->setTaxType($taxType);		// 税種別設定
 			$unitPrice = self::$_ecObj->getPriceWithTax($price, $dispUnitPrice);	// 税込み価格取得
 			$dispUnitPrice = $prePrice . $dispUnitPrice . $postPrice;
 		} else {
@@ -723,7 +723,7 @@ class ec_mainBaseWidgetContainer extends BaseWidgetContainer
 
 			// 価格作成
 			self::$_ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
-			self::$_ecObj->setTaxType($taxType, $this->_langId);		// 税種別設定
+			self::$_ecObj->setTaxType($taxType);		// 税種別設定
 			$unitPrice = self::$_ecObj->getPriceWithTax($price, $dispUnitPrice);	// 税込み価格取得
 			$dispUnitPrice = $prePrice . $dispUnitPrice . $postPrice;
 		} else {

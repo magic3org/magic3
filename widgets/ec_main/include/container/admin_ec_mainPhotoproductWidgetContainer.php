@@ -512,7 +512,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		// 各種価格を求める
 		$price = $this->ecObj->getCurrencyPrice($price);	// 端数調整
 		$this->ecObj->setCurrencyType($this->currency, $this->langId);		// 通貨設定
-		$this->ecObj->setTaxType($this->taxType, $this->langId);		// 税種別設定
+		$this->ecObj->setTaxType($this->taxType);		// 税種別設定
 		$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 		$delivPrice = $this->ecObj->getCurrencyPrice($delivPrice);	// 端数調整
 		
@@ -548,7 +548,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 			$this->db->getCurrency($defaultLang, array($this, 'currencyLoop'));
 		}
 		// 課税タイプ選択メニューの作成
-		$this->db->getTaxType($defaultLang, array($this, 'taxTypeLoop'));
+		$this->db->getTaxType(array($this, 'taxTypeLoop'));
 
 		// 商品画像プレビューの作成
 		// 画像小
@@ -652,7 +652,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 
 			// 価格作成
 			$this->ecObj->setCurrencyType($currency, $langId);		// 通貨設定
-			$this->ecObj->setTaxType($taxType, $langId);		// 税種別設定
+			$this->ecObj->setTaxType($taxType);		// 税種別設定
 			$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 			if (empty($taxType)) $dispPrice = '(未)';		// 税種別未選択のとき
 			

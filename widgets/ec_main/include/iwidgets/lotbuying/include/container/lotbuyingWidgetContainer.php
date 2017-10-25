@@ -167,7 +167,7 @@ class lotbuyingWidgetContainer extends BaseIWidgetContainer
 
 			// 価格作成
 			$this->ecObj->setCurrencyType($currency, $this->langId);		// 通貨設定
-			$this->ecObj->setTaxType($taxType, $this->langId);		// 税種別設定
+			$this->ecObj->setTaxType($taxType);		// 税種別設定
 			$unitPrice = $this->ecObj->getPriceWithTax($price, $dispUnitPrice);	// 税込み価格取得
 			$dispUnitPrice = $prePrice . $dispUnitPrice . $postPrice;
 		} else {

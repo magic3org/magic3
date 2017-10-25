@@ -23,6 +23,11 @@
 -- 商品価格マスターデータ変換
 UPDATE product_price SET pp_price_type_id = 'regular' WHERE pp_price_type_id = 'selling';
 
+-- 商品価格マスターのキー変更
+ALTER TABLE product_price DROP INDEX pp_product_class;-- ALTER TABLE product_price DROP CONSTRAINT product_price_pp_product_class_pp_product_id_pp_product_typ_key; -- ユニーク制約削除
+ALTER TABLE product_price ADD UNIQUE (pp_product_class,     pp_product_id,    pp_product_type_id,    pp_language_id,      pp_currency_id,   pp_price_type_id,      pp_history_index);                -- ユニーク制約再設定
+
+
 -- 価格種別マスター
 DELETE FROM price_type;
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('regular', 'ja', 10, '通常価格',      1);
@@ -30,6 +35,22 @@ INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) 
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('member',  'ja', 12, '会員価格',      3);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('disposal','ja', 13, '処分価格',      4);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 20, '仕入価格',      5);
+
+-- 税種別マスター(仕様変更)
+DROP TABLE IF EXISTS tax_type;
+CREATE TABLE tax_type (
+    tt_id                VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 種別ID
+    tt_tax_rate_type     INT            DEFAULT 0                     NOT NULL,      -- 税率種別(0=税率なし、1=固定(tax_rateテーブル))
+    tt_tax_inout         SMALLINT       DEFAULT 0                     NOT NULL,      -- 内税外税区分(0=外税、1=内税)
+    tt_tax_rate_id       VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 税率ID
+    tt_name              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 名称
+    tt_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
+    tt_geo_zone_id       TEXT                                         NOT NULL,      -- 対象区域(,区切り)
+    tt_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    PRIMARY KEY          (tt_id)
+) ENGINE=innodb;
+INSERT INTO tax_type (tt_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('sales', 1, 'rate_sales', '課税(外税)',   '1', 0);
+INSERT INTO tax_type (tt_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('notax', 0, '',           '非課税', '1', 1);
 
 -- 税率マスター(仕様変更)
 DROP TABLE IF EXISTS tax_rate;

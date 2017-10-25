@@ -74,16 +74,15 @@ class ecLib
 	 * 税種別設定
 	 *
 	 * @param string	$type		税種別
-	 * @param string	$lang		言語
 	 */
-	public function setTaxType($type, $lang)
+	public function setTaxType($type)
 	{
 		if (empty($type)){			// 税タイプ未選択のとき
 			$this->taxRate = 0;
 			$this->taxType = '';
 		} else if ($type != $this->taxType){
 			// 税種別情報を取得
-			$ret = $this->db->getTaxType($type, $lang, $row);
+			$ret = $this->db->getTaxType($type, $row);
 			if ($ret){
 				// 税率を取得
 				// 税率が取得できないときは0とする
@@ -97,14 +96,13 @@ class ecLib
 	 * 税率を取得
 	 *
 	 * @param string	$type		税種別
-	 * @param string	$lang		言語
 	 * @return float				税率
 	 */
-	public function getTaxRate($type, $lang)
+	public function getTaxRate($type)
 	{
 		$rate = 0;
 		// 税種別情報を取得
-		$ret = $this->db->getTaxType($type, $lang, $row);
+		$ret = $this->db->getTaxType($type, $row);
 		if ($ret){
 			// 税率を取得
 			$rate = $this->db->getTaxRate($row['tt_tax_rate_id']);

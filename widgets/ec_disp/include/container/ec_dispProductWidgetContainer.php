@@ -230,7 +230,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 
 					// 価格作成
 					$this->ecObj->setCurrencyType($currency, $this->langId);		// 通貨設定
-					$this->ecObj->setTaxType($taxType, $this->langId);		// 税種別設定
+					$this->ecObj->setTaxType($taxType);		// 税種別設定
 					$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 				} else {		// 商品情報が取得できないときは、カートの商品をキャンセル
 					$isValidItem = false;
@@ -432,7 +432,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 			
 				// 表示額作成
 				$this->ecObj->setCurrencyType($currency, $lang);		// 通貨設定
-				$this->ecObj->setTaxType($taxType, $lang);		// 税種別設定
+				$this->ecObj->setTaxType($taxType);		// 税種別設定
 				$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 			
 				// 画像を取得
@@ -582,7 +582,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 
 			// 表示額作成
 			$this->ecObj->setCurrencyType($currency, $lang);		// 通貨設定
-			$this->ecObj->setTaxType($taxType, $lang);		// 税種別設定
+			$this->ecObj->setTaxType($taxType);		// 税種別設定
 			$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 			
 			// 画像を取得

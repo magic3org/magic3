@@ -59,16 +59,14 @@ class ec_mainProductDb extends BaseDb
 	/**
 	 * 税一覧を取得
 	 *
-	 * @param string	$lang				言語
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getTaxType($lang, $callback)
+	function getTaxType($callback)
 	{
 		$queryStr = 'SELECT * FROM tax_type ';
-		$queryStr .=  'WHERE tt_language_id = ? ';
 		$queryStr .=  'ORDER BY tt_index';
-		$this->selectLoop($queryStr, array($lang), $callback, null);
+		$this->selectLoop($queryStr, array(), $callback, null);
 	}
 	/**
 	 * 単位名から単位IDを取得
@@ -84,24 +82,6 @@ class ec_mainProductDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($lang, $name), $row);
 		if ($ret){
 			return $row['ut_id'];
-		} else {
-			return '';
-		}
-	}
-	/**
-	 * 税種別名から税種別IDを取得
-	 *
-	 * @param string	$lang				言語
-	 * @param string	$name				名前
-	 * @return string						税種別ID
-	 */
-	function getTaxTypeIdByName($lang, $name)
-	{
-		$queryStr = 'SELECT * FROM tax_type ';
-		$queryStr .=  'WHERE tt_language_id = ? AND tt_name = ?';
-		$ret = $this->selectRecord($queryStr, array($lang, $name), $row);
-		if ($ret){
-			return $row['tt_id'];
 		} else {
 			return '';
 		}

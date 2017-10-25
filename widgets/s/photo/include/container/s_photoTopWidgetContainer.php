@@ -775,7 +775,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 
 			// 価格作成
 			$ecLibObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
-			$ecLibObj->setTaxType($taxType, $this->_langId);		// 税種別設定
+			$ecLibObj->setTaxType($taxType);		// 税種別設定
 			$totalPrice = $ecLibObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 		} else {		// 商品情報が取得できないときは、カートの商品をキャンセル
 			$this->writeError(__METHOD__, '商品情報が取得できません。', 1100,
@@ -1034,7 +1034,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 
 		// 表示額作成
 		$this->ecObj->setCurrencyType($currency, $this->_langId);		// 通貨設定
-		$this->ecObj->setTaxType($taxType, $this->_langId);		// 税種別設定
+		$this->ecObj->setTaxType($taxType);		// 税種別設定
 		$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 		
 		$row = array(
