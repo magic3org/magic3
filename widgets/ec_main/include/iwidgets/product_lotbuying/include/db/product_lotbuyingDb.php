@@ -87,12 +87,12 @@ class product_lotbuyingDb extends BaseDb
 	 */
 	function getProductByProductId($id, $langId, $currencyId, &$row, &$imageRows)
 	{
-		$queryStr  = 'SELECT * FROM product RIGHT JOIN product_price ON (pt_id = pp_product_id OR pp_product_id = 0) AND pp_deleted = false ';
+		$queryStr  = 'SELECT * FROM product RIGHT JOIN product_price ON (pt_id = pp_product_id OR pp_product_id = 0) AND pp_product_class = \'\' AND pp_deleted = false ';// 商品の個別価格とデフォルト価格を取得
 		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
 		$queryStr .=   'AND pt_id = ? ';
 		$queryStr .=   'AND pt_language_id = ? ';
 		$queryStr .=   'AND cu_id = ? ';
-		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
+		$queryStr .=   'ORDER BY pp_product_id DESC';		// デフォルト価格よりも個別価格を優先
 		$ret = $this->selectRecord($queryStr, array($id, $langId, $currencyId), $row);
 		if ($ret){
 			$queryStr  = 'SELECT * FROM product_image ';

@@ -75,8 +75,9 @@ class ec_product_slideDb extends BaseDb
 		if ($ret){
 			$queryStr  = 'SELECT * FROM product_price ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
+			$queryStr .=     'AND pp_product_class = ? ';		// 商品クラス
 			$queryStr .=     'AND pp_product_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
+			$this->selectRecords($queryStr, array(''/*デフォルト商品クラス*/, $row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
