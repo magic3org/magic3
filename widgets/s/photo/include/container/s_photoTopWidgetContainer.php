@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: s_photoTopWidgetContainer.php 5602 2013-02-06 14:17:57Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/s_photoBaseWidgetContainer.php');
@@ -765,7 +765,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 		}
 		// 商品情報を取得
 		$isValidItem = true;		// 現在のカートのデータが有効かどうか
-		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::REGULAR_PRICE, $this->_langId, $row);
+		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::REGULAR_PRICE, $this->_langId, self::DEFAULT_CURRENCY, $row);
 		if ($ret){
 			// 価格を取得
 			$productId = $row['ht_id'];	// 画像商品ID
@@ -1351,7 +1351,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 	function getPrice($srcRows, $priceType)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == self::DEFAULT_CURRENCY && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

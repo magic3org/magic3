@@ -441,20 +441,22 @@ class photo_mainDb extends BaseDb
 	 * @param string $productType	製品ID
 	 * @param string $priceType		価格タイプ
 	 * @param string $lang			言語ID
+	 * @param string $currency		通貨ID
 	 * @param array $row			取得データ
 	 * @return						true=正常、false=異常
 	 */
-	function getPhotoInfoWithPrice($publicId, $productClass, $productType, $priceType, $lang, &$row)
+	function getPhotoInfoWithPrice($publicId, $productClass, $productType, $priceType, $lang, $currency, &$row)
 	{
-		$queryStr  = 'SELECT * FROM photo RIGHT JOIN product_price ON (ht_id = pp_product_id OR pp_product_id = 0) AND ht_language_id = pp_language_id AND pp_deleted = false ';
+		$queryStr  = 'SELECT * FROM photo RIGHT JOIN product_price ON (ht_id = pp_product_id OR pp_product_id = 0) AND pp_deleted = false ';
 		$queryStr .=   'WHERE ht_deleted = false ';
 		$queryStr .=     'AND ht_language_id = ? ';
 		$queryStr .=     'AND ht_public_id = ? ';
 		$queryStr .=     'AND pp_product_class = ? ';
 		$queryStr .=     'AND pp_product_type_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
+		$queryStr .=     'AND cu_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
-		$ret = $this->selectRecord($queryStr, array($lang, $publicId, $productClass, $productType, $priceType), $row);
+		$ret = $this->selectRecord($queryStr, array($lang, $publicId, $productClass, $productType, $priceType, $currency), $row);
 		return $ret;
 	}
 	/**
@@ -1105,8 +1107,7 @@ class photo_mainDb extends BaseDb
 			$queryStr .=     'AND pp_product_class = ? ';		// 商品クラス
 			$queryStr .=     'AND pp_product_id = ? ';			// 商品ID(画像ID)
 			$queryStr .=     'AND pp_product_type_id = ? ';		// 商品タイプ
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $row['hp_id'], $row['hp_language_id']), $row2);
+			$this->selectRecords($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $row['hp_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない

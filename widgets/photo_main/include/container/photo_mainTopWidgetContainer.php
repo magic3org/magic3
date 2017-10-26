@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -841,7 +841,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		}
 		// 商品情報を取得
 		$isValidItem = true;		// 現在のカートのデータが有効かどうか
-		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::REGULAR_PRICE, $this->_langId, $row);
+		$ret = self::$_mainDb->getPhotoInfoWithPrice($this->photoId, self::PRODUCT_CLASS, $productType, self::REGULAR_PRICE, $this->_langId, self::DEFAULT_CURRENCY, $row);
 		if ($ret){
 			// 価格を取得
 			$productId = $row['ht_id'];	// 画像商品ID
@@ -1407,7 +1407,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	function getPrice($srcRows, $priceType)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == self::DEFAULT_CURRENCY && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

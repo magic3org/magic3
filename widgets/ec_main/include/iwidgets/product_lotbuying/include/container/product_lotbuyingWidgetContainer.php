@@ -160,7 +160,7 @@ class product_lotbuyingWidgetContainer extends BaseIWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = $this->db->getPhotoInfoWithPrice($productId, $productClass, $productType, self::REGULAR_PRICE, $this->langId, $row);
+				$ret = $this->db->getPhotoInfoWithPrice($productId, $productClass, $productType, self::REGULAR_PRICE, $this->langId, $fetchedRow['cu_id'], $row);
 				break;
 			case self::PRODUCT_CLASS_DEFAULT:	// 一般商品のとき
 				// 表示用の商品名、商品コード作成
@@ -171,7 +171,7 @@ class product_lotbuyingWidgetContainer extends BaseIWidgetContainer
 				if (!$fetchedRow['pt_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 商品価格情報を取得
-				$ret = $this->db->getProductByProductId($productId, $this->langId, $row, $imageRows);
+				$ret = $this->db->getProductByProductId($productId, $this->langId, $fetchedRow['cu_id'], $row, $imageRows);
 				break;
 		}
 		

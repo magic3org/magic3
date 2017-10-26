@@ -678,7 +678,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				if (!$fetchedRow['ht_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 画像価格情報を取得
-				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::REGULAR_PRICE, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoInfoWithPrice($productId, $productClass, $productType, ec_mainCommonDef::REGULAR_PRICE, $this->_langId, $fetchedRow['cu_id'], $row);
 				
 				// 画像詳細へのリンク
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId;
@@ -698,7 +698,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 				if (!$fetchedRow['pt_visible']) $priceAvailable = false;		// 商品が表示不可のときは価格を無効とする
 				
 				// 商品価格情報を取得
-				$ret = self::$_mainDb->getProductByProductId($productId, $this->_langId, $row, $imageRows);
+				$ret = self::$_mainDb->getProductByProductId($productId, $this->_langId, $fetchedRow['cu_id'], $row, $imageRows);
 				
 				// 商品詳細へのリンク
 				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId;

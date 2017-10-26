@@ -26,6 +26,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	private $langId;			// 言語
 	private $unitTypeId;		// 選択単位
 	private $currency;			// 通貨
+	private $defaultCurrencyId;	// デフォルトの通貨ID
 	private $taxType;			// 税種別
 	private $ecObj;			// 共通ECオブジェクト
 	private $categoryListData;		// 商品カテゴリー
@@ -75,6 +76,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		
 		// EC用共通オブジェクト取得
 		$this->ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
+		
+		$this->defaultCurrencyId = $this->ecObj->getDefaultCurrency();	// デフォルトの通貨ID
 		
 		$this->sortKeyType = array('index'/*表示順*/, 'stock'/*在庫数*/, 'id'/*商品ID*/, 'date'/*更新日時*/, 'name'/*商品名*/, 'code'/*商品コード*/, 'price'/*商品価格*/, 'visible'/*公開状態*/);
 		$this->imageTypes = array('s', 'm', 'l');			// 画像タイプ
@@ -544,12 +547,12 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->defaultCurrencyId, $price, $startDt, $endDt);		// 単品商品で追加
 				// セール価格
 				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE] && floatval($salePrice) > 0){
-					$priceArray[] = array(self::SALE_PRICE, $this->currency, floatval($salePrice), $startDt, $endDt);
+					$priceArray[] = array(self::SALE_PRICE, $this->defaultCurrencyId, floatval($salePrice), $startDt, $endDt);
 				} else {
-					$priceArray[] = array(self::SALE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
+					$priceArray[] = array(self::SALE_PRICE, $this->defaultCurrencyId, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
 				}
 				
 				// 画像情報の作成
@@ -663,12 +666,12 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$priceArray = array();
 				$startDt = $this->gEnv->getInitValueOfTimestamp();
 				$endDt = $this->gEnv->getInitValueOfTimestamp();
-				$priceArray[] = array(self::REGULAR_PRICE, $this->currency, $price, $startDt, $endDt);		// 単品商品で追加
+				$priceArray[] = array(self::REGULAR_PRICE, $this->defaultCurrencyId, $price, $startDt, $endDt);		// 単品商品で追加
 				// セール価格
 				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE] && floatval($salePrice) > 0){
-					$priceArray[] = array(self::SALE_PRICE, $this->currency, floatval($salePrice), $startDt, $endDt);
+					$priceArray[] = array(self::SALE_PRICE, $this->defaultCurrencyId, floatval($salePrice), $startDt, $endDt);
 				} else {
-					$priceArray[] = array(self::SALE_PRICE, $this->currency, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
+					$priceArray[] = array(self::SALE_PRICE, $this->defaultCurrencyId, null/*削除*/, $startDt, $endDt);			// 0の場合はレコードを削除
 				}
 				
 				// 画像情報の作成
@@ -958,13 +961,13 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$updateDt = $this->convertToDispDateTime($row['pt_create_dt']);	// 更新日時
 			
 				// 価格を取得
-				$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
+				$priceArray = $this->getPrice($row2, self::REGULAR_PRICE, $this->defaultCurrencyId);
 				$price = $priceArray['pp_price'];	// 価格
 				$this->currency = $priceArray['pp_currency_id'];	// 通貨
 				// セール価格
 				$salePrice = '';
 				if (self::$_configArray[ec_mainCommonDef::CF_E_USE_SALE_PRICE]){			// セール価格を使用する場合
-					$priceArray = $this->getPrice($row2, self::SALE_PRICE);
+					$priceArray = $this->getPrice($row2, self::SALE_PRICE, $this->defaultCurrencyId);
 					if (floatval($priceArray['pp_price']) > 0) $salePrice = $priceArray['pp_price'];	// 価格
 				}
 
@@ -1066,7 +1069,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		// 各種価格を求める
 		$price = $this->ecObj->getCurrencyPrice($price);	// 端数調整
 		if ($salePrice != '') $salePrice = $this->ecObj->getCurrencyPrice($salePrice);	// 端数調整
-		$this->ecObj->setCurrencyType($this->currency, $this->langId);		// 通貨設定
+		$this->ecObj->setCurrencyType($this->defaultCurrencyId, $this->langId);		// 通貨設定
 		$this->ecObj->setTaxType($this->taxType);		// 税種別設定
 		$totalPrice = $this->ecObj->getPriceWithTax($price, $dispPrice);	// 税込み価格取得
 		$delivPrice = $this->ecObj->getCurrencyPrice($delivPrice);	// 端数調整
@@ -1117,9 +1120,9 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->db->getUnitType($defaultLang, array($this, 'unitTypeLoop'));
 
 		// 通貨タイプ選択メニュー作成
-		if ($this->gEnv->getMultiLanguage()){	// 多言語対応のとき
+/*		if ($this->gEnv->getMultiLanguage()){	// 多言語対応のとき
 			$this->db->getCurrency($defaultLang, array($this, 'currencyLoop'));
-		}
+		}*/
 		// 課税タイプ選択メニューの作成
 		$this->db->getTaxType(array($this, 'taxTypeLoop'));
 
@@ -1190,7 +1193,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$langId = $row['pt_language_id'];
 			
 			// 価格を取得
-			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
+			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE, $this->defaultCurrencyId);
 			$price = $priceArray['pp_price'];	// 価格
 			$currency = $priceArray['pp_currency_id'];	// 通貨
 			$taxType = $row['pt_tax_type_id'];					// 税種別			
@@ -1310,12 +1313,13 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	 *
 	 * @param array  	$srcRows			価格リスト
 	 * @param string	$priceType			価格のタイプ
+	 * @param string    $currencyId			通貨ID
 	 * @return array						取得した価格行
 	 */
-	function getPrice($srcRows, $priceType)
+	function getPrice($srcRows, $priceType, $currencyId)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == $currencyId && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

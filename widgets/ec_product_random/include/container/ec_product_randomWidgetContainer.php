@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_product_randomWidgetContainer.php 5462 2012-12-13 03:33:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -20,6 +20,7 @@ class ec_product_randomWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
+	private $currencyId;	// 現在の通貨ID
 	private $currentPageUrl;	// 現在のページ
 	private $viewStyle;		// 表示モード
 	private $viewCountArray;	// 表示回数更新用
@@ -53,6 +54,8 @@ class ec_product_randomWidgetContainer extends BaseWidgetContainer
 		// EC用共通オブジェクト取得
 		$this->ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
 		//$this->ecObj->initByDefault();		// デフォルト値で初期化
+		
+		$this->currencyId = $this->ecObj->getDefaultCurrency();		// 現在の通貨ID
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -298,7 +301,7 @@ class ec_product_randomWidgetContainer extends BaseWidgetContainer
 	function getPrice($srcRows, $priceType)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == $this->currencyId && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

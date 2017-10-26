@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_dispProductWidgetContainer.php 5559 2013-01-16 13:09:11Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -21,6 +21,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 現在の言語ID
+	private $currencyId;	// 現在の通貨ID
 	private $viewStyle;		// 表示スタイル
 	private $categoryId;		// カテゴリーID
 	private $productId;			// 製品ID
@@ -79,6 +80,8 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 		
 		// 価格計算用オブジェクト取得
 		$this->ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
+		
+		$this->currencyId = $this->ecObj->getDefaultCurrency();		// 現在の通貨ID
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -707,7 +710,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 	function getPrice($srcRows, $priceType)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == $this->currencyId && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

@@ -26,7 +26,7 @@ UPDATE product_price SET pp_price_type_id = 'regular' WHERE pp_price_type_id = '
 -- 商品価格マスターのキー変更
 ALTER TABLE product_price DROP INDEX pp_product_class;-- ALTER TABLE product_price DROP CONSTRAINT product_price_pp_product_class_pp_product_id_pp_product_typ_key; -- ユニーク制約削除
 ALTER TABLE product_price DROP COLUMN pp_language_id;  -- カラム削除
-ALTER TABLE product_price ADD UNIQUE (pp_product_class,     pp_product_id,    pp_product_type_id,    pp_currency_id,   pp_price_type_id,      pp_history_index);                -- ユニーク制約再設定
+ALTER TABLE product_price ADD UNIQUE (pp_product_class,     pp_product_id,    pp_product_type_id,     pp_price_type_id, pp_currency_id,     pp_history_index);                -- ユニーク制約再設定
 
 -- 価格種別マスター
 DELETE FROM price_type;

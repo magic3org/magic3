@@ -146,11 +146,10 @@ class ec_dispDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		if ($ret){
 			$queryStr  = 'SELECT * FROM product_price ';
-			$queryStr .=   'LEFT JOIN currency ON pp_currency_id = cu_id AND pp_language_id = cu_language_id ';
+			$queryStr .=   'LEFT JOIN currency ON pp_currency_id = cu_id ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
@@ -191,11 +190,10 @@ class ec_dispDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
 		if ($ret){
 			$queryStr  = 'SELECT * FROM product_price ';
-			$queryStr .=   'LEFT JOIN currency ON pp_currency_id = cu_id AND pp_language_id = cu_language_id ';
+			$queryStr .=   'LEFT JOIN currency ON pp_currency_id = cu_id ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない

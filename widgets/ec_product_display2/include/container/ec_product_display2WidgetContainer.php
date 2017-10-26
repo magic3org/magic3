@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_product_display2WidgetContainer.php 5482 2012-12-22 10:13:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -22,6 +22,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 	private $db;			// DB接続オブジェクト
 	private $ecObj;					// EC共通ライブラリオブジェクト
 	private $langId;		// 現在の言語
+	private $currencyId;	// 現在の通貨ID
 	private $maxCount;		// 最大表示項目数
 	private $viewItemCount;		// 表示項目数
 	private $imageWidth;	// 画像幅
@@ -64,6 +65,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 		// 価格計算用オブジェクト取得
 		$this->ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
 		
+		$this->currencyId = $this->ecObj->getDefaultCurrency();		// 現在の通貨ID
 		$this->imageSizeArray = array(self::PRODUCT_IMAGE_SMALL, self::PRODUCT_IMAGE_MEDIUM, self::PRODUCT_IMAGE_LARGE);		// 画像サイズ
 	}
 	/**
@@ -313,7 +315,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 	function getPrice($srcRows, $priceType)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == $this->currencyId && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

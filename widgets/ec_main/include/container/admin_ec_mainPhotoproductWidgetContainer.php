@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,6 +24,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 	private $langId;			// 言語
 	private $unitTypeId;		// 選択単位
 	private $currency;			// 通貨
+	private $defaultCurrencyId;	// デフォルトの通貨ID
 	private $taxType;			// 税種別
 	private $ecObj;			// 共通ECオブジェクト
 	const MAX_HIER_LEVEL = 20;		// カテゴリー階層最大値
@@ -45,6 +46,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		
 		// DBオブジェクト作成
 		$this->db = new ec_mainPhotoProductDb();
+		
+		$this->defaultCurrencyId = $this->ecObj->getDefaultCurrency();	// デフォルトの通貨ID
 		
 		// EC用共通オブジェクト取得
 		$this->ecObj = $this->gInstance->getObject(self::PRICE_OBJ_ID);
@@ -494,7 +497,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 					$updateDt = $this->convertToDispDateTime($row['hp_create_dt']);	// 更新日時
 				
 					// 価格を取得
-					$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
+					$priceArray = $this->getPrice($row2, self::REGULAR_PRICE, $this->defaultCurrencyId);
 					$price = $priceArray['pp_price'];	// 価格
 					$this->currency = $priceArray['pp_currency_id'];	// 通貨
 				
@@ -544,9 +547,9 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		$this->db->getUnitType($defaultLang, array($this, 'unitTypeLoop'));
 
 		// 通貨タイプ選択メニュー作成
-		if ($this->gEnv->getMultiLanguage()){	// 多言語対応のとき
+/*		if ($this->gEnv->getMultiLanguage()){	// 多言語対応のとき
 			$this->db->getCurrency($defaultLang, array($this, 'currencyLoop'));
-		}
+		}*/
 		// 課税タイプ選択メニューの作成
 		$this->db->getTaxType(array($this, 'taxTypeLoop'));
 
@@ -645,7 +648,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 			$langId = $row['hp_language_id'];
 			
 			// 価格を取得
-			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE);
+			$priceArray = $this->getPrice($row2, self::REGULAR_PRICE, $this->defaultCurrencyId);
 			$price = $priceArray['pp_price'];	// 価格
 			$currency = $priceArray['pp_currency_id'];	// 通貨
 			$taxType = $row['hp_tax_type_id'];					// 税種別			
@@ -762,12 +765,13 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 	 *
 	 * @param array  	$srcRows			価格リスト
 	 * @param string	$priceType			価格のタイプ
+	 * @param string    $currencyId			通貨ID
 	 * @return array						取得した価格行
 	 */
-	function getPrice($srcRows, $priceType)
+	function getPrice($srcRows, $priceType, $currencyId)
 	{
 		for ($i = 0; $i < count($srcRows); $i++){
-			if ($srcRows[$i]['pp_price_type_id'] == $priceType){
+			if ($srcRows[$i]['pp_currency_id'] == $currencyId && $srcRows[$i]['pp_price_type_id'] == $priceType){
 				return $srcRows[$i];
 			}
 		}

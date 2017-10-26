@@ -32,8 +32,7 @@ class ec_product_display2Db extends BaseDb
 		$queryStr  = 'SELECT * FROM product_price ';
 		$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 		$queryStr .=     'AND pp_product_id = ? ';
-		$queryStr .=     'AND pp_language_id = ? ';
-		$this->selectRecords($queryStr, array($id, $langId), $priceRows);
+		$this->selectRecords($queryStr, array($id), $priceRows);
 		
 		$queryStr  = 'SELECT * FROM product_image ';
 		$queryStr .=   'WHERE im_deleted = false ';// 削除されていない

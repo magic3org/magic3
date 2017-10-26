@@ -170,8 +170,7 @@ class ec_mainProductDb extends BaseDb
 			$queryStr  = 'SELECT * FROM product_price ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
@@ -220,8 +219,7 @@ class ec_mainProductDb extends BaseDb
 			$queryStr  = 'SELECT * FROM product_price ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
@@ -270,8 +268,7 @@ class ec_mainProductDb extends BaseDb
 			$queryStr  = 'SELECT * FROM product_price ';
 			$queryStr .=   'WHERE pp_deleted = false ';// 削除されていない
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array($row['pt_id'], $row['pt_language_id']), $row2);
+			$this->selectRecords($queryStr, array($row['pt_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
@@ -468,7 +465,7 @@ class ec_mainProductDb extends BaseDb
 		// 価格の更新
 		for ($i = 0; $i < count($prices); $i++){
 			$price = $prices[$i];
-			$ret = $this->updatePrice($pId, $lang, $price[0], $price[1], $price[2], $price[3], $price[4], $userId, $now);
+			$ret = $this->updatePrice($pId, $price[0], $price[1], $price[2], $price[3], $price[4], $userId, $now);
 			if (!$ret){
 				if ($startTran) $this->endTransaction();
 				return false;
@@ -561,8 +558,7 @@ class ec_mainProductDb extends BaseDb
 			$queryStr .=     'pp_update_dt = ? ';
 			$queryStr .=   'WHERE pp_deleted = false ';
 			$queryStr .=     'AND pp_product_id = ? ';
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->execStatement($queryStr, array($userId, $now, $id, $langId));
+			$this->execStatement($queryStr, array($userId, $now, $id));
 
 			// 画像レコードを削除
 			$queryStr  = 'UPDATE product_image ';
@@ -746,7 +742,6 @@ class ec_mainProductDb extends BaseDb
 	 * 商品価格の更新
 	 *
 	 * @param int        $productId		商品ID(商品タイプに応じて参照するテーブルが異なる)
-	 * @param string     $langId		言語ID
 	 * @param string     $priceType		価格の種別ID(price_typeテーブル)
 	 * @param string     $currency		通貨種別
 	 * @param float      $price			単価(税抜)。nullの場合はレコードを削除。
@@ -756,17 +751,17 @@ class ec_mainProductDb extends BaseDb
 	 * @param timestamp  $now			現時日時
 	 * @return bool		 true = 成功、false = 失敗
 	 */
-	function updatePrice($productId, $langId, $priceType, $currency, $price, $startDt, $endDt, $userId, $now)
+	function updatePrice($productId, $priceType, $currency, $price, $startDt, $endDt, $userId, $now)
 	{
 		// 指定のレコードの履歴インデックス取得
 		$historyIndex = 0;		// 履歴番号
 		$queryStr  = 'SELECT * FROM product_price ';
 		$queryStr .=   'WHERE pp_product_id = ? ';
-		$queryStr .=     'AND pp_language_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
+		$queryStr .=     'AND pp_currency_id = ? ';
 		$queryStr .=  'ORDER BY pp_history_index desc ';
 		$queryStr .=    'LIMIT 1';
-		$ret = $this->selectRecord($queryStr, array($productId, $langId, $priceType), $row);
+		$ret = $this->selectRecord($queryStr, array($productId, $priceType, $currency), $row);
 		if ($ret){
 			$historyIndex = $row['pp_history_index'] + 1;
 		
@@ -790,7 +785,6 @@ class ec_mainProductDb extends BaseDb
 		$queryStr = 'INSERT INTO product_price ';
 		$queryStr .=  '(';
 		$queryStr .=  'pp_product_id, ';
-		$queryStr .=  'pp_language_id, ';
 		$queryStr .=  'pp_price_type_id, ';
 		$queryStr .=  'pp_history_index, ';
 		$queryStr .=  'pp_currency_id, ';
@@ -800,8 +794,8 @@ class ec_mainProductDb extends BaseDb
 		$queryStr .=  'pp_create_user_id, ';
 		$queryStr .=  'pp_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$ret =$this->execStatement($queryStr, array($productId, $langId, $priceType, $historyIndex, $currency, $price, $startDt, $endDt, $userId, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$ret =$this->execStatement($queryStr, array($productId, $priceType, $historyIndex, $currency, $price, $startDt, $endDt, $userId, $now));
 		return $ret;
 	}
 	/**

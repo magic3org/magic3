@@ -153,8 +153,7 @@ class ec_mainPhotoProductDb extends BaseDb
 			$queryStr .=     'AND pp_product_class = ? ';		// 商品クラス
 			$queryStr .=     'AND pp_product_id = ? ';			// 商品ID(画像ID)
 			$queryStr .=     'AND pp_product_type_id = ? ';		// 商品タイプ
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->selectRecords($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $row['hp_id'], $row['hp_language_id']), $row2);
+			$this->selectRecords($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $row['hp_id']), $row2);
 			
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
@@ -304,7 +303,7 @@ class ec_mainPhotoProductDb extends BaseDb
 		// 価格の更新
 		for ($i = 0; $i < count($prices); $i++){
 			$price = $prices[$i];
-			$ret = $this->updatePrice($pId, $lang, $price[0], $price[1], $price[2], $price[3], $price[4], $userId, $now);
+			$ret = $this->updatePrice($pId, $price[0], $price[1], $price[2], $price[3], $price[4], $userId, $now);
 			if (!$ret){
 				if ($startTran) $this->endTransaction();
 				return false;
@@ -381,8 +380,7 @@ class ec_mainPhotoProductDb extends BaseDb
 			$queryStr .=     'AND pp_product_class = ? ';		// 商品クラス
 			$queryStr .=     'AND pp_product_id = ? ';
 			$queryStr .=     'AND pp_product_type_id = ? ';		// 商品タイプ
-			$queryStr .=     'AND pp_language_id = ? ';
-			$this->execStatement($queryStr, array($userId, $now, self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $id, $langId));
+			$this->execStatement($queryStr, array($userId, $now, self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $id));
 			
 			// 画像レコードを削除
 			$queryStr  = 'UPDATE product_image ';
@@ -462,7 +460,6 @@ class ec_mainPhotoProductDb extends BaseDb
 	 * 商品価格の更新
 	 *
 	 * @param int        $productId		商品ID(商品タイプに応じて参照するテーブルが異なる)
-	 * @param string     $langId		言語ID
 	 * @param string     $priceType		価格の種別ID(price_typeテーブル)
 	 * @param string     $currency		通貨種別
 	 * @param float      $price			単価(税抜)
@@ -472,7 +469,7 @@ class ec_mainPhotoProductDb extends BaseDb
 	 * @param timestamp  $now			現時日時
 	 * @return bool		 true = 成功、false = 失敗
 	 */
-	function updatePrice($productId, $langId, $priceType, $currency, $price, $startDt, $endDt, $userId, $now)
+	function updatePrice($productId, $priceType, $currency, $price, $startDt, $endDt, $userId, $now)
 	{
 		// 指定のレコードの履歴インデックス取得
 		$historyIndex = 0;		// 履歴番号
@@ -480,10 +477,10 @@ class ec_mainPhotoProductDb extends BaseDb
 		$queryStr .=   'WHERE pp_product_class = ? ';		// 商品クラス
 		$queryStr .=     'AND pp_product_id = ? ';
 		$queryStr .=     'AND pp_product_type_id = ? ';		// 商品タイプ
-		$queryStr .=     'AND pp_language_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
+		$queryStr .=     'AND pp_currency_id = ? ';
 		$queryStr .=  'ORDER BY pp_history_index DESC ';
-		$ret = $this->selectRecord($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $productId, $langId, $priceType), $row);
+		$ret = $this->selectRecord($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $productId, $priceType, $currency), $row);
 		if ($ret){
 			$historyIndex = $row['pp_history_index'] + 1;
 		
@@ -506,7 +503,6 @@ class ec_mainPhotoProductDb extends BaseDb
 		$queryStr .=  'pp_product_class, ';
 		$queryStr .=  'pp_product_id, ';
 		$queryStr .=  'pp_product_type_id, ';// 商品タイプ
-		$queryStr .=  'pp_language_id, ';
 		$queryStr .=  'pp_price_type_id, ';
 		$queryStr .=  'pp_history_index, ';
 		$queryStr .=  'pp_currency_id, ';
@@ -516,8 +512,8 @@ class ec_mainPhotoProductDb extends BaseDb
 		$queryStr .=  'pp_create_user_id, ';
 		$queryStr .=  'pp_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$ret =$this->execStatement($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $productId, $langId, 
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$ret =$this->execStatement($queryStr, array(self::PRODUCT_CLASS_PHOTO/*フォト画像クラス*/, 0/*全画像対象*/, $productId, 
 													$priceType, $historyIndex, $currency, $price, $startDt, $endDt, $userId, $now));
 		return $ret;
 	}

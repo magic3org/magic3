@@ -423,12 +423,13 @@ class ec_mainDb extends BaseDb
 	 * @param string $productType	製品ID
 	 * @param string $priceType		価格タイプ
 	 * @param string $lang			言語ID
+	 * @param string $currency		通貨ID
 	 * @param array $row			取得データ
 	 * @return						true=正常、false=異常
 	 */
-	function getPhotoInfoWithPrice($id, $productClass, $productType, $priceType, $lang, &$row)
+	function getPhotoInfoWithPrice($id, $productClass, $productType, $priceType, $lang, $currency, &$row)
 	{
-		$queryStr  = 'SELECT * FROM photo RIGHT JOIN product_price ON (ht_id = pp_product_id OR pp_product_id = 0) AND ht_language_id = pp_language_id AND pp_deleted = false ';
+		$queryStr  = 'SELECT * FROM photo RIGHT JOIN product_price ON (ht_id = pp_product_id OR pp_product_id = 0) AND pp_deleted = false ';
 		$queryStr .=   'WHERE ht_deleted = false ';
 		$queryStr .=     'AND ht_language_id = ? ';
 		//$queryStr .=     'AND ht_public_id = ? ';
@@ -436,8 +437,9 @@ class ec_mainDb extends BaseDb
 		$queryStr .=     'AND pp_product_class = ? ';
 		$queryStr .=     'AND pp_product_type_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
+		$queryStr .=     'AND cu_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
-		$ret = $this->selectRecord($queryStr, array($lang, $id, $productClass, $productType, $priceType), $row);
+		$ret = $this->selectRecord($queryStr, array($lang, $id, $productClass, $productType, $priceType, $currency), $row);
 		return $ret;
 	}
 	/**
@@ -844,19 +846,21 @@ class ec_mainDb extends BaseDb
 	 *
 	 * @param int		$id					商品ID
 	 * @param string	$langId				言語ID
+	 * @param string    $currencyId			通貨ID
 	 * @param array     $row				レコード
 	 * @param array     $imageRows			商品画像
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getProductByProductId($id, $langId, &$row, &$imageRows)
+	function getProductByProductId($id, $langId, $currencyId, &$row, &$imageRows)
 	{
 		$queryStr  = 'SELECT * FROM product LEFT JOIN product_record ON pt_id = pe_product_id AND pt_language_id = pe_language_id ';
-		$queryStr .=   'RIGHT JOIN product_price ON (pt_id = pp_product_id OR pp_product_id = 0) AND pt_language_id = pp_language_id AND pp_deleted = false ';
-		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
+		$queryStr .=   'RIGHT JOIN product_price ON (pt_id = pp_product_id OR pp_product_id = 0) AND pp_deleted = false ';
+		$queryStr .= 'WHERE pt_deleted = false ';	// 削除されていない
 		$queryStr .=   'AND pt_id = ? ';
 		$queryStr .=   'AND pt_language_id = ? ';
+		$queryStr .=   'AND cu_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		$ret = $this->selectRecord($queryStr, array($id, $langId, $currencyId), $row);
 		if ($ret){
 			$queryStr  = 'SELECT * FROM product_image ';
 			$queryStr .=   'WHERE im_deleted = false ';// 削除されていない
