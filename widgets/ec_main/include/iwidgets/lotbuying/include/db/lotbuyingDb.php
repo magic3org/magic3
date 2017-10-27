@@ -70,7 +70,7 @@ class lotbuyingDb extends BaseDb
 		$queryStr .=     'AND pp_product_class = ? ';
 		$queryStr .=     'AND pp_product_type_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
-		$queryStr .=     'AND cu_id = ? ';
+		$queryStr .=     'AND pp_currency_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
 		$ret = $this->selectRecord($queryStr, array($lang, $id, $productClass, $productType, $priceType, $currency), $row);
 		return $ret;
@@ -91,7 +91,7 @@ class lotbuyingDb extends BaseDb
 		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
 		$queryStr .=   'AND pt_id = ? ';
 		$queryStr .=   'AND pt_language_id = ? ';
-		$queryStr .=   'AND cu_id = ? ';
+		$queryStr .=   'AND pp_currency_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// デフォルト価格よりも個別価格を優先
 		$ret = $this->selectRecord($queryStr, array($id, $langId, $currencyId), $row);
 		if ($ret){

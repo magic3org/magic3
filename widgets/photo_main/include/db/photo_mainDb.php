@@ -454,7 +454,7 @@ class photo_mainDb extends BaseDb
 		$queryStr .=     'AND pp_product_class = ? ';
 		$queryStr .=     'AND pp_product_type_id = ? ';
 		$queryStr .=     'AND pp_price_type_id = ? ';
-		$queryStr .=     'AND cu_id = ? ';
+		$queryStr .=     'AND pp_currency_id = ? ';
 		$queryStr .=   'ORDER BY pp_product_id DESC';		// 商品価格マスターの商品ID
 		$ret = $this->selectRecord($queryStr, array($lang, $publicId, $productClass, $productType, $priceType, $currency), $row);
 		return $ret;
