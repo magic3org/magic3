@@ -723,6 +723,7 @@ class BaseFrameContainer extends Core
 //			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-dependency.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post-type.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-embed.php');
 
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');
@@ -779,6 +780,7 @@ class BaseFrameContainer extends Core
 			// WordPressメインオブジェクト作成
 			$GLOBALS['wp_version'] = '4.7.0';			// 下位互換性チェックで引っかかるのでv4.7.0に定める
 			$GLOBALS['locale'] = $this->gEnv->getCurrentLanguage();		// 表示言語を設定
+			$GLOBALS['wp_embed'] = new WP_Embed();
 			$GLOBALS['wp_the_query'] = new WP_Query();				// $wp_the_queryは変更不可変数で$wp_queryは変更可変数
 			$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 			$GLOBALS['wp'] = new WP();
