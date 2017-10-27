@@ -532,8 +532,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$otherParams['pt_product_type'] = 1;				// 商品種別(1=単品商品、2=セット商品、3=オプション商品)
 				$otherParams['pt_unit_type_id'] = $this->unitTypeId;	// 選択単位
 				$otherParams['pt_unit_quantity'] = $unitQuantity;		// 数量
-				$otherParams['pt_description'] = $description;		// 説明
-				$otherParams['pt_description_short'] = $description_short;	// 簡易説明
+				$otherParams['pt_html'] = $description;		// 説明
+				$otherParams['pt_description'] = $description_short;	// 簡易説明
 				//$otherParams['pt_search_keyword'] = $keyword;		// 検索キーワード
 				$otherParams['pt_meta_keywords'] = $metaKeyword;	// METAタグ用キーワード
 				$otherParams['pt_site_url'] = $url;			// 詳細情報URL
@@ -651,8 +651,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$otherParams['pt_product_type'] = 1;				// 商品種別(1=単品商品、2=セット商品、3=オプション商品)
 				$otherParams['pt_unit_type_id'] = $this->unitTypeId;	// 選択単位
 				$otherParams['pt_unit_quantity'] = $unitQuantity;		// 数量
-				$otherParams['pt_description'] = $description;		// 説明
-				$otherParams['pt_description_short'] = $description_short;	// 簡易説明
+				$otherParams['pt_html'] = $description;		// 説明
+				$otherParams['pt_description'] = $description_short;	// 簡易説明
 				//$otherParams['pt_search_keyword'] = $keyword;		// 検索キーワード
 				$otherParams['pt_meta_keywords'] = $metaKeyword;	// METAタグ用キーワード
 				$otherParams['pt_site_url'] = $url;			// 詳細情報URL
@@ -950,8 +950,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				$delivType = $row['pt_deliv_type'];		// 配送タイプ
 				$delivPrice = $row['pt_deliv_fee'];		// 配送単価
 				$delivWeight = $row['pt_weight'];		// 配送基準重量
-				$description = $row['pt_description'];			// 説明
-				$description_short = $row['pt_description_short'];		// 簡易説明
+				$description = $row['pt_html'];			// 説明
+				$description_short = $row['pt_description'];		// 簡易説明
 				//$keyword = $row['pt_search_keyword'];					// 検索キーワード
 				$metaKeyword = $row['pt_meta_keywords'];	// METAタグ用キーワード
 				$url = $row['pt_site_url'];							// 詳細情報URL

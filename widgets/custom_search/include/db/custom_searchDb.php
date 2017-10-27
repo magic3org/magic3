@@ -287,8 +287,8 @@ class custom_searchDb extends BaseDb
 					$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 					$queryStr .=    'AND (pt_name LIKE \'%' . $keyword . '%\' ';
 					$queryStr .=    'OR pt_code LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR pt_description_short LIKE \'%' . $keyword . '%\') ';
+					$queryStr .=    'OR pt_html LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\') ';
 				}
 			}
 		}

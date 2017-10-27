@@ -20,6 +20,10 @@
 
 
 -- *** システム標準テーブル ***
+-- -- 商品情報マスター
+ALTER TABLE product CHANGE pt_description pt_html TEXT                                         NOT NULL; -- 商品説明
+ALTER TABLE product CHANGE pt_description_short pt_description TEXT                            NOT NULL; -- 商品概要
+	
 -- 商品価格マスターデータ変換
 UPDATE product_price SET pp_price_type_id = 'regular' WHERE pp_price_type_id = 'selling';
 

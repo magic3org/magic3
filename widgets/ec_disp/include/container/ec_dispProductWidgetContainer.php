@@ -414,11 +414,11 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 					$unitType = $unitRow['ut_symbol'];
 				}
 				$unitQuantity = $row['pt_unit_quantity'];		// 数量
-				$description = $row['pt_description'];			// 説明
-				$description_short = $row['pt_description_short'];		// 簡易説明
+				$description = $row['pt_html'];			// 説明
+				$description_short = $row['pt_description'];		// 簡易説明
 				//$keyword = $row['pt_search_keyword'];					// 検索キーワード
 				$this->headTitle = $row['pt_name'];		// METAタグタイトル
-				$this->headDesc = $row['pt_description_short'];		// METAタグ要約
+				$this->headDesc = $row['pt_description'];		// METAタグ要約
 				$this->headKeyword = $row['pt_meta_keywords'];			// METAタグキーワード
 				$url = $row['pt_site_url'];							// 詳細情報URL
 				$this->taxType = $row['pt_tax_type_id'];					// 税種別
@@ -493,8 +493,8 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 				$this->tmpl->addVar("_widget", "id", $row['pt_id']);		// 商品ID
 				$this->tmpl->addVar("_widget", "name", $row['pt_name']);		// 名前
 				$this->tmpl->addVar("_widget", "code", $row['pt_code']);		// 商品コード
-				$this->tmpl->addVar("_widget", "description", $row['pt_description']);		// 説明
-				$this->tmpl->addVar("_widget", "desc_short", $row['pt_description_short']);		// 簡易説明		
+				$this->tmpl->addVar("_widget", "description", $row['pt_html']);		// 説明
+				$this->tmpl->addVar("_widget", "desc_short", $row['pt_description']);		// 簡易説明		
 				$this->tmpl->addVar("show_cart", "unit_type", $unitType);		// 単位タイプ
 				$this->tmpl->addVar("show_cart", "quantity", '1');		// 数量デフォルト値
 				
@@ -688,7 +688,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 			'name' => $this->convertToDispString($row['pt_name']),		// 名前
 			'code' => $this->convertToDispString($row['pt_code']),		// 商品コード
 			'disp_total_price' => $prePrice . $dispPrice . $postPrice,				// 税込み価格
-			'description_short' => $row['pt_description_short'],				// 簡易説明
+			'description_short' => $row['pt_description'],				// 簡易説明
 			'product_link' => $link												// 商品詳細リンク
 		);
 		$this->tmpl->addVars('productlist', $itemRow);

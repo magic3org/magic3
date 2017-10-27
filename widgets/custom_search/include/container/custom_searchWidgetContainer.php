@@ -502,10 +502,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				// 商品情報を取得
 				$ret = $this->db->getProductByProductId($productId, $this->_langId, $row);
 				if ($ret){
-					$summary = $row['pt_description_short'];
+					$summary = $row['pt_description'];
 					if (empty($summary)){
 						// テキストに変換。HTMLタグ削除。
-						$content = $this->gInstance->getTextConvManager()->htmlToText($row['pt_description']);
+						$content = $this->gInstance->getTextConvManager()->htmlToText($row['pt_html']);
 	
 						// 検索結果用のテキスト作成
 						$summary = $this->_createSummaryText($content);

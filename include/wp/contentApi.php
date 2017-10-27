@@ -680,6 +680,7 @@ class ContentApi extends BaseApi
 			$serial = $row['cn_serial'];
 			$id		= $row['cn_id'];
 			$title	= $row['cn_name'];
+			$excerpt = $row['cn_description'];			// 概要
 			$authorId		= $row['cn_create_user_id'];		// コンテンツ登録者
 			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
@@ -692,6 +693,7 @@ class ContentApi extends BaseApi
 			$serial = $row['be_serial'];
 			$id		= $row['be_id'];
 			$title	= $row['be_name'];
+			$excerpt = $row['be_description'];			// 概要
 			$authorId		= $row['be_regist_user_id'];		// コンテンツ登録者
 			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
@@ -704,11 +706,12 @@ class ContentApi extends BaseApi
 			$serial = $row['pt_serial'];
 			$id		= $row['pt_id'];
 			$title	= $row['pt_name'];
+			$excerpt = $row['pt_description'];			// 概要
 			$authorId		= $row['pt_create_user_id'];		// コンテンツ登録者
 			$authorName		= $row['lu_name'];				// コンテンツ登録者名
 			$authorUrl		= '';			// コンテンツ登録者URL
 			$date			= $row['pt_create_dt'];
-			$contentHtml	= $row['pt_description'];
+			$contentHtml	= $row['pt_html'];
 			$thumbSrc		= $row['pt_thumb_src'];	// サムネールの元のファイル(リソースディレクトリからの相対パス)
 			
 			// サムネールが設定されていない場合は、製品の各種画像を取得
@@ -746,6 +749,7 @@ class ContentApi extends BaseApi
 		$post->menu_order = 0;
 		// Magic3設定値追加
 		$post->post_title = $title;
+		$post->post_excerpt = $excerpt;			// 概要
 		$post->post_content = $contentHtml;
 		$post->guid = $this->getContentUrl($contentType, $id);	// 詳細画面URL
 		$post->filter = 'raw';

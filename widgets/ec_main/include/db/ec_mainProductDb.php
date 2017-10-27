@@ -323,8 +323,8 @@ class ec_mainProductDb extends BaseDb
 		$updateFields[] = 'pt_product_type';		// 商品種別(1=単品商品、2=セット商品、3=オプション商品)
 		$updateFields[] = 'pt_unit_type_id';		// 選択単位
 		$updateFields[] = 'pt_unit_quantity';		// 数量
-		$updateFields[] = 'pt_description';			// 説明
-		$updateFields[] = 'pt_description_short';	// 簡易説明
+		$updateFields[] = 'pt_html';			// 説明
+		$updateFields[] = 'pt_description';	// 簡易説明
 		$updateFields[] = 'pt_meta_title';			// METAタグ、タイトル
 		$updateFields[] = 'pt_meta_description';	// METAタグ、ページ要約
 		$updateFields[] = 'pt_meta_keywords';		// METAタグ、検索用キーワード
@@ -996,8 +996,8 @@ class ec_mainProductDb extends BaseDb
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 				$queryStr .=    'AND (pt_name LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR pt_code LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR pt_description_short LIKE \'%' . $keyword . '%\') ';
+				$queryStr .=    'OR pt_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\') ';
 			}
 		}
 		
@@ -1082,8 +1082,8 @@ class ec_mainProductDb extends BaseDb
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 				$queryStr .=    'AND (pt_name LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR pt_code LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR pt_description_short LIKE \'%' . $keyword . '%\') ';
+				$queryStr .=    'OR pt_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR pt_description LIKE \'%' . $keyword . '%\') ';
 			}
 		}
 		return $this->selectRecordCount($queryStr, $params);

@@ -251,7 +251,7 @@ class ec_product_display2WidgetContainer extends BaseWidgetContainer
 		}
 		if ($this->descVisible){			// 商品説明表示
 			$tableColumnCount = 2;
-			$destStr = '<div class="product_description">' . $this->convertToDispString($fetchedRow['pt_description_short']) . '</div>';
+			$destStr = '<div class="product_description">' . $this->convertToDispString($fetchedRow['pt_description']) . '</div>';
 		}
 		if ($this->detailVisible){			// 詳細ボタン表示
 			$detailButton = '<div class="product_link"><a href="' . $this->getUrl($url, true) . '">' . $this->detailLabel . '</a></div>';

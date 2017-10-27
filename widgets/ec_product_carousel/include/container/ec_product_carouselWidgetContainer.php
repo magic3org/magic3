@@ -255,7 +255,7 @@ class ec_product_carouselWidgetContainer extends BaseWidgetContainer
 			'name' => $this->convertToDispString($row['pt_name']),		// 名前
 			'code' => $this->convertToDispString($row['pt_code']),		// 商品コード
 			'disp_total_price' => $dispPrice,				// 税込み価格
-			'description_short' => $row['pt_description_short'],				// 簡易説明
+			'description_short' => $row['pt_description'],				// 簡易説明
 			'product_url' => $this->getUrl($linkUrl, true),										// 商品詳細リンクURL
 			'product_link' => $link											// 商品詳細リンク
 		);
