@@ -162,9 +162,9 @@ class WC_Session_Handler extends WC_Session {
 	 *
 	 * @return string
 	 */
-	private function get_cache_prefix() {
+/*	private function get_cache_prefix() {
 		return WC_Cache_Helper::get_cache_prefix( WC_SESSION_CACHE_GROUP );
-	}
+	}*/
 
 	/**
 	 * Save data.
@@ -189,7 +189,7 @@ class WC_Session_Handler extends WC_Session {
 			);
 
 			// Set cache
-			wp_cache_set( $this->get_cache_prefix() . $this->_customer_id, $this->_data, WC_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
+//			wp_cache_set( $this->get_cache_prefix() . $this->_customer_id, $this->_data, WC_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
 
 			// Mark session clean after saving
 			$this->_dirty = false;
@@ -256,7 +256,7 @@ class WC_Session_Handler extends WC_Session {
 		}
 
 		// Try get it from the cache, it will return false if not present or if object cache not in use
-		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, WC_SESSION_CACHE_GROUP );
+//		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, WC_SESSION_CACHE_GROUP );
 
 		if ( false === $value ) {
 			$value = $wpdb->get_var( $wpdb->prepare( "SELECT session_value FROM $this->_table WHERE session_key = %s", $customer_id ) );
@@ -265,7 +265,7 @@ class WC_Session_Handler extends WC_Session {
 				$value = $default;
 			}
 
-			wp_cache_add( $this->get_cache_prefix() . $customer_id, $value, WC_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
+//			wp_cache_add( $this->get_cache_prefix() . $customer_id, $value, WC_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
 		}
 
 		return maybe_unserialize( $value );
@@ -279,7 +279,7 @@ class WC_Session_Handler extends WC_Session {
 	public function delete_session( $customer_id ) {
 		global $wpdb;
 
-		wp_cache_delete( $this->get_cache_prefix() . $customer_id, WC_SESSION_CACHE_GROUP );
+//		wp_cache_delete( $this->get_cache_prefix() . $customer_id, WC_SESSION_CACHE_GROUP );
 
 		$wpdb->delete(
 			$this->_table,

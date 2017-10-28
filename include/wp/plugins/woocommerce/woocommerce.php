@@ -367,9 +367,9 @@ final class WooCommerce {
 			$this->frontend_includes();
 		}
 
-		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
+//		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
 			include_once( WC_ABSPATH . 'includes/class-wc-session-handler.php' );
-		}
+//		}
 
 		if ( $this->is_request( 'cron' ) && 'yes' === get_option( 'woocommerce_allow_tracking', 'no' ) ) {
 			include_once( WC_ABSPATH . 'includes/class-wc-tracker.php' );
@@ -429,10 +429,10 @@ final class WooCommerce {
 //		$this->deprecated_hook_handlers['filters'] = new WC_Deprecated_Filter_Hooks();
 
 		// Session class, handles session data for users - can be overwritten if custom handler is needed.
-/*		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
+//		if ( $this->is_request( 'frontend' ) || $this->is_request( 'cron' ) ) {
 			$session_class  = apply_filters( 'woocommerce_session_handler', 'WC_Session_Handler' );
 			$this->session  = new $session_class();
-		}*/
+//		}
 
 		// Classes/actions loaded for the frontend and for ajax requests.
 		if ( $this->is_request( 'frontend' ) ) {
