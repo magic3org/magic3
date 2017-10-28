@@ -268,7 +268,7 @@ class WC_Cart {
 	 * Sets the php session data for the cart and coupons.
 	 */
 	public function set_session() {
-		// Set cart and coupon session data
+/*		// Set cart and coupon session data
 		$cart_session = $this->get_cart_for_session();
 
 		WC()->session->set( 'cart', $cart_session );
@@ -280,7 +280,7 @@ class WC_Cart {
 		foreach ( $this->cart_session_data as $key => $default ) {
 			WC()->session->set( $key, $this->$key );
 		}
-
+*/
 		if ( get_current_user_id() ) {
 			$this->persistent_cart_update();
 		}
