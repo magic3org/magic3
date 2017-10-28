@@ -146,6 +146,13 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			// 税タイプ
 			$this->taxType = $gContentApi->getProductTaxType($rowProduct);
 			if (empty($this->taxType)) $this->data['tax_status'] = 'none';			// 課税タイプが設定されていない場合は課税処理しない
+			
+			// 商品の状態
+			if ($rowProduct['pt_visible'] && $rowProduct['pt_sell_status'] < 3/*未設定,カート可,販売中*/){
+				$this->data['status'] = 'publish';
+			} else {
+				$this->data['status'] = 'private';
+			}
 		}
 	}
 
