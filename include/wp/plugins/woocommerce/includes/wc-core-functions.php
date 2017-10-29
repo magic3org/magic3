@@ -735,12 +735,27 @@ function wc_print_js() {
  * @param  bool    $secure Whether the cookie should be served only over https.
  */
 function wc_setcookie( $name, $value, $expire = 0, $secure = false ) {
-	if ( ! headers_sent() ) {
+		global $gRequestManager;
+
+		// ##### $nameのクッキー名は先頭に「woocommerce_」が付加されている #####
+		// 現在時よりも前の場合はクッキーを削除
+		if ($expire < time()){
+			$gRequestManager->removeCookieValue($name);
+			return;
+		} else if (intval($expire) == 0){
+			$expire = 0;			// ブラウザ閉じるまで生存
+		} else {
+			$expire = $expire / (60 * 60 * 24);		// 日にち換算
+		}
+		// クッキーを作成
+		$gRequestManager->setCookieValue($name, $value, $expire);
+		
+/*	if ( ! headers_sent() ) {
 		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure );
 	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		headers_sent( $file, $line );
 		trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE );
-	}
+	}*/
 }
 
 /**

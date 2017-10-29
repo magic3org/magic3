@@ -29,8 +29,7 @@ function wc_notice_count( $notice_type = '' ) {
 	}
 
 	$notice_count = 0;
-	//$all_notices  = WC()->session->get( 'wc_notices', array() );
-	$all_notices =  array();
+	$all_notices  = WC()->session->get( 'wc_notices', array() );
 
 	if ( isset( $all_notices[ $notice_type ] ) ) {
 
@@ -60,8 +59,7 @@ function wc_has_notice( $message, $notice_type = 'success' ) {
 		return false;
 	}
 
-//	$notices = WC()->session->get( 'wc_notices', array() );
-	$notices = array();
+	$notices = WC()->session->get( 'wc_notices', array() );
 	$notices = isset( $notices[ $notice_type ] ) ? $notices[ $notice_type ] : array();
 	return array_search( $message, $notices ) !== false;
 }
@@ -79,8 +77,7 @@ function wc_add_notice( $message, $notice_type = 'success' ) {
 		return;
 	}
 
-//	$notices = WC()->session->get( 'wc_notices', array() );
-	$notices = array();
+	$notices = WC()->session->get( 'wc_notices', array() );
 
 	// Backward compatibility
 	if ( 'success' === $notice_type ) {
@@ -89,7 +86,7 @@ function wc_add_notice( $message, $notice_type = 'success' ) {
 
 	$notices[ $notice_type ][] = apply_filters( 'woocommerce_add_' . $notice_type, $message );
 
-//	WC()->session->set( 'wc_notices', $notices );
+	WC()->session->set( 'wc_notices', $notices );
 }
 
 /**
@@ -103,7 +100,7 @@ function wc_set_notices( $notices ) {
 		wc_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before woocommerce_init.', 'woocommerce' ), '2.6' );
 		return;
 	}
-//	WC()->session->set( 'wc_notices', $notices );
+	WC()->session->set( 'wc_notices', $notices );
 }
 
 
@@ -117,7 +114,7 @@ function wc_clear_notices() {
 		wc_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before woocommerce_init.', 'woocommerce' ), '2.3' );
 		return;
 	}
-	//WC()->session->set( 'wc_notices', null );
+	WC()->session->set( 'wc_notices', null );
 }
 
 /**
@@ -131,8 +128,7 @@ function wc_print_notices() {
 		return;
 	}
 
-	//$all_notices  = WC()->session->get( 'wc_notices', array() );
-	$all_notices = array();
+	$all_notices  = WC()->session->get( 'wc_notices', array() );
 	$notice_types = apply_filters( 'woocommerce_notice_types', array( 'error', 'success', 'notice' ) );
 
 	foreach ( $notice_types as $notice_type ) {
@@ -179,8 +175,7 @@ function wc_get_notices( $notice_type = '' ) {
 		return;
 	}
 
-//	$all_notices = WC()->session->get( 'wc_notices', array() );
-	$all_notices = array();
+	$all_notices = WC()->session->get( 'wc_notices', array() );
 
 	if ( empty( $notice_type ) ) {
 		$notices = $all_notices;

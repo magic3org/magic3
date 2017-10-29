@@ -62,7 +62,7 @@ class WC_Session_Handler extends WC_Session {
 		// Actions
 		add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_session_cookie' ), 10 );
 		add_action( 'woocommerce_cleanup_sessions', array( $this, 'cleanup_sessions' ), 10 );
-		add_action( 'shutdown', array( $this, 'save_data' ), 20 );
+//		add_action( 'shutdown', array( $this, 'save_data' ), 20 );
 		add_action( 'wp_logout', array( $this, 'destroy_session' ) );
 		if ( ! is_user_logged_in() ) {
 			add_filter( 'nonce_user_logged_out', array( $this, 'nonce_user_logged_out' ) );
@@ -169,7 +169,7 @@ class WC_Session_Handler extends WC_Session {
 	/**
 	 * Save data.
 	 */
-	public function save_data() {
+/*	public function save_data() {
 		// Dirty if something changed - prevents saving nothing new
 		if ( $this->_dirty && $this->has_session() ) {
 			global $wpdb;
@@ -194,7 +194,7 @@ class WC_Session_Handler extends WC_Session {
 			// Mark session clean after saving
 			$this->_dirty = false;
 		}
-	}
+	}*/
 
 	/**
 	 * Destroy all session data.
