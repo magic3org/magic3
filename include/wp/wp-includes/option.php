@@ -42,6 +42,11 @@ function get_option( $option, $default = false ) {
 	// カスタマイズ値がない時はデフォルト値を取得
 	if (!isset($value)) $value = $m3WpOptions[$option];
 
+	// siteurl,homeが初期化されていない場合は直接取得
+	if (!isset($value) && ($option == 'siteurl' || $option == 'home')){
+		$value = $gEnvManager->getRootUrl();
+	}
+	
 	// 値が設定されていない場合は関数引数を設定
 	if (!isset($value)) $value = $default;
 	

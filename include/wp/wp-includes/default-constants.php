@@ -201,7 +201,8 @@ function wp_cookie_constants() {
 	 * @since 1.5.0
 	 */
 	if ( !defined( 'COOKIEHASH' ) ) {
-		$siteurl = get_site_option( 'siteurl' );
+//		$siteurl = get_site_option( 'siteurl' );
+		$siteurl = get_option('siteurl');
 		if ( $siteurl )
 			define( 'COOKIEHASH', md5( $siteurl ) );
 		else

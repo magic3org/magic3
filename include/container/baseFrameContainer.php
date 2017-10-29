@@ -767,6 +767,7 @@ class BaseFrameContainer extends Core
 
 			// ##### データ初期化 #####
 			wp_initial_constants();			// WordPressその他定義値設定
+			wp_cookie_constants();			// クッキー用定義
 			create_initial_post_types();	// WP_Post型データ型登録
 			
 			// プラグイン初期化

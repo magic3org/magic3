@@ -491,12 +491,16 @@ class RequestManager extends Core
 	 *
 	 * @param string $name		キー値
 	 * @param string $value  	格納値
-	 * @param int $expireDay  	クッキーの生存期間(日)
+	 * @param int $expireDay  	クッキーの生存期間(日)。0を設定した場合はブラウザ閉じるまで生存。
 	 * @return 					なし
 	 */
 	public function setCookieValue($name, $value = '', $expireDay = 30)
 	{
-		$cookExpire = time() + 60 * 60 * 24 * $expireDay;
+		if (floatval($expireDay) == 0){
+			$cookExpire = 0;		// ブラウザ閉じるまで
+		} else {
+			$cookExpire = time() + 60 * 60 * 24 * $expireDay;
+		}
 		//setcookie($name, $value, $cookExpire);
 		setcookie($name, $value, $cookExpire, '/');
 		
@@ -504,7 +508,7 @@ class RequestManager extends Core
 		$this->tmpCookie[$name] = $value;		// クッキー送信前のクッキー格納データ
 	}
 	/**
-	 * クッキーに値を削除
+	 * クッキーの値を削除
 	 *
 	 * @param string $name		キー値
 	 * @return 					なし
@@ -512,7 +516,6 @@ class RequestManager extends Core
 	public function removeCookieValue($name)
 	{
 		setcookie($name, '', time() - 3600, '/');
-		//setcookie($name, '', time() - 3600, '/');
 	}
 	/**
 	 * URLクエリー配列を取得
