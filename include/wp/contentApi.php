@@ -1094,6 +1094,59 @@ class ContentApi extends BaseApi
 		return $url;
 	}
 	/**
+	 * EC画面のURLを取得
+	 *
+	 * @param string $pageType				ページ種別(shop,cart,myaccount,checkout,terms等)
+	 * @return string						URL
+	 */
+	function getCommerceUrl($pageType)
+	{
+		$baseUrl = '';
+		$urlParams = '';
+		
+		// Eコマース用ページID取得
+		$subId = $this->gPage->getPageSubIdByContentType(M3_VIEW_TYPE_COMMERCE, $this->gEnv->getCurrentPageId());
+		
+		// デフォルトページの場合はページIDは付加しない
+//		$subId = $this->gEnv->getCurrentPageSubId();
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		
+		// ベースURLを取得
+		switch ($this->accessPoint){
+		case '':			// PC用
+		default:
+			$baseUrl = $this->gEnv->getDefaultUrl();
+			break;
+		case 'm':			// 携帯用
+			$baseUrl = $this->gEnv->getDefaultMobileUrl();
+			break;
+		case 's':			// スマートフォン用
+			$baseUrl = $this->gEnv->getDefaultSmartphoneUrl();
+			break;
+		}
+		
+		$baseUrl .= '?';
+		if (!empty($urlParams)){
+			$baseUrl .= $urlParams . '&';
+		}
+		// ページ種別を付加
+		$task = '';
+		switch ($pageType){
+		case 'cart':
+			$task = 'cart';
+			break;
+		case 'shop':
+		case 'myaccount':
+		case 'checkout':
+		case 'terms':
+			break;
+		}
+		if (!empty($task)) $baseUrl .= M3_REQUEST_PARAM_OPERATION_TASK . '=' . $task;
+		
+		$url = $this->getUrl($baseUrl);
+		return $url;
+	}
+	/**
 	 * コンテンツ表示制御(サムネールを表示するかどうか)を取得
 	 *
 	 * @return bool				true=表示、false=表示しない
@@ -1103,7 +1156,7 @@ class ContentApi extends BaseApi
 		return $this->showThumb;
 	}
 	/**
-	 * WordPressコンポーネントにコンテンツを更新
+	 * WordPressコンポーネントのコンテンツを更新
 	 *
 	 * @param string $content				コンテンツテキスト
 	 * @return								なし
@@ -1167,6 +1220,60 @@ class ContentApi extends BaseApi
 	public function getPostTitle()
 	{
 		return $this->postTitle;
+	}
+	/**
+	 * WordPress専用描画ページかどうかを取得
+	 *
+	 * @return bool						WordPress専用描画ページかどうか
+	 */
+	function isWordPressSpecificPage()
+	{
+		// 現在のページがcommerce等の特定のページコンテンツ属性の場合は画面はWordPress側のみで作成する
+		$contentType = $this->gPage->getContentType();
+		if ($contentType == M3_VIEW_TYPE_COMMERCE){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * WordPress専用描画ページのパラメータを取得
+	 *
+	 * @return array			パラメータの連想配列。取得できない場合はnullが返る。
+	 */
+	function getWordPressSpecificPageParam()
+	{
+		global $woocommerce;
+		
+		// WooCommerceがインストールされていない場合は終了
+		if (!isset($woocommerce)) return array();
+		
+		$pages = array(
+					'shop' => array(
+						'name'    => _x( 'shop', 'Page slug', 'woocommerce' ),
+						'title'   => _x( 'Shop', 'Page title', 'woocommerce' ),
+						'content' => '',
+					),
+					'cart' => array(
+						'name'    => _x( 'cart', 'Page slug', 'woocommerce' ),
+						'title'   => _x( 'Cart', 'Page title', 'woocommerce' ),
+						'content' => '[' . apply_filters( 'woocommerce_cart_shortcode_tag', 'woocommerce_cart' ) . ']',
+					),
+					'checkout' => array(
+						'name'    => _x( 'checkout', 'Page slug', 'woocommerce' ),
+						'title'   => _x( 'Checkout', 'Page title', 'woocommerce' ),
+						'content' => '[' . apply_filters( 'woocommerce_checkout_shortcode_tag', 'woocommerce_checkout' ) . ']',
+					),
+					'myaccount' => array(
+						'name'    => _x( 'my-account', 'Page slug', 'woocommerce' ),
+						'title'   => _x( 'My account', 'Page title', 'woocommerce' ),
+						'content' => '[' . apply_filters( 'woocommerce_my_account_shortcode_tag', 'woocommerce_my_account' ) . ']',
+					),
+				);
+		// EC機能用のページタイプを取得
+		$pageType = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
+		return $pages[$pageType];
 	}
 }
 ?>

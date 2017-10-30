@@ -1675,6 +1675,7 @@ class WP_Query {
 		global $gPageManager;
 		global $paged;
 
+		// ########## このメソッドは画面出力前に実行される ##########
 		// ##### URLパラメータを解析 #####
 		$this->query_vars = array();
 		// ページ番号
@@ -1687,6 +1688,12 @@ class WP_Query {
 		// コンテンツタイプが設定されていない場合はダミーのWP_Postデータを作成
 		$contentType = $gContentApi->getContentType();
 		if (empty($contentType)){
+			// WordPress専用描画ページの場合はWP_Postオブジェクト用のパラメータを取得
+			$pageParams = array();
+			if ($gContentApi->isWordPressSpecificPage()){
+				$pageParams = $gContentApi->getWordPressSpecificPageParam();
+			}
+			
 			// コンテンツタイプないページの場合はWordPressの「page」で画面を生成
 			// WP_Postオブジェクトに変換して格納
 			$post = new stdClass;
@@ -1712,6 +1719,13 @@ class WP_Query {
 			$post->filter = 'raw';
 			// Magic3用パラメータ
 			$post->thumb_src = $thumbSrc;*/
+			
+			// ### WordPress専用描画ページのパラメータ ###
+			if (!empty($pageParams)){
+				$post->post_name = $pageParams['name'];
+				$post->post_title = $pageParams['title'];
+				$post->post_content = $pageParams['content'];
+			}
 		
 			$wpPostObj = new WP_Post($post);
 			$this->posts = array($wpPostObj);
