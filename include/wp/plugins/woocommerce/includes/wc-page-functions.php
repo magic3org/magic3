@@ -68,8 +68,13 @@ function wc_get_page_id( $page ) {
  * @return string
  */
 function wc_get_page_permalink( $page ) {
-	$page_id   = wc_get_page_id( $page );
-	$permalink = 0 < $page_id ? get_permalink( $page_id ) : get_home_url();
+//	$page_id   = wc_get_page_id( $page );
+//	$permalink = 0 < $page_id ? get_permalink( $page_id ) : get_home_url();
+	global $gContentApi;
+	
+	// Magic3のEコマース機能のURLに変換
+	$permalink = $gContentApi->getCommerceUrl($page);
+	
 	return apply_filters( 'woocommerce_get_' . $page . '_page_permalink', $permalink );
 }
 
