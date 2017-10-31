@@ -1373,7 +1373,8 @@ function wc_postcode_location_matcher( $postcode, $objects, $object_id_key, $obj
  * @return int
  */
 function wc_get_shipping_method_count( $include_legacy = false ) {
-	global $wpdb;
+	return 0;
+/*	global $wpdb;
 
 	$transient_name = 'wc_shipping_method_count_' . ( $include_legacy ? 1 : 0 ) . '_' . WC_Cache_Helper::get_transient_version( 'shipping' );
 	$method_count   = get_transient( $transient_name );
@@ -1396,6 +1397,7 @@ function wc_get_shipping_method_count( $include_legacy = false ) {
 	}
 
 	return absint( $method_count );
+	*/
 }
 
 /**
