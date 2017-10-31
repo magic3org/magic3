@@ -158,6 +158,10 @@ class ContentApi extends BaseApi
 				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
+				
+				// フック関数追加
+				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
+				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
 				
 				$this->useCommerce = true;			// EC機能を使用
@@ -1275,6 +1279,44 @@ class ContentApi extends BaseApi
 		$pageType = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		
 		return $pages[$pageType];
+	}
+	/**
+	 * WooCommerceフック関数
+	 */
+	/**
+	 * ショップホーム(product)画面のURL取得
+	 *
+	 * @return					ショップホームへのURL
+	 */
+	function getShopUrl()
+	{
+		$baseUrl = '';
+		$urlParams = '';
+		
+		// 商品ページID取得
+		$subId = $this->gPage->getPageSubIdByContentType(M3_VIEW_TYPE_PRODUCT, $this->gEnv->getCurrentPageId());
+		
+		// デフォルトページの場合はページIDは付加しない
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		
+		// ベースURLを取得
+		switch ($this->accessPoint){
+		case '':			// PC用
+		default:
+			$baseUrl = $this->gEnv->getDefaultUrl();
+			break;
+		case 'm':			// 携帯用
+			$baseUrl = $this->gEnv->getDefaultMobileUrl();
+			break;
+		case 's':			// スマートフォン用
+			$baseUrl = $this->gEnv->getDefaultSmartphoneUrl();
+			break;
+		}
+		
+		if (!empty($urlParams)) $baseUrl .= '?' . $urlParams;
+		
+		$url = $this->getUrl($baseUrl);
+		return $url;
 	}
 }
 ?>
