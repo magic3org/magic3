@@ -20,6 +20,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 
 class ContentApi extends BaseApi
 {
+	private $useCommerce;			// EC機能を使用するかどうか
 	private $contentType;			// コンテンツタイプ
 	private $pageType;				// ページタイプ(WordPressテンプレートのpage,single,search)
 	private $accessPoint;			// アクセスポイント(空文字列=PC用,m=携帯用,s=スマートフォン用)
@@ -158,6 +159,8 @@ class ContentApi extends BaseApi
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
+				
+				$this->useCommerce = true;			// EC機能を使用
 				break;
 			case M3_VIEW_TYPE_BBS:	// BBS
 				break;
@@ -1230,7 +1233,7 @@ class ContentApi extends BaseApi
 	{
 		// 現在のページがcommerce等の特定のページコンテンツ属性の場合は画面はWordPress側のみで作成する
 		$contentType = $this->gPage->getContentType();
-		if ($contentType == M3_VIEW_TYPE_COMMERCE){
+		if ($this->useCommerce && $contentType == M3_VIEW_TYPE_COMMERCE){			// Eコマース機能が組み込まれている場合
 			return true;
 		} else {
 			return false;
@@ -1243,10 +1246,8 @@ class ContentApi extends BaseApi
 	 */
 	function getWordPressSpecificPageParam()
 	{
-		global $woocommerce;
-		
-		// WooCommerceがインストールされていない場合は終了
-		if (!isset($woocommerce)) return array();
+		//  Eコマース機能が組み込まれていない場合は終了
+		if (!$this->useCommerce) return array();
 		
 		$pages = array(
 					'shop' => array(
