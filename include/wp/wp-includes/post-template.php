@@ -245,7 +245,7 @@ function the_content( $more_link_text = null, $strip_teaser = false) {
 	global $wp_query;
 	global $gContentApi;
 	global $gPageManager;
-	
+
 	// WordPressメインループからget_template_part()が呼ばれずに直接呼ばれている場合はMagic3メインポジションの出力処理を行う
 	$isTemplatePart = $gContentApi->getIsTemplatePart();
 	if ($wp_query->is_page && !$isTemplatePart){
@@ -256,7 +256,7 @@ function the_content( $more_link_text = null, $strip_teaser = false) {
 		echo $gPageManager->getWPContents('main-bottom', false/*タイトル非表示*/);
 		return;
 	}
-	
+
 	$content = get_the_content( $more_link_text, $strip_teaser );
 
 	/**

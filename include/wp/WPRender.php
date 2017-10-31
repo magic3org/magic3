@@ -87,23 +87,19 @@ class WPRender
 		global $gEnvManager;
 		global $gContentApi;
 		
-		if ($gContentApi->isWordPressSpecificPage()){			// WordPress専用描画ページの場合
-			$content = '';
+		// コンポーネント生成用スクリプトパス取得
+		$componentPath = $gEnvManager->getWpComponentPath();
+		if (file_exists($componentPath)){
+			// ウィジェットで生成されたデータでWordPressコンポーネント用のデータを更新
+			$gContentApi->updateComponentContent($content);
+		
+			ob_clean();
+			require($componentPath);		// 毎回実行する
+			$content = ob_get_contents();
+			ob_clean();
 		} else {
-			// コンポーネント生成用スクリプトパス取得
-			$componentPath = $gEnvManager->getWpComponentPath();
-			if (file_exists($componentPath)){
-				// ウィジェットで生成されたデータでWordPressコンポーネント用のデータを更新
-				$gContentApi->updateComponentContent($content);
-			
-				ob_clean();
-				require($componentPath);		// 毎回実行する
-				$content = ob_get_contents();
-				ob_clean();
-			} else {
-				// コンポーネント生成用スクリプトがない場合はWordPressモジュール出力を使用
-				$content = $this->getModuleContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer, $widgetTag);
-			}
+			// コンポーネント生成用スクリプトがない場合はWordPressモジュール出力を使用
+			$content = $this->getModuleContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer, $widgetTag);
 		}
 		return $content;
 	}
