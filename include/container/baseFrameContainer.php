@@ -770,6 +770,7 @@ class BaseFrameContainer extends Core
 			wp_initial_constants();			// WordPressその他定義値設定
 			wp_cookie_constants();			// クッキー用定義
 			create_initial_post_types();	// WP_Post型データ型登録
+			register_shutdown_function('shutdown_action_hook');		// 終了時イベント登録
 			
 			// プラグイン初期化
 			$GLOBALS['wp_plugin_paths'] = array();			// $wp_plugin_pathsは未使用?
