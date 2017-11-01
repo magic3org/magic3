@@ -900,9 +900,11 @@ class WC_Cart {
 			$cart_item_data = (array) apply_filters( 'woocommerce_add_cart_item_data', $cart_item_data, $product_id, $variation_id );
 
 			// Generate a ID based on product ID, variation ID, variation data, and other cart item data
+			// 商品($product_id)ごとのIDを生成する
 			$cart_id        = $this->generate_cart_id( $product_id, $variation_id, $variation, $cart_item_data );
 
 			// Find the cart item key in the existing cart
+			// 指定の商品がカートに入ってない場合は空が返る。入っている場合は$cart_idが返る。
 			$cart_item_key  = $this->find_product_in_cart( $cart_id );
 
 			// Force quantity to 1 if sold individually and check for existing item in cart
