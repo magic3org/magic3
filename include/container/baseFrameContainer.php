@@ -1010,7 +1010,7 @@ class BaseFrameContainer extends Core
 			// ##### テンプレート前処理(起動ファイル決定後に実行) #####
 			do_action('template_redirect');
 						
-			// WordPressオブジェクト作成
+			// WordPressオブジェクト作成。wpイベント実行。
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
 			global $mainframe;

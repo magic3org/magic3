@@ -733,7 +733,7 @@ class WP {
 	 * @param string|array $query_args Passed to parse_request().
 	 */
 	public function main($query_args = '') {
-		// 起動時に１度のみ実行される
+		// ##### 画面表示(HTML出力)前、起動時に１度のみ実行される #####
 //		$this->init();
 //		$this->parse_request($query_args);
 //		$this->send_headers();
@@ -748,6 +748,7 @@ class WP {
 		 *
 		 * @param WP &$this Current WordPress environment instance (passed by reference).
 		 */
-//		do_action_ref_array( 'wp', array( &$this ) );
+		// 「wp」イベント実行。主にプラグインでの処理実行。
+		do_action_ref_array( 'wp', array( &$this ) );
 	}
 }
