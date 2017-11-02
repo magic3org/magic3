@@ -56,6 +56,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const CF_MULTI_LANGUAGE = 'multi_language';			// 多言語対応
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
+	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 //	const CF_USE_JQUERY = 'use_jquery';			// jQueryを常に使用するかどうか
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
@@ -149,6 +150,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->adminTheme = $request->trimValueOf('item_admin_theme');		// 管理画面用jQueryUIテーマ
 		$this->defaultTheme = $request->trimValueOf('item_default_theme');		// フロント画面用jQueryUIテーマ
 		$this->jqueryVersion = $request->trimValueOf('item_jquery_version');		// jQueryバージョン
+		$externalJquery = $request->trimCheckedValueOf('item_external_jquery');		// システム外部のjQueryを使用するかどうか
 //		$useJquery = ($request->trimValueOf('item_use_jquery') == 'on') ? 1 : 0;			// 常にjQueryを使用するかどうか
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
 		$this->wysiwygEditor = $request->trimValueOf('item_wysiwyg_editor');			// 管理画面用WYSIWYGエディター
@@ -247,6 +249,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_JQUERY_VERSION, $this->jqueryVersion)) $isErr = true;// jQueryバージョン
 			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(self::CF_EXTERNAL_JQUERY, $externalJquery)) $isErr = true;// システム外部のjQueryを使用するかどうか
+			}
 /*			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_USE_JQUERY, $useJquery)) $isErr = true;// 常にjQueryを使用するかどうか
 			}*/
@@ -307,6 +312,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
+			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
@@ -380,6 +386,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
+			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
@@ -501,6 +508,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($multiLanguage) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "multi_language", $checked);	// 多言語対応かどうか
+		$this->tmpl->addVar("_widget", "external_jquery", $this->convertToCheckedString($externalJquery));// システム外部のjQueryを使用するかどうか
 //		$checked = '';
 //		if ($useJquery) $checked = 'checked';
 //		$this->tmpl->addVar("_widget", "use_jquery", $checked);		// 常にjQueryを使用するかどうか

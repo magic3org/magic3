@@ -152,6 +152,7 @@ class PageManager extends Core
 	const CF_GOOGLE_MAPS_KEY = 'google_maps_key';				// Googleマップ利用キー
 	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
+	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_ADMIN_JQUERY_VERSION = 'admin_jquery_version';			// 管理画面用jQueryバージョン
 	const CF_USE_JQUERY = 'use_jquery';				// jQueryを常に使用するかどうか
@@ -3783,9 +3784,14 @@ class PageManager extends Core
 				// Googleマップライブラリの読み込み
 				if ($this->useGooglemaps && $this->isContentGooglemaps) $this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));	// コンテンツにGoogleマップが含むかどうか
 
+				$useExternalJquery = $gSystemManager->getSystemConfig(self::CF_EXTERNAL_JQUERY);		// システム外部のjQueryを使用するかどうか
+				
 				$count = count($this->defaultScriptFiles);
 				for ($i = 0; $i < $count; $i++){
 					$defaultScriptFile = $this->defaultScriptFiles[$i];
+
+					// 外部のjQueryを使用する場合はSCRIPTタグを出力しない
+					if ($defaultScriptFile == $this->selectedJQueryFilename && $useExternalJquery) continue;
 					
 					// ##### jQueryMobileスクリプトを追加する場合は直前に初期化スクリプトを追加 #####
 					if ($defaultScriptFile == $this->selectedJQueryMobileFilename){
