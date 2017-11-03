@@ -169,7 +169,12 @@ class ContentApi extends BaseApi
 					global $woocommerce;
 					
 					$sessionObj = $woocommerce->session->getSessionObj();
-					if (!empty($sessionObj)) $this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
+				//	$sessionObj = array_filter($sessionObj);		// 空要素削除
+					if (empty($sessionObj)){		// データがない場合はセッションデータを削除
+						$this->gRequest->unsetSessionValue(M3_WC_SESSION);
+					} else {
+						$this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
+					}
 				});
 				
 				$this->useCommerce = true;			// EC機能を使用

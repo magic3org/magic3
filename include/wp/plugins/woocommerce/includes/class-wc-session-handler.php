@@ -57,7 +57,7 @@ class WC_Session_Handler extends WC_Session {
 			$this->_customer_id = $this->generate_customer_id();
 		}
 
-		// ƒZƒbƒVƒ‡ƒ“‚©‚çƒf[ƒ^“Ç‚İ‚İ
+		// ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
 		//$this->_data = $this->get_session_data();
 		global $gRequestManager;
 		$sessionObj = $gRequestManager->getSessionValueWithSerialize(M3_WC_SESSION);
@@ -316,9 +316,9 @@ class WC_Session_Handler extends WC_Session {
 		);
 	}
 	/**
-	 * ƒZƒbƒVƒ‡ƒ“ƒIƒuƒWƒFƒNƒgæ“¾(Magic3’Ç‰Á)
+	 * ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—(Magic3è¿½åŠ )
 	 *
-	 * @return object		ƒZƒbƒVƒ‡ƒ“ƒIƒuƒWƒFƒNƒg
+	 * @return object		ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 */
 	public function getSessionObj(){
 		return $this->_data;
