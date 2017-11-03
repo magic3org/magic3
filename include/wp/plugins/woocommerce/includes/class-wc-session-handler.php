@@ -36,10 +36,10 @@ class WC_Session_Handler extends WC_Session {
 	 * Constructor for the session class.
 	 */
 	public function __construct() {
-		global $wpdb;
+//		global $wpdb;
 
 		$this->_cookie = apply_filters( 'woocommerce_cookie', 'wp_woocommerce_session_' . COOKIEHASH );
-		$this->_table  = $wpdb->prefix . 'woocommerce_sessions';
+//		$this->_table  = $wpdb->prefix . 'woocommerce_sessions';
 
 		if ( $cookie = $this->get_session_cookie() ) {
 			$this->_customer_id        = $cookie[0];
@@ -57,7 +57,11 @@ class WC_Session_Handler extends WC_Session {
 			$this->_customer_id = $this->generate_customer_id();
 		}
 
-		$this->_data = $this->get_session_data();
+		// セッションからデータ読み込み
+		//$this->_data = $this->get_session_data();
+		global $gRequestManager;
+		$sessionObj = $gRequestManager->getSessionValueWithSerialize(M3_WC_SESSION);
+		$this->_data = isset($sessionObj) ? $sessionObj : array();
 
 		// Actions
 		add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_session_cookie' ), 10 );
@@ -153,9 +157,9 @@ class WC_Session_Handler extends WC_Session {
 	 *
 	 * @return array
 	 */
-	public function get_session_data() {
+/*	public function get_session_data() {
 		return $this->has_session() ? (array) $this->get_session( $this->_customer_id, array() ) : array();
-	}
+	}*/
 
 	/**
 	 * Gets a cache prefix. This is used in session names so the entire cache can be invalidated with 1 function call.
@@ -310,5 +314,13 @@ class WC_Session_Handler extends WC_Session {
 				'%d'
 			)
 		);
+	}
+	/**
+	 * セッションオブジェクト取得(Magic3追加)
+	 *
+	 * @return object		セッションオブジェクト
+	 */
+	public function getSessionObj(){
+		return $this->_data;
 	}
 }

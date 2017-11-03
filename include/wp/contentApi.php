@@ -164,6 +164,14 @@ class ContentApi extends BaseApi
 				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
 				
+				// セッションデータを保存
+				$this->gRequest->addSessionCloseEventCallback(function (){
+					global $woocommerce;
+					
+					$sessionObj = $woocommerce->session->getSessionObj();
+					if (!empty($sessionObj)) $this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
+				});
+				
 				$this->useCommerce = true;			// EC機能を使用
 				break;
 			case M3_VIEW_TYPE_BBS:	// BBS

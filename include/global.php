@@ -432,6 +432,8 @@ define('M3_SESSION_USER_ENV_WIDGET',      	'_user_env_widget:');			// ユーザ�
 define('M3_SESSION_CODE',      				'_session_code');				// セッションセキュリティチェック用ブラウザコード
 define('M3_SESSION_CLIENT_IP',      		'_session_client_ip');			// セッションセキュリティチェック用ブラウザIP
 define('M3_SESSION_USER_ID',      			'_session_user_id');			// 現在ログイン中のユーザID(Nodejs連携用)
+// Magic3以外のセッション
+define('M3_WC_SESSION',      				'woocommerce_session');			// WooCommerce用
 
 // ######### システムの定義 ###########
 define('M3_HTML_CHARSET',	'utf-8');				// キャラクターセット
