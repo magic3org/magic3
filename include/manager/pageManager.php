@@ -1294,6 +1294,9 @@ class PageManager extends Core
 		$userInfo = $gRequestManager->getSessionValueWithSerialize(M3_SESSION_USER_INFO);
 		if (!$gAccessManager->checkSessionSecurity($userInfo)) return;			// セキュリティ問題ありの場合は終了
 		
+		// その他セッション情報取得
+		$gRequestManager->_doSessionOpenEventCallback();
+
 		// ユーザ情報をロード
 		$gInstanceManager->setUserInfo($userInfo);
 
@@ -2168,6 +2171,9 @@ class PageManager extends Core
 		$userInfo = $gInstanceManager->getUserInfo();
 		$gRequestManager->setSessionValueWithSerialize(M3_SESSION_USER_INFO, $userInfo);
 		
+		// その他セッション情報保存
+		$gRequestManager->_doSessionCloseEventCallback();
+		
 		// 画面設定保存
 		$gDispManager->save();
 			
@@ -2247,6 +2253,9 @@ class PageManager extends Core
 		// セッションへユーザ情報を保存
 		$userInfo = $gInstanceManager->getUserInfo();
 		$gRequestManager->setSessionValueWithSerialize(M3_SESSION_USER_INFO, $userInfo);
+		
+		// その他セッション情報保存
+		$gRequestManager->_doSessionCloseEventCallback();
 		
 		$this->isAbort = true;					// ページ作成処理を中断するかどうか
 	}

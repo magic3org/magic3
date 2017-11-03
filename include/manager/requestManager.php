@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,6 +21,8 @@ class RequestManager extends Core
 	private $tmpCookie;		// クッキー送信前のクッキー格納データ
 	private $magicQuote;	// バックスラッシュでの文字エスケープ処理
 	private $sessionNoUpdate;		// セッションの更新を停止するかどうか(参照は可能)
+	private $sessionOpenEventCallbacks;		// セッション開始イベントコールバック関数
+	private $sessionCloseEventCallbacks;		// セッション終了イベントコールバック関数
 	
 	/**
 	 * コンストラクタ
@@ -55,7 +57,9 @@ class RequestManager extends Core
 		
 		// その他パラメータ初期化
 		$this->tmpCookie = array();		// クッキー送信前のクッキー格納データ
-
+		$this->sessionOpenEventCallbacks = array();		// セッション開始イベントコールバック関数
+		$this->sessionCloseEventCallbacks = array();	// セッション終了イベントコールバック関数
+		
 		// magic quoteが有効の場合は回避手段を取る
 		if (get_magic_quotes_gpc() == 1) $this->magicQuote = true;
 	}
@@ -648,6 +652,80 @@ class RequestManager extends Core
 	function _sessionGc($maxlifetime)
 	{
 		return $this->db->gcSession($maxlifetime);
+	}
+	
+	
+	/**
+	 * セッション開始イベント時のコールバック関数追加
+	 *
+	 * @param  callable  $callback		コールバック関数
+	 * @return bool						true=正常終了,false=異常終了
+	 */
+	function addSessionOpenEventCallback($callback)
+	{
+		if (!is_callable($callback)) return false;
+		
+		// コールバックス関数追加
+		$this->sessionOpenEventCallbacks[] = $callback;
+		
+		return true;
+	}
+	/**
+	 * セッション終了イベント時のコールバック関数追加
+	 *
+	 * @param  callable  $callback		コールバック関数
+	 * @return bool						true=正常終了,false=異常終了
+	 */
+	function addSessionCloseEventCallback($callback)
+	{
+		if (!is_callable($callback)) return false;
+		
+		// コールバックス関数追加
+		$this->sessionCloseEventCallbacks[] = $callback;
+		
+		return true;
+	}
+	/**
+	 * セッション開始イベント時のコールバック関数を実行
+	 *
+	 * @return bool						true=正常終了,false=異常終了
+	 */
+	function _doSessionOpenEventCallback()
+	{
+		$callbackCount = count($this->sessionOpenEventCallbacks);
+		if ($callbackCount == 0) return true;
+		
+		$retStatus = true;
+		for ($i = 0; $i < $callbackCount; $i++){
+			$callback = $this->sessionOpenEventCallbacks[$i];
+			if (is_callable($callback)){
+				// コールバック関数を実行
+				$result = call_user_func($callback);
+				if (!$result) $retStatus = false;
+			}
+		}
+		return $retStatus;
+	}
+	/**
+	 * セッション終了イベント時のコールバック関数を実行
+	 *
+	 * @return bool						true=正常終了,false=異常終了
+	 */
+	function _doSessionCloseEventCallback()
+	{
+		$callbackCount = count($this->sessionCloseEventCallbacks);
+		if ($callbackCount == 0) return true;
+		
+		$retStatus = true;
+		for ($i = 0; $i < $callbackCount; $i++){
+			$callback = $this->sessionCloseEventCallbacks[$i];
+			if (is_callable($callback)){
+				// コールバック関数を実行
+				$result = call_user_func($callback);
+				if (!$result) $retStatus = false;
+			}
+		}
+		return $retStatus;
 	}
 }
 ?>
