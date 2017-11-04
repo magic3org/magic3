@@ -4990,7 +4990,9 @@ function wp_delete_attachment( $post_id, $force_delete = false ) {
  * @return mixed Attachment meta field. False on failure.
  */
 function wp_get_attachment_metadata( $post_id = 0, $unfiltered = false ) {
-	$post_id = (int) $post_id;
+	return false;
+	
+/*	$post_id = (int) $post_id;
 	if ( !$post = get_post( $post_id ) )
 		return false;
 
@@ -4998,7 +5000,7 @@ function wp_get_attachment_metadata( $post_id = 0, $unfiltered = false ) {
 
 	if ( $unfiltered )
 		return $data;
-
+*/
 	/**
 	 * Filters the attachment meta data.
 	 *
@@ -5008,7 +5010,7 @@ function wp_get_attachment_metadata( $post_id = 0, $unfiltered = false ) {
 	 *                            if the object does not exist.
 	 * @param int        $post_id Attachment ID.
 	 */
-	return apply_filters( 'wp_get_attachment_metadata', $data, $post->ID );
+//	return apply_filters( 'wp_get_attachment_metadata', $data, $post->ID );
 }
 
 /**

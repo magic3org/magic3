@@ -18,8 +18,9 @@
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return bool Whether the post has an image attached.
  */
-function has_post_thumbnail( $post = null ) {
-	return (bool) get_post_thumbnail_id( $post );
+//function has_post_thumbnail( $post = null ) {
+function has_post_thumbnail($post = null, $postType = ''){
+	return (bool) get_post_thumbnail_id( $post, $postType);
 }
 
 /**
@@ -31,8 +32,14 @@ function has_post_thumbnail( $post = null ) {
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return string|int Post thumbnail ID or empty string.
  */
-function get_post_thumbnail_id( $post = null ) {
-	$post = get_post( $post );
+//function get_post_thumbnail_id( $post = null ) {
+function get_post_thumbnail_id($post = null, $postType = ''){
+	// データタイプが設定されている場合はデータタイプを指定
+	if (empty($postType)){
+		$post = get_post( $post );
+	} else {
+		$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+	}
 	if ( ! $post ) {
 		return '';
 	}
@@ -124,8 +131,16 @@ function the_post_thumbnail( $size = 'post-thumbnail', $attr = '' ) {
  * @param string|array $attr Optional. Query string or array of attributes. Default empty.
  * @return string The post thumbnail image tag.
  */
-function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = '' ) {
-	$post = get_post( $post );
+//function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = '' ) {
+function get_the_post_thumbnail($post = null, $size = 'post-thumbnail', $attr = '', $postType = ''){
+
+	// データタイプが設定されている場合はデータタイプを指定
+	if (empty($postType)){
+		$post = get_post($post);
+	} else {
+		$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+	}
+	
 	if ( ! $post ) {
 		return '';
 	}
@@ -158,7 +173,8 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		do_action( 'begin_fetch_post_thumbnail_html', $post->ID, $post_thumbnail_id, $size );
 //		if ( in_the_loop() )
 //			update_post_thumbnail_cache();
-		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, $attr );
+//		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, $attr );
+		$html = wp_get_attachment_image($post_thumbnail_id, $size, false, $attr, $postType);
 
 		/**
 		 * Fires after fetching the post thumbnail HTML.

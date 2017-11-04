@@ -134,11 +134,11 @@ function get_permalink($post = 0, $leavename = false, $postType = '') {
 	if ( is_object( $post ) && isset( $post->filter ) && 'sample' == $post->filter ) {
 		$sample = true;
 	} else {
-		// データタイプが指定されている場合はコンテンツタイプを指定
+		// データタイプが設定されている場合はデータタイプを指定
 		if (empty($postType)){
 			$post = get_post( $post );
 		} else {
-			get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+			$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
 		}
 		$sample = false;
 	}

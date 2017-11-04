@@ -907,7 +907,8 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
  * @param string|array $attr          Optional. Attributes for the image markup. Default empty.
  * @return string HTML img element or empty string on failure.
  */
-function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
+//function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
+function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '', $postType = '') {
 	$html = '';
 	$image = wp_get_attachment_image_src($attachment_id, $size, $icon);
 	if ( $image ) {
@@ -917,7 +918,14 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 		if ( is_array( $size_class ) ) {
 			$size_class = join( 'x', $size_class );
 		}
-		$attachment = get_post($attachment_id);
+		
+		// データタイプが設定されている場合はデータタイプを指定
+		if (empty($postType)){
+			$attachment = get_post($attachment_id);
+		} else {
+			$attachment = get_post($attachment_id, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+		}
+	
 		$default_attr = array(
 			'src'	=> $src,
 			'class'	=> "attachment-$size_class size-$size_class",
