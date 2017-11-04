@@ -115,7 +115,8 @@ function get_the_permalink( $post = 0, $leavename = false ) {
  * @param bool        $leavename Optional. Whether to keep post name or page name. Default false.
  * @return string|false The permalink URL or false if post does not exist.
  */
-function get_permalink( $post = 0, $leavename = false ) {
+//function get_permalink( $post = 0, $leavename = false ) {
+function get_permalink($post = 0, $leavename = false, $postType = '') {
 	$rewritecode = array(
 		'%year%',
 		'%monthnum%',
@@ -133,7 +134,12 @@ function get_permalink( $post = 0, $leavename = false ) {
 	if ( is_object( $post ) && isset( $post->filter ) && 'sample' == $post->filter ) {
 		$sample = true;
 	} else {
-		$post = get_post( $post );
+		// データタイプが指定されている場合はコンテンツタイプを指定
+		if (empty($postType)){
+			$post = get_post( $post );
+		} else {
+			get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+		}
 		$sample = false;
 	}
 

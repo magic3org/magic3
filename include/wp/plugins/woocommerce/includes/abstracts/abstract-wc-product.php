@@ -1661,7 +1661,10 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 	 * @return string
 	 */
 	public function get_permalink() {
-		return get_permalink( $this->get_id() );
+		//return get_permalink( $this->get_id() );
+		
+		// データタイプを指定してパーマリンクを作成
+		return get_permalink($this->get_id(), false, $this->post_type);
 	}
 
 	/**
