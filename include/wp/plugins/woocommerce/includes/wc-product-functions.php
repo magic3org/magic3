@@ -925,17 +925,7 @@ function wc_get_price_including_tax( $product, $args = array() ) {
 	if ( $product->is_taxable() ) {
 		if ( ! wc_prices_include_tax() ) {
 			// 税率を取得
-			//$tax_rates    = WC_Tax::get_rates( $product->get_tax_class() );
-			
-			// 税タイプ取得
-			$taxType = $product->getTaxType();
-			$tax_rates = array();
-			if (!empty($taxType)){
-				// 税率取得
-				global $gContentApi;
-				$taxRate = $gContentApi->getTaxRate($taxType);
-				if (floatval($taxRate) > 0) $tax_rates[] = array( 'rate' => $taxRate, 'label' => 'Tax', 'shipping' => 'yes', 'compound' => 'no' );
-			}
+			$tax_rates    = WC_Tax::get_rates( $product->get_tax_class() );
 
 			$taxes        = WC_Tax::calc_tax( $line_price, $tax_rates, false );
 			$tax_amount   = WC_Tax::get_tax_total( $taxes );

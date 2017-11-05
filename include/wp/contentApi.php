@@ -151,14 +151,19 @@ class ContentApi extends BaseApi
 				// ##### woocommerce.phpが呼ばれる前にWooCommerceで使用するオプション値は取得しておく #####
 				global $m3WpOptions;		// 初期値取得用
 				
+				// ##### 商品価格の扱い #####
+				// 商品価格と税は分けて計算する。商品価格を表示するときは税を含んで表示する。
+				
 				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
 				$m3WpOptions['woocommerce_calc_taxes'] = 'yes';					// 税処理を行う
+				$m3WpOptions['woocommerce_prices_include_tax'] = 'no';			// 商品価格が税込みかどうか(税は別途計算し付加する)
 				$m3WpOptions['woocommerce_tax_display_shop'] ='incl';			// 消費税表示方法(税込み)
+				$m3WpOptions['woocommerce_tax_display_cart'] = 'incl';			// 消費税表示方法(税込み)
 				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
 				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
-				
+				//$m3WpOptions['woocommerce_tax_round_at_subtotal'] = 'no';
 				// フック関数追加
 				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
 				
@@ -598,7 +603,7 @@ class ContentApi extends BaseApi
 		return array();
 	}
 	/**
-	 * 製品税タイプ取得
+	 * 商品税タイプ取得
 	 *
 	 * @param array  	$productRow			製品レコード
 	 * @return string						課税タイプ(sales=課税(外税),空=課税なし)
@@ -610,19 +615,31 @@ class ContentApi extends BaseApi
 		return $taxType;
 	}
 	/**
+	 * 商品販売許可状態を取得
+	 *
+	 * @return bool					true=販売可、false=販売不可
+	 */
+	function getSellAllowed($productRow)
+	{
+		$status = $productRow['pt_sell_status'];// 販売状態(0=未設定、1=カート可(一時停止中)、2=販売中、3=販売不可)
+		if ($status == 3){			// 「販売不可」の場合
+			return false;
+		} else {
+			return true;
+		}
+	}
+	/**
 	 * 税率を取得
 	 *
-	 * @param string	$taxType	税種別
 	 * @return float				税率
 	 */
-	public function getTaxRate($taxType)
+	public function getTaxRate()
 	{
-		if (empty($taxType)) return 0;
-		
 		// アドオンオブジェクト取得
 		$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
 		
-		$rate = $addonObj->getTaxRate($taxType);
+		$rate = $addonObj->getTaxRate('sales');		// 消費税率取得
+
 		return $rate;
 	}
 	/**

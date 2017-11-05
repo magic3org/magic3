@@ -1173,7 +1173,6 @@ class WC_Cart {
 					// Now add modified taxes
 					$tax_result            = WC_Tax::calc_tax( $line_subtotal, $item_tax_rates );
 					$line_subtotal_tax     = array_sum( $tax_result );
-
 				/**
 				 * Regular tax calculation (customer inside base and the tax class is unmodified.
 				 */
@@ -2185,7 +2184,7 @@ class WC_Cart {
 				if ( $this->prices_include_tax && $this->tax_total > 0 ) {
 					$product_subtotal .= ' <small class="tax_label">' . WC()->countries->ex_tax_or_vat() . '</small>';
 				}
-			} else {
+			} else {		// 税を含めて表示(デフォルト値)
 
 				$row_price        = wc_get_price_including_tax( $product, array( 'qty' => $quantity ) );
 				$product_subtotal = wc_price( $row_price );

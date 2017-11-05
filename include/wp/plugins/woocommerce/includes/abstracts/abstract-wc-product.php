@@ -143,9 +143,14 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 			$this->data['sale_price'] = $salePrice;
 			$this->data['price'] = $price;			// 実売価格
 			
+			// ### tax_statusでカート処理を制御。taxable(デフォルト)=税処理行う,shipping=税処理なし,none=カート処理不可(商品はカタログ的扱い)。 ###
 			// 税タイプ
 			$this->taxType = $gContentApi->getProductTaxType($rowProduct);
-			if (empty($this->taxType)) $this->data['tax_status'] = 'none';			// 課税タイプが設定されていない場合は課税処理しない
+			if (empty($this->taxType)) $this->data['tax_status'] = 'shipping';			// 課税タイプが設定されていない場合は課税処理しない
+			
+			// 商品の販売可否を取得
+			$sellAllowed = $gContentApi->getSellAllowed($rowProduct);
+			if (!$sellAllowed) $this->data['tax_status'] = 'none';				// 商品はカタログ的な扱い
 			
 			// 商品の状態
 			if ($rowProduct['pt_visible'] && $rowProduct['pt_sell_status'] < 3/*未設定,カート可,販売中*/){

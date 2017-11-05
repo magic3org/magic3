@@ -478,7 +478,16 @@ class WC_Tax {
 	 * @return  array
 	 */
 	public static function get_rates( $tax_class = '' ) {
-		$tax_class         = sanitize_title( $tax_class );
+		global $gContentApi;
+
+		// Å—¦Žæ“¾
+		$tax_rates = array();
+		$taxRate = $gContentApi->getTaxRate();
+		if (floatval($taxRate) > 0) $tax_rates[] = array( 'rate' => $taxRate, 'label' => 'Tax', 'shipping' => 'yes', 'compound' => 'no' );
+		
+		return $tax_rates;
+				
+/*		$tax_class         = sanitize_title( $tax_class );
 		$location          = self::get_tax_location( $tax_class );
 		$matched_tax_rates = array();
 
@@ -493,8 +502,8 @@ class WC_Tax {
 				'tax_class' => $tax_class,
 			) );
 		}
-
 		return apply_filters( 'woocommerce_matched_rates', $matched_tax_rates, $tax_class );
+		*/
 	}
 
 	/**
