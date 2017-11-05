@@ -182,7 +182,8 @@ function image_hwstring( $width, $height ) {
  * @return false|array Array containing the image URL, width, height, and boolean for whether
  *                     the image is an intermediate size. False on failure.
  */
-function image_downsize( $id, $size = 'medium' ) {
+//function image_downsize( $id, $size = 'medium' ) {
+function image_downsize($id, $size = 'medium', $postType = ''){
 	global $gEnvManager;
 	global $gContentApi;
 
@@ -209,8 +210,14 @@ function image_downsize( $id, $size = 'medium' ) {
 		return $out;
 	}
 
-	// 現在のコンテンツデータを取得
-	$post = get_post();
+//	// 現在のコンテンツデータを取得
+//	$post = get_post();
+	// データタイプが設定されている場合はデータタイプを指定
+	if (empty($postType)){
+		$post = get_post($id);
+	} else {
+		$post = get_post($id, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+	}
 	if (!$post) return false;
 
 	// サムネール作成元の画像を取得
@@ -858,9 +865,10 @@ function get_intermediate_image_sizes() {
  * @param bool         $icon          Optional. Whether the image should be treated as an icon. Default false.
  * @return false|array Returns an array (url, width, height, is_intermediate), or false, if no image is available.
  */
-function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon = false ) {
+//function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon = false ) {
+function wp_get_attachment_image_src($attachment_id, $size = 'thumbnail', $icon = false, $postType = ''){
 	// get a thumbnail or intermediate image if there is one
-	$image = image_downsize( $attachment_id, $size );
+	$image = image_downsize($attachment_id, $size, $postType);
 	if ( ! $image ) {
 		$src = false;
 
@@ -910,7 +918,7 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
 //function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
 function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '', $postType = '') {
 	$html = '';
-	$image = wp_get_attachment_image_src($attachment_id, $size, $icon);
+	$image = wp_get_attachment_image_src($attachment_id, $size, $icon, $postType);
 	if ( $image ) {
 		list($src, $width, $height) = $image;
 		$hwstring = image_hwstring($width, $height);

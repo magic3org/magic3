@@ -1784,6 +1784,7 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 	 */
 	public function get_image( $size = 'shop_thumbnail', $attr = array(), $placeholder = true ) {
 		if (has_post_thumbnail($this->get_id(), $this->post_type)){		// データタイプを指定
+			// ### Magic3では常にこちらに来る ###
 			$image = get_the_post_thumbnail($this->get_id(), $size, $attr, $this->post_type);// データタイプを指定
 		} elseif (($parent_id = wp_get_post_parent_id($this->get_id())) && has_post_thumbnail($parent_id, $this->post_type)){// データタイプを指定
 			$image = get_the_post_thumbnail($parent_id, $size, $attr, $this->post_type);// データタイプを指定
