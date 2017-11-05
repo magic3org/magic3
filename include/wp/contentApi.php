@@ -587,6 +587,26 @@ class ContentApi extends BaseApi
 		return $ret;
 	}
 	/**
+	 * 商品名取得
+	 *
+	 * @param array  	$productRow			製品レコード
+	 * @return string						商品名
+	 */
+	function getProductName($productRow)
+	{
+		return $productRow['pt_name'];
+	}
+	/**
+	 * 商品コード取得
+	 *
+	 * @param array  	$productRow			製品レコード
+	 * @return string						商品コード
+	 */
+	function getProductCode($productRow)
+	{
+		return $productRow['pt_code'];
+	}
+	/**
 	 * 製品価格取得
 	 *
 	 * @param array  	$srcRows			価格リスト

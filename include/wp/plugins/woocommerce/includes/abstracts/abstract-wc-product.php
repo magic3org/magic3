@@ -131,6 +131,10 @@ class WC_Product extends WC_Abstract_Legacy_Product {
 		global $gContentApi;
 		$ret = $gContentApi->getProductInfo($product, $rowProduct, $rowPrice, $rowImage, $rowStatus, $rowCategory);
 		if ($ret){
+			// 商品名
+			$this->data['name'] = $gContentApi->getProductName($rowProduct);
+			$this->data['code'] = $gContentApi->getProductCode($rowProduct);			// 商品コード
+
 			// 価格
 			$priceInfo = $gContentApi->getProductPrice($rowPrice, 'regular');
 			$regularPrice = $priceInfo['pp_price'];	// 通常価格
