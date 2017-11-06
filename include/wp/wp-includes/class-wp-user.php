@@ -118,6 +118,14 @@ class WP_User {
 	 * @param int $blog_id Optional Site ID, defaults to current site.
 	 */
 	public function __construct( $id = 0, $name = '', $blog_id = '' ) {
+		global $gEnvManager;
+		
+		// 現在のユーザの情報を取得
+		$userInfo = $gEnvManager->getCurrentUserInfo();
+		if (!is_null($userInfo)){
+			$this->ID = $userInfo->userId;
+//			$this->user_email = $userInfo->email;
+		}
 /*		if ( ! isset( self::$back_compat_keys ) ) {
 			$prefix = $GLOBALS['wpdb']->prefix;
 			self::$back_compat_keys = array(
@@ -129,7 +137,7 @@ class WP_User {
 				$prefix . 'usersettingstime' => $prefix . 'user-settings-time',
 			);
 		}*/
-
+/*
 		if ( $id instanceof WP_User ) {
 			$this->init( $id->data, $blog_id );
 			return;
@@ -154,6 +162,7 @@ class WP_User {
 		} else {
 			$this->data = new stdClass;
 		}
+		*/
 	}
 
 	/**

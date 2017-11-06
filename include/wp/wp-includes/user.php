@@ -933,7 +933,7 @@ function count_users($strategy = 'time') {
  *
  * @param int $for_user_id Optional. User ID to set up global data.
  */
-function setup_userdata($for_user_id = '') {
+/*function setup_userdata($for_user_id = '') {
 	global $user_login, $userdata, $user_level, $user_ID, $user_email, $user_url, $user_identity;
 
 	if ( '' == $for_user_id )
@@ -956,7 +956,7 @@ function setup_userdata($for_user_id = '') {
 	$user_url   = $user->user_url;
 	$user_identity = $user->display_name;
 }
-
+*/
 /**
  * Create dropdown HTML content of users.
  *
@@ -2533,7 +2533,7 @@ function _wp_get_current_user() {
 
 	wp_set_current_user( $user_id );*/
 
-	$current_user = wp_set_current_user();		// Magic3�ǉ�
+	$current_user = new WP_User();		// 現在のユーザ情報を取得
 	
 	return $current_user;
 }
