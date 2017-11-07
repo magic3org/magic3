@@ -1292,7 +1292,8 @@ class PageManager extends Core
 		
 		// セッションからユーザ情報を取得
 		$userInfo = $gRequestManager->getSessionValueWithSerialize(M3_SESSION_USER_INFO);
-		if (!$gAccessManager->checkSessionSecurity($userInfo)) return;			// セキュリティ問題ありの場合は終了
+		if (!$gAccessManager->checkSessionSecurity($userInfo)) return;			// セキュリティ問題ありの場合はここで終了
+		// ##### ここで終了した場合はページサブIDが未設定のためページ不正のエラーが発生しアクセスエラー画面が表示される #####
 		
 		// その他セッション情報取得
 		$gRequestManager->_doSessionOpenEventCallback();
