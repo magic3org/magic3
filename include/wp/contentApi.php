@@ -1331,6 +1331,40 @@ class ContentApi extends BaseApi
 		return $pages[$pageType];
 	}
 	/**
+	 * CSRF防止用のトークンを生成
+	 *
+	 * @return						トークン文字列
+	 */
+	function createOnetimeToken()
+	{
+		$token = makeShortHash(time() . $this->gAccess->getAccessLogSerialNo());
+		return $token;
+	}
+	/**
+	 * CSRF防止用のトークンをチェック
+	 *
+	 * @param string $value			チェック文字列
+	 * @return bool					true=正常、false=異常
+	 */
+	function verifyOnetimeToken($value)
+	{
+		$token = $this->gRequest->getSessionValue(M3_SESSION_POST_TICKET);
+		if ($token == $value){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * CSRF防止用のトークンを破棄
+	 *
+	 * @return						なし
+	 */
+	function removeOnetimeToken()
+	{
+		$this->gRequest->unsetSessionValue(M3_SESSION_POST_TICKET);
+	}
+	/**
 	 * WooCommerceフック関数
 	 */
 	/**

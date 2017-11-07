@@ -24,7 +24,7 @@ if ( !function_exists('wp_set_current_user') ) :
  * @return WP_User Current user User object
  */
 function wp_set_current_user($id = 0, $name = '') {
-	global $current_user;
+/*	global $current_user;
 
 	// If `$id` matches the user who's already current, there's nothing to do.
 	if ( isset( $current_user )
@@ -39,14 +39,9 @@ function wp_set_current_user($id = 0, $name = '') {
 //
 //	setup_userdata( $current_user->ID );
 
-	/**
-	 * Fires after the current user is set.
-	 *
-	 * @since 2.0.1
-	 */
-//	do_action( 'set_current_user' );
-
 	return $current_user;
+	*/
+	return false;
 }
 endif;
 
@@ -1860,10 +1855,17 @@ if ( !function_exists('wp_verify_nonce') ) :
  *                   0-12 hours ago, 2 if the nonce is valid and generated between 12-24 hours ago.
  */
 function wp_verify_nonce( $nonce, $action = -1 ) {
-	$nonce = (string) $nonce;
+	global $gContentApi;
+	
+	// ワンタイムトークンを有効性をチェック
+	$isOk = $gContentApi->verifyOnetimeToken();
+	return $isOk;
+	
+/*	$nonce = (string) $nonce;
 	$user = wp_get_current_user();
 	$uid = (int) $user->ID;
 	if ( ! $uid ) {
+*/
 		/**
 		 * Filters whether the user who generated the nonce is logged out.
 		 *
@@ -1872,7 +1874,7 @@ function wp_verify_nonce( $nonce, $action = -1 ) {
 		 * @param int    $uid    ID of the nonce-owning user.
 		 * @param string $action The nonce action.
 		 */
-		$uid = apply_filters( 'nonce_user_logged_out', $uid, $action );
+/*		$uid = apply_filters( 'nonce_user_logged_out', $uid, $action );
 	}
 
 	if ( empty( $nonce ) ) {
@@ -1893,7 +1895,7 @@ function wp_verify_nonce( $nonce, $action = -1 ) {
 	if ( hash_equals( $expected, $nonce ) ) {
 		return 2;
 	}
-
+*/
 	/**
 	 * Fires when nonce verification fails.
 	 *
@@ -1904,10 +1906,10 @@ function wp_verify_nonce( $nonce, $action = -1 ) {
 	 * @param WP_User    $user   The current user object.
 	 * @param string     $token  The user's session token.
 	 */
-	do_action( 'wp_verify_nonce_failed', $nonce, $action, $user, $token );
+/*	do_action( 'wp_verify_nonce_failed', $nonce, $action, $user, $token );
 
 	// Invalid nonce
-	return false;
+	return false;*/
 }
 endif;
 
@@ -1923,17 +1925,24 @@ if ( !function_exists('wp_create_nonce') ) :
  * @return string The token.
  */
 function wp_create_nonce($action = -1) {
-	$user = wp_get_current_user();
+	global $gContentApi;
+	
+	// ワンタイムトークンを生成
+	$token = $gContentApi->createOnetimeToken();
+	return $token;
+/*	$user = wp_get_current_user();
 	$uid = (int) $user->ID;
 	if ( ! $uid ) {
-		/** This filter is documented in wp-includes/pluggable.php */
-		$uid = apply_filters( 'nonce_user_logged_out', $uid, $action );
+*/
+//		/** This filter is documented in wp-includes/pluggable.php */
+/*		$uid = apply_filters( 'nonce_user_logged_out', $uid, $action );
 	}
 
 	$token = wp_get_session_token();
 	$i = wp_nonce_tick();
 
 	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
+	*/
 }
 endif;
 

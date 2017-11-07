@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -125,6 +125,16 @@ function makePassword($len, $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGH
 		$l--;
 	}
 	return $pwd;
+}
+/**
+ * 短いハッシュ文字列を生成する
+ *
+ * @param string  $data		生成元データ
+ * @return string			作成したハッシュ文字列
+ */
+function makeShortHash($data, $algo = 'md5')
+{
+	return strtr(rtrim(base64_encode(pack('H*', $algo($data))), '='), '+/', '-_');
 }
 /**
  * 省略文字列を作成
