@@ -1337,7 +1337,16 @@ class ContentApi extends BaseApi
 	 */
 	function createOnetimeToken()
 	{
-		$token = makeShortHash(time() . $this->gAccess->getAccessLogSerialNo());
+		static $token;
+
+		// ##### トークンは画面単位で発行する #####
+		// AJAXでの設定の場合は既存のトークンを取得
+		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+			$token = $this->gRequest->getSessionValue(M3_SESSION_POST_TICKET);
+		} else {
+			if (!isset($token)) $token = makeShortHash(time() . $this->gAccess->getAccessLogSerialNo());
+			$this->gRequest->setSessionValue(M3_SESSION_POST_TICKET, $token);		// セッションに保存
+		}
 		return $token;
 	}
 	/**

@@ -1857,8 +1857,8 @@ if ( !function_exists('wp_verify_nonce') ) :
 function wp_verify_nonce( $nonce, $action = -1 ) {
 	global $gContentApi;
 	
-	// ƒƒ“ƒ^ƒCƒ€ƒg[ƒNƒ“‚ð—LŒø«‚ðƒ`ƒFƒbƒN
-	$isOk = $gContentApi->verifyOnetimeToken();
+	// ãƒ¯ãƒ³ã‚¿ã‚¤ãƒ ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æœ‰åŠ¹æ€§ã‚’ãƒã‚§ãƒƒã‚¯
+	$isOk = $gContentApi->verifyOnetimeToken($nonce);
 	return $isOk;
 	
 /*	$nonce = (string) $nonce;
@@ -1927,7 +1927,7 @@ if ( !function_exists('wp_create_nonce') ) :
 function wp_create_nonce($action = -1) {
 	global $gContentApi;
 	
-	// ƒƒ“ƒ^ƒCƒ€ƒg[ƒNƒ“‚ð¶¬
+	// ãƒ¯ãƒ³ã‚¿ã‚¤ãƒ ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç”Ÿæˆ
 	$token = $gContentApi->createOnetimeToken();
 	return $token;
 /*	$user = wp_get_current_user();
@@ -1943,6 +1943,20 @@ function wp_create_nonce($action = -1) {
 
 	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
 	*/
+}
+endif;
+
+if ( !function_exists('wp_remove_nonce') ) :
+/**
+ * ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤(Magic3è¿½åŠ )
+ *
+ * @return 					ãªã—
+ */
+function wp_remove_nonce() {
+	global $gContentApi;
+	
+	// ãƒ¯ãƒ³ã‚¿ã‚¤ãƒ ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤
+	$gContentApi->removeOnetimeToken();
 }
 endif;
 
