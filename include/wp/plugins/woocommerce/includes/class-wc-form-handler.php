@@ -436,19 +436,20 @@ class WC_Form_Handler {
 	 * Remove from cart/update.
 	 */
 	public static function update_cart_action() {
-
+		global $gContentApi;
+		
 		if ( ! empty( $_POST['apply_coupon'] ) && ! empty( $_POST['coupon_code'] ) ) {
-
 			// Add Discount
 			WC()->cart->add_discount( sanitize_text_field( $_POST['coupon_code'] ) );
 
 		} elseif ( isset( $_GET['remove_coupon'] ) ) {
-
 			// Remove Coupon Codes
 			WC()->cart->remove_coupon( wc_clean( $_GET['remove_coupon'] ) );
 
 		} elseif ( ! empty( $_GET['remove_item'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'woocommerce-cart' ) ) {
-
+			// ワンタイムトークンを削除
+			wp_remove_nonce();
+			
 			// Remove from cart
 			$cart_item_key = sanitize_text_field( $_GET['remove_item'] );
 
@@ -456,7 +457,6 @@ class WC_Form_Handler {
 				WC()->cart->remove_cart_item( $cart_item_key );
 
 				$product = wc_get_product( $cart_item['product_id'] );
-
 				$item_removed_title = apply_filters( 'woocommerce_cart_item_removed_title', $product ? sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', 'woocommerce' ), $product->get_name() ) : __( 'Item', 'woocommerce' ), $cart_item );
 
 				// Don't show undo link if removed item is out of stock.
@@ -470,12 +470,17 @@ class WC_Form_Handler {
 				wc_add_notice( $removed_notice );
 			}
 
+			// 項目削除用のリダイレクトを発行
 			$referer  = wp_get_referer() ? remove_query_arg( array( 'remove_item', 'add-to-cart', 'added-to-cart' ), add_query_arg( 'removed_item', '1', wp_get_referer() ) ) : wc_get_cart_url();
 			wp_safe_redirect( $referer );
-			exit;
+//			exit;
 
+			// システム終了
+			$gContentApi->exitSystem();
 		} elseif ( ! empty( $_GET['undo_item'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'woocommerce-cart' ) ) {
-
+			// ワンタイムトークンを削除
+			wp_remove_nonce();
+			
 			// Undo Cart Item
 			$cart_item_key = sanitize_text_field( $_GET['undo_item'] );
 
@@ -483,13 +488,17 @@ class WC_Form_Handler {
 
 			$referer  = wp_get_referer() ? remove_query_arg( array( 'undo_item', '_wpnonce' ), wp_get_referer() ) : wc_get_cart_url();
 			wp_safe_redirect( $referer );
-			exit;
+//			exit;
 
+			// システム終了
+			$gContentApi->exitSystem();
 		}
 
 		// Update Cart - checks apply_coupon too because they are in the same form
 		if ( ( ! empty( $_POST['apply_coupon'] ) || ! empty( $_POST['update_cart'] ) || ! empty( $_POST['proceed'] ) ) && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'woocommerce-cart' ) ) {
-
+			// ワンタイムトークンを削除
+			wp_remove_nonce();
+			
 			$cart_updated = false;
 			$cart_totals  = isset( $_POST['cart'] ) ? $_POST['cart'] : '';
 
@@ -536,12 +545,18 @@ class WC_Form_Handler {
 
 			if ( ! empty( $_POST['proceed'] ) ) {
 				wp_safe_redirect( wc_get_checkout_url() );
-				exit;
+//				exit;
+
+				// システム終了
+				$gContentApi->exitSystem();
 			} elseif ( $cart_updated ) {
 				wc_add_notice( __( 'Cart updated.', 'woocommerce' ) );
 				$referer = remove_query_arg( array( 'remove_coupon', 'add-to-cart' ), ( wp_get_referer() ? wp_get_referer() : wc_get_cart_url() ) );
 				wp_safe_redirect( $referer );
-				exit;
+//				exit;
+
+				// システム終了
+				$gContentApi->exitSystem();
 			}
 		}
 	}

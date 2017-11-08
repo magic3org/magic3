@@ -1374,6 +1374,17 @@ class ContentApi extends BaseApi
 		$this->gRequest->unsetSessionValue(M3_SESSION_POST_TICKET);
 	}
 	/**
+	 * システムを中途終了
+	 *
+	 * @return						なし
+	 */
+	function exitSystem()
+	{
+		// システムを中断し終了処理を行う
+		$this->gPage->abortPage();
+		$this->gPage->exitSystem();
+	}
+	/**
 	 * WooCommerceフック関数
 	 */
 	/**
