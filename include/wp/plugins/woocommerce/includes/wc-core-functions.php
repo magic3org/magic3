@@ -738,12 +738,11 @@ function wc_setcookie( $name, $value, $expire = 0, $secure = false ) {
 		global $gRequestManager;
 
 		// ##### $nameのクッキー名は先頭に「woocommerce_」が付加されている #####
-		// 現在時よりも前の場合はクッキーを削除
-		if ($expire < time()){
+		if (intval($expire) == 0){
+			$expire = 0;			// ブラウザ閉じるまで生存
+		} else if ($expire < time()){// 現在時よりも前の場合はクッキーを削除
 			$gRequestManager->removeCookieValue($name);
 			return;
-		} else if (intval($expire) == 0){
-			$expire = 0;			// ブラウザ閉じるまで生存
 		} else {
 			$expire = $expire / (60 * 60 * 24);		// 日にち換算
 		}
