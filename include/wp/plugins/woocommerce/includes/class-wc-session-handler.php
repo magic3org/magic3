@@ -18,19 +18,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Session_Handler extends WC_Session {
 
 	/** @var string cookie name */
-	private $_cookie;
+//	private $_cookie;
 
 	/** @var string session due to expire timestamp */
-	private $_session_expiring;
+//	private $_session_expiring;
 
 	/** @var string session expiration timestamp */
-	private $_session_expiration;
+//	private $_session_expiration;
 
 	/** $var bool Bool based on whether a cookie exists **/
-	private $_has_cookie = false;
+//	private $_has_cookie = false;
 
 	/** @var string Custom session table name */
-	private $_table;
+//	private $_table;
 
 	/**
 	 * Constructor for the session class.
@@ -38,10 +38,10 @@ class WC_Session_Handler extends WC_Session {
 	public function __construct() {
 //		global $wpdb;
 
-		$this->_cookie = apply_filters( 'woocommerce_cookie', 'wp_woocommerce_session_' . COOKIEHASH );
+//		$this->_cookie = apply_filters( 'woocommerce_cookie', 'wp_woocommerce_session_' . COOKIEHASH );
 //		$this->_table  = $wpdb->prefix . 'woocommerce_sessions';
 
-		if ( $cookie = $this->get_session_cookie() ) {
+/*		if ( $cookie = $this->get_session_cookie() ) {
 			$this->_customer_id        = $cookie[0];
 			$this->_session_expiration = $cookie[1];
 			$this->_session_expiring   = $cookie[2];
@@ -55,7 +55,7 @@ class WC_Session_Handler extends WC_Session {
 		} else {
 			$this->set_session_expiration();
 			$this->_customer_id = $this->generate_customer_id();
-		}
+		}*/
 
 		// セッションからデータ読み込み
 		//$this->_data = $this->get_session_data();
@@ -64,13 +64,13 @@ class WC_Session_Handler extends WC_Session {
 		$this->_data = isset($sessionObj) ? $sessionObj : array();
 
 		// Actions
-		add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_session_cookie' ), 10 );
-		add_action( 'woocommerce_cleanup_sessions', array( $this, 'cleanup_sessions' ), 10 );
+//		add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_session_cookie' ), 10 );
+//		add_action( 'woocommerce_cleanup_sessions', array( $this, 'cleanup_sessions' ), 10 );
 //		add_action( 'shutdown', array( $this, 'save_data' ), 20 );
-		add_action( 'wp_logout', array( $this, 'destroy_session' ) );
+/*		add_action( 'wp_logout', array( $this, 'destroy_session' ) );
 		if ( ! is_user_logged_in() ) {
 			add_filter( 'nonce_user_logged_out', array( $this, 'nonce_user_logged_out' ) );
-		}
+		}*/
 	}
 
 	/**
@@ -82,7 +82,7 @@ class WC_Session_Handler extends WC_Session {
 	 *
 	 * @param bool $set
 	 */
-	public function set_customer_session_cookie( $set ) {
+/*	public function set_customer_session_cookie( $set ) {
 		if ( $set ) {
 			// Set/renew our cookie
 			$to_hash           = $this->_customer_id . '|' . $this->_session_expiration;
@@ -93,24 +93,24 @@ class WC_Session_Handler extends WC_Session {
 			// Set the cookie
 			wc_setcookie( $this->_cookie, $cookie_value, $this->_session_expiration, apply_filters( 'wc_session_use_secure_cookie', false ) );
 		}
-	}
+	}*/
 
 	/**
 	 * Return true if the current user has an active session, i.e. a cookie to retrieve values.
 	 *
 	 * @return bool
 	 */
-	public function has_session() {
+/*	public function has_session() {
 		return isset( $_COOKIE[ $this->_cookie ] ) || $this->_has_cookie || is_user_logged_in();
-	}
+	}*/
 
 	/**
 	 * Set session expiration.
 	 */
-	public function set_session_expiration() {
+/*	public function set_session_expiration() {
 		$this->_session_expiring   = time() + intval( apply_filters( 'wc_session_expiring', 60 * 60 * 47 ) ); // 47 Hours.
 		$this->_session_expiration = time() + intval( apply_filters( 'wc_session_expiration', 60 * 60 * 48 ) ); // 48 Hours.
-	}
+	}*/
 
 	/**
 	 * Generate a unique customer ID for guests, or return user ID if logged in.
@@ -119,7 +119,7 @@ class WC_Session_Handler extends WC_Session {
 	 *
 	 * @return int|string
 	 */
-	public function generate_customer_id() {
+/*	public function generate_customer_id() {
 		if ( is_user_logged_in() ) {
 			return get_current_user_id();
 		} else {
@@ -127,14 +127,14 @@ class WC_Session_Handler extends WC_Session {
 			$hasher = new PasswordHash( 8, false );
 			return md5( $hasher->get_random_bytes( 32 ) );
 		}
-	}
+	}*/
 
 	/**
 	 * Get session cookie.
 	 *
 	 * @return bool|array
 	 */
-	public function get_session_cookie() {
+/*	public function get_session_cookie() {
 		if ( empty( $_COOKIE[ $this->_cookie ] ) || ! is_string( $_COOKIE[ $this->_cookie ] ) ) {
 			return false;
 		}
@@ -150,7 +150,7 @@ class WC_Session_Handler extends WC_Session {
 		}
 
 		return array( $customer_id, $session_expiration, $session_expiring, $cookie_hash );
-	}
+	}*/
 
 	/**
 	 * Get session data.
@@ -203,7 +203,7 @@ class WC_Session_Handler extends WC_Session {
 	/**
 	 * Destroy all session data.
 	 */
-	public function destroy_session() {
+/*	public function destroy_session() {
 		// Clear cookie
 		wc_setcookie( $this->_cookie, '', time() - YEAR_IN_SECONDS, apply_filters( 'wc_session_use_secure_cookie', false ) );
 
@@ -216,7 +216,7 @@ class WC_Session_Handler extends WC_Session {
 		$this->_data        = array();
 		$this->_dirty       = false;
 		$this->_customer_id = $this->generate_customer_id();
-	}
+	}*/
 
 	/**
 	 * When a user is logged out, ensure they have a unique nonce by using the customer/session ID.
@@ -225,14 +225,14 @@ class WC_Session_Handler extends WC_Session {
 	 *
 	 * @return string
 	 */
-	public function nonce_user_logged_out( $uid ) {
+/*	public function nonce_user_logged_out( $uid ) {
 		return $this->has_session() && $this->_customer_id ? $this->_customer_id : $uid;
-	}
+	}*/
 
 	/**
 	 * Cleanup sessions.
 	 */
-	public function cleanup_sessions() {
+/*	public function cleanup_sessions() {
 		global $wpdb;
 
 		if ( ! defined( 'WP_SETUP_CONFIG' ) && ! defined( 'WP_INSTALLING' ) ) {
@@ -243,7 +243,7 @@ class WC_Session_Handler extends WC_Session {
 			// Invalidate cache
 			WC_Cache_Helper::incr_cache_prefix( WC_SESSION_CACHE_GROUP );
 		}
-	}
+	}*/
 
 	/**
 	 * Returns the session.
@@ -252,7 +252,7 @@ class WC_Session_Handler extends WC_Session {
 	 * @param mixed $default
 	 * @return string|array
 	 */
-	public function get_session( $customer_id, $default = false ) {
+/*	public function get_session( $customer_id, $default = false ) {
 		global $wpdb;
 
 		if ( defined( 'WP_SETUP_CONFIG' ) ) {
@@ -273,14 +273,14 @@ class WC_Session_Handler extends WC_Session {
 		}
 
 		return maybe_unserialize( $value );
-	}
+	}*/
 
 	/**
 	 * Delete the session from the cache and database.
 	 *
 	 * @param int $customer_id
 	 */
-	public function delete_session( $customer_id ) {
+/*	public function delete_session( $customer_id ) {
 		global $wpdb;
 
 //		wp_cache_delete( $this->get_cache_prefix() . $customer_id, WC_SESSION_CACHE_GROUP );
@@ -292,14 +292,14 @@ class WC_Session_Handler extends WC_Session {
 			)
 		);
 	}
-
+*/
 	/**
 	 * Update the session expiry timestamp.
 	 *
 	 * @param string $customer_id
 	 * @param int $timestamp
 	 */
-	public function update_session_timestamp( $customer_id, $timestamp ) {
+/*	public function update_session_timestamp( $customer_id, $timestamp ) {
 		global $wpdb;
 
 		$wpdb->update(
@@ -314,7 +314,7 @@ class WC_Session_Handler extends WC_Session {
 				'%d'
 			)
 		);
-	}
+	}*/
 	/**
 	 * セッションオブジェクト取得(Magic3追加)
 	 *
