@@ -180,7 +180,8 @@ class WC_Frontend_Scripts {
 	 * Register all WC scripts.
 	 */
 	private static function register_scripts() {
-		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+//		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = '';
 		$register_scripts = array(
 			'flexslider' => array(
 				'src'     => self::get_asset_url( 'assets/js/flexslider/jquery.flexslider' . $suffix . '.js' ),

@@ -532,7 +532,9 @@ final class WooCommerce {
 	 * @return string
 	 */
 	public function ajax_url() {
-		return admin_url( 'admin-ajax.php', 'relative' );
+//		return admin_url( 'admin-ajax.php', 'relative' );
+//		return home_url();
+		return '';
 	}
 
 	/**

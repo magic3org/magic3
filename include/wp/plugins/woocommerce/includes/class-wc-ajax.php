@@ -43,10 +43,9 @@ class WC_AJAX {
 		if ( ! empty( $_GET['wc-ajax'] ) ) {
 			wc_maybe_define_constant( 'DOING_AJAX', true );
 			wc_maybe_define_constant( 'WC_DOING_AJAX', true );
-			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
-				@ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON
-			}
-			$GLOBALS['wpdb']->hide_errors();
+//			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
+//				@ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON
+//			}
 		}
 	}
 
@@ -145,11 +144,12 @@ class WC_AJAX {
 			'shipping_classes_save_changes'                    => false,
 		);
 
+		// AJAX処理登録
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
-			add_action( 'wp_ajax_woocommerce_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+//			add_action( 'wp_ajax_woocommerce_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
 			if ( $nopriv ) {
-				add_action( 'wp_ajax_nopriv_woocommerce_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+//				add_action( 'wp_ajax_nopriv_woocommerce_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
 				// WC AJAX can be used for frontend ajax requests.
 				add_action( 'wc_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
@@ -2379,5 +2379,5 @@ class WC_AJAX {
 	}
 }
 
-// WooCommerceのAjaxは停止
-//WC_AJAX::init();
+// WooCommerceのAjaxを受け付ける
+WC_AJAX::init();
