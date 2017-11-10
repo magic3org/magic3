@@ -437,7 +437,7 @@ class WC_Form_Handler {
 	 */
 	public static function update_cart_action() {
 		global $gContentApi;
-		
+
 		if ( ! empty( $_POST['apply_coupon'] ) && ! empty( $_POST['coupon_code'] ) ) {
 			// Add Discount
 			WC()->cart->add_discount( sanitize_text_field( $_POST['coupon_code'] ) );
@@ -472,11 +472,11 @@ class WC_Form_Handler {
 
 			// 項目削除用のリダイレクトを発行
 			$referer  = wp_get_referer() ? remove_query_arg( array( 'remove_item', 'add-to-cart', 'added-to-cart' ), add_query_arg( 'removed_item', '1', wp_get_referer() ) ) : wc_get_cart_url();
-			wp_safe_redirect( $referer );
+//			wp_safe_redirect( $referer );
 //			exit;
 
-			// システム終了
-			$gContentApi->exitSystem();
+			// リダイレクト先を指定してシステム終了
+			$gContentApi->exitSystem($referer);
 		} elseif ( ! empty( $_GET['undo_item'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'woocommerce-cart' ) ) {
 			// ワンタイムトークンを削除
 			wp_remove_nonce();
@@ -487,11 +487,11 @@ class WC_Form_Handler {
 			WC()->cart->restore_cart_item( $cart_item_key );
 
 			$referer  = wp_get_referer() ? remove_query_arg( array( 'undo_item', '_wpnonce' ), wp_get_referer() ) : wc_get_cart_url();
-			wp_safe_redirect( $referer );
+//			wp_safe_redirect( $referer );
 //			exit;
 
-			// システム終了
-			$gContentApi->exitSystem();
+			// リダイレクト先を指定してシステム終了
+			$gContentApi->exitSystem($referer);
 		}
 
 		// Update Cart - checks apply_coupon too because they are in the same form
@@ -544,19 +544,19 @@ class WC_Form_Handler {
 			}
 
 			if ( ! empty( $_POST['proceed'] ) ) {
-				wp_safe_redirect( wc_get_checkout_url() );
+//				wp_safe_redirect( wc_get_checkout_url() );
 //				exit;
 
-				// システム終了
-				$gContentApi->exitSystem();
+				// リダイレクト先を指定してシステム終了
+				$gContentApi->exitSystem(wc_get_checkout_url());
 			} elseif ( $cart_updated ) {
 				wc_add_notice( __( 'Cart updated.', 'woocommerce' ) );
 				$referer = remove_query_arg( array( 'remove_coupon', 'add-to-cart' ), ( wp_get_referer() ? wp_get_referer() : wc_get_cart_url() ) );
-				wp_safe_redirect( $referer );
+//				wp_safe_redirect( $referer );
 //				exit;
 
-				// システム終了
-				$gContentApi->exitSystem();
+				// リダイレクト先を指定してシステム終了
+				$gContentApi->exitSystem($referer);
 			}
 		}
 	}

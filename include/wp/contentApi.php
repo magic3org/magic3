@@ -1376,12 +1376,20 @@ class ContentApi extends BaseApi
 	/**
 	 * システムを中途終了
 	 *
+	 * @param string $redirectUrl	リダイレクト先URL
 	 * @return						なし
 	 */
-	function exitSystem()
+	function exitSystem($redirectUrl)
 	{
 		// システムを中断し終了処理を行う
 		$this->gPage->abortPage();
+		
+		// リダイレクトを行う場合はURLを指定
+		if (!empty($redirectUrl)){
+			$this->gPage->redirect($redirectUrl);
+		}
+		
+		// システム終了
 		$this->gPage->exitSystem();
 	}
 	/**
