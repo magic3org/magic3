@@ -464,7 +464,8 @@ class BaseWidgetContainer extends Core
 		//$this->tmpl->applyInputFilter('StripComments');
 		
 		// フォームチェック機能を使用するか、システム管理権限がある場合は、管理画面用パラメータを埋め込む
-		if ($this->_useFormCheck || $gEnvManager->isSystemManageUser()) $this->tmpl->applyInputFilter('PostParam');
+//		if ($this->_useFormCheck || $gEnvManager->isSystemManageUser()) $this->tmpl->applyInputFilter('PostParam');
+		$this->tmpl->applyInputFilter('PostParam');
 	}
 	/**
 	 * 出力用の変数に値を設定する
@@ -653,9 +654,18 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @return なし
 	 */
-	function setFormCheck()
+	function setUseFormCheck()
 	{
 		$this->_useFormCheck = true;
+	}
+	/**
+	 * フォームチェック機能を使用するかどうかを取得
+	 *
+	 * @return bool		true=使用する、false=使用しない
+	 */
+	function getUseFormCheck()
+	{
+		return $this->_useFormCheck;
 	}
 	/**
 	 * フォームIDをチェック
@@ -701,7 +711,7 @@ class BaseWidgetContainer extends Core
 		$this->_usePostToken = true;
 		
 		// フォームチェック機能使用
-		$this->setFormCheck();
+		$this->setUseFormCheck();
 		
 		// トークンを生成し、セッションと画面に書き出す
 		if (!isset($token)) $token = md5(time() . $this->gAccess->getAccessLogSerialNo());
@@ -730,6 +740,11 @@ class BaseWidgetContainer extends Core
 		// 該当するフォームかどうかチェック
 		$checkForm = $this->checkFormId();
 		if (!$checkForm) return false;
+		
+		// リファラーをチェック
+		$referer	= $this->gRequest->trimServerValueOf('HTTP_REFERER');
+		$uri		= $this->gEnv->getCurrentRequestUri();
+		if (empty($referer) || $referer != $uri) return false;
 		
 		// トークンをチェック
 		$token = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_TOKEN);		// POST確認用

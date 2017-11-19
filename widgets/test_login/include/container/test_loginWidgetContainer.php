@@ -39,7 +39,7 @@ class test_loginWidgetContainer extends BaseWidgetContainer
 		parent::__construct();
 		
 		// フォームチェック機能を使用
-//		$this->setFormCheck();
+//		$this->setUseFormCheck();
 	}
 	/**
 	 * テンプレートファイルを設定

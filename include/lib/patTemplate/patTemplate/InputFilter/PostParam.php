@@ -38,6 +38,7 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 		global $gEnvManager;
 		
 		$paramTag = '';
+		$useFormCheck = false;			// フォームIDのチェックを行うかどうか
 		$usePostToken = false;			// POSTデータのトークン認証機能を使用するかどうか
 		
 		// 現在のウィジェットオブジェクトを取得
@@ -51,6 +52,7 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 				}
 			}
 			
+			$useFormCheck = $widgetObj->getUseFormCheck();
 			$usePostToken = $widgetObj->getUsePostToken();
 		}
 		
@@ -60,7 +62,7 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 			$paramTag .= '<input type="hidden" name="_pdefconfig" value="{_DEF_CONFIG}" />' . M3_NL;
 			$paramTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
 		}
-		$paramTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
+		if ($useFormCheck) $paramTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
 		if ($usePostToken) $paramTag .= '<input type="hidden" name="_token" value="{_TOKEN}" />' . M3_NL;
 		
 		// Firefoxの自動入力の問題を回避(2015/12/1)

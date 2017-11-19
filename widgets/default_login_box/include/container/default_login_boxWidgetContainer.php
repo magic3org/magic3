@@ -44,7 +44,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 		$this->db = new default_login_boxDb();
 		
 		// フォームチェック機能を使用
-		$this->setFormCheck();
+		$this->setUseFormCheck();
 	}
 	/**
 	 * テンプレートファイルを設定
