@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -38,6 +38,7 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 		global $gEnvManager;
 		
 		$paramTag = '';
+		$usePostToken = false;			// POSTデータのトークン認証機能を使用するかどうか
 		
 		// 現在のウィジェットオブジェクトを取得
 		$widgetObj = $gEnvManager->getCurrentWidgetObj();
@@ -49,6 +50,8 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 					$paramTag .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . M3_NL;
 				}
 			}
+			
+			$usePostToken = $widgetObj->getUsePostToken();
 		}
 		
 		if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム管理権限ありの場合
@@ -58,6 +61,7 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 			$paramTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
 		}
 		$paramTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
+		if ($usePostToken) $paramTag .= '<input type="hidden" name="_token" value="{_TOKEN}" />' . M3_NL;
 		
 		// Firefoxの自動入力の問題を回避(2015/12/1)
 		if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) ||		// 管理画面にログインしている場合

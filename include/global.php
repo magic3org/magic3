@@ -363,6 +363,7 @@ define('M3_REQUEST_PARAM_DEF_PAGE_SUB_ID',      	'_sub');			// ページサブID
 define('M3_REQUEST_PARAM_PAGE_DEF_SERIAL',			'_defserial');		// ページ定義のレコードシリアル番号(設定画面起動時)
 define('M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID',		'_defconfig');		// ページ定義のウィジェット定義ID(設定画面起動時)
 define('M3_REQUEST_PARAM_FORM_ID',					'_formid');			// フォーム識別用
+define('M3_REQUEST_PARAM_TOKEN',					'_token');			// POSTデータトークン認証用
 define('M3_REQUEST_PARAM_BACK_URL',					'_backurl');		// 戻り先URL
 define('M3_REQUEST_PARAM_BACKUP_URL',				'_backupurl');		// URL退避用(画面編集時)
 define('M3_REQUEST_PARAM_SERVER',					'_server');			// サーバ指定
@@ -427,6 +428,7 @@ define('M3_TODO_SEPARATOR',							';');					// TODO用セパレータ
 define('M3_SESSION_CURRENT_TEMPLATE',		'_current_template');			// 現在表示中のテンプレート
 define('M3_SESSION_USER_INFO',      		'_user_info');					// 現在ログイン中のユーザ情報
 define('M3_SESSION_POST_TICKET',      		'_ticket');						// POSTデータ確認用
+define('M3_SESSION_POST_TOKEN',      		'_token');						// POSTデータトークン認証用
 define('M3_SESSION_WIDGET',      			'_widget_');					// 各ウィジェット用(+ウィジェットID)
 define('M3_SESSION_USER_ENV_WIDGET',      	'_user_env_widget:');			// ユーザ環境マネージャーのウィジェット用パラメータ
 define('M3_SESSION_CODE',      				'_session_code');				// セッションセキュリティチェック用ブラウザコード

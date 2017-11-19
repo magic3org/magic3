@@ -43,6 +43,7 @@ class BaseWidgetContainer extends Core
 	protected $urlParamOrder;					// URLパラメータの並び順
 	protected $_configMode;						// 設定画面用の入力設定(TEXTフィールドの自動入力をオフにする等)にするかどうか
 	protected $_useFormCheck;						// フォームチェック機能を使用するかどうか
+	protected $_usePostToken;						// POSTデータのトークン認証機能を使用するかどうか
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_isSmallDeviceOptimize;				// 小画面デバイス最適化を行うかどうか
@@ -663,8 +664,6 @@ class BaseWidgetContainer extends Core
 	 */
 	function checkFormId()
 	{
-		global $gRequestManager;
-		
 		$formId = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_FORM_ID);
 		if (empty($formId)){
 			return false;
@@ -678,6 +677,66 @@ class BaseWidgetContainer extends Core
 			} else {
 				return false;
 			}
+		}
+	}
+	/**
+	 * POSTデータのトークン認証機能を使用するかどうかを取得
+	 *
+	 * @return bool		true=正常、false=不正
+	 */
+	function getUsePostToken()
+	{
+		return $this->_usePostToken;
+	}
+	/**
+	 * Postデータのトークン認証機能を開始
+	 *
+	 * @return なし
+	 */
+	function openPostToken()
+	{
+		static $token;			// トークンは1リクエストで共通のトークンを使用する
+		
+		// トークン認証機能を使用
+		$this->_usePostToken = true;
+		
+		// フォームチェック機能使用
+		$this->setFormCheck();
+		
+		// トークンを生成し、セッションと画面に書き出す
+		if (!isset($token)) $token = md5(time() . $this->gAccess->getAccessLogSerialNo());
+		$this->gRequest->setSessionValue(M3_SESSION_POST_TOKEN, $token);		// セッションに保存
+		$this->tmpl->addVar('_widget', '_token', $token);				// 画面に書き出し
+	}
+	/**
+	 * Postデータのトークン認証機能を終了
+	 *
+	 * @return なし
+	 */
+	function closePostToken()
+	{
+		// トークン認証機能を終了
+		$this->_usePostToken = false;
+		
+		$this->gRequest->unsetSessionValue(M3_SESSION_POST_TOKEN);		// セッション値をクリア
+	}
+	/**
+	 * Postデータのトークン認証チェックを行う
+	 *
+	 * @return bool		true=正常、false=不正
+	 */
+	function verifyPostToken()
+	{
+		// 該当するフォームかどうかチェック
+		$checkForm = $this->checkFormId();
+		if (!$checkForm) return false;
+		
+		// トークンをチェック
+		$token = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_TOKEN);		// POST確認用
+		if (!empty($token) && $token == $this->gRequest->getSessionValue(M3_SESSION_POST_TOKEN)){		// 正常なPOST値のとき
+			return true;
+		} else {
+			return false;
 		}
 	}
 	/**
@@ -940,8 +999,6 @@ class BaseWidgetContainer extends Core
 	 */
 	function getInputField(&$fieldValue, $name, $inputType = '', $outputType = '', $validateRule = '', $fieldNameHead = 'item_')
 	{
-		global $gRequestManager;
-		
 		// パレメータエラーチェック
 		// 名前が空の場合は終了
 		if (empty($name)){
@@ -973,11 +1030,11 @@ class BaseWidgetContainer extends Core
 		switch ($inputType){
 		case 'text':
 		case 'url':
-			$fieldValue = $gRequestManager->trimValueOf($inputFieldName);
+			$fieldValue = $this->gRequest->trimValueOf($inputFieldName);
 			break;
 		case 'int':
 			if (is_int($inputParam)){			// デフォルト値がある場合
-				$fieldValue = $gRequestManager->trimIntValueOf($inputFieldName, $inputParam);
+				$fieldValue = $this->gRequest->trimIntValueOf($inputFieldName, $inputParam);
 			} else {
 				echo 'Input field error: ' . $name . ' must have default value.';
 				return;
@@ -985,11 +1042,11 @@ class BaseWidgetContainer extends Core
 			$outputType = 'text';
 			break;
 		case 'html':
-			$fieldValue = $gRequestManager->valueOf($inputFieldName);
+			$fieldValue = $this->gRequest->valueOf($inputFieldName);
 			if ($inputParam == 'trim') $fieldValue = trim($fieldValue);		// 「trim」オプション付きの場合
 			break;
 		case 'checkbox':
-			$fieldValue = $gRequestManager->trimCheckedValueOf($inputFieldName);
+			$fieldValue = $this->gRequest->trimCheckedValueOf($inputFieldName);
 			break;
 		case 'none':		// 出力のみ
 			// 出力タイプが設定されていない場合はデフォルト変換を行う
