@@ -606,6 +606,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'scrapy'					=> 'scrapy.png',
 			'deusu'						=> 'deusu.png',
 			'yandex'					=> 'ya.png',
+			'u-tokyo'					=> 'tokyo_univ.png',	// 東京大学 喜連川研究室
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
