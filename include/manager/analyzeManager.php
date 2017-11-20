@@ -28,7 +28,6 @@ class AnalyzeManager extends Core
 	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.5.2/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
-//	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.0.5/';		// プラットフォーム判定スクリプト
 	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
 	
 	/**

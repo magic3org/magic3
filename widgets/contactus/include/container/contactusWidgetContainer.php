@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/contactus_mainDb.php');
 class contactusWidgetContainer extends BaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $langId;	// 表示言語
 	private $state;		// 都道府県
 	private $tagRequired;		// 「必須」ラベルタグ
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
@@ -38,6 +37,9 @@ class contactusWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new contactus_mainDb();
+		
+		// ##### Postデータのトークン認証機能を初期化 #####
+		$this->initPostToken();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -71,7 +73,6 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		
 		// 設定値の取得
 		$sendMessage = self::DEFAULT_SEND_MESSAGE;			// メール送信機能を使用するかどうか
@@ -138,9 +139,12 @@ class contactusWidgetContainer extends BaseWidgetContainer
 		$phone = $request->trimValueOf('item_phone');		// 電話番号
 		$body = $request->trimValueOf('item_body');		// 問い合わせ内容
 		if ($act == 'send'){		// お問い合わせメール送信
-			$postTicket = $request->trimValueOf('ticket');		// POST確認用
-			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
+//			$postTicket = $request->trimValueOf('ticket');		// POST確認用
+//			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 			
+			// ##### Postデータのトークン認証を行う #####
+			$isVerified = $this->verifyPostToken();
+			if ($isVerified){		// 正常なPOSTデータのとき
 				// 入力状況のチェック
 				if ($nameVisible && $nameRequired) $this->checkInput($name, 'お名前');
 				if ($nameKanaVisible && $nameKanaRequired) $this->checkInput($nameKana, 'お名前(カナ)');
@@ -163,7 +167,7 @@ class contactusWidgetContainer extends BaseWidgetContainer
 					// メール送信設定のときはメールを送信
 					if ($sendMessage){
 						// メール本文の作成
-						$stateName = $this->db->getStateName('JPN', $this->langId, $this->state);
+						$stateName = $this->db->getStateName('JPN', $this->_langId, $this->state);
 						$mailBody = '';
 						if ($nameVisible)		$mailBody .= 'お名前　　　　　: ' . $name . "\n";
 						if ($nameKanaVisible)	$mailBody .= 'お名前（カナ）　: ' . $nameKana . "\n";
@@ -201,18 +205,31 @@ class contactusWidgetContainer extends BaseWidgetContainer
 					$this->tmpl->addVar("show_tel", "phone_disabled", 'disabled');
 					$this->tmpl->addVar("show_body", "body_disabled", 'disabled');
 					$this->tmpl->addVar("_widget", "send_button_disabled", 'disabled');// 送信ボタン
-					$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+//					$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 					$sendButtonLabel = '送信済み';			// 送信ボタンラベル
+					
+					// ##### Postデータのトークン認証を終了 #####
+					$this->closePostToken();
 				} else {		// 入力エラーの場合はハッシュキーを再設定
-					// ハッシュキー作成
+/*					// ハッシュキー作成
 					$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
 					$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
-					$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+					$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し*/
+					
 					$sendButtonLabel = '送信する';			// 送信ボタンラベル
+					
+					// ##### Postデータのトークン認証を更新 #####
+					$this->openPostToken(true/*トークン更新*/);
 				}
 			} else {		// ハッシュキーが異常のとき
-				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+				$this->setAppErrorMsg('送信に失敗しました');
+				
+//				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+
 				$sendButtonLabel = '送信する';			// 送信ボタンラベル
+					
+				// ##### Postデータのトークン認証を終了 #####
+				$this->closePostToken();
 			}
 			$this->tmpl->addVar("show_name", "name", $name);
 			$this->tmpl->addVar("show_name_kana", "name_kana", $nameKana);
@@ -225,10 +242,13 @@ class contactusWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->addVar("show_body", "body", $body);
 			$this->tmpl->addVar("_widget", "send_button_label", $sendButtonLabel);// 送信ボタンラベル
 		} else {
-			// ハッシュキー作成
+/*			// ハッシュキー作成
 			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
 			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
 			$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+			*/
+			// ##### Postデータのトークン認証を開始 #####
+			$this->openPostToken();
 			
 			// メール送信不可の場合はボタンを使用不可にする
 			if ($sendMessage){
@@ -278,7 +298,7 @@ class contactusWidgetContainer extends BaseWidgetContainer
 		if ($stateVisible){
 			if ($stateRequired) $this->tmpl->addVar('show_state', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_state', 'visibility', 'visible');//都道府県入力フィールドの表示
-			$this->db->getAllState('JPN', $this->langId, array($this, 'stateLoop'));// 都道府県メニュー
+			$this->db->getAllState('JPN', $this->_langId, array($this, 'stateLoop'));// 都道府県メニュー
 		}
 		if ($addressVisible){	// 住所入力フィールドの表示
 			if ($addressRequired) $this->tmpl->addVar('show_address', 'required', $this->tagRequired);// 「必須」表示

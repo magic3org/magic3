@@ -699,22 +699,30 @@ class BaseWidgetContainer extends Core
 		return $this->_usePostToken;
 	}
 	/**
-	 * Postデータのトークン認証機能を開始
+	 * Postデータのトークン認証機能を初期化
 	 *
 	 * @return なし
 	 */
-	function openPostToken()
+	function initPostToken()
 	{
-		static $token;			// トークンは1リクエストで共通のトークンを使用する
-		
 		// トークン認証機能を使用
 		$this->_usePostToken = true;
 		
 		// フォームチェック機能使用
 		$this->setUseFormCheck();
+	}
+	/**
+	 * Postデータのトークン認証機能を開始
+	 *
+	 * @param bool $updateToken			トークンを更新するかどうか
+	 * @return なし
+	 */
+	function openPostToken($updateToken = false)
+	{
+		static $token;			// トークンは1リクエストで共通のトークンを使用する
 		
 		// トークンを生成し、セッションと画面に書き出す
-		if (!isset($token)) $token = md5(time() . $this->gAccess->getAccessLogSerialNo());
+		if (!isset($token) || $updateToken) $token = md5(time() . $this->gAccess->getAccessLogSerialNo());
 		$this->gRequest->setSessionValue(M3_SESSION_POST_TOKEN, $token);		// セッションに保存
 		$this->tmpl->addVar('_widget', '_token', $token);				// 画面に書き出し
 	}
