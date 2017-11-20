@@ -747,6 +747,7 @@ class Crawlers extends AbstractProvider
         'urlresolver',
         'Urlstat',
         'UrlTrends Ranking Updater',
+		'u-tokyo',		// added by Magic3
         'Vagabondo',
         'vBSEO',
         'via ggpht\.com GoogleImageProxy',
