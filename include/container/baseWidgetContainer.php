@@ -62,6 +62,7 @@ class BaseWidgetContainer extends Core
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
 	protected $_isCmdAccess;					// cmd付きアクセスかどうか
+	protected static $_token;					// 1リクエストで共通のトークンを使用する
 	// 現在の値
 	protected $_widgetId;		// 現在のウィジェットID
 	protected $_langId;			// 現在の言語
@@ -719,12 +720,10 @@ class BaseWidgetContainer extends Core
 	 */
 	function openPostToken($updateToken = false)
 	{
-		static $token;			// トークンは1リクエストで共通のトークンを使用する
-		
 		// トークンを生成し、セッションと画面に書き出す
-		if (!isset($token) || $updateToken) $token = md5(time() . $this->gAccess->getAccessLogSerialNo());
-		$this->gRequest->setSessionValue(M3_SESSION_POST_TOKEN, $token);		// セッションに保存
-		$this->tmpl->addVar('_widget', '_token', $token);				// 画面に書き出し
+		if (!isset(self::$_token) || $updateToken) self::$_token = md5(time() . $this->gAccess->getAccessLogSerialNo());
+		$this->gRequest->setSessionValue(M3_SESSION_POST_TOKEN, self::$_token);		// セッションに保存
+		$this->tmpl->addVar('_widget', '_token', self::$_token);				// 画面に書き出し
 	}
 	/**
 	 * Postデータのトークン認証機能を終了
