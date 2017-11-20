@@ -139,9 +139,6 @@ class contactusWidgetContainer extends BaseWidgetContainer
 		$phone = $request->trimValueOf('item_phone');		// 電話番号
 		$body = $request->trimValueOf('item_body');		// 問い合わせ内容
 		if ($act == 'send'){		// お問い合わせメール送信
-//			$postTicket = $request->trimValueOf('ticket');		// POST確認用
-//			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
-			
 			// ##### Postデータのトークン認証を行う #####
 			$isVerified = $this->verifyPostToken();
 			if ($isVerified){		// 正常なPOSTデータのとき
@@ -205,17 +202,11 @@ class contactusWidgetContainer extends BaseWidgetContainer
 					$this->tmpl->addVar("show_tel", "phone_disabled", 'disabled');
 					$this->tmpl->addVar("show_body", "body_disabled", 'disabled');
 					$this->tmpl->addVar("_widget", "send_button_disabled", 'disabled');// 送信ボタン
-//					$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 					$sendButtonLabel = '送信済み';			// 送信ボタンラベル
 					
 					// ##### Postデータのトークン認証を終了 #####
 					$this->closePostToken();
 				} else {		// 入力エラーの場合はハッシュキーを再設定
-/*					// ハッシュキー作成
-					$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
-					$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
-					$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し*/
-					
 					$sendButtonLabel = '送信する';			// 送信ボタンラベル
 					
 					// ##### Postデータのトークン認証を更新 #####
@@ -223,8 +214,6 @@ class contactusWidgetContainer extends BaseWidgetContainer
 				}
 			} else {		// ハッシュキーが異常のとき
 				$this->setAppErrorMsg('送信に失敗しました');
-				
-//				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 
 				$sendButtonLabel = '送信する';			// 送信ボタンラベル
 					
@@ -242,11 +231,6 @@ class contactusWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->addVar("show_body", "body", $body);
 			$this->tmpl->addVar("_widget", "send_button_label", $sendButtonLabel);// 送信ボタンラベル
 		} else {
-/*			// ハッシュキー作成
-			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
-			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
-			$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
-			*/
 			// ##### Postデータのトークン認証を開始 #####
 			$this->openPostToken();
 			
