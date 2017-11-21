@@ -153,17 +153,21 @@ class ContentApi extends BaseApi
 				
 				// ##### 商品価格の扱い #####
 				// 商品価格と税は分けて計算する。商品価格を表示するときは税を含んで表示する。
-				
 				$addonObj = $this->_getAddonObj(M3_VIEW_TYPE_PRODUCT);			// 製品
+				
+				// ##### オプション値の設定。ここでの設定はWooCommerceでの設定に優先する。 #####
 				$m3WpOptions['woocommerce_calc_taxes'] = 'yes';					// 税処理を行う
 				$m3WpOptions['woocommerce_prices_include_tax'] = 'no';			// 商品価格が税込みかどうか(税は別途計算し付加する)
 				$m3WpOptions['woocommerce_tax_display_shop'] ='incl';			// 消費税表示方法(税込み)
 				$m3WpOptions['woocommerce_tax_display_cart'] = 'incl';			// 消費税表示方法(税込み)
+				$m3WpOptions['woocommerce_tax_total_display'] = 'single';		// 合計の税表示方法(税はまとめて表示)
 				$m3WpOptions['woocommerce_currency'] = $addonObj->getConfig('default_currency');		// デフォルト通貨
 				$m3WpOptions['woocommerce_price_num_decimals'] = 0;				// 価格表示少数桁数
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
+				$m3WpOptions['woocommerce_default_country'] = 'JP';		// 基準国(GB等)
 				//$m3WpOptions['woocommerce_tax_round_at_subtotal'] = 'no';
+				
 				// フック関数追加
 				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
 				
