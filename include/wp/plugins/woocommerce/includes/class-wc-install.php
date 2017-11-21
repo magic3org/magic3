@@ -97,7 +97,10 @@ class WC_Install {
 	 * Hook in tabs.
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
+		// オプションのデフォルト値をロード
+		self::create_options();
+		
+/*		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
 		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
 		add_action( 'in_plugin_update_message-woocommerce/woocommerce.php', array( __CLASS__, 'in_plugin_update_message' ) );
@@ -107,6 +110,7 @@ class WC_Install {
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
 		add_action( 'woocommerce_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
 		add_action( 'woocommerce_theme_background_installer', array( __CLASS__, 'theme_background_installer' ), 10, 1 );
+		*/
 	}
 
 	/**
@@ -364,7 +368,7 @@ class WC_Install {
 		include_once( dirname( __FILE__ ) . '/admin/class-wc-admin-settings.php' );
 
 		$settings = WC_Admin_Settings::get_settings_pages();
-
+var_dump($settings);
 		foreach ( $settings as $section ) {
 			if ( ! method_exists( $section, 'get_settings' ) ) {
 				continue;
