@@ -368,7 +368,7 @@ class WC_Install {
 		include_once( dirname( __FILE__ ) . '/admin/class-wc-admin-settings.php' );
 
 		$settings = WC_Admin_Settings::get_settings_pages();
-var_dump($settings);
+
 		foreach ( $settings as $section ) {
 			if ( ! method_exists( $section, 'get_settings' ) ) {
 				continue;
