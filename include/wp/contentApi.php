@@ -1068,7 +1068,7 @@ class ContentApi extends BaseApi
 		$urlParam = $wp_query->get('s');		
 		if ($urlParam != '') $baseUrl .= '&s=' . $urlParam;
 		
-		$url = $this->getUrl($baseUrl);
+		$url = $this->getUrl($baseUrl, true/*リンク用*/);
 		return $url;
 	}
 	/**
@@ -1107,7 +1107,7 @@ class ContentApi extends BaseApi
 		// カテゴリーを付加
 		$baseUrl .= M3_REQUEST_PARAM_CATEGORY_ID . '=' . $id;
 		
-		$url = $this->getUrl($baseUrl);
+		$url = $this->getUrl($baseUrl, true/*リンク用*/);
 		return $url;
 	}
 	/**
@@ -1151,7 +1151,7 @@ class ContentApi extends BaseApi
 		if (isset($month))	$baseUrl .= '&'. M3_REQUEST_PARAM_MONTH . '=' . $month;
 		if (isset($day))	$baseUrl .= '&'. M3_REQUEST_PARAM_DAY . '=' . $day;
 		
-		$url = $this->getUrl($baseUrl);
+		$url = $this->getUrl($baseUrl, true/*リンク用*/);
 		return $url;
 	}
 	/**
@@ -1160,17 +1160,17 @@ class ContentApi extends BaseApi
 	 * @param string $pageType				ページ種別(shop,cart,myaccount,checkout,terms等)
 	 * @return string						URL
 	 */
-	function getCommerceUrl($pageType)
+	function getCommerceUrl($pageType = '')
 	{
 		$baseUrl = '';
-		$urlParams = '';
+		$urlParams = array();
 		
 		// Eコマース用ページID取得
 		$subId = $this->gPage->getPageSubIdByContentType(M3_VIEW_TYPE_COMMERCE, $this->gEnv->getCurrentPageId());
 		
 		// デフォルトページの場合はページIDは付加しない
 //		$subId = $this->gEnv->getCurrentPageSubId();
-		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams = M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+		if ($subId != $this->gEnv->getDefaultPageSubId()) $urlParams[M3_REQUEST_PARAM_PAGE_SUB_ID] = $subId;
 		
 		// ベースURLを取得
 		switch ($this->accessPoint){
@@ -1185,11 +1185,7 @@ class ContentApi extends BaseApi
 			$baseUrl = $this->gEnv->getDefaultSmartphoneUrl();
 			break;
 		}
-		
-		$baseUrl .= '?';
-		if (!empty($urlParams)){
-			$baseUrl .= $urlParams . '&';
-		}
+
 		// ページ種別を付加
 		$task = '';
 		switch ($pageType){
@@ -1200,11 +1196,15 @@ class ContentApi extends BaseApi
 		case 'myaccount':
 		case 'checkout':
 		case 'terms':
+		default:
 			break;
 		}
-		if (!empty($task)) $baseUrl .= M3_REQUEST_PARAM_OPERATION_TASK . '=' . $task;
+		if (!empty($task)) $urlParams[M3_REQUEST_PARAM_OPERATION_TASK] = $task;
 		
-		$url = $this->getUrl($baseUrl);
+		if (!empty($urlParams)){
+			$baseUrl .= '?' . http_build_query($urlParams);
+		}
+		$url = $this->getUrl($baseUrl, true/*リンク用*/);
 		return $url;
 	}
 	/**
@@ -1431,7 +1431,7 @@ class ContentApi extends BaseApi
 		
 		if (!empty($urlParams)) $baseUrl .= '?' . $urlParams;
 		
-		$url = $this->getUrl($baseUrl);
+		$url = $this->getUrl($baseUrl, true/*リンク用*/);
 		return $url;
 	}
 }
