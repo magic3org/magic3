@@ -8,9 +8,9 @@
  *
  * @package    Googleマップ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2012 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2017 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: googlemapsWidgetContainer.php 4766 2012-03-19 02:22:15Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -28,6 +28,9 @@ class googlemapsWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// Googleマップライブラリの読み込み
+		$this->gPage->setIsContentGooglemaps(true);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -129,10 +132,10 @@ class googlemapsWidgetContainer extends BaseWidgetContainer
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptFileToHead($request, &$param)
+/*	function _addScriptFileToHead($request, &$param)
 	{
 		$scriptUrl = $this->getUrl('http://maps.google.com/maps/api/js?sensor=false');
 		return $scriptUrl;
-	}
+	}*/
 }
 ?>

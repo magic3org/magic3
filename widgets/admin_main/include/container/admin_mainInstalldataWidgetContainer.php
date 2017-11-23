@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -26,6 +26,7 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 	private $sampleDesc;	// サンプルデータ説明
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
+	const UNTITLED_TITLE = 'タイトル未設定:';		// タイトルが取得できない場合のタイトル
 		
 	/**
 	 * コンストラクタ
@@ -89,6 +90,14 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 				// スクリプト実行
 				if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
 					$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
+					
+					// サンプルデータのタイトルを取得
+					list($title, $fileDescArray) = $this->getScriptInfo($scriptPath);
+					if (empty($title)) $title = self::UNTITLED_TITLE;
+					
+					// ログを残す
+					$msg = 'サンプルデータをインストールしました。データ名: %s';
+					$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $title), 1000);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
 				}
@@ -148,36 +157,10 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$this->getSampleListFromOfficialSite();
 		}
 		
-		// 実行スクリプトファイルのヘッダを取得
+		// 実行スクリプトファイルのヘッダを解析
 		if (!empty($this->sampleId) && !strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){
-			$filePath = $searchPath . '/' . $this->sampleId;
-			
-			// ファイルの読み込み
-			$fileDescArray = array();
-			$fp = fopen($filePath, 'r');
-			while (!feof($fp)){
-			    $line = fgets($fp, 1024);
-				$line = trim($line);
-				
-				// 空行が来たら終了
-				if (empty($line)){
-					break;
-				} else if (strncmp($line, '--', strlen('--')) != 0){		// コメント以外の場合も終了
-					break;
-				}
-				if (strncmp($line, '-- *', strlen('-- *')) != 0){		// ヘッダ部読み飛ばし
-					// コメント記号を削除
-					$line = trim(substr($line, strlen('--')));
-					
-					// タイトルを取得
-					if (preg_match('/^\[(.*)\]$/', $line, $match)){
-						$this->sampleTitle = $match[1];	// サンプルデータタイトル
-					} else {
-						$fileDescArray[] = $line;
-					}
-				}
-			}
-			fclose($fp);
+			$scriptPath = $searchPath . '/' . $this->sampleId;
+			list($this->sampleTitle, $fileDescArray) = $this->getScriptInfo($scriptPath);
 			if (count($fileDescArray)) $this->sampleDesc = implode('<br />', $fileDescArray);
 		}
 		$content = '<h4>' . $this->convertToDispString($this->sampleTitle, true/*タグ変換なし*/) . '</h4>';
@@ -262,6 +245,45 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$this->tmpl->addVars('sample__sql_list', $row);
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 		}
+	}
+	/**
+	 * スクリプトファイルの情報取得
+	 *
+	 * @param string $path		スクリプトファイルパス
+	 * @return array			タイトル、説明の連想配列
+	 */
+	function getScriptInfo($path)
+	{
+		$title = '';		// タイトル
+		$fileDescArray = array();		// 説明
+		
+		// ファイルの読み込み
+		$fp = fopen($path, 'r');
+		while (!feof($fp)){
+		    $line = fgets($fp, 1024);
+			$line = trim($line);
+			
+			// 空行が来たら終了
+			if (empty($line)){
+				break;
+			} else if (strncmp($line, '--', strlen('--')) != 0){		// コメント以外の場合も終了
+				break;
+			}
+			if (strncmp($line, '-- *', strlen('-- *')) != 0){		// ヘッダ部読み飛ばし
+				// コメント記号を削除
+				$line = trim(substr($line, strlen('--')));
+				
+				// タイトルを取得
+				if (preg_match('/^\[(.*)\]$/', $line, $match)){
+					$title = $match[1];	// サンプルデータタイトル
+				} else {
+					$fileDescArray[] = $line;
+				}
+			}
+		}
+		fclose($fp);
+		
+		return array($title, $fileDescArray);
 	}
 }
 ?>
