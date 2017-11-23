@@ -3160,19 +3160,27 @@ function _wp_json_prepare_data( $data ) {
  * @param int   $status_code The HTTP status code to output.
  */
 function wp_send_json( $response, $status_code = null ) {
+	global $gPageManager;
+			
+	// システムを中断
+	$gPageManager->abortPage();
+		
 	@header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
 	if ( null !== $status_code ) {
 		status_header( $status_code );
 	}
 	echo wp_json_encode( $response );
 
-	if ( wp_doing_ajax() ) {
+	// システム終了
+	$gPageManager->exitSystem();
+	
+/*	if ( wp_doing_ajax() ) {
 		wp_die( '', '', array(
 			'response' => null,
 		) );
 	} else {
 		die;
-	}
+	}*/
 }
 
 /**

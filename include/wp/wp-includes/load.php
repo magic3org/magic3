@@ -1055,6 +1055,7 @@ function wp_is_ini_value_changeable( $setting ) {
  * @return bool True if it's a WordPress Ajax request, false otherwise.
  */
 function wp_doing_ajax() {
+	// AJAX起動かどうかは$_GET['wc-ajax']の値があるかどうかで判断される
 	/**
 	 * Filters whether the current request is a WordPress Ajax request.
 	 *

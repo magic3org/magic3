@@ -365,10 +365,10 @@ class WC_AJAX {
 		$product_id        = apply_filters( 'woocommerce_add_to_cart_product_id', absint( $_POST['product_id'] ) );
 		$quantity          = empty( $_POST['quantity'] ) ? 1 : wc_stock_amount( $_POST['quantity'] );
 		$passed_validation = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
-		$product_status    = get_post_status( $product_id );
+//		$product_status    = get_post_status( $product_id );
+		$product_status    = get_post_status($product_id, 'product');			// データタイプを指定
 
 		if ( $passed_validation && false !== WC()->cart->add_to_cart( $product_id, $quantity ) && 'publish' === $product_status ) {
-
 			do_action( 'woocommerce_ajax_added_to_cart', $product_id );
 
 			if ( get_option( 'woocommerce_cart_redirect_after_add' ) == 'yes' ) {
