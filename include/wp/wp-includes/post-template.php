@@ -813,26 +813,29 @@ function get_body_class( $class = '' ) {
  * @return bool false if a password is not required or the correct password cookie is present, true otherwise.
  */
 function post_password_required( $post = null ) {
-	$post = get_post($post);
+	// WP_Postオブジェクトの参照にパスワードは必要なし
+	return false;
+	
+//	$post = get_post($post);
+//
+//	if ( empty( $post->post_password ) ) {
+//		/** This filter is documented in wp-includes/post.php */
+//		return apply_filters( 'post_password_required', false, $post );
+//	}
 
-	if ( empty( $post->post_password ) ) {
-		/** This filter is documented in wp-includes/post.php */
-		return apply_filters( 'post_password_required', false, $post );
-	}
-
-	if ( ! isset( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] ) ) {
-		/** This filter is documented in wp-includes/post.php */
-		return apply_filters( 'post_password_required', true, $post );
-	}
-
-	$hasher = new PasswordHash( 8, true );
-
-	$hash = wp_unslash( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] );
-	if ( 0 !== strpos( $hash, '$P$B' ) ) {
-		$required = true;
-	} else {
-		$required = ! $hasher->CheckPassword( $post->post_password, $hash );
-	}
+//	if ( ! isset( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] ) ) {
+//		/** This filter is documented in wp-includes/post.php */
+//		return apply_filters( 'post_password_required', true, $post );
+//	}
+//
+//	$hasher = new PasswordHash( 8, true );
+//
+//	$hash = wp_unslash( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] );
+//	if ( 0 !== strpos( $hash, '$P$B' ) ) {
+//		$required = true;
+//	} else {
+//		$required = ! $hasher->CheckPassword( $post->post_password, $hash );
+//	}
 
 	/**
 	 * Filters whether a post requires the user to supply a password.
@@ -843,7 +846,7 @@ function post_password_required( $post = null ) {
 	 *                          provided or is incorrect, false if password has been supplied or is not required.
 	 * @param WP_Post $post     Post data.
 	 */
-	return apply_filters( 'post_password_required', $required, $post );
+//	return apply_filters( 'post_password_required', $required, $post );
 }
 
 //

@@ -650,8 +650,14 @@ function get_post_mime_type( $ID = '' ) {
  * @param int|WP_Post $ID Optional. Post ID or post object. Default empty.
  * @return string|false Post status on success, false on failure.
  */
-function get_post_status( $ID = '' ) {
-	$post = get_post($ID);
+//function get_post_status( $ID = '' ) {
+function get_post_status($ID = '', $postType = ''){
+	// データタイプが設定されている場合はデータタイプを指定
+	if (empty($postType)){
+		$post = get_post($ID);
+	} else {
+		$post = get_post($ID, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+	}
 
 	if ( !is_object($post) )
 		return false;
@@ -924,9 +930,18 @@ function post_type_exists( $post_type ) {
  * @param int|WP_Post|null $post Optional. Post ID or post object. Default is global $post.
  * @return string|false          Post type on success, false on failure.
  */
-function get_post_type( $post = null ) {
-	if ( $post = get_post( $post ) )
-		return $post->post_type;
+//function get_post_type( $post = null ) {
+function get_post_type($post = null, $postType = ''){
+	// データタイプが設定されている場合はデータタイプを指定
+	if (empty($postType)){
+		$post = get_post($post);
+	} else {
+		$post = get_post($post, OBJECT/*デフォルト*/, 'raw'/*デフォルト*/, $postType);			// データタイプを指定
+	}
+	
+//	if ( $post = get_post( $post ) )
+//		return $post->post_type;
+	if ($post) return $post->post_type;
 	
 	return false;
 }
