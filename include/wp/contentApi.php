@@ -1208,6 +1208,30 @@ class ContentApi extends BaseApi
 		return $url;
 	}
 	/**
+	 * 現在のページがEC画面の機能ページかどうかを返す
+	 *
+	 * @param string $type			ページ種別(shop,cart,myaccount,checkout,terms等)
+	 * @return bool					true=機能ページ,false=機能ページでない
+	 */
+	function isCommercePage($type)
+	{
+		// Eコマース用ページID取得
+		$subId = $this->gPage->getPageSubIdByContentType(M3_VIEW_TYPE_COMMERCE, $this->gEnv->getCurrentPageId());
+		
+		// 現在のページサブID取得
+		$currentPageSubId = $this->gEnv->getCurrentPageSubId();
+		
+		// ページ種別取得
+		$pageType = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
+		// 指定の機能ページかどうかチェック
+		if ($currentPageSubId == $subId && $type == $pageType){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * コンテンツ表示制御(サムネールを表示するかどうか)を取得
 	 *
 	 * @return bool				true=表示、false=表示しない
