@@ -170,7 +170,7 @@ class BaseWidgetContainer extends Core
 			// アクセス不可のときはここで終了
 			if (!$this->_checkAccess($request)) return;
 		}
-					
+	
 		// ディスパッチ処理
 		if (method_exists($this, '_dispatch')){
 			// 処理を継続しない場合は終了

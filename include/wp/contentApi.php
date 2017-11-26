@@ -166,6 +166,7 @@ class ContentApi extends BaseApi
 				$m3WpOptions['woocommerce_price_thousand_sep'] = ',';			// 価格桁区切り
 				$m3WpOptions['woocommerce_price_display_suffix'] = $addonObj->getConfig('price_suffix');	// 価格表示接尾辞
 				$m3WpOptions['woocommerce_default_country'] = 'JP';		// 基準国(GB等)
+				$m3WpOptions['woocommerce_enable_shipping_calc'] = 'no';		// ユーザの手動計算機能
 				//$m3WpOptions['woocommerce_tax_round_at_subtotal'] = 'no';
 				
 				// フック関数追加

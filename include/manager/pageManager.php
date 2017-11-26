@@ -1238,6 +1238,7 @@ class PageManager extends Core
 		global $gAccessManager;
 		global $gSystemManager;
 		global $gDispManager;
+		global $gOpeLogManager;
 		
 		// 実行コマンドを取得
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
@@ -1294,6 +1295,14 @@ class PageManager extends Core
 		$userInfo = $gRequestManager->getSessionValueWithSerialize(M3_SESSION_USER_INFO);
 		if (!$gAccessManager->checkSessionSecurity($userInfo)) return;			// セキュリティ問題ありの場合はここで終了
 		// ##### ここで終了した場合はページサブIDが未設定のためページ不正のエラーが発生しアクセスエラー画面が表示される #####
+		
+		// ##### POST時のリファラーチェック #####
+		if ($gRequestManager->isPostMethod() && !$this->_checkReferer()){
+			$errMsg = '不正なPOSTデータ(リファラー異常)を検出しました。アクセス元IP: ' . $gAccessManager->getClientIp();
+			$msgDetail = 'アクセスをブロックしました。account=' . $userInfo->account . ', userid=' . $userInfo->userId;
+			$gOpeLogManager->writeUserError(__METHOD__, $errMsg, 2210, $msgDetail);
+			return;
+		}
 		
 		// その他セッション情報取得
 		$gRequestManager->_doSessionOpenEventCallback();
@@ -6881,6 +6890,25 @@ class PageManager extends Core
 	function getCkeditorTemplateType()
 	{
 		return $this->ckeditorTemplateType;
+	}
+	/**
+	 * POST時のリファラーチェック
+	 *
+	 * @return bool		true=正常、false=不正
+	 */
+	function _checkReferer()
+	{
+		global $gEnvManager;
+		global $gRequestManager;
+		
+		// リファラーをチェック
+		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
+		$uri		= $gEnvManager->getCurrentRequestUri();
+		if (empty($referer) || $referer != $uri){
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
 ?>
