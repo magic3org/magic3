@@ -198,7 +198,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 							$loginUserId = $row['lu_id'];
 							$name = $row['lu_name'];
 						}
-						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					}
 				} else {
 					$this->setAppErrorMsg($this->_('Failed in deleting item.'));		// データ削除に失敗しました
@@ -344,6 +344,14 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$endDt = $this->gEnv->getInitValueOfTimestamp();
 				}
 				
+				// 変更項目を取得
+				$chengedFields = array();
+				if ($account != $row['lu_account']) $chengedFields[] = 'アカウント';
+				if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
+				if ($name != $row['lu_name']) $chengedFields[] = 'ユーザ名';
+				if ($this->userType != $row['lu_user_type']) $chengedFields[] = 'ユーザ種別';
+				if ($email != $row['lu_email']) $chengedFields[] = 'Eメール';
+				
 				// 追加項目
 				$otherParams = array();
 				$otherParams['lu_email'] = $email;		// Eメール
@@ -354,9 +362,9 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 					
 					// 運用ログ出力
-					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
-					if ($ret) $loginUserId = $row['lu_id'];
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを更新しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					$changeFieldInfo = '';
+					if (!empty($chengedFields)) $changeFieldInfo = '('. implode(',', $chengedFields) . ')';
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $account, 2100, 'userid=' . $row['lu_id'] . ', username=' . $name);
 					
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -416,7 +424,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					// 運用ログ出力
 					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
 					if ($ret) $loginUserId = $row['lu_id'];
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -432,7 +440,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				// 運用ログ出力
 				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 				if ($ret) $loginUserId = $row['lu_id'];
-				$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+				$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in deleting item.'));	// データ削除に失敗しました
 			}
