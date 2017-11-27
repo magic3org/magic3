@@ -1297,12 +1297,13 @@ class PageManager extends Core
 		// ##### ここで終了した場合はページサブIDが未設定のためページ不正のエラーが発生しアクセスエラー画面が表示される #####
 		
 		// ##### POST時のリファラーチェック #####
-		if ($gRequestManager->isPostMethod() && !$this->_checkReferer()){
+		// WooCommerceのAJAX処理が通らないのでチェックしない?
+/*		if ($gRequestManager->isPostMethod() && !$this->_checkReferer()){
 			$errMsg = '不正なPOSTデータ(リファラー異常)を検出しました。アクセス元IP: ' . $gAccessManager->getClientIp();
 			$msgDetail = 'アクセスをブロックしました。account=' . $userInfo->account . ', userid=' . $userInfo->userId;
 			$gOpeLogManager->writeUserError(__METHOD__, $errMsg, 2210, $msgDetail);
 			return;
-		}
+		}*/
 		
 		// その他セッション情報取得
 		$gRequestManager->_doSessionOpenEventCallback();
@@ -6896,7 +6897,7 @@ class PageManager extends Core
 	 *
 	 * @return bool		true=正常、false=不正
 	 */
-	function _checkReferer()
+/*	function _checkReferer()
 	{
 		global $gEnvManager;
 		global $gRequestManager;
@@ -6909,6 +6910,6 @@ class PageManager extends Core
 		} else {
 			return true;
 		}
-	}
+	}*/
 }
 ?>

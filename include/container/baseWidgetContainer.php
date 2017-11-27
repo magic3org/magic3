@@ -744,6 +744,9 @@ class BaseWidgetContainer extends Core
 	 */
 	function verifyPostToken()
 	{
+		// POSTでの処理かどうかチェック
+		if (!$this->gRequest->isPostMethod()) return false;
+		
 		// 該当するフォームかどうかチェック
 		$checkForm = $this->checkFormId();
 		if (!$checkForm) return false;
@@ -759,6 +762,25 @@ class BaseWidgetContainer extends Core
 			return true;
 		} else {
 			return false;
+		}
+	}
+	/**
+	 * POST時のリファラーをチェックする(CSRF対策用)
+	 *
+	 * @return bool		true=正常、false=不正
+	 */
+	function checkSafePost()
+	{
+		// POSTでの処理かどうかチェック
+		if (!$this->gRequest->isPostMethod()) return false;
+		
+		// リファラーをチェック
+		$referer	= $this->gRequest->trimServerValueOf('HTTP_REFERER');
+		$uri		= $this->gEnv->getCurrentRequestUri();
+		if (empty($referer) || $referer != $uri){
+			return false;
+		} else {
+			return true;
 		}
 	}
 	/**

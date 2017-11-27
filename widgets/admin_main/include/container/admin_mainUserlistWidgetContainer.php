@@ -173,7 +173,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	{
 		$act = $request->trimValueOf('act');
 		
-		if ($act == 'delete'){		// メニュー項目の削除
+		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
 			$delItems = array();
 			for ($i = 0; $i < count($listedItem); $i++){
@@ -296,7 +296,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$isAdmin = false;			// 管理権限ありかどうか
 		$limitedMenu = false;		// ユーザタイプメニューの項目を制限するかどうか
 		$reloadData = false;		// データの再読み込み
-		if ($act == 'update'){		// 行更新のとき
+		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'update'){		// 行更新のとき
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
 			//$this->checkInput($account, $this->_('Login Account'));	// アカウント
@@ -364,7 +364,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
 				}
 			}
-		} else if ($act == 'add'){		// 新規追加のとき
+		} else if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'add'){		// 新規追加のとき
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
 			//$this->checkInput($account, $this->_('Login Account'));	// アカウント
@@ -424,7 +424,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in adding item.'));	// データ追加に失敗しました
 				}
 			}
-		} else if ($act == 'delete'){		// 削除のとき
+		} else if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// 削除のとき
 			$ret = $this->_mainDb->delUserBySerial(array($this->serialNo));
 			if ($ret){		// データ削除成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Item deleted.'));	// データを削除しました
