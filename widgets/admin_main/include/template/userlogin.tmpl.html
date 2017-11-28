@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -47,6 +47,22 @@ $(document).keyup(function(e){
 	}
 });
 $(function(){
+	// パスワード入力部作成
+	$("#pwd").on("keyup",function(){
+		if ($(this).val()){
+			$(".glyphicon-eye-open").show();
+		} else {
+			$(".glyphicon-eye-open").hide();
+		}
+	});
+	$(".glyphicon-eye-open").mousedown(function(){
+		$("#pwd").attr('type','text');
+	}).mouseup(function(){
+		$("#pwd").attr('type','password');
+	}).mouseout(function(){
+		$("#pwd").attr('type','password');
+	});
+
 	// 初期データロード
 	$('#account').val($.cookie('login_account'));
 	
@@ -88,7 +104,7 @@ $(function(){
     <div class="col-md-7">
         <div id="pwd_area" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-            <input type="password" id="pwd" name="pwd" class="form-control">
+            <input type="password" id="pwd" name="pwd" class="form-control"><i class="glyphicon glyphicon-eye-open"></i>
         </div>
         <div id="email_area" class="input-group" style="display:none;">
             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>

@@ -846,11 +846,22 @@ span[rel="m3help"] { cursor: default; }
 .m3field_calendar {
 	width: 80px;
 }
-/****** login box ******/
+/****** ログイン ******/
 .login_box {
 	margin-top:20%;
 }
-/* ファイル選択 */
+#pwd_area input[type="password"]{
+	padding-right: 30px;
+}
+#pwd_area i.glyphicon.glyphicon-eye-open {
+	position: absolute;
+	z-index: 5;
+	display: none;
+	right: 10px;
+	top: 17px;
+	cursor: pointer;
+}
+/****** ファイル選択 ******/
 .btn-file {
 	position: relative;
 	overflow: hidden;
