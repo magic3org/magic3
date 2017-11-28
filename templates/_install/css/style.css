@@ -26,3 +26,14 @@
 }
 .modal-processing .modal-content .icon {
 }
+#password_area input[type="password"]{
+	padding-right: 30px;
+}
+#password_area i.glyphicon.glyphicon-eye-open {
+	position: absolute;
+	z-index: 5;
+	display: none;
+	right: 23px;
+	top: 17px;
+	cursor: pointer;
+}

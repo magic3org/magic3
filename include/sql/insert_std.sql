@@ -227,7 +227,7 @@ VALUES                 ('send_tmp_password', 'ja',           '仮パスワード
 TRUNCATE TABLE _templates;
 INSERT INTO _templates
 (tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version) VALUES
-('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        '',           ''),
+('_admin',                       '_admin',                         2,       0,              false,     true,             false,        '',           ''),
 ('_system',                       '_system',                       1,       0,              false,     false,            false,        '',           ''),
 ('_layout',                       '_layout',                       1,       0,              false,     false,            false,        '',           ''),
 ('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         '',           ''),

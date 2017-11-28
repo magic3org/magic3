@@ -1,0 +1,18 @@
+img {
+	border: none;
+}
+fieldset {
+	border:2px groove #ffffcc;
+	padding:5 5;
+}
+table {
+	text-align: left;	/*for text align defeult value 'centering' fixed */
+}
+/* inner table style canceled */
+.simple-table table
+{
+	font-size: 80%;/* for IE problem*/
+}
+.simple-table {
+	table-layout:fixed;	/* table width fix */
+}

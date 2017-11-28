@@ -51,7 +51,7 @@ INSERT INTO _system_config
 ('log_dir',                     '',                         'ログ出力ディレクトリ'),
 ('work_dir',                    '',                         '作業用ディレクトリ'),
 ('default_template',            'art42_sample5',            'PCフロント画面用デフォルトテンプレート'),
-('admin_default_template',      '_admin4',                  '管理画面用デフォルトテンプレート'),
+('admin_default_template',      '_admin',                   '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
 ('default_sub_template',        '',                         'PCフロント画面用デフォルトサブテンプレート'),

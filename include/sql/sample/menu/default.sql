@@ -68,10 +68,10 @@ INSERT INTO _nav_item
 (10303,   10300,          2,        'admin_menu.en', 'mainte',          0,               '',       'System Maintenance', 'System Maintenance', 'Maintenance about file system and database.');
 
 -- テンプレート情報
-DELETE FROM _templates WHERE tm_id = '_admin4';
+DELETE FROM _templates WHERE tm_id = '_admin';
 INSERT INTO _templates
-(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
-('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        0,             now());
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version) VALUES
+('_admin',                       '_admin',                         2,       0,              false,     true,             false,        '',           '');
 
 -- システム設定マスター(管理画面用デフォルトテンプレートを変更)
-UPDATE _system_config SET sc_value = '_admin4' WHERE sc_id = 'admin_default_template';
+UPDATE _system_config SET sc_value = '_admin' WHERE sc_id = 'admin_default_template';
