@@ -153,14 +153,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
-	
-	// KCFinderの設定
-	config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
-	config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=image';
-	config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
-	config.filebrowserUploadUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=file';
-	config.filebrowserImageUploadUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=image';
-	config.filebrowserFlashUploadUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=flash';
 };
 CKEDITOR.on('dialogDefinition', function(ev){
 	var dialogName = ev.data.name;

@@ -232,13 +232,6 @@ CKEDITOR.editorConfig = function(config){
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
 	config.protectedSource.push(/<i[^>]*><\/i>/g);	// iタグ許可
 	config.dialog_noConfirmCancel = true;		// ダイアログキャンセル時のダイアログを非表示にする
-	
-	// KCFinderの設定
-	if (!jQuery().elfinder){			// elFinderが使用できない場合
-		config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
-		config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=image';
-		config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
-	}
 };
 // HTML5対応
 CKEDITOR.dtd.a.div = 1;
