@@ -850,10 +850,10 @@ span[rel="m3help"] { cursor: default; }
 .login_box {
 	margin-top:20%;
 }
-#pwd_area input[type="password"]{
+.password_area input[type="password"]{
 	padding-right: 30px;
 }
-#pwd_area i.glyphicon.glyphicon-eye-open {
+.password_area i.glyphicon.glyphicon-eye-open {
 	position: absolute;
 	z-index: 5;
 	display: none;
