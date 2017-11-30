@@ -15,8 +15,8 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/ec_mainOrderDb.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/config/lang/jpn.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/tcpdf.php');
+require_once($gEnvManager->getLibPath() .	'/TCPDF-6.2.13/config/lang/jpn.php');
+require_once($gEnvManager->getLibPath() .	'/TCPDF-6.2.13/tcpdf.php');
 
 class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 {

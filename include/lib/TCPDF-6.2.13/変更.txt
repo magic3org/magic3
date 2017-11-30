@@ -1,0 +1,4 @@
+●変更点
+・「IPA Pゴシック」フォントを追加
+・examples/langディレクトリをconfig/langに移動
+・examplesディレクトリ削除
