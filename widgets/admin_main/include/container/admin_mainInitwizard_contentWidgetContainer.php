@@ -222,7 +222,6 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		$menuItems = array(array(), array(), array());
 
 		// 主要コンテンツタイプと主要機能タイプを連結
-//		$contentType = array_merge(array_map(create_function('$a', 'return $a["value"];'), $this->mainContentType), array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureType));
 		$contentType = array_merge($this->gPage->getMainContentTypes(), $this->gPage->getMainFeatureTypes());
 		$ret = $this->_mainDb->getContentWidgetOnPage($this->langId, $this->pageIdArray, $contentType, $rows);
 		if ($ret){
