@@ -854,7 +854,8 @@ var elFinder = function(node, opts, bootCallback) {
 				$('head').append(node.data('cssautoloadHide'));
 				
 				// load CSS
-				self.loadCss([baseUrl+'css/elfinder.min.css', baseUrl+'css/theme.css']);
+			//	self.loadCss([baseUrl+'css/elfinder.min.css', baseUrl+'css/theme.css']);
+				self.loadCss([baseUrl+'css/elfinder.full.css', baseUrl+'css/theme.css']);	// Magic3 modified.
 				
 				// additional CSS files
 				if (Array.isArray(self.options.cssAutoLoad)) {
