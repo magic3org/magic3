@@ -422,7 +422,7 @@ abstract class elFinderVolumeDriver {
 		// required to fix bug on macos
 		// However, we recommend to use the Normalizer plugin instead this option
 		'utf8fix'      => false,
-		 //                           й                 ё              Й               Ё              Ø         Å
+		 //                           й                 ё              Й               Ё              O         A
 		'utf8patterns' => array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308", "\u00d8A", "\u030a"),
 		'utf8replace'  => array("\u0439",        "\u0451",       "\u0419",       "\u0401",       "\u00d8", "\u00c5"),
 		// cache control HTTP headers for commands `file` and  `get`
@@ -5905,6 +5905,11 @@ abstract class elFinderVolumeDriver {
 		if ($bgcolor === 'transparent'){
 			imagealphablending($image, false);
 			imagesavealpha($image, true);
+			
+			/***** サムネール等のPNG画像ではリサイズした画像の空白背景部分が透過にならず黒になるバグがあるため空白背景部分に背景色を設定する by magic3 *****/
+			$bgcolor1 = imagecolorallocatealpha($image, 0, 0, 0, 127);
+			imagefill($image, 0, 0, $bgcolor1);
+			/***** ここまで *****/
 		} else {
 			list($r, $g, $b) = sscanf($bgcolor, "#%02x%02x%02x");
 			$bgcolor1 = imagecolorallocate($image, $r, $g, $b);
