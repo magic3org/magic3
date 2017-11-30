@@ -366,11 +366,13 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.css';		// テーマファイル
 
 	// elFinder v2.1.30版
+	// elfinder.min.jsは変更なしで使用し、elfinder.full.cssはMagic3用にカスタマイズ
 	const ELFINDER130_VER			= '2.1.30';									// elFinderバージョン
-	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.full.js';		// elFinder
-//	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.min.js';		// elFinder
+//	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.full.js';		// elFinder
+	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.min.js';		// elFinder
 	const ELFINDER130_LANG_FILENAME	= 'elfinder-2.1.30/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.full.css';		// elFinder CSS
+//	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER130_OPTION_CSS	= 'elfinder-2.1.30/css/theme.css';				// elFinder CSS
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
