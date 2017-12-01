@@ -152,7 +152,12 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		if (strStartsWith($adminUrl, 'https://')) $isSslAdminUrl = true;
 		
 		// 値を埋め込む
-		usort($hostArray, create_function('$a,$b', 'return $a["date"] - $b["date"];'));
+//		usort($hostArray, create_function('$a,$b', 'return $a["date"] - $b["date"];'));
+		usort($hostArray, function($a, $b)
+		{
+			return $a['date'] - $b['date'];
+		});
+		
 		for ($i = 0; $i < count($hostArray); $i++){
 			$line = $hostArray[$i];
 			$hostStr = $this->convertToDispString($line['hostname']);

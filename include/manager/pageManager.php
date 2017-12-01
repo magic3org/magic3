@@ -6801,7 +6801,11 @@ class PageManager extends Core
 			if (!isset($orderNo)) $orderNo = 100;
 			$sortParam[] = array('key' => $key, 'value' => $value, 'no' => $orderNo);
 		}
-		usort($sortParam, create_function('$a,$b', 'return $a["no"] - $b["no"];'));
+//		usort($sortParam, create_function('$a,$b', 'return $a["no"] - $b["no"];'));
+		usort($sortParam, function($a, $b)
+		{
+			return $a['no'] - $b['no'];
+		});
 		
 		// 文字列を作成
 		$sortCount = count($sortParam);
