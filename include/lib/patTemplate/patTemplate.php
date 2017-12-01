@@ -232,7 +232,8 @@ class patTemplate
 	* @access	public
 	* @param	string	type (either html or tex)
 	*/
-	function patTemplate( $type = 'html' )
+//	function patTemplate( $type = 'html' )
+	function __construct($type = 'html')
 	{
 		if( !defined( 'PATTEMPLATE_INCLUDE_PATH' ) ) {
 			define( 'PATTEMPLATE_INCLUDE_PATH', dirname( __FILE__ ) . '/patTemplate' );
