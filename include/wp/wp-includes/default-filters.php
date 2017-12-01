@@ -440,8 +440,8 @@ add_filter( 'style_loader_src', 'wp_style_loader_src', 10, 2 );
 //add_action( 'change_locale', 'create_initial_taxonomies' );
 
 // Canonical
-add_action( 'template_redirect', 'redirect_canonical' );
-add_action( 'template_redirect', 'wp_redirect_admin_locations', 1000 );
+//add_action( 'template_redirect', 'redirect_canonical' );
+//add_action( 'template_redirect', 'wp_redirect_admin_locations', 1000 );
 
 // Shortcodes
 add_filter( 'the_content', 'do_shortcode', 11 ); // AFTER wpautop()

@@ -202,6 +202,9 @@ final class WP_Term {
 	 * @param WP_Term|object $term Term object.
 	 */
 	public function __construct( $term ) {
+		// 0の場合はデータコピーしない
+		if (empty($term)) return;
+
 		foreach ( get_object_vars( $term ) as $key => $value ) {
 			$this->$key = $value;
 		}
