@@ -37,8 +37,10 @@ class MessageManager extends Core
 	const DEFAULT_MSG_ACCESS_DENY = 'アクセスできません';						// アクセス不可メッセージのデフォルト値
 	const DEFAULT_MSG_PAGE_NOT_FOUND = 'ページが見つかりません';						// ページが見つからないメッセージのデフォルト値
 	const DEFAULT_WORD_UNTITLED = '[未設定]';		// 用語未設定
-	const LOCALE_TEXT_FILE_GETTEXT = '/php-gettext-1.0.10/gettext.php';			// 各言語対応テキスト処理用
-	const LOCALE_TEXT_FILE_STREAMS = '/php-gettext-1.0.10/streams.php';			// 各言語対応テキスト処理用
+//	const LOCALE_TEXT_FILE_GETTEXT = '/php-gettext-1.0.10/gettext.php';			// 各言語対応テキスト処理用
+//	const LOCALE_TEXT_FILE_STREAMS = '/php-gettext-1.0.10/streams.php';			// 各言語対応テキスト処理用
+	const LOCALE_TEXT_FILE_GETTEXT = '/php-gettext-1.0.12/gettext.php';			// 各言語対応テキスト処理用
+	const LOCALE_TEXT_FILE_STREAMS = '/php-gettext-1.0.12/streams.php';			// 各言語対応テキスト処理用
 	
 	/**
 	 * コンストラクタ
