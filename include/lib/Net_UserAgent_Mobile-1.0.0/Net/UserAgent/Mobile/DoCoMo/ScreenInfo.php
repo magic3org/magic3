@@ -2118,7 +2118,8 @@ class Net_UserAgent_Mobile_DoCoMo_ScreenInfo
      * Creates the screen information by a given XML file if DOCOMO_MAP environment
      * variable exists.
      */
-    function Net_UserAgent_Mobile_DoCoMo_ScreenInfo()
+//    function Net_UserAgent_Mobile_DoCoMo_ScreenInfo()
+	function __construct()
     {
         if (!array_key_exists('DOCOMO_MAP', $_SERVER)) {
             return;

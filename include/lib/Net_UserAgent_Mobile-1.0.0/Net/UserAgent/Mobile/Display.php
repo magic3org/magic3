@@ -149,7 +149,8 @@ class Net_UserAgent_Mobile_Display
      *
      * @param array $data display infomation
      */
-    function Net_UserAgent_Mobile_Display($data)
+//    function Net_UserAgent_Mobile_Display($data)
+	function __construct($data)
     {
         $this->_width  = (integer)@$data['width'];
         $this->_height = (integer)@$data['height'];
