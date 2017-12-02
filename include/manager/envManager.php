@@ -122,7 +122,7 @@ class EnvManager extends Core
 	const CF_REALTIME_SERVER_PORT = 'realtime_server_port';		// リアルタイムサーバ用ポート番号
 	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const DEFAULT_SITE_NAME = 'サイト名未設定';		// 管理画面用のデフォルトサイト名
-	const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.24/Mobile_Detect.php';		// デバイス判定用スクリプト
+	const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.26/Mobile_Detect.php';		// デバイス判定用スクリプト
 	
 	/**
 	 * コンストラクタ
