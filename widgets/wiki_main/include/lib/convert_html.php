@@ -48,7 +48,8 @@ class Element
 	var $elements; // References of childs
 	var $last;     // Insert new one at the back of the $last
 
-	function Element()
+//	function Element()
+	function __construct()
 	{
 		$this->elements = array();
 		$this->last     = $this;
@@ -180,9 +181,11 @@ function Factory_Div($root, $text)
 // Inline elements
 class Inline extends Element
 {
-	function Inline($text)
+//	function Inline($text)
+	function __construct($text)
 	{
-		parent::Element();
+//		parent::Element();
+		parent::__construct();
 		$this->elements[] = trim((substr($text, 0, 1) == "\n") ?
 			$text : make_link($text));
 	}
@@ -217,9 +220,11 @@ class Paragraph extends Element
 {
 	var $param;
 
-	function Paragraph($text, $param = '')
+//	function Paragraph($text, $param = '')
+	function __construct($text, $param = '')
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		$this->param = $param;
 		if ($text == '') return;
 
@@ -249,9 +254,11 @@ class Heading extends Element
 	var $id;
 	var $msg_top;
 
-	function Heading($root, $text)
+//	function Heading($root, $text)
+	function __construct($root, $text)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 
 		$this->level = min(3, strspn($text, '*'));
 		list($text, $this->msg_top, $this->id) = $root->getAnchor($text, $this->level);
@@ -293,9 +300,11 @@ class Heading extends Element
 // Horizontal Rule
 class HRule extends Element
 {
-	function HRule($root, $text)
+//	function HRule($root, $text)
+	function __construct($root, $text)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 	}
 
 	function canContain($obj)
@@ -320,9 +329,11 @@ class ListContainer extends Element
 	var $margin;
 	var $left_margin;
 
-	function ListContainer($tag, $tag2, $head, $text)
+//	function ListContainer($tag, $tag2, $head, $text)
+	function __construct($tag, $tag2, $head, $text)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 
 		$var_margin      = '_' . $tag . '_margin';
 		$var_left_margin = '_' . $tag . '_left_margin';
@@ -388,9 +399,11 @@ class ListContainer extends Element
 
 class ListElement extends Element
 {
-	function ListElement($level, $head)
+//	function ListElement($level, $head)
+	function __construct($level, $head)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		$this->level = $level;
 		$this->head  = $head;
 	}
@@ -411,9 +424,11 @@ class ListElement extends Element
 // - Three
 class UList extends ListContainer
 {
-	function UList($root, $text)
+//	function UList($root, $text)
+	function __construct($root, $text)
 	{
-		parent::ListContainer('ul', 'li', '-', $text);
+		//parent::ListContainer('ul', 'li', '-', $text);
+		parent::__construct('ul', 'li', '-', $text);
 	}
 }
 
@@ -422,9 +437,11 @@ class UList extends ListContainer
 // + Three
 class OList extends ListContainer
 {
-	function OList($root, $text)
+//	function OList($root, $text)
+	function __construct($root, $text)
 	{
-		parent::ListContainer('ol', 'li', '+', $text);
+		//parent::ListContainer('ol', 'li', '+', $text);
+		parent::__construct('ol', 'li', '+', $text);
 	}
 }
 
@@ -433,9 +450,11 @@ class OList extends ListContainer
 // : definition3 | description3
 class DList extends ListContainer
 {
-	function DList($out)
+//	function DList($out)
+	function __construct($out)
 	{
-		parent::ListContainer('dl', 'dt', ':', $out[0]);
+		//parent::ListContainer('dl', 'dt', ':', $out[0]);
+		parent::__construct('dl', 'dt', ':', $out[0]);
 		$this->last = Element::insert(new ListElement($this->level, 'dd'));
 		if ($out[1] != '')
 			$this->last = $this->last->insert(Factory_Inline($out[1]));
@@ -448,9 +467,11 @@ class BQuote extends Element
 {
 	var $level;
 
-	function BQuote($root, $text)
+//	function BQuote($root, $text)
+	function __construct($root, $text)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 
 		$head = substr($text, 0, 1);
 		$this->level = min(3, strspn($text, $head));
@@ -511,9 +532,11 @@ class TableCell extends Element
 	var $rowspan = 1;
 	var $style; // is array('width'=>, 'align'=>...);
 
-	function TableCell($text, $is_template = FALSE)
+//	function TableCell($text, $is_template = FALSE)
+	function __construct($text, $is_template = FALSE)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		$this->style = $matches = array();
 
 		while (preg_match('/^(?:(LEFT|CENTER|RIGHT)|(BG)?COLOR\(([#\w]+)\)|SIZE\((\d+)\)):(.*)$/',
@@ -589,9 +612,11 @@ class Table extends Element
 	var $col; // number of column
 	public $align;		// テーブル表示位置
 	
-	function Table($out)
+//	function Table($out)
+	function __construct($out)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 
 		$cells       = explode('|', $out[1]);
 		$this->col   = count($cells);
@@ -713,9 +738,11 @@ class YTable extends Element
 	var $col;
 	public $align;		// テーブル表示位置
 
-	function YTable($_value)
+//	function YTable($_value)
+	function __construct($_value)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 
 		$align = $value = $matches = array();
 		foreach($_value as $val) {
@@ -801,10 +828,12 @@ class YTable extends Element
 // ' 'Space-beginning sentence
 class Pre extends Element
 {
-	function Pre($root, $text)
+//	function Pre($root, $text)
+	function __construct($root, $text)
 	{
 		global $preformat_ltrim;
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		$this->elements[] = htmlspecialchars(
 			(! $preformat_ltrim || $text == '' || $text{0} != ' ') ? $text : substr($text, 1));
 	}
@@ -833,9 +862,11 @@ class Div extends Element
 	var $name;
 	var $param;
 
-	function Div($out)
+//	function Div($out)
+	function __construct($out)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		list(, $this->name, $this->param) = array_pad($out, 3, '');
 	}
 
@@ -856,9 +887,11 @@ class Align extends Element
 {
 	var $align;
 
-	function Align($align)
+//	function Align($align)
+	function __construct($align)
 	{
-		parent::Element();
+		//parent::Element();
+		parent::__construct();
 		$this->align = $align;
 	}
 
@@ -900,12 +933,14 @@ class Body extends Element
 		',' => 'YTable',
 		'#' => 'Div');
 
-	function Body($id)
+//	function Body($id)
+	function __construct($id)
 	{
 		$this->id            = $id;
 		$this->contents      = new Element();
 		$this->contents_last = $this->contents;
-		parent::Element();
+//		parent::Element();
+		parent::__construct();
 	}
 
 	function parse($lines)
@@ -1055,13 +1090,15 @@ class Body extends Element
 
 class Contents_UList extends ListContainer
 {
-	function Contents_UList($text, $level, $id)
+//	function Contents_UList($text, $level, $id)
+	function __construct($text, $level, $id)
 	{
 		// Reformatting $text
 		// A line started with "\n" means "preformatted" ... X(
 		make_heading($text);
 		$text = "\n" . '<a href="#' . $id . '">' . $text . '</a>' . "\n";
-		parent::ListContainer('ul', 'li', '-', str_repeat('-', $level));
+		//parent::ListContainer('ul', 'li', '-', str_repeat('-', $level));
+		parent::__construct('ul', 'li', '-', str_repeat('-', $level));
 		$this->insert(Factory_Inline($text));
 	}
 

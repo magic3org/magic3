@@ -39,7 +39,8 @@ class Config
 	var $name, $page; // Page name
 	var $objs = array();
 
-	function Config($name)
+//	function Config($name)
+	function __construct($name)
 	{
 		$this->name = $name;
 		$this->page = PKWK_CONFIG_PREFIX . $name;
@@ -147,7 +148,8 @@ class ConfigTable
 	var $after  = array();	// Page contents (except table ones)
 	var $values = array();	// Table contents
 
-	function ConfigTable($title, $obj = NULL)
+//	function ConfigTable($title, $obj = NULL)
+	function __construct($title, $obj = NULL)
 	{
 		if ($obj !== NULL) {
 			$this->title  = $obj->title;

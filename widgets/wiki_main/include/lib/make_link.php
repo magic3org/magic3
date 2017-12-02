@@ -62,7 +62,8 @@ class InlineConverter
 		$this->converters = $converters;
 	}
 
-	function InlineConverter($converters = NULL, $excludes = NULL)
+//	function InlineConverter($converters = NULL, $excludes = NULL)
+	function __construct($converters = NULL, $excludes = NULL)
 	{
 		if ($converters === NULL) {
 			$converters = array(
@@ -163,7 +164,8 @@ class Link
 	var $alias;
 
 	// Constructor
-	function Link($start)
+//	function Link($start)
+	function __construct($start)
 	{
 		$this->start = $start;
 	}
@@ -221,9 +223,11 @@ class Link_plugin extends Link
 	var $pattern;
 	var $plain,$param;
 
-	function Link_plugin($start)
+//	function Link_plugin($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -289,9 +293,11 @@ EOD;
 // Footnotes
 class Link_note extends Link
 {
-	function Link_note($start)
+//	function Link_note($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -365,9 +371,11 @@ EOD;
 // URLs
 class Link_url extends Link
 {
-	function Link_url($start)
+//	function Link_url($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -422,9 +430,11 @@ EOD;
 // URLs (InterWiki definition on "InterWikiName")
 class Link_url_interwiki extends Link
 {
-	function Link_url_interwiki($start)
+//	function Link_url_interwiki($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -462,9 +472,11 @@ class Link_mailto extends Link
 {
 	var $is_image, $image;
 
-	function Link_mailto($start)
+//	function Link_mailto($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -504,9 +516,11 @@ class Link_interwikiname extends Link
 	var $param  = '';
 	var $anchor = '';
 
-	function Link_interwikiname($start)
+//	function Link_interwikiname($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -577,9 +591,11 @@ class Link_bracketname extends Link
 {
 	var $anchor, $refer;
 
-	function Link_bracketname($start)
+//	function Link_bracketname($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -638,9 +654,11 @@ EOD;
 // WikiNames
 class Link_wikiname extends Link
 {
-	function Link_wikiname($start)
+//	function Link_wikiname($start)
+	function __construct($start)
 	{
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
@@ -679,12 +697,14 @@ class Link_autolink extends Link
 	var $auto;
 	var $auto_a; // alphabet only
 
-	function Link_autolink($start)
+//	function Link_autolink($start)
+	function __construct($start)
 	{
 		global $autolink;
 		global $gEnvManager;
 
-		parent::Link($start);
+		//parent::Link($start);
+		parent::__construct($start);
 
 		// modified for Magic3 by naoki on 2008/9/28
 		//if (! $autolink || ! file_exists(CACHE_DIR . 'autolink.dat'))
@@ -730,9 +750,11 @@ class Link_autolink extends Link
 
 class Link_autolink_a extends Link_autolink
 {
-	function Link_autolink_a($start)
+//	function Link_autolink_a($start)
+	function __construct($start)
 	{
-		parent::Link_autolink($start);
+		//parent::Link_autolink($start);
+		parent::__construct($start);
 	}
 
 	function get_pattern()
