@@ -1,4 +1,5 @@
 ●変更点
+・フォントはデフォルトで必要な「helvetica」(helvetica.php,pdfahelvetica.php,pdfahelvetica.z)を残し、他はすべて削除。
 ・「IPA Pゴシック」フォントを追加
 ・examples/langディレクトリをconfig/langに移動
 ・examplesディレクトリ削除
