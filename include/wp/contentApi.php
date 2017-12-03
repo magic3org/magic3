@@ -18,6 +18,9 @@
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 
+// ##### WordPressテンプレート使用時のエラー出力調整(暫定) #####
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+
 class ContentApi extends BaseApi
 {
 	private $useCommerce;			// EC機能を使用するかどうか
@@ -176,14 +179,17 @@ class ContentApi extends BaseApi
 				
 				// セッションデータを保存
 				$this->gRequest->addSessionCloseEventCallback(function (){
+					global $gRequestManager;
 					global $woocommerce;
 					
 					$sessionObj = $woocommerce->session->getSessionObj();
 				//	$sessionObj = array_filter($sessionObj);		// 空要素削除
 					if (empty($sessionObj)){		// データがない場合はセッションデータを削除
-						$this->gRequest->unsetSessionValue(M3_WC_SESSION);
+						//$this->gRequest->unsetSessionValue(M3_WC_SESSION);
+						$gRequestManager->unsetSessionValue(M3_WC_SESSION);
 					} else {
-						$this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
+						//$this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
+						$gRequestManager->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
 					}
 				});
 				
