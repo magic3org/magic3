@@ -53,11 +53,12 @@ class WC_Admin_Settings {
 			$settings[] = include( 'settings/class-wc-settings-products.php' );
 			$settings[] = include( 'settings/class-wc-settings-tax.php' );
 			$settings[] = include( 'settings/class-wc-settings-shipping.php' );
-			$settings[] = include( 'settings/class-wc-settings-checkout.php' );
+/*			$settings[] = include( 'settings/class-wc-settings-checkout.php' );
 			$settings[] = include( 'settings/class-wc-settings-accounts.php' );
 			$settings[] = include( 'settings/class-wc-settings-emails.php' );
 			$settings[] = include( 'settings/class-wc-settings-integrations.php' );
 			$settings[] = include( 'settings/class-wc-settings-api.php' );
+			*/
 
 			self::$settings = apply_filters( 'woocommerce_get_settings_pages', $settings );
 		}

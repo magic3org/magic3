@@ -38,8 +38,9 @@ error_reporting(E_ALL ^ E_NOTICE);			// E_NOTICE 以外の全てのエラーを�
 } else if (version_compare(PHP_VERSION, '5.6.0') < 0){
 error_reporting(E_ALL & ~E_STRICT & ~E_NOTICE);	// E_STRICT,E_NOTICE 以外の全てのエラーを表示する(PHP5.4以上初期設定値)
 } else if (version_compare(PHP_VERSION, '7.0.0') < 0){
-error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
-} else {		// PHP7以降
+//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+error_reporting(E_ALL ^ E_NOTICE);
+} else {		// PHP7以降はE_STRICTが廃止
 //error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED);
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 }

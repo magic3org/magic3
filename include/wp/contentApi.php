@@ -19,7 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/valueCheck.php');
 
 // ##### WordPressテンプレート使用時のエラー出力調整(暫定) #####
-error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+//error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
 class ContentApi extends BaseApi
 {
