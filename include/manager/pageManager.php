@@ -61,6 +61,7 @@ class PageManager extends Core
 	private $headDescription;				// HTMLヘッダ「description」に出力する文字列
 	private $headKeywords;				// HTMLヘッダ「keywords」に出力する文字列
 	private $headOthers;				// HTMLヘッダに出力するタグ文字列
+	private $adminHeadOthers;				// HTMLヘッダに出力するタグ文字列(管理画面用)
 	private $lastHeadTitle;				// 最後にヘッダ部titleにセットした文字列
 	private $lastHeadDescription;		// 最後にヘッダ部descriptionにセットした文字列
 	private $lastHeadKeywords;			// 最後にヘッダ部keywordsにセットした文字列
@@ -544,14 +545,19 @@ class PageManager extends Core
 		}
 	}
 	/**
-	 * HTMLヘッダに出力するタグ文字列を取得
+	 * HTMLヘッダに出力するタグ文字列を追加(管理画面用)
 	 *
-	 * @return string $str   出力文字列
+	 * @param string $str   出力文字列
+	 * @return なし
 	 */
-/*	function getHeadOthers()
+	function addAdminHeadOthers($str)
 	{
-		return $this->headOthers;
-	}*/
+		if (is_string($str) && !empty($str)){
+			// 追加されていない場合のみ追加
+			$pos = strpos($this->adminHeadOthers, $str);
+			if ($pos === false) $this->adminHeadOthers .= $str;
+		}
+	}
 	/**
 	 * HTMLヘッダ「title」のサブタイトル出力する文字列を設定
 	 *
@@ -3540,6 +3546,13 @@ class PageManager extends Core
 				$titleCount = count($this->headSubTitle);
 				if ($titleCount > 0) $title = $this->headSubTitle[$titleCount -1];		// サブタイトルが設定されている場合は変更
 				$replaceStr .= '<title>' . htmlspecialchars($title) . '</title>' . M3_NL;
+				
+				// その他HTMLヘッダに出力するタグ文字列
+				if (!empty($this->adminHeadOthers)){
+					// マクロを変換
+					$this->adminHeadOthers = $gInstanceManager->getTextConvManager()->convContentMacro($this->adminHeadOthers, false/*改行コードをbrタグに変換しない*/, array(), true/*変換後の値はHTMLエスケープ処理する*/);
+					$replaceStr .= $this->adminHeadOthers . M3_NL;
+				}
 			} else {			// 管理画面以外の画面へのアクセスの場合
 				// 画面タイトル
 				$titleItemCount = 0;		// タイトル項目数

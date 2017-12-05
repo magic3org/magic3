@@ -412,6 +412,10 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
 				$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
 				$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+				
+				// タイムアウト対応処理
+				$metaStr = '<meta http-equiv="refresh" content="600" />';			// 10分ごとに画面を再読み込み
+				$this->gPage->addAdminHeadOthers($metaStr);// HTMLヘッダ部にMETAタグを追加
 				break;
 		}
 		// テキストをローカライズ
