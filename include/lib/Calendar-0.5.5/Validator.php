@@ -89,7 +89,8 @@ class Calendar_Validator
      *
      * @access public
      */
-    function Calendar_Validator(&$calendar)
+//    function Calendar_Validator(&$calendar)
+	function __construct(&$calendar)
     {
         $this->calendar = & $calendar;
         $this->cE       = & $calendar->getEngine();
