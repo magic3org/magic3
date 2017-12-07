@@ -257,7 +257,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 		height = '600px';
 		options = {	toolbar:[
 						['back', 'forward'],
-						['netmount'],
+						// ['netmount'],
 						// ['reload'],
 						// ['home', 'up'],
 						['mkdir', 'mkfile', 'upload'],

@@ -18,12 +18,32 @@ $(function(){
 	$(".container").removeClass("container");
 	var browserHeight = ($(window).height() - 200/*ヘッダ高さ*/) * 0.9;
 	
+	options = {	toolbar:[
+					['back', 'forward'],
+					// ['netmount'],
+					// ['reload'],
+					// ['home', 'up'],
+					['mkdir', 'mkfile', 'upload'],
+					['open', 'download', 'getfile'],
+					['info', 'chmod'],
+					['quicklook'],
+					['copy', 'cut', 'paste'],
+					['rm'],
+					['duplicate', 'rename', 'edit', 'resize'],
+					['extract', 'archive'],
+					['search'],
+					['view', 'sort'],
+					['help'],
+					['fullscreen']
+				] };
+					
 	var elf = $('#elfinder').elfinder({
 		url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php',
 		width: '100%',
 		height: browserHeight,
 		lang: '{LANG}',             // language (OPTIONAL)
 		ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
+		uiOptions: options,
 		getFileCallback : function(files, fm){		// ダブルクリックのファイルオープン禁止
 			return false;
 		}
