@@ -737,16 +737,16 @@ function wc_print_js() {
 function wc_setcookie( $name, $value, $expire = 0, $secure = false ) {
 		global $gRequestManager;
 
-		// ##### $name‚ÌƒNƒbƒL[–¼‚Íæ“ª‚Éuwoocommerce_v‚ª•t‰Á‚³‚ê‚Ä‚¢‚é #####
+		// ##### $nameã®ã‚¯ãƒƒã‚­ãƒ¼åã¯å…ˆé ­ã«ã€Œwoocommerce_ã€ãŒä»˜åŠ ã•ã‚Œã¦ã„ã‚‹ #####
 		if (intval($expire) == 0){
-			$expire = 0;			// ƒuƒ‰ƒEƒU•Â‚¶‚é‚Ü‚Å¶‘¶
-		} else if ($expire < time()){// Œ»İ‚æ‚è‚à‘O‚Ìê‡‚ÍƒNƒbƒL[‚ğíœ
+			$expire = 0;			// ãƒ–ãƒ©ã‚¦ã‚¶é–‰ã˜ã‚‹ã¾ã§ç”Ÿå­˜
+		} else if ($expire < time()){// ç¾åœ¨æ™‚ã‚ˆã‚Šã‚‚å‰ã®å ´åˆã¯ã‚¯ãƒƒã‚­ãƒ¼ã‚’å‰Šé™¤
 			$gRequestManager->removeCookieValue($name);
 			return;
 		} else {
-			$expire = $expire / (60 * 60 * 24);		// “ú‚É‚¿Š·Z
+			$expire = $expire / (60 * 60 * 24);		// æ—¥ã«ã¡æ›ç®—
 		}
-		// ƒNƒbƒL[‚ğì¬
+		// ã‚¯ãƒƒã‚­ãƒ¼ã‚’ä½œæˆ
 		$gRequestManager->setCookieValue($name, $value, $expire);
 		
 /*	if ( ! headers_sent() ) {
@@ -1372,7 +1372,11 @@ function wc_postcode_location_matcher( $postcode, $objects, $object_id_key, $obj
  * @return int
  */
 function wc_get_shipping_method_count( $include_legacy = false ) {
-	return 0;
+	global $gCommerceApi;
+	
+	// é…é€æ–¹æ³•ã®ç·æ•°ã‚’å–å¾—
+	$count = $gCommerceApi->getDeliveryMethodCount();
+	return $count;
 /*	global $wpdb;
 
 	$transient_name = 'wc_shipping_method_count_' . ( $include_legacy ? 1 : 0 ) . '_' . WC_Cache_Helper::get_transient_version( 'shipping' );

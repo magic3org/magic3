@@ -153,6 +153,7 @@ class ContentApi extends BaseApi
 			case M3_VIEW_TYPE_PRODUCT:	// 製品
 				// ##### woocommerce.phpが呼ばれる前にWooCommerceで使用するオプション値は取得しておく #####
 				global $m3WpOptions;		// 初期値取得用
+				global $gCommerceApi;		// EコマースAPI
 				
 				// ##### 商品価格の扱い #####
 				// 商品価格と税は分けて計算する。商品価格を表示するときは税を含んで表示する。
@@ -192,6 +193,10 @@ class ContentApi extends BaseApi
 						$gRequestManager->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
 					}
 				});
+				
+				// EコマースAPIオブジェクト作成
+				require_once($this->gEnv->getWordpressRootPath() . '/commerceApi.php');	// EコマースAPI
+				$gCommerceApi = new CommerceApi();
 				
 				$this->useCommerce = true;			// EC機能を使用
 				break;
