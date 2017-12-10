@@ -284,10 +284,10 @@ final class WooCommerce {
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-payment-token.php' ); // Payment Tokens
 		*/
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-product.php' ); // Products
-/*		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-order.php' ); // Orders
-		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-settings-api.php' ); // Settings API (for gateways, shipping, and integrations)
+//		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-order.php' ); // Orders
+//		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-settings-api.php' ); // Settings API (for gateways, shipping, and integrations)
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-shipping-method.php' ); // A Shipping method
-		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-payment-gateway.php' ); // A Payment gateway
+/*		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-payment-gateway.php' ); // A Payment gateway
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-integration.php' ); // An integration with a service
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-log-handler.php' );
 		include_once( WC_ABSPATH . 'includes/abstracts/abstract-wc-deprecated-hooks.php' );
