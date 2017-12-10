@@ -8,11 +8,13 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: baseIWidgetContainer.php 4503 2011-12-14 13:57:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
+
 class BaseIWidgetContainer extends BaseWidgetContainer
 {
 	private $_paramObj;		// パラメータオブジェクト

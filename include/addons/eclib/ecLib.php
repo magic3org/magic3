@@ -256,6 +256,17 @@ class ecLib
 		return $retVal;
 	}
 	/**
+	 * 実行可能な配送方法を取得
+	 *
+	 * @param string	$lang				言語
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getActiveDelivMethod($lang, $callback)
+	{
+		$this->db->getActiveDelivMethod($lang, 0/*セットID*/, $callback);
+	}
+	/**
 	 * 商品情報を取得
 	 *
 	 * @param int		$id					商品ID
