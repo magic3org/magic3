@@ -54,7 +54,7 @@ class WC_Settings_Shipping extends WC_Settings_Page {
 			'classes' => __( 'Shipping classes', 'woocommerce' ),
 		);
 
-		if ( ! defined( 'WC_INSTALLING' ) ) {
+/*		if ( ! defined( 'WC_INSTALLING' ) ) {
 			// Load shipping methods so we can show any global options they may have
 			$shipping_methods = WC()->shipping->load_shipping_methods();
 
@@ -65,7 +65,7 @@ class WC_Settings_Shipping extends WC_Settings_Page {
 				$title = empty( $method->method_title ) ? ucfirst( $method->id ) : $method->method_title;
 				$sections[ strtolower( $method->id ) ] = esc_html( $title );
 			}
-		}
+		}*/
 
 		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 	}
