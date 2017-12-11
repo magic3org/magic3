@@ -259,11 +259,11 @@ final class WooCommerce {
 		 * Interfaces.
 		 */
 /*		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-abstract-order-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-coupon-data-store-interface.php' );
+		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-coupon-data-store-interface.php' );*/
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-customer-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-customer-download-data-store-interface.php' );
+//		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-customer-download-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-object-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-data-store-interface.php' );
+/*		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-item-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-item-product-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-item-type-data-store-interface.php' );
@@ -328,8 +328,8 @@ final class WooCommerce {
 		 * Data stores - used to store and retrieve CRUD object data from the database.
 		 */
 		include_once( WC_ABSPATH . 'includes/class-wc-data-store.php' );
-/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-data-store-wp.php' );
-		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-coupon-data-store-cpt.php' );
+		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-data-store-wp.php' );
+/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-coupon-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-grouped-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-variable-data-store-cpt.php' );
@@ -341,10 +341,10 @@ final class WooCommerce {
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-item-product-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-item-shipping-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-item-tax-data-store.php' );
-		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-payment-token-data-store.php' );
+		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-payment-token-data-store.php' );*/
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-data-store-session.php' );
-		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-download-data-store.php' );
+/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-download-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-shipping-zone-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/abstract-wc-order-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-data-store-cpt.php' );
