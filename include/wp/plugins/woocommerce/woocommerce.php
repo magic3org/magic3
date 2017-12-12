@@ -270,9 +270,9 @@ final class WooCommerce {
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-refund-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-payment-token-data-store-interface.php' );*/
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-data-store-interface.php' );
-/*		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-variable-data-store-interface.php' );
+//		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-variable-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-shipping-zone-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-logger-interface.php' );
+/*		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-logger-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-log-handler-interface.php' );
 		*/
 
@@ -344,9 +344,9 @@ final class WooCommerce {
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-payment-token-data-store.php' );*/
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-data-store-session.php' );
-/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-download-data-store.php' );
+//		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-customer-download-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-shipping-zone-data-store.php' );
-		include_once( WC_ABSPATH . 'includes/data-stores/abstract-wc-order-data-store-cpt.php' );
+/*		include_once( WC_ABSPATH . 'includes/data-stores/abstract-wc-order-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-order-refund-data-store-cpt.php' );*/
 
