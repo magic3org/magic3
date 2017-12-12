@@ -268,9 +268,9 @@ final class WooCommerce {
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-item-product-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-item-type-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-order-refund-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-payment-token-data-store-interface.php' );
+		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-payment-token-data-store-interface.php' );*/
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-data-store-interface.php' );
-		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-variable-data-store-interface.php' );
+/*		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-product-variable-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-shipping-zone-data-store-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-logger-interface.php' );
 		include_once( WC_ABSPATH . 'includes/interfaces/class-wc-log-handler-interface.php' );
@@ -301,8 +301,8 @@ final class WooCommerce {
 //		include_once( WC_ABSPATH . 'includes/class-wc-datetime.php' );
 		include_once( WC_ABSPATH . 'includes/class-wc-post-types.php' ); // Registers post types
 		include_once( WC_ABSPATH . 'includes/class-wc-install.php' );
-/*		include_once( WC_ABSPATH . 'includes/class-wc-geolocation.php' );
-		include_once( WC_ABSPATH . 'includes/class-wc-download-handler.php' );
+		include_once( WC_ABSPATH . 'includes/class-wc-geolocation.php' );
+/*		include_once( WC_ABSPATH . 'includes/class-wc-download-handler.php' );
 		include_once( WC_ABSPATH . 'includes/class-wc-comments.php' );
 		include_once( WC_ABSPATH . 'includes/class-wc-post-data.php' );*/
 		include_once( WC_ABSPATH . 'includes/class-wc-ajax.php' );
@@ -329,9 +329,9 @@ final class WooCommerce {
 		 */
 		include_once( WC_ABSPATH . 'includes/class-wc-data-store.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-data-store-wp.php' );
-/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-coupon-data-store-cpt.php' );
+//		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-coupon-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-data-store-cpt.php' );
-		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-grouped-data-store-cpt.php' );
+/*		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-grouped-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-variable-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/class-wc-product-variation-data-store-cpt.php' );
 		include_once( WC_ABSPATH . 'includes/data-stores/abstract-wc-order-item-type-data-store.php' );

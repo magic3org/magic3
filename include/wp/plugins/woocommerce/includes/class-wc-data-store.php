@@ -69,7 +69,7 @@ class WC_Data_Store {
 	 * @throws Exception
 	 */
 	public function __construct( $object_type ) {
-/*		$this->object_type = $object_type;
+		$this->object_type = $object_type;
 		$this->stores = apply_filters( 'woocommerce_data_stores', $this->stores );
 
 		// If this object type can't be found, check to see if we can load one
@@ -96,7 +96,7 @@ class WC_Data_Store {
 			}
 		} else {
 			throw new Exception( __( 'Invalid data store.', 'woocommerce' ) );
-		}*/
+		}
 	}
 
 	/**
