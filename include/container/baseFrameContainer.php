@@ -725,6 +725,9 @@ class BaseFrameContainer extends Core
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post.php');			// コンテンツAPIマネージャーからWP_Post型でデータを取得
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-post-type.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-embed.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-http.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-http-requests-hooks.php');
+			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/class-wp-http-proxy.php');
 
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/query.php');
 			require_once($this->gEnv->getWordpressRootPath() . '/wp-includes/pluggable.php');

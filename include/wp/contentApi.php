@@ -172,6 +172,8 @@ class ContentApi extends BaseApi
 				$m3WpOptions['woocommerce_default_country'] = 'JP';		// 基準国(GB等)
 				$m3WpOptions['woocommerce_enable_shipping_calc'] = 'no';		// ユーザの手動計算機能
 				//$m3WpOptions['woocommerce_tax_round_at_subtotal'] = 'no';
+				$m3WpOptions['woocommerce_ship_to_countries'] = 'specific';		// 配送可能な国を指定
+				$m3WpOptions['woocommerce_specific_ship_to_countries'] = array('JP');		// 配送可能な国を指定
 				
 				// フック関数追加
 				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
