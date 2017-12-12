@@ -112,9 +112,10 @@ class WC_Shipping_Zone_Data_Store extends WC_Data_Store_WP implements WC_Shippin
 	 * @return array               Array of objects containing method_id, method_order, instance_id, is_enabled
 	 */
 	public function get_methods( $zone_id, $enabled_only ) {
-		global $wpdb;
+/*		global $wpdb;
 		$raw_methods_sql = $enabled_only ? "SELECT method_id, method_order, instance_id, is_enabled FROM {$wpdb->prefix}woocommerce_shipping_zone_methods WHERE zone_id = %d AND is_enabled = 1;" : "SELECT method_id, method_order, instance_id, is_enabled FROM {$wpdb->prefix}woocommerce_shipping_zone_methods WHERE zone_id = %d;";
-		return $wpdb->get_results( $wpdb->prepare( $raw_methods_sql, $zone_id ) );
+		return $wpdb->get_results( $wpdb->prepare( $raw_methods_sql, $zone_id ) );*/
+		return array();
 	}
 
 	/**
@@ -254,12 +255,12 @@ class WC_Shipping_Zone_Data_Store extends WC_Data_Store_WP implements WC_Shippin
 	 * @param WC_Shipping_Zone
 	 */
 	private function read_zone_locations( &$zone ) {
-		global $wpdb;
+/*		global $wpdb;
 		if ( $locations = $wpdb->get_results( $wpdb->prepare( "SELECT location_code, location_type FROM {$wpdb->prefix}woocommerce_shipping_zone_locations WHERE zone_id = %d;", $zone->get_id() ) ) ) {
 			foreach ( $locations as $location ) {
 				$zone->add_location( $location->location_code, $location->location_type );
 			}
-		}
+		}*/
 	}
 
 	/**
