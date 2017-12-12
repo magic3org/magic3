@@ -351,7 +351,8 @@ class WC_Shipping {
 			unset( $package_to_hash['contents'][ $item_id ]['data'] );
 		}
 
-		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash ) . WC_Cache_Helper::get_transient_version( 'shipping' ) );
+//		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash ) . WC_Cache_Helper::get_transient_version( 'shipping' ) );
+		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash ));
 		$session_key  = 'shipping_for_package_' . $package_key;
 		$stored_rates = WC()->session->get( $session_key );
 

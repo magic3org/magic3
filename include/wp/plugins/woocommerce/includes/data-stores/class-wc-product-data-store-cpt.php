@@ -1362,11 +1362,13 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 	 * @return bool|string
 	 */
 	public function get_product_type( $product_id ) {
-		$post_type = get_post_type( $product_id );
+//		$post_type = get_post_type( $product_id );
+		$post_type = get_post_type($product_id, 'product');		// データタイプを指定
 		if ( 'product_variation' === $post_type ) {
 			return 'variation';
 		} elseif ( 'product' === $post_type ) {
-			$terms = get_the_terms( $product_id, 'product_type' );
+//			$terms = get_the_terms( $product_id, 'product_type' );
+			$terms = '';		// Magic3暫定
 			return ! empty( $terms ) ? sanitize_title( current( $terms )->name ) : 'simple';
 		} else {
 			return false;

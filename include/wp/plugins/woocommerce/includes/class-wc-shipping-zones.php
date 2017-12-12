@@ -121,14 +121,14 @@ class WC_Shipping_Zones {
 		$country          = strtoupper( wc_clean( $package['destination']['country'] ) );
 		$state            = strtoupper( wc_clean( $package['destination']['state'] ) );
 		$postcode         = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
-		$cache_key        = WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'wc_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
+/*		$cache_key        = WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'wc_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
 		$matching_zone_id = wp_cache_get( $cache_key, 'shipping_zones' );
 
 		if ( false === $matching_zone_id ) {
 			$data_store       = WC_Data_Store::load( 'shipping-zone' );
 			$matching_zone_id = $data_store->get_zone_id_from_package( $package );
 			wp_cache_set( $cache_key, $matching_zone_id, 'shipping_zones' );
-		}
+		}*/
 
 		return new WC_Shipping_Zone( $matching_zone_id ? $matching_zone_id : 0 );
 	}
