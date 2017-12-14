@@ -77,8 +77,8 @@ class WC_Autoloader {
 			$path = $this->include_path . 'gateways/' . substr( str_replace( '_', '-', $class ), 18 ) . '/';
 		} elseif ( strpos( $class, 'wc_gateway_' ) === 0 ) {
 			$path = $this->include_path . 'gateways/' . substr( str_replace( '_', '-', $class ), 11 ) . '/';
-		} elseif ( strpos( $class, 'wc_shipping_' ) === 0 ) {
-			$path = $this->include_path . 'shipping/' . substr( str_replace( '_', '-', $class ), 12 ) . '/';
+//		} elseif ( strpos( $class, 'wc_shipping_' ) === 0 ) {
+//			$path = $this->include_path . 'shipping/' . substr( str_replace( '_', '-', $class ), 12 ) . '/';
 		} elseif ( strpos( $class, 'wc_shortcode_' ) === 0 ) {
 			$path = $this->include_path . 'shortcodes/';
 		} elseif ( strpos( $class, 'wc_meta_box' ) === 0 ) {

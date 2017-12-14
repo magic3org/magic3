@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @category	Class
  * @author 		WooCommerce
  */
-class WC_Shipping_Zone extends WC_Legacy_Shipping_Zone {
-
+//class WC_Shipping_Zone extends WC_Legacy_Shipping_Zone {
+class WC_Shipping_Zone extends WC_Data {
 	/**
 	 * Zone ID
 	 * @var int|null

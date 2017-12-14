@@ -108,7 +108,7 @@ class WC_Shipping {
 			'local_pickup'  => 'WC_Shipping_Local_Pickup',
 		);
 
-		// For backwards compatibility with 2.5.x we load any ENABLED legacy shipping methods here
+/*		// For backwards compatibility with 2.5.x we load any ENABLED legacy shipping methods here
 		$maybe_load_legacy_methods = array( 'flat_rate', 'free_shipping', 'international_delivery', 'local_delivery', 'local_pickup' );
 
 		foreach ( $maybe_load_legacy_methods as $method ) {
@@ -116,7 +116,7 @@ class WC_Shipping {
 			if ( $options && isset( $options['enabled'] ) && 'yes' === $options['enabled'] ) {
 				$shipping_methods[ 'legacy_' . $method ] = 'WC_Shipping_Legacy_' . $method;
 			}
-		}
+		}*/
 
 		return apply_filters( 'woocommerce_shipping_methods', $shipping_methods );
 	}
