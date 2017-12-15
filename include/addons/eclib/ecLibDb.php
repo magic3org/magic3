@@ -589,12 +589,31 @@ class ecLibDb extends BaseDb
 	/**
 	 * 実行可能な配送方法を取得
 	 *
-	 * @param string	$lang				言語
+	 * @param string $langId		言語
+	 * @param int    $setId			セットID
+	 * @param array  $rows			取得レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getActiveDelivMethodRows($langId, $setId, &$rows)
+	{
+		$queryStr  = 'SELECT * FROM delivery_method_def ';
+		$queryStr .= 'WHERE do_deleted = false ';
+		$queryStr .=   'AND do_visible = true ';			// 表示状態
+		$queryStr .=   'AND do_language_id = ? ';
+		$queryStr .=   'AND do_set_id = ? ';
+		$queryStr .=   'ORDER BY do_index ';
+		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
+		return $retValue;
+	}
+	/**
+	 * 実行可能な配送方法を取得
+	 *
+	 * @param string	$langId				言語
 	 * @param int		$setId				セットID
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getActiveDelivMethod($lang, $setId, $callback)
+	function getActiveDelivMethod($langId, $setId, $callback)
 	{
 		$queryStr = 'SELECT * FROM delivery_method_def ';
 		$queryStr .=  'WHERE do_deleted = false ';
@@ -602,7 +621,7 @@ class ecLibDb extends BaseDb
 		$queryStr .=  'AND do_language_id = ? ';
 		$queryStr .=  'AND do_set_id = ? ';
 		$queryStr .=  'ORDER BY do_index ';
-		$this->selectLoop($queryStr, array($lang, $setId), $callback);
+		$this->selectLoop($queryStr, array($langId, $setId), $callback);
 	}
 	/**
 	 * 商品情報を取得

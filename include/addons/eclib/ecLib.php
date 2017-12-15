@@ -258,13 +258,25 @@ class ecLib
 	/**
 	 * 実行可能な配送方法を取得
 	 *
-	 * @param string	$lang				言語
+	 * @param string $langId		言語
+	 * @param array  $rows			取得レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getActiveDelivMethodRows($langId, &$rows)
+	{
+		$status = $this->db->getActiveDelivMethodRows($langId, 0/*セットID*/, $rows);
+		return $status;
+	}
+	/**
+	 * 実行可能な配送方法を取得
+	 *
+	 * @param string	$langId				言語
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getActiveDelivMethod($lang, $callback)
+	function getActiveDelivMethod($langId, $callback)
 	{
-		$this->db->getActiveDelivMethod($lang, 0/*セットID*/, $callback);
+		$this->db->getActiveDelivMethod($langId, 0/*セットID*/, $callback);
 	}
 	/**
 	 * 商品情報を取得
