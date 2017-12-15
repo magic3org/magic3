@@ -23,7 +23,9 @@ class CommerceApi extends BaseApi
 	private $ecObj;					// EC共通ライブラリオブジェクト
 	private $langId;				// コンテンツの言語
 	private $delivMethodCount;		// 配送方法数
-	const ADDON_OBJ_COMMERCE = "eclib";		// EコマースアドオンオブジェクトID
+	private $delivMethodRows;		// 配送方法レコード
+	const ADDON_OBJ_COMMERCE = 'eclib';		// EコマースアドオンオブジェクトID
+	const DELIVERY_METHOD_CLASS = 'WCShippingMethod';			// 配送方法クラス名(共通)
 	
 	/**
 	 * コンストラクタ
@@ -42,15 +44,48 @@ class CommerceApi extends BaseApi
 		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語
 	}
 	/**
+	 * 配送方法の取得
+	 *
+	 * @return array		配送方法レコード
+	 */
+	function _getDeliveryMethodRows()
+	{
+		if (!isset($this->delivMethodRows)){
+			$this->delivMethodRows = array();
+			$status = $this->ecObj->getActiveDelivMethodRows($this->langId, $rows);
+			if ($status) $this->delivMethodRows = $rows;
+		}
+		return $this->delivMethodRows;
+	}
+	/**
 	 * 配送方法の総数取得
 	 *
 	 * @return int     				配送方法数
 	 */
 	function getDeliveryMethodCount()
 	{
-		$this->delivMethodCount = 0;		// 配送方法数
+/*		$this->delivMethodCount = 0;		// 配送方法数
 		$this->ecObj->getActiveDelivMethod($this->langId, array($this, '_delivMethodLoop'));
 		return $this->delivMethodCount;
+		*/
+		$rows = $this->_getDeliveryMethodRows();
+		return count($rows);
+	}
+	/**
+	 * 配送方法のIDを取得
+	 *
+	 * @return array     				配送方法、配送クラスの配列
+	 */
+	function getDeliveryMethodId()
+	{
+		$methodArray = array();
+		$rows = $this->_getDeliveryMethodRows();
+		$rowCount = count($rows);
+		for ($i = 0; $i < $rowCount; $i++){
+			$row = $rows[$i];
+			$methodArray[$row['do_id']] = self::DELIVERY_METHOD_CLASS/*配送クラス名(共通)*/;
+		}
+		return $methodArray;
 	}
 	/**
 	 * 取得した配送方法をテンプレートに設定する

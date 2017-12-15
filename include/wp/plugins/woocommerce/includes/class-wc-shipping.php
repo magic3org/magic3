@@ -101,12 +101,21 @@ class WC_Shipping {
 	 * @return array
 	 */
 	public function get_shipping_method_class_names() {
+		global $gCommerceApi;
+		static $shipping_methods;
+		
+		// 配送方法の名前を取得
+		if (!isset($shipping_methods)){
+			$shipping_methods = $gCommerceApi->getDeliveryMethodId();
+		}
+		return $shipping_methods;
+			
 		// Unique Method ID => Method Class name
-		$shipping_methods = array(
+/*		$shipping_methods = array(
 			'flat_rate'     => 'WC_Shipping_Flat_Rate',
 			'free_shipping' => 'WC_Shipping_Free_Shipping',
 			'local_pickup'  => 'WC_Shipping_Local_Pickup',
-		);
+		);*/
 
 /*		// For backwards compatibility with 2.5.x we load any ENABLED legacy shipping methods here
 		$maybe_load_legacy_methods = array( 'flat_rate', 'free_shipping', 'international_delivery', 'local_delivery', 'local_pickup' );
@@ -118,7 +127,7 @@ class WC_Shipping {
 			}
 		}*/
 
-		return apply_filters( 'woocommerce_shipping_methods', $shipping_methods );
+//		return apply_filters( 'woocommerce_shipping_methods', $shipping_methods );
 	}
 
 	/**
@@ -147,7 +156,8 @@ class WC_Shipping {
 
 		// For the settings in the backend, and for non-shipping zone methods, we still need to load any registered classes here.
 		foreach ( $this->get_shipping_method_class_names() as $method_id => $method_class ) {
-			$this->register_shipping_method( $method_class );
+			//$this->register_shipping_method( $method_class );
+			$this->register_shipping_method($method_id, $method_class);
 		}
 
 		// Methods can register themselves manually through this hook if necessary.
@@ -164,12 +174,14 @@ class WC_Shipping {
 	 *
 	 * @return bool|void
 	 */
-	public function register_shipping_method( $method ) {
+//	public function register_shipping_method( $method ) {
+	public function register_shipping_method($methodId, $method){
 		if ( ! is_object( $method ) ) {
 			if ( ! class_exists( $method ) ) {
 				return false;
 			}
-			$method = new $method();
+			//$method = new $method();
+			$method = new $method($methodId);
 		}
 		if ( is_null( $this->shipping_methods ) ) {
 			$this->shipping_methods = array();

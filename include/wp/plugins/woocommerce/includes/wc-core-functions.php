@@ -1214,9 +1214,10 @@ function wc_get_checkout_url() {
  * @since 1.5.7
  * @param string|object $shipping_method class name (string) or a class object.
  */
+/*
 function woocommerce_register_shipping_method( $shipping_method ) {
 	WC()->shipping->register_shipping_method( $shipping_method );
-}
+}*/
 
 if ( ! function_exists( 'wc_get_shipping_zone' ) ) {
 	/**
