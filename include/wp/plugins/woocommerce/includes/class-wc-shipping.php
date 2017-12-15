@@ -132,6 +132,7 @@ class WC_Shipping {
 	 */
 	public function load_shipping_methods( $package = array() ) {
 		if ( ! empty( $package ) ) {
+			// ゾーンから配送方法を取得する場合
 			$debug_mode             = 'yes' === get_option( 'woocommerce_shipping_debug_mode', 'no' );
 			$shipping_zone          = WC_Shipping_Zones::get_zone_matching_package( $package );
 			$this->shipping_methods = $shipping_zone->get_shipping_methods( true );

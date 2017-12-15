@@ -179,7 +179,8 @@ class ContentApi extends BaseApi
 				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
 				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
-				
+				require_once($this->gEnv->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
+							
 				// セッションデータを保存
 				$this->gRequest->addSessionCloseEventCallback(function (){
 					global $gRequestManager;
