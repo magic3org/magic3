@@ -22,9 +22,13 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2015082501',               'DBバージョン'),
+('db_version',                  '2017081601',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
+('server_no',                   '-1',                       'サーバ管理No'),
+('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
+('realtime_server_port',        '',                         'リアルタイムサーバポート番号'),
 ('server_url',                  '',                         'サーバURL'),
+('system_type',                 '',                         'システム運用タイプ'),
 ('default_lang',                'ja',                       'デフォルト言語'),
 ('multi_language',               '0',                       '多言語対応'),
 ('accept_language',             '',                         'アクセス可能言語'),
@@ -50,6 +54,7 @@ INSERT INTO _system_config
 ('install_dt',                  '',                         'インストール日時'),
 ('log_dir',                     '',                         'ログ出力ディレクトリ'),
 ('work_dir',                    '',                         '作業用ディレクトリ'),
+('multi_device_admin',          '0',                        'マルチデバイス最適化管理画面'),
 ('default_template',            'art42_sample5',            'PCフロント画面用デフォルトテンプレート'),
 ('admin_default_template',      '_admin',                   '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
@@ -60,8 +65,8 @@ INSERT INTO _system_config
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
 ('use_jquery',                  '1',                        'フロント画面にjQueryを使用(廃止予定)'),
-('default_theme',               'black-tie',                'フロント画面用jQueryUIテーマ'),
-('admin_default_theme',         'black-tie',                '管理画面用jQueryUIテーマ'),
+('default_theme',               'smoothness',               'フロント画面用jQueryUIテーマ'),
+('admin_default_theme',         'smoothness',               '管理画面用jQueryUIテーマ'),
 ('jquery_version',               '1.9',                     'jQueryバージョン(PC用)'),
 ('admin_jquery_version',         '1.9',                     '管理画面用jQueryバージョン'),
 ('s:jquery_version',             '1.9',                     'jQueryバージョン(スマートフォン用)'),
@@ -103,8 +108,21 @@ INSERT INTO _system_config
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
 ('auto_login',                   '1',                        'フロント画面自動ログイン機能'),
 ('auto_login_admin',             '0',                        '管理画面自動ログイン機能'),
-('access_in_intranet',               '0',                       'イントラネット運用'),
-('awstats_data_path', '../tools/awstats', 'Awstatsデータのデータパス');
+('access_in_intranet',           '0',                        'イントラネット運用'),
+('server_tools_user',            '',                         '管理ツールアカウント'),
+('server_tools_password',        '',                         '管理ツールパスワード'),
+('awstats_data_path',            '../tools/awstats',         'Awstatsデータのデータパス'),
+('smtp_use_server',              '0',                        'SMTP外部サーバを使用するかどうか'),
+('smtp_host',                    '',                         'SMTPホスト名'),
+('smtp_port',                    '587',                      'SMTPポート番号'),
+('smtp_encrypt_type',            'tls',                      'SMTP暗号化タイプ'),
+('smtp_authentication',          '1',                        'SMTP認証'),
+('smtp_account',                 '',                         'SMTP接続アカウント'),
+('smtp_password',                '',                         'SMTPパスワード'),
+('default_content_type',       'blog',         'デフォルトコンテンツタイプ'),                -- WordPressテンプレートで使用(現在未使用)
+('default_menu_id',            'main_menu',    'フロント画面用デフォルトメニューID'),        -- WordPressテンプレートで使用(現在未使用)
+('mobile_default_menu_id',     'm_main_menu',  '携帯画面用デフォルトメニューID'),            -- WordPressテンプレートで使用(現在未使用)
+('smartphone_default_menu_id', 's_main_menu',  'スマートフォン画面用デフォルトメニューID');  -- WordPressテンプレートで使用(現在未使用)
 
 -- バージョン管理マスター
 INSERT INTO _version (vs_id,         vs_value,     vs_name)
@@ -165,33 +183,33 @@ INSERT INTO _nav_item
 
 -- ページIDマスター
 INSERT INTO _page_id 
-(pg_id,          pg_type, pg_default_sub_id, pg_path,       pg_name,                            pg_description,                       pg_priority, pg_device_type, pg_active, pg_visible, pg_mobile, pg_editable, pg_admin_menu, pg_analytics) VALUES
-('index',        0,       'content',         'index',       'PC用アクセスポイント',             'PC用アクセスポイント',               0,           0,              true,      true,      false,     true, true, true),
-('s_index',      0,       'content',         's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              true,      true,      false,     true, false, true),
-('m_index',      0,       'content',         'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              true,      true,      true,      true, false, true),
-('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,      false,     false, false, false),
-('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,      false,     true, false, false);
+(pg_id,          pg_type, pg_default_sub_id, pg_path,       pg_name,                            pg_description,                       pg_priority, pg_device_type, pg_active, pg_visible, pg_mobile, pg_editable, pg_admin_menu, pg_frontend) VALUES
+('index',        0,       'content',         'index',       'PC用アクセスポイント',             'PC用アクセスポイント',               0,           0,              true,      true,       false,     true,        true,          true),
+('s_index',      0,       'content',           's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              false,     true,       false,     true,        false,         true),
+('m_index',      0,       'content',           'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              false,     true,       true,      true,        false,         true),
+('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,       false,     false,       false,         false),
+('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,       false,     false,       false,         false);
 INSERT INTO _page_id 
-(pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable) VALUES
-('front',        1,            'トップ画面',                       'トップ画面用',                       0,           false,      true,       true),
-('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false),
-('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           false,      true,       true),
-('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           false,      true,       true),
-('bbs',          1,            '掲示板',                           '掲示板画面用',                       4,           false,      true,       true),
-('blog',         1,            'ブログ',                           'ブログ画面用',                       5,           false,      true,       true),
-('wiki',         1,            'Wiki',                             'Wiki画面用',                         6,           false,      true,       true),
-('calendar',     1,            'カレンダー',                       'カレンダー画面用',                   7,           false,      true,       true),
-('event',        1,            'イベント情報',                     'イベント情報画面用',                 8,           false,      true,       true),
-('photo',        1,            'フォトギャラリー',                 'フォトギャラリー画面用',             9,           false,      true,       true),
-('contact',      1,            'お問い合わせ',                     'お問い合わせ画面用',                 10,          false,      true,       true),
-('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 11,          false,      true,       true),
-('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          false,      true,       true),
-('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,       true),
-('member',       1,            '会員',                             '会員画面用',                         20,          false,      true,       true),
-('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          false,      true,       true),
-('search',       1,            '検索',                             '検索画面用',                         22,          false,      true,       true),
-('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,       true),
-('deploy',       1,            '[ウィジェット有効化用]',             'ウィジェット有効化用',             100,         false,      false,      true);
+(pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable, pg_function_type) VALUES
+('front',        1,            'トップ画面',                       'トップ画面用',                       0,           false,      true,      true,        ''),
+('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false,       ''),
+('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           false,      true,      true,        ''),
+('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           false,      true,      true,        ''),
+('bbs',          1,            '掲示板',                           '掲示板画面用',                       4,           false,      true,      true,        ''),
+('blog',         1,            'ブログ',                           'ブログ画面用',                       5,           false,      true,      true,        ''),
+('wiki',         1,            'Wiki',                             'Wiki画面用',                         6,           false,      true,      true,        ''),
+('calendar',     1,            'カレンダー',                       'カレンダー画面用',                   7,           false,      true,      true,        ''),
+('event',        1,            'イベント情報',                     'イベント情報画面用',                 8,           false,      true,      true,        ''),
+('photo',        1,            'フォトギャラリー',                 'フォトギャラリー画面用',             9,           false,      true,      true,        ''),
+('contact',      1,            'お問い合わせ',                     'お問い合わせ画面用',                 10,          false,      true,      true,        ''),
+('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 11,          false,      true,      true,        ''),
+('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          false,      true,      true,        ''),
+('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,      true,        ''),
+('member',       1,            '会員',                             '会員画面用',                         20,          false,      true,      true,        ''),
+('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          false,      true,      true,        ''),
+('search',       1,            '検索',                             '検索画面用',                         22,          false,      true,      true,        ''),
+('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,      true,        ''),
+('deploy',       1,            '[ウィジェット有効化用]',           'ウィジェット有効化用',               100,         false,      false,     true,        'activate');
 
 -- ページ情報マスター
 INSERT INTO _page_info
@@ -245,15 +263,17 @@ INSERT INTO _page_info
 
 -- ページ定義マスター
 INSERT INTO _page_def
-(pd_id,         pd_sub_id,      pd_position_id, pd_index, pd_widget_id,   pd_config_id, pd_visible, pd_editable, pd_title_visible) VALUES
-('admin_index', '',             'top',          1,        'admin_menu4',  0,            true,       false, false),
-('admin_index', 'front',        'top',          2,        'admin/message',  0,            true,       false, false),
-('admin_index', 'front',        'main',         1,        'admin_main',   0,            true,       false, false),
-('admin_index', 'front',        'main',         2,        'admin/analytics',   0,            true,       true, false),
-('admin_index', 'front',        'main',         3,        'admin/opelog',   0,            true,       true, false),
-('admin_index', 'front',        'left',         1,        'admin/loginuser',   0,            true,       true, true),
-('admin_index', 'content',      'main',         1,        'admin_main',   0,            true,       false, false),
-('connector',   'content',      'main',         1,        'c/updateinfo', 0,            true,       false,       true);
+(pd_id,         pd_sub_id,      pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_visible, pd_editable, pd_title_visible, pd_visible_condition) VALUES
+('admin_index', '',             'top',          1,        'admin_menu4',         0,            true,       false,       false,            ''),
+('admin_index', 'front',        'top',          2,        'admin/message',       0,            true,       false,       false,            ''),
+('admin_index', 'front',        'main',         1,        'admin_main',          0,            true,       false,       false,            ''),
+('admin_index', 'front',        'main',         2,        'admin/analytics',     0,            true,       true,        false,            ''),
+('admin_index', 'front',        'main',         3,        'admin/opelog',        0,            true,       true,        false,            ''),
+('admin_index', 'front',        'left',         1,        'admin/loginuser',     0,            true,       true,        true,             ''),
+('admin_index', 'content',      'main',         1,        'admin_main',          0,            true,       false,       false,            ''),
+('admin_index', 'content',      'left',         1,        'admin/remotecontent', 0,            true,       true,        true,             'task=dummy'),
+('admin_index', 'content',      'right',        1,        'admin/remotecontent', 0,            true,       true,        true,             'task=help'),
+('connector',   'content',      'main',         1,        'c/updateinfo',        0,            true,       false,       true,             '');
 
 -- サイト定義マスター
 INSERT INTO _site_def
@@ -280,7 +300,8 @@ INSERT INTO _language_string
 (ls_type, ls_id,                           ls_language_id, ls_value,                             ls_name) VALUES
 (0,       'msg_site_in_maintenance',       'ja',           'ただいまサイトのメンテナンス中です', 'メンテナンス中メッセージ'),
 (0,       'msg_access_deny',               'ja',           'アクセスできません',                 'アクセス不可メッセージ'),
-(0,       'msg_page_not_found',            'ja',           'ページが見つかりません',                 '存在しないページメッセージ'),
+(0,       'msg_page_not_found',            'ja',           'ページが見つかりません',             '存在しないページメッセージ'),
+(0,       'msg_admin_popup_login',         'ja',           '',                                   'ログイン時管理者向けポップアップメッセージ'),
 (1,       'word_account',                  'ja',           'ID(Eメール)',                        'アカウント'),
 (2,       'dboard',      'ja',           'ダッシュボード',       'ダッシュボード'),
 (2,       'search',      'ja',           '検索結果',             '検索結果'),
@@ -297,10 +318,16 @@ INSERT INTO _language_string
 (10,      'COM_CONTENT_CREATED_DATE_ON',   'ja',           '作成日：%s',         ''),
 (10,      'COM_CONTENT_LAST_UPDATED',      'ja',           '更新日：%s',         ''),
 (10,      'COM_CONTENT_PUBLISHED_DATE_ON', 'ja',           '公開日：%s',         ''),
-(10,      'COM_CONTENT_WRITTEN_BY',        'ja',           '作者：%s',           ''),
+(10,      'COM_CONTENT_WRITTEN_BY',        'ja',           '作成者：%s',           ''),
 (10,      'COM_CONTENT_CATEGORY',          'ja',           'カテゴリー：%s',     ''),
-(10,      'COM_CONTENT_ARTICLE_HITS',      'ja',           'アクセス数：%s',     ''),
+(10,      'COM_CONTENT_ARTICLE_HITS',      'ja',           'ヒット数：%s',     ''),
+(10,      'COM_CONTENT_READ_MORE',         'ja',           'もっと読む: ',       ''),
 (10,      'COM_CONTENT_READ_MORE_TITLE',   'ja',           'もっと読む',         ''),
+(10,      'COM_CONTENT_PREV',              'ja',           '前',                 ''),
+(10,      'COM_CONTENT_NEXT',              'ja',           '次',                 ''),
+(10,      'COM_CONTENT_START',             'ja',           '最初',               ''),
+(10,      'COM_CONTENT_END',               'ja',           '最後',               ''),
+(10,      'COM_CONTENT_PAGE_CURRENT_OF_TOTAL', 'ja',       'ページ番号 %s 総数 %s',  ''),
 (10,      'DATE_FORMAT_LC',                'ja',           'Y年Fd日（l）',       ''),
 (10,      'DATE_FORMAT_LC1',               'ja',           'Y年Fd日（l）',       ''),
 (10,      'DATE_FORMAT_LC2',               'ja',           'Y年Fd日（l）H:i',    ''),
@@ -352,7 +379,13 @@ INSERT INTO _language_string
 (10,      'COM_CONTENT_WRITTEN_BY',        'en',           'Written by %s',      ''),
 (10,      'COM_CONTENT_CATEGORY',          'en',           'Category: %s',       ''),
 (10,      'COM_CONTENT_ARTICLE_HITS',      'en',           'Hits: %s',           ''),
+(10,      'COM_CONTENT_READ_MORE',         'en',           'Read more: ',        ''),
 (10,      'COM_CONTENT_READ_MORE_TITLE',   'en',           'Read more...',       ''),
+(10,      'COM_CONTENT_PREV',              'en',           'Prev',               ''),
+(10,      'COM_CONTENT_NEXT',              'en',           'Next',               ''),
+(10,      'COM_CONTENT_START',             'en',           'Start',              ''),
+(10,      'COM_CONTENT_END',               'en',           'End',                ''),
+(10,      'COM_CONTENT_PAGE_CURRENT_OF_TOTAL', 'en',       'Page %s of %s',      ''),
 (10,      'DATE_FORMAT_LC',                'en',           'l, d F Y',           ''),
 (10,      'DATE_FORMAT_LC1',               'en',           'l, d F Y',           ''),
 (10,      'DATE_FORMAT_LC2',               'en',           'l, d F Y H:i',       ''),

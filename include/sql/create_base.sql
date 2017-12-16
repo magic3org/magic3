@@ -512,7 +512,7 @@ CREATE TABLE _view_count (
     vc_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     vc_type_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツタイプ(「a:c-h」a=アクセスポイント,c=コンテンツタイプ,h=参照方法。「a:」「-h」省略可。)
     vc_content_serial    INT            DEFAULT 0                     NOT NULL,      -- コンテンツシリアル番号
-    vc_content_id        VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID
+    vc_content_id        VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID
     vc_date              DATE           DEFAULT '0000-00-00'          NOT NULL,      -- 日付
     vc_hour              SMALLINT       DEFAULT 0                     NOT NULL,      -- 時間
     vc_count             INT            DEFAULT 0                     NOT NULL,      -- 参照数
@@ -546,6 +546,8 @@ CREATE TABLE _templates (
     tm_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレート名
     tm_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     tm_url               TEXT                                         NOT NULL,      -- 取得先URL
+	tm_info_url          TEXT                                         NOT NULL,      -- テンプレート情報URL
+	tm_custom_params     TEXT                                         NOT NULL,      -- カスタマイズ用パラメータ
     tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ(廃止予定)
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
@@ -609,6 +611,7 @@ CREATE TABLE _widgets (
     wd_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用ウィジェットかどうか
     wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか
+	wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか
     wd_read_scripts      BOOLEAN        DEFAULT false                 NOT NULL,      -- スクリプトディレクトリを自動読み込みするかどうか(廃止予定)
     wd_read_css          BOOLEAN        DEFAULT false                 NOT NULL,      -- cssディレクトリを自動読み込みするかどうか(廃止予定)
     wd_use_ajax          BOOLEAN        DEFAULT false                 NOT NULL,      -- Ajax共通ライブラリを読み込むかどうか
@@ -776,9 +779,11 @@ CREATE TABLE _page_id (
     pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイント時使用)
     pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイント時使用)
     pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)(ページID種別がアクセスポイント時使用)
+	pg_function_type     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- システム用機能タイプ
     pg_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名称
     pg_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     pg_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
+	pg_frontend          BOOLEAN        DEFAULT false                 NOT NULL,      -- フロント画面用かどうか(ページID種別がアクセスポイント時)、pg_analyticsは廃止
     pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がアクセスポイント時使用)
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
@@ -838,7 +843,7 @@ CREATE TABLE _page_def (
     pd_config_name       VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ウィジェット定義名
     pd_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
     pd_suffix            VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
-    pd_title             VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- タイトル
+    pd_title             TEXT                                         NOT NULL,      -- タイトル
     pd_h_tag_level       INT            DEFAULT 0                     NOT NULL,      -- タイトル用のHタグのトップレベル(0=設定なし、0以外=Hタグレベル)
     pd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
     pd_css               TEXT                                         NOT NULL,      -- CSS
@@ -847,6 +852,7 @@ CREATE TABLE _page_def (
     pd_view_control_type INT            DEFAULT 0                     NOT NULL,      -- 表示出力の制御タイプ(0=常時表示、1=ログイン時のみ表示、2=非ログイン時のみ表示)
     pd_view_page_state   INT            DEFAULT 0                     NOT NULL,      -- ページ状況での表示制御タイプ(0=常時表示、1=トップ時のみ表示)
     pd_view_option       TEXT                                         NOT NULL,      -- 表示オプション
+	pd_visible_condition TEXT                                         NOT NULL,      -- ウィジェット表示条件。「キー=値」の形式でURLクエリーパラメータを指定。複数のクエリーパラメータ条件は「,」で区切り、条件のまとまりは「;」で区切る。
     pd_edit_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 編集状態(0=編集完了、1=編集中)
     pd_top_content       TEXT                                         NOT NULL,      -- 上部コンテンツ
     pd_bottom_content    TEXT                                         NOT NULL,      -- 下部コンテンツ

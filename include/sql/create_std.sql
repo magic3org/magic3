@@ -130,6 +130,7 @@ CREATE TABLE content (
     cn_password          CHAR(32)       DEFAULT ''                    NOT NULL,      -- アクセス制限パスワード(MD5)
     cn_search_content    TEXT                                         NOT NULL,      -- 検索用コンテンツ
     cn_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
+	cn_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
     cn_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
     cn_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     cn_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
@@ -284,6 +285,7 @@ CREATE TABLE blog_category (
     bc_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
 
     bc_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
+	bc_html              TEXT                                         NOT NULL,      -- 説明
     bc_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 親カテゴリID
     bc_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     bc_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
@@ -313,12 +315,16 @@ CREATE TABLE blog_entry (
     be_search_tag        VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 検索用タグ(「,」区切り)
     be_theme_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ブログテーマID(廃止予定)
     be_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
+	be_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
     be_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     be_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
+	be_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
+	be_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
     be_show_comment      BOOLEAN        DEFAULT true                  NOT NULL,      -- コメントを表示するかどうか
     be_receive_comment   BOOLEAN        DEFAULT false                 NOT NULL,      -- コメントの受け付け可否
     be_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
     be_blog_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ブログID
+	be_master_serial     INT            DEFAULT 0                     NOT NULL,      -- 作成元レコードのシリアル番号
     be_regist_user_id    INT            DEFAULT 0                     NOT NULL,      -- エントリー作者
     be_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 投稿日時
     be_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ブログ記事更新日時
