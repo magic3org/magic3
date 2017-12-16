@@ -21,8 +21,9 @@ class WCShippingMethod extends WC_Shipping_Method {
 	 * @param int $instance_id
 	 */
 	public function __construct( $instance_id = 0 ) {
-		$this->id                    = 'local_pickup';
-		$this->instance_id 			 = absint( $instance_id );
+//		$this->id                    = 'local_pickup';
+//		$this->instance_id 			 = absint( $instance_id );
+		$this->id = $instance_id;
 		$this->method_title          = __( 'Local pickup', 'woocommerce' );
 		$this->method_description    = __( 'Allow customers to pick up orders themselves. By default, when using local pickup store base taxes will apply regardless of customer address.', 'woocommerce' );
 		$this->supports              = array(
@@ -37,10 +38,10 @@ class WCShippingMethod extends WC_Shipping_Method {
 	 * Initialize local pickup.
 	 */
 	public function init() {
-
+/*
 		// Load the settings.
 		$this->init_form_fields();
-		$this->init_settings();
+//		$this->init_settings();
 
 		// Define user set variables
 		$this->title		     = $this->get_option( 'title' );
@@ -49,6 +50,7 @@ class WCShippingMethod extends WC_Shipping_Method {
 
 		// Actions
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+		*/
 	}
 
 	/**
