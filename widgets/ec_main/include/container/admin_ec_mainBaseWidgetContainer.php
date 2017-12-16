@@ -52,6 +52,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_PAYMETHOD_DETAIL		= 'paymethod_detail';		// 支払方法(詳細)
 	const TASK_CALCORDER			= 'calcorder';				// 注文計算(一覧)
 	const TASK_CALCORDER_DETAIL		= 'calcorder_detail';		// 注文計算(詳細)
+	const TASK_TAX					= 'tax';					// 税設定
 	const TASK_OTHER				= 'other';					// その他設定
 
 	/**
@@ -183,6 +184,10 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '注文計算一覧';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_TAX:					// 税設定
+				$titles[] = '基本設定';
+				$titles[] = '税';
+				break;
 			case self::TASK_OTHER:				// その他設定
 				$titles[] = '基本設定';
 				$titles[] = 'その他';
@@ -295,6 +300,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 											$task == self::TASK_PAYMETHOD_DETAIL ||		// 支払方法(詳細)
 											$task == self::TASK_CALCORDER ||			// 注文計算(一覧)
 											$task == self::TASK_CALCORDER_DETAIL ||		// 注文計算(詳細)
+											$task == self::TASK_TAX ||					// 税設定
 											$task == self::TASK_OTHER					// その他設定
 										),
 						'submenu'	=> array(
@@ -326,6 +332,15 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 								'active'	=> (
 													$task == self::TASK_CALCORDER ||			// 注文計算(一覧)
 													$task == self::TASK_CALCORDER_DETAIL		// 注文計算(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '税',
+								'task'		=> self::TASK_TAX,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_TAX					// 税設定
 												)
 							),
 							(Object)array(

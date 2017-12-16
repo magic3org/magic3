@@ -45,6 +45,7 @@ class admin_ec_mainWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
 			case self::TASK_IMAGE:		// 商品画像
+			case self::TASK_TAX:		// 税設定
 			case 'other':		// その他設定
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
