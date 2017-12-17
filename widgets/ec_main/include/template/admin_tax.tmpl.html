@@ -19,8 +19,28 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function setIndex(){
+	// インデックスNo再設定
+	$('#sales_tax_rate_table').find('tr .m3rowno').each(function(index){
+		$(this).text(index + 1);
+	});
+}
 $(function() {
 	m3SetConfigTable('mainconfig');
+	
+	// インデックス設定
+	setIndex();
+		
+	$("#addrow_button").click(function(){
+		var lineText = '<tr><td style="text-align:center;"><span class="m3rowno"></span></td>';
+		lineText += '<td><input type="text" name="item_rate[]" class="form-control" value="{RATE}" maxlength="3" /></td>';
+		lineText += '<td><input type="text" name="item_date[]" class="form-control" value="{DATE}" maxlength="10" /></td>';
+		lineText += '</tr>';
+		$('#sales_tax_rate_table').append(lineText);
+
+		// インデックス再設定
+		setIndex();
+	});
 });
 //]]>
 </script>
@@ -33,8 +53,22 @@ $(function() {
 <table id="mainconfig">
     <tbody>
     <tr>
-	    <th><span {_HELP_TAX_SALES_TAX}>消費税</span></th>
-	    <td></td>
+	    <th><span {_HELP_TAX_SALES_TAX_RATE}>消費税</span></th>
+	    <td>
+        <table id="sales_tax_rate_table" class="table table-condensed table-bordered table-striped" style="margin-bottom:5px;">
+	    <thead>
+	    <tr><th style="width:30px;">No</th><th>税率(%)</th><th>開始日付</th></tr>
+	    </thead><tbody>
+	        <patTemplate:tmpl name="sales_tax_rate_list">
+            <tr>
+	        <td style="text-align:center;"><span class="m3rowno"></span></td>
+	        <td><input type="text" name="item_rate[]" class="form-control" value="{RATE}" maxlength="3" {RATE_DISABLED} /></td>
+	        <td><input type="text" name="item_date[]" class="form-control" value="{DATE}" maxlength="10" {DATE_DISABLED} /></td>
+	        </tr>
+	        </patTemplate:tmpl>
+	    </tbody></table>
+		<a href="#" id="addrow_button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-plus"></i> 行追加</a>
+		</td>
 	</tr>
     </tbody>
 </table>
