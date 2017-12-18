@@ -938,5 +938,68 @@ class ec_mainDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($type), $row);
 		return $ret;
 	}
+	/**
+	 * 消費税デフォルト値を取得
+	 *
+	 * @param string   $rateTypeId	税率種別ID
+	 * @param array    $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getDefaultTaxRate($rateTypeId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM tax_rate ';
+		$queryStr .=   'WHERE tr_id = ? ';
+		$queryStr .=   'AND tr_index = 0';
+		$ret = $this->selectRecord($queryStr, array($rateTypeId), $row);
+		return $ret;
+	}
+	/**
+	 * 税率リストを取得
+	 *
+	 * @param string   $rateTypeId	税率種別ID
+	 * @param function $callback	コールバック関数
+	 * @return						なし
+	 */
+	function getTaxRateList($rateTypeId, $callback)
+	{
+		$queryStr  = 'SELECT * FROM tax_rate ';
+		$queryStr .=   'WHERE tr_id = ? ';
+		$queryStr .=   'ORDER BY tr_index';
+		$this->selectLoop($queryStr, array($rateTypeId), $callback);
+	}
+	/**
+	 * 税率リスト更新
+	 *
+	 * @param string $rateTypeId		税率種別ID
+	 * @param array $rateArray			税率
+	 * @return bool						true = 正常、false=異常
+	 */
+	function updateTaxRateList($rateTypeId, $rateArray)
+	{
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 旧データ削除
+		$queryStr  = 'DELETE FROM tax_rate ';
+		$queryStr .= 'WHERE tr_id = ? ';
+		$queryStr .=   'AND tr_index > 0';
+		$this->execStatement($queryStr, array($rateTypeId));
+		
+		// レコードを追加
+		$rateCount = count($rateArray);
+		for ($i = 0; $i < $rateCount; $i++){
+			$rateObj = $rateArray[$i];
+			
+			$queryStr  = 'INSERT INTO tax_rate ';
+			$queryStr .=   '(tr_id, tr_index, tr_rate, tr_active_start_dt) ';
+			$queryStr .= 'VALUES ';
+			$queryStr .=   '(?, ?, ?, ?)';
+			$this->execStatement($queryStr, array($rateTypeId, $i + 1, $rateObj->rate, $rateObj->date));
+		}
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>
