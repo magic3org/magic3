@@ -70,10 +70,21 @@ class ecLibDb extends BaseDb
 	 */
 	function getTaxRate($rateTypeId, $dt = null)
 	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
+		if (is_null($dt)) $dt = date("Y/m/d H:i:s");	// 現在日時
+		
+		// 税率はtr_indexが最大のレコードを取得
+		$params = array();
 		$queryStr  = 'SELECT * FROM tax_rate ';
-		$queryStr .=   'WHERE tr_id = ? ';
+		$queryStr .= 'WHERE tr_id = ? '; $params[] = $rateTypeId;
+		
+		$queryStr .=   'AND (tr_active_start_dt = ? OR (tr_active_start_dt != ? AND tr_active_start_dt <= ?)) ';
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $dt;
+		
 		$queryStr .=   'ORDER BY tr_index DESC';
-		$ret = $this->selectRecord($queryStr, array($rateTypeId), $row);
+		$ret = $this->selectRecord($queryStr, $params, $row);
 		if ($ret){
 			return $row['tr_rate'];
 		} else {
