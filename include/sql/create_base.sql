@@ -703,7 +703,7 @@ CREATE TABLE _widget_param (
 DROP TABLE IF EXISTS _iwidgets;
 CREATE TABLE _iwidgets (
     iw_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    iw_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)
+    iw_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)(廃止予定)
     iw_id                VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- インナーウィジェットID(ファイル名)
     iw_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     

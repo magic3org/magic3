@@ -607,7 +607,7 @@ class ecLibDb extends BaseDb
 	 */
 	function getActiveDelivMethodRows($langId, $setId, &$rows)
 	{
-		$queryStr  = 'SELECT * FROM delivery_method_def ';
+		$queryStr  = 'SELECT * FROM delivery_method_def LEFT JOIN _iwidgets ON do_iwidget_id = iw_id AND iw_deleted = false ';
 		$queryStr .= 'WHERE do_deleted = false ';
 		$queryStr .=   'AND do_visible = true ';			// 表示状態
 		$queryStr .=   'AND do_language_id = ? ';

@@ -219,7 +219,7 @@ function wc_cart_totals_shipping_html() {
 
 		wc_get_template( 'cart/cart-shipping.php', array(
 			'package'                  => $package,
-			'available_methods'        => $package['rates'],
+			'available_methods'        => $package['rates'],			// 配送方法
 			'show_package_details'     => sizeof( $packages ) > 1,
 			'show_shipping_calculator' => is_cart() && $first,
 			'package_details'          => implode( ', ', $product_names ),
