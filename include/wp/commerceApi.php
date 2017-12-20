@@ -72,11 +72,11 @@ class CommerceApi extends BaseApi
 		return count($rows);
 	}
 	/**
-	 * 配送方法のIDを取得
+	 * 配送方法クラスを取得
 	 *
-	 * @return array     				配送方法、配送クラスの配列
+	 * @return array     				配送方法、配送クラスの連想配列
 	 */
-	function getDeliveryMethodId()
+	function getDeliveryMethodClass()
 	{
 		$methodArray = array();
 		$rows = $this->_getDeliveryMethodRows();
@@ -84,6 +84,36 @@ class CommerceApi extends BaseApi
 		for ($i = 0; $i < $rowCount; $i++){
 			$row = $rows[$i];
 			$methodArray[$row['do_id']] = self::DELIVERY_METHOD_CLASS/*配送クラス名(共通)*/;
+		}
+		return $methodArray;
+	}
+	/**
+	 * 配送方法の初期化パラメータを取得
+	 *
+	 * @return array     				配送方法、配送クラス、初期化パラメータの配列
+	 */
+	function getDeliveryMethodInitParam()
+	{
+		$methodArray = array();
+		$rows = $this->_getDeliveryMethodRows();
+		$rowCount = count($rows);
+		for ($i = 0; $i < $rowCount; $i++){
+			$row = $rows[$i];
+			
+			// IWidgetパラメータを解析
+			$support = array();
+			if (!empty($row['iw_params'])){
+				$lines = explode(';', $row['iw_params']);
+				for ($i = 0; $i < count($lines); $i++){
+					$keyValue = explode('=', $lines[$i]);
+					$key = strtolower(trim($keyValue[0]));
+					$value = strtolower(trim($keyValue[1]));
+					if ($key == 'wc_support'){
+						$support = explode(',', $value);
+					}
+				}
+			}
+			$methodArray[] = array($row['do_id'], self::DELIVERY_METHOD_CLASS/*配送クラス名(共通)*/, $support);
 		}
 		return $methodArray;
 	}
