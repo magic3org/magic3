@@ -90,7 +90,7 @@ class CommerceApi extends BaseApi
 	/**
 	 * 配送方法の初期化パラメータを取得
 	 *
-	 * @return array     				配送方法、配送クラス、初期化パラメータの配列
+	 * @return array     				配送方法,配送クラス,初期化パラメータ,タイトルの配列
 	 */
 	function getDeliveryMethodInitParam()
 	{
@@ -113,7 +113,7 @@ class CommerceApi extends BaseApi
 					}
 				}
 			}
-			$methodArray[] = array($row['do_id'], self::DELIVERY_METHOD_CLASS/*配送クラス名(共通)*/, $support);
+			$methodArray[] = array($row['do_id'], self::DELIVERY_METHOD_CLASS/*配送クラス名(共通)*/, $support, $row['do_name']);
 		}
 		return $methodArray;
 	}
