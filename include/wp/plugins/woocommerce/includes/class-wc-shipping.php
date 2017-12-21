@@ -104,9 +104,9 @@ class WC_Shipping {
 		global $gCommerceApi;
 		static $shipping_methods;
 		
-		// 配送方法の名前を取得
+		// 配送方法クラスを取得
 		if (!isset($shipping_methods)){
-			$shipping_methods = $gCommerceApi->getDeliveryMethodId();
+			$shipping_methods = $gCommerceApi->getDeliveryMethodClass();
 		}
 		return $shipping_methods;
 			
@@ -155,9 +155,13 @@ class WC_Shipping {
 		}
 
 		// For the settings in the backend, and for non-shipping zone methods, we still need to load any registered classes here.
-		foreach ( $this->get_shipping_method_class_names() as $method_id => $method_class ) {
+		global $gCommerceApi;
+
+		//foreach ( $this->get_shipping_method_class_names() as $method_id => $method_class ) {
+		foreach ($gCommerceApi->getDeliveryMethodInitParam() as $methodParam){
+			list($method_id, $method_class, $supportArray, $methodTitle) = $methodParam;
 			//$this->register_shipping_method( $method_class );
-			$this->register_shipping_method($method_id, $method_class);
+			$this->register_shipping_method($method_id, $method_class, $supportArray, $methodTitle);
 		}
 
 		// Methods can register themselves manually through this hook if necessary.
@@ -175,13 +179,13 @@ class WC_Shipping {
 	 * @return bool|void
 	 */
 //	public function register_shipping_method( $method ) {
-	public function register_shipping_method($methodId, $method){
+	public function register_shipping_method($methodId, $method, $supportArray, $methodTitle){
 		if ( ! is_object( $method ) ) {
 			if ( ! class_exists( $method ) ) {
 				return false;
 			}
 			//$method = new $method();
-			$method = new $method($methodId);
+			$method = new $method($methodId, $supportArray, $methodTitle);
 		}
 		if ( is_null( $this->shipping_methods ) ) {
 			$this->shipping_methods = array();
@@ -352,6 +356,8 @@ class WC_Shipping {
 	 * @return array|bool
 	 */
 	public function calculate_shipping_for_package( $package = array(), $package_key = 0 ) {
+		global $gCommerceApi;
+		
 		if ( ! $this->enabled || empty( $package ) || ! $this->is_package_shippable( $package ) ) {
 			return false;
 		}
@@ -364,8 +370,9 @@ class WC_Shipping {
 			unset( $package_to_hash['contents'][ $item_id ]['data'] );
 		}
 
+		// パッケージの内容が変更されているかどうかハッシュ値でチェックする
 //		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash ) . WC_Cache_Helper::get_transient_version( 'shipping' ) );
-		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash ));
+		$package_hash = 'wc_ship_' . md5( json_encode( $package_to_hash )) . '_' . $gCommerceApi->getDeliveryMethodHash();				// 配送方法が変更されているかどうかチェック用のハッシュも追加
 		$session_key  = 'shipping_for_package_' . $package_key;
 		$stored_rates = WC()->session->get( $session_key );
 
