@@ -22,7 +22,7 @@ class CommerceApi extends BaseApi
 	private $db;				// システムDBオブジェクト
 	private $ecObj;					// EC共通ライブラリオブジェクト
 	private $langId;				// コンテンツの言語
-	private $delivMethodCount;		// 配送方法数
+	private $userId;				// 現在のユーザID
 	private $delivMethodRows;		// 配送方法レコード
 	const ADDON_OBJ_COMMERCE = 'eclib';		// EコマースアドオンオブジェクトID
 	const DELIVERY_METHOD_CLASS = 'WCShippingMethod';			// 配送方法クラス名(共通)
@@ -42,6 +42,7 @@ class CommerceApi extends BaseApi
 		$this->ecObj = $this->gInstance->getObject(self::ADDON_OBJ_COMMERCE);
 		
 		$this->langId = $this->gEnv->getCurrentLanguage();				// コンテンツの言語
+		$this->userId = $this->gEnv->getCurrentUserId();				// 現在のユーザID
 	}
 	/**
 	 * 配送方法の取得
@@ -64,10 +65,6 @@ class CommerceApi extends BaseApi
 	 */
 	function getDeliveryMethodCount()
 	{
-/*		$this->delivMethodCount = 0;		// 配送方法数
-		$this->ecObj->getActiveDelivMethod($this->langId, array($this, '_delivMethodLoop'));
-		return $this->delivMethodCount;
-		*/
 		$rows = $this->_getDeliveryMethodRows();
 		return count($rows);
 	}
@@ -118,54 +115,63 @@ class CommerceApi extends BaseApi
 		return $methodArray;
 	}
 	/**
-	 * 取得した配送方法をテンプレートに設定する
+	 * 配送方法の変更のチェック用のハッシュを取得
 	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 * @return string	ハッシュ文字列
 	 */
-	function _delivMethodLoop($index, $fetchedRow)
+	function getDeliveryMethodHash()
 	{
-		// 出力を初期化
-		$price = 0;
-		$content = '';
+		$rows = $this->_getDeliveryMethodRows();
+		return md5(json_encode($rows));
+	}
+	/**
+	 * 配送料を集計
+	 *
+	 * @param string $methodId		配送方法ID
+	 * @param array $package		カート内容
+	 * @return float				集計額
+	 */
+	function calcDeliveryCost($methodId, $package)
+	{
+		$cost = 0;
 		
-		// 配送料金を求める
-		$iWidgetId	= $fetchedRow['do_iwidget_id'];	// インナーウィジェットID
-		if (!empty($iWidgetId)){
-			// パラメータをインナーウィジェットに設定し、計算結果を取得
-			$optionParam = new stdClass;
-			$optionParam->id = $fetchedRow['do_id'];		// ユニークなID(配送方法ID)
-			// データの更新方法を設定
-			if ($this->replaceNew){		// データを再取得するかどうか
-				$optionParam->init = true;		// 初期データ取得
-			} else {
-				$optionParam->init = false;		// 画面からの入力データを使用
-			}
-			$optionParam->userId = $this->_userId;					// ログインユーザID
-			$optionParam->languageId = $this->_langId;		// 言語ID
-			$optionParam->cartId = $this->cartId;					// 商品のカート
-			$optionParam->productTotal = $this->productTotal;				// 商品総額
-			$optionParam->productCount = $this->productCount;		// 商品総数
-			$optionParam->zipcode = $this->zipcode;		// 配送先の郵便番号
-			$optionParam->stateId = $this->stateId;		// 配送先の都道府県
-			if ($this->calcIWidgetParam($iWidgetId, $fetchedRow['do_id'], $fetchedRow['do_param'], $optionParam, $resultObj)){
-				$price = $resultObj->price;		// 配送料金
-			}
+		$rows = $this->_getDeliveryMethodRows();
+		for ($i = 0; $i < count($rows); $i++){
+			$row = $rows[$i];
+			if ($methodId == $row['do_id']){		// 配送方法ID
+				// 配送料金を求める
+				$iWidgetId	= $row['do_iwidget_id'];	// インナーウィジェットID
+				if (!empty($iWidgetId)){
+					// パラメータをインナーウィジェットに設定し、計算結果を取得
+					$optionParam = new stdClass;
+					$optionParam->id = $row['do_id'];		// ユニークなID(配送方法ID)
+					// データの更新方法を設定
+	//				if ($this->replaceNew){		// データを再取得するかどうか
+						$optionParam->init = true;		// 初期データ取得
+	//				} else {
+	//					$optionParam->init = false;		// 画面からの入力データを使用
+	//				}
+					$optionParam->userId = $this->userId;					// ログインユーザID
+					$optionParam->languageId = $this->langId;		// 言語ID
+					$optionParam->cartId = $this->cartId;					// 商品のカート
+			//		$optionParam->productTotal = $this->productTotal;				// 商品総額
+					$optionParam->productTotal = $package['contents_cost'];// 商品総額
+			//		$optionParam->productCount = $this->productCount;		// 商品総数
+					$optionParam->productCount =$this->get_package_item_qty($package);// 商品総数
+					$optionParam->zipcode = $this->zipcode;		// 配送先の郵便番号
+					$optionParam->stateId = $this->stateId;		// 配送先の都道府県
+					if ($this->calcIWidgetParam($iWidgetId, $row['do_id'], $row['do_param'], $optionParam, $resultObj)){
+						$cost = $resultObj->price;		// 配送料金
+					}
 
-			// インナーウィジェットの画面を取得
-			$this->setIWidgetParam($iWidgetId, $fetchedRow['do_id'], $fetchedRow['do_param'], $optionParam);// パラメータをインナーウィジェットに設定
-			$content = $this->getIWidgetContent($iWidgetId, $fetchedRow['do_id']);	// 通常画面を取得
+					// インナーウィジェットの画面を取得
+					$this->setIWidgetParam($iWidgetId, $row['do_id'], $row['do_param'], $optionParam);// パラメータをインナーウィジェットに設定
+					$content = $this->getIWidgetContent($iWidgetId, $row['do_id']);	// 通常画面を取得
+				}
+				break;
+			}
 		}
-		// 送料が0円のときは「無料」表示
-		$unit = '円';
-		if (empty($price)){
-			$price = '';
-			$unit = '無料';
-		}
-		
-		$this->delivMethodCount++;		// 配送方法数
-		return true;
+		return $cost;
 	}
 	/**
 	 * インナーウィジェットを出力を取得
@@ -211,6 +217,20 @@ class CommerceApi extends BaseApi
 		$paramObj = unserialize($param);			// パラメータをオブジェクト化
 		$ret = $this->gPage->commandIWidget(2/*計算*/, $id, $configId, $paramObj, $optionParamObj, $resultObj, $content, $isAdmin);
 		return $ret;
+	}
+	/**
+	 * Get items in package.
+	 * @param  array $package
+	 * @return int
+	 */
+	public function get_package_item_qty( $package ) {
+		$total_quantity = 0;
+		foreach ( $package['contents'] as $item_id => $values ) {
+			if ( $values['quantity'] > 0 && $values['data']->needs_shipping() ) {
+				$total_quantity += $values['quantity'];
+			}
+		}
+		return $total_quantity;
 	}
 }
 ?>
