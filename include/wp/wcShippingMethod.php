@@ -21,7 +21,7 @@ class WCShippingMethod extends WC_Shipping_Method {
 	 * @param int $instance_id
 	 */
 //	public function __construct( $instance_id = 0 ) {
-	public function __construct($methodId, $supports) {
+	public function __construct($methodId, $supports, $title) {
 //		$this->id                    = 'local_pickup';
 //		$this->instance_id 			 = absint( $instance_id );
 		$this->id = $methodId;
@@ -32,15 +32,16 @@ class WCShippingMethod extends WC_Shipping_Method {
 			'instance-settings',
 			'instance-settings-modal',
 		);
-		$this->supports = array_merge($this->supports, $supports);
+		$this->supports = array_merge($this->supports, $supports);		// Magic3側の設定を追加
 		
-		$this->init();
+		$this->title = $title;
+//		$this->init();
 	}
 
 	/**
 	 * Initialize local pickup.
 	 */
-	public function init() {
+//	public function init() {
 /*
 		// Load the settings.
 		$this->init_form_fields();
@@ -54,7 +55,7 @@ class WCShippingMethod extends WC_Shipping_Method {
 		// Actions
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		*/
-	}
+//	}
 
 	/**
 	 * calculate_shipping function.
@@ -63,6 +64,11 @@ class WCShippingMethod extends WC_Shipping_Method {
 	 * @param array $package
 	 */
 	public function calculate_shipping( $package = array() ) {
+		global $gCommerceApi;
+				
+		// 配送料を集計
+		$this->cost = $gCommerceApi->calcDeliveryCost($this->id, $package);
+		
 		$this->add_rate( array(
 			'label' 	 => $this->title,
 			'package'    => $package,
