@@ -1,5 +1,5 @@
 <?php
-include_once( 'legacy/class-wc-legacy-shipping-zone.php' );
+//include_once( 'legacy/class-wc-legacy-shipping-zone.php' );
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
