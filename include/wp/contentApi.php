@@ -1207,9 +1207,11 @@ class ContentApi extends BaseApi
 		case 'cart':
 			$task = 'cart';
 			break;
+		case 'checkout':
+			$task = 'checkout';
+			break;
 		case 'shop':
 		case 'myaccount':
-		case 'checkout':
 		case 'terms':
 		default:
 			break;
