@@ -81,7 +81,7 @@ class WC_Payment_Gateways {
 		/**
 		 * Simplify Commerce is @deprecated in 2.6.0. Only load when enabled.
 		 */
-		if ( ! class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) && in_array( WC()->countries->get_base_country(), apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ) ) ) {
+/*		if ( ! class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) && in_array( WC()->countries->get_base_country(), apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ) ) ) {
 			$simplify_options = get_option( 'woocommerce_simplify_commerce_settings', array() );
 
 			if ( ! empty( $simplify_options['enabled'] ) && 'yes' === $simplify_options['enabled'] ) {
@@ -91,7 +91,7 @@ class WC_Payment_Gateways {
 					$load_gateways[] = 'WC_Gateway_Simplify_Commerce';
 				}
 			}
-		}
+		}*/
 
 		// Filter
 		$load_gateways = apply_filters( 'woocommerce_payment_gateways', $load_gateways );
