@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @category    Abstract Class
  * @author      WooThemes
  */
-abstract class WC_Payment_Gateway extends WC_Settings_API {
-
+//abstract class WC_Payment_Gateway extends WC_Settings_API {
+abstract class WC_Payment_Gateway {
 	/**
 	 * Set if the place order button should be renamed on selection.
 	 * @var string
