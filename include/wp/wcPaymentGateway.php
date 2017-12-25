@@ -20,9 +20,18 @@ class WCPaymentGateway extends WC_Payment_Gateway {
 	/**
 	 * Constructor for the gateway.
 	 */
-	public function __construct() {
+	public function __construct($methodId, $title, $desc) {
+		$this->id                 = $methodId;
+		$this->icon               = apply_filters( 'woocommerce_cod_icon', '' );
+		$this->method_title       = __( 'Cash on delivery', 'woocommerce' );
+		$this->method_description = __( 'Have your customers pay with cash (or by other means) upon delivery.', 'woocommerce' );
+		$this->has_fields         = false;
+		
+		$this->title = $title;
+		$this->description = $desc;
+		
 		// Setup general properties
-		$this->setup_properties();
+//		$this->setup_properties();
 
 		// Load the settings
 		$this->init_form_fields();
@@ -47,13 +56,13 @@ class WCPaymentGateway extends WC_Payment_Gateway {
 	/**
 	 * Setup general properties for the gateway.
 	 */
-	protected function setup_properties() {
+/*	protected function setup_properties() {
 		$this->id                 = 'cod';
 		$this->icon               = apply_filters( 'woocommerce_cod_icon', '' );
 		$this->method_title       = __( 'Cash on delivery', 'woocommerce' );
 		$this->method_description = __( 'Have your customers pay with cash (or by other means) upon delivery.', 'woocommerce' );
 		$this->has_fields         = false;
-	}
+	}*/
 
 	/**
 	 * Initialise Gateway Settings Form Fields.

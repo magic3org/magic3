@@ -208,6 +208,36 @@ class CommerceApi extends BaseApi
 		return $methodArray;
 	}
 	/**
+	 * 支払方法の初期化パラメータを取得
+	 *
+	 * @return array     				支払方法ID,支払方法クラス,初期化パラメータ,タイトル,説明の配列
+	 */
+	function getPayMethodInitParam()
+	{
+		$methodArray = array();
+		$rows = $this->_getPayMethodRows();
+		$rowCount = count($rows);
+		for ($i = 0; $i < $rowCount; $i++){
+			$row = $rows[$i];
+			
+			// IWidgetパラメータを解析
+			$support = array();
+			if (!empty($row['iw_params'])){
+				$lines = explode(';', $row['iw_params']);
+				for ($i = 0; $i < count($lines); $i++){
+					$keyValue = explode('=', $lines[$i]);
+					$key = strtolower(trim($keyValue[0]));
+					$value = strtolower(trim($keyValue[1]));
+					if ($key == 'wc_support'){
+						$support = explode(',', $value);
+					}
+				}
+			}
+			$methodArray[] = array($row['po_id'], self::PAY_METHOD_CLASS/*支払方法クラス名(共通)*/, $support, $row['po_name'], $row['po_description']);
+		}
+		return $methodArray;
+	}
+	/**
 	 * インナーウィジェットを出力を取得
 	 *
 	 * @param string $id		ウィジェットID+インナーウィジェットID

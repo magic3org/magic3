@@ -120,8 +120,9 @@ class WC_Payment_Gateways {
 		
 		// x•¥•û–@ƒNƒ‰ƒX‚ğæ“¾
 		$this->payment_gateways = array();
-		foreach ($gCommerceApi->getPayMethodClass() as $methodId => $className){
-			$this->payment_gateways[$methodId] = new $className;
+		foreach ($gCommerceApi->getPayMethodInitParam() as $methodParam){
+			list($method_id, $className, $supportArray, $methodTitle, $methodDesc) = $methodParam;
+			$this->payment_gateways[$methodId] = new $className($methodId, $methodTitle, $methodDesc);
 		}
 	}
 
@@ -156,7 +157,6 @@ class WC_Payment_Gateways {
 	 * @return array
 	 */
 	public function get_available_payment_gateways() {
-	
 		return $this->payment_gateways;
 		
 /*		$_available_gateways = array();
