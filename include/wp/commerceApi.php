@@ -16,8 +16,8 @@
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
-require_once($gEnvManaber->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
-require_once($gEnvManaber->getWordpressRootPath() . '/wcPaymentGateway.php');		// 支払い方法クラス
+require_once($this->gEnv->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
+require_once($this->gEnv->getWordpressRootPath() . '/wcPaymentGateway.php');		// 支払い方法クラス
 
 class CommerceApi extends BaseApi
 {

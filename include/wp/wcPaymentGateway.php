@@ -26,10 +26,10 @@ class WCPaymentGateway extends WC_Payment_Gateway {
 
 		// Load the settings
 		$this->init_form_fields();
-		$this->init_settings();
+//		$this->init_settings();
 
 		// Get settings
-		$this->title              = $this->get_option( 'title' );
+/*		$this->title              = $this->get_option( 'title' );
 		$this->description        = $this->get_option( 'description' );
 		$this->instructions       = $this->get_option( 'instructions' );
 		$this->enable_for_methods = $this->get_option( 'enable_for_methods', array() );
@@ -41,6 +41,7 @@ class WCPaymentGateway extends WC_Payment_Gateway {
 
 		// Customer Emails
 		add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
+		*/
 	}
 
 	/**

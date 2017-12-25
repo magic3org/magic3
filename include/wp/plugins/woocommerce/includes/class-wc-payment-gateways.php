@@ -71,12 +71,12 @@ class WC_Payment_Gateways {
 	 * Load gateways and hook in functions.
 	 */
 	public function init() {
-		$load_gateways = array(
+/*		$load_gateways = array(
 			'WC_Gateway_BACS',
 			'WC_Gateway_Cheque',
 			'WC_Gateway_COD',
 			'WC_Gateway_Paypal',
-		);
+		);*/
 
 		/**
 		 * Simplify Commerce is @deprecated in 2.6.0. Only load when enabled.
@@ -92,7 +92,7 @@ class WC_Payment_Gateways {
 				}
 			}
 		}*/
-
+/*
 		// Filter
 		$load_gateways = apply_filters( 'woocommerce_payment_gateways', $load_gateways );
 
@@ -115,13 +115,21 @@ class WC_Payment_Gateways {
 		}
 
 		ksort( $this->payment_gateways );
+		*/
+		global $gCommerceApi;
+		
+		// x•¥•û–@ƒNƒ‰ƒX‚ğæ“¾
+		$this->payment_gateways = array();
+		foreach ($gCommerceApi->getPayMethodClass() as $methodId => $className){
+			$this->payment_gateways[$methodId] = new $className;
+		}
 	}
 
 	/**
 	 * Get gateways.
 	 * @return array
 	 */
-	public function payment_gateways() {
+/*	public function payment_gateways() {
 		$_available_gateways = array();
 
 		if ( sizeof( $this->payment_gateways ) > 0 ) {
@@ -131,7 +139,7 @@ class WC_Payment_Gateways {
 		}
 
 		return $_available_gateways;
-	}
+	}*/
 
 	/**
 	 * Get array of registered gateway ids
@@ -148,7 +156,10 @@ class WC_Payment_Gateways {
 	 * @return array
 	 */
 	public function get_available_payment_gateways() {
-		$_available_gateways = array();
+	
+		return $this->payment_gateways;
+		
+/*		$_available_gateways = array();
 
 		foreach ( $this->payment_gateways as $gateway ) {
 			if ( $gateway->is_available() ) {
@@ -163,6 +174,7 @@ class WC_Payment_Gateways {
 		}
 
 		return apply_filters( 'woocommerce_available_payment_gateways', $_available_gateways );
+		*/
 	}
 
 	/**
@@ -176,7 +188,7 @@ class WC_Payment_Gateways {
 			return;
 		}
 
-		if ( is_user_logged_in() ) {
+/*		if ( is_user_logged_in() ) {
 			$default_token = WC_Payment_Tokens::get_customer_default_token( get_current_user_id() );
 			if ( ! is_null( $default_token ) ) {
 				$default_token_gateway = $default_token->get_gateway_id();
@@ -195,7 +207,7 @@ class WC_Payment_Gateways {
 		// Ensure we can make a call to set_current() without triggering an error
 		if ( $current_gateway && is_callable( array( $current_gateway, 'set_current' ) ) ) {
 			$current_gateway->set_current();
-		}
+		}*/
 	}
 
 	/**
