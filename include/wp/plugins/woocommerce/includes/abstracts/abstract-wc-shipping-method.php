@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @category    Abstract Class
  * @author      WooThemes
  */
-//abstract class WC_Shipping_Method extends WC_Settings_API {
-abstract class WC_Shipping_Method {
+abstract class WC_Shipping_Method extends WC_Settings_API {
+//abstract class WC_Shipping_Method {
 	/**
 	 * Features this method supports. Possible features used by core:
 	 * - shipping-zones Shipping zone functionality + instances
