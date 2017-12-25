@@ -179,25 +179,22 @@ class ContentApi extends BaseApi
 				add_filter('woocommerce_return_to_shop_redirect', array($this, 'getShopUrl'));		// ショップホーム(product)画面へのURL取得
 				
 				require_once($this->gEnv->getWordpressRootPath() . '/plugins/woocommerce/woocommerce.php');
-				require_once($this->gEnv->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
+//				require_once($this->gEnv->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
 							
-				// セッションデータを保存
+				// セッションデータ保存処理を登録
 				$this->gRequest->addSessionCloseEventCallback(function (){
 					global $gRequestManager;
 					global $woocommerce;
 					
 					$sessionObj = $woocommerce->session->getSessionObj();
-				//	$sessionObj = array_filter($sessionObj);		// 空要素削除
 					if (empty($sessionObj)){		// データがない場合はセッションデータを削除
-						//$this->gRequest->unsetSessionValue(M3_WC_SESSION);
 						$gRequestManager->unsetSessionValue(M3_WC_SESSION);
 					} else {
-						//$this->gRequest->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
 						$gRequestManager->setSessionValueWithSerialize(M3_WC_SESSION, $sessionObj);
 					}
 				});
 				
-				// EコマースAPIオブジェクト作成
+				// Eコマース関連クラス読み込み、EコマースAPIオブジェクト作成
 				require_once($this->gEnv->getWordpressRootPath() . '/commerceApi.php');	// EコマースAPI
 				$gCommerceApi = new CommerceApi();
 				

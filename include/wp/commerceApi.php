@@ -16,6 +16,8 @@
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/baseApi.php');
+require_once($gEnvManaber->getWordpressRootPath() . '/wcShippingMethod.php');		// 配送方法クラス
+require_once($gEnvManaber->getWordpressRootPath() . '/wcPaymentGateway.php');		// 支払い方法クラス
 
 class CommerceApi extends BaseApi
 {
@@ -24,8 +26,10 @@ class CommerceApi extends BaseApi
 	private $langId;				// コンテンツの言語
 	private $userId;				// 現在のユーザID
 	private $delivMethodRows;		// 配送方法レコード
+	private $payMethodRows;			// 支払方法レコード
 	const ADDON_OBJ_COMMERCE = 'eclib';		// EコマースアドオンオブジェクトID
 	const DELIVERY_METHOD_CLASS = 'WCShippingMethod';			// 配送方法クラス名(共通)
+	const PAY_METHOD_CLASS = 'WCPaymentGateway';			// 支払方法クラス名(共通)
 	
 	/**
 	 * コンストラクタ
@@ -57,6 +61,20 @@ class CommerceApi extends BaseApi
 			if ($status) $this->delivMethodRows = $rows;
 		}
 		return $this->delivMethodRows;
+	}
+	/**
+	 * 支払方法の取得
+	 *
+	 * @return array		支払方法レコード
+	 */
+	function _getPayMethodRows()
+	{
+		if (!isset($this->payMethodRows)){
+			$this->payMethodRows = array();
+			$status = $this->ecObj->getActivePayMethodRows($this->langId, $rows);
+			if ($status) $this->payMethodRows = $rows;
+		}
+		return $this->payMethodRows;
 	}
 	/**
 	 * 配送方法の総数取得
@@ -172,6 +190,22 @@ class CommerceApi extends BaseApi
 			}
 		}
 		return $cost;
+	}
+	/**
+	 * 支払方法クラスを取得
+	 *
+	 * @return array     				支払方法、支払方法クラスの連想配列
+	 */
+	function getPayMethodClass()
+	{
+		$methodArray = array();
+		$rows = $this->_getPayMethodRows();
+		$rowCount = count($rows);
+		for ($i = 0; $i < $rowCount; $i++){
+			$row = $rows[$i];
+			$methodArray[$row['po_id']] = self::PAY_METHOD_CLASS/*支払方法クラス名(共通)*/;
+		}
+		return $methodArray;
 	}
 	/**
 	 * インナーウィジェットを出力を取得

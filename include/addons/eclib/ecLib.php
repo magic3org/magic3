@@ -274,9 +274,21 @@ class ecLib
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getActiveDelivMethod($langId, $callback)
+//	function getActiveDelivMethod($langId, $callback)
+//	{
+//		$this->db->getActiveDelivMethod($langId, 0/*セットID*/, $callback);
+//	}
+	/**
+	 * 実行可能な支払方法を取得
+	 *
+	 * @param string $langId		言語
+	 * @param array  $rows			取得レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getActivePayMethodRows($langId, &$rows)
 	{
-		$this->db->getActiveDelivMethod($langId, 0/*セットID*/, $callback);
+		$status = $this->db->getActivePayMethodRows($langId, 0/*セットID*/, $rows);
+		return $status;
 	}
 	/**
 	 * 商品情報を取得

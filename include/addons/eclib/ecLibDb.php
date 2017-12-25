@@ -612,7 +612,7 @@ class ecLibDb extends BaseDb
 		$queryStr .=   'AND do_visible = true ';			// 表示状態
 		$queryStr .=   'AND do_language_id = ? ';
 		$queryStr .=   'AND do_set_id = ? ';
-		$queryStr .=   'ORDER BY do_index ';
+		$queryStr .= 'ORDER BY do_index ';
 		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
 		return $retValue;
 	}
@@ -624,7 +624,7 @@ class ecLibDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getActiveDelivMethod($langId, $setId, $callback)
+/*	function getActiveDelivMethod($langId, $setId, $callback)
 	{
 		$queryStr = 'SELECT * FROM delivery_method_def ';
 		$queryStr .=  'WHERE do_deleted = false ';
@@ -633,6 +633,25 @@ class ecLibDb extends BaseDb
 		$queryStr .=  'AND do_set_id = ? ';
 		$queryStr .=  'ORDER BY do_index ';
 		$this->selectLoop($queryStr, array($langId, $setId), $callback);
+	}*/
+	/**
+	 * 実行可能な支払方法を取得
+	 *
+	 * @param string $langId		言語
+	 * @param int    $setId			セットID
+	 * @param array  $rows			取得レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getActivePayMethodRows($langId, $setId, &$rows)
+	{
+		$queryStr  = 'SELECT * FROM pay_method_def LEFT JOIN _iwidgets ON po_iwidget_id = iw_id AND iw_deleted = false ';
+		$queryStr .= 'WHERE po_deleted = false ';
+		$queryStr .=   'AND po_visible = true ';			// 表示状態
+		$queryStr .=   'AND po_language_id = ? ';
+		$queryStr .=   'AND po_set_id = ? ';
+		$queryStr .= 'ORDER BY po_index ';
+		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
+		return $retValue;
 	}
 	/**
 	 * 商品情報を取得
