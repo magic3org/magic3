@@ -705,7 +705,12 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				} else {
 					// Themlerテンプレートかどうか確認
 					$ret = $this->isTemlerTemplate($templateDir, $version);
-					if ($ret) $genarator = 'themler';
+					if ($ret){
+						$genarator = 'themler';
+						
+						// Themlerテンプレートの修正処理を行う
+						$this->fixThemlerTemplate($templateDir);
+					}
 				}
 				break;
 		}
@@ -877,6 +882,90 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			list($tmp, $version) = explode('=', $verSrc);
 		}
 		return $ret;
+	}
+	/**
+	 * Themlerテンプレートの修正
+	 *
+	 * @param string $templateDir		テンプレートのディレクトリ
+	 * @return bool						true=成功、false=失敗
+	 */
+	function fixThemlerTemplate($templateDir)
+	{
+		$searchDir = $templateDir . '/html/com_content';
+		$dir = dir($searchDir);
+		while (($file = $dir->read()) !== false){
+			$filePath = $searchDir . '/' . $file;
+			
+			// ディレクトリかどうかチェック
+			if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath)){
+				$targetFile = $filePath . '/default.php';
+				$this->fixThemlerTemplateDefaultFile($targetFile);
+			}
+		}
+		$dir->close();
+	}
+	/**
+	 * Themlerテンプレートのcom_contentディレクトリ以下のdefault.phpファイルの修正を行う
+	 *
+	 * @param string $filePath	対象ファイルのパス
+	 * @return bool				true=成功、false=失敗
+	 */
+	function fixThemlerTemplateDefaultFile($filePath)
+	{
+		// ファイルが存在しない場合は終了
+		if (!file_exists($filePath)) return false;
+
+		// 現在のファイルを読み込む
+		if (!($file = @fopen($filePath, "r"))){
+			$errMsg = 'ファイルのオープンに失敗しました ファイル=' . $filePath;
+ 			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+ 			return false;
+		}
+		$content = @fread($file, filesize($filePath));
+		@fclose($file);
+		
+		// プログラム変更処理
+		$content = str_replace('require_once \'default_template.php\';', 'require \'default_template.php\';', $content);
+		
+		// ファイルに保存
+		$backupFilePath = dirname($filePath) . '/_' . basename($filePath);
+		$isOk = writeFile($backupFilePath, $content);
+		if (!$isOk) return false;
+
+		// 新旧ファイル入れ替え
+		$tmpFilePath = $filePath . '_tmp';
+		if (!renameFile($filePath, $tmpFilePath)){
+			$errMsg = 'ファイルを移動できません';
+			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成したファイルを削除
+			unlink($backupFilePath);
+			return false;
+		}
+		if (!renameFile($backupFilePath, $filePath)){
+			$errMsg = 'ファイルを移動できません';
+			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成したファイルを削除
+			unlink($backupFilePath);
+			
+			// ファイルを戻す
+			renameFile($tmpFilePath, $filePath);
+			return false;
+		}
+		if (!renameFile($tmpFilePath, $backupFilePath)){
+			$errMsg = 'ファイルを移動できません';
+			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成したファイルを削除
+			unlink($tmpFilePath);
+			return false;
+		}
+		return true;
 	}
 }
 ?>
