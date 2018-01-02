@@ -81,6 +81,10 @@ img.m3icon {
 	outline: 3px solid #FFE14F;
 	outline-offset:-3px;
 }
+/* 非表示ウィジェット */
+.m3_widget.m3invisible {
+	background-color:#AAA;
+}
 /* コンテンツ編集用ボタンリスト */
 .m3edittool {
 	position:relative;

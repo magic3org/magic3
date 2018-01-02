@@ -124,7 +124,10 @@ class PageManager extends Core
 	const MENUBAR_TAGS			= '{{MENUBAR_TAGS}}';				// メニューバー出力用タグ
 	const MENUBAR_SCRIPT_TAGS	= '{{MENUBAR_SCRIPT_TAGS}}';				// メニューバー出力用スクリプトタグ
 	const WIDGET_ICON_IMG_SIZE = 32;			// ウィジェットアイコンサイズ
-	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラスクラス
+	const WIDGET_INVISIBLE_CLASS = 'm3invisible';			// 非表示ウィジェットクラス
+	const WIDGET_VISIBLE_IN_LOGIN_CLASS = 'm3visible_in_login';					// ログイン時のみ表示ウィジェットクラス
+	const WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS = 'm3visible_in_not_login';			// 非ログイン時のみ表示ウィジェットクラス
+	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラス
 	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_pos_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
 	const WIDGET_OUTER_CLASS_WIDGET_TAG = 'm3_';				// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
 //	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
@@ -4513,6 +4516,32 @@ class PageManager extends Core
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;		// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+								// ウィジェット表示タイプによる表示制御
+								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
+								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
+								if (!empty($controlType)){
+									switch ($controlType){
+										case 1:			// ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											break;
+										case 2:			// 非ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											break;
+										default:
+											break;
+									}
+								}
+								if (!empty($pageState)){
+									switch ($pageState){
+										case 1:			// トップ時のみ表示
+											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											break;
+										default:
+											break;
+									}
+								}
+		
 								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
 								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
 								$hasAdmin = '0';		// 管理画面があるかどうか
@@ -4521,7 +4550,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
 							} else {
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
@@ -4629,6 +4658,32 @@ class PageManager extends Core
 					//		$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
 					
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+								// ウィジェット表示タイプによる表示制御
+								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
+								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
+								if (!empty($controlType)){
+									switch ($controlType){
+										case 1:			// ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											break;
+										case 2:			// 非ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											break;
+										default:
+											break;
+									}
+								}
+								if (!empty($pageState)){
+									switch ($pageState){
+										case 1:			// トップ時のみ表示
+											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											break;
+										default:
+											break;
+									}
+								}
+								
 								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
 								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
 								$hasAdmin = '0';		// 管理画面があるかどうか
@@ -4637,7 +4692,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
 							} else {
 						//		$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 						//		$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
@@ -4805,6 +4860,32 @@ class PageManager extends Core
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;	// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+								// ウィジェット表示タイプによる表示制御
+								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
+								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
+								if (!empty($controlType)){
+									switch ($controlType){
+										case 1:			// ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											break;
+										case 2:			// 非ログイン時のみ表示
+											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											break;
+										default:
+											break;
+									}
+								}
+								if (!empty($pageState)){
+									switch ($pageState){
+										case 1:			// トップ時のみ表示
+											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											break;
+										default:
+											break;
+									}
+								}
+			
 								//$editInfo = 'widgetid:' . $this->pageDefRows[$i]['wd_id'];
 								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
 								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
@@ -4814,7 +4895,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
 							} else {
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
