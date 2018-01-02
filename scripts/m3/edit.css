@@ -81,9 +81,19 @@ img.m3icon {
 	outline: 3px solid #FFE14F;
 	outline-offset:-3px;
 }
-/* 非表示ウィジェット */
+/* ウィジェット状態表示 */
 .m3_widget.m3invisible {
 	background-color:#AAA;
+}
+.m3_widget.m3invisible::after {
+	content: attr(data-bg-text);
+	display: block;
+	position: static;
+	color: #FFF;
+	margin:10px;
+	font-size: 30px;
+	line-height: 1;
+	text-align:right;
 }
 /* コンテンツ編集用ボタンリスト */
 .m3edittool {

@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -4518,6 +4518,7 @@ class PageManager extends Core
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 								// ウィジェット表示タイプによる表示制御
 								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$widgetStatusLabelOption = '';		// ウィジェット状態表示ラベル
 								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
 								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
 								if (!empty($controlType)){
@@ -4535,7 +4536,10 @@ class PageManager extends Core
 								if (!empty($pageState)){
 									switch ($pageState){
 										case 1:			// トップ時のみ表示
-											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											if (!$this->isPageTopUrl){
+												$widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+												$widgetStatusLabelOption .= ' data-bg-text="非表示中"';
+											}
 											break;
 										default:
 											break;
@@ -4550,7 +4554,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . $widgetStatusLabelOption . '>' . $widgetContent . '</div>';
 							} else {
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
@@ -4660,6 +4664,7 @@ class PageManager extends Core
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 								// ウィジェット表示タイプによる表示制御
 								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$widgetStatusLabelOption = '';		// ウィジェット状態表示ラベル
 								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
 								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
 								if (!empty($controlType)){
@@ -4677,7 +4682,10 @@ class PageManager extends Core
 								if (!empty($pageState)){
 									switch ($pageState){
 										case 1:			// トップ時のみ表示
-											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											if (!$this->isPageTopUrl){
+												$widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+												$widgetStatusLabelOption .= ' data-bg-text="非表示中"';
+											}
 											break;
 										default:
 											break;
@@ -4692,7 +4700,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . $widgetStatusLabelOption . '>' . $widgetContent . '</div>';
 							} else {
 						//		$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 						//		$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
@@ -4862,6 +4870,7 @@ class PageManager extends Core
 							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 								// ウィジェット表示タイプによる表示制御
 								$widgetStatusClass = '';// ウィジェットの状態表示クラス
+								$widgetStatusLabelOption = '';		// ウィジェット状態表示ラベル
 								$controlType = $this->pageDefRows[$i]['pd_view_control_type'];
 								$pageState = $this->pageDefRows[$i]['pd_view_page_state'];
 								if (!empty($controlType)){
@@ -4879,7 +4888,10 @@ class PageManager extends Core
 								if (!empty($pageState)){
 									switch ($pageState){
 										case 1:			// トップ時のみ表示
-											if (!$this->isPageTopUrl) $widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+											if (!$this->isPageTopUrl){
+												$widgetStatusClass .= ' ' . self::WIDGET_INVISIBLE_CLASS;		// ページトップ(サブページ内のトップ位置)でなければ非表示
+												$widgetStatusLabelOption .= ' data-bg-text="非表示中"';
+											}
 											break;
 										default:
 											break;
@@ -4895,7 +4907,7 @@ class PageManager extends Core
 								if (empty($this->pageDefRows[$i]['pd_sub_id'])) $shared = '1';	// 共通ウィジェットのとき
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
-								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget' . $widgetStatusClass . '" rel="#m3editwidget" ' . $m3Option . $widgetStatusLabelOption . '>' . $widgetContent . '</div>';
 							} else {
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
