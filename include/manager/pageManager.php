@@ -125,8 +125,7 @@ class PageManager extends Core
 	const MENUBAR_SCRIPT_TAGS	= '{{MENUBAR_SCRIPT_TAGS}}';				// メニューバー出力用スクリプトタグ
 	const WIDGET_ICON_IMG_SIZE = 32;			// ウィジェットアイコンサイズ
 	const WIDGET_INVISIBLE_CLASS = 'm3invisible';			// 非表示ウィジェットクラス
-	const WIDGET_VISIBLE_IN_LOGIN_CLASS = 'm3visible_in_login';					// ログイン時のみ表示ウィジェットクラス
-	const WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS = 'm3visible_in_not_login';			// 非ログイン時のみ表示ウィジェットクラス
+	const WIDGET_LOGIN_STATUS_CLASS = 'm3loginstatus';		// ログイン状態連動クラス
 	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラス
 	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_pos_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
 	const WIDGET_OUTER_CLASS_WIDGET_TAG = 'm3_';				// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
@@ -4524,10 +4523,12 @@ class PageManager extends Core
 								if (!empty($controlType)){
 									switch ($controlType){
 										case 1:			// ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="ログイン時のみ表示"';
 											break;
 										case 2:			// 非ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="非ログイン時のみ表示"';
 											break;
 										default:
 											break;
@@ -4670,10 +4671,12 @@ class PageManager extends Core
 								if (!empty($controlType)){
 									switch ($controlType){
 										case 1:			// ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="ログイン時のみ表示"';
 											break;
 										case 2:			// 非ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="非ログイン時のみ表示"';
 											break;
 										default:
 											break;
@@ -4876,10 +4879,12 @@ class PageManager extends Core
 								if (!empty($controlType)){
 									switch ($controlType){
 										case 1:			// ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_LOGIN_CLASS;	// ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="ログイン時のみ表示"';
 											break;
 										case 2:			// 非ログイン時のみ表示
-											$widgetStatusClass .= ' ' . self::WIDGET_VISIBLE_IN_NOT_LOGIN_CLASS;	// 非ログイン時のみ表示ウィジェットクラス
+											$widgetStatusClass .= ' ' . self::WIDGET_LOGIN_STATUS_CLASS;
+											$widgetStatusLabelOption .= ' data-bg-text="非ログイン時のみ表示"';
 											break;
 										default:
 											break;
