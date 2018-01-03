@@ -82,10 +82,23 @@ img.m3icon {
 	outline-offset:-3px;
 }
 /* ウィジェット状態表示 */
-.m3_widget.m3invisible {
-	background-color:#AAA;
+.m3_widget.m3invisible {	/* 非表示 */
+	background: repeating-linear-gradient(45deg, #444, #444 10px, #888 0, #888 20px);
 }
 .m3_widget.m3invisible::after {
+	content: attr(data-bg-text);
+	display: block;
+	position: static;
+	color: #FFF;
+	margin:10px;
+	font-size: 30px;
+	line-height: 1;
+	text-align:right;
+}
+.m3_widget.m3loginstatus {	/* ログイン状態連動 */
+	background-color:#CCC;
+}
+.m3_widget.m3loginstatus::after {
 	content: attr(data-bg-text);
 	display: block;
 	position: static;
