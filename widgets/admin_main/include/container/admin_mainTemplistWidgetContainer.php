@@ -404,6 +404,15 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				$this->gCache->clearAllCache();
 			}
 		} else if ($act == 'changetype'){		// テンプレートタイプの変更のとき
+		} else if ($act == 'init'){		// テンプレート初期化のとき
+			$ret = $this->initializeTemplate($templateId);
+			if ($ret){
+				$msg = sprintf($this->_('Template initialization completed. (template ID: %s)'), $templateId);		// テンプレート初期化完了しました。(テンプレートID: %s)
+				$this->setMsg(self::MSG_GUIDANCE, $msg);
+			} else {
+				$msg = sprintf($this->_('Failed in template initializing. (template ID: %s)'), $templateId);		// テンプレート初期化に失敗しました。(テンプレートID: %s)
+				$this->setMsg(self::MSG_APP_ERR, $msg);
+			}
 		}
 			
 		// テンプレートのタイプごとの処理
@@ -718,6 +727,31 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		// テンプレートを登録
 		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version, $infoUrl);
 		return $ret;
+	}
+	/**
+	 * テンプレートを初期化
+	 *
+	 * @param string $id		テンプレートID
+	 * @return bool				true=成功、false=失敗
+	 */
+	function initializeTemplate($id)
+	{
+		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $id;		// テンプレートディレクトリ
+		
+		// テンプレートの情報を取得
+		if ($this->_db->getTemplate($id, $row)){
+			$genarator = $row['tm_generator'];			// テンプレート作成アプリケーション
+			
+			// Themlerテンプレートの修正処理を行う
+			switch ($genarator){
+			case 'themler':
+				$this->fixThemlerTemplate($templateDir);
+				break;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * テンプレートIDを取得
