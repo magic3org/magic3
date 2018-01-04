@@ -123,7 +123,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 		{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 		{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
-//		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
+//		{ name: 'insert', items: [ 'Image', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 		{ name: 'insert', items: [ 'Image' ] },
 		{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
 		{ name: 'others', items: [ 'LinkInfo', 'M3Templates' ] },
@@ -159,7 +159,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 	var dialogDefinition = ev.data.definition;
 	var dialog = dialogDefinition.dialog;
 	
-	if (dialogName == 'image' || dialogName == 'flash'){
+	if (dialogName == 'image'){
 		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
 	}
 });

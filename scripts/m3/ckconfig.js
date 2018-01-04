@@ -172,7 +172,7 @@ CKEDITOR.editorConfig = function(config){
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find', 'Replace', 'SelectAll' ] },
-			{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
+			{ name: 'insert', items: [ 'Image', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor', '-', 'FontSize' ] },
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
@@ -192,7 +192,7 @@ CKEDITOR.editorConfig = function(config){
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find', 'Replace', 'SelectAll' ] },
-			{ name: 'insert', items: [ 'Image', 'Flash', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
+			{ name: 'insert', items: [ 'Image', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor', '-', 'FontSize' ] },
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
@@ -242,7 +242,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 	var dialogDefinition = ev.data.definition;
 	var dialog = dialogDefinition.dialog;
 	
-	if (dialogName == 'image' || dialogName == 'flash'){
+	if (dialogName == 'image'){
 		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
 	}
 	
@@ -292,9 +292,6 @@ CKEDITOR.on('dialogDefinition', function(ev){
 					case 'image':
 						title = '画像を選択';
 						break;
-					case 'flash':
-						title = 'Flashを選択';
-						break;
 					default:
 						title = 'ファイルを選択';
 						break;
@@ -310,7 +307,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 						},
 						create: function(event, ui){
 							var option = '';
-							if (dialogName == 'image' || dialogName == 'flash'){
+							if (dialogName == 'image'){
 								option = '?dirtype=' + dialogName;
 							} else if (dialogName == 'm3link'){
 								option = '?dirtype=file';
