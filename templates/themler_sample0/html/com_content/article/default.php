@@ -34,6 +34,6 @@ $currentTemplateName = getCurrentTemplateByType($article->isPage ? 'page' : 'pos
 ?>
 <!--TEMPLATE <?php echo $currentTemplateName; ?> /-->
 <?php
-require_once 'default_template.php';
+require 'default_template.php';
 ?>
 <?php /*END_EDITOR_OPEN*/ } /*END_EDITOR_CLOSE*/ ?>
