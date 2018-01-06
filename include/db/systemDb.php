@@ -761,6 +761,7 @@ class SystemDb extends BaseDb
 		$updateFields[] = 'tm_clean_type';			// 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)
 		$updateFields[] = 'tm_info_url';			// テンプレート情報URL
 		$updateFields[] = 'tm_custom_params';		// カスタマイズ用パラメータ
+		$updateFields[] = 'tm_editor_param';		// 編集エディタ用パラメータ
 		
 		// トランザクション開始
 		$this->startTransaction();

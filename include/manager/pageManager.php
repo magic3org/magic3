@@ -6927,7 +6927,7 @@ class PageManager extends Core
 		return $destParam;
 	}
 	/**
-	 * URLで指定した画面のCSSファイルを取得
+	 * URLで指定した画面のCSSファイル(テンプレート独自のCSSまたは外部のCSS)を取得
 	 *
 	 * @param string $url	取得画面のURL
 	 * @return				なし
@@ -6957,10 +6957,21 @@ class PageManager extends Core
 				if (strEndsWith($match[1], '.css')){		// ファイル名の拡張子が「css」の場合
 					$urlArray[] = $match[1];
 				} else {
-					// typeが「text/css」の場合も取得
+					// typeが「text/css」を取得
 					$attrPattern = '/type\s*=\s*[\'"]+(.+?)[\'"]/si';
 					if (preg_match($attrPattern, $match[0], $attrMatch)){
-						if (strcasecmp($attrMatch[1], 'text/css') == 0) $urlArray[] = $match[1];
+						if (strcasecmp($attrMatch[1], 'text/css') == 0){
+							$urlArray[] = $match[1];
+							continue;
+						}
+					}
+					// relが「stylesheet」を取得
+					$attrPattern = '/rel\s*=\s*[\'"]+(.+?)[\'"]/si';
+					if (preg_match($attrPattern, $match[0], $attrMatch)){
+						if (strcasecmp($attrMatch[1], 'stylesheet') == 0){
+							$urlArray[] = $match[1];
+							continue;
+						}
 					}
 				}
 			}
@@ -6968,16 +6979,17 @@ class PageManager extends Core
 
 		// ifで制御されているCSSファイルを除く
 		$delUrlArray = array();
-		$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';
+		$pattern = '/<!--\[if\b.*?\]>[\s\S]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\s\S]*<!\[endif\]-->/si';
 		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
 			foreach ($matches as $match) $delUrlArray[] = $match[1];
 		}
 
-		// テンプレート独自のCSSまたは外部のCSSを取得する
+		// ##### テンプレート独自のCSSまたは外部のCSSを取得する #####
 		$this->ckeditorCssFiles = array();
 		$cssFiles = array_merge(array_diff($urlArray, $delUrlArray));	// CKEditor用のCSSファイル
 		for ($i = 0; $i < count($cssFiles); $i++){
 			$cssFileUrl = $cssFiles[$i];
+			$baseUrl = '';
 			if (strncasecmp($cssFileUrl, 'http://', strlen('http://')) == 0){
 				$baseUrl = $this->gEnv->getRootUrl();
 			} else if (strncasecmp($cssFileUrl, 'https://', strlen('https://')) == 0){
@@ -6986,14 +6998,16 @@ class PageManager extends Core
 			// パスを解析
 			$relativePath = str_replace($baseUrl, '', $cssFileUrl);		// ルートURLからの相対パスを取得
 			
-			if (strStartsWith($relativePath, '/' . M3_DIR_NAME_TEMPLATES . '/')){		// テンプレートディレクトリの場合
+			if (strStartsWith($relativePath, '//')){		// URLが「//」で始まる外部ファイルの場合
+				$this->ckeditorCssFiles[] = $cssFileUrl;
+			} else if (strStartsWith($relativePath, '/' . M3_DIR_NAME_TEMPLATES . '/')){		// テンプレートディレクトリの場合
 				$this->ckeditorCssFiles[] = $cssFileUrl;
 			} else if (strStartsWith($relativePath, '/')){		// テンプレートディレクトリ以外のディレクトリの場合
 			} else {			// 外部URLの場合
 				$this->ckeditorCssFiles[] = $cssFileUrl;
 			}
 		}
-		
+
 		// テンプレートタイプを取得
 		$pattern = '/var\s*M3_TEMPLATE_TYPE\s*=\s*(\d+?)\s*;/si';
 		if (preg_match($pattern, $headContent, $matches)) $this->ckeditorTemplateType = $matches[1];			// CKEditor用のテンプレートタイプ
@@ -7026,5 +7040,116 @@ class PageManager extends Core
 			return true;
 		}
 	}*/
+	/**
+	 * テンプレート画面のCSSファイルを取得
+	 *
+	 * @param string $templateId	テンプレートID
+	 * @return						テンプレート情報オブジェクト
+	 */
+	function parseTemplateCssFile($templateId)
+	{
+		// テンプレートのURL
+		$url = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_SHOW_POSITION . '&template=' . $templateId;
+		
+		// テンプレート情報オブジェクト
+		$tmplateInfoObj = new stdClass;
+		$tmplateInfoObj->cssFiles	= array();		// テンプレートで使用されているCSSファイル
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_USERAGENT, M3_SYSTEM_NAME . '/' . M3_SYSTEM_VERSION);		// ユーザエージェント
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());		// セッションを維持
+		$content = curl_exec($ch);
+		curl_close($ch);
+
+		// HEADタグを取り出す
+		$urlArray = array();
+		$headContent = '';
+		$pattern = '/<head\b[^>]*?>(.*?)<\/head\b[^>]*?>/si';
+		if (preg_match($pattern, $content, $matches)) $headContent = $matches[0];
+
+		// CSSファイル取り出し
+		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
+		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
+			foreach ($matches as $match){
+				if (strEndsWith($match[1], '.css')){		// ファイル名の拡張子が「css」の場合
+					$urlArray[] = $match[1];
+				} else {
+					// typeが「text/css」を取得
+					$attrPattern = '/type\s*=\s*[\'"]+(.+?)[\'"]/si';
+					if (preg_match($attrPattern, $match[0], $attrMatch)){
+						if (strcasecmp($attrMatch[1], 'text/css') == 0){
+							$urlArray[] = $match[1];
+							continue;
+						}
+					}
+					// relが「stylesheet」を取得
+					$attrPattern = '/rel\s*=\s*[\'"]+(.+?)[\'"]/si';
+					if (preg_match($attrPattern, $match[0], $attrMatch)){
+						if (strcasecmp($attrMatch[1], 'stylesheet') == 0){
+							$urlArray[] = $match[1];
+							continue;
+						}
+					}
+				}
+			}
+		}
+
+		// ifで制御されているCSSファイルを除く
+		$delUrlArray = array();
+		$pattern = '/<!--\[if\b.*?\]>[\s\S]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\s\S]*<!\[endif\]-->/si';
+		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
+			foreach ($matches as $match) $delUrlArray[] = $match[1];
+		}
+
+		// テンプレート独自のCSSまたは外部のCSSを取得する
+		$cssFiles = array_merge(array_diff($urlArray, $delUrlArray));	// CKEditor用のCSSファイル
+		for ($i = 0; $i < count($cssFiles); $i++){
+			$cssFileUrl = $cssFiles[$i];
+			$baseUrl = '';
+			if (strncasecmp($cssFileUrl, 'http://', strlen('http://')) == 0){
+				$baseUrl = $this->gEnv->getRootUrl();
+			} else if (strncasecmp($cssFileUrl, 'https://', strlen('https://')) == 0){
+				$baseUrl = $this->gEnv->getSslRootUrl();		// SSLの場合
+			}
+			// パスを解析
+			$relativePath = str_replace($baseUrl, '', $cssFileUrl);		// ルートURLからの相対パスを取得
+			
+			if (strStartsWith($relativePath, '//')){		// URLが「//」で始まる外部ファイルの場合
+				$tmplateInfoObj->cssFiles[] = $cssFileUrl;
+			} else if (strStartsWith($relativePath, '/' . M3_DIR_NAME_TEMPLATES . '/')){		// テンプレートディレクトリの場合
+				$tmplateInfoObj->cssFiles[] = $cssFileUrl;
+			} else if (strStartsWith($relativePath, '/')){		// テンプレートディレクトリ以外のディレクトリの場合
+			} else {			// 外部URLの場合
+				$tmplateInfoObj->cssFiles[] = $cssFileUrl;
+			}
+		}
+		
+		// パスを相対パスに変換
+		for ($i = 0; $i < count($tmplateInfoObj->cssFiles); $i++){
+			$cssFileUrl = $tmplateInfoObj->cssFiles[$i];
+			
+			$baseUrl = '';
+			if (strncasecmp($cssFileUrl, 'http://', strlen('http://')) == 0){
+				$baseUrl = $this->gEnv->getRootUrl();
+			} else if (strncasecmp($cssFileUrl, 'https://', strlen('https://')) == 0){
+				$baseUrl = $this->gEnv->getSslRootUrl();		// SSLの場合
+			}
+			// パスを解析
+			$relativePath = str_replace($baseUrl, '', $cssFileUrl);		// ルートURLからの相対パスを取得
+			
+			// テンプレート内のCSSの場合は相対パスに変換
+			if (strStartsWith($relativePath, '/' . M3_DIR_NAME_TEMPLATES . '/')){// テンプレートディレクトリの場合
+				$tmplateInfoObj->cssFiles[$i] = $relativePath;
+			} else {
+				$tmplateInfoObj->cssFiles[$i] = $cssFileUrl;
+			}
+		}
+		
+		return $tmplateInfoObj;
+	}
 }
 ?>

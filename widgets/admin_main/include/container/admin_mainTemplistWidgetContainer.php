@@ -723,9 +723,18 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				}
 				break;
 		}
-		
+			
 		// テンプレートを登録
 		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version, $infoUrl);
+		if ($ret){
+			// テンプレート登録後、テンプレートを解析してCSSファイルを取得
+			$templateInfoObj = $this->gPage->parseTemplateCssFile($id);
+		
+			// テンプレートの情報を更新
+			$updateParam = array();
+			$updateParam['tm_editor_param'] = serialize($templateInfoObj);
+			$ret = $this->_db->updateTemplate($id, $updateParam);
+		}
 		return $ret;
 	}
 	/**
@@ -748,7 +757,15 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				$this->fixThemlerTemplate($templateDir);
 				break;
 			}
-			return true;
+			
+			// テンプレートを解析し、使用しているCSSファイルを取得
+			$templateInfoObj = $this->gPage->parseTemplateCssFile($id);
+			
+			// テンプレートの情報を更新
+			$updateParam = array();
+			$updateParam['tm_editor_param'] = serialize($templateInfoObj);
+			$ret = $this->_db->updateTemplate($id, $updateParam);
+			return $ret;
 		} else {
 			return false;
 		}
