@@ -31,6 +31,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 	const ACTION_ICON_FILE = '/images/system/action16.png';		// 操作要求アイコン
 	const GUIDE_ICON_FILE = '/images/system/guide16.png';		// ガイダンスアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
+	const MAX_MSG_LENGTH = 120;					// メッセージの長さ最大値
 	
 	/**
 	 * コンストラクタ
@@ -200,7 +201,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 			'index'		=> $index,													// 行番号
 			'serial'	=> $this->convertToDispString($serial),			// シリアル番号
 			'type'		=> $iconTag,			// メッセージタイプを示すアイコン
-			'message'	=> $this->convertToDispString($fetchedRow['ol_message']),		// メッセージ
+			'message'	=> $this->convertToDispString(makeTruncStr($fetchedRow['ol_message'], self::MAX_MSG_LENGTH)),		// メッセージ
 			'output_dt' => $dispDate,	// 出力日時
 			'url'		=> $this->convertUrlToHtmlEntity($messageUrl)			// メッセージのリンク先
 		);
