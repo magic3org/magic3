@@ -25,6 +25,25 @@ function deleteline(templateId){
 	document.main.submit();
 	return false;
 }
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
 function uploadCheck(){
 	if (!document.upload.upfile.value){
 		alert('{_LC_MSG_NO_UPLOAD_FILE}');
@@ -92,7 +111,8 @@ $(function(){
 <input type="hidden" name="task" value="templist" />
 <input type="hidden" name="act" />
 <input type="hidden" name="template" />
-<input type="hidden" name="no" />
+<!--<input type="hidden" name="no" />-->
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_TEMPLIST}>{_LC_LABEL_TEMPLATE_LIST}</span>
 <select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
@@ -101,8 +121,12 @@ $(function(){
 </patTemplate:tmpl>
 </select>
 </h3>
-
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_TEMPLIST_BUTTONS}><div class="btn-group">
+<div class="m3config_h_side_buttons pull-right">
+<div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div>
+</div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_TEMPLIST_BUTTONS}><div class="btn-group">
 <input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="{_LC_LABEL_UPLOAD}" />
 </div></div></div>
 <div id="reload_area" style="display:none;">
@@ -113,11 +137,11 @@ $(function(){
 <table id="templatelist">
     <thead>
     <tr>
-        <th style="width:50px;">No</th>
+        <th class="select"><span {_HELP_TEMPLIST_CHECK}>選択</span></th>
 	    <th style="width:32px;"></th>
         <th><span {_HELP_TEMPLIST_ID}>ID</span></th>
 	    <th><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
-	    <th style="width:50px;"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
+	    <!--<th style="width:50px;"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>-->
 	    <th style="width:70px;">{_LC_LABEL_TEMPLATE_DATE}</th>
 	    <th><span {_HELP_TEMPLIST_ACT}>{_LC_LABEL_TEMPLATE_OPERATION}</span></th>
 	</tr>
@@ -125,22 +149,31 @@ $(function(){
     <tbody>
     <patTemplate:tmpl name="templist">
     <tr>
-	    <td>{NO}</td>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_STR}<div class="pull-right">{INFO_BUTTON}</div></td>
 	    <td>{FORMAT_TYPE}</td>
-	    <td><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
+	    <!--<td><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>-->
 	    <td>{UPDATE_DT}</td>
 	    <td>
-		{DELETE_BUTTON} {PREVIEW_BUTTON} {DOWNLOAD_BUTTON} <!--{EDIT_BUTTON}-->
+		<!--{DELETE_BUTTON}--> {PREVIEW_BUTTON} <!-- {DOWNLOAD_BUTTON}--> <!--{EDIT_BUTTON}-->
 <div class="dropdown" style="display: inline-block;">
-  <button class="btn btn-sm btn-warning dropdown-toggle {EDIT_DISABLED}" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-sm btn-default dropdown-toggle {EDIT_DISABLED}" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     <i class="glyphicon glyphicon-edit"></i>&nbsp;<span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
     <li><a href="{EDIT_URL}">画像編集</a></li>
     <li {GENERATE_DISABLED}><a href="{GENERATE_CSS_URL}">CSS生成</a></li>
-	<li><a href="javascript:void(0);" onclick="initTemplate('{ID}');">初期化</a></li>
+  </ul>
+</div>
+<div class="dropdown" style="display: inline-block;">
+  <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    その他&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <li {DEFAULT_DISABLED}><a href="javascript:void(0);" onclick="changeDefault('{ID}');">デフォルトを変更</a></li>
+	<li><a href="javascript:void(0);" onclick="downloadTemplate('{ID}');">ダウンロード</a></li>
+	<li><a href="javascript:void(0);" onclick="initTemplate('{ID}');">テンプレート初期化</a></li>
   </ul>
 </div>
 	    </td>

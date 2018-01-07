@@ -25,6 +25,7 @@ require_once($gEnvManager->getJoomlaRootPath() . '/JRender.php');
 class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
+	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $newTemplate = array();		// 新規追加テンプレート
 	private $defalutTemplate;	// デフォルトのテンプレート
 	private $templateTypeArray;		// テンプレートタイプ
@@ -203,15 +204,45 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				if ((is_dir($templatePath) && rmDirectory($templatePath)) || !is_dir($templatePath)){// 削除成功か、ディレクトリが存在しないとき
 					$ret = $this->db->deleteTemplate($templateId);
 					if ($ret){		// データ更新成功のとき
-						//$this->setMsg(self::MSG_GUIDANCE, 'テンプレートを削除しました(テンプレートID：' . $templateId . ')');
 						$this->setMsg(self::MSG_GUIDANCE, sprintf($this->_('Template deleted. (template ID: %s)'), $templateId));	// テンプレートを削除しました(テンプレートID：%s)
 					} else {
-						//$this->setMsg(self::MSG_APP_ERR, 'テンプレート削除に失敗しました(テンプレートID：' . $templateId . ')');
 						$this->setMsg(self::MSG_APP_ERR, sprintf($this->_('Failed in deleting template. (template ID: %s)'), $templateId));	// テンプレート削除に失敗しました(テンプレートID：%s)
 					}
 				} else {
-					//$this->setMsg(self::MSG_APP_ERR, 'テンプレートのディレクトリが削除できませんでした(テンプレートID：' . $templateId . ')');
 					$this->setMsg(self::MSG_APP_ERR, sprintf($this->_('Failed in deleting template directory. (directory: %s)'), $templatePath));	// テンプレートのディレクトリが削除できませんでした(ディレクトリ：%s)
+				}
+			}
+		} else if ($act == 'delete'){		// 項目削除の場合
+			$listedItem = explode(',', $request->trimValueOf('seriallist'));
+			$delItems = array();
+			for ($i = 0; $i < count($listedItem); $i++){
+				// 項目がチェックされているかを取得
+				$itemName = 'item' . $i . '_selected';
+				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+				
+				if ($itemValue){		// チェック項目
+					$delItems[] = $listedItem[$i];
+				}
+			}
+			if (count($delItems) > 0){
+				// 削除するコンテンツの情報を取得
+				$delContentInfo = array();
+				for ($i = 0; $i < count($delItems); $i++){
+					// テンプレートディレクトリ取得
+					$templateId = $delItems[$i];
+					$templatePath = $this->gEnv->getTemplatesPath() . '/' . $templateId;
+		
+					// ディレクトリ削除
+					if ((is_dir($templatePath) && rmDirectory($templatePath)) || !is_dir($templatePath)){// 削除成功か、ディレクトリが存在しないとき
+						$ret = $this->db->deleteTemplate($templateId);
+						if ($ret){		// データ更新成功のとき
+							$this->setMsg(self::MSG_GUIDANCE, sprintf($this->_('Template deleted. (template ID: %s)'), $templateId));	// テンプレートを削除しました(テンプレートID：%s)
+						} else {
+							$this->setMsg(self::MSG_APP_ERR, sprintf($this->_('Failed in deleting template. (template ID: %s)'), $templateId));	// テンプレート削除に失敗しました(テンプレートID：%s)
+						}
+					} else {
+						$this->setMsg(self::MSG_APP_ERR, sprintf($this->_('Failed in deleting template directory. (directory: %s)'), $templatePath));	// テンプレートのディレクトリが削除できませんでした(ディレクトリ：%s)
+					}
 				}
 			}
 		} else if ($act == 'upload'){		// ファイルアップロードの場合
@@ -431,6 +462,17 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				$installDir = $this->gEnv->getTemplatesPath() . '/' . M3_DIR_NAME_SMARTPHONE;// テンプレート格納ディレクトリ
 				break;
 		}
+		// デフォルトのテンプレートが存在しない場合はエラーメッセージを表示
+		if ($this->_db->getTemplate($this->defalutTemplate, $row)){
+			$templateDir = $this->gEnv->getTemplatesPath() . '/' . $this->defalutTemplate;			// テンプレートのディレクトリ
+			if (!file_exists($templateDir)){
+				$msg = $this->_('Default template directory does not exist.');		// デフォルトテンプレートのディレクトリが存在しません。
+				$this->setAppErrorMsg($msg);
+			}
+		} else {
+			$msg = $this->_('Default template is not selected.');		// デフォルトテンプレートが選択されていません。
+			$this->setAppErrorMsg($msg);
+		}
 		
 		// テンプレート選択メニュー作成
 		$this->createTemplateTypeMenu();
@@ -458,6 +500,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$imageTitle = 'ディレクトリ再読み込み';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
 		$this->tmpl->addVar("_widget", "reload_image", $imageTag);
+		// その他
+		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		
 		// テキストをローカライズ
 		$localeText = array();
@@ -502,12 +546,13 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $templateId;			// テンプレートのディレクトリ
 		if (file_exists($templateDir)) $isExistsTemplate = true;
 		
-		// デフォルトテンプレート
+/*		// デフォルトテンプレート
 		$defaultCheck = '';
 		if ($templateId == $this->defalutTemplate){
 			$defaultCheck = 'checked ';
 		}
 		if (!$isExistsTemplate) $defaultCheck .= 'disabled';		// テンプレートが存在しないときは使用不可
+		*/
 		
 		// 画面イメージ表示設定
 		$name = $this->convertToDispString($fetchedRow['tm_name']);			// テンプレート名
@@ -535,6 +580,11 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				break;
 			}
 		}
+		// デフォルトの場合はアイコンを付加
+		if ($templateId == $this->defalutTemplate){
+			$idText = '<span rel="m3help" data-container="body" title="デフォルトテンプレート"><i class="glyphicon glyphicon-ok-sign"></i></span> ' . $idText;
+		}
+		
 		// テンプレートサムネール画像
 		if ($isExistsTemplate){		// テンプレートが存在するとき
 			$imageTag = '<img src="' . $this->getUrl($imgUrl) . '" width="' . self::previewImageSizeWidth . '" height="' . self::previewImageSizeHeight . '" border="0" />';
@@ -622,8 +672,12 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$canGenerateCss = $this->canGenerateCss($templateId);
 		if (!$canGenerateCss) $generateDisabled = 'class="disabled"';
 		
+		// デフォルト選択ボタン
+		$defaultDisabled = '';
+		if (!$isExistsTemplate || $templateId == $this->defalutTemplate) $defaultDisabled = 'class="disabled"';
+		
 		$row = array(
-			'no'			=> $index + 1,													// 行番号
+			'index'			=> $index,													// 項目番号
 			'serial'		=> $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
 			'id_str'		=> $idText,
 			'id'			=> $this->convertToDispString($templateId),			// ID
@@ -631,7 +685,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'info_button'	=> $infoButtonTag,		// テンプレート情報URL
 			'format_type'	=> $formatType,		// テンプレート形式
 			'update_dt'		=> $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
-			'is_default'	=> $defaultCheck,										// デフォルトテンプレートかどうか
+//			'is_default'	=> $defaultCheck,										// デフォルトテンプレートかどうか
 			'image_tag'		=> $imageTag,		// 画像
 			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
 			'preview_button'	=> $previewButtonTag,		// プレビューボタン
@@ -640,10 +694,14 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'edit_disabled'		=> $editDisabled,		// テンプレート編集ボタンの使用可否
 			'edit_url'			=> $editUrl,				// テンプレート画像編集用URL
 			'generate_css_url'	=> $generateCssUrl,			// テンプレートCSS生成用URL
-			'generate_disabled'	=> $generateDisabled		// CSS生成ボタンの使用可否
+			'generate_disabled'	=> $generateDisabled,		// CSS生成ボタンの使用可否
+			'default_disabled'	=> $defaultDisabled		// デフォルト選択ボタン
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');
+		
+		// 表示中のコンテンツIDを保存
+		$this->serialArray[] = $templateId;
 		
 		$this->isExistsTemplateList = true;		// テンプレートが存在する
 		return true;
