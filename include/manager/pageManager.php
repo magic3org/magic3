@@ -6927,6 +6927,40 @@ class PageManager extends Core
 		return $destParam;
 	}
 	/**
+	 * DBからCSSファイル(テンプレート独自のCSSまたは外部のCSS)を取得
+	 *
+	 * @param string $templateId	テンプレートID
+	 * @return bool					true=取得成功、false=取得失敗
+	 */
+	function loadCssFiles($templateId = '')
+	{
+		if (empty($templateId)) $templateId = $this->gSystem->defaultTemplateId();		// PC画面デフォルトのテンプレートを取得
+		
+		$ret = $this->db->getTemplate($templateId, $row);
+		if (!$ret) return false;
+		if (empty($row['tm_editor_param'])) return false;
+	
+		$editorParamObj = unserialize($row['tm_editor_param']);
+		if (isset($editorParamObj)){
+			$this->ckeditorCssFiles = array();
+			$cssFiles = $editorParamObj->cssFiles;
+			for ($i = 0; $i < count($cssFiles); $i++){
+				$cssFile = $cssFiles[$i];
+				
+				if (strStartsWith($cssFile, '//')){		// URLが「//」で始まる外部ファイルの場合はそのまま追加
+					$this->ckeditorCssFiles[] = $cssFile;
+				} else if (strStartsWith($cssFile, '/')){		// URLが「/」で始まる相対パスの場合はURLに変換
+					$this->ckeditorCssFiles[] = $this->gEnv->getAdminUrl(true/*adminディレクトリ削除*/) . $cssFile;
+				} else {
+					$this->ckeditorCssFiles[] = $cssFile;
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * URLで指定した画面のCSSファイル(テンプレート独自のCSSまたは外部のCSS)を取得
 	 *
 	 * @param string $url	取得画面のURL

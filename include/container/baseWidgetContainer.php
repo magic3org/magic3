@@ -3890,8 +3890,12 @@ class BaseWidgetContainer extends Core
 	 */
 	function loadCKEditorCssFiles($url = '')
 	{
-		if (empty($url)) $url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-		$this->gPage->loadCssFilesByUrl($url);
+		// DBのテンプレート情報からCSSファイルの情報が取得できる場合は取得し、できない場合は画面から直接取得
+		$ret = $this->gPage->loadCssFiles();
+		if (!$ret){
+			if (empty($url)) $url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+			$this->gPage->loadCssFilesByUrl($url);
+		}
 	}
 	
 	/**
