@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -27,6 +27,22 @@ function testMail(){
 }
 $(function() {
 	m3SetConfigTable('config_table');
+	
+	// パスワード入力部作成
+	$("#password").on("keyup",function(){
+		if ($(this).val()){
+			$(".glyphicon-eye-open").show();
+		} else {
+			$(".glyphicon-eye-open").hide();
+		}
+	});
+	$(".glyphicon-eye-open").mousedown(function(){
+		$("#password").attr('type','text');
+	}).mouseup(function(){
+		$("#password").attr('type','password');
+	}).mouseout(function(){
+		$("#password").attr('type','password');
+	});
 });
 //]]>
 </script>
@@ -74,7 +90,7 @@ $(function() {
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGMAIL_SMTP_PASSWORD}>パスワード</span></th>
-	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div><div class="col-sm-3 m3config_item"><input type="password" name="item_smtp_password" class="form-control" value="{SMTP_PASSWORD}" maxlength="20" /></div>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div><div class="col-sm-3 m3config_item password_area"><input type="password" id="password" name="item_smtp_password" class="form-control password" value="{SMTP_PASSWORD}" maxlength="20" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div>
 	    </td>
 	</tr>
     </tbody>
