@@ -81,7 +81,7 @@ $(function(){
 	});
 	
 	// パスワード入力部作成
-	$("#password").on("keyup",function(){
+	$("#item_password").on("keyup",function(){
 		if ($(this).val()){
 			$(".glyphicon-eye-open").show();
 		} else {
@@ -89,11 +89,11 @@ $(function(){
 		}
 	});
 	$(".glyphicon-eye-open").mousedown(function(){
-		$("#password").attr('type','text');
+		$("#item_password").attr('type','text');
 	}).mouseup(function(){
-		$("#password").attr('type','password');
+		$("#item_password").attr('type','password');
 	}).mouseout(function(){
-		$("#password").attr('type','password');
+		$("#item_password").attr('type','password');
 	});
 });
 //]]>
@@ -132,7 +132,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_USERLIST_PWD}>{_LC_LABEL_PASSWORD}</span></th>
 	    <td colspan="3"><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
-		<div class="col-sm-4 m3config_item password_area"><input type="password" id="password" name="item_password" class="form-control password" value="{PASSWORD}" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
+		<div class="col-sm-4 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" value="{PASSWORD}" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USERTYPE}>{_LC_LABEL_USER_TYPE}</span></th>
