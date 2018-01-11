@@ -3988,6 +3988,9 @@ class PageManager extends Core
 					if (isset($this->ckeditorTemplateType)){
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
 					}
+				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION){		// ポジション表示
+					$replaceStr .= 'var M3_POSITION_DATA = "' . implode(',', $this->defPositions) . '";' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
+					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
 				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
 					// その他のポジションデータを取得
 					$positionData = $this->getRestPositionData();
@@ -4951,6 +4954,9 @@ class PageManager extends Core
 				$contents .= '<div style="background-color:#eee;margin:2px;padding:10px;border:3px solid #f00;color:#700;">ポジション名: ';
 				$contents .= '<b>' . $position . '</b>';
 				$contents .= '</div>';
+				
+				// ポジションを保存
+				if (!in_array($position, $this->defPositions)) $this->defPositions[] = $position;	// テンプレート上のポジション
 				break;
 			case 2:		// ポジション表示(ウィジェット付き)
 				$rev = '555';			// データのリビジョン番号
@@ -5108,7 +5114,8 @@ class PageManager extends Core
 				
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
-		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||					// 管理画面(ウィジェットなしポジション表示)のとき
+			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
 			return 1;		// ウィジェットが設定されていないポジション名を表示するために固定で値を返す
 		}
 		
