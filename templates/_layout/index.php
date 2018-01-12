@@ -1,10 +1,18 @@
 <?php
-
 /**
- * Template for Joomla! CMS, created with Artisteer.
- * See readme.txt for more details on how to use the template.
+ * ウィジェットレイアウト用テンプレート
+ *
+ * PHP versions 5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
  */
-
 defined('_JEXEC') or die;
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'functions.php';
@@ -106,6 +114,13 @@ $view->componentWrapper();
   echo $view->position('banner4', 'art-nostyle');
   echo $view->positions(array('user4' => 50, 'user5' => 50), 'art-article');
   echo $view->position('banner5', 'art-nostyle');
+
+	// デフォルトのテンプレートで使用されている残りのポジションを取得
+	global $gPageManager;
+	$otherPositions = $gPageManager->getLayoutTemplatePosition();
+	for ($i = 0; $i < count($otherPositions); $i++){
+		echo $view->position($otherPositions[$i], 'art-nostyle');
+	}
 ?>
 
   <div class="cleared"></div>
@@ -142,7 +157,5 @@ $view->componentWrapper();
     </div>
 </div>
 </div>
-<?php echo $view->position('debug'); ?>
-<?php echo $view->position('temporary'); ?>
 </body>
 </html>

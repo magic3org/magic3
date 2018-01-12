@@ -7198,5 +7198,48 @@ class PageManager extends Core
 		}
 		return $tmplateInfoObj;
 	}
+	/**
+	 * デフォルトのテンプレートからレイアウト用テンプレートで使用していないポジションを取得
+	 *
+	 * @return array				ポジション名の配列
+	 */
+	function getLayoutTemplatePosition()
+	{
+		$removePositions = array('header', 'extra1', 'extra2', 'brand', 'hmenu', 'user3', 'banner1', 'top1', 'top2', 'top3',
+								'left', 'banner2', 'breadcrumb', 'user1', 'user2', 'banner3', 'main-top', 'main', 'main-bottom', 'banner4', 'user4', 'user5', 'banner5', 
+								'right','bottom1', 'bottom2', 'bottom3', 'banner6', 'syndicate', 'copyright', 'footer');		// レイアウト用テンプレートに存在するので削除するポジション
+		
+		// URLパラメータからデフォルトのテンプレートを取得
+		$pageId = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+
+		$templateId = '';
+		if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
+			$templateId = $this->gSystem->defaultTemplateId();
+		} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
+			$templateId = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
+		} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
+			$templateId = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
+		}
+
+		// テンプレート情報取得
+		$ret = $this->db->getTemplate($templateId, $row);
+		if (!$ret) return array();
+		if (empty($row['tm_editor_param'])) return array();
+	
+		// レイアウト用テンプレートに存在しないポジション名のみ返す
+		$editorParamObj = unserialize($row['tm_editor_param']);
+		if (isset($editorParamObj)){
+			if (isset($editorParamObj->positions)){
+				$srcArray = $editorParamObj->positions;
+				$destArray = array();
+				for ($i = 0; $i < count($srcArray); $i++){
+					$position = $srcArray[$i];
+					if (!in_array($position, $removePositions)) $destArray[] = $position;
+				}
+				return $destArray;
+			}
+		}
+		return array();
+	}
 }
 ?>
