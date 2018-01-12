@@ -7082,12 +7082,12 @@ class PageManager extends Core
 		}
 	}*/
 	/**
-	 * テンプレート画面のCSSファイルを取得
+	 * テンプレート画面を解析してCSSファイルやポジションの情報を取得
 	 *
 	 * @param string $templateId	テンプレートID
 	 * @return						テンプレート情報オブジェクト
 	 */
-	function parseTemplateCssFile($templateId)
+	function parseTemplate($templateId)
 	{
 		// テンプレートのURL
 		$url = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_SHOW_POSITION . '&template=' . $templateId;
@@ -7190,6 +7190,12 @@ class PageManager extends Core
 			}
 		}
 		
+		// テンプレートのポジションを取得
+		$tmplateInfoObj->positions = array();
+		$pattern = '/var\s*M3_POSITION_DATA\s*=\s*[\'"]+(.+?)[\'"]/si';
+		if (preg_match($pattern, $headContent, $matches) && !empty($matches[1])){
+			$tmplateInfoObj->positions = explode(',', $matches[1]);
+		}
 		return $tmplateInfoObj;
 	}
 }

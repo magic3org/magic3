@@ -786,7 +786,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version, $infoUrl);
 		if ($ret){
 			// テンプレート登録後、テンプレートを解析してCSSファイルを取得
-			$templateInfoObj = $this->gPage->parseTemplateCssFile($id);
+			$templateInfoObj = $this->gPage->parseTemplate($id);
 		
 			// テンプレートの情報を更新
 			$updateParam = array();
@@ -817,7 +817,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			}
 			
 			// テンプレートを解析し、使用しているCSSファイルを取得
-			$templateInfoObj = $this->gPage->parseTemplateCssFile($id);
+			$templateInfoObj = $this->gPage->parseTemplate($id);
 			
 			// テンプレートの情報を更新
 			$updateParam = array();
