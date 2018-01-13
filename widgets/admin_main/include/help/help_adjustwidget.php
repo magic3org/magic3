@@ -49,7 +49,7 @@ class help_adjustwidget extends HelpConv
 			),
 			'adjustwidget_render' => array(	
 				'title' =>	$this->_('Render'),	// 描画処理
-				'body' =>	$this->_('If you check \'Render by Joomla! style\' checkbox, the widget is added border line and title. If you uncheck it, the widget is displayed with plane text.')		// 「Joomla!スタイルの描画処理」をオンにするとウィジェットの周囲の枠やタイトルが付加されます。チェックをはずした場合はウィジェットのプレーンな出力が表示されます。
+				'body' =>	$this->_('If you check \'Render by template\' checkbox, the widget output is applied with template original style.')		// 「テンプレートの描画処理」をオンにするとウィジェットの出力にテンプレート独自のスタイルが適用されます。
 			),
 			'adjustwidget_top_content' => array(	
 				'title' =>	$this->_('Additional Top Content'),	// 補助コンテンツ(上)

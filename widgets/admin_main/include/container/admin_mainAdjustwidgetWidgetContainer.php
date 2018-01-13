@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -164,7 +164,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$marginRight = $request->trimValueOf('item_right');			// 右マージン
 		$title = $request->trimValueOf('item_title');			// タイトル名
 		$titleVisible = ($request->trimValueOf('item_title_visible') == 'on') ? 1 : 0;		// タイトルを表示するかどうか
-		$useRender = ($request->trimValueOf('item_use_render') == 'on') ? 1 : 0;		// Joomla!の描画処理を使用するかどうか
+		$useRender = ($request->trimValueOf('item_use_render') == 'on') ? 1 : 0;		// テンプレートの描画処理を使用するかどうか
 		$widgetId = $request->trimValueOf('widget_id');			// ウィジェットID
 		$topContent = $request->valueOf('item_top_content');			// 補助コンテンツ(上)
 		$bottomContent = $request->valueOf('item_bottom_content');			// 補助コンテンツ(下)
@@ -405,7 +405,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$marginRight = '';			// 右マージン
 			$title = '';			// タイトル名
 			$titleVisible = 1;		// タイトルを表示するかどうか
-			$useRender = 1;		// Joomla!の描画処理を使用するかどうか
+			$useRender = 1;		// テンプレートの描画処理を使用するかどうか
 			$widgetId = '';	// ウィジェットID
 			$topContent = '';			// 補助コンテンツ(上)
 			$bottomContent = '';			// 補助コンテンツ(下)
@@ -463,7 +463,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				}
 				$title = $row['pd_title'];			// タイトル名
 				$titleVisible = $row['pd_title_visible'];			// タイトルを表示するかどうか
-				$useRender = $row['pd_use_render'];		// Joomla!の描画処理を使用するかどうか
+				$useRender = $row['pd_use_render'];		// テンプレートの描画処理を使用するかどうか
 				$widgetId = $row['pd_widget_id'];	// ウィジェットID
 				$topContent = $row['pd_top_content'];			// 補助コンテンツ(上)
 				$bottomContent = $row['pd_bottom_content'];			// 補助コンテンツ(下)
@@ -531,7 +531,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "right", 	$this->convertToDispString($marginRight));			// 右マージン
 		$this->tmpl->addVar("_widget", "title", 	$this->convertToDispString($title));				// タイトル名
 		if (!empty($titleVisible)) $this->tmpl->addVar("_widget", "title_visible", 'checked');		// タイトルを表示するかどうか
-		if (!empty($useRender)) $this->tmpl->addVar("_widget", "use_render", 'checked');		// Joomla!の描画処理を使用するかどうか
+		if (!empty($useRender)) $this->tmpl->addVar("_widget", "use_render", 'checked');		// テンプレートの描画処理を使用するかどうか
 		$this->tmpl->addVar("_widget", "widget_id", $this->convertToDispString($widgetId));				// ウィジェットID
 		$this->tmpl->addVar("_widget", "top_content", $topContent);			// 補助コンテンツ(上)
 		$this->tmpl->addVar("_widget", "bottom_content", $bottomContent);			// 補助コンテンツ(下)
@@ -734,7 +734,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_right'] = $this->_('Right:');			// 右：
 		$localeText['label_position'] = $this->_('Contents Position');			// テキスト表示位置
 		$localeText['label_render'] = $this->_('Render');// 描画処理
-		$localeText['label_use_joomla_render'] = $this->_('Render by Joomla! style');// Joomla!スタイルの描画処理を使用
+		$localeText['label_use_template_render'] = $this->_('Render by template');// テンプレートの描画処理を使用
 		$localeText['label_top_content'] = $this->_('Additional Top Content');// 補助コンテンツ(上)
 		$localeText['label_bottom_content'] = $this->_('Additional Bottom Content');// 補助コンテンツ(下)
 		$localeText['label_readmore'] = $this->_('Readmore Button');// 「もっと読む」ボタン
