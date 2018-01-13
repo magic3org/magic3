@@ -37,6 +37,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const END_TIME_ID		= 'item_end_time';			// 公開期間終了時間タグID、タグ名
 	const START_BUTTON_ID	= 'calenderbutton1';			// 開始日用カレンダー表示ボタンのID
 	const END_BUTTON_ID		= 'calenderbutton2';			// 終了日用カレンダー表示ボタンのID
+	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
+	const CLOSE_PANEL_ICON_FILE = '/images/system/minus32.png';		// 拡張エリア非表示用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -428,7 +430,10 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$cssClassSuffix = '';			// 追加CSSクラスサフィックス
 			$css = '';
 			$this->hTagLevel = 0;			// Hタグレベル
-				
+			
+			// 補助コンテンツエリアの表示制御
+			$isAdditionalContentArea = false;
+			
 			$replaceNew = true;
 		}
 		// 表示データ再取得
@@ -498,6 +503,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				
 				// ウィジェット用CSS ID
 				$widgetCssId = $this->gPage->getWidgetCssId($row['pd_serial'], $row['pd_id'], $row['pd_sub_id'], $row['pd_position_id']);
+				
+				// 補助コンテンツエリアの表示制御
+				if (!empty($topContent) || !empty($bottomContent) || !empty($showReadmore)) $isAdditionalContentArea = true;		// 補助コンテンツ(上),補助コンテンツ(下),もっと読むボタン
 			}
 		}
 		
@@ -517,6 +525,21 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar('_widget', 'calendar_range_control', $rangeTag);
 		$this->tmpl->addVar('_widget', 'start_button_id', self::START_BUTTON_ID);// 開始日用カレンダー表示ボタンのID
 		$this->tmpl->addVar('_widget', 'end_button_id', self::END_BUTTON_ID);// 終了日用カレンダー表示ボタンのID
+		
+		// 補助コンテンツエリア表示制御
+		if ($isAdditionalContentArea){
+			$this->tmpl->addVar('_widget', 'additional_content_area_open', 'true');
+		} else {
+			$this->tmpl->addVar('_widget', 'additional_content_area_open', 'false');
+		}
+		$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン
+		$iconTitle = $this->_('Show additional content area');		// 補助コンテンツエリアを表示
+		$openButton = '<a id="button_open" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-plus"></i></a>';
+		$this->tmpl->addVar('_widget', 'open_button', $openButton);
+		$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_PANEL_ICON_FILE;		// 拡張エリア非表示用アイコン
+		$iconTitle = $this->_('Hide additional content area');				// 補助コンテンツエリアを非表示
+		$closeButton = '<a id="button_close" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-minus"></i></a>';
+		$this->tmpl->addVar('_widget', 'close_button', $closeButton);
 		
 		// ナビゲーションタブ作成
 		if (empty($activeTab)){		// タブの選択

@@ -146,6 +146,34 @@ $(function(){
 		button      : "{END_BUTTON_ID}"       // ID of the button
 	});
 	
+	// 補助コンテンツエリア表示制御
+	if ({ADDITIONAL_CONTENT_AREA_OPEN}){
+		$("table.option_area").slideDown(300);
+		$("#button_open").css({'display':'none'});
+		$("#button_close").css({'display':'inline-block'});
+	} else {
+		$("table.option_area").slideUp(300);
+		$("#button_open").css({'display':'inline-block'});
+		$("#button_close").css({'display':'none'});
+	}
+	
+	$("#button_open").click(function(){
+		$("table.option_area").slideDown(300);
+		$("#button_open").css({'display':'none'});
+		$("#button_close").css({'display':'inline-block'});
+		
+		m3AdjustParentWindow();
+		return false;
+	});
+	$("#button_close").click(function(){
+		$("table.option_area").slideUp(300);
+		$("#button_open").css({'display':'inline-block'});
+		$("#button_close").css({'display':'none'});
+		
+		m3AdjustParentWindow();
+		return false;
+	});
+	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_top_content', 100, false);
 	m3SetWysiwygEditor('item_bottom_content', 100, false);
@@ -199,8 +227,9 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-<h3><span {_HELP_ADJUSTWIDGET_ADDITIONAL_CONTENT}>{_LC_LABEL_ADDITIONAL_CONTENT}</span></h3>
-<table id="widget_content_table">
+<h3 class="m3config_h"><span {_HELP_ADJUSTWIDGET_ADDITIONAL_CONTENT}>{_LC_LABEL_ADDITIONAL_CONTENT}</span>
+{OPEN_BUTTON}{CLOSE_BUTTON}</h3>
+<table id="widget_content_table" class="option_area" style="display:none;">
     <tbody>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_TOP_CONTENT}>{_LC_LABEL_TOP_CONTENT}</span></th>
