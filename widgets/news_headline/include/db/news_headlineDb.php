@@ -48,8 +48,9 @@ class news_headlineDb extends BaseDb
 		$queryStr = 'SELECT * FROM news ';
 		$queryStr .=  'WHERE nw_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND nw_visible = true ';
-		if (!empty($contentType)) $queryStr .=    'AND nw_type = ? ';$params[] = $contentType;
-		
+		if (!empty($contentType)){
+			$queryStr .=    'AND nw_type = ? '; $params[] = $contentType;
+		}
 		$queryStr .=  'ORDER BY nw_regist_dt desc limit ' . $limit . ' offset ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}

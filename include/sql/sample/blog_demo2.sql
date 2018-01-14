@@ -13,7 +13,7 @@
 -- * @link       http://www.magic3.org
 -- *
 -- [ブログサイトデモ2]
--- WordPressテンプレートテスト用
+-- WordPressテンプレート最適化ブログサイト
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'wisteria' WHERE sc_id = 'default_template';
@@ -25,7 +25,7 @@ DELETE FROM _site_def WHERE sd_id = 'head_title';
 INSERT INTO _site_def
 (sd_id,                  sd_language_id, sd_value,         sd_name) VALUES
 ('site_name',            'ja',           'Magic3デモ',               'サイト名'),
-('site_slogan',          'ja',           'WordPressテンプレートテスト中',               'スローガン'),
+('site_slogan',          'ja',           'WordPressテンプレート最適化',               'スローガン'),
 ('head_title',           'ja',           'Magic3デモ',               'HTMLヘッダtitle');
 
 -- 管理画面ページデータ(デフォルトを変更)

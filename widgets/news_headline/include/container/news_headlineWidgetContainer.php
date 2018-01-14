@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -92,7 +92,7 @@ class news_headlineWidgetContainer extends BaseWidgetContainer
 		// 新着情報を取得
 		$this->listItemLayout = $this->configArray[news_headlineCommonDef::FD_LAYOUT_LIST_ITEM];		// 一覧項目レイアウト
 		$this->db->getNewsList('', $itemCount, 1, array($this, 'itemLoop'));
-
+		
 		if (!$this->isNews){	// 新着情報がないときはメッセージを出力
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');		// リストを非表示
 			$this->tmpl->addVar("_widget", "message", '新着情報はありません');
