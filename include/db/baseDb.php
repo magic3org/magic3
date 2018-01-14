@@ -1613,7 +1613,8 @@ class BaseDb extends Core
 								}
 							} else if ($words[0] == 'RENAME'){
 								$dest[] = trim($saveStr . ' ' . $words[0] . ' ' . $words[1] . ' TO ' . $words[2], ' ,');		// 行末の「,」を削除
-							} else if ($words[0] == 'DROP'){		// 「DROP INDEX」対応
+					//		} else if ($words[0] == 'DROP'){		// 「DROP INDEX」対応
+							} else if ($words[0] == 'DROP' && strncasecmp($words[1], 'index', strlen('index')) == 0){		// 「DROP INDEX」対応
 								if (version_compare(self::getDbVersion(), '9.0.0') >= 0){// PostgreSQL 9.0以上の場合
 									$dest[] = trim($saveStr . ' ' . $words[0] . ' CONSTRAINT ' . $words[2], ' ,');		// 行末の「,」を削除
 								} else {
