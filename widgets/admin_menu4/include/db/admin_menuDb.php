@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -49,7 +49,7 @@ class admin_menuDb extends BaseDb
 		$queryStr  = 'SELECT * FROM _nav_item ';
 		$queryStr .=   'WHERE ni_nav_id = ? ';
 		$queryStr .=     'AND ni_task_id = ? ';
-		$queryStr .=     'AND ni_visible = true ';
+//		$queryStr .=     'AND ni_visible = true ';
 		$retValue = $this->selectRecord($queryStr, array($navId, $taskId), $row);
 		return $retValue;
 	}
@@ -60,13 +60,13 @@ class admin_menuDb extends BaseDb
 	 * @param bool $taskId		タスク
 	 * @return					true = 正常、false=異常
 	 */
-	function updateNavItemMenuType($itemId, $taskId)
+/*	function updateNavItemMenuType($itemId, $taskId)
 	{
 		$sql = 'UPDATE _nav_item SET ni_task_id = ? WHERE ni_id = ?';
 		$params = array($taskId, $itemId);
 		$retValue =$this->execStatement($sql, $params);
 		return $retValue;
-	}
+	}*/
 	/**
 	 * 画面配置している主要コンテンツ編集ウィジェットを取得
 	 *
@@ -163,6 +163,34 @@ class admin_menuDb extends BaseDb
 	//	$queryStr .= 'ORDER BY pageno, wd_sort_order';
 		$queryStr .= 'ORDER BY pageno, contentno';
 		$retValue = $this->selectRecords($queryStr, array($setId), $rows);
+		return $retValue;
+	}
+	/**
+	 * 画面に表示中のメニューのメニューIDを取得
+	 *
+	 * @param string $pageId		ページID
+	 * @param array  $rows			レコード
+	 * @param int    $setId			定義セットID
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getMenuId($pageId, &$rows, $setId = 0)
+	{	
+		$queryStr  = 'SELECT DISTINCT pd_menu_id, mn_name, mn_sort_order, ';
+		$queryStr .=   'CASE pd_sub_id ';
+		$queryStr .=     'WHEN \'\' THEN -1 ';
+		$queryStr .=     'ELSE pg_priority ';
+		$queryStr .=   'END AS idx ';
+		$queryStr .= 'FROM (_page_def LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false) ';
+		$queryStr .=   'LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
+		$queryStr .=   'LEFT JOIN _menu_id ON pd_menu_id = mn_id ';// メニューID
+		$queryStr .= 'WHERE pd_id = ? ';
+//		$queryStr .=   'AND (pd_sub_id = ? or pd_sub_id = \'\') ';	// 空の場合は共通項目
+		$queryStr .=   'AND pd_set_id = ? ';
+		$queryStr .=   'AND pd_menu_id != \'\' ';			// メニューIDが設定されている
+		$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中
+		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
+		$queryStr .= 'ORDER BY idx, mn_sort_order';
+		$retValue = $this->selectRecords($queryStr, array($pageId, $setId), $rows);
 		return $retValue;
 	}
 }

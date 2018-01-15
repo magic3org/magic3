@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,6 +25,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $useMenu;				// メニューを使用するかどうか
 	protected $useCloseButton;				// 「閉じる」を使用するかどうか
 	protected $systemType;			// システム運用タイプ
+	protected $isHierMenu;			// メニュー定義編集画面が多階層タイプであるかどうか
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
@@ -49,6 +50,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
 	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
 	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
+	const MENU_ICON_FILE = '/images/system/menu24.png';		// メニュー定義画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
 	const MAX_SITENAME_LENGTH_S = 9;		// サイト名の最大文字数
 	const ICON_SIZE = 24;			// アイコンサイズ
@@ -58,13 +60,16 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const MENU_TITLE_PREVIEW = 'プレビュー';
 	const MENU_TITLE_CONTENT = 'コンテンツ管理';		// コンテンツ編集メニューのタイトル
 	const MENU_TITLE_SUB_CONTENT = 'サブコンテンツ管理';		// サブコンテンツ編集メニューのタイトル
+	const MENU_TITLE_MENUDEF = 'メニュー定義';		// メニュー定義編集メニューのタイトル
 	const UNTITLED_USER_NAME = '名称なしユーザ';		// ユーザ名が設定されていなかった場合の表示名
 	const MAINMENU_INDENT_LEBEL = 4;		// メインメニューのインデントレベル
 	const SITEMENU_INDENT_LEBEL = 2;		// サイトメニューのインデントレベル
 	const MAINMENU_COL_STYLE = 'col-md-';	// Bootstrapのカラムクラス
 	const MENUBAR_HEIGHT = 60;			// メインメニューバーの高さ
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
-
+	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+	
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
 	const CF_SITE_PC_IN_PUBLIC		= 'site_pc_in_public';				// PC用サイトの公開状況
@@ -475,6 +480,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$menuTag = '';
 		$isOpen					= $this->gSystem->siteInPublic();
 		
+		// メニュー定義の編集画面のタイプを取得
+		$this->isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
+
 		// アクセスポイントごとの公開状況
 		$sitePcInPublic			= $this->gSystem->sitePcInPublic();			// PC用サイトの公開状況
 		$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic();	// スマートフォン用サイトの公開状況
@@ -497,6 +505,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(0, $isVisibleSite);				// コンテンツ編集メニュー付加
+			$iconTag .= $this->createMenuDefMenu(0, $isVisibleSite);				// メニュー定義編集メニュー付加
+			$iconTag .= $this->createAccessPointControlMenu(0, $isVisibleSite);				// アクセスポイント公開制御メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '</li>' . M3_NL;
 			$menuTag .= $iconTag;
@@ -519,6 +529,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(2, $isVisibleSite);// コンテンツ編集メニュー付加
+			$iconTag .= $this->createMenuDefMenu(2, $isVisibleSite);				// メニュー定義編集メニュー付加
+			$iconTag .= $this->createAccessPointControlMenu(2, $isVisibleSite);				// アクセスポイント公開制御メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '</li>' . M3_NL;
 			$menuTag .= $iconTag;
@@ -541,6 +553,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(1, $isVisibleSite);			// コンテンツ編集メニュー付加
+			$iconTag .= $this->createMenuDefMenu(1, $isVisibleSite);				// メニュー定義編集メニュー付加
+			$iconTag .= $this->createAccessPointControlMenu(1, $isVisibleSite);				// アクセスポイント公開制御メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '</li>' . M3_NL;
 			$menuTag .= $iconTag;
@@ -757,6 +771,18 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;">' . $iconTag . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
 		}
+		return $menuTag;
+	}
+	/**
+	 * アクセスポイント公開制御メニュー作成
+	 *
+	 * @param int $deviceType			デバイスタイプ
+	 * @param bool $isVisibleSite		アクセスポイント公開中かどうか
+	 * @return string					メニュータグ
+	 */
+	function createAccessPointControlMenu($deviceType, $isVisibleSite)
+	{
+		$menuTag = '';
 		
 		// サーバ管理でのシステム運用の場合はアクセスポイントの制御項目を表示しない
 		if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN) return $menuTag;		// サーバ管理の場合
@@ -778,6 +804,63 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
 		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
+		
+		return $menuTag;
+	}
+	
+	/**
+	 * メニュー定義編集メニュー作成
+	 *
+	 * @param int $deviceType			デバイスタイプ
+	 * @param bool $isVisibleSite		アクセスポイント公開中かどうか
+	 * @return string					メニュータグ
+	 */
+	function createMenuDefMenu($deviceType, $isVisibleSite)
+	{
+		$menuTag = '';
+		
+		// セパレータ
+		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+		$menuTag .= '<li class="divider hidden-xs"></li>' . M3_NL;
+	
+		// タイトル
+		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+		$menuTag .= '<li class="dropdown-header">' . self::MENU_TITLE_MENUDEF . '</li>' . M3_NL;
+
+		// ページID取得
+		$pageId = '';
+		switch ($deviceType){
+			case 0:			// PC用画面のとき
+			default:
+				$pageId = $this->gEnv->getDefaultPageId();
+				break;
+			case 1:			// 携帯用画面のとき
+				$pageId = $this->gEnv->getDefaultMobilePageId();
+				break;
+			case 2:			// スマートフォン用画面のとき
+				$pageId = $this->gEnv->getDefaultSmartphonePageId();
+				break;
+		}
+		$ret = $this->db->getMenuId($pageId, $rows);
+		if ($ret){
+			$iconTitle = 'メニュー定義';
+			$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
+			
+			for ($i = 0; $i < count($rows); $i++){
+				$title = $rows[$i]['mn_name'];
+				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+				$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
+				$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $this->convertToDispString($title) . '</a></li>' . M3_NL;
+			}
+		}
+
+		// メニュー定義画面のURLを作成
+		$taskValue = 'menudef';
+		if (empty($isHierMenu)) $taskValue = 'smenudef';
+		$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&openby=tabs&menuid=' . $menuId;
+		$this->tmpl->addVar("_widget", "url", $this->getUrl($menuDefUrl));
+		$this->tmpl->addVar("_widget", "menu_id", $menuId);
+		
 		return $menuTag;
 	}
 	/**
@@ -816,6 +899,19 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$menuTag = $this->gDesign->createSubMenubarMenuTag($navbarDef);
 		
 		return array($titleTag, $menuTag);
+	}
+	/**
+	 * メニュー管理画面が多階層メニューかどうかを取得
+	 *
+	 * @return bool				true=多階層、false=単階層
+	 */
+	function getMenuIsHider()
+	{
+		$isHier = false;	// 多階層メニューかどうか
+		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		if ($ret) $isHier = true;
+
+		return $isHier;
 	}
 }
 ?>
