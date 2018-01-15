@@ -8,7 +8,7 @@
  *
  * @package    パンくずリスト
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: breadcrumbDb.php 3521 2010-08-23 04:08:41Z fishbone $
  * @link       http://www.m-media.co.jp
@@ -29,7 +29,7 @@ class breadcrumbDb extends BaseDb
 	 */
 	function getMenuId($useHiddenMenu, $pageId, $pageSubId, &$rows, $setId = 0)
 	{	
-		$queryStr  = 'SELECT DISTINCT pd_menu_id, pd_sub_id, ';
+		$queryStr  = 'SELECT DISTINCT pd_menu_id, pd_sub_id, mn_sort_order, ';
 		$queryStr .=   'CASE pd_sub_id ';
 		$queryStr .=     'WHEN \'\' THEN -1 ';
 		$queryStr .=     'ELSE pg_priority ';
