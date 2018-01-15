@@ -25,7 +25,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $useMenu;				// メニューを使用するかどうか
 	protected $useCloseButton;				// 「閉じる」を使用するかどうか
 	protected $systemType;			// システム運用タイプ
-	protected $isHierMenu;			// メニュー定義編集画面が多階層タイプであるかどうか
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
@@ -479,9 +478,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	{
 		$menuTag = '';
 		$isOpen					= $this->gSystem->siteInPublic();
-		
-		// メニュー定義の編集画面のタイプを取得
-		$this->isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
 
 		// アクセスポイントごとの公開状況
 		$sitePcInPublic			= $this->gSystem->sitePcInPublic();			// PC用サイトの公開状況
@@ -570,14 +566,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	{
 		$menuItems = array(array(), array(), array());
 		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
-/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
-								M3_VIEW_TYPE_PRODUCT,				// 製品
-								M3_VIEW_TYPE_BBS,					// BBS
-								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// Wiki
-								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
-								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
 		$contentType = $this->gPage->getMainContentTypes();
 		$ret = $this->db->getEditWidgetOnPage($pageIdArray, $contentType, $rows);
 		if ($ret){
@@ -846,21 +834,22 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconTitle = 'メニュー定義';
 			$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
 			
+			// メニュー定義の編集画面のタイプを取得
+			$isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
+		
+			// メニュー定義画面のURLを作成
+			$taskValue = 'menudef';
+			if (empty($isHierMenu)) $taskValue = 'smenudef';
+		
 			for ($i = 0; $i < count($rows); $i++){
 				$title = $rows[$i]['mn_name'];
+				$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&menuid=' . $rows[$i]['pd_menu_id'];
+			
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-				$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
+				$menuTag .= '<li><a href="' . $this->getUrl($menuDefUrl) . '">';
 				$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
 		}
-
-		// メニュー定義画面のURLを作成
-		$taskValue = 'menudef';
-		if (empty($isHierMenu)) $taskValue = 'smenudef';
-		$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&openby=tabs&menuid=' . $menuId;
-		$this->tmpl->addVar("_widget", "url", $this->getUrl($menuDefUrl));
-		$this->tmpl->addVar("_widget", "menu_id", $menuId);
-		
 		return $menuTag;
 	}
 	/**
