@@ -50,7 +50,7 @@ class blog_category_menuDb extends BaseDb
 		$params[] = $initDt;
 		$params[] = $now;
 		
-		$queryStr .=  'GROUP BY bc_id ';
+		$queryStr .=  'GROUP BY bc_id, bc_name, bc_sort_order ';
 		$queryStr .=  'ORDER BY bc_sort_order';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
