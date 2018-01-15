@@ -40,11 +40,11 @@ class breadcrumbDb extends BaseDb
 		$queryStr .= 'WHERE pd_id = ? ';
 		$queryStr .=   'AND (pd_sub_id = ? or pd_sub_id = \'\') ';	// 空の場合は共通項目
 		$queryStr .=   'AND pd_set_id = ? ';
-		$queryStr .=   'AND pd_menu_id != ? ';				// メニューIDが設定されている
+		$queryStr .=   'AND pd_menu_id != \'\' ';				// メニューIDが設定されている
 		if (empty($useHiddenMenu)) $queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .= 'ORDER BY idx, mn_sort_order';
-		$retValue = $this->selectRecords($queryStr, array($pageId, $pageSubId, $setId, ''), $rows);
+		$retValue = $this->selectRecords($queryStr, array($pageId, $pageSubId, $setId), $rows);
 		return $retValue;
 	}
 	/**
