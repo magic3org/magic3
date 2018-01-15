@@ -1476,6 +1476,10 @@ class BaseDb extends Core
 								$status = 1;
 								$endLoop = false;		// 終了をキャンセル
 							}
+						} else if (strncasecmp($cmd0, 'truncate', strlen('truncate')) == 0 && strncasecmp($cmd1, 'table', strlen('table')) == 0){		// TRUNCATE TABLEのとき
+							// AUTO_INCREMENTで作成されたフィールドのシーケンスをリセットする
+							$words[] = 'RESTART';
+							$words[] = 'IDENTITY';
 						}
 						
 						// ##### 必要のないクエリーを削除 #####
