@@ -985,7 +985,7 @@ CREATE TABLE _menu_id (
     mn_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
     mn_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- メニュー名称
     mn_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
-    mn_type              INT            DEFAULT 0                     NOT NULL,      -- メニュータイプ(0=単階層、1=多階層)
+    mn_type              INT            DEFAULT 0                     NOT NULL,      -- メニュータイプ(0=単階層、1=多階層)(廃止予定)
     mn_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     mn_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)
     mn_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
