@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -505,6 +505,7 @@ class blogLibDb extends BaseDb
 			$serialStr = implode(',', $serialArray);
 			if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
 	
+			$params = array();
 			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 			$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
 			$queryStr .=   'WHERE be_serial in (' . $serialStr . ') ';
