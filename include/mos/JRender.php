@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -465,7 +465,7 @@ $this->item->title = '****';*/
 	/**
 	 * Joomlaメニュー用コンテンツ取得
 	 * 
-	 * @param string $style			表示スタイル
+	 * @param string $style			表示スタイル(_navmenu=ウィジェットタイプがナビゲーションメニュー,drstyle=Themler縦型メニュー)
 	 * @param string $content		ウィジェット出力
 	 * @param string $title			タイトル(空のときはタイトル非表示)
 	 * @param array $attribs		その他タグ属性
@@ -502,6 +502,10 @@ $this->item->title = '****';*/
 			case 10:		// Bootstrapテンプレート
 				$helper = $gEnvManager->getJoomlaRootPath() . '/render/menuHelper.php';
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_menu/default.php';		// メニュー出力用スクリプト
+				
+				if ($style == 'drstyle'){		// Themlerテンプレート縦型メニューの場合はパラメータ追加
+					$params->set('moduleclass_sfx',		'vmenu');
+				}
 				break;
 			default:
 				$helper = '';
