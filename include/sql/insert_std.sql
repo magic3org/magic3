@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2015 Magic3 Project.
+-- * @copyright  Copyright 2006-2018 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -263,10 +263,10 @@ INSERT INTO _templates
 -- メニューIDマスター
 INSERT INTO _menu_id
 (mn_id,         mn_name,          mn_description, mn_device_type, mn_widget_id, mn_sort_order) VALUES
-('main_menu',   'メインメニュー(PC用)', '',             0,        '',      0),
-('sub_menu1',   'サブメニュー1(PC用)',  '',             0,        '',      1),
-('sub_menu2',   'サブメニュー2(PC用)',  '',             0,        '',      2),
-('sub_menu3',   'サブメニュー3(PC用)',  '',             0,        '',      3),
+('main_menu',   'メインメニュー', '',             0,        '',      0),
+('sub_menu1',   'サブメニュー1',  '',             0,        '',      1),
+('sub_menu2',   'サブメニュー2',  '',             0,        '',      2),
+('sub_menu3',   'サブメニュー3',  '',             0,        '',      3),
 ('m_main_menu', 'メインメニュー(携帯用)', '',             1,      '',        10),
 ('s_main_menu', 'メインメニュー(スマートフォン用)', '',             2,     '',         0);
 
