@@ -405,13 +405,24 @@ class Calendar
      */
     function fetch()
     {
-        $child = each($this->children);
+/*        $child = each($this->children);
         if ($child) {
             return $child['value'];
         } else {
             reset($this->children);
             return false;
         }
+		*/
+		// PHP7.2非奨励のeach()を置き換え
+		$key = key($this->children);
+		if ($key){
+			$value = $this->children[$key];
+			next($this->children);
+			return $value;
+		} else {
+			reset($this->children);
+			return false;
+		}
     }
 
     /**
