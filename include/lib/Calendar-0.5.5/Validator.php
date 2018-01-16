@@ -270,13 +270,23 @@ class Calendar_Validator
      */
     function fetch()
     {
-        $error = each($this->errors);
+/*        $error = each($this->errors);
         if ($error) {
             return $error['value'];
         } else {
             reset($this->errors);
             return false;
-        }
+        }*/
+		// PHP7.2非奨励のeach()を置き換え
+		$key = key($this->errors);
+		if ($key){
+			$value = $this->errors[$key];
+			next($this->errors);
+			return $value;
+		} else {
+			reset($this->errors);
+			return false;
+		}
     }
 }
 
