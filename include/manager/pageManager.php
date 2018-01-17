@@ -4799,24 +4799,33 @@ class PageManager extends Core
 										if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
 											$moduleContent = '';
 											
-											// メニュータイプのウィジェットのみ実行
+											// ウィジェットタイプがメニューのときはナビゲーションメニューを生成
 											if ($widgetType == 'menu') $moduleContent = $render->getNavMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 								
 											// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
 											if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 											$widgetContent = $moduleContent;
 										} else {
-											if (strcmp($position, 'main') == 0){// メイン部のとき
-												// ウィジェットの内枠(コンテンツ外枠)を設定
-												// ウィジェットの内枠はレンダーで設定
-												//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-												$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-											} else {		// その他の位置のとき
-												// ウィジェットの内枠(コンテンツ外枠)を設定
-												// ウィジェットの内枠はレンダーで設定
-												//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											// ウィジェットタイプに応じた処理を実行
+											if ($widgetType == 'breadcrumb'){		// パンくずリスト
+												$moduleContent = $render->getBreadcrumbContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												
+												// パンくずリストで作成できないときはデフォルトの出力を取得
+												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												$widgetContent = $moduleContent;
+											} else {
+												if (strcmp($position, 'main') == 0){// メイン部のとき
+													// ウィジェットの内枠(コンテンツ外枠)を設定
+													// ウィジェットの内枠はレンダーで設定
+													//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+													$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												} else {		// その他の位置のとき
+													// ウィジェットの内枠(コンテンツ外枠)を設定
+													// ウィジェットの内枠はレンダーで設定
+													//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 											
-												$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+													$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												}
 											}
 										}
 /*										if (strcmp($position, 'main') == 0){// メイン部のとき
