@@ -536,6 +536,68 @@ $this->item->title = '****';*/
 		return $contents;
 	}
 	/**
+	 * パンくずリストコンテンツ取得
+	 * 
+	 * @param string $style			表示スタイル(_navmenu=ウィジェットタイプがナビゲーションメニュー,drstyle=Themler縦型メニュー)
+	 * @param string $content		ウィジェット出力
+	 * @param string $title			タイトル(空のときはタイトル非表示)
+	 * @param array $attribs		その他タグ属性
+	 * @param array $paramsOther	その他パラメータ
+	 * @param array $pageDefParam	画面定義パラメータ
+	 * @param int   $templateVer	テンプレートバージョン(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+	 * @return string				モジュール出力
+	 */
+	public function getBreadcrumbContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
+	{
+		global $gEnvManager;
+		
+		// パラメータ作成
+		$params   = new JParameter();
+/*	//	$params->set('startLevel',		0);
+		$params->set('startLevel',		1);
+		$params->set('endLevel',		0);
+		$params->set('showAllChildren',	1);		// サブメニュー表示
+		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
+*/
+		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn」を読み込むかどうかを決定。最新版ではnnを指定しなくてもデフォルトのパンくずリストが存在する?
+//		$attribs['id'] = 1;
+		
+		// 必要なスクリプトを読み込む
+		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
+		switch ($templateVer){
+			case 2:		// Joomla!v2.5テンプレート
+			case 10:		// Bootstrapテンプレート
+				$helper = $gEnvManager->getJoomlaRootPath() . '/render/menuHelper.php';
+				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_breadcrumbs/default.php';		// パンくずリスト出力用スクリプト
+				break;
+			default:
+				$helper = '';
+				$menuPath = '';
+		}
+
+		// メニュー出力を取得
+		$contents = '';
+		if (is_readable($menuPath)){
+			// ウィジェットが出力したメニューコンテンツを設定
+			$gEnvManager->setJoomlaMenuContent($content);
+
+			// Joomla!2.5テンプレート用追加設定(2012/5/1 追加)
+			$GLOBALS['artx_settings']['menu']['show_submenus'] = true;
+			$GLOBALS['artx_settings']['vmenu']['show_submenus'] = true;
+			
+			ob_clean();
+/*			if ($templateVer == 2 ||		// Joomla!v2.5テンプレート
+				$templateVer == 10){		// Bootstrapテンプレート
+				require_once($gEnvManager->getJoomlaRootPath() . '/class/moduleHelper.php');
+			}*/
+			require($helper);		// デフォルトの出力方法
+			require($menuPath);		// 毎回実行する
+			$contents = ob_get_contents();
+			ob_clean();
+		}
+		return $contents;
+	}
+	/**
 	 * ウィジェットに「もっと読む...」ボタンを追加
 	 *
 	 * @param string $src		ウィジェットコンテンツ
