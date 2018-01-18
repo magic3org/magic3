@@ -1,6 +1,6 @@
 <?php
 /**
- * Joomlaテンプレート用関数
+ * Joomla!テンプレートのメニュー生成サポートプログラム
  *
  * PHP versions 5
  *
@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: menuHelper.php 5336 2012-10-27 09:34:40Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // no direct access

@@ -1,17 +1,27 @@
 <?php
 /**
- * @package     Joomla.Site
- * @subpackage  mod_breadcrumbs
+ * Joomla!テンプレートのパンくずリスト生成サポートプログラム
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * PHP versions 5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
  */
-
 defined('_JEXEC') or die;
 
-// Include the breadcrumbs functions only once
-JLoader::register('ModBreadCrumbsHelper', __DIR__ . '/helper.php');
+global $gEnvManager;
 
+$menuData	= $gEnvManager->getJoomlaMenuData();
+$list		= $menuData['crumbs'];			// パンくずリストデータ
+$count = count($list);
+
+/*
 // Get the breadcrumbs
 $list  = ModBreadCrumbsHelper::getList($params);
 $count = count($list);
@@ -19,5 +29,4 @@ $count = count($list);
 // Set the default separator
 $separator = ModBreadCrumbsHelper::setSeparator($params->get('separator'));
 $moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8');
-
-require JModuleHelper::getLayoutPath('mod_breadcrumbs', $params->get('layout', 'default'));
+*/

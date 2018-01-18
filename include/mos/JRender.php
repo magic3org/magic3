@@ -559,6 +559,8 @@ $this->item->title = '****';*/
 		$params->set('showAllChildren',	1);		// サブメニュー表示
 		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
 */
+		$params->set('showHere',		0);
+		
 		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn」を読み込むかどうかを決定。最新版ではnnを指定しなくてもデフォルトのパンくずリストが存在する?
 //		$attribs['id'] = 1;
 		
