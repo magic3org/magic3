@@ -567,7 +567,7 @@ $this->item->title = '****';*/
 		switch ($templateVer){
 			case 2:		// Joomla!v2.5テンプレート
 			case 10:		// Bootstrapテンプレート
-				$helper = $gEnvManager->getJoomlaRootPath() . '/render/menuHelper.php';
+				$helper = $gEnvManager->getJoomlaRootPath() . '/render/breadcrumbHelper.php';
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_breadcrumbs/default.php';		// パンくずリスト出力用スクリプト
 				break;
 			default:
