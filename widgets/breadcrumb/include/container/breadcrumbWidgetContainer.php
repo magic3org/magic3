@@ -8,7 +8,7 @@
  *
  * @package    パンくずリスト
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -22,6 +22,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 	private $currentMacroUrl;		// 現在のマクロ表記URL
 	private $menuItems;		// メニュー項目情報
 	private $iconTag;		// パンくずリストのアイコン
+	private $crumbs = array();			// Joomla!用パンくずリストデータ
 	const DEFAULT_TITLE = 'パンくずリスト';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_HOME_NAME = 'ホーム';			// デフォルトのルート階層名
 	const DEFAULT_HOME_URL = '/';				// デフォルトのホームURL
@@ -127,7 +128,18 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 				//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
 				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 				$this->tmpl->addVar("_widget", "link", $html);
+				
+				// Joomla!用データ追加
+				$item       = new stdClass;
+				$item->name = $this->convertToDispString($homeName);			// HTML文字エスケープ
+				$item->link = '';
+				$this->crumbs[] = $item;
 			}
+			
+			// Joomla用のメニュー階層データを設定
+			$menuData = array();
+			$menuData['crumbs'] = $this->crumbs;
+			$this->gEnv->setJoomlaMenuData($menuData);
 			return;
 		}
 		
@@ -154,6 +166,17 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 					//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
 					$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 					$this->tmpl->addVar("_widget", "link", $html);
+					
+					// Joomla!用データ追加
+					$item       = new stdClass;
+					$item->name = $this->convertToDispString($homeName);			// HTML文字エスケープ
+					$item->link = '';
+					$this->crumbs[] = $item;
+					
+					// Joomla用のメニュー階層データを設定
+					$menuData = array();
+					$menuData['crumbs'] = $this->crumbs;
+					$this->gEnv->setJoomlaMenuData($menuData);
 					return;
 				}
 			} else {
@@ -231,6 +254,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			// リンク作成
 			$html = $this->createLink($menuPathArray);
 		}
+		
 		if (!empty($html)){		// リンクが空のときは表示しない
 			$linkUrl = $this->getUrl($homeUrl, true/*リンク用*/);
 			//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($homeName) . '</a>' . $this->iconTag . $html;// リンクの間にアイコンを挿入
@@ -240,6 +264,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$html = $this->_createLinkOuter($html);
 			$this->tmpl->addVar("_widget", "link", $html);
 		}
+		
+		// Joomla用のメニュー階層データを設定
+		$menuData = array();
+		$menuData['crumbs'] = $this->crumbs;
+		$this->gEnv->setJoomlaMenuData($menuData);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -446,6 +475,13 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 				$linkItem = '<a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a>';
 			}
 		}
+		
+		// Joomla!用データ追加
+		$item       = new stdClass;
+		$item->name = $this->convertToDispString($name);			// HTML文字エスケープ
+		$item->link = $url;
+		$this->crumbs[] = $item;
+		
 		return $linkItem;
 	}
 	/**
