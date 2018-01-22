@@ -60,6 +60,7 @@ function isInputValueChanged(){
 }
 $(function(){
 	// パスワード入力部
+	$(".glyphicon-eye-open").show();		// 初期状態で表示
 	$("#password").on("keyup",function(){
 		if ($(this).val()){
 			$(".glyphicon-eye-open").show();
