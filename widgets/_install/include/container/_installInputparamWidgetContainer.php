@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -165,7 +165,10 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 					$db = new _installDB();
 					
 					// 接続テスト
+					$db->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
 					if ($db->testDbConnection($dsn, $dbuser, $password)){
+						$db->displayErrMessage(true);		// エラーメッセージの画面出力解除
+						
 						$isErr = false;			// エラーありかどうか
 						$msg = '<b><font color="green">' . $this->_('Succeeded in connecting database.') . '</font></b>';			// 接続正常
 						
@@ -221,13 +224,22 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 							}
 							$isTested = true;			// 接続テスト完了かどうか
 						}
-					} else {
-						$msg .= '<b><font color="red">' . $this->_('Failed in connecting database.') . '</font></b>';		// 接続エラー
+					} else {		// 接続エラーの場合
+						// エラーメッセージ作成
+						$message = $this->_('Failed in connecting database. Confirm the db connection information.');
+						$errors = $db->getErrMsg();
+						for ($i = 0; $i < count($errors); $i++){
+							$message .= '<br />' . $errors[$i];
+						}
+						$this->setMsg(self::MSG_APP_ERR, $message);
+						
+						$msg .= '<b><font color="red">' . $this->_('Failed in connecting.') . '</font></b>';		// 接続エラー
 					}
 					$this->tmpl->addVar('_widget', 'db_test',	$msg);
 				}
 			}
 		}
+
 		// インストール定義ファイルがある場合は設定値を取得
 		if (defined('M3_INSTALL_PRE_FIXED_DB') && M3_INSTALL_PRE_FIXED_DB){			// DB接続を固定する場合
 			$dbname = defined('M3_INSTALL_DB_NAME') ? M3_INSTALL_DB_NAME : '';

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 20:19+0900\n"
-"PO-Revision-Date: 2017-10-09 20:20+0900\n"
+"POT-Creation-Date: 2018-01-23 11:49+0900\n"
+"PO-Revision-Date: 2018-01-23 11:49+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -482,12 +482,12 @@ msgid "Can't use database."
 msgstr "DBが使用できません"
 
 #: container/_installInputparamWidgetContainer.php:133
-#: container/_installInputparamWidgetContainer.php:313
+#: container/_installInputparamWidgetContainer.php:321
 msgid "User"
 msgstr "DBユーザ"
 
 #: container/_installInputparamWidgetContainer.php:136
-#: container/_installInputparamWidgetContainer.php:312
+#: container/_installInputparamWidgetContainer.php:320
 msgid "Database Name"
 msgstr "DB名"
 
@@ -503,79 +503,83 @@ msgstr "設定値を更新しました"
 msgid "Failed in updating configration."
 msgstr "設定値の更新に失敗しました"
 
-#: container/_installInputparamWidgetContainer.php:170
+#: container/_installInputparamWidgetContainer.php:173
 msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
-#: container/_installInputparamWidgetContainer.php:180
+#: container/_installInputparamWidgetContainer.php:183
 msgid "Invalid sql_mode. It requires blank value."
 msgstr "sql_modeが不正です。空文字列に設定して下さい。"
 
-#: container/_installInputparamWidgetContainer.php:181
+#: container/_installInputparamWidgetContainer.php:184
 msgid "Invalid sql_mode."
 msgstr "sql_mode不正"
 
-#: container/_installInputparamWidgetContainer.php:206
+#: container/_installInputparamWidgetContainer.php:209
 msgid "Invalid encoding for Japanese."
 msgstr "日本語を使用するためのエンコード設定が不正です。"
 
-#: container/_installInputparamWidgetContainer.php:207
+#: container/_installInputparamWidgetContainer.php:210
 msgid "Incollect encoding."
 msgstr "エンコーディングエラー"
 
-#: container/_installInputparamWidgetContainer.php:218
+#: container/_installInputparamWidgetContainer.php:221
 msgid "Succeeded in creating table."
 msgstr "テーブル作成正常"
 
-#: container/_installInputparamWidgetContainer.php:220
+#: container/_installInputparamWidgetContainer.php:223
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:225
-msgid "Failed in connecting database."
+#: container/_installInputparamWidgetContainer.php:228
+msgid "Failed in connecting database. Confirm the db connection information."
+msgstr "DB接続に失敗しました。DB接続情報を確認してください。"
+
+#: container/_installInputparamWidgetContainer.php:232
+msgid "Failed in connecting."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:301
+#: container/_installInputparamWidgetContainer.php:309
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:302
+#: container/_installInputparamWidgetContainer.php:310
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:303
+#: container/_installInputparamWidgetContainer.php:311
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:304
+#: container/_installInputparamWidgetContainer.php:312
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:305
+#: container/_installInputparamWidgetContainer.php:313
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:307
+#: container/_installInputparamWidgetContainer.php:315
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:308
+#: container/_installInputparamWidgetContainer.php:316
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:309
+#: container/_installInputparamWidgetContainer.php:317
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:310
+#: container/_installInputparamWidgetContainer.php:318
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:311
+#: container/_installInputparamWidgetContainer.php:319
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:314
+#: container/_installInputparamWidgetContainer.php:322
 msgid "Password"
 msgstr "パスワード"
 
