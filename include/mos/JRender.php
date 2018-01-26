@@ -126,11 +126,9 @@ class JRender extends JParameter
 		if (function_exists($chromeMethod))
 		{
 			$module = new stdClass;
-			//$module->style = $attribs['style'];
 			$module->content = $content;
 			if (!empty($title)){
 				$module->showtitle = 1;
-//				$module->title = htmlentities($title, ENT_COMPAT, M3_HTML_CHARSET);
 				$module->title = convertToHtmlEntity($title);
 			}
 			
@@ -519,6 +517,13 @@ $this->item->title = '****';*/
 			// ウィジェットが出力したメニューコンテンツを設定
 			$gEnvManager->setJoomlaMenuContent($content);
 
+			$module = new stdClass;
+			$module->content = $content;
+			if (!empty($title)){
+				$module->showtitle = 1;
+				$module->title = convertToHtmlEntity($title);
+			}
+			
 			// Joomla!2.5テンプレート用追加設定(2012/5/1 追加)
 			$GLOBALS['artx_settings']['menu']['show_submenus'] = true;
 			$GLOBALS['artx_settings']['vmenu']['show_submenus'] = true;
