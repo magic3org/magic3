@@ -91,6 +91,7 @@ class JRender extends JParameter
 			if ($paramsOther['moduleclass_sfx'] == 'art-vmenu'){		// 縦型メニュー
 				if ($templateVer == 2){// Joomla!v2.5テンプレート
 					$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
+					return $content;
 				} else {
 				//	$params->set('startLevel',		0);
 					$params->set('startLevel',		1);
