@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/1.6/template-install.dtd">
 <extension version="2.5" client="site" type="template" method="upgrade">
-  <name>champion</name>
+  <name>themler_old</name>
   <creationDate>2016-02-04</creationDate>
   <version>1.0</version>
   <author/>
@@ -60,7 +60,7 @@
     <position>top-4</position>
   </positions>
   <config>
-    <fields name="params" addfieldpath="/templates/champion/fields">
+    <fields name="params" addfieldpath="/templates/themler_old/fields">
       <fieldset name="basic">
         <field name="siteTitle" default="Headline" type="text" size="50" label="TPL_SITE_TITLE" description="TPL_SITE_TITLE_DESCRIPTION"/>
         <field name="siteSlogan" default="Slogan" type="text" size="50" label="TPL_SITE_SLOGAN" description="TPL_SITE_SLOGAN_DESCRIPTION"/>

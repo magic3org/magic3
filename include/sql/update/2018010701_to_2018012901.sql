@@ -18,9 +18,13 @@
 
 -- *** システムベーステーブル ***
 -- テンプレート情報
-ALTER TABLE _templates ADD tm_editor_param               TEXT                                         NOT NULL;      -- 編集エディタ用パラメータ
+DELETE FROM _templates WHERE tm_id = 'art41_sample1';
+DELETE FROM _templates WHERE tm_id = 'art41_sample2';
+DELETE FROM _templates WHERE tm_id = 'art42_sample4';
 
-DELETE FROM _templates WHERE tm_id = 'themler_sample1';
-DELETE FROM _templates WHERE tm_id = 'themler_sample2';
+DELETE FROM _templates WHERE tm_id = 'themler_old';
+INSERT INTO _templates
+(tm_id,                tm_name,             tm_type, tm_generator, tm_version) VALUES
+('themler_old',        'themler_old',       2,       'themler',    '1.0.68');
 
 -- *** システム標準テーブル ***
