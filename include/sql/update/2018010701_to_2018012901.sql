@@ -27,4 +27,9 @@ INSERT INTO _templates
 (tm_id,                tm_name,             tm_type, tm_generator, tm_version) VALUES
 ('themler_old',        'themler_old',       2,       'themler',    '1.0.68');
 
+DELETE FROM _templates WHERE tm_id = '_layout';
+INSERT INTO _templates
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version, tm_info_url) VALUES
+('_layout',                       '_layout',                       99,       0,              false,     false,            false,        '',           '',         '');
+
 -- *** システム標準テーブル ***

@@ -2306,7 +2306,7 @@ class PageManager extends Core
 	 * Joomla!v1.5タグを読み込んでウィジェット実行
 	 *
 	 * @param string	$srcBuf			バッファデータ
-	 * @param int		$templateVer	テンプレートバージョン(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+	 * @param int		$templateVer	テンプレートバージョン(99=レイアウト用テンプレート、0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
 	 * @return string					変換後文字列
 	 */
 	function launchWidgetByJoomlaTag($srcBuf, $templateVer)
@@ -2381,24 +2381,77 @@ class PageManager extends Core
 					if (!empty($name)){		// ポジション名が取得できたとき
 						// Joomla!では、テンプレートの「jdoc:include」タグの属性styleが空のときは「none」で処理される
 						// Joomla!デフォルトで設定可能なのは「none,table,horz,xhtml,rounded,outline」
-/*						if (empty($style)){
-							if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
-								strcasecmp($name, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
-								$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
-							} else {
-								$style = 'none';
-							}
-						}*/
+						// 配置ブロックがナビゲーション型に固定されていない場合はテンプレートの種類によってナビゲーションかどうかを判断
 						if (strcasecmp($type, 'navmenu') == 0){											// メニューウィジェット用配置ブロックの場合
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 							$attr['type'] = $type;			// テンプレート内での参照用
-						} else if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
-							strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
-							strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
-							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
-						} else if (empty($style)){
-							$style = 'none';
+						} else {
+							switch ($templateVer){
+							case 0:			// デフォルトテンプレート(Joomla!v1.0)
+							case 1:			// Joomla!v1.5
+							case 2:			// Joomla!v2.5
+							case 10:		// Bootstrap v3.0
+							default:
+								if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
+									strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
+									strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
+									$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+								}
+								break;
+							case 99:		// レイアウト用テンプレート
+								global $gRequestManager;
+								static $templateType;		// レイアウト用テンプレートタイプを一度だけ取得
+								static $templateGenerator;
+								
+								if (!isset($templateType)){
+									$templateType = 99;
+									
+									// レイアウト用テンプレートの場合は対象とするテンプレートの情報を取得して判断する
+									$pageId		= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+									$pageSubId	= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+								
+									// ページ用個別に設定されたテンプレートがある場合は取得
+									$curTemplate = '';
+									$line = $this->getPageInfo($pageId, $pageSubId);
+									if (!empty($line)) $curTemplate = $line['pn_template_id'];
+				
+									// 取得できなければデフォルトを取得
+									if (empty($curTemplate)){
+										if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
+											$curTemplate = $this->gSystem->defaultTemplateId();
+										} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
+											$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
+										} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
+											$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
+										}
+									}
+									
+									// テンプレートのタイプを取得
+									$ret = $this->db->getTemplate($curTemplate, $row);
+									if ($ret){
+										$templateType = $row['tm_type'];
+										$templateGenerator = $row['tm_generator'];
+									}
+								}
+								
+								if ($templateType != 99){
+									// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
+									if ($templateGenerator == 'themler'){
+										if (strcasecmp($name, 'hmenu') == 0){		// Joomla!v3テンプレート対応
+											$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+										}
+									} else {
+										if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
+											strcasecmp($name, 'position-1') == 0){		// Joomla!v2.5テンプレート対応
+											$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+										}
+									}
+								}
+								break;
+							}
 						}
+						if (empty($style)) $style = 'none';
+						
 						// ウィジェットの出力を取得
 						$contents = $this->getContents($name, $style, $templateVer, $attr);
 					}

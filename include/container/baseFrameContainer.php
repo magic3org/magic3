@@ -1117,7 +1117,7 @@ class BaseFrameContainer extends Core
 
 		// Joomla!タグの変換処理(ウィジェット実行)
 		if ($convType >= 1 && $convType < 100){		// Joomla!v1.5,v2.5テンプレートのとき
-			$srcContents = $this->gPage->launchWidgetByJoomlaTag($srcContents, $convType);
+			$srcContents = $this->gPage->launchWidgetByJoomlaTag($srcContents, $convType);		// launchWidgetByJoomlaTag()は携帯変換(-1)は実行されない
 		}
 	
 		// 遅延実行ウィジェットの出力を埋め込む。HTMLヘッダ出力する。
