@@ -17,6 +17,12 @@
 -- --------------------------------------------------------------------------------------------------
 
 -- *** システムベーステーブル ***
+-- システム設定マスター
+DELETE FROM _system_config WHERE sc_id = 'operation_mode';
+INSERT INTO _system_config 
+(sc_id,                      sc_value,            sc_name) VALUES
+('operation_mode',          '0',                 'システム運用モード');
+
 -- テンプレート情報
 DELETE FROM _templates WHERE tm_id = 'art41_sample1';
 DELETE FROM _templates WHERE tm_id = 'art41_sample2';
@@ -26,7 +32,6 @@ DELETE FROM _templates WHERE tm_id = 'themler_old';
 INSERT INTO _templates
 (tm_id,                tm_name,             tm_type, tm_generator, tm_version) VALUES
 ('themler_old',        'themler_old',       2,       'themler',    '1.0.68');
-
 DELETE FROM _templates WHERE tm_id = '_layout';
 INSERT INTO _templates
 (tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version, tm_info_url) VALUES
