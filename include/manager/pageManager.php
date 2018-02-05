@@ -5423,6 +5423,33 @@ class PageManager extends Core
 				$ret = $this->db->getPageDef($pageId, $pageSubId, $position2, $rows2);// 0レコードでも正常とする
 			}
 
+			// ##### 該当するページのテンプレートタイプを取得 #####
+			$templateType = 99;
+			$templateGenerator = '';
+		
+			// ページ用個別に設定されたテンプレートがある場合は取得
+			$curTemplate = '';
+			$line = $this->getPageInfo($pageId, $pageSubId);
+			if (!empty($line)) $curTemplate = $line['pn_template_id'];
+
+			// 取得できなければデフォルトを取得
+			if (empty($curTemplate)){
+				if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
+					$curTemplate = $this->gSystem->defaultTemplateId();
+				} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
+					$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
+				} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
+					$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
+				}
+			}
+			
+			// テンプレートのタイプを取得
+			$ret = $this->db->getTemplate($curTemplate, $row);
+			if ($ret){
+				$templateType = $row['tm_type'];
+				$templateGenerator = $row['tm_generator'];
+			}
+
 			// 更新データを作成
 			// 更新対象のポジションブロック
 			echo '<div>' . M3_NL;
@@ -5433,18 +5460,46 @@ class PageManager extends Core
 				// ポジション名取得
 				$posName = str_replace(self::POSITION_TAG_HEAD, '', substr($updatepos[$i], 0, strlen($updatepos[$i]) - strlen(strrchr($updatepos[$i], "_"))));
 				if ($task == 'wmove' && $posName == $position2){
+					// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
+					$style = '';
+					if ($templateGenerator == 'themler'){
+						if (strcasecmp($position2, 'hmenu') == 0){		// Joomla!v3テンプレート対応
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						}
+					} else {
+						if (strcasecmp($position2, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
+							strcasecmp($position2, 'position-1') == 0){		// Joomla!v2.5テンプレート対応
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						}
+					}
+									
 					// ウィジェット一覧外枠
 					$posHead = '';
-					if (strcasecmp($position2, 'user3') == 0 || strcasecmp($position2, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					//if (strcasecmp($position2, 'user3') == 0 || strcasecmp($position2, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position2 . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position2 . '</h2>' . M3_NL;
 				
 					// ウィジェット一覧出力
 					echo $this->getWidgetList($pageId, $pageSubId, $widgetTagHead, $rows2);
 				} else {
+					// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
+					$style = '';
+					if ($templateGenerator == 'themler'){
+						if (strcasecmp($position, 'hmenu') == 0){		// Joomla!v3テンプレート対応
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						}
+					} else {
+						if (strcasecmp($position, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
+							strcasecmp($position, 'position-1') == 0){		// Joomla!v2.5テンプレート対応
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						}
+					}
+					
 					// ウィジェット一覧外枠
 					$posHead = '';
-					if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					//if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
 				
