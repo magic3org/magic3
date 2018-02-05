@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -39,6 +39,45 @@ function previewInOtherWindow(type, url)
 $(function(){
 	m3SetConfigTable('site_info');
 	m3SetConfigTable('system_info');
+	
+	$('#site_status_toggle').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+			
+			var message;
+			var act;
+			if ($(this).prop('checked')){
+				message = 'サイトを公開しますか?';
+				act = 'siteopen';
+			} else {
+				message = 'サイトを非公開にしますか?';
+				act = 'siteclose';
+			}
+			if (window.confirm(message)){
+				document.main.act.value = act;
+				document.main.submit();
+			} else {
+				// トグルボタンを元に戻す
+				$(this).bootstrapToggle('toggle');
+			}
+			$(this).removeClass('fired');
+		}
+	});
+	$('#operation_mode_status').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+			
+			var act;
+			if ($(this).prop('checked')){
+				act = 'operation_mode_on';
+			} else {
+				act = 'operation_mode_off';
+			}
+			document.main.act.value = act;
+			document.main.submit();
+			$(this).removeClass('fired');
+		}
+	});
 });
 //]]>
 </script>
@@ -56,8 +95,8 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_SITE_STATUS}>サイトの状態</span></th>
-	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">{SITE_OPEN}</div><div class="col-sm-2 m3config_item"><input type="button" class="button" onclick="toggleSiteOpen({SITE_OPEN_STATUS});" value="{SITE_OPEN_LABEL}" /></div>
-	    <!--<label>非公開の場合、全アクセスポイントがメンテナンス画面に切り替わります</label>--></td>
+	    <td colspan="2"><input type="checkbox" id="site_status_toggle" data-toggle="toggle" data-onstyle="success" data-offstyle="default" data-on="公開中" data-off="公開停止" {SITE_STATUS_CHECKED} />
+		</td>
 	</tr>
     <tr>
 	    <th rowspan="4">アクセスポイント</th>
@@ -77,6 +116,11 @@ $(function(){
 	    <th>携帯用</th><td><patTemplate:tmpl name="show_site_mobile_open" visibility="hidden"><div class="checkbox col-sm-6 m3config_item"><label><input type="checkbox" name="item_site_mobile_in_public" {SITE_MOBILE_IN_PUBLIC} />公開</label></div><div class="form-control-static col-sm-6 text-right m3config_item">画面エンコーディング：{MOBILE_ENCODE}</div>
 	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(1, '{MOBILE_ACCESS_URL}');">{MOBILE_ACCESS_URL}</a></div></patTemplate:tmpl>
 		<patTemplate:tmpl name="show_site_mobile_close" visibility="hidden"><div class="form-control-static">閉鎖中</div></patTemplate:tmpl></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGSYS_ADMIM_MODE}>管理画面モード</span></th>
+	    <td colspan="2"><input type="checkbox" id="operation_mode_status" data-toggle="toggle" data-onstyle="success" data-offstyle="primary" data-on="サイト運用モード" data-off="サイト構築モード" data-width="160" {OPERATION_MODE_CHECKED} />
+		</td>
 	</tr>
     </tbody>
 </table>
