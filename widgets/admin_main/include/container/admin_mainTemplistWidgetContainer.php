@@ -15,7 +15,8 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
+//require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
+require_once($gEnvManager->getLibPath()				. '/pclzip-2-8-2/pclzip.lib.php');
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
 require_once($gEnvManager->getCommonPath()		. '/archive.php');
 // Joomlaテンプレート用
@@ -279,7 +280,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 					if ($ret){
 						// 解凍先ディレクトリ取得
 						$extDir = $this->gEnv->getTempDir();
-						
+
 						// ファイルを解凍
 						$archiver = new Archive();
 						$ret = $archiver->extract($tmpFile, $extDir, $ext);
