@@ -33,6 +33,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 //	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
 	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
+	const TOP_MENU_ICON_FILE = '/images/system/home32_menu.png';		// トップ遷移アイコン(サイト運用モード)
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
 	const TOP_SERVER_ADMIN_ICON_FILE = '/images/system/globe32.png';		// トップ遷移アイコン(サーバ管理運用の場合)
 	const SMALL_DEVICE_ICON_FILE = '/images/system/smalldevice32.png';		// 小画面デバイスアイコン(小画面最適化実行時)
@@ -206,7 +207,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
-
+			
 		// メニューを表示
 		if ($menu == 'off'){	// メニュー非表示指定のとき
 		} else if (!empty($openBy)){	// 別ウィンドウで表示のときは閉じるボタン表示
@@ -233,11 +234,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		} else {	// メニュー表示のとき
 			$this->useMenu = true;				// メニューを使用するかどうか
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
-			
+
 			// ##### メニューを作成 #####
 			// システムの表示モードを取得
 			$isSiteOperationModeOn = $this->gSystem->getSystemConfig(self::CF_SITE_OPERATION_MODE);		// サイト運用モード
-
+		
 			// トップレベル項目を取得
 			$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getCurrentLanguage();
 			if (!$this->db->getNavItems($navId, 0, $rows)){			// 現在の言語で取得できないときはデフォルト言語で取得
@@ -368,7 +369,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN){		// サーバ管理の場合
 					$iconUrl = $this->gEnv->getRootUrl() . self::TOP_SERVER_ADMIN_ICON_FILE;
 				} else {
-					$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+					if ($isSiteOperationModeOn){			// サイト運用モードのとき
+						$iconUrl = $this->gEnv->getRootUrl() . self::TOP_MENU_ICON_FILE;
+					} else {
+						$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+					}
 				}
 			}
 			$iconTitle = $this->_('Top Page');		// トップ画面
