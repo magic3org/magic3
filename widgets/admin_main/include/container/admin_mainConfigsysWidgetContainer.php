@@ -349,9 +349,11 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		} else if ($act == 'siteclose'){		// サイト運用停止のとき
 			$this->db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 0);
 		} else if ($act == 'site_operation_mode_on'){			// サイト運用モード変更
-			$this->db->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 1);
+			// システム制御マネージャーの値を更新
+			$this->gSystem->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 1);
 		} else if ($act == 'site_operation_mode_off'){			// サイト運用モード変更
-			$this->db->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 0);
+			// システム制御マネージャーの値を更新
+			$this->gSystem->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 0);
 		} else if ($act == 'clearcache'){		// キャッシュクリアのとき
 			$ret = $this->gCache->clearAllCache();
 			if ($ret){
