@@ -74,6 +74,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const CF_SITE_PC_IN_PUBLIC		= 'site_pc_in_public';				// PC用サイトの公開状況
 	const CF_SITE_MOBILE_IN_PUBLIC	= 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
+	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	const CF_SYSTEM_TYPE			= 'system_type';		// システム運用タイプ
 	const SYSTEM_TYPE_SERVER_ADMIN	= 'serveradmin';		// システム運用タイプ(サーバ管理)
@@ -234,6 +235,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
 			
 			// ##### メニューを作成 #####
+			// システムの表示モードを取得
+			$isSiteOperationModeOn = $this->gSystem->getSystemConfig(self::CF_SITE_OPERATION_MODE);		// サイト運用モード
+
 			// トップレベル項目を取得
 			$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getCurrentLanguage();
 			if (!$this->db->getNavItems($navId, 0, $rows)){			// 現在の言語で取得できないときはデフォルト言語で取得
@@ -253,11 +257,26 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0) $columnCount++;
 			$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
 			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
-						
+			
+			$escapeColumnEnd = false;		// 改行読み飛ばしをリセット
 			for ($i = 0; $i < $topMenuCount; $i++){
+				// 非表示オプション取得
+				$hideOptions = array();
+				if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
+				
+				// サイト運用モードがオンの場合は非表示項目を非表示にする
+				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)){
+					$escapeColumnEnd = true;		// 改行を読み飛ばす
+					continue;
+				}
+				
 				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
+					// 改行読み飛ばしのときは終了
+					if ($escapeColumnEnd) continue;
+					
 					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
 				} else {		// 改行以外のとき
+					$escapeColumnEnd = false;		// 改行読み飛ばしをリセット
 					$topId = $rows[$i]['ni_id'];
 			
 					// サブレベル取得

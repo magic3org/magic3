@@ -63,15 +63,15 @@ $(function(){
 			$(this).removeClass('fired');
 		}
 	});
-	$('#operation_mode_status').on('change', function(){
+	$('#site_operation_mode_status').on('change', function(){
 		if ($(this).hasClass('fired') == false){
 			$(this).addClass('fired');
 			
 			var act;
 			if ($(this).prop('checked')){
-				act = 'operation_mode_on';
+				act = 'site_operation_mode_on';
 			} else {
-				act = 'operation_mode_off';
+				act = 'site_operation_mode_off';
 			}
 			document.main.act.value = act;
 			document.main.submit();
@@ -119,7 +119,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_ADMIM_MODE}>管理画面モード</span></th>
-	    <td colspan="2"><input type="checkbox" id="operation_mode_status" data-toggle="toggle" data-onstyle="success" data-offstyle="primary" data-on="サイト運用モード" data-off="サイト構築モード" data-width="160" {OPERATION_MODE_CHECKED} />
+	    <td colspan="2"><input type="checkbox" id="site_operation_mode_status" data-toggle="toggle" data-onstyle="success" data-offstyle="primary" data-on="サイト運用モード" data-off="サイト構築モード" data-width="160" {SITE_OPERATION_MODE_CHECKED} />
 		</td>
 	</tr>
     </tbody>

@@ -41,7 +41,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';			// スマートフォンの自動遷移
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
 	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
-	const CF_OPERATION_MODE = 'operation_mode';			// システム運用モード
+	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用
 	const CF_MULTI_DOMAIN = 'multi_domain';		// マルチドメイン運用
 	const CF_SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
@@ -348,10 +348,10 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 1);
 		} else if ($act == 'siteclose'){		// サイト運用停止のとき
 			$this->db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 0);
-		} else if ($act == 'operation_mode_on'){			// システム運用モード変更
-			$this->db->updateSystemConfig(self::CF_OPERATION_MODE, 1);
-		} else if ($act == 'operation_mode_off'){			// システム運用モード変更
-			$this->db->updateSystemConfig(self::CF_OPERATION_MODE, 0);
+		} else if ($act == 'site_operation_mode_on'){			// サイト運用モード変更
+			$this->db->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 1);
+		} else if ($act == 'site_operation_mode_off'){			// サイト運用モード変更
+			$this->db->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 0);
 		} else if ($act == 'clearcache'){		// キャッシュクリアのとき
 			$ret = $this->gCache->clearAllCache();
 			if ($ret){
@@ -430,8 +430,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "site_status_checked", $checked);
 		$this->tmpl->addVar("_widget", "except_ip", $this->db->getSystemConfig(self::CF_SITE_ACCESS_EXCEPTION_IP));
 		$checked = '';
-		if ($this->db->getSystemConfig(self::CF_OPERATION_MODE) == '1') $checked = 'checked';		// システム運用モードのとき
-		$this->tmpl->addVar("_widget", "operation_mode_checked", $checked);
+		if ($this->db->getSystemConfig(self::CF_SITE_OPERATION_MODE) == '1') $checked = 'checked';		// サイト運用モードのとき
+		$this->tmpl->addVar("_widget", "site_operation_mode_checked", $checked);
 		
 		// 項目の表示制御
 		$isActiveSite = $this->gSystem->getSiteActiveStatus(0);		// PC用サイト
