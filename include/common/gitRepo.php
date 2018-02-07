@@ -14,7 +14,7 @@
  * @link       http://www.magic3.org
  */
 //require_once(M3_SYSTEM_INCLUDE_PATH				. '/lib/pcl/pclzip.lib.php' );
-require_once(M3_SYSTEM_INCLUDE_PATH				. '/pclzip-2-8-2/pclzip.lib.php');
+require_once(M3_SYSTEM_INCLUDE_PATH				. '/lib/pclzip-2-8-2/pclzip.lib.php');
 
 class GitRepo
 {
