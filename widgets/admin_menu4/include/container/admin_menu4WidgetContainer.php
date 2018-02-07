@@ -252,32 +252,50 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			// カラム数を求める
 			$topMenuCount = count($rows);
 			$columnCount = 0;
-			for ($i = 0; $i < $topMenuCount; $i++){
-				if ($rows[$i]['ni_view_control'] != 0) $columnCount++;		// 改行のとき
-			}
-			if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0) $columnCount++;
-			$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
-			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
-			
-			$escapeColumnEnd = false;		// 改行読み飛ばしをリセット
+			$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
 			for ($i = 0; $i < $topMenuCount; $i++){
 				// 非表示オプション取得
 				$hideOptions = array();
 				if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
 				
 				// サイト運用モードがオンの場合は非表示項目を非表示にする
-				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)){
-					$escapeColumnEnd = true;		// 改行を読み飛ばす
-					continue;
-				}
+				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
 				
+				// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
+				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
+					if (!$escapeColumnEnd) $columnCount++;
+					
+					$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+				} else {		// 改行以外のとき
+					$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
+				}
+			}
+
+			// 最後が改行でない場合を修正
+			if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0 && !$escapeColumnEnd) $columnCount++;
+			$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
+			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
+			
+			$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+			for ($i = 0; $i < $topMenuCount; $i++){
+				// 非表示オプション取得
+				$hideOptions = array();
+				if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
+				
+				// サイト運用モードがオンの場合は非表示項目を非表示にする
+				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
+				
+				// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
 				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
 					// 改行読み飛ばしのときは終了
 					if ($escapeColumnEnd) continue;
 					
 					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
+					
+					$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
 				} else {		// 改行以外のとき
-					$escapeColumnEnd = false;		// 改行読み飛ばしをリセット
+					$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
+					
 					$topId = $rows[$i]['ni_id'];
 			
 					// サブレベル取得
@@ -334,8 +352,10 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li>' . M3_NL;
 			$this->tmpl->addVar("menu", "menu_inner", $menuInner);
 			$this->tmpl->addVar("menu", "widget_url", $this->getUrl($this->gEnv->getCurrentWidgetRootUrl()));	// ウィジェットのルートディレクトリ
-			
 			$this->tmpl->addVar("menu", "top_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));		// トップメニュー画面URL
+			
+			// メインメニューのカラム数が少ない場合はメインメニューの左位置を「メニュー」ボタンの左位置に合わせる
+			if ($columnCount <= 2) $this->tmpl->setAttribute('smallmainmenu', 'visibility', 'visible');
 			
 			// サイト表示
 			$siteName = $this->gEnv->getSiteName();
