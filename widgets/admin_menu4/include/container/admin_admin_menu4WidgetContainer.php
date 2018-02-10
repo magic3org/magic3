@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,7 +22,8 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
 	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
-
+	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -94,6 +95,18 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 			}
 			$this->gPage->updateParentWindow();// 親ウィンドウを更新
+		} else if ($act == 'site_operation_mode_on'){			// サイト運用モード変更
+			// システム制御マネージャーの値を更新
+			$this->gSystem->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 1);
+			
+			// 親ウィンドウを更新
+			$this->gPage->updateParentWindow();
+		} else if ($act == 'site_operation_mode_off'){			// サイト運用モード変更
+			// システム制御マネージャーの値を更新
+			$this->gSystem->updateSystemConfig(self::CF_SITE_OPERATION_MODE, 0);
+			
+			// 親ウィンドウを更新
+			$this->gPage->updateParentWindow();
 		} else {		// 初期表示の場合
 			$replaceNew = true;			// データ再取得
 		}
@@ -108,6 +121,10 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
 		}
+		
+		$checked = '';
+		if ($this->_db->getSystemConfig(self::CF_SITE_OPERATION_MODE) == '1') $checked = 'checked';		// サイト運用モードのとき
+		$this->tmpl->addVar("_widget", "site_operation_mode_checked", $checked);
 	}
 	/**
 	 * メニュー管理画面の情報を取得

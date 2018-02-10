@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,6 +21,45 @@ function updateItem(){
 }
 $(function(){
 	m3SetConfigTable('mainconfig');
+	
+	$('#site_status_toggle').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+			
+			var message;
+			var act;
+			if ($(this).prop('checked')){
+				message = 'サイトを公開しますか?';
+				act = 'siteopen';
+			} else {
+				message = 'サイトを非公開にしますか?';
+				act = 'siteclose';
+			}
+			if (window.confirm(message)){
+				document.main.act.value = act;
+				document.main.submit();
+			} else {
+				// トグルボタンを元に戻す
+				$(this).bootstrapToggle('toggle');
+			}
+			$(this).removeClass('fired');
+		}
+	});
+	$('#site_operation_mode_status').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+			
+			var act;
+			if ($(this).prop('checked')){
+				act = 'site_operation_mode_on';
+			} else {
+				act = 'site_operation_mode_off';
+			}
+			document.main.act.value = act;
+			document.main.submit();
+			$(this).removeClass('fired');
+		}
+	});
 });
 //]]>
 </script>
@@ -38,9 +77,14 @@ $(function(){
 <table id="mainconfig">
     <tbody>
     <tr>
-	    <th>メニュー管理タイプ</th>
+	    <th>メニュー定義画面<br />タイプ</th>
 		<td><div class="radio"><label><input type="radio" name="menu_type" value="0" {MENU_TYPE_SINGLE} />単階層</label></div>
 		<div class="radio"><label><input type="radio" name="menu_type" value="1" {MENU_TYPE_TREE} />多階層</label></div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGSYS_ADMIM_MODE}>管理画面モード</span></th>
+	    <td><input type="checkbox" id="site_operation_mode_status" data-toggle="toggle" data-onstyle="success" data-offstyle="primary" data-on="サイト運用モード" data-off="サイト構築モード" data-width="160" {SITE_OPERATION_MODE_CHECKED} />
 		</td>
 	</tr>
     </tbody>
