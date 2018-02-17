@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -137,11 +137,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = '状況';
 				break;
 			case self::TASK_INITWIZARD:		// 管理画面カスタムウィザード
-				$titles[] = 'コア管理';
+				$titles[] = '管理画面設定';
 				$titles[] = '管理画面カスタムウィザード';
 				break;
 			case self::TASK_EDITMENU:		// 管理メニュー編集
-				$titles[] = 'コア管理';
+				$titles[] = '管理画面設定';
 				$titles[] = '管理メニュー編集';
 				break;
 		}
@@ -275,10 +275,10 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 								)
 							);
 							
-		// 設定によって「コア管理」は変更
+		// 設定によって「管理画面設定」は変更
 		if (M3_PERMIT_REINSTALL){			// 再インストール可能な場合は「システム再インストール」項目を表示
 			$navbarDef->menu[] =	(Object)array(
-										'name'		=> 'コア管理',
+										'name'		=> '管理画面設定',
 										'task'		=> '',
 										'url'		=> '',
 										'tagid'		=> '',
@@ -319,7 +319,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									);
 		} else {
 			$navbarDef->menu[] =	(Object)array(
-										'name'		=> 'コア管理',
+										'name'		=> '管理画面設定',
 										'task'		=> '',
 										'url'		=> '',
 										'tagid'		=> '',
