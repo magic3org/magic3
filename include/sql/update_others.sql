@@ -31,7 +31,7 @@ INSERT INTO _nav_item
 ('helplink', 8,     8,        '',                    'テンプレートを作成するには？', 'Artisteer(http://www.artisteer.com/)やThemler(https://themler.com/)などのツールが利用できます。Joomla!タイプでテンプレートを作成します。'),
 ('helplink', 9,     9,        'task=configsys',       'サイトを非公開にするには？', '「システム基本設定」画面の「サイトの状態」のボタンで制御します。'),
 ('helplink', 10,     10,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？', '「メッセージ設定」画面の「サイトメンテナンス中」を変更します。'),
-('helplink', 11,     11,        'task=configsite',       '管理画面モードを変更するには？', '「システム基本設定」画面の「管理画面モード」を変更します。'),
+('helplink', 11,     11,        'task=configsys',       '管理画面モードを変更するには？', '「システム基本設定」画面の「管理画面モード」を変更します。'),
 ('helplink', 12,     12,        'task=userlist',       '管理者のパスワードを変更するには？', '「ユーザ一覧」画面から管理者を選択し、パスワードを変更します。'),
 ('helplink', 13,     13,        'task=configsys',       'SSLを設定するには？', '「システム基本設定」画面の「SSL」の項目にチェックを入れると「https://～」でアクセスできるようになります。'),
 ('helplink', 14,     14,        'task=configsys',       '共有SSLを設定するには？', '「システム基本設定」画面の「SSL」の「フロント画面にSSLを使用」にチェックを入れ、「共有SSLのルートURL」に共有SSL用のURLを設定します。'),
