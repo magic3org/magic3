@@ -567,8 +567,9 @@ $this->item->title = '****';*/
 */
 		$params->set('showHere',		0);
 		
-		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn」を読み込むかどうかを決定。最新版ではnnを指定しなくてもデフォルトのパンくずリストが存在する?
-//		$attribs['id'] = 1;
+		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn」を読み込むかどうかを決定。
+		// 現在default_breadcrumbs_nnの出力ではうまく動作しない。ダミーの値を設定し、デフォルトのULタグでの出力を使用する。(2018/2/19)
+		$attribs['id'] = 100;
 		
 		// 必要なスクリプトを読み込む
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
