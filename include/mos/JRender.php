@@ -185,16 +185,16 @@ class JRender extends JParameter
 		$this->pageheading = '';		// ページタイトル用
 		
 		// ページタイトルの設定
-		if (!empty($title) && $title != M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){
-			// 旧タイトル設定方法
-/*			$this->params->set('show_title', 1);
+		if (!empty($title) && $title != M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){		// ウィジェットタイトルが設定されている場合
+/*			// 旧タイトル設定方法
+			$this->params->set('show_title', 1);
 			//$this->params->set('link_titles', 1);
 			$this->article->title = $title;
 			
 			// Joomla!2.5テンプレート用追加設定(2012/4/4 追加)
 			$this->item->title = $title;
 			$this->item->params->set('show_title', 1);
-			*/
+*/
 			// ページタイトルの設定方法を以下に変更(2015/10/6)
 			// Joomla!新型描画処理用(Joomla!1.5以上、Themler)
 			$this->params->set('show_page_heading', 1);
@@ -274,8 +274,8 @@ $this->item->title = '****';*/
 				if (!empty($viewData)){
 					$contentItems = $viewData['Items'];		// コンテンツ情報
 					$contentItem = $contentItems[0];
-					$this->item->title = $contentItem->title;
-					$this->item->params->set('show_title', 1);
+//					$this->item->title = $contentItem->title;			// タイトルは非表示にしてページタイトルで表示?(2018/2/22)
+//					$this->item->params->set('show_title', 1);
 //					$this->item->titleLink = $contentItem->url;
 //					$this->item->params->set('link_titles', 1);		// リンク表示
 					if (!empty($contentItem->published)){		// 登録日時
@@ -289,6 +289,13 @@ $this->item->title = '****';*/
 					if (isset($contentItem->hits)){		// アクセス数
 						$this->item->hits = $contentItem->hits;
 						$this->item->params->set('show_hits', 1);
+					}
+					
+					// ##### Joomla!新型描画処理用(Joomla!1.5以上、Themler) #####
+					// ウィジェット側で設定したタイトルを使用の場合
+					if ($title == M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){
+						$this->params->set('show_page_heading', 1);
+						$this->params->set('page_heading', $contentItem->title);
 					}
 				}
 
