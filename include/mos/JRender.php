@@ -297,6 +297,9 @@ $this->item->title = '****';*/
 						$this->params->set('show_page_heading', 1);
 						$this->params->set('page_heading', $contentItem->title);
 					}
+/*$this->item->created = $contentItem->published;
+$this->item->params->set('show_create_date', 1);
+debug($contentItem->published);*/
 				}
 
 				$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
