@@ -184,8 +184,9 @@ class PageManager extends Core
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
-	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
-	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メイン型" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メイン型ウィジェット)
+	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー型)
+	const POS_HEAD_MAIN = '<i class="glyphicon glyphicon-stop" rel="m3help" title="メイン型" data-placement="auto"></i> ';		// 特殊ポジションブロック(メイン型)
+	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-stop" rel="m3help" title="メイン型" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メイン型ウィジェット)
 	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
 	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型テンプレート対応" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_FUNCTION_MARK_WORDPRESS = ' <span class="label label-warning" rel="m3help" title="WordPress型テンプレート対応" data-placement="auto">W</span>';			// ウィジェット機能マーク(WordPress型テンプレート
@@ -5047,7 +5048,11 @@ class PageManager extends Core
 				$posHead = '';
 				// ナビゲーション型のポジションの場合はアイコン付加
 				//if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
-				if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+				if ($style == self::WIDGET_STYLE_NAVMENU){
+					$posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加(ナビゲーションメニュー型)
+				} else if (strcasecmp($position, 'main') == 0){
+					$posHead = self::POS_HEAD_MAIN;		// 特殊ポジションブロックのアイコン付加(メイン型)
+				}
 				$contents .= '<div id="' . $viewPosId . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 				$contents .= '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
 				
@@ -5475,7 +5480,11 @@ class PageManager extends Core
 									
 					// ウィジェット一覧外枠
 					$posHead = '';
-					if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					if ($style == self::WIDGET_STYLE_NAVMENU){
+						$posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加(ナビゲーションメニュー型)
+					} else if (strcasecmp($position2, 'main') == 0){
+						$posHead = self::POS_HEAD_MAIN;		// 特殊ポジションブロックのアイコン付加(メイン型)
+					}
 					//if (strcasecmp($position2, 'user3') == 0 || strcasecmp($position2, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position2 . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position2 . '</h2>' . M3_NL;
@@ -5498,7 +5507,11 @@ class PageManager extends Core
 					
 					// ウィジェット一覧外枠
 					$posHead = '';
-					if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+					if ($style == self::WIDGET_STYLE_NAVMENU){
+						$posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加(ナビゲーションメニュー型)
+					} else if (strcasecmp($position, 'main') == 0){
+						$posHead = self::POS_HEAD_MAIN;		// 特殊ポジションブロックのアイコン付加(メイン型)
+					}
 					//if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
