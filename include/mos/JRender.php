@@ -292,11 +292,8 @@ $this->item->title = '****';*/
 					}
 					
 					// ##### Joomla!新型描画処理用(Joomla!1.5以上、Themler) #####
-					// ウィジェット側で設定したタイトルを使用の場合
-					if ($title == M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){
-						$this->params->set('show_page_heading', 1);
-						$this->params->set('page_heading', $contentItem->title);
-					}
+					$this->params->set('show_page_heading', 1);
+					$this->params->set('page_heading', $contentItem->title);
 /*$this->item->created = $contentItem->published;
 $this->item->params->set('show_create_date', 1);
 debug($contentItem->published);*/

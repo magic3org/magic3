@@ -257,8 +257,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				break;
 			case 10:			// 記事単体表示
 				// ### ウィジェットタイトルはデフォルトで非表示 ###
-				$this->title = M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END;
-				
+//				$this->title = M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END;			// 仕様変更(2018/2//25)
+
 				$avatarFormat = $this->gInstance->getImageManager()->getDefaultAvatarFormat();		// 画像フォーマット取得
 				$this->gInstance->getImageManager()->parseImageFormat($avatarFormat, $imageType, $imageAttr, $this->avatarSize);		// 画像情報取得
 		
@@ -334,6 +334,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		if (!empty($entryRow)){		// 記事レコードがあるとき
+			$this->title = $entryRow['be_name'];			// ウィジェット用画面タイトル(仕様追加 2018/2/25)
 			$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
 		}
 		
