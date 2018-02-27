@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -262,6 +262,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'installdata':	// データインストール
 						case 'dbbackup':	// DBバックアップ
 						case 'dbcondition':	// DB状況
+						case self::TASK_DB_ACCESSLOG:			// DBアクセスログ
 						case 'serverenv':	// サーバ環境
 						case 'configsys':	// システム設定
 						case 'configlang':	// 言語設定
