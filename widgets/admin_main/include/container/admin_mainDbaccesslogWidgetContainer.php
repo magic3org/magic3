@@ -16,11 +16,13 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_analyzeDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_tableDb.php');
 
 class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $analyzeDb;
+	private $tableDb;
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const DEFAULT_STR_NOT_CALC = '未集計';		// 未集計時の表示文字列
 	
@@ -35,6 +37,7 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// DBオブジェクト作成
 		$this->db = new admin_mainDb();
 		$this->analyzeDb = new admin_analyzeDb();
+		$this->tableDb = new admin_tableDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -63,6 +66,14 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 	{
 		$act = $request->trimValueOf('act');
 
+		if ($act == 'dellog'){		// アクセスログ削除処理のとき
+			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, 'アクセスログを削除しました');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'アクセスログ削除に失敗しました');
+			}
+		}
+		
 		// 最終集計日取得
 		$lastDateCalcPv = $this->analyzeDb->getStatus(self::CF_LAST_DATE_CALC_PV);		// ページビュー集計最終更新日
 		if (empty($lastDateCalcPv)){
@@ -71,6 +82,10 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$lastDateCalcPv = $this->convertToDispDate($lastDateCalcPv);		// 最終集計日
 		}
 		$this->tmpl->addVar("_widget", "lastdate_pv", $lastDateCalcPv);
+		
+		// レコード数取得
+		$rowCount = $this->tableDb->getTableDataListCount('_access_log');
+		$this->tmpl->addVar('_widget', 'row_count', $this->convertToDispString($rowCount));
 		
 		// ディスク使用量取得
 		$diskByte = $this->gInstance->getDbManager()->getTableDataSize('_access_log');
