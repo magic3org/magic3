@@ -67,10 +67,22 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$act = $request->trimValueOf('act');
 
 		if ($act == 'dellog'){		// アクセスログ削除処理のとき
-			if ($ret){
-				$this->setMsg(self::MSG_GUIDANCE, 'アクセスログを削除しました');
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, 'アクセスログ削除に失敗しました');
+			// 最初の未集計日を取得
+			$lastDate = $this->analyzeDb->getStatus(self::CF_LAST_DATE_CALC_PV);		// ページビュー集計最終更新日
+			
+			if (empty($lastDate)) $this->setUserErrorMsg('集計が終了していません');
+			
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				// 集計開始日を求める
+				$startDt = date("Y/m/d", strtotime("$lastDate 1 day"));		// 翌日
+
+				$ret = $this->analyzeDb->delAccessLog($startDt);
+				if ($ret){
+					$this->setMsg(self::MSG_GUIDANCE, 'アクセスログを削除しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'アクセスログ削除に失敗しました');
+				}
 			}
 		}
 		

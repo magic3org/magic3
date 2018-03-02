@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -39,6 +39,19 @@ class admin_analyzeDb extends BaseDb
 		$queryStr  = 'SELECT * FROM _access_log ';
 		$queryStr .=   'WHERE al_serial = ?';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}
+	/**
+	 * アクセスログを削除
+	 *
+	 * @param timestamp	$startDt	最初の未集計日
+	 * @return						true=成功、false=失敗
+	 */
+	function delAccessLog($startDt)
+	{
+		$queryStr = 'DELETE FROM _access_log WHERE al_dt < ?';
+		$params = array($startDt);
+		$ret = $this->execStatement($queryStr, $params);
 		return $ret;
 	}
 	/**
