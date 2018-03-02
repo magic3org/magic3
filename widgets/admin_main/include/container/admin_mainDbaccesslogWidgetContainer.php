@@ -78,11 +78,13 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$lastDateCalcPv = $this->analyzeDb->getStatus(self::CF_LAST_DATE_CALC_PV);		// ページビュー集計最終更新日
 		if (empty($lastDateCalcPv)){
 			$lastDateCalcPv = self::DEFAULT_STR_NOT_CALC;
+			
+			$this->tmpl->addVar('_widget', 'del_log_button_disabled', 'disabled');		// ログ削除ボタンは使用不可
 		} else {
 			$lastDateCalcPv = $this->convertToDispDate($lastDateCalcPv);		// 最終集計日
 		}
 		$this->tmpl->addVar("_widget", "lastdate_pv", $lastDateCalcPv);
-		
+			
 		// レコード数取得
 		$rowCount = $this->tableDb->getTableDataListCount('_access_log');
 		$this->tmpl->addVar('_widget', 'row_count', $this->convertToDispString($rowCount));
