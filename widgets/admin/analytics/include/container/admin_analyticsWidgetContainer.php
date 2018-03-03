@@ -140,10 +140,19 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 			$showGraph = true;		// グラフを表示
 		} else {
 			// データの先頭の日付を求める
-			$ret = $this->db->getOldAccessLog($row);
+/*			$ret = $this->db->getOldAccessLog($row);
 			if ($ret){		// 集計対象のデータが存在するとき
 				$logStartDate = date("Y-m-d", strtotime($row['al_dt']));
+			}*/
+			// サイト解析ページビューの先頭のデータを取得
+			$ret = $this->db->getOldPageView($row);
+			if ($ret){
+				$logStartDate = date("Y-m-d", strtotime($row['ap_date']));
+			} else {			// 未集計の場合はアクセスログの先頭から日付を取得
+				$ret = $this->db->getOldAccessLog($row);
+				if ($ret) $logStartDate = date("Y-m-d", strtotime($row['al_dt']));
 			}
+			
 			switch ($this->termType){
 				case '10day':
 					$startDate = date("Y-m-d", strtotime("$endDate -10 day"));			// 10日前

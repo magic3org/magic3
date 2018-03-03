@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -117,11 +117,20 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 			$this->tmpl->setAttribute('show_graph', 'visibility', 'hidden');		// グラフ非表示
 			$this->tmpl->setAttribute('draw_graph', 'visibility', 'hidden');		// グラフ非表示
 		} else {
-			// データの先頭の日付を求める
+/*			// データの先頭の日付を求める
 			$ret = $this->db->getOldAccessLog($row);
 			if ($ret){		// 集計対象のデータが存在するとき
 				$logStartDate = date("Y/m/d", strtotime($row['al_dt']));
+			}*/
+			// サイト解析ページビューの先頭のデータを取得
+			$ret = $this->db->getOldPageView($row);
+			if ($ret){
+				$logStartDate = date("Y-m-d", strtotime($row['ap_date']));
+			} else {			// 未集計の場合はアクセスログの先頭から日付を取得
+				$ret = $this->db->getOldAccessLog($row);
+				if ($ret) $logStartDate = date("Y-m-d", strtotime($row['al_dt']));
 			}
+			
 			switch ($this->termType){
 				case '30day':
 					$startDate = date("Y/m/d", strtotime("$endDate -30 day"));			// 30日前

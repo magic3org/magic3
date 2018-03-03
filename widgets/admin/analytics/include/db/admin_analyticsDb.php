@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_analyticsDb.php 4889 2012-04-26 22:29:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -34,6 +34,24 @@ class admin_analyticsDb extends BaseDb
 		
 		$queryStr  = 'SELECT * FROM _access_log ';
 		$queryStr .=   'WHERE al_serial = ?';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}
+	/**
+	 * 最も古いサイト解析ページビューを取得
+	 *
+	 * @param array  	$row		取得レコード
+	 * @param bool					true=成功、false=失敗
+	 */
+	function getOldPageView(&$row)
+	{
+		$serial = 0;
+		$queryStr  = 'SELECT min(ap_serial) as m FROM _analyze_page_view ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $serial = $row['m'];
+		
+		$queryStr  = 'SELECT * FROM _analyze_page_view ';
+		$queryStr .=   'WHERE ap_serial = ?';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
 	}

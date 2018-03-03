@@ -42,6 +42,24 @@ class admin_analyzeDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 最も古いサイト解析ページビューを取得
+	 *
+	 * @param array  	$row		取得レコード
+	 * @param bool					true=成功、false=失敗
+	 */
+	function getOldPageView(&$row)
+	{
+		$serial = 0;
+		$queryStr  = 'SELECT min(ap_serial) as m FROM _analyze_page_view ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $serial = $row['m'];
+		
+		$queryStr  = 'SELECT * FROM _analyze_page_view ';
+		$queryStr .=   'WHERE ap_serial = ?';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}
+	/**
 	 * アクセスログを削除
 	 *
 	 * @param timestamp	$startDt	最初の未集計日
