@@ -2415,7 +2415,8 @@ class admin_mainDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
-		$queryStr = 'SELECT * FROM _access_log LEFT JOIN _login_user on al_user_id = lu_id ';
+//		$queryStr = 'SELECT * FROM _access_log LEFT JOIN _login_user on al_user_id = lu_id ';
+		$queryStr = 'SELECT al_serial,al_uri,al_ip,al_user_agent,al_accept_language,al_dt,lu_name,lu_avatar FROM _access_log LEFT JOIN _login_user on al_user_id = lu_id ';
 		if (!is_null($path)){
 			$queryStr .=  'WHERE al_path = ? ';
 			$params[] = $path;
