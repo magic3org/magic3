@@ -2461,7 +2461,8 @@ class admin_mainDb extends BaseDb
 	function getAccessLogCount($path, $startDt, $endDt, $ip)
 	{
 		$params = array();
-		$queryStr = 'SELECT * FROM _access_log ';
+//		$queryStr = 'SELECT * FROM _access_log ';
+		$queryStr = 'SELECT COUNT(al_serial) AS ct FROM _access_log ';
 		if (!is_null($path)){
 			$queryStr .=  'WHERE al_path = ? ';
 			$params[] = $path;
@@ -2492,7 +2493,14 @@ class admin_mainDb extends BaseDb
 			}
 			$params[] = $ip;
 		}
-		return $this->selectRecordCount($queryStr, $params);
+//		return $this->selectRecordCount($queryStr, $params);
+		$ret = $this->selectRecord($queryStr, $params, $row);
+		if ($ret){
+			$count = $row['ct'];
+		} else {
+			$count = 0;
+		}
+		return $count;
 	}
 	/**
 	 * アクセスログの取得
