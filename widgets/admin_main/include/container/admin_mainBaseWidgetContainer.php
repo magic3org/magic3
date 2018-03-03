@@ -33,7 +33,7 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_TEMPIMAGE_DETAIL	= 'tempimage_detail';		// テンプレート画像編集(詳細)
 	const TASK_TEMPGENERATECSS			= 'tempgeneratecss';			// テンプレートCSS生成
 	const TASK_TEMPGENERATECSS_DETAIL	= 'tempgeneratecss_detail';		// テンプレートCSS生成(詳細)
-	const TASK_DB_ACCESSLOG		= 'dbaccesslog';			// DBアクセスログ
+	const TASK_DB_ACCESSLOG		= 'dbaccesslog';			// DB管理アクセスログ
 	const TASK_TEST						= 'test';						// テスト画面
 	
 	/**

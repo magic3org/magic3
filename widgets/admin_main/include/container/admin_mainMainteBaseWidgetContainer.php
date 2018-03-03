@@ -32,7 +32,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
 	const TASK_INSTALLDATA		= 'installdata';	// データインストール
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
-	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
+//	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
 	const TASK_INITWIZARD		= 'initwizard';		// 管理画面カスタムウィザード
 	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
@@ -132,9 +132,9 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'DB管理';
 				$titles[] = 'バックアップ';
 				break;
-			case self::TASK_DBCONDITION:	// DB状況
+			case self::TASK_DB_ACCESSLOG:	// DB管理アクセスログ
 				$titles[] = 'DB管理';
-				$titles[] = '状況';
+				$titles[] = 'アクセスログ';
 				break;
 			case self::TASK_INITWIZARD:		// 管理画面カスタムウィザード
 				$titles[] = '管理画面設定';
@@ -241,7 +241,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'active'	=> (
 														$task == self::TASK_INSTALLDATA ||	// データインストール
 														$task == self::TASK_DBBACKUP ||			// DBバックアップ
-														$task == self::TASK_DBCONDITION			// DB状況
+														$task == self::TASK_DB_ACCESSLOG			// DB管理アクセスログ
 													),
 									'submenu'	=> array(
 										(Object)array(
@@ -263,12 +263,12 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 															)
 										),
 										(Object)array(
-											'name'		=> '状況',
-											'task'		=> self::TASK_DBCONDITION,
+											'name'		=> 'アクセスログ',
+											'task'		=> self::TASK_DB_ACCESSLOG,
 											'url'		=> '',
 											'tagid'		=> '',
 											'active'	=> (
-																$task == self::TASK_DBCONDITION		// DB状況
+																$task == self::TASK_DB_ACCESSLOG		// DB管理アクセスログ
 															)
 										)
 									)
