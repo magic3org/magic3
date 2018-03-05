@@ -19,7 +19,15 @@ function delLog(){
 	// 処理中ダイアログ表示
 	m3ShowProcessModal();
 	
-	document.main.act.value='dellog';
+	document.main.act.value = 'dellog';
+	document.main.submit();
+	return true;
+}
+function downloadLog(){
+alert('aaa');
+	if (!window.confirm('アクセスログをダウンロードしますか?')) return false;
+	
+	document.main.act.value = 'download';
 	document.main.submit();
 	return true;
 }
@@ -43,7 +51,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th>レコード数 /<br />ディスク使用量</th>
-	    <td><div class="form-control-static">{ROW_COUNT} 行 / {SIZE_ACCESS_LOG} バイト</div></td>
+	    <td><div class="form-control-static m3config_inline_item col-sm-8">{ROW_COUNT} 行 / {SIZE_ACCESS_LOG} バイト</div><div class="m3config_item col-sm-4 text-right" style="padding-top:3px;padding-bottom:3px;">{DOWNLOAD_BUTTON}</div></td>
 	</tr>
     </tbody>
 </table>

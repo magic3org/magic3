@@ -815,7 +815,7 @@ span[rel="m3help"] { cursor: default; }
 .m3config_table td .m3config_item.justify-3:nth-child(3n+1) {
 	padding-left: 0;
 }
-.m3config_item.form-control-static {
+.m3config_item.form-control-static {	/* ラベル用 */
 	padding-left: 3px;
 	padding-right: 3px;
 	white-space: nowrap;

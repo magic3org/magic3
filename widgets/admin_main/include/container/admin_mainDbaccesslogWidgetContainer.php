@@ -104,6 +104,11 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// ディスク使用量取得
 		$diskByte = $this->gInstance->getDbManager()->getTableDataSize('_access_log');
 		$this->tmpl->addVar("_widget", "size_access_log", convFromBytes($diskByte));
+		
+		// ボタン作成
+		$eventAttr = 'onclick="downloadLog();"';
+		$downloadButtonTag = $this->gDesign->createDownloadButton(''/*同画面*/, 'ダウンロード', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/, $downloadDisabled/*ボタン使用可否*/);
+		$this->tmpl->addVar('_widget', 'download_button', $downloadButtonTag);
 	}
 }
 ?>
