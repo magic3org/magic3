@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -271,6 +271,18 @@ class DbManager extends Core
 	function backupDb($filename)
 	{
 		$ret = $this->specificDb->backupDb($filename);
+		return $ret;
+	}
+	/**
+	 * データベーステーブルをバックアップ
+	 *
+	 * @param string $tableName		テーブル名
+	 * @param string $filename		バックアップファイル名
+	 * @return bool					true=正常、false=異常
+	 */
+	function backupTable($tableName, $filename)
+	{
+		$ret = $this->specificDb->backupTable($tableName, $filename);
 		return $ret;
 	}
 	/**

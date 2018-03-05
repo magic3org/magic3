@@ -25,6 +25,8 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 	private $tableDb;
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const DEFAULT_STR_NOT_CALC = '未集計';		// 未集計時の表示文字列
+	const BACKUP_FILENAME_HEAD = 'backup_';
+	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
 	
 	/**
 	 * コンストラクタ
@@ -83,6 +85,32 @@ class admin_mainDbaccesslogWidgetContainer extends admin_mainMainteBaseWidgetCon
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'アクセスログ削除に失敗しました');
 				}
+			}
+		} else if ($act == 'download'){		// ファイルダウンロードのとき
+			// ダウンロード時のファイル名
+			$downloadFilename = self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
+						
+			// タイムアウトを停止
+			$this->gPage->setNoTimeout();
+			
+			// バックアップ作成
+			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
+			$ret = $this->gInstance->getDbManager()->backupTable(self::TABLE_NAME_ACCESS_LOG, $tmpFile);
+			if ($ret){
+				// ページ作成処理中断
+				$this->gPage->abortPage();
+				
+				// ダウンロード処理
+				$ret = $this->gPage->downloadFile($tmpFile, $downloadFilename, true/*実行後ファイル削除*/);
+				
+				// システム強制終了
+				$this->gPage->exitSystem();
+			} else {
+				$msg = 'バックアップファイルの作成に失敗しました';
+				$this->setAppErrorMsg($msg);
+				
+				// テンポラリファイル削除
+				unlink($tmpFile);
 			}
 		}
 		

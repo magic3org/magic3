@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -92,6 +92,33 @@ class specificDb extends BaseDb
 		switch ($dbType){
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
 				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
+				$ret = $this->_procExec($cmd);
+				if ($ret == 0){
+					$ret = true;
+				} else {
+					$ret = false;
+				}
+				break;
+			case M3_DB_TYPE_PGSQL:		// PostgreSQLの場合
+
+				break;
+		}
+		return $ret;
+	}
+	/**
+	 * データベーステーブルをバックアップ
+	 *
+	 * @param string $tableName		テーブル名
+	 * @param string $filename		バックアップファイル名
+	 * @return bool					true=正常、false=異常
+	 */
+	function backupTable($tableName, $filename)
+	{
+		$ret = false;
+		$dbType = $this->getDbType();
+		switch ($dbType){
+			case M3_DB_TYPE_MYSQL:		// MySQLの場合
+				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
