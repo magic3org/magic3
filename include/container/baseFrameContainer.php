@@ -1371,8 +1371,70 @@ class BaseFrameContainer extends Core
 		ob_end_flush();
 	}
 	/**
-	 * 以下、Joomla!v1.5テンプレート専用
+	 * WordPressテンプレートの起動ファイルパスを相対パスに変換
+	 *
+	 * @param string $templateId	テンプレートID
+	 * @param string $path			テンプレートの起動ファイル絶対パス
+	 * @return string				テンプレート内での相対パス。エラー発生の場合はデフォルト(index.php)を返す。
 	 */
+	function _getRelativeTemplateIndexPath($templateId, $path)
+	{
+		$savedPath = $path;
+		$templatePath = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/';
+		
+		// テンプレートまでのパスを削除
+		$path = str_replace($templatePath, '', $path);
+		if ($path == $savedPath) $path = M3_FILENAME_INDEX;
+		return $path;
+	}
+	/**
+	 * 旧システムディレクトリが存在するかどうかを取得
+	 *
+	 * @return bool				true=存在する、false=存在しない
+	 */
+	function _isExistsOldSystemDir()
+	{
+		// 旧システムディレクトリは同ディレクト階層に存在し、ディレクトリ名の先頭に「_」が付加されているディレクトリ
+		$currentDir = $this->gEnv->getSystemRootPath();
+		$parentDir = dirname($currentDir);
+		$dirName = basename($currentDir);
+		
+		// ##### open_basedir等のアクセス制限が掛かっていてディレクトリが見えない場合はis_dir()はfalseを返す #####
+		// 親ディレクトリへのアクセス権をチェック
+		if (@is_dir($parentDir)){
+			if (@is_dir($parentDir . '/_' . $dirName)){
+				return true;
+			} else {
+				return false;
+			}
+		} else {		// 親ディレクトリへのアクセス権がない場合は旧システムが存在すると判断する
+			return true;
+		}
+	}
+	/**
+	 * PHPファイルを読み込み、定義値をグローバル値に変換する
+	 *
+	 * @param string $path		ファイルパス
+	 * @return bool				true=ファイル読み込み完了、false=ファイル読み込み失敗
+	 */
+	function _loadFileAsGlobal($path)
+	{
+		if (file_exists($path)){
+			include($path);
+			
+			// グローバル変数に変換
+			$vars = get_defined_vars();
+			foreach($vars as $varName => $varValue){
+				if (!isset($GLOBALS[$varName])) $GLOBALS[$varName] = $varValue;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/***********************************************************************************
+	 * 以下、Joomla!v1.5テンプレート専用
+	 ***********************************************************************************/
 	/**
 	 * ウィジェット数を取得
 	 *
@@ -1462,66 +1524,65 @@ class BaseFrameContainer extends Core
 		}
 	}
 	/**
-	 * WordPressテンプレートの起動ファイルパスを相対パスに変換
+	 * Adds a linked stylesheet to the page
 	 *
-	 * @param string $templateId	テンプレートID
-	 * @param string $path			テンプレートの起動ファイル絶対パス
-	 * @return string				テンプレート内での相対パス。エラー発生の場合はデフォルト(index.php)を返す。
-	 */
-	function _getRelativeTemplateIndexPath($templateId, $path)
-	{
-		$savedPath = $path;
-		$templatePath = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/';
-		
-		// テンプレートまでのパスを削除
-		$path = str_replace($templatePath, '', $path);
-		if ($path == $savedPath) $path = M3_FILENAME_INDEX;
-		return $path;
-	}
-	/**
-	 * 旧システムディレクトリが存在するかどうかを取得
+	 * @param   string  $url      URL to the linked style sheet
+	 * @param   array   $options  Array of options. Example: array('version' => 'auto', 'conditional' => 'lt IE 9')
+	 * @param   array   $attribs  Array of attributes. Example: array('id' => 'stylesheet', 'data-test' => 1)
 	 *
-	 * @return bool				true=存在する、false=存在しない
+	 * @return  JDocument instance of $this to allow chaining
+	 *
+	 * @since   11.1
+	 * @deprecated 4.0  The (url, mime, media, attribs) method signature is deprecated, use (url, options, attributes) instead.
 	 */
-	function _isExistsOldSystemDir()
+	public function addStyleSheet($url, $options = array(), $attribs = array())
 	{
-		// 旧システムディレクトリは同ディレクト階層に存在し、ディレクトリ名の先頭に「_」が付加されているディレクトリ
-		$currentDir = $this->gEnv->getSystemRootPath();
-		$parentDir = dirname($currentDir);
-		$dirName = basename($currentDir);
-		
-		// ##### open_basedir等のアクセス制限が掛かっていてディレクトリが見えない場合はis_dir()はfalseを返す #####
-		// 親ディレクトリへのアクセス権をチェック
-		if (@is_dir($parentDir)){
-			if (@is_dir($parentDir . '/_' . $dirName)){
-				return true;
-			} else {
-				return false;
+		// B/C before 3.7.0
+		if (is_string($options))
+		{
+			JLog::add('The addStyleSheet method signature used has changed, use (url, options, attributes) instead.', JLog::WARNING, 'deprecated');
+
+			$argList = func_get_args();
+			$options = array();
+			$attribs = array();
+
+			// Old mime type parameter.
+			if (!empty($argList[1]))
+			{
+				$attribs['type'] = $argList[1];
 			}
-		} else {		// 親ディレクトリへのアクセス権がない場合は旧システムが存在すると判断する
-			return true;
-		}
-	}
-	/**
-	 * PHPファイルを読み込み、定義値をグローバル値に変換する
-	 *
-	 * @param string $path		ファイルパス
-	 * @return bool				true=ファイル読み込み完了、false=ファイル読み込み失敗
-	 */
-	function _loadFileAsGlobal($path)
-	{
-		if (file_exists($path)){
-			include($path);
-			
-			// グローバル変数に変換
-			$vars = get_defined_vars();
-			foreach($vars as $varName => $varValue){
-				if (!isset($GLOBALS[$varName])) $GLOBALS[$varName] = $varValue;
+
+			// Old media parameter.
+			if (isset($argList[2]) && $argList[2])
+			{
+				$attribs['media'] = $argList[2];
 			}
-			return true;
-		} else {
-			return false;
+
+			// Old attribs parameter.
+			if (isset($argList[3]) && $argList[3])
+			{
+				$attribs = array_replace($attribs, $argList[3]);
+			}
 		}
+
+		// Default value for type.
+		if (!isset($attribs['type']) && !isset($attribs['mime']))
+		{
+			$attribs['type'] = 'text/css';
+		}
+
+		$this->_styleSheets[$url] = isset($this->_styleSheets[$url]) ? array_replace($this->_styleSheets[$url], $attribs) : $attribs;
+
+		if (isset($this->_styleSheets[$url]['options']))
+		{
+			$this->_styleSheets[$url]['options'] = array_replace($this->_styleSheets[$url]['options'], $options);
+		}
+		else
+		{
+			$this->_styleSheets[$url]['options'] = $options;
+		}
+
+		return $this;
 	}
 }
 ?>
