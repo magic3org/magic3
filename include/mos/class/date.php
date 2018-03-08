@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-//defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') or die;
 
 /**
  * JDate is a class that stores a date and provides logic to manipulate
