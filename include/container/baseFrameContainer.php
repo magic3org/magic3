@@ -1016,6 +1016,15 @@ class BaseFrameContainer extends Core
 			// WordPressオブジェクト作成。wpイベント実行。
 			wp();
 		} else if ($convType >= 1){		// Joomla!v1.5,v2.5テンプレートのとき
+			// Joomla!テンプレート共通の設定
+			define('_JEXEC', 1);
+			define('JPATH_PLATFORM', $this->gEnv->getJoomlaRootPath());
+			define('JPATH_BASE', dirname(__FILE__));
+			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
+			define('JPATH_PLUGINS', $this->gEnv->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
+//			define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
+			define('DS', DIRECTORY_SEPARATOR);
+			
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み
 			require_once($this->gEnv->getJoomlaRootPath() . '/JParameter.php');
@@ -1033,16 +1042,8 @@ class BaseFrameContainer extends Core
 			// テンプレートヘッダ画像上のテキスト設定(Joomla!テンプレート2.5以降)
 			$params->set('siteTitle',		$this->gEnv->getSiteName());		// サイト名
 			$params->set('siteSlogan',		$this->gSystem->getSiteDef(M3_TB_FIELD_SITE_SLOGAN));		// サイトスローガン
-			
-			// Joomla!テンプレート共通の設定
-			define('_JEXEC', 1);
-						
+
 			// Joomla!v1.5用の設定
-			define('JPATH_BASE', dirname(__FILE__));
-			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
-			define('JPATH_PLUGINS', $this->gEnv->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
-//			define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
-			define('DS', DIRECTORY_SEPARATOR);
 			$this->language = $this->gEnv->getCurrentLanguage();
 			$this->template = $curTemplate;
 			//$this->baseurl  = $this->gEnv->getRootUrl();

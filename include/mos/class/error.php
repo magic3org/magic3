@@ -172,8 +172,10 @@ abstract class JError
 //		jimport('joomla.error.exception');
 
 		// Build error object
-		$exception = new JException($msg, $code, $level, $info, $backtrace);
-		return JError::throwError($exception);
+//		$exception = new JException($msg, $code, $level, $info, $backtrace);
+//		return JError::throwError($exception);
+		// ##### エラーメッセージをログ出力 #####
+		debug($msg . ' code=' . $code);
 	}
 
 	/**
