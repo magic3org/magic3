@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -86,6 +86,13 @@ class JParameter
 		
 		$value = $this->get($key);
 		return $value;
+	}
+}
+abstract class JLoader
+{
+	public static function import($key, $base = null)
+	{
+		return true;
 	}
 }
 class JUser
