@@ -338,11 +338,15 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 									if ($ret){
 										// テンプレートを新規登録
 										$ret = $this->addNewTemplate(intval($this->templateType), $templateId);
-							
-										//$msg = 'ファイルのアップロードが完了しました(テンプレートID：' . $templateId . ')';
-										$msg = sprintf($this->_('File uploaded. (template ID: %s)'), $templateId);		// ファイルのアップロードが完了しました(テンプレートID: %s)
-										$this->setGuidanceMsg($msg);
-										$this->newTemplate[] = $templateId;
+										if ($ret){
+											//$msg = 'ファイルのアップロードが完了しました(テンプレートID：' . $templateId . ')';
+											$msg = sprintf($this->_('File uploaded. (template ID: %s)'), $templateId);		// ファイルのアップロードが完了しました(テンプレートID: %s)
+											$this->setGuidanceMsg($msg);
+											$this->newTemplate[] = $templateId;
+										} else {
+											// 新規登録失敗の場合はディレクトリを削除
+											rmDirectory($destTemplateDir);
+										}
 									} else {
 										//$msg = 'ディレクトリの移動に失敗しました(ディレクトリ：' . $destTemplateDir . ')';
 										$msg = sprintf($this->_('Failed in moving directory. (directory: %s)'), $destTemplateDir);// ディレクトリの移動に失敗しました(ディレクトリ：%s)
@@ -723,7 +727,14 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$version = '';			// テンプレートバージョン
 		$infoUrl = '';			// テンプレート情報リンク
 		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $id;			// テンプレートディレクトリ
-				
+		
+		// テンプレートかどうかのエラーチェック
+		if (!file_exists($templateDir . '/index.php')){			// index.phpがなければエラー
+			$msg = $this->_('Upload file is not the correct template format.');		// アップロードしたファイルは正しいテンプレートフォーマットではありません。
+			$this->setAppErrorMsg($msg);
+			return false;
+		}
+		
 		// テンプレートの種別を判定
 		switch ($type){
 			case '0':		// PC用テンプレート
@@ -759,8 +770,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 					}
 				} else {
 					// 設定ファイルがない場合はWordPressテンプレートかどうかチェック
-					$content = file_get_contents($templateDir . '/header.php');
-					if (empty($content)) $content = file_get_contents($templateDir . '/index.php');		// Themlerテンプレート対応
+					$content = @file_get_contents($templateDir . '/header.php');
+					if (empty($content)) $content = @file_get_contents($templateDir . '/index.php');		// Themlerテンプレート対応
 					$ret = $this->isWordpressTemplate($content);
 					if ($ret) $templType = 100;		// WordPress型
 				}
