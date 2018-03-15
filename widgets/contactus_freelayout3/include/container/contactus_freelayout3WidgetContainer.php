@@ -8,7 +8,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -117,6 +117,10 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$userEmailSubject = $targetObj->userEmailSubject;				// 入力ユーザ向けメールタイトル
 		$userEmailFormat = $targetObj->userEmailFormat;				// 入力ユーザ向けメール本文フォーマット
 		$baseTemplate = $targetObj->baseTemplate;		// 入力エリア作成用ベーステンプレート
+		$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
+		$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
+		$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
+		$accessKey = $targetObj->accessKey;		// 生成アクセスキー
 		$this->css		= $targetObj->css;		// CSS
 		$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
 		$this->sendButtonId = $targetObj->sendButtonId;		// 送信ボタンのタグID
@@ -231,7 +235,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 
 				// エラーなしの場合は送信画面へ遷移
 				if ($this->getMsgCount() == 0){
-					$this->setGuidanceMsg('入力内容をご確認の上「送信」ボタンを押してください');
+					$msg = $msgConfirm;			// 確認画面メッセージ
+					if (empty($msg)) $msg = '入力内容をご確認の上「送信」ボタンを押してください';
+					$this->setGuidanceMsg($msg);
 				
 					// 項目を入力不可に設定
 					$inputEnabled = false;			// 入力の許可状態
@@ -348,7 +354,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 
 				// エラーなしの場合はメール送信
 				if ($this->getMsgCount() == 0){
-					$this->setGuidanceMsg('送信完了しました');
+					$msg = $msgComplete;			// 完了画面メッセージ
+					if (empty($msg)) $msg = '送信完了しました';
+					$this->setGuidanceMsg($msg);
 				
 					// メール送信設定のときはメールを送信
 					if ($sendMessage){
@@ -448,7 +456,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					$inputEnabled = false;			// 入力の許可状態
 
 					// 送信ステータスを更新
-					$sendStatus = 2;
+					$sendStatus = 2;		// 送信完了
 					
 					$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 				} else {		// 送信時入力エラーの場合は初期画面に戻す
@@ -510,6 +518,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->uploaderScript = '';		// ファイルアップローダ用スクリプト
 		$this->uploaderResetScript = '';	// ファイルアップローダ初期化用スクリプト
 		$fieldOutput = $this->createFieldOutput($baseTemplate, $inputEnabled);
+		if ($sendStatus == 2){			// 送信完了の場合は完了画面コンテンツを付加
+			if (!empty($contentComplete)) $fieldOutput = '<div>' . $contentComplete . '</div>' . $fieldOutput;
+		}
 		$this->tmpl->addVar("_widget", "field_output", $fieldOutput);// お問い合わせ入力項目データ
 		$this->tmpl->addVar("_widget", "field_count", $fieldCount);// お問い合わせ項目数
 		$this->tmpl->addVar("_widget", "add_script", $this->addScript);// 追加スクリプト
@@ -994,15 +1005,6 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	 */
 	function getImage()
 	{
-/*		// 画像パス作成
-		switch ($type){
-		case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
-			$filename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
-			break;
-		}
-		$imagePath = '';
-		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
-			*/
 		// ページ作成処理中断
 		$this->gPage->abortPage();
 

@@ -8,7 +8,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -177,6 +177,10 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$uploadMaxCount = $request->trimValueOf('item_upload_max_count');		// アップロードファイル最大数
 		$uploadFileExtension = $request->trimValueOf('item_upload_file_extension');		// アップロード可能なファイルの拡張子
 		$uploadArea = $request->valueOf('item_upload_area');		// ファイルアップロードエリア
+		$msgConfirm = $request->trimValueOf('item_msg_confirm');		// 確認画面メッセージ
+		$msgComplete = $request->trimValueOf('item_msg_complete');		// 完了画面メッセージ
+		$contentComplete = $request->valueOf('item_content_complete');		// 完了画面コンテンツ
+		$accessKey = $request->trimValueOf('item_access_key');		// 生成アクセスキー
 		
 		// 入力データを取得
 		$this->fieldInfoArray = array();
@@ -247,6 +251,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
 			$this->checkInput($uploadFileExtension, 'アップロード可能なファイルの拡張子');
 		
+			// 生成アクセスキー
+			$this->checkSingleByte($accessKey, '生成アクセスキー', true);
+		
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// ファイルアップロードエリアが空のときはデフォルトを取得
@@ -277,7 +284,11 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->uploadFileExtension = $uploadFileExtension;	// アップロード可能なファイルの拡張子
 				$newObj->uploadArea = $uploadArea;		// ファイルアップロードエリア
 				$newObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
-				
+				$newObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
+				$newObj->msgComplete = $msgComplete;		// 完了画面メッセージ
+				$newObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
+				$newObj->accessKey = $accessKey;		// 生成アクセスキー
+		
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -325,6 +336,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
 			$this->checkInput($uploadFileExtension, 'アップロード可能なファイルの拡張子');
 			
+			// 生成アクセスキー
+			$this->checkSingleByte($accessKey, '生成アクセスキー', true);
+			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// ファイルアップロードエリアが空のときはデフォルトを取得
 				if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();
@@ -355,6 +369,10 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->uploadFileExtension = $uploadFileExtension;	// アップロード可能なファイルの拡張子
 					$targetObj->uploadArea = $uploadArea;		// ファイルアップロードエリア
 					$targetObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
+					$targetObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
+					$targetObj->msgComplete = $msgComplete;		// 完了画面メッセージ
+					$targetObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
+					$targetObj->accessKey = $accessKey;		// 生成アクセスキー
 				}
 				
 				// 設定値を更新
@@ -396,7 +414,11 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$uploadFileExtension = self::UPLOAD_FILE_EXTENSION;		// アップロード可能なファイルの拡張子
 				$uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
 				$this->fieldInfoArray = array();			// お問い合わせ項目情報
-				
+				$msgConfirm = '';		// 確認画面メッセージ
+				$msgComplete = '';		// 完了画面メッセージ
+				$contentComplete = '';		// 完了画面コンテンツ
+				$accessKey = '';		// 生成アクセスキー
+					
 				// デフォルトのテンプレート作成
 				$tagHead = $this->createTagIdHead();
 				$this->confirmButtonId = $tagHead . '_confirm';		// 確認ボタンのタグID
@@ -435,6 +457,10 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
 					$uploadArea = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $uploadArea);				// アプリケーションルートを変換
 					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせ項目情報
+					$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
+					$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
+					$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
+					$accessKey = $targetObj->accessKey;		// 生成アクセスキー
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -481,7 +507,11 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		$this->tmpl->addVar('_widget', 'tag_start', M3_TAG_START . M3_TAG_MACRO_ITEM_KEY);		// 置換タグ(前)
 		$this->tmpl->addVar('_widget', 'tag_end', M3_TAG_END);		// 置換タグ(後)
-		
+		$this->tmpl->addVar('_widget', 'msg_confirm', $this->convertToDispString($msgConfirm));		// 確認画面メッセージ
+		$this->tmpl->addVar('_widget', 'msg_complete', $this->convertToDispString($msgComplete));		// 完了画面メッセージ
+		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
+		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 生成アクセスキー
+
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン

@@ -5,7 +5,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -95,80 +95,30 @@ function listItem(){
 // お問い合わせ項目を追加
 function addLine()
 {
-var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td style="text-align:center;"><span class="m3drag_rowno"></span></td>';
-lineText += '<td style="vertical-align:top;">';
-lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
-lineText += '<hr class="border" />';
-lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div>';
-lineText += '</td>';
-lineText += '<td style="vertical-align:top;">';
-lineText += '<input type="text" name="item_desc[]" maxlength="100" />';
-lineText += '<hr class="border" />';
-lineText += '<div class="form-group clearfix"><input type="text" name="item_def[]" maxlength="500" /></div>';
-lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" maxlength="60" /></div></div>';
-lineText += '<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" />半角数値</label></div></div>';
-lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" maxlength="1" /></div></div>';
-lineText += '<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" maxlength="60" /></div>';
-lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
-lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
-lineText += '</td>';
-lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
-lineText += '</tr>';
-		
-/*	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
-	lineText += '<td valign="top"><input type="text" name="item_title[]" maxlength="60" style="width:70%;" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示<br />';
-	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list11"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
-	lineText += '&nbsp;&nbsp;<input type="checkbox" name="item_required[]" class="required" />必須</td>';
-	lineText += '<td><input type="text" name="item_desc[]" maxlength="100" style="width:100%;" /><br /><input type="text" name="item_def[]" maxlength="500" style="width:75%;" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />';
-	lineText += 'デフォルト：<input type="text" name="item_default[]" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" />半角数値<br />';
-	lineText += 'フィールドID：<input type="text" name="item_field_id[]" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</td>';
-	lineText += '<td align="center"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-	*/
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td style="text-align:center;"><span class="m3drag_rowno"></span></td>';
+	lineText += '<td style="vertical-align:top;">';
+	lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
+	lineText += '<hr class="border" />';
+	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div>';
+	lineText += '</td>';
+	lineText += '<td style="vertical-align:top;">';
+	lineText += '<input type="text" name="item_desc[]" maxlength="100" />';
+	lineText += '<hr class="border" />';
+	lineText += '<div class="form-group clearfix"><input type="text" name="item_def[]" maxlength="500" /></div>';
+	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" maxlength="60" /></div></div>';
+	lineText += '<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" />半角数値</label></div></div>';
+	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" maxlength="1" /></div></div>';
+	lineText += '<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" maxlength="60" /></div>';
+	lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
+	lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
+	lineText += '</td>';
+	lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
+	lineText += '</tr>';
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
-//	setupList();
 	m3SetDragDropTable('field_list', reorder_callback);
 }
-/*
-function setupList()
-{
-	$("#field_list").tableDnD({
-		onDrop: function(table, row){
-			setupNo();
-		},
-		dragHandle: ".m3drag_handle"
-	});
-	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('m3drag_current');
-	}, function() {
-		$(this.cells[0]).removeClass('m3drag_current');
-	});
-	// 画像項目削除処理
-	$("#field_list tr .m3drag_delrow").click(function(){
-		$(this).parents('.m3drag_row').remove();
-		setupNo();
-	});
-	// インデックスNo再設定
-	setupNo();
-	
-	// スタイル再設定
-	m3SetConfigSubTable('field_list');
-	
-	// HELP追加
-	m3SetHelp($("#field_list"));
-}*/
-/*function setupNo()
-{
-	// インデックスNo再設定
-	$("#field_list tr .m3drag_rowno").each(function(index){
-		$(this).text(index + 1);
-	});
-	$("#field_list tr .replaceTag").each(function(index){
-		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
-		$(this).val(replaceTag);
-	});
-}*/
 // 項目順変更時処理
 function reorder_callback()
 {
@@ -190,9 +140,9 @@ $(function(){
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300);
 	m3SetWysiwygEditor('item_upload_area', 100/* 高さ */);
-	
+	m3SetWysiwygEditor('item_content_complete', 150/* 高さ */);
+
 	// お問い合わせ項目部作成
-//	setupList();
 	m3SetDragDropTable('field_list', reorder_callback);
 });
 //]]>
@@ -286,8 +236,12 @@ $(function(){
 	    <td>{TAG_ID_STR}<input type="hidden" name="item_confirm_button" value="{CONFIRM_BUTTON}" /><input type="hidden" name="item_send_button" value="{SEND_BUTTON}" /><input type="hidden" name="item_cancel_button" value="{CANCEL_BUTTON}" /><input type="hidden" name="item_reset_button" value="{RESET_BUTTON}" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONTACTUS_TEMPLATE}>レイアウト</span></th>
+	    <th><span {_HELP_CONTACTUS_TEMPLATE}>本文レイアウト</span></th>
 	    <td class="ckeditor"><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_COMPLETE_CONTENT}>完了画面<br />コンテンツ</span></th>
+	    <td class="ckeditor"><textarea name="item_content_complete" rows="3">{CONTENT_COMPLETE}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTACTUS_CSS}>CSS</span></th>
@@ -296,6 +250,13 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONTACTUS_DESIGN}>デザイン</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_artisteer" {USE_ARTISTEER} />Artisteer対応(チェックボックス,ラジオボタン等)</label></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_MESSAGE}>メッセージ</span></th>
+	    <td>
+<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item">確認画面：</div><div class="col-sm-10 m3config_item" ><input type="text" class="form-control" name="item_msg_confirm" value="{MSG_CONFIRM}" maxlength="200" /></div></div>
+<div class="form-group last"><div class="form-control-static col-sm-2 m3config_item">完了画面：</div><div class="col-sm-10 m3config_item" ><input type="text" class="form-control" name="item_msg_complete" value="{MSG_COMPLETE}" maxlength="200" /></div></div>
 	    </td>
 	</tr>
     <tr>
@@ -334,6 +295,10 @@ $(function(){
 	</tr>
     <tr>
 	    <td class="ckeditor"><textarea name="item_upload_area">{UPLOAD_AREA}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_ACCESS_KEY}>生成アクセスキー</span></th>
+	    <td><input type="text" name="item_access_key" value="{ACCESS_KEY}" maxlength="60" /></td>
 	</tr>
     </tbody>
 </table>
