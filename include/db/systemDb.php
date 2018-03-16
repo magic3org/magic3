@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -4682,6 +4682,74 @@ class SystemDb extends BaseDb
 		$queryStr .=   'ORDER BY md_index';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
+	}
+	/**
+	 * セッションのアクセスキー情報を追加
+	 *
+	 * @param string $name			アクセスキー名
+	 * @param string $widgetId		ウィジェットID
+	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
+	 * @param ing    $accessType	アクセスタイプ(0=参照,1=発行)
+	 * @return bool					true=登録成功、false=登録失敗
+	 */
+	function addAccessKey($name, $widgetId, $contentId, $accessType)
+	{
+		global $gEnvManager;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'SELECT * FROM _session_access_key ';
+		$queryStr .= 'WHERE sk_id = ? ';
+		$queryStr .=   'AND sk_widget_id = ? ';
+		$queryStr .=   'AND sk_content_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($name, $widgetId, $contentId), $row);
+		if ($ret){
+			// トランザクション確定
+			$this->endTransaction();
+		
+			return false;			// 既に登録済みの場合は終了
+		}
+		
+		$queryStr  = 'INSERT INTO _session_access_key (';
+		$queryStr .=   'sk_id, ';
+		$queryStr .=   'sk_widget_id, ';
+		$queryStr .=   'sk_content_id, ';
+		$queryStr .=   'sk_type, ';
+		$queryStr .=   'sk_update_user_id, ';
+		$queryStr .=   'sk_update_dt ';
+		$queryStr .= ') VALUES (';
+		$queryStr .=   '?, ?, ?, ?, ?, ?';
+		$queryStr .= ')';
+		$ret = $this->execStatement($queryStr, array($name, $widgetId, $contentId, $accessType, $userId, $now));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * セッションのアクセスキー情報をすべて削除
+	 *
+	 * @param string $widgetId		ウィジェットID
+	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
+	 * @return bool					true=削除成功、false=削除失敗
+	 */
+	function delAllAccessKey($widgetId, $contentId)
+	{
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'DELETE FROM _session_access_key ';
+		$queryStr .= 'WHERE sk_widget_id = ? ';
+		$queryStr .=   'AND sk_content_id = ?';
+		$this->execStatement($queryStr, array($widgetId, $contentId));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
 	}
 }
 ?>

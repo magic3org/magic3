@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -3937,6 +3937,11 @@ class BaseWidgetContainer extends Core
 			if (count($delItems) > 0){
 				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->_localParamObj, $delItems);
 				if ($ret){		// データ削除成功のとき
+					// ##### アクセスキー情報を削除 #####
+					for ($i = 0; $i < count($delItems); $i++){
+						$this->gAccess->unegistAllSessionAccessKey($this->gEnv->getCurrentWidgetId(), $delItems[$i]);		// 一旦すべて削除
+					}
+
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');

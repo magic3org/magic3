@@ -828,5 +828,31 @@ class AccessManager extends Core
 			$this->gOpeLog->writeUserError(__METHOD__, $errMessage, 2200, $errMessageDetail);
 		}
 	}
+	/**
+	 * アクセス制御キー登録
+	 *
+	 * @param string $name			アクセスキー名
+	 * @param string $widgetId		ウィジェットID
+	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
+	 * @param ing    $accessType	アクセスタイプ(0=参照,1=発行)
+	 * @return bool					true=登録成功、false=登録失敗
+	 */
+	function registSessionAccessKey($name, $widgetId, $contentId, $accessType)
+	{
+		$ret = $this->db->addAccessKey($name, $widgetId, $contentId, $accessType);
+		return $ret;
+	}
+	/**
+	 * アクセス制御キーをすべて登録解除
+	 *
+	 * @param string $widgetId		ウィジェットID
+	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
+	 * @return bool					true=削除成功、false=削除失敗
+	 */
+	function unegistAllSessionAccessKey($widgetId, $contentId)
+	{
+		$ret = $this->db->delAllAccessKey($widgetId, $contentId);
+		return $ret;
+	}
 }
 ?>
