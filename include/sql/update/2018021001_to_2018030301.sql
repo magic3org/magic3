@@ -57,4 +57,19 @@ INSERT INTO _nav_item
 (10302, 10300,        1,        'admin_menu.en', 'configsys',          0,               true,       '',       '',               'System Information',         'System Information',         'Configure sytem information.'),
 (10303, 10300,        2,        'admin_menu.en', 'mainte',             0,               true,       '',       '',               'System Maintenance', 'System Maintenance', 'Maintenance about file system and database.');
 
+-- セッションアクセスキー管理マスター
+DROP TABLE IF EXISTS _session_access_key;
+CREATE TABLE _session_access_key (
+    sk_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    sk_id                VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- アクセスキー
+    sk_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID
+    sk_config_id         INT            DEFAULT 0                     NOT NULL,      -- ウィジェット定義ID
+
+    sk_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- アクセスキータイプ(0=参照,1=発行)
+    sk_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    sk_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    PRIMARY KEY          (sk_serial),
+    UNIQUE               (sk_id, sk_widget_id, sk_config_id)
+) ENGINE=innodb;
+
 -- *** システム標準テーブル ***

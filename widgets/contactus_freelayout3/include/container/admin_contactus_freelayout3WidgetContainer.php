@@ -180,7 +180,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$msgConfirm = $request->trimValueOf('item_msg_confirm');		// 確認画面メッセージ
 		$msgComplete = $request->trimValueOf('item_msg_complete');		// 完了画面メッセージ
 		$contentComplete = $request->valueOf('item_content_complete');		// 完了画面コンテンツ
-		$accessKey = $request->trimValueOf('item_access_key');		// 生成アクセスキー
+		$accessKey = $request->trimValueOf('item_access_key');		// 発行アクセスキー
 		
 		// 入力データを取得
 		$this->fieldInfoArray = array();
@@ -251,8 +251,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
 			$this->checkInput($uploadFileExtension, 'アップロード可能なファイルの拡張子');
 		
-			// 生成アクセスキー
-			$this->checkSingleByte($accessKey, '生成アクセスキー', true);
+			// 発行アクセスキー
+			$this->checkSingleByte($accessKey, '発行アクセスキー', true);
 		
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
@@ -287,7 +287,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
 				$newObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 				$newObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
-				$newObj->accessKey = $accessKey;		// 生成アクセスキー
+				$newObj->accessKey = $accessKey;		// 発行アクセスキー
 		
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
@@ -336,8 +336,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
 			$this->checkInput($uploadFileExtension, 'アップロード可能なファイルの拡張子');
 			
-			// 生成アクセスキー
-			$this->checkSingleByte($accessKey, '生成アクセスキー', true);
+			// 発行アクセスキー
+			$this->checkSingleByte($accessKey, '発行アクセスキー', true);
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// ファイルアップロードエリアが空のときはデフォルトを取得
@@ -372,7 +372,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
 					$targetObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 					$targetObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
-					$targetObj->accessKey = $accessKey;		// 生成アクセスキー
+					$targetObj->accessKey = $accessKey;		// 発行アクセスキー
 				}
 				
 				// 設定値を更新
@@ -417,7 +417,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$msgConfirm = '';		// 確認画面メッセージ
 				$msgComplete = '';		// 完了画面メッセージ
 				$contentComplete = '';		// 完了画面コンテンツ
-				$accessKey = '';		// 生成アクセスキー
+				$accessKey = '';		// 発行アクセスキー
 					
 				// デフォルトのテンプレート作成
 				$tagHead = $this->createTagIdHead();
@@ -460,7 +460,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
 					$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
 					$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
-					$accessKey = $targetObj->accessKey;		// 生成アクセスキー
+					$accessKey = $targetObj->accessKey;		// 発行アクセスキー
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -510,7 +510,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar('_widget', 'msg_confirm', $this->convertToDispString($msgConfirm));		// 確認画面メッセージ
 		$this->tmpl->addVar('_widget', 'msg_complete', $this->convertToDispString($msgComplete));		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
-		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 生成アクセスキー
+		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 発行アクセスキー
 
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
