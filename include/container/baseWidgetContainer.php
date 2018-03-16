@@ -3939,7 +3939,7 @@ class BaseWidgetContainer extends Core
 				if ($ret){		// データ削除成功のとき
 					// ##### アクセスキー情報を削除 #####
 					for ($i = 0; $i < count($delItems); $i++){
-						$this->gAccess->unegistAllSessionAccessKey($this->gEnv->getCurrentWidgetId(), $delItems[$i]);		// 一旦すべて削除
+						$this->gAccess->unegistAllSessionAccessKey($delItems[$i]);		// 一旦すべて削除
 					}
 
 					$this->setGuidanceMsg('データを削除しました');

@@ -292,8 +292,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
 					// ##### アクセスキー情報を登録 #####
-					$this->gAccess->unegistAllSessionAccessKey($this->gEnv->getCurrentWidgetId(), $defConfigId);		// 一旦すべて削除
-					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $this->gEnv->getCurrentWidgetId(), $defConfigId, 1/*発行*/);
+					$this->gAccess->unegistAllSessionAccessKey($defConfigId);		// 一旦すべて削除
+					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $defConfigId, 1/*発行*/);
 					
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -383,8 +383,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ##### アクセスキー情報を登録 #####
-					$this->gAccess->unegistAllSessionAccessKey($this->gEnv->getCurrentWidgetId(), $defConfigId);		// 一旦すべて削除
-					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $this->gEnv->getCurrentWidgetId(), $defConfigId, 1/*発行*/);
+					$this->gAccess->unegistAllSessionAccessKey($defConfigId);		// 一旦すべて削除
+					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $defConfigId, 1/*発行*/);
 					
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データ再取得

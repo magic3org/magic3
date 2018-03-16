@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -832,27 +832,52 @@ class AccessManager extends Core
 	 * アクセス制御キー登録
 	 *
 	 * @param string $name			アクセスキー名
-	 * @param string $widgetId		ウィジェットID
 	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
 	 * @param ing    $accessType	アクセスタイプ(0=参照,1=発行)
 	 * @return bool					true=登録成功、false=登録失敗
 	 */
-	function registSessionAccessKey($name, $widgetId, $contentId, $accessType)
+	function registSessionAccessKey($name, $contentId, $accessType)
 	{
-		$ret = $this->db->addAccessKey($name, $widgetId, $contentId, $accessType);
+		$ret = $this->db->addAccessKey($name, $this->gEnv->getCurrentWidgetId(), $contentId, $accessType);
 		return $ret;
 	}
 	/**
 	 * アクセス制御キーをすべて登録解除
 	 *
-	 * @param string $widgetId		ウィジェットID
 	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
 	 * @return bool					true=削除成功、false=削除失敗
 	 */
-	function unegistAllSessionAccessKey($widgetId, $contentId)
+	function unegistAllSessionAccessKey($contentId)
 	{
-		$ret = $this->db->delAllAccessKey($widgetId, $contentId);
+		$ret = $this->db->delAllAccessKey($this->gEnv->getCurrentWidgetId(), $contentId);
 		return $ret;
+	}
+	/**
+	 * アクセス制御キーを作成
+	 *
+	 * @param string $name			アクセスキー名
+	 * @param string $contentId		コンテンツID。コンテンツがない場合はウィジェット定義ID。
+	 * @return bool					true=作成成功、false=作成失敗
+	 */
+	function generateSessionAccessKey($name, $contentId)
+	{
+		global $gRequestManager;
+				
+		$gRequestManager->setSessionValue(M3_SESSION_ACCESS_KEY . $name, $this->gEnv->getCurrentWidgetId() . M3_WIDGET_ID_SEPARATOR . $contentId);		// ウィジェットID,コンテンツIDを格納
+		return true;
+	}
+	/**
+	 * アクセス制御キーを取得
+	 *
+	 * @param string $name			アクセスキー名
+	 * @return string				アクセスキー値
+	 */
+	function getSessionAccessKey($name)
+	{
+		global $gRequestManager;
+		
+		$value = $gRequestManager->getSessionValue(M3_SESSION_ACCESS_KEY . $name);
+		return $value;
 	}
 }
 ?>
