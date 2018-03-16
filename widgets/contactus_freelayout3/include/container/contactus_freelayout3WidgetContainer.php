@@ -120,7 +120,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
 		$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
 		$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
-		$accessKey = $targetObj->accessKey;		// 生成アクセスキー
+		$accessKey = $targetObj->accessKey;		// 発行アクセスキー
 		$this->css		= $targetObj->css;		// CSS
 		$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
 		$this->sendButtonId = $targetObj->sendButtonId;		// 送信ボタンのタグID
@@ -452,6 +452,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 							}
 						}
 					}
+					// ##### アクセスキーが設定されている場合はアクセスキーを発行 #####
+					if (!empty($accessKey)) $this->gAccess->generateSessionAccessKey($accessKey, $configId/*コンテンツIDまたはウィジェット定義ID*/);
+					
 					// 項目を入力不可に設定
 					$inputEnabled = false;			// 入力の許可状態
 
