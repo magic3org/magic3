@@ -61,7 +61,7 @@ INSERT INTO _nav_item
 DROP TABLE IF EXISTS _session_access_key;
 CREATE TABLE _session_access_key (
     sk_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    sk_id                VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- アクセスキー
+    sk_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- アクセスキー
     sk_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID
 	sk_content_id        VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID。コンテンツがない場合はウィジェット定義ID。
 
@@ -73,3 +73,7 @@ CREATE TABLE _session_access_key (
 ) ENGINE=innodb;
 
 -- *** システム標準テーブル ***
+
+-- 汎用コンテンツマスター
+ALTER TABLE content ADD cn_attach_access_key       VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- 添付ファイルアクセスキー
+ALTER TABLE content ADD cn_attach_access_url       TEXT                                         NOT NULL;      -- 添付ファイルアクセスキー取得用URL
