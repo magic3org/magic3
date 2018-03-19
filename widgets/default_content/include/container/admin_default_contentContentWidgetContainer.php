@@ -196,6 +196,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 
 				if ($ret){		// データ削除成功のとき
+					// ##### アクセスキー情報を削除 #####
+					for ($i = 0; $i < count($delContentInfo); $i++){
+						$infoObj = $delContentInfo[$i];
+						$this->gAccess->unegistAllSessionAccessKey($infoObj->contentId);		// 一旦すべて削除
+					}
+					
 					$this->setGuidanceMsg('データを削除しました');
 					
 					// キャッシュデータのクリア
@@ -458,7 +464,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 
 				if ($ret){
+					// ##### アクセスキー情報を登録 #####
+					$this->gAccess->unegistAllSessionAccessKey($contentId);		// 一旦すべて削除
+					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $contentId, 0/*参照*/);
+					
 					$this->setGuidanceMsg('データを追加しました');
+					
 					// シリアル番号更新
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -569,7 +580,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				if ($ret){
+					// ##### アクセスキー情報を登録 #####
+					$this->gAccess->unegistAllSessionAccessKey($contentId);		// 一旦すべて削除
+					if (!empty($accessKey)) $this->gAccess->registSessionAccessKey($accessKey, $contentId, 0/*参照*/);
+					
 					$this->setGuidanceMsg('データを更新しました');
+					
 					// シリアル番号更新
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -641,6 +657,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				if ($ret){		// データ削除成功のとき
+					// ##### アクセスキー情報を削除 #####
+					$this->gAccess->unegistAllSessionAccessKey($contentId);		// 一旦すべて削除
+					
 					$this->setGuidanceMsg('データを削除しました');
 					$reloadData = true;		// データの再読み込み
 					
@@ -655,7 +674,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					if ($this->isMultiLang && $this->langId != $this->gEnv->getDefaultLanguage()) $contentAttr .= $this->getLangName($this->langId);		// 多言語対応の場合
 					//$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_CONTENT,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->contentId,
+										//	M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->contentId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $contentId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
 					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $name), 2402, 'ID=' . $contentId, $eventParam);
 				} else {
