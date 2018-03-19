@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -62,6 +62,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
 	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
+	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	
 	/**
 	 * コンストラクタ
@@ -322,6 +323,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$jQueryScript = $request->valueOf('item_jquery_script');	// jQueryスクリプト
 		$this->templateId	= $request->trimValueOf('templateid');	// テンプレートID
 		$this->subTemplateId = $request->trimValueOf('subtemplateid');	// サブテンプレートID
+		$accessKey = $request->trimValueOf('item_access_key');		// アクセスキー
+		$accessUrl = $request->trimValueOf('item_access_url');		// アクセスキー取得用URL
+		$accessUrl = str_replace($this->gEnv->getRootUrl(), M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $accessUrl);// マクロ変換
 		
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
 		if (!empty($start_date)) $start_date = $this->convertToProperDate($start_date);
@@ -388,6 +392,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
+			// アクセスキーのチェック
+			$this->checkSingleByte($accessKey, 'アクセスキー', true);
+			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -416,13 +423,16 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				// 追加パラメータ
-				$otherParams = array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+				$otherParams =	array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'cn_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'cn_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
 										'cn_script'				=> $jQueryScript,	// jQueryスクリプト
 										'cn_script_lib'			=> implode(',', $this->selectedPlugin),// jQueryプラグイン
 										'cn_template_id'		=> $this->templateId,		// テンプレートID
-										'cn_sub_template_id'	=> $this->subTemplateId);	// サブテンプレートID
+										'cn_sub_template_id'	=> $this->subTemplateId,	// サブテンプレートID
+										'cn_attach_access_key'	=> $accessKey,		// アクセスキー
+										'cn_attach_access_url'	=> $accessUrl		// アクセスキー取得用URL
+								);
 				
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $nextContentId * (-1)/*次のコンテンツIDのチェック*/,
@@ -487,6 +497,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
+			// アクセスキーのチェック
+			$this->checkSingleByte($accessKey, 'アクセスキー', true);
+			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -512,13 +525,16 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 
 				// 追加パラメータ
-				$otherParams = array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+				$otherParams =	array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'cn_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'cn_option_fields'		=> $this->serializeArray($this->fieldValueArray),	// ユーザ定義フィールド値
 										'cn_script'				=> $jQueryScript,	// jQueryスクリプト
 										'cn_script_lib'			=> implode(',', $this->selectedPlugin),			// jQueryプラグイン
 										'cn_template_id'		=> $this->templateId,		// テンプレートID
-										'cn_sub_template_id'	=> $this->subTemplateId);	// サブテンプレートID
+										'cn_sub_template_id'	=> $this->subTemplateId,	// サブテンプレートID
+										'cn_attach_access_key'	=> $accessKey,		// アクセスキー
+										'cn_attach_access_url'	=> $accessUrl		// アクセスキー取得用URL
+								);
 										
 				// 履歴からのデータ取得の場合はシリアル番号を最新に変更
 				$mode = $request->trimValueOf('mode');			// データ更新モード
@@ -807,6 +823,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (!empty($row['cn_script_lib'])) $this->selectedPlugin = explode(',', $row['cn_script_lib']);		// jQueryプラグイン
 				$this->templateId	= $row['cn_template_id'];	// テンプレートID
 				$this->subTemplateId = $row['cn_sub_template_id'];	// サブテンプレートID
+				$accessKey = $row['cn_attach_access_key'];		// アクセスキー
+				$accessUrl = $row['cn_attach_access_url'];		// アクセスキー取得用URL
 				
 				// パスワード
 				if (!empty($row['cn_password'])) $hasPassword = true;		// パスワードが設定されている
@@ -863,6 +881,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$this->selectedPlugin = array();		// jQueryプラグイン
 				$this->templateId	= '';	// テンプレートID
 				$this->subTemplateId = '';	// サブテンプレートID
+				$accessKey = '';		// アクセスキー
+				$accessUrl = '';		// アクセスキー取得用URL
 				
 				// パスワード
 				$hasPassword = false;		// パスワードが設定されている
@@ -935,6 +955,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 //		$uploadUrl .= '&path=' . $this->adaptWindowsPath($path);					// アップロードディレクトリ
 		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 		
+		// アクセスキー取得用URLを実URLに変換
+		$accessUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $accessUrl);		// マクロ展開
+		
 		// jQueryスクリプト、プラグイン一覧作成
 		if ($useJQuery){
 			// デフォルト言語のみ入力可能
@@ -978,7 +1001,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		if ($hasPassword) $this->tmpl->addVar("_widget", "password", self::DEFAULT_PASSWORD);// 入力済みを示すパスワードの設定
 		$this->tmpl->addVar("_widget", "related_content", $this->convertToDispString($relatedContent));	// 関連コンテンツ
 		$this->tmpl->addVar("show_jquery", "jquery_script", $this->convertToDispString($jQueryScript));	// jQueryスクリプト
-
+		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// アクセスキー
+		$this->tmpl->addVar('_widget', 'access_url', $this->convertToDispString($accessUrl));		// アクセスキー取得用URL
+				
 		// 項目表示、項目利用可否チェックボックス
 /*		$visibleStr = '';
 		if ($visible) $visibleStr = 'checked';
@@ -996,7 +1021,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);		// 選択中のシリアル番号
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用
 		$this->tmpl->addVar("_widget", "device_type", default_contentCommonDef::$_deviceType);		// デバイスタイプ
-			
+
 		// パスの設定
 		$this->tmpl->addVar('_widget', 'admin_url', $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理者URL
 
@@ -1029,6 +1054,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
+		
+		// リンクボタン作成
+		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);
+		$this->tmpl->addVar("_widget", "tagid_change_url", self::CHANGE_URL_TAG_ID);		// URL変更タグ
 		
 		// 拡張エリア制御
 		if ($this->isOpenOptionArea){

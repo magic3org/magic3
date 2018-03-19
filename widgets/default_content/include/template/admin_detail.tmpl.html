@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -208,10 +208,24 @@ function setStatusColor(){
 		$('#status_field').removeClass('success').addClass('warning');
 	}
 }
+// 作成リンク取得用
+function setLinkUrl(url)
+{
+	$('#item_access_url').val(url);
+}
+// URL作成
+function createUrl()
+{
+	m3CreateLinkUrl(0, '', setLinkUrl);
+}
 $(function(){
 	// 編集中の離脱を防止
 	m3SetSafeContentEdit();
 	
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
+	// テーブルを作成
 	m3SetConfigTable('mainconfig');
 	
 	// スクリプト編集エリア
@@ -302,6 +316,11 @@ $(function(){
 	
 	// 画像アップローダー作成
 	createUploader();
+	
+	// URL変更ボタン
+	$("#{TAGID_CHANGE_URL}").click(function (){		// デフォルトURL
+		createUrl();
+	});
 });
 //]]>
 </script>
@@ -464,7 +483,7 @@ $(function(){
 	</tr>
 </patTemplate:tmpl>
  	<tr class="option_area" style="display:none;">
-	    <th><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></th>
+	    <th rowspan="3"><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></th>
 	    <td colspan="3">
 	    <!--<table id="attach_file_list" class="simple-table simple-table-inner">-->
             <table id="attach_file_list" class="table table-condensed table-bordered table-striped">
@@ -483,6 +502,14 @@ $(function(){
 	    </tbody></table>
 	    <div id="file-uploader"></div>
 	    </td>
+	</tr>
+	<tr class="option_area" style="display:none;">
+	    <th><span {_HELP_CONTENT_ACCESS_KEY}>アクセスキー</span></th>
+	    <td colspan="2"><input type="text" name="item_access_key" class="form-control" value="{ACCESS_KEY}" maxlength="20" /></td>
+	</tr>
+	<tr class="option_area" style="display:none;">
+	    <th><span {_HELP_CONTENT_ACCESS_URL}>キー取得URL</span><div class="pull-right">{CHANGE_URL_BUTTON}</div></th>
+	    <td colspan="2"><input type="text" id="item_access_url" name="item_access_url" class="form-control" value="{ACCESS_URL}" size="60" maxlength="200" /></td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
