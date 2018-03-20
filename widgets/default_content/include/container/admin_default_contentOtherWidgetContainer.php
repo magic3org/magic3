@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_default_contentOtherWidgetContainer.php 5893 2013-04-01 13:27:22Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('default_content') . '/admin_default_contentBaseWidgetContainer.php');
@@ -67,6 +67,7 @@ class admin_default_contentOtherWidgetContainer extends admin_default_contentBas
 		$layoutViewDetail = $request->valueOf('item_layout_view_detail');					// コンテンツレイアウト(詳細表示)
 		$outputHead	= ($request->trimValueOf('item_output_head') == 'on') ? 1 : 0;		// ヘッダ出力するかどうか
 		$headViewDetail = $request->valueOf('item_head_view_detail');					// ヘッダ出力(詳細表示)
+		$autoGenerateAttachFileList = $request->trimValueOf('item_auto_generate_attach_file_list');	// 添付ファイルリストを自動作成
 		
 		// デバイスタイプごとの処理
 		if (default_contentCommonDef::$_deviceType == 2){		// スマートフォンの場合
@@ -96,11 +97,10 @@ class admin_default_contentOtherWidgetContainer extends admin_default_contentBas
 				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_USE_CONTENT_TEMPLATE, $useContentTemplate);// コンテンツ単位のテンプレート設定を行うかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_USE_PASSWORD, $usePassword);		// パスワードを使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_PASSWORD_CONTENT, $passwordContent);		// パスワード入力画面用コンテンツ
-				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_LAYOUT_VIEW_DETAIL, $layoutViewDetail);
-																												// コンテンツレイアウト(詳細表示)
-				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_OUTPUT_HEAD, $outputHead);		// ヘッダ出力するかどうか																								
-				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_HEAD_VIEW_DETAIL, $headViewDetail);
-																												// ヘッダ出力(詳細表示)
+				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_LAYOUT_VIEW_DETAIL, $layoutViewDetail);	// コンテンツレイアウト(詳細表示)
+				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_OUTPUT_HEAD, $outputHead);		// ヘッダ出力するかどうか																						
+				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_HEAD_VIEW_DETAIL, $headViewDetail);	// ヘッダ出力(詳細表示)
+				if ($ret) $ret = self::$_mainDb->updateConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::CF_AUTO_GENERATE_ATTACH_FILE_LIST, $autoGenerateAttachFileList);// 添付ファイルリストを自動作成
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -148,6 +148,7 @@ class admin_default_contentOtherWidgetContainer extends admin_default_contentBas
 			$layoutViewDetail = self::$_mainDb->getConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_LAYOUT_VIEW_DETAIL);		// コンテンツレイアウト(詳細表示)
 			$outputHead = self::$_mainDb->getConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_OUTPUT_HEAD);		// ヘッダ出力するかどうか
 			$headViewDetail = self::$_mainDb->getConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::$CF_HEAD_VIEW_DETAIL);		// ヘッダ出力(詳細表示)
+			$autoGenerateAttachFileList = self::$_mainDb->getConfig(default_contentCommonDef::$_contentType, default_contentCommonDef::CF_AUTO_GENERATE_ATTACH_FILE_LIST);		// 添付ファイルリストを自動作成
 		}
 		
 		// 画面に書き戻す
@@ -177,6 +178,11 @@ class admin_default_contentOtherWidgetContainer extends admin_default_contentBas
 		if (!empty($outputHead)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "output_head_checked", $checked);		// ヘッダ出力するかどうか
 		$this->tmpl->addVar("_widget", "head_view_detail", $headViewDetail);		// ヘッダ出力(詳細表示)
+		if (empty($autoGenerateAttachFileList)){		// 添付ファイルリストを自動作成するかどうか
+			$this->tmpl->addVar('_widget', 'auto_generate_list_user_checked', 'checked');		// ユーザが作成
+		} else {
+			$this->tmpl->addVar('_widget', 'auto_generate_list_auto_checked', 'checked');		// 自動生成
+		}
 		
 		// デバイスタイプごとの画面作成
 		switch (default_contentCommonDef::$_deviceType){

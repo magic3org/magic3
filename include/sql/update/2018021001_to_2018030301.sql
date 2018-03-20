@@ -73,6 +73,10 @@ CREATE TABLE _session_access_key (
 ) ENGINE=innodb;
 
 -- *** システム標準テーブル ***
+-- 汎用コンテンツ設定マスター
+INSERT INTO content_config
+(ng_type,      ng_id,              ng_value,                              ng_name) VALUES
+('',           'auto_generate_attach_file_list',      '1', '添付ファイルリストを自動作成');
 
 -- 汎用コンテンツマスター
 ALTER TABLE content ADD cn_attach_access_key       VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- 添付ファイルアクセスキー

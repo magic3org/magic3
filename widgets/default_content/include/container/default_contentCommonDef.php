@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_contentCommonDef.php 5894 2013-04-01 23:07:52Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
  
@@ -29,6 +29,7 @@ class default_contentCommonDef
 	static $CF_LAYOUT_VIEW_DETAIL	= 'layout_view_detail';			// コンテンツレイアウト(詳細表示)
 	static $CF_OUTPUT_HEAD			= 'output_head';		// ヘッダ出力するかどうか
 	static $CF_HEAD_VIEW_DETAIL		= 'head_view_detail';			// ヘッダ出力(詳細表示)
+	const CF_AUTO_GENERATE_ATTACH_FILE_LIST = 'auto_generate_attach_file_list';			// 添付ファイルリストを自動作成
 	
 	const CONTENT_WIDGET_ID = 'default_content';		// デフォルトの汎用コンテンツ編集ウィジェット
 	const ATTACH_FILE_DIR = '/etc/content';				// 添付ファイル格納ディレクトリ
