@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -192,7 +192,6 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				$contentId = $attachFileRow[af_content_id];		// コンテンツID
 				
 				// コンテンツへのアクセス可能状況をチェック
-				//self::$_mainDb->getContentItems(default_contentCommonDef::$_contentType, array($this, 'checkItemsLoop'), array($contentId), $this->gEnv->getCurrentLanguage(), $all, $now, false);
 				self::$_mainDb->getContentItems(default_contentCommonDef::$_contentType, array($this, 'checkItemsLoop'), array($contentId), $this->gEnv->getDefaultLanguage(), $all, $now, false);
 				if ($this->_contentCreated){		// コンテンツにアクセスできるとき
 					// パスワード入力のアクセス権はデフォルト言語でチェック
@@ -205,6 +204,10 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 							if (!is_array($this->sessionParamObj->authContentId) || !in_array($contentId, $this->sessionParamObj->authContentId)) $inputPassword = true;	// パスワード入力かどうか
 						}
 						if (!$inputPassword) $canDownload = true;		// ダウンロード可能
+						
+						// 添付ファイルへのアクセス情報を取得
+						$accessKey = $defaultContentRow['cn_attach_access_key'];		// アクセスキー
+						$accessUrl = $defaultContentRow['cn_attach_access_url'];		// アクセスキー取得用URL
 					}
 				}
 			}
@@ -212,32 +215,56 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			$this->gPage->abortPage();
 							
 			if ($canDownload){		// ダウンロード可能なとき
-				// 添付ファイル情報を取得
-				$downloadCompleted = false;				// ダウンロード処理完了かどうか
-				$contentSerial = $this->serialArray[0];		// アクセス可能なコンテンツのシリアル番号
-				$ret = $this->gInstance->getFileManager()->getAttachFileInfo(default_contentCommonDef::$_viewContentType, $contentSerial, $attachFileRows);
-				if ($ret){
-					for ($i = 0; $i < count($attachFileRows); $i++){
-						$fileRow = $attachFileRows[$i];
-						if ($fileId == $fileRow['af_file_id']){
-							$downloadFile = default_contentCommonDef::getAttachFileDir() . DIRECTORY_SEPARATOR . $fileId;
-							$downloadFilename = $fileRow['af_filename'];
-							if (empty($downloadFilename)) $downloadFilename = $fileRow['af_original_filename'];
+				// ##### 添付ファイルにアクセスキーが設定されている場合アクセス制御を行う #####
+				$canDownloadAttachFile = false;			// 添付ファイルダウンロード不可
+				$sessionAccessKey = '';
+				if (empty($accessKey)){
+					$canDownloadAttachFile = true;		// 添付ファイルダウンロード可
+				} else {
+					// セッションのアクセスキーを確認
+					$sessionAccessKey = $this->gAccess->getSessionAccessKey($accessKey);
+					if (!empty($sessionAccessKey)) $canDownloadAttachFile = true;		// 添付ファイルダウンロード可
+				}
+			
+				if ($canDownloadAttachFile){		// 添付ファイルダウンロード可能な場合
+					// 添付ファイル情報を取得
+					$downloadCompleted = false;				// ダウンロード処理完了かどうか
+					$contentSerial = $this->serialArray[0];		// アクセス可能なコンテンツのシリアル番号
+					$ret = $this->gInstance->getFileManager()->getAttachFileInfo(default_contentCommonDef::$_viewContentType, $contentSerial, $attachFileRows);
+					if ($ret){
+						for ($i = 0; $i < count($attachFileRows); $i++){
+							$fileRow = $attachFileRows[$i];
+							if ($fileId == $fileRow['af_file_id']){
+								$downloadFile = default_contentCommonDef::getAttachFileDir() . DIRECTORY_SEPARATOR . $fileId;
+								$downloadFilename = $fileRow['af_filename'];
+								if (empty($downloadFilename)) $downloadFilename = $fileRow['af_original_filename'];
 							
-							// ダウンロード処理
-							$ret = $this->gPage->downloadFile($downloadFile, $downloadFilename);
-							$downloadCompleted = true;				// ダウンロード処理完了かどうか
-							break;
+								// ダウンロード処理
+								$ret = $this->gPage->downloadFile($downloadFile, $downloadFilename);
+								$downloadCompleted = true;				// ダウンロード処理完了かどうか
+								break;
+							}
 						}
 					}
-				}
-				if ($downloadCompleted){		// ダウンロード処理完了のとき
-					// ダウンロードログを残す
-					$this->gInstance->getAnalyzeManager()->logContentDownload(default_contentCommonDef::$_viewContentType . default_contentCommonDef::DOWNLOAD_CONTENT_TYPE, $fileId);
-				} else {
-					$msgDetail = '';
-					if (!empty($contentId)) $msgDetail .= 'コンテンツID=' . $contentId;
-					$this->writeError(__METHOD__, '添付ファイルのダウンロードに失敗しました。添付ファイルが見つかりません。ファイルID=' . $fileId, 2200, $msgDetail);
+					if ($downloadCompleted){		// ダウンロード処理完了のとき
+						// ダウンロードログを残す
+						$this->gInstance->getAnalyzeManager()->logContentDownload(default_contentCommonDef::$_viewContentType . default_contentCommonDef::DOWNLOAD_CONTENT_TYPE, $fileId);
+					} else {
+						$msgDetail = '';
+						if (!empty($contentId)) $msgDetail .= 'コンテンツID=' . $contentId;
+						$this->writeError(__METHOD__, '添付ファイルのダウンロードに失敗しました。添付ファイルが見つかりません。ファイルID=' . $fileId, 2200, $msgDetail);
+					}
+				} else {		// 添付ファイルダウンロード不可の場合
+					// アクセスキー取得用のURLが設定されている場合はリダイレクト
+					if (empty($accessUrl)){		// アクセスキー取得用URLが設定されていない場合
+						$this->writeError(__METHOD__, '添付ファイルのアクセスキー取得用のURLが設定されていません。コンテンツID=' . $contentId, 2200);
+					} else {
+						$accessUrl = $this->getUrl($accessUrl, true/*リンク用*/);
+						//$this->gPage->redirect($accessUrl);
+						// ### キャッシュに残さない方法でリダイレクトする ###
+						$this->gPage->redirect($accessUrl, false, 303, false/*SSLは自動制御しない*/);
+						return;
+					}
 				}
 			} else {
 				// ダウンロード不可のときはエラーログを残す
@@ -476,6 +503,8 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	function itemsLoop($index, $fetchedRow)
 	{
 		$contentId = $fetchedRow['cn_id'];
+		$accessKey = $fetchedRow['cn_attach_access_key'];		// アクセスキー
+		$accessUrl = $fetchedRow['cn_attach_access_url'];		// アクセスキー取得用URL
 		
 		// ページタイトルの設定
 		if (empty($this->pageTitle)) $this->pageTitle = $fetchedRow['cn_name'];		// 画面タイトル、パンくずリスト用タイトル
@@ -580,12 +609,32 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_CONTENT, default_contentCommonDef::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);
 			}
 
+			// アクセスキーが設定されている場合アクセス制御を行う
+			$canDownloadAttachFile = false;			// 添付ファイルダウンロード不可
+			$sessionAccessKey = '';
+			if (empty($accessKey)){
+				$canDownloadAttachFile = true;		// 添付ファイルダウンロード可
+			} else {
+				// セッションのアクセスキーを確認
+				$sessionAccessKey = $this->gAccess->getSessionAccessKey($accessKey);
+				if (!empty($sessionAccessKey)) $canDownloadAttachFile = true;		// 添付ファイルダウンロード可
+			}
+			
 			// 添付ファイルダウンロード用リンク
 			$attachFileTag = '';
 			$attachContentSerial = $fetchedRow['cn_serial'];
 			if ($isDefaltContent) $attachContentSerial = $defaltContentRow['cn_serial'];
 			$ret = $this->gInstance->getFileManager()->getAttachFileInfo(default_contentCommonDef::$_viewContentType, $attachContentSerial, $attachFileRows);
 			if ($ret){
+				if (!$canDownloadAttachFile){			// ダウンロード不可のとき
+					// アクセスキー取得用URL
+					if (empty($accessUrl)){		// アクセスキー取得用URLが設定されていない場合
+						$this->writeError(__METHOD__, '添付ファイルのアクセスキー取得用のURLが設定されていません。コンテンツID=' . $contentId, 2200);
+					} else {
+						$accessUrl = $this->getUrl($accessUrl, true/*リンク用*/);
+					}
+				}
+				
 				$optionAttr = '';		// 追加属性
 				if ($this->jQueryMobileFormat) $optionAttr = 'rel="external"';			// jQueryMobile用のフォーマットで出力するかどうか
 				
@@ -595,12 +644,18 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 					if (empty($fileTitle)) $fileTitle = $attachFileRows[$i]['af_filename'];
 					
 					// ダウンロード用のリンク
-					$downloadUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
-					$downloadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-					$downloadUrl .= '&fileid=' . $attachFileRows[$i]['af_file_id'];
+					// 添付ファイルがダウンロードできない状態のときはアクセスキー取得用のURLへリンク
+					if ($canDownloadAttachFile){			// ダウンロード可能のとき
+						$downloadUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
+						$downloadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+						$downloadUrl .= '&fileid=' . $attachFileRows[$i]['af_file_id'];
+						$downloadUrl = $this->getUrl($downloadUrl);
+					} else {
+						$downloadUrl = $accessUrl;
+					}
 						
 					$attachFileTag .= '<li>' . $this->convertToDispString($fileTitle);
-					$attachFileTag .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($downloadUrl)) . '" ' . $optionAttr . '>';
+					$attachFileTag .= '<a href="' . $this->convertUrlToHtmlEntity($downloadUrl) . '" ' . $optionAttr . '>';
 					$attachFileTag .= '<img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ICON_FILE) . '" width="' . self::DOWNLOAD_ICON_SIZE . '" height="' . self::DOWNLOAD_ICON_SIZE . '" title="ダウンロード" alt="ダウンロード" style="border:none;margin:0;padding:0;vertical-align:text-top;" />';
 					$attachFileTag .= '</a></li>';
 				}
