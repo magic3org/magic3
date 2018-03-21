@@ -1041,7 +1041,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);		// 選択中のシリアル番号
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用
 		$this->tmpl->addVar("_widget", "device_type", default_contentCommonDef::$_deviceType);		// デバイスタイプ
-
+		$this->tmpl->addVar('_widget', 'tag_start', M3_TAG_START . M3_TAG_MACRO_ITEM_KEY);		// 置換タグ(前)
+		$this->tmpl->addVar('_widget', 'tag_end', M3_TAG_END);		// 置換タグ(後)
+		
 		// パスの設定
 		$this->tmpl->addVar('_widget', 'admin_url', $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理者URL
 
@@ -1071,7 +1073,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$iconTitle = '削除';
 		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		$this->tmpl->addVar('_widget', 'delete_icon', $iconTag);
-		
+
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
 		

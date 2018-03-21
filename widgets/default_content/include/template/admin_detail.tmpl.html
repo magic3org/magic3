@@ -180,12 +180,20 @@ function addAttachFile(fileid, filename)
 {
 	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
 	lineText += '<td><input type="text" name="item_filetitle[]" class="form-control" size="20" maxlength="60" /></td>';
-	lineText += '<td><input type="text" name="item_filename[]" class="form-control" size="30" maxlength="100" value="' + filename + '" /></td>';
+	lineText += '<td><div class="m3config_item col-sm-8"><input type="text" name="item_filename[]" class="form-control" size="30" maxlength="100" value="' + filename + '" /></div><div class="m3config_item col-sm-4 following"><input type="text" class="replaceTag" readonly /></div></td>';
 	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="m3drag_delrow" href="#">{DELETE_ICON}</a></td></tr>';
 	$('#attach_file_list').append(lineText);
 	
 	// 項目一覧を再設定
-	m3SetDragDropTable('attach_file_list');
+	m3SetDragDropTable('attach_file_list', reorder_callback);
+}
+// 項目順変更時処理
+function reorder_callback()
+{
+	$("#attach_file_list tr .replaceTag").each(function(index){
+		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
+		$(this).val(replaceTag);
+	});
 }
 function createUploader(){
 	var uploader = new qq.FileUploader({
@@ -312,7 +320,7 @@ $(function(){
 	});
 
 	// 添付ファイル項目一覧を初期化
-	m3SetDragDropTable('attach_file_list');
+	m3SetDragDropTable('attach_file_list', reorder_callback);
 	
 	// 画像アップローダー作成
 	createUploader();
@@ -488,14 +496,14 @@ $(function(){
 	    <!--<table id="attach_file_list" class="simple-table simple-table-inner">-->
             <table id="attach_file_list" class="table table-condensed table-bordered table-striped">
 	    <thead>
-	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">タイトル</th><th>ファイル名</th><th style="width:35px;">操作</th></tr>
+	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">タイトル</th><th>ファイル名 / 埋め込みタグ</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="attach_file_list">
             <tr class="m3drag_row">
 	    <td class="m3drag_handle"></td>
 	    <td align="center"><span class="m3drag_rowno"></span></td>
 	    <td><input type="text" name="item_filetitle[]" class="form-control" value="{TITLE}" size="20" maxlength="60" /></td>
-	    <td><input type="text" name="item_filename[]" class="form-control" value="{FILENAME}" size="30" maxlength="100" /></td>
+	    <td><div class="m3config_item col-sm-8"><input type="text" name="item_filename[]" class="form-control" value="{FILENAME}" size="30" maxlength="100" /></div><div class="m3config_item col-sm-4 following"><input type="text" class="replaceTag" readonly /></div></td>
 	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="m3drag_delrow" href="#">{DELETE_ICON}</a></td>
 	    </tr>
 	    </patTemplate:tmpl>
