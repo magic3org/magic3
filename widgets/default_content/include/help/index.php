@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -72,6 +72,13 @@ $HELP['content_limited']['title'] = 'ユーザ制限';
 $HELP['content_limited']['body'] = 'コンテンツの参照をログインしたユーザに限定するかどうかを設定します。チェックが入っているコンテンツはログインユーザだけが参照可能です。';
 $HELP['content_attach_file']['title'] = '添付ファイル';
 $HELP['content_attach_file']['body'] = 'コンテンツに添付するファイルを指定します。ファイルを追加するには、「ファイルアップロード」領域にファイルをドロップするか、クリックで表示したダイアログでファイルを選択します。';
+$HELP['content_access_key']['title'] = 'アクセスキー';
+$HELP['content_access_key']['body'] = '添付ファイルのダウンロードを制限するためにアクセスキーを設定することができます。セッションにアクセスキーが存在していれば添付ファイルはダウンロード可能になります。任意の英数文字列で設定します。';
+$HELP['content_access_url']['title'] = 'アクセスキー取得用URL';
+$HELP['content_access_url']['body'] = 'アクセスキーを発行できるページのURLを設定します。ページ上のウィジェットがアクセスキー発行に対応されている必要があります。発行側のウィジェットに上記のアクセスキーを登録します。';
+
+$HELP['content_filename_embed_tag']['title'] = 'ファイル名 / 埋め込みタグ';
+$HELP['content_filename_embed_tag']['body'] = '●ファイル名<br />ユーザがダウンロードしたときのファイル名です。<br />●埋め込みタグ<br />コンテンツに埋め込むと添付ファイルをダウンロードするためのリンクタグを生成します。';
 
 $HELP['content_buttons']['title'] = '操作ボタン';
 $HELP['content_buttons']['body'] = '新規 - 新規コンテンツを追加します。<br />編集 - 選択されているコンテンツを編集します。<br />コンテンツを選択するには、一覧の左端のチェックボックスにチェックを入れます。<br />削除ボタン - 選択されているコンテンツを削除します。<br />コンテンツを選択するには、一覧の左端のチェックボックスにチェックを入れます。';
