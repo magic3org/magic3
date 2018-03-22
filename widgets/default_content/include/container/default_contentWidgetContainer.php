@@ -40,6 +40,9 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	private $useJQuery;						// jQueryスクリプト作成を行うかどうか
 	private $headScript;	// HTMLヘッダに埋め込むJavascript
 	private $addLib = array();		// 追加スクリプトライブラリ
+	private $autoGenerateAttachFileList;		// 添付ファイルリストを自動作成するかどうか
+	private $attachFileRows;		// 添付ファイル情報(コンテンツ本文作成用)
+	private $attachFileDownloadUrl;			// 添付ファイルのリンク先URL
 	const DEFAULT_LIST_COUNT = 10;			// 最大リスト表示数
 	const DEFAULT_SEARCH_LIST_COUNT = 20;			// 最大リスト表示数(検索用)
 	const MESSAGE_NO_CONTENT		= 'コンテンツが見つかりません';
@@ -77,6 +80,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		$this->outputHead = self::$_configArray[default_contentCommonDef::$CF_OUTPUT_HEAD];			// ヘッダ出力するかどうか
 		$this->passwordFormCount = 0;		// パスワード入力フォーム数
 		$this->useJQuery = self::$_configArray[default_contentCommonDef::$CF_USE_JQUERY];			// jQueryスクリプトを作成するかどうか
+		$this->autoGenerateAttachFileList = self::$_configArray[default_contentCommonDef::CF_AUTO_GENERATE_ATTACH_FILE_LIST];		// 添付ファイルリストを自動作成するかどうか
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -564,8 +568,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			
 			$formName = '';
 			$funcName = '';
-			
-			$contentText = $fetchedRow['cn_html'];
+			$contentText = $fetchedRow['cn_html'];		// コンテンツ本文
 			
 			$accessPointUrl = '';		// コンテンツアクセスポイント
 			switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
@@ -638,28 +641,36 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				$optionAttr = '';		// 追加属性
 				if ($this->jQueryMobileFormat) $optionAttr = 'rel="external"';			// jQueryMobile用のフォーマットで出力するかどうか
 				
-				$attachFileTag .= '<ul>';
-				for ($i = 0; $i < count($attachFileRows); $i++){
-					$fileTitle = $attachFileRows[$i]['af_title'];
-					if (empty($fileTitle)) $fileTitle = $attachFileRows[$i]['af_filename'];
+				if (empty($this->autoGenerateAttachFileList)){		// 添付ファイルリストを自動作成しない場合
+					// ##### コンテンツ本文を解析して添付ファイルダウンロード用のリンクを埋め込む #####
+					$this->attachFileRows = $attachFileRows;		// 添付ファイル情報(コンテンツ本文作成用)
+					$this->attachFileDownloadUrl = $canDownloadAttachFile ? '' : $accessUrl;			// 添付ファイルのリンク先URL(ダウンロード不可時のみ設定)
+					$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_ITEM_KEY) . '(\d+?)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';			// オプションパラメータは「|」以降(2015/4/20変更)
+					$contentText = preg_replace_callback($pattern, array($this, '_replace_content_macro_callback'), $contentText);
+				} else {		// 添付ファイルリストを自動生成する場合
+					$attachFileTag .= '<ul>';
+					for ($i = 0; $i < count($attachFileRows); $i++){
+						$fileTitle = $attachFileRows[$i]['af_title'];
+						if (empty($fileTitle)) $fileTitle = $attachFileRows[$i]['af_filename'];
 					
-					// ダウンロード用のリンク
-					// 添付ファイルがダウンロードできない状態のときはアクセスキー取得用のURLへリンク
-					if ($canDownloadAttachFile){			// ダウンロード可能のとき
-						$downloadUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
-						$downloadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-						$downloadUrl .= '&fileid=' . $attachFileRows[$i]['af_file_id'];
-						$downloadUrl = $this->getUrl($downloadUrl);
-					} else {
-						$downloadUrl = $accessUrl;
-					}
+						// ダウンロード用のリンク
+						// 添付ファイルがダウンロードできない状態のときはアクセスキー取得用のURLへリンク
+						if ($canDownloadAttachFile){			// ダウンロード可能のとき
+							$downloadUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
+							$downloadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+							$downloadUrl .= '&fileid=' . $attachFileRows[$i]['af_file_id'];
+							$downloadUrl = $this->getUrl($downloadUrl);
+						} else {
+							$downloadUrl = $accessUrl;
+						}
 						
-					$attachFileTag .= '<li>' . $this->convertToDispString($fileTitle);
-					$attachFileTag .= '<a href="' . $this->convertUrlToHtmlEntity($downloadUrl) . '" ' . $optionAttr . '>';
-					$attachFileTag .= '<img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ICON_FILE) . '" width="' . self::DOWNLOAD_ICON_SIZE . '" height="' . self::DOWNLOAD_ICON_SIZE . '" title="ダウンロード" alt="ダウンロード" style="border:none;margin:0;padding:0;vertical-align:text-top;" />';
-					$attachFileTag .= '</a></li>';
+						$attachFileTag .= '<li>' . $this->convertToDispString($fileTitle);
+						$attachFileTag .= '<a href="' . $this->convertUrlToHtmlEntity($downloadUrl) . '" ' . $optionAttr . '>';
+						$attachFileTag .= '<img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ICON_FILE) . '" width="' . self::DOWNLOAD_ICON_SIZE . '" height="' . self::DOWNLOAD_ICON_SIZE . '" title="ダウンロード" alt="ダウンロード" style="border:none;margin:0;padding:0;vertical-align:text-top;" />';
+						$attachFileTag .= '</a></li>';
+					}
+					$attachFileTag .= '</ul>';
 				}
-				$attachFileTag .= '</ul>';
 			}
 			
 			// 関連コンテンツリンク
@@ -852,6 +863,59 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			$contentText = preg_replace($pattern, $value, $contentText);
 		}
 		return $contentText;
+	}
+	/**
+	 * 添付ファイルリンク変換コールバック関数
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _replace_content_macro_callback($matchData)
+	{
+		$destTag	= $matchData[0];
+		$itemNo		= $matchData[1];	// 添付ファイルの項目No
+		$options	= $matchData[2];	// オプション文字列
+		
+		// オプションを解析
+		$option = '';
+		if (!empty($options)){
+			list($option, $optionValue) = array_map('trim', explode('=', $options));
+			$option = strtolower($option);
+		}
+
+		// デフォルトのファイルタイトルを取得
+		$index = $itemNo -1;
+		$fileTitle = $this->attachFileRows[$index]['af_title'];
+		if (empty($fileTitle)) $fileTitle = $this->attachFileRows[$index]['af_filename'];
+		if (empty($fileTitle)) $fileTitle = $this->attachFileRows[$index]['af_original_filename'];
+		
+		switch ($option){
+		case 'title':
+			if (!empty($optionValue)) $fileTitle = $optionValue;
+			break;
+		case 'tag':
+		default:
+			break;
+		}
+		
+		// ダウンロード用のリンク
+		if (empty($this->attachFileDownloadUrl)){
+			$downloadUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
+			$downloadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+			$downloadUrl .= '&fileid=' . $this->attachFileRows[$index]['af_file_id'];
+			$downloadUrl = $this->getUrl($downloadUrl);
+		} else {
+			$downloadUrl = $this->attachFileDownloadUrl;
+		}
+		$destTag = '<a href="' . $this->convertUrlToHtmlEntity($downloadUrl) . '">';
+		if ($option == 'tag'){
+			$destTag .= $optionValue;
+		} else {
+			$destTag .= $this->convertToDispString($fileTitle);
+		}
+		$destTag .= '</a>';
+
+		return $destTag;
 	}
 }
 ?>
