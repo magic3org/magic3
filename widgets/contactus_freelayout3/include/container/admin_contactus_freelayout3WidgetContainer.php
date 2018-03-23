@@ -262,6 +262,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// ファイルアップロードエリアをマクロ表現に変換
 				$uploadArea = $this->gInstance->getTextConvManager()->convToContentMacro($uploadArea);
 				
+				// データ修正
+				$uploadFileExtension = implode(',', array_map('trim', explode(',', $uploadFileExtension)));
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
@@ -349,6 +352,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				
 				// ファイルアップロードエリアをマクロ表現に変換
 				$uploadArea = $this->gInstance->getTextConvManager()->convToContentMacro($uploadArea);
+				
+				// データ修正
+				$uploadFileExtension = implode(',', array_map('trim', explode(',', $uploadFileExtension)));
 				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
