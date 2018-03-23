@@ -144,6 +144,20 @@ $(function(){
 
 	// お問い合わせ項目部作成
 	m3SetDragDropTable('field_list', reorder_callback);
+	
+	// 拡張領域の表示制御
+	$('#field_list').find('tr .button_open').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideDown(300);
+		rowObj.find('.button_open').css({'display':'none'});
+		rowObj.find('.button_close').css({'display':'block'});
+	});
+	$('#field_list').find('tr .button_close').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideUp(300);
+		rowObj.find('.button_open').css({'display':'block'});
+		rowObj.find('.button_close').css({'display':'none'});
+	});
 });
 //]]>
 </script>
@@ -211,20 +225,24 @@ $(function(){
 	       <patTemplate:tmpl name="type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	       </patTemplate:tmpl>
-            </select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />入力必須</label></div>
+        </select>
+		<div class="option_area" style="display:none;"><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />入力必須</label></div></div>
 	    </td>
 		<td style="vertical-align:top;">
 	    <input type="text" name="item_desc[]" value="{DESC}" maxlength="100" />
 		<hr class="border" />
-	    <div class="form-group clearfix"><input type="text" name="item_def[]" value="{DEF}" maxlength="500" /></div>
+	    <div class="form-group clearfix" style="margin-bottom:0;"><input type="text" name="item_def[]" value="{DEF}" maxlength="500" /></div>
+		
+		<div class="option_area" style="display:none;margin-top:15px;">
 	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" value="{DEFAULT}" maxlength="60" /></div></div>
 		<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値</label></div></div>
 	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" value="{FIELD_ID}" maxlength="1" /></div></div>
 		<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" value="{CALC}" maxlength="60" /></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</label></div>
 		<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>
+		</div>
 		</td>
-	    <td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
+	    <td style="text-align:center;vertical-align:top;"><div style="margin:6px auto 0;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></div><div style="margin:22px auto 0;width:32px;height:32px;">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

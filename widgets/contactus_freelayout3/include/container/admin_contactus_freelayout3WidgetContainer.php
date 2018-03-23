@@ -35,6 +35,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	const UPLOAD_MAX_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
 	const UPLOAD_MAX_COUNT = 5;			// アップロードファイル最大数
 	const UPLOAD_FILE_EXTENSION = 'png,gif,jpg,jpeg';		// アップロード可能なファイルの拡張子
+	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
+	const CLOSE_PANEL_ICON_FILE = '/images/system/minus32.png';		// 拡張エリア非表示用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -525,7 +527,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar('_widget', 'msg_complete', $this->convertToDispString($msgComplete));		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 発行アクセスキー
-
+		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
@@ -615,6 +617,14 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$this->tmpl->parseTemplate('type_list2', 'a');
 			}
 			
+			// 拡張エリア制御
+			$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン
+			$iconTitle = 'オプションを表示';
+			$openButton = '<a href="javascript:void(0);" class="button_open btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-plus"></i></a>';
+			$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_PANEL_ICON_FILE;		// 拡張エリア非表示用アイコン
+			$iconTitle = 'オプションを非表示';
+			$closeButton = '<a href="javascript:void(0);" class="button_close btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '" style="display:none;"><i class="glyphicon glyphicon-minus"></i></a>';
+		
 			$row = array(
 				'title' => $this->convertToDispString($title),	// タイトル名
 				'desc' => $this->convertToDispString($desc),	// 説明
@@ -627,7 +637,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				'default' => $this->convertToDispString($default),	// デフォルト値
 				'field_id' => $this->convertToDispString($fieldId),		// フィールドID
 				'calc' => $this->convertToDispString($calc),			// 計算式
-				'root_url' => $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
+				'root_url' => $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl())),
+				'open_button' => $openButton,
+				'close_button' => $closeButton
 			);
 			$this->tmpl->addVars('field_list', $row);
 			$this->tmpl->parseTemplate('field_list', 'a');
