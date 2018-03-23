@@ -99,25 +99,30 @@ function addLine()
 	lineText += '<td style="vertical-align:top;">';
 	lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
 	lineText += '<hr class="border" />';
-	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div>';
+	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="option_area" style="display:none;"><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div></div>';
 	lineText += '</td>';
 	lineText += '<td style="vertical-align:top;">';
 	lineText += '<input type="text" name="item_desc[]" maxlength="100" />';
 	lineText += '<hr class="border" />';
-	lineText += '<div class="form-group clearfix"><input type="text" name="item_def[]" maxlength="500" /></div>';
+	lineText += '<div class="form-group clearfix" style="margin-bottom:0;"><input type="text" name="item_def[]" maxlength="500" /></div>';
+	lineText += '<div class="option_area" style="display:none;margin-top:15px;">';
 	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" maxlength="60" /></div></div>';
 	lineText += '<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" />半角数値</label></div></div>';
 	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" maxlength="1" /></div></div>';
 	lineText += '<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" maxlength="60" /></div>';
 	lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
 	lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
+	lineText += '</div>';
 	lineText += '</td>';
-	lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
+	lineText += '<td style="text-align:center;vertical-align:top;"><div style="margin:6px auto 0;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></div><div style="margin:22px auto 0;width:32px;height:32px;">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>';
 	lineText += '</tr>';
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
 	m3SetDragDropTable('field_list', reorder_callback);
+	
+	// オプション領域を再作成
+	setupOptionArea();
 }
 // 項目順変更時処理
 function reorder_callback()
@@ -133,6 +138,26 @@ function previewInOtherWindow()
 	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
+// オプション領域を再作成
+function setupOptionArea()
+{
+	$('#field_list').find('tr .button_open').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideDown(300);
+		rowObj.find('.button_open').css({'display':'none'});
+		rowObj.find('.button_close').css({'display':'block'});
+		
+		m3AdjustParentWindow();
+	});
+	$('#field_list').find('tr .button_close').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideUp(300);
+		rowObj.find('.button_open').css({'display':'block'});
+		rowObj.find('.button_close').css({'display':'none'});
+		
+		m3AdjustParentWindow();
+	});
+}
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
@@ -145,19 +170,8 @@ $(function(){
 	// お問い合わせ項目部作成
 	m3SetDragDropTable('field_list', reorder_callback);
 	
-	// 拡張領域の表示制御
-	$('#field_list').find('tr .button_open').off('click').on('click', function(){
-		var rowObj = $(this).parents('.m3drag_row');
-		rowObj.find('.option_area').slideDown(300);
-		rowObj.find('.button_open').css({'display':'none'});
-		rowObj.find('.button_close').css({'display':'block'});
-	});
-	$('#field_list').find('tr .button_close').off('click').on('click', function(){
-		var rowObj = $(this).parents('.m3drag_row');
-		rowObj.find('.option_area').slideUp(300);
-		rowObj.find('.button_open').css({'display':'block'});
-		rowObj.find('.button_close').css({'display':'none'});
-	});
+	// オプション領域を再作成
+	setupOptionArea();
 });
 //]]>
 </script>

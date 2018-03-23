@@ -528,6 +528,16 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 発行アクセスキー
 		
+		// 項目追加処理内のオプション領域制御
+		$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン
+		$iconTitle = 'オプションを表示';
+		$openButton = '<a href="javascript:void(0);" class="button_open btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-plus"></i></a>';
+		$this->tmpl->addVar('_widget', 'open_button', $openButton);
+		$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_PANEL_ICON_FILE;		// 拡張エリア非表示用アイコン
+		$iconTitle = 'オプションを非表示';
+		$closeButton = '<a href="javascript:void(0);" class="button_close btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '" style="display:none;"><i class="glyphicon glyphicon-minus"></i></a>';
+		$this->tmpl->addVar('_widget', 'close_button', $closeButton);
+		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
@@ -617,7 +627,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$this->tmpl->parseTemplate('type_list2', 'a');
 			}
 			
-			// 拡張エリア制御
+			// オプション領域
 			$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン
 			$iconTitle = 'オプションを表示';
 			$openButton = '<a href="javascript:void(0);" class="button_open btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-plus"></i></a>';
