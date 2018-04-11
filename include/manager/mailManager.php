@@ -438,7 +438,8 @@ class MailManager extends Core
 		$mail->isHTML(false);		// テキストのみのメール
 		$mail->Encoding = '7bit';
 		$mail->CharSet = 'ISO-2022-JP';
-		$mail->Subject	= mb_encode_mimeheader(mb_convert_encoding($subject, 'JIS', M3_ENCODING));
+//		$mail->Subject	= mb_encode_mimeheader(mb_convert_encoding($subject, 'JIS', M3_ENCODING));
+		$mail->Subject	= mb_encode_mimeheader($subject,'ISO-2022-JP');				// 2018/4/11 タイトル文字化け修正
 		$mail->Body		= mb_convert_encoding($content, 'JIS', M3_ENCODING);
 		// HTMLメールの場合
 		//mail->isHTML(true);                                  // Set email format to HTML
