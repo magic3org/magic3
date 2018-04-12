@@ -183,6 +183,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$msgComplete = $request->trimValueOf('item_msg_complete');		// 完了画面メッセージ
 		$contentComplete = $request->valueOf('item_content_complete');		// 完了画面コンテンツ
 		$accessKey = $request->trimValueOf('item_access_key');		// 発行アクセスキー
+		$hideInComplete	= $request->trimCheckedValueOf('item_hide_in_complete');			// お問い合わせ項目を送信完了画面で隠すかどうか
 		
 		// 入力データを取得
 		$this->fieldInfoArray = array();
@@ -293,7 +294,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 				$newObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
 				$newObj->accessKey = $accessKey;		// 発行アクセスキー
-		
+				$newObj->hideInComplete	= $hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
+				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
 					// ##### アクセスキー情報を登録 #####
@@ -385,6 +387,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 					$targetObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
 					$targetObj->accessKey = $accessKey;		// 発行アクセスキー
+					$targetObj->hideInComplete	= $hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				}
 				
 				// 設定値を更新
@@ -434,7 +437,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$msgComplete = '';		// 完了画面メッセージ
 				$contentComplete = '';		// 完了画面コンテンツ
 				$accessKey = '';		// 発行アクセスキー
-					
+				$hideInComplete	= 0;			// お問い合わせ項目を送信完了画面で隠すかどうか
+				
 				// デフォルトのテンプレート作成
 				$tagHead = $this->createTagIdHead();
 				$this->confirmButtonId = $tagHead . '_confirm';		// 確認ボタンのタグID
@@ -477,6 +481,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
 					$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
 					$accessKey = $targetObj->accessKey;		// 発行アクセスキー
+					$hideInComplete	= $targetObj->hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -527,6 +532,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar('_widget', 'msg_complete', $this->convertToDispString($msgComplete));		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 発行アクセスキー
+		$this->tmpl->addVar("_widget", "hide_in_complete_checked", $this->convertToCheckedString($hideInComplete));			// お問い合わせ項目を送信完了画面で隠すかどうか
 		
 		// 項目追加処理内のオプション領域制御
 		$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン

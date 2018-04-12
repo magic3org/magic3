@@ -141,7 +141,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->uploadArea = $targetObj->uploadArea;
 		if (empty($this->uploadArea)) $this->uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
 		$this->uploadArea = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $this->uploadArea);				// アプリケーションルートを変換
-					
+		$hideInComplete	= $targetObj->hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
+				
 		// 入力値を取得
 		$this->valueArray = array();
 		$fieldCount = count($this->fieldInfoArray);
@@ -522,6 +523,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->uploaderResetScript = '';	// ファイルアップローダ初期化用スクリプト
 		$fieldOutput = $this->createFieldOutput($baseTemplate, $inputEnabled);
 		if ($sendStatus == 2){			// 送信完了の場合は完了画面コンテンツを付加
+			// 送信完了画面でお問い合わせ項目を非表示にする場合は項目データをクリア
+			if (!empty($hideInComplete)) $fieldOutput = '';
+			
 			if (!empty($contentComplete)) $fieldOutput = '<div>' . $contentComplete . '</div>' . $fieldOutput;
 		}
 		$this->tmpl->addVar("_widget", "field_output", $fieldOutput);// お問い合わせ入力項目データ
