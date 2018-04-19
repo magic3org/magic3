@@ -90,7 +90,7 @@ class image2WidgetContainer extends BaseWidgetContainer
 				
 			// マクロパスを修正
 			if (!empty($imageUrl))$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
-			if (!empty($linkUrl)) $linkUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $linkUrl);
+			if (!empty($linkUrl)) $linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 			
 			if (!empty($imageUrl)){
 				// 外側のdivの設定
