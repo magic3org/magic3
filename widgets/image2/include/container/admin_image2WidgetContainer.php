@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_image2WidgetContainer.php 2268 2009-08-31 03:29:18Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/image2Db.php');
 class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
 	private $langId;
@@ -37,7 +36,23 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new image2Db();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'list'){		// 一覧画面
+			// 通常のテンプレート処理を組み込みのテンプレート処理に変更。_setTemplate()、_assign()はキャンセル。
+			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
+		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -51,12 +66,7 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_list.tmpl.html';
-		} else {			// 一覧画面
-			return 'admin.tmpl.html';
-		}
+		return 'admin.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -69,12 +79,21 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
-			return $this->createDetail($request);
-		}
+		return $this->createDetail($request);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * 詳細画面作成
@@ -134,6 +153,7 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){
 				// パスをマクロ形式に変換
 				if (!empty($imageUrl)) $imageUrl = $this->gEnv->getMacroPath($imageUrl);
+				if (!empty($linkUrl)) $linkUrl = $this->gEnv->getMacroPath($linkUrl);
 				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
@@ -174,7 +194,8 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// パスをマクロ形式に変換
 				if (!empty($imageUrl)) $imageUrl = $this->gEnv->getMacroPath($imageUrl);
-				
+				if (!empty($linkUrl)) $linkUrl = $this->gEnv->getMacroPath($linkUrl);
+
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -214,14 +235,12 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 			$this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 			$replaceNew = true;			// データ再取得
 		}
-		// 設定項目選択メニュー作成
-		$this->createItemMenu();
-				
+		
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$imageUrl 	= '';							// 画像へのパス
 				$linkUrl	= '';			// リンク先
 				$align		= '';			// 表示位置
@@ -269,21 +288,23 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
 
-		// 画像のパスを修正
-		if (!empty($imageUrl)){
-			$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
-		}
+		// 設定項目選択メニュー作成
+		$this->createConfigNameMenu($this->configId);
+		
+		// マクロパスを修正
+		if (!empty($imageUrl)) $imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
+		if (!empty($linkUrl)) $linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
-		$this->tmpl->addVar("item_name_visible", "name",	$name);
+		$this->tmpl->addVar("item_name_visible", "name",	$this->convertToDispString($name));
 		$this->tmpl->addVar("_widget", "link_url",	$this->getUrl($linkUrl));// リンク先
-		$this->tmpl->addVar("_widget", "bgcolor", $bgcolor);
-		$this->tmpl->addVar("_widget", "width",	$width);
-		$this->tmpl->addVar("_widget", "height",	$height);
-		$this->tmpl->addVar("_widget", "margin",	$margin);
-		$this->tmpl->addVar("_widget", "posx",	$posx);// x座標
-		$this->tmpl->addVar("_widget", "posy",	$posy);// y座標
+		$this->tmpl->addVar("_widget", "bgcolor", $this->convertToDispString($bgcolor));
+		$this->tmpl->addVar("_widget", "width",	$this->convertToDispString($width));
+		$this->tmpl->addVar("_widget", "height",	$this->convertToDispString($height));
+		$this->tmpl->addVar("_widget", "margin",	$this->convertToDispString($margin));
+		$this->tmpl->addVar("_widget", "posx",	$this->convertToDispString($posx));// x座標
+		$this->tmpl->addVar("_widget", "posy",	$this->convertToDispString($posy));// y座標
 		
 		// 高さ、幅の単位
 		if (empty($widthType)){		// ヘッダの幅単位
@@ -320,7 +341,7 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 		} else if ($align == 'right'){
 			$this->tmpl->addVar("_widget", "align3_selected",	'selected');
 		}
-		$this->tmpl->addVar("_widget", "image_url",	$imageUrl);
+		$this->tmpl->addVar("_widget", "image_url",	$this->convertToDispString($imageUrl));
 		if ($usePos) $this->tmpl->addVar('_widget', 'use_pos',	'checked');	// 座標指定を可能とするかどうか
 		if ($useLink) $this->tmpl->addVar('_widget', 'use_link',	'checked');			// 画像にリンクを付けるかどうか
 		
@@ -353,159 +374,6 @@ class admin_image2WidgetContainer extends BaseAdminWidgetContainer
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
-	/**
-	 * 選択用メニューを作成
-	 *
-	 * @return なし						
-	 */
-	function createItemMenu()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$id = $this->paramObj[$i]->id;// 定義ID
-			$targetObj = $this->paramObj[$i]->object;
-			$name = $targetObj->name;// 定義名
-			$selected = '';
-			if ($this->configId == $id) $selected = 'selected';
-
-			$row = array(
-				'name' => $name,		// 名前
-				'value' => $id,		// 定義ID
-				'selected' => $selected	// 選択中の項目かどうか
-			);
-			$this->tmpl->addVars('title_list', $row);
-			$this->tmpl->parseTemplate('title_list', 'a');
-		}
-	}
-	/**
-	 * デフォルトの名前を取得
-	 *
-	 * @return string	デフォルト名						
-	 */
-	function createDefaultName()
-	{
-		$name = self::DEFAULT_NAME_HEAD;
-		for ($j = 1; $j < 100; $j++){
-			$name = self::DEFAULT_NAME_HEAD . $j;
-			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					break;
-				}
-			}
-			// 重複なしのときは終了
-			if ($i == count($this->paramObj)) break;
-		}
-		return $name;
-	}
-	/**
-	 * 一覧画面作成
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
-	 */
-	function createList($request)
-	{
-		// ページ定義IDとページ定義のレコードシリアル番号を取得
-		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
-		
-		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$act = $request->trimValueOf('act');
-		
-		if ($act == 'delete'){		// メニュー項目の削除
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-				}
-			}
-			if (count($delItems) > 0){
-				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
-				}
-			}
-		}
-		// 定義一覧作成
-		$this->createItemList();
-		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		$this->tmpl->addVar('_widget', 'admin_url', $this->gEnv->getDefaultAdminUrl());// 管理者URL
-		
-		// ページ定義IDとページ定義のレコードシリアル番号を更新
-		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
-	/**
-	 * 定義一覧作成
-	 *
-	 * @return なし						
-	 */
-	function createItemList()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$id			= $this->paramObj[$i]->id;// 定義ID
-			$targetObj	= $this->paramObj[$i]->object;
-			$name = $targetObj->name;// 定義名
-			$width		= $targetObj->width;		// 画像の幅
-			$height		= $targetObj->height;		// 画像の高さ
-			$widthType	= $targetObj->widthType;		// 画像の幅単位
-			$heightType	= $targetObj->heightType;		// 画像の高さ単位
-		
-			// ファイル名取得
-			$filename = '';
-			$partArray = explode('/', $targetObj->imageUrl);
-			if (count($partArray) > 0) $filename = $partArray[count($partArray)-1];
-		
-			// 使用数
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
-			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			
-			// 画像サイズ
-			$imgWidth = '';
-			$imgHeight = '';
-			if (!empty($width) && $width > 0){
-				$imgWidth = $width;
-				if (!empty($widthType)) $imgWidth .= '%';
-			}
-			if (!empty($height) && $height > 0){
-				$imgHeight = $height;
-				if (!empty($heightType)) $imgHeight .= '%';
-			}
-			
-			// 画像URL
-			$url = $targetObj->imageUrl;
-			if (!empty($url)) $url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);
-			
-			$row = array(
-				'index' => $i,
-				'id' => $id,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'filename' => $this->convertToDispString($filename),	// ファイル名
-				'def_count' => $defCount,							// 使用数
-				'width' => $imgWidth,					// 画像幅
-				'height' => $imgHeight,					// 画像高さ
-				'url' => $this->getUrl($url)					// URL
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->serialArray[] = $id;
-		}
 	}
 }
 ?>

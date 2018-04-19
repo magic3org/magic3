@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -97,128 +97,131 @@ function setLinkUrl(url)
 	$('#item_link_url').val(url);
 }
 $(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td><span {_HELP_IMAGE_DETAIL}><label>画像詳細</label></span></td>
-<td align="right"><span {_HELP_IMAGE_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>
-</td></tr>
-<tr><td colspan="2">
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
 
-<table class="simple-table" style="margin:0 auto;">
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_IMAGE_NAME_INPUT}>名前</span></td>
-	    <td width="500">
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+    <tr>
+	    <th><span {_HELP_IMAGE_NAME_INPUT}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
+	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
-	        <patTemplate:tmpl name="title_list">
+	        <patTemplate:tmpl name="_config_name_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:60%;" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
-	    <td class="table-headside" width="150"><span {_HELP_IMAGE_ID}>ID</span></td>
-	    <td align="center">{ID}</td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_IMAGE_FILE}>画像</span></td>
-	    <td colspan="3">
+    <tr>
+	    <th><span {_HELP_IMAGE_FILE}>画像</span></th>
+	    <td>
 	    <div id="preview_outer">{IMAGE}</div><div><input type="button" class="button" onclick="selectImage();" value="変更" /></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_IMAGE_URL}>画像パス</span></td>
-	    <td colspan="3"><span id="image_url">{IMAGE_URL}</span><input type="hidden" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" /></td>
+    <tr>
+	    <th><span {_HELP_IMAGE_URL}>画像パス</span></th>
+	    <td><div class="form-control-static m3config_item"><span id="image_url">{IMAGE_URL}</span><input type="hidden" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" /></div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_IMAGE_SIZE}>画像サイズ</span></td>
-	    <td colspan="3">幅：<input type="text" id="item_width" name="item_width" value="{WIDTH}" size="4" maxlength="4" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" />
-	    <select id="item_widthtype" name="item_widthtype" onchange="updateImage();">
+    <tr>
+	    <th><span {_HELP_IMAGE_SIZE}>画像サイズ</span></th>
+	    <td><div class="form-control-static col-sm-1 m3config_item" style="width:3em;">幅：</div><div class="col-sm-1 m3config_item" style="width:6em;"><input type="text" id="item_width" name="item_width" value="{WIDTH}" maxlength="4" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" /></div>
+	    <div class="col-sm-2 m3config_item following" style="width:6em;"><select id="item_widthtype" name="item_widthtype" onchange="updateImage();">
 	        <option value="0" {WIDTH0_SELECTED}>px</option>
 		<option value="1" {WIDTH1_SELECTED}>%</option>
-	    </select>
-	    &nbsp;&nbsp;高さ：<input type="text" id="item_height" name="item_height" value="{HEIGHT}" size="4" maxlength="4" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" />
-	    <select id="item_heighttype" name="item_heighttype" onchange="updateImage();">
+	    </select></div>
+	    <div class="form-control-static col-sm-1 m3config_item" style="width:3em;">高さ：</div><div class="col-sm-1 m3config_item" style="width:6em;"><input type="text" id="item_height" name="item_height" value="{HEIGHT}" maxlength="4" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" /></div>
+	    <div class="col-sm-2 m3config_item following" style="width:6em;"><select id="item_heighttype" name="item_heighttype" onchange="updateImage();">
 	        <option value="0" {HEIGHT0_SELECTED}>px</option>
 		<option value="1" {HEIGHT1_SELECTED}>%</option>
-	    </select>
-	    &nbsp;&nbsp;0を指定した場合は画像の実サイズ
+	    </select></div>
+	    <div class="form-control-static col-sm-4 m3config_item" style="left-margin:20px;">0を指定した場合は画像の実サイズ</div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_IMAGE_MARGIN}>画像マージン</span></td>
-	    <td colspan="3">
-	    <input type="text" name="item_margin" value="{MARGIN}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px
+    <tr>
+	    <th><span {_HELP_IMAGE_MARGIN}>画像マージン</span></th>
+	    <td>
+	    <div class="col-sm-1 m3config_item" style="width:6em;"><input type="text" name="item_margin" value="{MARGIN}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item" style="width:3em;">px</div>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_IMAGE_ALIGN}>表示位置</span></td>
-	    <td colspan="3">
-	    <select name="item_align">
+    <tr>
+	    <th><span {_HELP_IMAGE_ALIGN}>表示位置</span></th>
+	    <td>
+	    <div class="col-sm-2 m3config_item"><select name="item_align">
 	        <option value="" {ALIGN0_SELECTED}>指定なし</option>
 		<option value="left" {ALIGN1_SELECTED}>左寄せ</option>
 		<option value="center" {ALIGN2_SELECTED}>中央</option>
 		<option value="right" {ALIGN3_SELECTED}>右寄せ</option>
-	    </select>
+	    </select></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_IMAGE_POS}>座標指定</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_use_pos" {USE_POS} />有効
-	    &nbsp;&nbsp;座標タイプ：<select name="item_postype">
+    <tr>
+	    <th><span {_HELP_IMAGE_POS}>座標指定</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_pos" {USE_POS} />有効</label></div>
+		<div class="form-group clearfix">
+	    <div class="form-control-static col-sm-1 m3config_item" style="width:6em;">座標タイプ：</div>
+		<div class="col-sm-2 m3config_item"><select name="item_postype">
 		<option value="relative" {POSTYPE0_SELECTED}>相対座標</option>
 	        <option value="absolute" {POSTYPE1_SELECTED}>絶対座標</option>
-	    </select>
-	    &nbsp;&nbsp;横：<input type="text" name="item_posx" value="{POSX}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
-	    <select name="item_posxtype">
+	    </select></div>
+		</div>
+	    <div class="form-control-static col-sm-1 m3config_item" style="width:3em;">横：</div><div class="col-sm-1 m3config_item" style="width:6em;"><input type="text" name="item_posx" value="{POSX}" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div>
+	    <div class="col-sm-1 m3config_item following" style="width:6em;"><select name="item_posxtype">
 	        <option value="0" {POSX0_SELECTED}>px</option>
 		<option value="1" {POSX1_SELECTED}>%</option>
-	    </select>
-	    &nbsp;&nbsp;縦：<input type="text" name="item_posy" value="{POSY}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
-	    <select name="item_posytype">
+	    </select></div>
+	    <div class="form-control-static col-sm-1 m3config_item" style="width:3em;">縦：</div><div class="col-sm-1 m3config_item" style="width:6em;"><input type="text" name="item_posy" value="{POSY}" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div>
+	    <div class="col-sm-1 m3config_item following" style="width:6em;"><select name="item_posytype">
 	        <option value="0" {POSY0_SELECTED}>px</option>
 		<option value="1" {POSY1_SELECTED}>%</option>
-	    </select>
+	    </select></div>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_IMAGE_BGCOLOR}>背景色</span></td>
-	    <td colspan="3"><input type="text" id="item_bgcolor" name="item_bgcolor" value="{BGCOLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_bgcolor);" />&nbsp;&nbsp;</td>
+    <tr>
+	    <th><span {_HELP_IMAGE_BGCOLOR}>背景色</span></th>
+	    <td><div class="col-sm-2 m3config_item"><input type="text" id="item_bgcolor" name="item_bgcolor" value="{BGCOLOR}" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_bgcolor);" /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_IMAGE_LINK}>リンク</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_use_link" {USE_LINK} />あり
-	    &nbsp;&nbsp;<label>リンク先：<input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" size="80" maxlength="120" style="width:70%;" /></label><input type="button" class="button" onclick="createUrl('');" value="URL作成" />
+    <tr>
+	    <th><span {_HELP_IMAGE_LINK}>リンク</span></th>
+	    <td>
+        <div class="checkbox"><label><input type="checkbox" name="item_use_link" {USE_LINK} />あり</label></div>
+	    <div class="form-control-static col-sm-1 m3config_item">URL：</div><div class="col-sm-9 m3config_item"><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" maxlength="120" /></div><div class="col-sm-2 m3config_item"><input type="button" class="button" onclick="createUrl('');" value="URL作成" /></div>
 	    </td>
 	</tr>
-	<tr class="even">
-	    <td align="right" colspan="4">
+    </tbody>
+</table>
+
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
+
 </form>
 </div>
 </patTemplate:tmpl>

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: image2WidgetContainer.php 2268 2009-08-31 03:29:18Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -88,10 +88,10 @@ class image2WidgetContainer extends BaseWidgetContainer
 			$usePos		= $targetObj->usePos;			// 座標指定を可能とするかどうか
 			$useLink	= $targetObj->useLink;			// 画像にリンクを付けるかどうか
 				
-			// 画像のパスを修正
-			if (!empty($imageUrl)){
-				$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
-			}
+			// マクロパスを修正
+			if (!empty($imageUrl))$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
+			if (!empty($linkUrl)) $linkUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $linkUrl);
+			
 			if (!empty($imageUrl)){
 				// 外側のdivの設定
 				$divStyle = '';
