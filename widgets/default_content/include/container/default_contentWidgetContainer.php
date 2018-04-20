@@ -645,7 +645,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 					// ##### コンテンツ本文を解析して添付ファイルダウンロード用のリンクを埋め込む #####
 					$this->attachFileRows = $attachFileRows;		// 添付ファイル情報(コンテンツ本文作成用)
 					$this->attachFileDownloadUrl = $canDownloadAttachFile ? '' : $accessUrl;			// 添付ファイルのリンク先URL(ダウンロード不可時のみ設定)
-					$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_ITEM_KEY) . '(\d+?)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';			// オプションパラメータは「|」以降(2015/4/20変更)
+					$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_ITEM_KEY) . '(\d+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';			// オプションパラメータは「|」以降(2015/4/20変更)
 					$contentText = preg_replace_callback($pattern, array($this, '_replace_content_macro_callback'), $contentText);
 				} else {		// 添付ファイルリストを自動生成する場合
 					$attachFileTag .= '<ul>';
@@ -875,7 +875,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		$destTag	= $matchData[0];
 		$itemNo		= $matchData[1];	// 添付ファイルの項目No
 		$options	= $matchData[2];	// オプション文字列
-		
+
 		// オプションを解析
 		$option = '';
 		if (!empty($options)){

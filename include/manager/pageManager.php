@@ -2224,6 +2224,9 @@ class PageManager extends Core
 				// 更新日時
 				header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 		
+				// 文字コード設定
+				header('Content-Type: text/html; charset=UTF-8');			// 2018/4/19 Firefoxで文字化けが起きる場合があるので追加
+				
 				// Ajax用JSON型データをHTTPヘッダに格納
 				$gInstanceManager->getAjaxManager()->header();
 			}

@@ -356,7 +356,8 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		// Apacheで運営されているバーチャルホストの情報を取得
 		$vhostList = array();
 		$siteCondition = shell_exec('httpd -S');
-		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+?)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);
+//		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+?)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);
+		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);			// 2018/4/20 該当行数マッチ部分修正
 		for ($i = 0; $i < count($matches); $i++){
 			$hostName = $matches[$i][1];
 			$configPath = $matches[$i][2];
