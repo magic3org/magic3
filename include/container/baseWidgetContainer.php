@@ -2928,6 +2928,7 @@ class BaseWidgetContainer extends Core
 		$ret = $this->updateWidgetParamObjectWithId($newParam);
 		if ($ret){
 			$paramObj[] = $newParam;		// 新規定義を追加
+			$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
 			$defConfigId = $newParam->id;		// 定義定義IDを更新
 		}
 		
@@ -2970,6 +2971,8 @@ class BaseWidgetContainer extends Core
 				break;
 			}
 		}
+		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
+		
 		// 画面定義更新
 		if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
 			$ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $id, $updateObj->name, $menuId);
@@ -3017,6 +3020,7 @@ class BaseWidgetContainer extends Core
 			// パラメータオブジェクトを再取得
 			$paramObj = $this->getWidgetParamObjectWithId();
 		}
+		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
 		
 		// 画面定義更新
 		if ($ret && !empty($defSerial) && $delConfig){		// 画面作成から呼ばれている場合のみ更新
