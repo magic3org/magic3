@@ -1210,7 +1210,7 @@ class TextConvManager extends Core
 		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_WIDGET);		// 「[」を正規表現用に「\[」に変換
 		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「]」を正規表現用に「\]」に変換
 	//	$str = '/' . $startTag . ':(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';
-		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';				// セパレータを「:」または「|」どちらでも使用可にする
+		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+)' . $endTag . '/';				// セパレータを「:」または「|」どちらでも使用可にする
         $dest = preg_replace_callback($str, array($this, '_replace_widget_tag_callback'), $src);
 		return true;
 	}
