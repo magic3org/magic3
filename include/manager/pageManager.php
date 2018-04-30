@@ -6173,6 +6173,9 @@ class PageManager extends Core
 		if ($autoSsl){
 			$isSslPage = false;
 			if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
+				// ルートURLがSSLの場合は管理画面は常にSSL付き
+				if ($gEnvManager->isRootUrlSsl()) $isSslPage = true;
+				
 				// 管理画面のSSL状態を参照
 				if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
 			} else {		// フロント画面へのアクセスのとき
@@ -6216,11 +6219,13 @@ class PageManager extends Core
 			if ($noMessage){
 				header('HTTP/1.1 302 Found(Moved Temporary)');		// ダイアログメッセージを抑止(ドコモ携帯端末用)
 			} else {
-				header('HTTP/1.1 301 Moved Permanently');
+//				header('HTTP/1.1 301 Moved Permanently');
+				header('HTTP/1.1 302 Moved Temporary');				// ドメインのURLをHTTPからHTTPに変更するとChromeで問題が発生したので301から302リダイレクトに変更(2018/4/30)
 			}
 		} else {		// レスポンスコードが指定されている場合
 			switch ($responseCode){
 				case 301:
+					// ##### 301リダイレクトはChromeではブラウザにキャッシュされてしまうので注意 #####
 					header('HTTP/1.1 301 Moved Permanently');
 					break;
 				case 302:
