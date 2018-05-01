@@ -1,10 +1,10 @@
 /**
- * �\���f�[�^�쐬�p�e���v���[�g(patTemplate)
+ * 表示データ作成用テンプレート(patTemplate)
  *
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
  * @package    Magic3 Framework
- * @author     ���c���B(Naoki Hirata) <naoki@aplo.co.jp>
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
@@ -13,35 +13,53 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function sendmessage(){
+	if (!window.confirm('管理者をコールしますか?')) return false;
+//	document.skyway_main.submit();
+
+	m3_ajax_request('skyway', 'act=sendmail&peerid=' + document.skyway_main.peerid.value, ajax_success_func, ajax_failure_func);
+	return true;
+}
+function ajax_success_func(request, retcode, jsondata)
+{
+//alert(jsondata.peerid);
+alert('ok...');
+}
+function ajax_failure_func(request)
+{
+	alert('ajax failure!');
+}
 $(function(){
+	// SkyWay APIキー
 	window.__SKYWAY_KEY__ = '{API_KEY}';
-	
-  // Peer object
-  const peer = new Peer({
-    key:   window.__SKYWAY_KEY__,
-    debug: 3,
-  });
 
-  let localStream;
-  let existingCall;
+	let localStream;
+	let existingCall;
+  
+	// Peeroオブジェクト作成
+	const peer = new Peer({
+		key:   window.__SKYWAY_KEY__,
+		debug: 3,
+	});
 
-  peer.on('open', () => {
-    $('#my-id').text(peer.id);
-    step1();
-  });
+	peer.on('open', () => {
+		$('#my-id').text(peer.id);
+		document.skyway_main.peerid.value = peer.id;
+		step1();
+	});
 
-  // Receiving a call
-  peer.on('call', call => {
-    // Answer the call automatically (instead of prompting user) for demo purposes
-    call.answer(localStream);
-    step3(call);
-  });
+	// Receiving a call
+	peer.on('call', call => {
+		// Answer the call automatically (instead of prompting user) for demo purposes
+		call.answer(localStream);
+		step3(call);
+	});
 
-  peer.on('error', err => {
-    alert(err.message);
-    // Return to step 2 if error occurs
-    step2();
-  });
+	peer.on('error', err => {
+		alert(err.message);
+		// Return to step 2 if error occurs
+		step2();
+	});
 
   $('#make-call').on('submit', e => {
     e.preventDefault();
@@ -157,6 +175,11 @@ $(function(){
 });
 //]]>
 </script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="skyway_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="peerid" />
+<!-- m3:PostParam -->
   <!-- Video area -->
 <!--  <div class="pure-u-2-3" id="video-container">-->
     <video id="their-video" autoplay playsinline></video>
@@ -201,4 +224,6 @@ $(function(){
       <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
     </div>
 <!--  </div>-->
+<input type="button" class="button" onclick="sendmessage();" value="管理者をコール" />
+</form>
 </patTemplate:tmpl>

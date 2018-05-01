@@ -18,6 +18,7 @@ require_once($gEnvManager->getContainerPath() .			'/baseWidgetContainer.php');
 class skywayWidgetContainer extends BaseWidgetContainer
 {
 	const DEFAULT_TITLE = 'SkyWayサンプル';			// デフォルトのウィジェットタイトル
+	const SKYWAY_CALL = 'skyway_call';				// SKYWAY返答メールフォーマット
 	
 	/**
 	 * コンストラクタ
@@ -59,6 +60,26 @@ class skywayWidgetContainer extends BaseWidgetContainer
 			$apiKey = $paramObj->apiKey;						// APIキー
 		}
 		
+		$act = $request->trimValueOf('act');
+		if ($act == 'sendmail'){			// 管理者をコールする場合
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+
+			$peerid = $request->trimValueOf('peerid');
+			
+			// 管理者にコールを通知
+			$address = $this->gEnv->getSiteEmail();// 送信元が取得できないときは、システムのデフォルトメールアドレスを使用
+
+			$url = $this->gPage->getDefaultPageUrlByWidget($this->gEnv->getCurrentWidgetId());		// このウィジェットのあるページURL
+			if (!empty($peerid)) $url .=  '&peerid=' . $peerid;
+			$mailParam = array();
+			$mailParam['URL']		= $this->getUrl($url, true);
+			$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), $address, $address, '', '', self::SKYWAY_CALL, $mailParam);
+			
+			// フロントへ返す値を設定
+			$this->gInstance->getAjaxManager()->addData('result', $ret);		// メール送信結果
+			return;
+		}
 		$this->tmpl->addVar("_widget", "api_key", $apiKey);				// APIキー
 	}
 	/**
