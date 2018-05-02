@@ -15,19 +15,21 @@
 //<![CDATA[
 function sendmessage(){
 	if (!window.confirm('管理者をコールしますか?')) return false;
-//	document.skyway_main.submit();
 
+	// AJAXで管理者にメール通知
 	m3_ajax_request('skyway', 'act=sendmail&peerid=' + document.skyway_main.peerid.value, ajax_success_func, ajax_failure_func);
 	return true;
 }
 function ajax_success_func(request, retcode, jsondata)
 {
-//alert(jsondata.peerid);
-alert('ok...');
+	window.scrollTo(0, 0);
+	
+	// 状態表示変更
+	$('#skyway_status').text('管理者応答待ち');
 }
 function ajax_failure_func(request)
 {
-	alert('ajax failure!');
+	$('#skyway_status').text('通信エラー');
 }
 $(function(){
 	// SkyWay APIキー
@@ -36,6 +38,9 @@ $(function(){
 	let localStream;
 	let existingCall;
   
+  	// 画面初期化
+	$('#skyway_status').text('通話準備中');
+	
 	// Peeroオブジェクト作成
 	const peer = new Peer({
 		key:   window.__SKYWAY_KEY__,
@@ -148,9 +153,9 @@ $(function(){
   }
 
   function step2() {
-    $('#step1, #step3').hide();
+/*    $('#step1, #step3').hide();
     $('#step2').show();
-    $('#callto-id').focus();
+    $('#callto-id').focus();*/
   }
 
   function step3(call) {
@@ -180,6 +185,10 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="peerid" />
 <!-- m3:PostParam -->
+<div class="well pull-right">
+状態：<span id="skyway_status"></span>
+<div><input type="button" class="button" onclick="sendmessage();" value="管理者と通話する" /></div>
+</div>
   <!-- Video area -->
 <!--  <div class="pure-u-2-3" id="video-container">-->
     <video id="their-video" autoplay playsinline></video>
@@ -224,6 +233,5 @@ $(function(){
       <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
     </div>
 <!--  </div>-->
-<input type="button" class="button" onclick="sendmessage();" value="管理者をコール" />
 </form>
 </patTemplate:tmpl>
