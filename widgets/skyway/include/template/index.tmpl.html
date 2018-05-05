@@ -29,51 +29,59 @@ $(function(){
 		debug: 3,
 	});
 
+	// 通話初期化
 	peer.on('open', () => {
-//		document.skyway_main.peerid.value = peer.id;
-		step1();
+		initCall();
+		
+		// 管理者で起動のときはすぐに接続
+		if (document.skyway_main.peerid.value != ''){
+			const call = peer.call(document.skyway_main.peerid.value, localStream);
+    		setupCall(call);
+		}
 	});
 
-	// Receiving a call
+	// 管理者からの応答処理
 	peer.on('call', call => {
-		// Answer the call automatically (instead of prompting user) for demo purposes
+		// メディアストリームを使用して応答
 		call.answer(localStream);
-		step3(call);
+		
+		setupCall(call);
 	});
 
 	peer.on('error', err => {
-		alert(err.message);
-		// Return to step 2 if error occurs
-		step2();
+		// エラーメッセージ表示
+		showErrorMessage(err.message);
 	});
 
-	// イベント設定
+	// メール通知イベント
 	$('#sendmail').on('click', () => {
 		if (!window.confirm('管理者をコールしますか?')) return false;
 
 		// AJAXで管理者にメール通知
-//		m3_ajax_request('skyway', 'act=sendmail&peerid=' + document.skyway_main.peerid.value, function(request, retcode, jsondata){		// 正常終了
 		m3_ajax_request('skyway', 'act=sendmail&peerid=' + peer.id, function(request, retcode, jsondata){		// 正常終了
 			window.scrollTo(0, 0);
 	
 			// 状態表示変更
-			//$('#skyway_status').text('管理者応答待ち');
 			setCallStatus(2);		// 管理者応答待ち
 		}, function(request){		// 異常終了
-			//$('#skyway_status').text('通信エラー');
-			setCallStatus(-1);		// 通信エラー
+			setCallStatus(-1);		// 通話エラー
 		});
 		return true;
 	});
-	// 通話開始イベント
+	// 通話開始イベント(画面初期表示時または初期表示時に失敗した場合のリトライ用)
 	$('#callopen').on('click', () => {
-		$('#step1-error').hide();
-		step1();
+		// エラーメッセージリセット
+		resetErrorMessage();
+		
+		// 通話初期化
+		initCall();
 	});
 	// 通話終了イベント
 	$('#callend').on('click', () => {
+		// エラーメッセージリセット
+		resetErrorMessage();
+		
 	    if (existingCall) existingCall.close();
-	    step2();
 		
 		localStream.getAudioTracks()[0].stop();
 		localStream.getVideoTracks()[0].stop();
@@ -112,128 +120,83 @@ $(function(){
 			$('#callopen').hide();
 			$('#callstart').hide();
 			$('#callend').hide();
-		} else {			// 通信状態
-			$('#skyway_status').text('通信中');
+		} else {			// 通話状態
+			$('#skyway_status').text('通話中');
 			$('#sendmail').hide();		// メール送信可
 			$('#callopen').hide();
 			$('#callstart').hide();
 			$('#callend').show();
 		}
 	}
+	// エラーメッセージ表示
+	function showErrorMessage(message){
+		$('#skyway_message .message').text(message);
+		$('#skyway_message').show();
+	}
+	// エラーメッセージ非表示
+	function resetErrorMessage(){
+		$('#skyway_message').hide();
+	}
+	// 通話初期化処理
+	function initCall() {
+		const constraints = {
+			audio: true,
+			video: true,
+		};
+		navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+			$('#my-video').get(0).srcObject = stream;
+			localStream = stream;
 
-  function step1() {
-    // Get audio/video stream
-    const audioSource = $('#audioSource').val();
-    const videoSource = $('#videoSource').val();
-    const constraints = {
-      audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-      video: {deviceId: videoSource ? {exact: videoSource} : undefined},
-    };
+			if (existingCall) {
+				existingCall.replaceStream(stream);
+				return;
+			}
 
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-      $('#my-video').get(0).srcObject = stream;
-      localStream = stream;
-
-      if (existingCall) {
-        existingCall.replaceStream(stream);
-        return;
-      }
-
-      step2();
-	  
-	  // オンライン状態に遷移
-	  setCallStatus(1);
-    }).catch(err => {
-      $('#step1-error').show();
-//      console.error(err);
-    });
-  }
-  function step2() {
+			// オンライン状態に遷移
+			setCallStatus(1);
+		}).catch(err => {
+			// 接続エラーメッセージ
+			showErrorMessage('カメラとマイクに接続できません。Webブラウザの設定でカメラとマイクのアクセスを「許可」してください。');
+		});
+	}
+/*  function step2() {
     $('#step1, #step3').hide();
     $('#step2').show();
-    $('#callto-id').focus();
-  }
+  }*/
+	// 通話開始処理
+	function setupCall(call) {
+		// Hang up on an existing call if present
+		if (existingCall) {
+			existingCall.close();
+		}
+		// Wait for stream on the call, then set peer video display
+		call.on('stream', stream => {
+			const el = $('#their-video').get(0);
+			el.srcObject = stream;
+			el.play();
+		});
 
-  function step3(call) {
-    // Hang up on an existing call if present
-    if (existingCall) {
-      existingCall.close();
-    }
-    // Wait for stream on the call, then set peer video display
-    call.on('stream', stream => {
-      const el = $('#their-video').get(0);
-      el.srcObject = stream;
-      el.play();
-    });
+		// UI stuff
+		existingCall = call;
+		
+		call.on('close', () => {
+			alsert("closed...");
+		});
+		//    $('#their-id').text(call.remoteId);
+		//    call.on('close', step2);
+		//    $('#step1, #step2').hide();
+		//    $('#step3').show();
 
-    // UI stuff
-    existingCall = call;
-    $('#their-id').text(call.remoteId);
-    call.on('close', step2);
-    $('#step1, #step2').hide();
-    $('#step3').show();
-  }
+		setCallStatus(4);		// 通話中
+	}
   
-  $('#make-call').on('submit', e => {
+/*  $('#make-call').on('submit', e => {
     e.preventDefault();
     // Initiate a call!
-    console.log($('#callto-id').val());
-    const call = peer.call($('#callto-id').val(), localStream);
-    step3(call);
-  });
-
-  $('#end-call').on('click', () => {
-    existingCall.close();
-    step2();
-  });
-
-  // Retry if getUserMedia fails
-  $('#step1-retry').on('click', () => {
-    $('#step1-error').hide();
-    step1();
-  });
-
-  // set up audio and video input selectors
-  const audioSelect = $('#audioSource');
-  const videoSelect = $('#videoSource');
-  const selectors = [audioSelect, videoSelect];
-
-  navigator.mediaDevices.enumerateDevices()
-    .then(deviceInfos => {
-      const values = selectors.map(select => select.val() || '');
-      selectors.forEach(select => {
-        const children = select.children(':first');
-        while (children.length) {
-          select.remove(children);
-        }
-      });
-
-      for (let i = 0; i !== deviceInfos.length; ++i) {
-        const deviceInfo = deviceInfos[i];
-        const option = $('<option>').val(deviceInfo.deviceId);
-
-        if (deviceInfo.kind === 'audioinput') {
-          option.text(deviceInfo.label ||
-            'Microphone ' + (audioSelect.children().length + 1));
-          audioSelect.append(option);
-        } else if (deviceInfo.kind === 'videoinput') {
-          option.text(deviceInfo.label ||
-            'Camera ' + (videoSelect.children().length + 1));
-          videoSelect.append(option);
-        }
-      }
-
-      selectors.forEach((select, selectorIndex) => {
-        if (Array.prototype.slice.call(select.children()).some(n => {
-          return n.value === values[selectorIndex];
-        })) {
-          select.val(values[selectorIndex]);
-        }
-      });
-
-      videoSelect.on('change', step1);
-      audioSelect.on('change', step1);
-    });
+//    console.log($('#callto-id').val());
+ //   const call = peer.call($('#callto-id').val(), localStream);
+    setupCall(call);
+  });*/
 });
 //]]>
 </script>
@@ -242,54 +205,20 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="peerid" value="{PEER_ID}" />
 <!-- m3:PostParam -->
+<div id="skyway_message" class="alert alert-danger" role="alert" style="display:none;">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Error:</span><span class="message"></span>
+</div>
 <div id="skyway_screen">
   <div class="well pull-right">
   状態：<span id="skyway_status"></span>
   <div id="sendmail"><input type="button" class="button" value="管理者と通話する" /></div>
-  <div id="callopen"><input type="button" class="button" value="オンライン" /></div>
+  <div id="callopen"><input type="button" class="button" value="再接続する" /></div>
   <div id="callstart"><input type="button" class="button" value="通話開始" /></div>
   <div id="callend"><input type="button" class="button" value="通話終了" /></div>
   </div>
   <video id="their-video" autoplay playsinline></video>
   <video id="my-video" muted="true" autoplay playsinline></video>
 </div>
-
-  <!-- Steps -->
-<!--  <div class="pure-u-1-3">
-    <h2>SkyWay Video Chat</h2>-->
-
-    <div class="select">
-      <label for="audioSource">Audio input source: </label><select id="audioSource"></select>
-    </div>
-
-    <div class="select">
-      <label for="videoSource">Video source: </label><select id="videoSource"></select>
-    </div>
-
-    <!-- Get local audio/video stream -->
-    <div id="step1">
-      <p>Please click `allow` on the top of the screen so we can access your webcam and microphone for calls.</p>
-      <div id="step1-error">
-        <p>Failed to access the webcam and microphone. Make sure to run this demo on an http server and click allow when asked for permission by the browser.</p>
-        <a href="#" class="pure-button pure-button-error" id="step1-retry">Try again</a>
-      </div>
-    </div>
-
-    <!-- Make calls to others -->
-    <div id="step2">
-      <p>Share this id with others so they can call you.</p>
-      <h3>Make a call</h3>
-      <form id="make-call" class="pure-form">
-        <input type="text" placeholder="Call user id..." id="callto-id">
-        <button href="#" class="pure-button pure-button-success" type="submit">Call</button>
-      </form>
-    </div>
-
-    <!-- Call in progress -->
-    <div id="step3">
-      <p>Currently in call with <span id="their-id">...</span></p>
-      <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
-    </div>
-<!--  </div>-->
 </form>
 </patTemplate:tmpl>

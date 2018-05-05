@@ -79,6 +79,10 @@ class skywayWidgetContainer extends BaseWidgetContainer
 			// フロントへ返す値を設定
 			$this->gInstance->getAjaxManager()->addData('result', $ret);		// メール送信結果
 			return;
+		} else {		// 初期表示
+			// URLのパラメータにPeerIDがある場合のみ画面に埋め込む
+			$peerid = $request->trimValueOfGet('peerid');
+			if (!empty($peerid)) $this->tmpl->addVar("_widget", "peer_id", $peerid);
 		}
 		$this->tmpl->addVar("_widget", "api_key", $apiKey);				// APIキー
 	}
