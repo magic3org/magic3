@@ -184,6 +184,10 @@ $(function(){
 		// 新規の通話を保存
 		existingCall = call;
 		
+		// 動画サイズ調整
+		$('#skyway_othervideo').show();
+		$('#skyway_selfvideo').width(200);
+		
 		setCallStatus(4);		// 通話中
 	}
 });
@@ -206,7 +210,7 @@ $(function(){
   <div id="callstart"><input type="button" class="button" value="通話開始" /></div>
   <div id="callend"><input type="button" class="button" value="通話終了" /></div>
   </div>
-  <video id="skyway_othervideo" autoplay playsinline></video>
+  <video id="skyway_othervideo" autoplay playsinline style="display:none;"></video>
   <video id="skyway_selfvideo" muted="true" autoplay playsinline></video>
 </div>
 </form>
