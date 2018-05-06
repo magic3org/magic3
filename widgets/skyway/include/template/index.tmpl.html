@@ -35,7 +35,10 @@ $(function(){
 		
 		// 管理者で起動のときはすぐに接続
 		if (document.skyway_main.peerid.value != ''){
+			// PeerIDで相手方と接続
 			const call = peer.call(document.skyway_main.peerid.value, localStream);
+			
+			// 通話開始
     		setupCall(call);
 		}
 	});
@@ -45,9 +48,11 @@ $(function(){
 		// メディアストリームを使用して応答
 		call.answer(localStream);
 		
+		// 通話開始
 		setupCall(call);
 	});
 
+	// 通話時エラー処理
 	peer.on('error', err => {
 		// エラーメッセージ表示
 		showErrorMessage(err.message);
@@ -55,7 +60,7 @@ $(function(){
 
 	// メール通知イベント
 	$('#sendmail').on('click', () => {
-		if (!window.confirm('管理者をコールしますか?')) return false;
+		if (!window.confirm('管理者に通話要求しますか?')) return false;
 
 		// AJAXで管理者にメール通知
 		m3_ajax_request('skyway', 'act=sendmail&peerid=' + peer.id, function(request, retcode, jsondata){		// 正常終了
@@ -144,7 +149,7 @@ $(function(){
 			video: true,
 		};
 		navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-			$('#my-video').get(0).srcObject = stream;
+			$('#skyway_selfvideo').get(0).srcObject = stream;
 			localStream = stream;
 
 			if (existingCall) {
@@ -159,44 +164,28 @@ $(function(){
 			showErrorMessage('カメラとマイクに接続できません。Webブラウザの設定でカメラとマイクのアクセスを「許可」してください。');
 		});
 	}
-/*  function step2() {
-    $('#step1, #step3').hide();
-    $('#step2').show();
-  }*/
 	// 通話開始処理
 	function setupCall(call) {
-		// Hang up on an existing call if present
-		if (existingCall) {
-			existingCall.close();
-		}
-		// Wait for stream on the call, then set peer video display
+		// 既存の通話を終了
+		if (existingCall) existingCall.close();
+		
+		// 動画を画面に表示
 		call.on('stream', stream => {
-			const el = $('#their-video').get(0);
+			const el = $('#skyway_othervideo').get(0);
 			el.srcObject = stream;
 			el.play();
 		});
+		
+		// 通話終了時イベント
+		call.on('close', () => {
+			setCallStatus(3);		// 通話終了
+		});
 
-		// UI stuff
+		// 新規の通話を保存
 		existingCall = call;
 		
-		call.on('close', () => {
-			alsert("closed...");
-		});
-		//    $('#their-id').text(call.remoteId);
-		//    call.on('close', step2);
-		//    $('#step1, #step2').hide();
-		//    $('#step3').show();
-
 		setCallStatus(4);		// 通話中
 	}
-  
-/*  $('#make-call').on('submit', e => {
-    e.preventDefault();
-    // Initiate a call!
-//    console.log($('#callto-id').val());
- //   const call = peer.call($('#callto-id').val(), localStream);
-    setupCall(call);
-  });*/
 });
 //]]>
 </script>
@@ -217,8 +206,8 @@ $(function(){
   <div id="callstart"><input type="button" class="button" value="通話開始" /></div>
   <div id="callend"><input type="button" class="button" value="通話終了" /></div>
   </div>
-  <video id="their-video" autoplay playsinline></video>
-  <video id="my-video" muted="true" autoplay playsinline></video>
+  <video id="skyway_othervideo" autoplay playsinline></video>
+  <video id="skyway_selfvideo" muted="true" autoplay playsinline></video>
 </div>
 </form>
 </patTemplate:tmpl>
