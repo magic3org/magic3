@@ -17,6 +17,7 @@
 -- ■必要条件
 -- ・HTTPSでサイトを作成する必要があります。
 -- ・SkyWayに登録してAPIキーを取得してください。(無料)
+-- ・サイトのデフォルトのメールアドレスを設定してください。
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'bootstrap_cerulean' WHERE sc_id = 'default_template';
@@ -92,7 +93,7 @@ INSERT INTO _nav_item
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,       pd_menu_id,  pd_title_visible, pd_view_page_state, pd_update_dt) VALUES
-('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',             'main_menu', true,             0,                  now()),
+('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',             'main_menu', false,            0,                  now()),
 ('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',             '',          true,             0,                  now()),
 ('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',             '',          true,             0,                  now()),
 ('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',             '',          true,             0,                  now()),
@@ -112,7 +113,7 @@ INSERT INTO _menu_def
 (md_id, md_index, md_menu_id,  md_name,        md_link_url,                                         md_update_dt) VALUES
 (1,     1,        'main_menu', 'ホーム',       '[#M3_ROOT_URL#]/',                                   now()),
 (2,     2,        'main_menu', '運営',     '[#M3_ROOT_URL#]/index.php?contentid=1', now()),
-(3,     3,        'main_menu', 'お問い合わせ', '[#M3_ROOT_URL#]/index.php?sub=contact2',             now());
+(3,     3,        'main_menu', 'ビデオ通話', '[#M3_ROOT_URL#]/index.php?sub=contact2',             now());
 
 -- ウィジェットパラメータ
 DELETE FROM _widget_param WHERE wp_id = 'default_menu';
