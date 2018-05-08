@@ -18,7 +18,8 @@ defined('_JEXEC') or die;
 global $gEnvManager;
 
 $menuData	= $gEnvManager->getJoomlaMenuData();
-$list		= array_reverse($menuData['crumbs']);			// リストデータを逆に並べる
+//$list		= array_reverse($menuData['crumbs']);			// リストデータを逆に並べる
+$list		= $menuData['crumbs'];			// メニュー項目順の問題を修正(2018/5/9)
 $count = count($list);
 
 /*

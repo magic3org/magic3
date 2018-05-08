@@ -258,7 +258,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		if (!empty($html)){		// リンクが空のときは表示しない
 			$linkUrl = $this->getUrl($homeUrl, true/*リンク用*/);
 			//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($homeName) . '</a>' . $this->iconTag . $html;// リンクの間にアイコンを挿入
-			$html = $this->_createLink($homeName, $linkUrl) . $this->iconTag . $html;// リンクの間にアイコンを挿入
+			$html = $this->_createLink($homeName, $linkUrl, true/*先頭にJoomla!用メニュー項目を追加*/) . $this->iconTag . $html;// リンクの間にアイコンを挿入
 			
 			//$html = '<span class="breadcrumbs pathway">' . $html . '</span>';
 			$html = $this->_createLinkOuter($html);
@@ -452,9 +452,10 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 	 *
 	 * @param string  $name		タイトル
 	 * @param string  $url		リンク先URL。空の場合はリンクなし。
+	 * @param bool $addFirst	先頭にJoomla!用メニュー項目を追加するかどうか
 	 * @return string			タグ
 	 */
-	function _createLink($name, $url = '')
+	function _createLink($name, $url = '', $addFirst = false)
 	{
 		$isNoLink = empty($url);		// リンクなし項目かどうか
 		$linkItem = '';
@@ -480,7 +481,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		$item       = new stdClass;
 		$item->name = $this->convertToDispString($name);			// HTML文字エスケープ
 		$item->link = $url;
-		$this->crumbs[] = $item;
+		if ($addFirst){		// 先頭にJoomla!用メニュー項目を追加する場合
+			array_unshift($this->crumbs, $item);
+		} else {
+			$this->crumbs[] = $item;
+		}
 		
 		return $linkItem;
 	}
