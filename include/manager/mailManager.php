@@ -368,6 +368,7 @@ class MailManager extends Core
 		$smtpAccount	= $gSystemManager->getSystemConfig(self::CF_SMTP_ACCOUNT);					// SMTP接続アカウント
 		$smtpPassword	= $gSystemManager->getSystemConfig(self::CF_SMTP_PASSWORD);					// SMTPパスワード
 
+		// ##### 通常の場合は送信ごとにオブジェクトを生成する。連続メール送信のときは1度だけオブジェクト生成を行う。#####
 		if (!isset($mail)){
 			$mail = new PHPMailer;
 
@@ -472,7 +473,8 @@ class MailManager extends Core
 				$this->sendCount = 0;
 			}
 		} else {
-			unset($mail);
+//			unset($mail);
+			$mail = null;			// unset()ではオブジェクトが破棄できないので変更(2018/5/19)
 		}
 		return $ret;
 	}
