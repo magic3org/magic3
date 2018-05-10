@@ -405,8 +405,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				break;
 			default:						// ユーザログイン画面
 				// アクセスされたURLが正しいURLかどうかをチェック
-				$adminUrl = $this->gEnv->getAdminUrl();
-				if (!strStartsWith($this->gEnv->getCurrentScriptUrl(), $adminUrl . '/')){
+				$adminUrl = $this->gEnv->getAdminUrl() . '/';
+				if (!strStartsWith($this->gEnv->getCurrentScriptUrl(), $adminUrl)){
 					$adminUrlLink = '<a href="' . $this->convertUrlToHtmlEntity($adminUrl) . '">' . $this->convertToDispString($adminUrl) . '</a>';
 					$this->SetMsg(self::MSG_APP_ERR, $this->_('Correct url is this:') . ' ' . $adminUrlLink);		// 正しいURLはこちらです：
 				}
