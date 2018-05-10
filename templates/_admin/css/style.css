@@ -188,6 +188,10 @@ background-color: #0081c2;
 	margin-top: 0;
 	margin-bottom: 10px;
 }
+.m3messages a {
+	color: #FFFFFF;
+}
+
 /****** widget ******/
 .m3widget_main {
 	margin: 10px 10px 20px 10px;

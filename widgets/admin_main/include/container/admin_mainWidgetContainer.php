@@ -404,6 +404,13 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->tmpl->addVar("_widget", "content", $this->content);			// メンテナンスコンテンツ
 				break;
 			default:						// ユーザログイン画面
+				// アクセスされたURLが正しいURLかどうかをチェック
+				$adminUrl = $this->gEnv->getAdminUrl();
+				if (!strStartsWith($this->gEnv->getCurrentScriptUrl(), $adminUrl . '/')){
+					$adminUrlLink = '<a href="' . $this->convertUrlToHtmlEntity($adminUrl) . '">' . $this->convertToDispString($adminUrl) . '</a>';
+					$this->SetMsg(self::MSG_APP_ERR, $this->_('Correct url is this:') . ' ' . $adminUrlLink);		// 正しいURLはこちらです：
+				}
+												
 				if (!empty($this->redirectUrl)){		// 遷移先
 					$this->tmpl->setAttribute('redirect_url', 'visibility', 'visible');
 					$this->tmpl->addVar('redirect_url', 'url', $this->convertToDispString($this->redirectUrl));
