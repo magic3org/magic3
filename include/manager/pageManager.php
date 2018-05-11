@@ -5645,8 +5645,8 @@ class PageManager extends Core
 			
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
 			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '"><div class="m3widgettitle">' . $widgetMark . $rows[$i]['wd_name'] . '</div>' . $operationMenu . '</dt>' . M3_NL;
-			$contents .= '<dd><table style="width:100%;"><tr style="vertical-align:top;"><td style="width:35px;">' . $imageTag . '</td><td>' . $desc . '</td></tr></table><hr />' . M3_NL;
-			$contents .= '<table style="width:100%;"><tr><td>' . $configName . '</td><td style="text-align:right;">' . $configImg . '</td></tr></table></dd>' . M3_NL;
+			$contents .= '<dd><table style="width:100%;"><tr style="vertical-align:top;"><td style="width:35px;border:none;">' . $imageTag . '</td><td style="border:none;">' . $desc . '</td></tr></table><hr />' . M3_NL;
+			$contents .= '<table style="width:100%;"><tr><td style="border:none;">' . $configName . '</td><td style="text-align:right;border:none;">' . $configImg . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;
 		}
 		return $contents;
