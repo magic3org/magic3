@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-10 11:03+0900\n"
-"PO-Revision-Date: 2018-05-10 11:04+0900\n"
+"POT-Creation-Date: 2018-05-16 22:13+0900\n"
+"PO-Revision-Date: 2018-05-16 22:16+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -908,6 +908,31 @@ msgid ""
 msgstr ""
 "アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
 "サイズを超えている可能性があります。 %sバイト)"
+
+#: ../container/admin_mainInstalldataWidgetContainer.php:333
+#, php-format
+msgid "Database updated. Database Version: %s"
+msgstr "DB更新処理が正常に終了しました。現在のDBバージョン: %s"
+
+#: ../container/admin_mainInstalldataWidgetContainer.php:342
+msgid "Failed in updating database"
+msgstr "DB更新に失敗しました"
+
+#: ../container/admin_mainInstalldataWidgetContainer.php:343
+msgid "Script filename"
+msgstr "スクリプト名"
+
+#: ../container/admin_mainInstalldataWidgetContainer.php:391
+#, php-format
+msgid "Database updated. Database Version: from %s to %s"
+msgstr "DBをバージョンアップしました。 DBバージョン: %sから%s"
+
+#: ../container/admin_mainInstalldataWidgetContainer.php:399
+#, php-format
+msgid "Bad script file found in files for update. Filename: %s"
+msgstr ""
+"DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファ"
+"イル名: %s"
 
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:35
 #: ../container/admin_mainUserlistWidgetContainer.php:123

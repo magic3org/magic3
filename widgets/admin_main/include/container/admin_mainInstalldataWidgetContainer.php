@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,6 +25,7 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
+	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 	const UNTITLED_TITLE = 'タイトル未設定:';		// タイトルが取得できない場合のタイトル
 		
@@ -111,6 +112,8 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
 			//$this->sampleId = $request->trimValueOf('sample_sql');
+		} else if ($act == 'updatedb'){		// DBをバージョンアップ
+			$this->execUpdate($request);
 		} else if ($act == 'develop'){		// 開発用モード
 			$this->showDetail = '1';
 		}
@@ -170,6 +173,12 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// その他値を埋め込む
 		$this->tmpl->addVar("_widget", "connect_official", $this->convertToCheckedString($connectOfficial));
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
+		if (!empty($this->showDetail)){			// 開発モードの場合はDBバージョンアップ用ボタンを表示
+			$panelTitle = ' (開発者用)';
+			$this->tmpl->addVar("_widget", "sub_title", $this->convertToDispString($panelTitle));
+			
+			$this->tmpl->setAttribute('show_dbupdate', 'visibility', 'visible');		// DBバージョンアップボタン
+		}
 	}
 	/**
 	 * ディレクトリ内のスクリプトファイルを取得
@@ -284,6 +293,174 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 		fclose($fp);
 		
 		return array($title, $fileDescArray);
+	}
+	/**
+	 * DBバージョンアップ実行
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return								なし
+	 */
+	function execUpdate($request)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$act = $request->trimValueOf('act');
+		
+		// 更新スクリプトがあるかどうか
+		if ($this->getUpdateScriptCount() <= 0){
+			$this->setMsg(self::MSG_GUIDANCE, 'DBは最新です');
+			return;
+		}
+
+		// タイムアウトを停止
+		$this->gPage->setNoTimeout();
+	
+		// テーブルの更新処理
+		$ret = $this->updateDb($filename, $updateErrors);
+
+		if ($ret){// 正常終了の場合
+			// デフォルト値設定
+			
+			// 更新日時を設定
+			$now = date("Y/m/d H:i:s");	// 現在日時
+			$this->_db->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
+		
+			// システム初期化を不可に設定(インストール終了)
+			$this->gSystem->disableInitSystem();
+		
+			// ログ出力
+			$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+
+			$msg = $this->_('Database updated. Database Version: %s');		// DB更新処理が正常に終了しました。現在のDBバージョン: %s
+			$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $currentVer), 1000);
+		} else {
+			// エラーメッセージ追加
+			if (!$ret){
+				if (!isset($errors)) $errors = array();
+				array_splice($errors, count($errors), 0, $updateErrors);
+			}
+			
+			$msg = $this->_('Failed in updating database');			// DB更新に失敗しました
+			if (!empty($filename)) $msg .= '(' . $this->_('Script filename') . '=' . $filename . ')';// スクリプト名
+			$this->setMsg(self::MSG_APP_ERR, $msg);
+		
+			// ログ出力
+			$this->gOpeLog->writeError(__METHOD__, $msg, 1100);
+		}
+		// エラーメッセージを画面に表示
+		if (empty($errors)){
+			$this->setMsg(self::MSG_GUIDANCE, 'DBを更新しました');
+		} else {
+			foreach ($errors as $error) {
+				$this->setMsg(self::MSG_APP_ERR, $error);
+			}
+		}
+	}
+	/**
+	 * DBをバージョンアップ
+	 *
+	 * @param string $filename		エラーがあったファイル名
+	 * @param array $errors			エラーメッセージ
+	 * @return bool					true=成功、false=失敗
+	 */
+	function updateDb(&$filename, &$errors)
+	{
+		$ret = true;
+		
+		// SQLスクリプトディレクトリのチェック
+		$dir = $this->gEnv->getSqlPath() . '/' . self::UPDATE_DIR;
+		$files = $this->getUpdateScriptFiles($dir);
+		for ($i = 0; $i < count($files); $i++){
+			// ファイル名のエラーチェック
+			$fileCheck = true;
+			list($foreVer, $to, $nextVer, $tmp) = explode('_', basename($files[$i], '.sql'));
+			
+			if (!is_numeric($foreVer)) $fileCheck = false;
+			if (!is_numeric($nextVer)) $fileCheck = false;
+			if ($fileCheck && intval($foreVer) >= intval($nextVer)) $fileCheck = false;
+
+			// DBのバージョンをチェックして問題なければ実行
+			if ($fileCheck){
+				// 現在のバージョンを取得
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				if ($foreVer != $currentVer) continue;	// バージョンが異なるときは読みとばす
+			
+				$ret = $this->gInstance->getDbManager()->execInitScriptFile(self::UPDATE_DIR . '/' . $files[$i], $errors);
+				if ($ret){
+					// 成功の場合はDBのバージョンを更新
+					$this->_db->updateSystemConfig(M3_TB_FIELD_DB_VERSION, $nextVer);
+					
+					// 更新情報をログに残す
+					$msg = $this->_('Database updated. Database Version: from %s to %s');// DBをバージョンアップしました。 DBバージョン: %sから%s
+					$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $foreVer, $nextVer), 1002);
+				} else {
+					$filename = $files[$i];
+					break;// 異常終了の場合
+				}
+			} else {
+				// ファイル名のエラーメッセージを出力
+				$msg = $this->_('Bad script file found in files for update. Filename: %s');// DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファイル名: %s
+				$this->gOpeLog->writeWarn(__METHOD__, sprintf($msg, $files[$i]), 1101);
+			}
+		}
+		return $ret;
+	}
+	/**
+	 * DBバージョンアップ用のスクリプトファイルの数を取得
+	 *
+	 * @return int			スクリプトファイル数
+	 */
+	function getUpdateScriptCount()
+	{
+		$count = 0;// ファイル数初期化
+		$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);// 現在のバージョンを取得
+		
+		// SQLスクリプトディレクトリのチェック
+		$dir = $this->gEnv->getSqlPath() . '/' . self::UPDATE_DIR;
+		$files = $this->getUpdateScriptFiles($dir);
+		for ($i = 0; $i < count($files); $i++){
+			// ファイル名のエラーチェック
+			$fileCheck = true;
+			list($foreVer, $to, $nextVer, $tmp) = explode('_', basename($files[$i], '.sql'));
+			
+			if (!is_numeric($foreVer)) $fileCheck = false;
+			if (!is_numeric($nextVer)) $fileCheck = false;
+			if ($fileCheck && intval($foreVer) >= intval($nextVer)) $fileCheck = false;
+
+			// バージョンをチェックして問題なければカウント
+			if ($fileCheck){
+				if (intval($foreVer) >= intval($currentVer)) $count++;
+			}
+		}
+		return $count;
+	}
+	/**
+	 * 追加用スクリプトファイルを取得
+	 *
+	 * @param string $path		読み込みパス
+	 * @return array			スクリプトファイル名
+	 */
+	function getUpdateScriptFiles($path)
+	{
+		$files = array();
+		if (is_dir($path)){
+			$dir = dir($path);
+			while (($file = $dir->read()) !== false){
+				$filePath = $path . '/' . $file;
+				$pathParts = pathinfo($file);
+				$ext = $pathParts['extension'];		// 拡張子
+					
+				// ファイルかどうかチェック
+				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)
+					&& strncmp($file, '_', 1) != 0 &&	// 「_」で始まる名前のファイルは読み込まない
+					$ext == 'sql'){		// 拡張子が「.sql」のファイルだけを読み込む
+					$files[] = $file;
+				}
+			}
+			$dir->close();
+		}
+		// 取得したファイルは番号順にソートする
+		sort($files);
+		return $files;
 	}
 }
 ?>
