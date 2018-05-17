@@ -955,6 +955,8 @@ function debug($msg)
 	} else {
 		$gLogManager->debug(__METHOD__, var_export($msg, true));
 	}
+	// コールスタック情報出力
+	//$gLogManager->debug(__METHOD__, var_export(debug_backtrace(2), true));
 }
 /**
  * 簡易版デバッグ出力(時間付き)

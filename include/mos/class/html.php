@@ -88,7 +88,8 @@ class JHTML
 		}
 		else
 		{
-			JError::raiseWarning( 0, $className.'::'.$func.' not supported.' );
+			// 頻度が多いので出力しない(2018/5/17)
+//			JError::raiseWarning( 0, $className.'::'.$func.' not supported.' );
 			return false;
 		}
 	}
