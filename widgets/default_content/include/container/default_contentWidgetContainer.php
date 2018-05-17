@@ -727,13 +727,16 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			$this->headTitle .= $fetchedRow['cn_meta_title'];
 			$this->headDesc .= $fetchedRow['cn_meta_description'];
 			$this->headKeyword .= $fetchedRow['cn_meta_keywords'];
+			$headOthers .= $fetchedRow['cn_head_others'];		// ヘッダ部その他
 		
 			// HTMLヘッダにタグ出力
+			$headText = '';
 			if ($this->outputHead){			// ヘッダ出力するかどうか
 				$headText = self::$_configArray[default_contentCommonDef::$CF_HEAD_VIEW_DETAIL];
 				$headText = $this->convertM3ToHead($headText, $contentInfo);
-				$this->gPage->setHeadOthers($headText);
 			}
+			if (!empty($headOthers)) $headText .= $headOthers;		// コンテンツごとの個別タグ設定
+			if (!empty($headText)) $this->gPage->setHeadOthers($headText);
 		}
 		
 		$headClassStr = $this->gDesign->getDefaultContentHeadClassString();			// コンテンツヘッダ用CSSクラス

@@ -324,6 +324,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$metaTitle = $request->trimValueOf('item_meta_title');		// ページタイトル名
 		$metaDesc = $request->trimValueOf('item_meta_desc');			// ページ要約
 		$metaKeyword = $request->trimValueOf('item_meta_keyword');	// ページキーワード
+		$headOthers = $request->valueOf('item_head_others');	// ヘッダ部その他
 		$password = $request->trimValueOf('password');
 		$relatedContent = $request->trimValueOf('item_related_content');	// 関連コンテンツ
 		$jQueryScript = $request->valueOf('item_jquery_script');	// jQueryスクリプト
@@ -443,11 +444,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $nextContentId * (-1)/*次のコンテンツIDのチェック*/,
 														$this->langId, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
-														$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $otherParams);
+														$metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $newSerial, $otherParams);
 				} else {
 					$ret = self::$_mainDb->addContentItem(default_contentCommonDef::$_contentType, $contentId, 
 														$this->langId, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
-														$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $otherParams);
+														$metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $newSerial, $otherParams);
 				}
 				// ##### 添付ファイル情報を更新 #####
 				if ($ret){
@@ -558,7 +559,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				$ret = self::$_mainDb->updateContentItem($this->serialNo, $name, $desc, $html, $visible, 0/*未使用(デフォルトかどうか)*/, $limited, $key, $password, 
-															$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $oldRecord, $otherParams);
+															$metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $newSerial, $oldRecord, $otherParams);
 				if ($ret){
 					// コンテンツに画像がなくなった場合は、サムネールを削除
 					if (empty($thumbFilename) && !empty($oldRecord['cn_thumb_filename'])){
@@ -834,6 +835,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$metaTitle = $row['cn_meta_title'];		// ページタイトル名(METAタグ)
 				$metaDesc = $row['cn_meta_description'];		// ページ要約(METAタグ)
 				$metaKeyword = $row['cn_meta_keywords'];		// ページキーワード(METAタグ)
+				$headOthers = $row['cn_head_others'];	// ヘッダ部その他
 				$start_date = $this->convertToDispDate($row['cn_active_start_dt']);	// 公開期間開始日
 				$start_time = $this->convertToDispTime($row['cn_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
 				$end_date = $this->convertToDispDate($row['cn_active_end_dt']);	// 公開期間終了日
@@ -873,7 +875,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				
 				// 拡張エリアの状態を設定
-				if ($hasPassword || !empty($limited) || !empty($key) || !empty($relatedContent) || count($this->attachFileInfoArray) > 0) $this->isOpenOptionArea = true;
+				if ($hasPassword || !empty($headOthers) || !empty($limited) || !empty($key) || !empty($relatedContent) || count($this->attachFileInfoArray) > 0) $this->isOpenOptionArea = true;
 			} else {
 				$this->serialNo = 0;
 				
@@ -892,6 +894,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$metaTitle = '';		// ページタイトル名(METAタグ)
 				$metaDesc = '';		// ページ要約(METAタグ)
 				$metaKeyword = '';		// ページキーワード(METAタグ)
+				$headOthers = '';	// ヘッダ部その他
 				$start_date = '';	// 公開期間開始日
 				$start_time = '';	// 公開期間開始時間
 				$end_date = '';	// 公開期間終了日
@@ -1012,6 +1015,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "meta_title", $this->convertToDispString($metaTitle));		// ページタイトル名(METAタグ)
 		$this->tmpl->addVar("_widget", "meta_desc", $this->convertToDispString($metaDesc));		// ページ要約(METAタグ)
 		$this->tmpl->addVar("_widget", "meta_keyword", $this->convertToDispString($metaKeyword));		// ページキーワード(METAタグ)
+		$this->tmpl->addVar("_widget", "head_others", $this->convertToDispString($headOthers));		// ヘッダ部その他
 		$this->tmpl->addVar("_widget", "update_user", $this->convertToDispString($update_user));	// 更新者
 		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($update_dt));	// 更新日時
 		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 公開期間開始日
