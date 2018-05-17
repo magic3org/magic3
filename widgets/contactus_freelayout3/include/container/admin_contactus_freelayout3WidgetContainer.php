@@ -30,6 +30,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	private $cancelButtonId;		// 送信キャンセルボタンのタグID
 	private $resetButtonId;		// エリアリセットボタンのタグID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
+	const DEFAULT_STR_REQUIRED = '<font color="red">*必須</font>';		// 「必須」表示用テキスト
 	const DEFAULT_USER_EMAIL_SUBJECT = '送信内容ご確認(自動送信メール)';
 	const DEFAULT_USER_EMAIL_FORMAT = "以下の内容でお問い合わせを送信しました。\n\n[#BODY#]";
 	const UPLOAD_MAX_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
@@ -182,6 +183,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$msgConfirm = $request->trimValueOf('item_msg_confirm');		// 確認画面メッセージ
 		$msgComplete = $request->trimValueOf('item_msg_complete');		// 完了画面メッセージ
 		$contentComplete = $request->valueOf('item_content_complete');		// 完了画面コンテンツ
+		$requiredLabel = $request->valueOf('item_required_label');		// 必須入力ラベル
 		$accessKey = $request->trimValueOf('item_access_key');		// 発行アクセスキー
 		$hideInComplete	= $request->trimCheckedValueOf('item_hide_in_complete');			// お問い合わせ項目を送信完了画面で隠すかどうか
 		
@@ -268,6 +270,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// データ修正
 				$uploadFileExtension = implode(',', array_map('trim', explode(',', $uploadFileExtension)));
 				
+				// 必須入力ラベル
+				if (empty($requiredLabel)) $requiredLabel = self::DEFAULT_STR_REQUIRED;
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
@@ -293,6 +298,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
 				$newObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 				$newObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
+				$newObj->requiredLabel = $requiredLabel;		// 必須入力ラベル
 				$newObj->accessKey = $accessKey;		// 発行アクセスキー
 				$newObj->hideInComplete	= $hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				
@@ -360,6 +366,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// データ修正
 				$uploadFileExtension = implode(',', array_map('trim', explode(',', $uploadFileExtension)));
 				
+				// 必須入力ラベル
+				if (empty($requiredLabel)) $requiredLabel = self::DEFAULT_STR_REQUIRED;
+				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -386,6 +395,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->msgConfirm = $msgConfirm;		// 確認画面メッセージ
 					$targetObj->msgComplete = $msgComplete;		// 完了画面メッセージ
 					$targetObj->contentComplete = $contentComplete;		// 完了画面コンテンツ
+					$targetObj->requiredLabel = $requiredLabel;		// 必須入力ラベル
 					$targetObj->accessKey = $accessKey;		// 発行アクセスキー
 					$targetObj->hideInComplete	= $hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				}
@@ -436,6 +446,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$msgConfirm = '';		// 確認画面メッセージ
 				$msgComplete = '';		// 完了画面メッセージ
 				$contentComplete = '';		// 完了画面コンテンツ
+				$requiredLabel = self::DEFAULT_STR_REQUIRED;		// 必須入力ラベル
 				$accessKey = '';		// 発行アクセスキー
 				$hideInComplete	= 0;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				
@@ -480,6 +491,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
 					$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
 					$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
+					$requiredLabel = $targetObj->requiredLabel;		// 必須入力ラベル
+					if (empty($requiredLabel)) $requiredLabel = self::DEFAULT_STR_REQUIRED;
 					$accessKey = $targetObj->accessKey;		// 発行アクセスキー
 					$hideInComplete	= $targetObj->hideInComplete;			// お問い合わせ項目を送信完了画面で隠すかどうか
 				}
@@ -531,6 +544,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar('_widget', 'msg_confirm', $this->convertToDispString($msgConfirm));		// 確認画面メッセージ
 		$this->tmpl->addVar('_widget', 'msg_complete', $this->convertToDispString($msgComplete));		// 完了画面メッセージ
 		$this->tmpl->addVar('_widget', 'content_complete', $contentComplete);		// 完了画面メッセージ
+		$this->tmpl->addVar('_widget', 'required_label', $this->convertToDispString($requiredLabel));		// 必須入力ラベル
 		$this->tmpl->addVar('_widget', 'access_key', $this->convertToDispString($accessKey));		// 発行アクセスキー
 		$this->tmpl->addVar("_widget", "hide_in_complete_checked", $this->convertToCheckedString($hideInComplete));			// お問い合わせ項目を送信完了画面で隠すかどうか
 		

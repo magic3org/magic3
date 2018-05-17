@@ -34,6 +34,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $oldFileInfoArray;	// ファイル情報旧データ
 	private $uploadFileExtension;		// アップロード可能なファイルの拡張子
 	private $uploadArea;		// ファイルアップロードエリア
+	private $requiredLabel;		// 必須入力ラベル
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
@@ -120,6 +121,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$msgConfirm = $targetObj->msgConfirm;		// 確認画面メッセージ
 		$msgComplete = $targetObj->msgComplete;		// 完了画面メッセージ
 		$contentComplete = $targetObj->contentComplete;		// 完了画面コンテンツ
+		$this->requiredLabel = $targetObj->requiredLabel;		// 必須入力ラベル
+		if (empty($this->requiredLabel)) $this->requiredLabel = self::DEFAULT_STR_REQUIRED;
 		$accessKey = $targetObj->accessKey;		// 発行アクセスキー
 		$this->css		= $targetObj->css;		// CSS
 		$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
@@ -588,7 +591,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 			$type = $infoObj->type;		// 項目タイプ
 			$def = $infoObj->def;		// 項目定義
 			$required = '';
-			if (!empty($infoObj->required)) $required = '&nbsp;' . self::DEFAULT_STR_REQUIRED;// 必須表示
+			if (!empty($infoObj->required)) $required = '&nbsp;' . $this->requiredLabel;// 必須表示
 			$disabled	= $infoObj->disabled;			// 編集不可
 			$titleVisible = $infoObj->titleVisible;		// タイトルを表示するかどうか
 			$alphabet	= $infoObj->alphabet;			// 入力制限半角英字
