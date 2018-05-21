@@ -124,6 +124,7 @@ class custom_searchDb extends BaseDb
 			$queryStr .= 'FROM content ';
 			$queryStr .=  'WHERE cn_visible = true ';
 			$queryStr .=    'AND cn_deleted = false ';		// 削除されていない
+			$queryStr .=    'AND cn_search_target = true ';		// 検索対象
 			$queryStr .=    'AND cn_type = ? ';$params[] = $contentType;
 			$queryStr .=    'AND cn_language_id = ? ';$params[] = $langId;
 			if (!$all) $queryStr .=    'AND cn_user_limited = false ';		// ユーザ制限のないデータ

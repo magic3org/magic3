@@ -321,6 +321,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
 		$limited = ($request->trimValueOf('item_limited') == 'on') ? 1 : 0;		// チェックボックス
 //		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// チェックボックス
+		$searchTarget = $request->trimCheckedValueOf('item_search_target');		// 検索対象かどうか
 		$metaTitle = $request->trimValueOf('item_meta_title');		// ページタイトル名
 		$metaDesc = $request->trimValueOf('item_meta_desc');			// ページ要約
 		$metaKeyword = $request->trimValueOf('item_meta_keyword');	// ページキーワード
@@ -438,7 +439,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 										'cn_template_id'		=> $this->templateId,		// テンプレートID
 										'cn_sub_template_id'	=> $this->subTemplateId,	// サブテンプレートID
 										'cn_attach_access_key'	=> $accessKey,		// アクセスキー
-										'cn_attach_access_url'	=> $accessUrl		// アクセスキー取得用URL
+										'cn_attach_access_url'	=> $accessUrl,		// アクセスキー取得用URL
+										'cn_search_target'		=> $searchTarget	// 検索対象かどうか
 								);
 				
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
@@ -545,7 +547,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 										'cn_template_id'		=> $this->templateId,		// テンプレートID
 										'cn_sub_template_id'	=> $this->subTemplateId,	// サブテンプレートID
 										'cn_attach_access_key'	=> $accessKey,		// アクセスキー
-										'cn_attach_access_url'	=> $accessUrl		// アクセスキー取得用URL
+										'cn_attach_access_url'	=> $accessUrl,		// アクセスキー取得用URL
+										'cn_search_target'		=> $searchTarget	// 検索対象かどうか
 								);
 										
 				// 履歴からのデータ取得の場合はシリアル番号を最新に変更
@@ -832,6 +835,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$visible = $row['cn_visible'];
 				$default = '0';			// 未使用(デフォルトかどうか)
 				$limited = $row['cn_user_limited'];		// ユーザ制限
+				$searchTarget = $row['cn_search_target'];		// 検索対象かどうか
 				$metaTitle = $row['cn_meta_title'];		// ページタイトル名(METAタグ)
 				$metaDesc = $row['cn_meta_description'];		// ページ要約(METAタグ)
 				$metaKeyword = $row['cn_meta_keywords'];		// ページキーワード(METAタグ)
@@ -891,6 +895,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$visible = '1';
 				$default = '0';		// 未使用(デフォルトかどうか)
 				$limited = '0';		// ユーザ制限
+				$searchTarget = '1';		// 検索対象かどうか
 				$metaTitle = '';		// ページタイトル名(METAタグ)
 				$metaDesc = '';		// ページ要約(METAタグ)
 				$metaKeyword = '';		// ページキーワード(METAタグ)
@@ -1041,6 +1046,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 */
 		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));		// コンテンツ公開
 		$this->tmpl->addVar("_widget", "sel_item_limited", $this->convertToCheckedString($limited));		// ユーザ制限
+		$this->tmpl->addVar("_widget", "search_target_checked", $this->convertToCheckedString($searchTarget));		// 検索対象かどうか
 	
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);		// 選択中のシリアル番号
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用

@@ -454,11 +454,11 @@ $(function(){
 	    <th><span {_HELP_CONTENT_HEAD_OTHERS}>ヘッダ部その他</span></th>
 	    <td colspan="3" height="50"><textarea name="item_head_others" class="form-control">{HEAD_OTHERS}</textarea></td>
 	</tr>
-	<tr>
-	    <th><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
-	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
-	    <th><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
-	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	<tr class="option_area" style="display:none;">
+	    <th><span {_HELP_CONTENT_ATTRIBUTE}>コンテンツ属性</span></th>
+	    <td colspan="3">
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_search_target" {SEARCH_TARGET_CHECKED} /><span {_HELP_CONTENT_SEARCH_TARGET}>検索対象</span></label></div>
+        </td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_ACCESS_CONTROL}>閲覧制限</span></th>
@@ -526,6 +526,12 @@ $(function(){
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
 	    <td colspan="3"><input type="text" name="item_key" class="form-control" value="{SEL_ITEM_KEY}" maxlength="20" {KEY_DISABLED} /></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <th><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
+	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr>
 	    <td colspan="4"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
