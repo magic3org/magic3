@@ -591,6 +591,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'baiduspider+'				=> 'baidu.png',	// 百度
 			'sogou web spider'			=> '',			// 搜狗
 			'asahina-antenna'			=> '',			// 朝日奈アンテナ
+			'hatena'					=> 'hatena.gif',	// はてなブックマーク
 			'hatena antenna'			=> 'hatena.gif',	// はてなアンテナ
 			'yeti'						=> 'naver.gif',	// Naver(韓国)
 			'icc-crawler'				=> 'nict.gif',	// 独立行政法人情報通信研究機構
