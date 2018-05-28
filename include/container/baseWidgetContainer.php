@@ -2945,6 +2945,43 @@ class BaseWidgetContainer extends Core
 		return $ret;
 	}
 	/**
+	 * ウィジェットパラメータオブジェクトとコンテンツ情報を追加
+	 *
+	 * @param string $defSerial			画面定義シリアル番号
+	 * @param string $defConfigId		ウィジェット定義ID
+	 * @param object $paramObj			ウィジェットパラメータオブジェクトの配列
+	 * @param object $newObj			新規追加パラメータオブジェクト(nameメンバーに設定名をセット)
+	 * @param string $contentType		コンテンツタイプ
+	 * @param string $contentId			コンテンツID
+	 * @return bool							true=成功、false=失敗
+	 */
+	function addPageDefParamWithContent(&$defSerial, &$defConfigId, &$paramObj, $newObj, $contentType = '', $contentId = '')
+	{
+		$newParam = new stdClass;
+		$newParam->id = -1;		// 新規追加
+		$newParam->object = $newObj;
+	
+		// ウィジェットパラメータオブジェクト更新
+		$ret = $this->updateWidgetParamObjectWithId($newParam);
+		if ($ret){
+			$paramObj[] = $newParam;		// 新規定義を追加
+			$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
+			$defConfigId = $newParam->id;		// 定義定義IDを更新
+		}
+		
+		// 画面定義更新
+		if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
+			$ret = $this->_db->updateWidgetConfigIdWithContent($this->gEnv->getCurrentWidgetId(), $defSerial, $defConfigId, $newObj->name, $contentType, $contentId);
+		}
+		
+		// キャッシュをクリア
+		$this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defConfigId);
+		
+		// 親ウィンドウを更新
+		$this->gPage->updateParentWindow($defSerial);
+		return $ret;
+	}
+	/**
 	 * ウィジェットパラメータオブジェクトを更新
 	 *
 	 * @param string 	$defSerial			画面定義シリアル番号
@@ -2976,6 +3013,48 @@ class BaseWidgetContainer extends Core
 		// 画面定義更新
 		if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
 			$ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $id, $updateObj->name, $menuId);
+		}
+		
+		// キャッシュをクリア
+		$this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $id);
+		
+		// 親ウィンドウを更新
+		$this->gPage->updateParentWindow($defSerial);
+		return $ret;
+	}
+	/**
+	 * ウィジェットパラメータオブジェクトとコンテンツ情報を更新
+	 *
+	 * @param string $defSerial			画面定義シリアル番号
+	 * @param string $defConfigId		ウィジェット定義ID
+	 * @param object $paramObj			ウィジェットパラメータオブジェクトの配列
+	 * @param int    $id				定義ID
+	 * @param object $updateObj			更新パラメータオブジェクト
+	 * @param string $contentType		コンテンツタイプ
+	 * @param string $contentId			コンテンツID
+	 * @return bool						true=成功、false=失敗
+	 */
+	function updatePageDefParamWithContent(&$defSerial, &$defConfigId, &$paramObj, $id, $updateObj, $contentType = '', $contentId = '')
+	{
+		// 該当項目を更新
+		$ret = false;
+		for ($i = 0; $i < count($paramObj); $i++){
+			$configId	= $paramObj[$i]->id;// 定義ID
+			if ($configId == $id){
+				// ウィジェットオブジェクト更新
+				$paramObj[$i]->object = $updateObj;
+				
+				// ウィジェットパラメータオブジェクトを更新
+				$ret = $this->updateWidgetParamObjectWithId($paramObj[$i]);
+				if ($ret) $defConfigId = $id;		// 定義定義IDを更新
+				break;
+			}
+		}
+		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
+		
+		// 画面定義更新
+		if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
+			$ret = $this->_db->updateWidgetConfigIdWithContent($this->gEnv->getCurrentWidgetId(), $defSerial, $id, $updateObj->name, $contentType, $contentId);
 		}
 		
 		// キャッシュをクリア

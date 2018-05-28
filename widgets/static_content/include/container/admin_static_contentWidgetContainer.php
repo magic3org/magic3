@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -200,7 +200,8 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->showReadMore	= $showReadMore;		// 「続きを読む」ボタンを表示
 				$newObj->readMoreTitle	= $readMoreTitle;		// 「続きを読む」ボタンタイトル
 				
-				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
+				// コンテンツ情報を付加して設定値を追加
+				$ret = $this->addPageDefParamWithContent($defSerial, $defConfigId, $this->paramObj, $newObj, M3_VIEW_TYPE_CONTENT/*コンテンツタイプ*/, $this->contentId/*コンテンツID*/);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -222,8 +223,8 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->readMoreTitle	= $readMoreTitle;		// 「続きを読む」ボタンタイトル
 				}
 				
-				// 設定値を更新
-				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
+				// コンテンツ情報を付加して設定値を更新
+				if ($ret) $ret = $this->updatePageDefParamWithContent($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj, M3_VIEW_TYPE_CONTENT/*コンテンツタイプ*/, $this->contentId/*コンテンツID*/);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					

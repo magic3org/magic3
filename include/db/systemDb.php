@@ -1473,6 +1473,55 @@ class SystemDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * ウィジェットの定義IDとコンテンツ情報を更新する
+	 *
+	 * @param string $widgetId		ウィジェットID
+	 * @param int    $serial		シリアル番号
+	 * @param int    $configId		定義ID
+	 * @param int    $title			定義名
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @return bool				true=成功、false=失敗
+	 */
+	function updateWidgetConfigIdWithContent($widgetId, $serial, $configId, $title = '', $contentType = '', $contentId = '')
+	{
+		global $gEnvManager;
+
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+
+		// 現在の値取得
+		$queryStr  = 'SELECT * FROM _page_def ';
+		$queryStr .=   'WHERE pd_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if (!$ret){		// 登録レコードがないとき
+			$this->endTransaction();
+			return false;
+		}
+		if ($row['pd_widget_id'] != $widgetId){		// ウィジェットIDが異なるとき
+			$this->endTransaction();
+			return false;
+		}
+		// 既存項目を更新
+		$queryStr  = 'UPDATE _page_def ';
+		$queryStr .=   'SET ';
+		$queryStr .=     'pd_config_id = ?, ';
+		$queryStr .=     'pd_config_name = ?, ';
+		$queryStr .=     'pd_content_type = ?, ';
+		$queryStr .=     'pd_content_id = ?, ';
+		$queryStr .=     'pd_update_user_id = ?, ';
+		$queryStr .=     'pd_update_dt = ? ';
+		$queryStr .=   'WHERE pd_serial = ? ';
+		$this->execStatement($queryStr, array($configId, $title, $contentType, $contentId, $userId, $now, $serial));
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * ウィジェットを移動する
 	 *
 	 * @param string $pageId		ページID
