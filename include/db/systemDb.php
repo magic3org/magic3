@@ -1065,6 +1065,58 @@ class SystemDb extends BaseDb
 		return $retValue;
 	}
 	/**
+	 * 指定したコンテンツの表示できるサブページIDを取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @param string $pageId		ページID
+	 * @param array  $rows			レコード
+	 * @param int    $setId			定義セットID
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getSubPageIdByContent($contentType, $contentId, $pageId, &$rows, $setId = 0)
+	{
+		global $gEnvManager;
+		
+		$params = array();
+		$initDt = $gEnvManager->getInitValueOfTimestamp();		// 日時初期化値
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		
+		$queryStr  = 'SELECT DISTINCT pd_sub_id ';
+		$queryStr .= 'FROM _page_def LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
+		$queryStr .=   'LEFT JOIN _page_info ON pd_id = pn_id AND pd_sub_id = pn_sub_id AND pn_deleted = false AND pn_language_id = \'\' ';		// ページ情報
+		$queryStr .= 'WHERE pd_id = ? '; $params[] = $pageId;
+		$queryStr .=   'AND pd_sub_id != \'\' ';
+		$queryStr .=   'AND pd_set_id = ? '; $params[] = $setId;
+		$queryStr .=   'AND pd_visible = true ';		// ウィジェットを表示
+		$queryStr .=   'AND pg_active = true ';			// 公開中のページ
+		
+		// ログイン状態
+		if ($gEnvManager->isCurrentUserLogined()){		// ログイン中のとき
+			$queryStr .=     'AND (pd_view_control_type = 0 OR pd_view_control_type = 1) ';		// ログイン時のみ表示
+		} else {
+			$queryStr .=     'AND (pd_view_control_type = 0 OR pd_view_control_type = 2) ';		// 非ログイン時のみ表示
+		}
+		
+		// 公開期間を指定
+		$queryStr .=    'AND (pd_active_start_dt = ? OR (pd_active_start_dt != ? AND pd_active_start_dt <= ?)) ';
+		$queryStr .=    'AND (pd_active_end_dt = ? OR (pd_active_end_dt != ? AND pd_active_end_dt > ?)) ';
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+		$params[] = $initDt;
+		$params[] = $initDt;
+		$params[] = $now;
+
+		// コンテンツを指定
+		$queryStr .=   'AND pd_content_type = ? '; $params[] = $contentType;		// コンテンツタイプ
+		$queryStr .=   'AND pd_content_id = ? '; $params[] = $contentId;		// コンテンツID
+
+		$queryStr .=   'ORDER BY pg_priority';
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
+	}
+	/**
 	 * 指定したコンテンツが表示可能なサブページIDを取得
 	 *
 	 * @param string $contentType	コンテンツタイプ

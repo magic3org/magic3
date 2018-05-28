@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -402,6 +402,15 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		
 					// 検索結果用のテキスト作成
 					$summary = $this->_createSummaryText($content);
+				}
+				
+				// 固定コンテンツウィジェット等でコンテンツをページに直接埋め込んでいる場合はリンク先を修正
+				$ret = $this->_db->getSubPageIdByContent(M3_VIEW_TYPE_CONTENT, $contentId, $this->gEnv->getCurrentPageId(), $rows);
+				if ($ret){
+					$pageSubId = $rows[0]['pd_sub_id'];
+					
+					// ページへのURLを作成
+					$linkUrl = $this->getUrl($this->gEnv->createPageUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId, true/*リンク用*/);
 				}
 				break;
 			case M3_VIEW_TYPE_USER:		// ユーザ作成コンテンツの場合
