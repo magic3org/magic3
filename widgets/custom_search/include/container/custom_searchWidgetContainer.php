@@ -380,6 +380,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	function searchItemsLoop($index, $fetchedRow)
 	{
 		// コンテンツへのリンクを生成
+		$title = '';
 		$linkUrl = '';
 		$summary = '';		// コンテンツ概要
 		$contentType = $fetchedRow['type'];
@@ -408,6 +409,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$ret = $this->_db->getSubPageIdByContent(M3_VIEW_TYPE_CONTENT, $contentId, $this->gEnv->getCurrentPageId(), $rows);
 				if ($ret){
 					$pageSubId = $rows[0]['pd_sub_id'];
+					$pageTitle = $rows[0]['pn_meta_title'];
+	
+					// ページタイトルが設定されている場合は取得
+					if (!empty($pageTitle)) $title = $pageTitle;
 					
 					// ページへのURLを作成
 					$linkUrl = $this->getUrl($this->gEnv->createPageUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId, true/*リンク用*/);
@@ -596,9 +601,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			default:
 				break;
 		}
-		$title = $fetchedRow['name'];
+		if (empty($title)) $title = $fetchedRow['name'];
 		$escapedTitle = $this->convertToDispString($title);
-		$titleLink = $this->convertToDispString($fetchedRow['name']);
+		$titleLink = $this->convertToDispString($title);
 		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
 		if (!empty($linkUrl)) $titleLink = '<a href="' . $escapedLinkUrl . '" >' . $titleLink . '</a>';
 

@@ -1082,7 +1082,7 @@ class SystemDb extends BaseDb
 		$initDt = $gEnvManager->getInitValueOfTimestamp();		// 日時初期化値
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		
-		$queryStr  = 'SELECT DISTINCT pd_sub_id ';
+		$queryStr  = 'SELECT DISTINCT pd_sub_id, pn_meta_title ';
 		$queryStr .= 'FROM _page_def LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
 		$queryStr .=   'LEFT JOIN _page_info ON pd_id = pn_id AND pd_sub_id = pn_sub_id AND pn_deleted = false AND pn_language_id = \'\' ';		// ページ情報
 		$queryStr .= 'WHERE pd_id = ? '; $params[] = $pageId;
