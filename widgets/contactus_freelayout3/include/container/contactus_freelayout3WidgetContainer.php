@@ -17,6 +17,7 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 {
+	private $langId;		// メッセージ表示言語を取得
 	private $fieldInfoArray = array();			// お問い合わせ項目情報
 	private $valueArray;		// 項目入力値
 	private $css;
@@ -101,7 +102,6 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		// デフォルト値設定
 		$inputEnabled = true;			// 入力の許可状態
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$sendMessage = self::DEFAULT_SEND_MESSAGE;			// メール送信機能を使用するかどうか
 		
 		// テンプレートタイプがArtisteerの場合は画面出力を調整
@@ -109,7 +109,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 			$targetObj->useArtisteer){
 			$this->useArtisteer = true;					// Artisteer対応デザイン
 		}
-				
+		
+		$this->langId = $targetObj->langId;		// メッセージ表示言語を取得
+		if (empty($this->langId)) $this->langId	= $this->gEnv->getDefaultLanguage();
 		//$sendMessage = $targetObj->sendMessage;			// メール送信機能を使用するかどうか
 		$emailReceiver = $targetObj->emailReceiver;		// メール受信者
 		$emailSubject = $targetObj->emailSubject;		// メール件名
@@ -168,7 +170,15 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				// ##### ファイル情報を取得 #####
 				$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
 				if (count($fileInfoArray) >= $uploadMaxCount){			// 上限に達している場合はアップロードエラー
-					$this->ajaxUploadFileError('アップロード可能なファイル数の上限を超えています');
+					switch ($this->langId){
+					case 'en':
+						$msg = 'Over allowed max file count.';
+						break;
+					default:
+						$msg = 'アップロード可能なファイル数の上限を超えています';
+						break;
+					}
+					$this->ajaxUploadFileError($msg);
 				} else {
 					// 最初のファイルアップロードのときは、作業ディレクトリを作成
 					$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();
@@ -199,12 +209,28 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 					// 必須チェック
 					if (!empty($required) && empty($this->valueArray[$i])){
-						$this->setUserErrorMsg('「' . $title . '」は必須入力項目です');
+						
+						switch ($this->langId){
+						case 'en':
+							$msg = '\'' . $title . '\' is required item.';
+							break;
+						default:
+							$msg = '「' . $title . '」は必須入力項目です';
+							break;
+						}
+						$this->setUserErrorMsg($msg);
 					} else {
 						// データタイプチェック
 						switch ($type){
 							case 'email':			// Eメール形式
-								$ret = $this->checkMailAddress($this->valueArray[$i], '「' . $title . '」', true/*入力なしOK*/);
+								switch ($this->langId){
+								case 'en':
+									$ret = $this->checkMailAddress($this->valueArray[$i], '\'' . $title . '\'', true/*入力なしOK*/, 'en'/*ダミーでロケール指定*/);
+									break;
+								default:
+									$ret = $this->checkMailAddress($this->valueArray[$i], '「' . $title . '」', true/*入力なしOK*/);
+									break;
+								}
 								
 								// 確認用のEメールフィールドの場合は、値が同じかチェック
 								if ($ret && !empty($def)){
@@ -220,7 +246,17 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 												$refNo--;
 												$refValue = $this->valueArray[$refNo];
 												$refTitle = $this->fieldInfoArray[$refNo]->title;
-												if ($this->valueArray[$i] != $refValue) $this->setUserErrorMsg('「' . $title . '」が「' . $refTitle . '」の内容と一致しません');
+												if ($this->valueArray[$i] != $refValue){
+													switch ($this->langId){
+													case 'en':
+														$msg = '\'' . $title . '\' does not match \'' . $refTitle . '\' value.';
+														break;
+													default:
+														$msg = '「' . $title . '」が「' . $refTitle . '」の内容と一致しません';
+														break;
+													}
+													$this->setUserErrorMsg($msg);
+												}
 											}
 											break;
 										}
@@ -240,7 +276,16 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				// エラーなしの場合は送信画面へ遷移
 				if ($this->getMsgCount() == 0){
 					$msg = $msgConfirm;			// 確認画面メッセージ
-					if (empty($msg)) $msg = '入力内容をご確認の上「送信」ボタンを押してください';
+					if (empty($msg)){
+						switch ($this->langId){
+						case 'en':
+							$msg = 'Confirm input data and push send button.';
+							break;
+						default:
+							$msg = '入力内容をご確認の上「送信」ボタンを押してください';
+							break;
+						}
+					}
 					$this->setGuidanceMsg($msg);
 				
 					// 項目を入力不可に設定
@@ -277,13 +322,28 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 					// 必須チェック
 					if (!empty($required) && empty($this->valueArray[$i])){
-						$this->setUserErrorMsg('「' . $title . '」は必須入力項目です');
+						switch ($this->langId){
+						case 'en':
+							$msg = '\'' . $title . '\' is required item.';
+							break;
+						default:
+							$msg = '「' . $title . '」は必須入力項目です';
+							break;
+						}
+						$this->setUserErrorMsg($msg);
 					} else {
 						// データタイプチェック
 						switch ($type){
 							case 'email':			// Eメール形式
-								$this->checkMailAddress($this->valueArray[$i], '「' . $title . '」', true/*入力なしOK*/);
-								
+								switch ($this->langId){
+								case 'en':
+									$this->checkMailAddress($this->valueArray[$i], '\'' . $title . '\'', true/*入力なしOK*/, 'en'/*ダミーでロケール指定*/);
+									break;
+								default:
+									$this->checkMailAddress($this->valueArray[$i], '「' . $title . '」', true/*入力なしOK*/);
+									break;
+								}
+						
 								// 確認用のEメールフィールドの場合は、値が同じかチェック
 								if ($ret && !empty($def)){
 									$refNo = 0;
@@ -298,7 +358,17 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 												$refNo--;
 												$refValue = $this->valueArray[$refNo];
 												$refTitle = $this->fieldInfoArray[$refNo]->title;
-												if ($this->valueArray[$i] != $refValue) $this->setUserErrorMsg('「' . $title . '」が「' . $refTitle . '」の内容と一致しません');
+												if ($this->valueArray[$i] != $refValue){
+													switch ($this->langId){
+													case 'en':
+														$msg = '\'' . $title . '\' does not match \'' . $refTitle . '\' value.';
+														break;
+													default:
+														$msg = '「' . $title . '」が「' . $refTitle . '」の内容と一致しません';
+														break;
+													}
+													$this->setUserErrorMsg($msg);
+												}
 											}
 											break;
 										}
@@ -321,7 +391,15 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 												if (file_exists($path)){
 													$attachFiles[] = array('path' => $path, 'filename' => $filename);
 												} else {
-													$this->setUserErrorMsg('「' . $title . '」の「' . $filename . '」がアップロードされていません');
+													switch ($this->langId){
+													case 'en':
+														$msg = '\'' . $filename . '\' of \'' . $title . '\' is not uploaded.';
+														break;
+													default:
+														$msg = '「' . $title . '」の「' . $filename . '」がアップロードされていません';
+														break;
+													}
+													$this->setUserErrorMsg($msg);
 												}
 												break;
 											}
@@ -340,7 +418,15 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 											if (file_exists($path)){
 												$attachFiles[] = array('path' => $path, 'filename' => $filename);
 											} else {
-												$this->setUserErrorMsg('「' . $title . '」の「' . $filename . '」がアップロードされていません');
+												switch ($this->langId){
+												case 'en':
+													$msg = '\'' . $filename . '\' of \'' . $title . '\' is not uploaded.';
+													break;
+												default:
+													$msg = '「' . $title . '」の「' . $filename . '」がアップロードされていません';
+													break;
+												}
+												$this->setUserErrorMsg($msg);
 											}
 											break;
 										}
@@ -359,7 +445,16 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				// エラーなしの場合はメール送信
 				if ($this->getMsgCount() == 0){
 					$msg = $msgComplete;			// 完了画面メッセージ
-					if (empty($msg)) $msg = '送信完了しました';
+					if (empty($msg)){
+						switch ($this->langId){
+						case 'en':
+							$msg = 'Sending message completed';
+							break;
+						default:
+							$msg = '送信完了しました';
+							break;
+						}
+					}
 					$this->setGuidanceMsg($msg);
 				
 					// メール送信設定のときはメールを送信

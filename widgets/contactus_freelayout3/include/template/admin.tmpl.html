@@ -212,6 +212,16 @@ $(function(){
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
 	    <div class="col-sm-4 m3config_item following"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div>
 	    </patTemplate:tmpl>
+		<div class="pull-right">
+		<div class="form-control-static col-sm-1 m3config_item" style="width:4em;">言語：</div>
+		<div class="col-sm-3 m3config_item" style="width:10em;">
+	    <select name="item_lang">
+	       <patTemplate:tmpl name="lang_list">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+        </select>
+		</div>
+		</div>
 	    </td>
 	</tr>
     <tr>
@@ -265,7 +275,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTACTUS_FIELD_CONTROL}>お問い合わせ<br />項目制御</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_hide_in_complete" {HIDE_IN_COMPLETE_CHECKED} />送信完了画面に表示しない</label></div>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_hide_in_complete" {HIDE_IN_COMPLETE_CHECKED} />送信完了画面に項目を表示しない</label></div>
 	    </td>
 	</tr>
     <tr>

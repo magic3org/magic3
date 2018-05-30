@@ -1212,9 +1212,10 @@ class BaseWidgetContainer extends Core
 	 * @param string $str		表示メッセージ
 	 * @param string $title		項目名
 	 * @param bool $passBlank	空を正常とするかどうか(true=空を正常とする、false=空の場合はエラーとする)
+	 * @param string $locale	ロケールを指定する場合は設定。指定しない場合はデフォルトのロケールを使用。
 	 * @return bool				false入力誤り
 	 */
-	function checkMailAddress($str, $title, $passBlank=false)
+	function checkMailAddress($str, $title, $passBlank = false, $locale = '')
 	{
 		if ($passBlank && $str == '') return true;
 		
@@ -1223,13 +1224,13 @@ class BaseWidgetContainer extends Core
 		}
 		if (strlen($str) && preg_match("/[^0-9a-zA-Z-.@_]/", $str)){
 			//array_push($this->warningMessage, $title.'は半角英数字／ハイフン／アンダースコア／ピリオド／＠以外の入力はできません');
-			$msg = $this->_g('%s can contain alphabets, numbers, hyphen, underscore, period, atmark.');			// メッセージを取得「%sは半角英数字／ハイフン／アンダースコア／ピリオド／＠以外の入力はできません」
+			$msg = $this->_g('%s can contain alphabets, numbers, hyphen, underscore, period, atmark.', $locale);			// メッセージを取得「%sは半角英数字／ハイフン／アンダースコア／ピリオド／＠以外の入力はできません」
 			array_push($this->warningMessage, sprintf($msg, $title));
 			return false;
 			
 		} elseif (strlen($str) && !preg_match("/[\w\d\-\.]+\@[\w\d\-\.]+/", $str)){
 			//array_push($this->warningMessage, 'この'.$title.'は正しい形式ではありません');
-			$msg = $this->_g('%s is not valid E-mail format.');			// メッセージを取得「この%sは正しい形式ではありません」
+			$msg = $this->_g('%s is not valid E-mail format.', $locale);			// メッセージを取得「この%sは正しい形式ではありません」
 			array_push($this->warningMessage, sprintf($msg, $title));
 			return false;
 		}
@@ -2581,15 +2582,20 @@ class BaseWidgetContainer extends Core
 	 * システム共通の各言語対応のテキストを取得
 	 *
 	 * @param string $id		メッセージID
+	 * @param string $locale	ロケール
 	 * @return string			取得テキスト
 	 */
-	function _g($id)
+	function _g($id, $locale = '')
 	{
 		static $init = false;
 		
 		// 初期化されていない場合はロケールデータをロード
 		if (!$init){
-			$ret = $this->gInstance->getMessageManager()->loadGlobalLocaleText($this->gEnv->getCurrentLocale());
+			if (empty($locale)){			// ロケールが設定されていない場合はデフォルトのロケール
+				$ret = $this->gInstance->getMessageManager()->loadGlobalLocaleText($this->gEnv->getCurrentLocale());
+			} else {
+				$ret = $this->gInstance->getMessageManager()->loadGlobalLocaleText($locale);
+			}
 			
 			$init = true;		// ロケールデータロード完了
 		}

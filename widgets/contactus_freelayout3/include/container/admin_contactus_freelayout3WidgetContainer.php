@@ -17,13 +17,13 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContainer
 {
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
-	private $langId;
+	private $langId;		// 選択言語
 	private $configId;		// 定義ID
 	private $paramObj;		// パラメータ保存用オブジェクト
 	private $typeArray;		// 項目タイプ
+	private $langArray;		// 言語メニュー用
 	private $fieldInfoArray = array();			// お問い合わせ項目情報
 	private $confirmButtonId;		// 確認ボタンのタグID
 	private $sendButtonId;		// 送信ボタンのタグID
@@ -47,9 +47,6 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		// DBオブジェクト作成
-		$this->sysDb = $this->gInstance->getSytemDbObject();
-		
 		// お問い合わせ項目タイプ
 		$this->typeArray = array(	array(	'name' => 'テキストボックス',			'value' => 'text'),
 									array(	'name' => 'テキストボックス(Eメール)',	'value' => 'email'),
@@ -59,6 +56,12 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 									array(	'name' => 'チェックボックス',			'value' => 'checkbox'),
 									array(	'name' => 'ラジオボタン',				'value' => 'radio'),
 									array(	'name' => 'ファイルアップローダ',		'value' => 'file')
+								);
+		
+		// 言語メニュータイプ
+		$this->langArray = array(
+									array(	'name' => '日本語',	'value' => 'ja'),
+									array(	'name' => '英語',	'value' => 'en')
 								);
 	}
 	/**
@@ -131,7 +134,6 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
 		$userId		= $this->gEnv->getCurrentUserId();
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
@@ -139,6 +141,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
+		$this->langId	= $request->trimValueOf('item_lang');		// メッセージ表示言語を取得
+		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// デフォルト言語
 		$pageTitle = $request->trimValueOf('item_page_title');			// 画面タイトル
 		$baseTemplate = $request->valueOf('item_html');		// 入力エリア作成用ベーステンプレート
 		$this->css	= $request->valueOf('item_css');		// 入力エリア作成用CSS
@@ -276,6 +280,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
+				$newObj->langId		= $this->langId;		// メッセージ表示言語を取得
 				$newObj->pageTitle = $pageTitle;			// 画面タイトル
 				$newObj->baseTemplate = $baseTemplate;		// 入力エリア作成用ベーステンプレート
 				$newObj->css	= $this->css;					// 入力エリア用CSS
@@ -373,9 +378,10 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
-					$targetObj->pageTitle = $pageTitle;			// 画面タイトル
-					$targetObj->baseTemplate = $baseTemplate;		// 入力エリア作成用ベーステンプレート
-					$targetObj->css			= $this->css;					// 入力エリア作成用CSS
+					$targetObj->langId			= $this->langId;		// メッセージ表示言語を取得
+					$targetObj->pageTitle		= $pageTitle;			// 画面タイトル
+					$targetObj->baseTemplate	= $baseTemplate;		// 入力エリア作成用ベーステンプレート
+					$targetObj->css				= $this->css;					// 入力エリア作成用CSS
 					$targetObj->confirmButtonId = $this->confirmButtonId;		// 確認ボタンのタグID
 					$targetObj->sendButtonId	= $this->sendButtonId;		// 送信ボタンのタグID
 					$targetObj->cancelButtonId	= $this->cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -428,7 +434,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
-				
+				$this->langId = $this->gEnv->getDefaultLanguage();		// メッセージ表示言語を取得
 				$pageTitle = '';			// 画面タイトル
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
 				$emailSubject = '';		// メールタイトル
@@ -464,6 +470,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$name	= $targetObj->name;// 名前
+					$this->langId = $targetObj->langId;		// メッセージ表示言語を取得
 					$pageTitle = $targetObj->pageTitle;			// 画面タイトル
 					$baseTemplate = $targetObj->baseTemplate;		// 入力エリア作成用ベーステンプレート
 					$this->css		= $targetObj->css;					// 入力エリア作成用CSS
@@ -502,9 +509,12 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
-				
+		
+		// 言語選択メニュー作成
+		$this->createLangMenu();
+		
 		// 追加用タイプメニュー作成
-		$this->createTypeMenu1();
+		$this->createTypeMenu();
 		
 		// お問い合わせ項目一覧作成
 		$this->createFieldList();
@@ -702,7 +712,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	 *
 	 * @return なし
 	 */
-	function createTypeMenu1()
+	function createTypeMenu()
 	{
 		for ($i = 0; $i < count($this->typeArray); $i++){
 			$value = $this->typeArray[$i]['value'];
@@ -715,6 +725,26 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			);
 			$this->tmpl->addVars('type_list1', $row);
 			$this->tmpl->parseTemplate('type_list1', 'a');
+		}
+	}
+	/**
+	 * 言語選択メニューを作成
+	 *
+	 * @return なし
+	 */
+	function createLangMenu()
+	{
+		for ($i = 0; $i < count($this->langArray); $i++){
+			$value = $this->langArray[$i]['value'];
+			$name = $this->langArray[$i]['name'];
+			
+			$row = array(
+				'value'    => $value,			// タイプ値
+				'name'     => $this->convertToDispString($name),			// タイプ名
+				'selected' => $this->convertToSelectedString($value, $this->langId)			// 選択中かどうか
+			);
+			$this->tmpl->addVars('lang_list', $row);
+			$this->tmpl->parseTemplate('lang_list', 'a');
 		}
 	}
 	/**
