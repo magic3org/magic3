@@ -875,6 +875,17 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		$ret = $this->db->getMenuId($pageId, $rows);
 		if ($ret){
+			// 重複しないメニュー情報を作成
+			$menuIdArray = array();
+			$destMenu = array();
+			for ($i = 0; $i < count($rows); $i++){
+				$menuId = $rows[$i]['pd_menu_id'];
+				if (!in_array($menuId, $menuIdArray)){
+					$menuIdArray[] = $menuId;
+					$destMenu[] = $rows[$i];
+				}
+			}
+
 			$iconTitle = 'メニュー定義';
 			$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
 			
@@ -885,9 +896,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$taskValue = 'menudef';
 			if (empty($isHierMenu)) $taskValue = 'smenudef';
 		
-			for ($i = 0; $i < count($rows); $i++){
-				$title = $rows[$i]['mn_name'];
-				$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&menuid=' . $rows[$i]['pd_menu_id'];
+			for ($i = 0; $i < count($destMenu); $i++){
+				$title = $destMenu[$i]['mn_name'];
+				$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&menuid=' . $destMenu[$i]['pd_menu_id'];
 			
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 				$menuTag .= '<li><a href="' . $this->getUrl($menuDefUrl) . '">';
