@@ -127,6 +127,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if (empty($this->requiredLabel)) $this->requiredLabel = self::DEFAULT_STR_REQUIRED;
 		$accessKey = $targetObj->accessKey;		// 発行アクセスキー
 		$this->css		= $targetObj->css;		// CSS
+		$script			= $targetObj->script;			// 入力エリア作成用JavaScript
 		$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
 		$this->sendButtonId = $targetObj->sendButtonId;		// 送信ボタンのタグID
 		$this->cancelButtonId = $targetObj->cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -633,6 +634,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "recalc_script", $this->recalcScript);// 計算処理用スクリプト
 		$this->tmpl->addVar("_widget", "uploader_script", $this->uploaderScript);// ファイルアップローダ用スクリプト
 		$this->tmpl->addVar("_widget", "uploader_reset", $this->uploaderResetScript);// ファイルアップローダ初期化用スクリプト
+		$this->tmpl->addVar("_widget", "other_script", $script);		// 入力エリア作成用JavaScript
 		
 		// その他データの画面埋め込み
 		$this->tmpl->addVar("_widget", "status",	$sendStatus);			// 送信ステータス

@@ -29,6 +29,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	private $sendButtonId;		// 送信ボタンのタグID
 	private $cancelButtonId;		// 送信キャンセルボタンのタグID
 	private $resetButtonId;		// エリアリセットボタンのタグID
+	private $css;				// 入力エリア作成用CSS
+	private $script;			// 入力エリア作成用JavaScript
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_STR_REQUIRED = '<font color="red">*必須</font>';		// 「必須」表示用テキスト
 	const DEFAULT_USER_EMAIL_SUBJECT = '送信内容ご確認(自動送信メール)';
@@ -146,6 +148,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$pageTitle = $request->trimValueOf('item_page_title');			// 画面タイトル
 		$baseTemplate = $request->valueOf('item_html');		// 入力エリア作成用ベーステンプレート
 		$this->css	= $request->valueOf('item_css');		// 入力エリア作成用CSS
+		$this->script	= $request->valueOf('item_script');		// 入力エリア作成用JavaScript
 		$this->confirmButtonId = $request->trimValueOf('item_confirm_button');		// 確認ボタンのタグID
 		$this->sendButtonId = $request->trimValueOf('item_send_button');		// 送信ボタンのタグID
 		$this->cancelButtonId = $request->trimValueOf('item_cancel_button');		// 送信キャンセルボタンのタグID
@@ -284,6 +287,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->pageTitle = $pageTitle;			// 画面タイトル
 				$newObj->baseTemplate = $baseTemplate;		// 入力エリア作成用ベーステンプレート
 				$newObj->css	= $this->css;					// 入力エリア用CSS
+				$newObj->script	= $this->script;			// 入力エリア作成用JavaScript
 				$newObj->confirmButtonId = $this->confirmButtonId;		// 確認ボタンのタグID
 				$newObj->sendButtonId	= $this->sendButtonId;		// 送信ボタンのタグID
 				$newObj->cancelButtonId	= $this->cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -382,6 +386,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->pageTitle		= $pageTitle;			// 画面タイトル
 					$targetObj->baseTemplate	= $baseTemplate;		// 入力エリア作成用ベーステンプレート
 					$targetObj->css				= $this->css;					// 入力エリア作成用CSS
+					$targetObj->script			= $this->script;			// 入力エリア作成用JavaScript
 					$targetObj->confirmButtonId = $this->confirmButtonId;		// 確認ボタンのタグID
 					$targetObj->sendButtonId	= $this->sendButtonId;		// 送信ボタンのタグID
 					$targetObj->cancelButtonId	= $this->cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -437,6 +442,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$this->langId = $this->gEnv->getDefaultLanguage();		// メッセージ表示言語を取得
 				$pageTitle = '';			// 画面タイトル
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
+				$this->script = '';			// 入力エリア作成用JavaScript
 				$emailSubject = '';		// メールタイトル
 				$emailReceiver = '';	// メール受信者(aaaa<xxx@xxx.xxx>形式が可能)
 				$sendUserEmail = 0;	// 入力ユーザ向けメールを送信するかどうか
@@ -474,6 +480,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$pageTitle = $targetObj->pageTitle;			// 画面タイトル
 					$baseTemplate = $targetObj->baseTemplate;		// 入力エリア作成用ベーステンプレート
 					$this->css		= $targetObj->css;					// 入力エリア作成用CSS
+					$this->script 	= $targetObj->script;			// 入力エリア作成用JavaScript
 					$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
 					$this->sendButtonId = $targetObj->sendButtonId;		// 送信ボタンのタグID
 					$this->cancelButtonId = $targetObj->cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -525,7 +532,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar("item_name_visible", "name",	$this->convertToDispString($name));
 		$this->tmpl->addVar("_widget", "page_title",	$this->convertToDispString($pageTitle));			// 画面タイトル
 		$this->tmpl->addVar("_widget", "html",	$baseTemplate);		// 入力エリア作成用ベーステンプレート
-		$this->tmpl->addVar("_widget", "css",	$this->css);		// 入力エリア作成用CSS
+		$this->tmpl->addVar("_widget", "css",	$this->convertToDispString($this->css));		// 入力エリア作成用CSS
+		$this->tmpl->addVar("_widget", "script",	$this->convertToDispString($this->script));		// 入力エリア作成用JavaScript
 		$this->tmpl->addVar("_widget", "confirm_button",	$this->confirmButtonId);		// 確認ボタンのタグID
 		$this->tmpl->addVar("_widget", "send_button",	$this->sendButtonId);		// 送信ボタンのタグID
 		$this->tmpl->addVar("_widget", "cancel_button",	$this->cancelButtonId);		// 送信キャンセルボタンのタグID
