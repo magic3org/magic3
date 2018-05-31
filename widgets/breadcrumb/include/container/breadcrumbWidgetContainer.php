@@ -67,6 +67,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$currentUrl = $this->gEnv->getCurrentRequestUri();
+		$pageSubId = $this->gEnv->getCurrentPageSubId();
 		
 		// このシステム外のアクセスの場合は終了
 		if (!$this->gEnv->isSystemUrlAccess($currentUrl)) return;
@@ -84,14 +85,46 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// 現在表示中のメニューID取得
-		$ret = $this->db->getMenuId($useHiddenMenu, $this->gEnv->getCurrentPageId(), $this->gEnv->getCurrentPageSubId(), $allMenu);
+		$hasGlobal = false;		// グローバルメニューを表示するページかどうか
+		$destMenu = array();
+		$ret = $this->db->getMenuId($useHiddenMenu, $this->gEnv->getCurrentPageId(), $pageSubId, $allMenu);
+		if ($ret){
+			// 使用するメニューを選別
+			for ($i = 0; $i < count($allMenu); $i++){
+				// グローバル属性ありの場合は現在のページが例外ページにないかチェック
+				$menu = $allMenu[$i];
+				if (empty($allMenu[$i]['pd_sub_id'])){
+					$exceptPageStr = $menu['pd_except_sub_id'];
+					if (!empty($exceptPageStr)){
+						$exceptPageArray = explode(',', $exceptPageStr);
+						if (!in_array($pageSubId, $exceptPageArray)){
+							$destMenu[] = $menu;
+							$hasGlobal = true;		// グローバルメニューを表示するページかどうか
+						}
+					}
+				} else {
+					$destMenu[] = $menu;
+				}
+			}
+		}
+		if (empty($destMenu)) return;
+	
+		// 重複しないメニューIDを作成
+		$menuIdArray = array();
+		for ($i = 0; $i < count($destMenu); $i++){
+			$menuId = $destMenu[$i]['pd_menu_id'];
+			if (!in_array($menuId, $menuIdArray)) $menuIdArray[] = $menuId;
+		}
+
+		// メニュー項目を取得
+		$ret = $this->db->getMenuItems($menuIdArray, $menuItems);
 		if (!$ret) return;
 		
+		// ##### メニュー作成開始 #####
 		// 区切り画像
 		if (empty($separatorImgPath)){
 			$separatorImgUrl = $this->gEnv->getCurrentWidgetRootUrl() . self::DEFAULT_ARROW_IMAGE_FILE;		// デフォルトの画像
 		} else {
-//			$separatorImgUrl = $this->gEnv->getRootUrl() . $separatorImgPath;		// ユーザ指定の画像
 			$separatorImgUrl = $this->gEnv->getResourceUrl() . $separatorImgPath;		// ユーザ指定の画像
 		}
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートの場合は区切りアイコンなし
@@ -99,17 +132,29 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		} else {
 			$this->iconTag = ' <img src="' . $this->getUrl($separatorImgUrl) . '" /> ';		// 両端にスペースを入れる
 		}
-	
-		// 重複しないメニューIDを作成
-		$menuIdArray = array();
-		for ($i = 0; $i < count($allMenu); $i++){
-			$menuId = $allMenu[$i]['pd_menu_id'];
-			if (!in_array($menuId, $menuIdArray)) $menuIdArray[] = $menuId;
-		}
+		
+		// ##### 最初のメニュー項目を「ホーム」と判断してリストを作成する #####
+		$isHome = false;		// 現在ホームページにいるかどうか
+		$isTop = false;			// サイトのトップページにいるかどうか
+		$homeUrl = $menuItems[0]['md_link_url'];
+		$homeName = $this->getCurrentLangString($menuItems[0]['md_name']);
+		
+		// 現在のURLをマクロ変換
+		$this->currentMacroUrl = $this->gEnv->getMacroPath($currentUrl);
+		
+		// 現在のURLパラメータを取得
+		$this->currentQueryArray = array();
+		list($tmp, $queryStr) = explode('?', $this->currentMacroUrl);
+		list($queryStr, $tmp) = explode('#', $queryStr);
+		if (!empty($queryStr)) parse_str($queryStr, $this->currentQueryArray);		// クエリーの解析
+		
+		// ホームページかどうかの判定
+		if ($this->isCurrentMenuItemUrl($homeUrl)) $isHome = true;
+		
+		// トップ位置の判定
+		if ($this->isRootUrl($this->currentMacroUrl)) $isTop = true;
 
-		// メニュー項目を取得
-		$this->db->getMenuItems($menuIdArray, $menuItems);
-
+		/*
 		// ルート階層名を取得
 		$homeName = self::DEFAULT_HOME_NAME;
 		$homeUrl = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . self::DEFAULT_HOME_URL;
@@ -120,12 +165,12 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 				$homeUrl = $url;
 				break;
 			}
-		}
+		}*/
+		/*
 		// 現在のURLがルートのときは終了
 		$this->currentMacroUrl = $this->gEnv->getMacroPath($currentUrl);
 		if ($this->isRootUrl($this->currentMacroUrl)){// ルート位置の場合の処理
 			if ($visibleOnRoot){		// ルートのときリスト表示するとき
-				//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
 				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 				$this->tmpl->addVar("_widget", "link", $html);
 				
@@ -141,13 +186,26 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$menuData['crumbs'] = $this->crumbs;
 			$this->gEnv->setJoomlaMenuData($menuData);
 			return;
+		}*/
+		// 現在のURLがホームページのときは終了
+		if ($isHome){
+			if ($visibleOnRoot){		// ホームページで「ホーム」を表示するとき
+				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
+				$this->tmpl->addVar("_widget", "link", $html);
+				
+				// Joomla!用データ追加
+				$item       = new stdClass;
+				$item->name = $this->convertToDispString($homeName);			// HTML文字エスケープ
+				$item->link = '';			// リンクなし
+				$this->crumbs[] = $item;
+			}
+			
+			// Joomla用のメニュー階層データを設定
+			$menuData = array();
+			$menuData['crumbs'] = $this->crumbs;
+			$this->gEnv->setJoomlaMenuData($menuData);
+			return;
 		}
-		
-		// 現在のURLパラメータを取得
-		$this->currentQueryArray = array();
-		list($tmp, $queryStr) = explode('?', $this->currentMacroUrl);
-		list($queryStr, $tmp) = explode('#', $queryStr);
-		if (!empty($queryStr)) parse_str($queryStr, $this->currentQueryArray);		// クエリーの解析
 		
 		// 現在のメニュー項目を取得
 		$menuItemId = 0;
@@ -160,17 +218,15 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		}
 		if (empty($menuItemId)){		// メニュー上にないURLのときは現在のページから作成
 			// 現在のページがデフォルトのページのときはトップ時と同じにする
-			$pageSubId = $this->gEnv->getCurrentPageSubId();
 			if (count($this->currentQueryArray) == 1 && $this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID] == $this->gEnv->getDefaultPageSubId()){
-				if ($visibleOnRoot){		// ルートのときリスト表示するとき
-					//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
+				if ($visibleOnRoot){		// ホームページで「ホーム」を表示するとき
 					$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 					$this->tmpl->addVar("_widget", "link", $html);
 					
 					// Joomla!用データ追加
 					$item       = new stdClass;
 					$item->name = $this->convertToDispString($homeName);			// HTML文字エスケープ
-					$item->link = '';
+					$item->link = '';			// リンクなし
 					$this->crumbs[] = $item;
 					
 					// Joomla用のメニュー階層データを設定
@@ -192,12 +248,10 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 
 				// ページサブID以外のパラメータをもつ場合のみリンクを作成
 				if (count($this->currentQueryArray) == 1 && isset($this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){		
-					//$html = $this->convertToDispString($pageName);
 					$html = $this->_createLink($pageName);
 				} else {
 					$pageUrl = $this->gEnv->createCurrentPageUrl();
 					$linkUrl = $this->getUrl($pageUrl, true/*リンク用*/);
-					//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($pageName) . '</a>';
 					$html = $this->_createLink($pageName, $linkUrl);
 					
 					// コンテンツ名が設定されている場合は出力
@@ -207,7 +261,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 					}
 				}
 			}
-		} else {
+		} else {		// メニュー上のページを表示する場合
 			$menuId = $menuItems[$i]['md_menu_id'];
 		
 			// メニュー項目IDの連想配列に変換
@@ -222,45 +276,46 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$ret = $this->createMenuPath($menuItemId, $menuPathArray);
 			$menuPathArray = array_reverse($menuPathArray);		// パスを反転
 
-			// ローカルメニューの場合とグローバルメニューの場合と処理を分ける
-			$pageSubId = '';
-			for ($i = 0; $i < count($allMenu); $i++){
-				if ($menuId == $allMenu[$i]['pd_menu_id']){
-					$pageSubId = $allMenu[$i]['pd_sub_id'];
-					break;
-				}
-			}
-			if (!empty($pageSubId)){	// ローカルメニューのとき
-				// グローバルメニューの該当ページを取得
-				$globalMenuItemId = 0;
-				for ($i = 0; $i < count($menuItems); $i++){
-					$url = $menuItems[$i]['md_link_url'];			// マクロ表記URLを取得
-					if ($this->isPageUrl($url, $pageSubId)){
-						$globalMenuItemId = $menuItems[$i]['md_id'];
+			// ### グローバールメニューとローカルメニューが同時に表示されている場合は、ローカルメニューの場合とグローバルメニューの場合と処理を分ける
+			if ($hasGlobal){		// グローバルメニューを表示するページの場合
+				$subId = '';
+				for ($i = 0; $i < count($destMenu); $i++){
+					if ($menuId == $destMenu[$i]['pd_menu_id']){
+						$subId = $destMenu[$i]['pd_sub_id'];
 						break;
 					}
 				}
-				if (!empty($globalMenuItemId)){
-					// グローバルメニュー階層を作成
-					$pathArray = $menuPathArray;
-					$menuPathArray = array();
-					$ret = $this->createMenuPath($globalMenuItemId, $menuPathArray);
-					$menuPathArray = array_reverse($menuPathArray);		// パスを反転
+				if (!empty($subId)){	// ローカルメニューのとき
+					// グローバルメニューの該当ページを取得
+					$globalMenuItemId = 0;
+					for ($i = 0; $i < count($menuItems); $i++){
+						$url = $menuItems[$i]['md_link_url'];			// マクロ表記URLを取得
+						if ($this->isPageUrl($url, $subId)){
+							$globalMenuItemId = $menuItems[$i]['md_id'];
+							break;
+						}
+					}
+					if (!empty($globalMenuItemId)){
+						// グローバルメニュー階層を作成
+						$pathArray = $menuPathArray;
+						$menuPathArray = array();
+						$ret = $this->createMenuPath($globalMenuItemId, $menuPathArray);
+						$menuPathArray = array_reverse($menuPathArray);		// パスを反転
 				
-					// メニューを連結
-					$menuPathArray = array_merge($menuPathArray, $pathArray);
+						// メニューを連結
+						$menuPathArray = array_merge($menuPathArray, $pathArray);
+					}
 				}
 			}
 			// リンク作成
 			$html = $this->createLink($menuPathArray);
 		}
 		
+		// 「ホーム」項目を追加
 		if (!empty($html)){		// リンクが空のときは表示しない
 			$linkUrl = $this->getUrl($homeUrl, true/*リンク用*/);
-			//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($homeName) . '</a>' . $this->iconTag . $html;// リンクの間にアイコンを挿入
 			$html = $this->_createLink($homeName, $linkUrl, true/*先頭にJoomla!用メニュー項目を追加*/) . $this->iconTag . $html;// リンクの間にアイコンを挿入
 			
-			//$html = '<span class="breadcrumbs pathway">' . $html . '</span>';
 			$html = $this->_createLinkOuter($html);
 			$this->tmpl->addVar("_widget", "link", $html);
 		}
