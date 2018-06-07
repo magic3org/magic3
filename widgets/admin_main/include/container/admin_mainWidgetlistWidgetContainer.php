@@ -60,7 +60,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
 		$developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
 		$this->widgetTypeArray = array();
-		
 		if ($isActiveSitePc) $this->widgetTypeArray[] = array(	'name' => $this->_('For PC'),			'value' => '0');	// PC用
 		if ($isActiveSiteSmartphone) $this->widgetTypeArray[] = array(	'name' => $this->_('For Smartphone'),	'value' => '2');		// スマートフォン用
 		if ($isActiveSiteMobile) $this->widgetTypeArray[] = array(	'name' => $this->_('For Mobile'),		'value' => '1');	// 携帯用
