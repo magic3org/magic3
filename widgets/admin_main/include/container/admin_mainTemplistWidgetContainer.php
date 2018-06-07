@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainTempBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-//require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
 require_once($gEnvManager->getLibPath()				. '/pclzip-2-8-2/pclzip.lib.php');
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
 require_once($gEnvManager->getCommonPath()		. '/archive.php');
@@ -48,6 +47,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 //	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
 	const THEMLER_APP_FILENAME = '/app/themler.version';		// Themlerテンプレートかどうかを判断するためのファイル
 	const DEFAULT_IMAGE_DIR = '/images';		// デフォルトの画像格納ディレクトリ
+	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 開発モードかどうか
 	
 	/**
 	 * コンストラクタ
@@ -61,9 +61,13 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$this->db = new admin_mainDb();
 		
 		// テンプレートタイプメニュー項目
-		$this->templateTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),		// PC用
-											array(	'name' => $this->_('For Mobile'),		'value' => '1'),		// 携帯用
-											array(	'name' => $this->_('For Smartphone'),	'value' => '2'));		// スマートフォン用
+		$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
+		$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
+		$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
+		$this->templateTypeArray = array();
+		if ($isActiveSitePc) $this->templateTypeArray[] = array(	'name' => $this->_('For PC'),			'value' => '0');	// PC用
+		if ($isActiveSiteSmartphone) $this->templateTypeArray[] = array(	'name' => $this->_('For Smartphone'),	'value' => '2');		// スマートフォン用
+		if ($isActiveSiteMobile) $this->templateTypeArray[] = array(	'name' => $this->_('For Mobile'),		'value' => '1');	// 携帯用
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -1087,6 +1091,34 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			return false;
 		}
 		return true;
+	}
+	/**
+	 * アクセスポイントが有効かどうか
+	 *
+	 * @param int   $deviceType デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
+	 * @return bool 			true=有効、false=無効
+	 */
+	function isActiveAccessPoint($deviceType)
+	{
+		// ページID作成
+		switch ($deviceType){
+			case 0:		// PC
+				$pageId = 'index';
+				break;
+			case 1:		// 携帯
+				$pageId = M3_DIR_NAME_MOBILE . '_index';
+				break;
+			case 2:		// スマートフォン
+				$pageId = M3_DIR_NAME_SMARTPHONE . '_index';
+				break;
+		}
+		
+		$isActive = false;
+		$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $pageId, $row);
+		if ($ret){
+			$isActive = $row['pg_active'];
+		}
+		return $isActive;
 	}
 }
 ?>

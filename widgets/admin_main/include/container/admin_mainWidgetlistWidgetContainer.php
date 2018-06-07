@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-//require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
 require_once($gEnvManager->getLibPath()				. '/pclzip-2-8-2/pclzip.lib.php');
 require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
@@ -42,6 +41,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const NEW_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/sql/update_widgets.sql';		// ウィジェットの最新情報ファイル
+	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	
 	/**
 	 * コンストラクタ
@@ -55,13 +55,17 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->db = new admin_mainDb();
 		
 		// ウィジェットタイプメニュー項目
-		$this->widgetTypeArray = array(
-										array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
-										array(	'name' => $this->_('For Mobile'),		'value' => '1'),	// 携帯用
-										array(	'name' => $this->_('For Smartphone'),	'value' => '2'),		// スマートフォン用
-										array(	'name' => $this->_('For Administration'),	'value' => '-1')		// 管理用
-									);	
-										
+		$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
+		$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
+		$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
+		$developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
+		$this->widgetTypeArray = array();
+		
+		if ($isActiveSitePc) $this->widgetTypeArray[] = array(	'name' => $this->_('For PC'),			'value' => '0');	// PC用
+		if ($isActiveSiteSmartphone) $this->widgetTypeArray[] = array(	'name' => $this->_('For Smartphone'),	'value' => '2');		// スマートフォン用
+		if ($isActiveSiteMobile) $this->widgetTypeArray[] = array(	'name' => $this->_('For Mobile'),		'value' => '1');	// 携帯用
+		if ($developMode) $this->widgetTypeArray[] = array(	'name' => $this->_('For Administration'),	'value' => '-1');		// 管理用
+		
 		// ラベル文字列
 		$this->labelTextArray = array(
 										'label_active'			=> $this->_('Active'),			// 稼働中
@@ -989,6 +993,34 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$this->isExistsWidgetList = true;		// ウィジェットが存在する
 		return true;
+	}
+	/**
+	 * アクセスポイントが有効かどうか
+	 *
+	 * @param int   $deviceType デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
+	 * @return bool 			true=有効、false=無効
+	 */
+	function isActiveAccessPoint($deviceType)
+	{
+		// ページID作成
+		switch ($deviceType){
+			case 0:		// PC
+				$pageId = 'index';
+				break;
+			case 1:		// 携帯
+				$pageId = M3_DIR_NAME_MOBILE . '_index';
+				break;
+			case 2:		// スマートフォン
+				$pageId = M3_DIR_NAME_SMARTPHONE . '_index';
+				break;
+		}
+		
+		$isActive = false;
+		$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $pageId, $row);
+		if ($ret){
+			$isActive = $row['pg_active'];
+		}
+		return $isActive;
 	}
 }
 ?>
