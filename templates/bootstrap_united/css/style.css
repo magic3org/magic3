@@ -5,6 +5,9 @@ body {
 .button {
 	margin: 5px;
 }
+.m3_widget_outer {
+	word-wrap:break-word;
+}
 #pos-slide.affix {
 	position: fixed;
 	top: 70px;

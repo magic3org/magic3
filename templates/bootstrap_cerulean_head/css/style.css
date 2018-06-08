@@ -5,6 +5,9 @@ body {
 .button {
 	margin: 5px;
 }
+.m3_widget_outer {
+	word-wrap:break-word;
+}
 #page_header {
 	background-color:#eee;
 }
