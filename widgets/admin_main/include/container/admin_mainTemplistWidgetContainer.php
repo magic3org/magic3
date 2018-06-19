@@ -621,6 +621,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			case 10:					// Bootstrap v3.0型
 				$formatType = 'B30';		// テンプレート形式
 				break;
+			case 11:					// Bootstrap v4.0型
+				$formatType = 'B40';		// テンプレート形式
+				break;
 			case 100:					// WordPress型
 				$formatType = 'W00';		// テンプレート形式
 				break;

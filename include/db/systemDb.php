@@ -746,7 +746,7 @@ class SystemDb extends BaseDb
 		$updateFields = array();	// 更新するフィールド名
 		$boolFields = array();		// boolタイプのフィールド名
 		
-		$updateFields[] = 'tm_type';			// テンプレート種別(0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,20=jQuery Mobile,100=WordPress)
+		$updateFields[] = 'tm_type';			// テンプレート種別(99=レイアウト用テンプレート,0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,11=Bootstrap v4.0,20=jQuery Mobile,100=WordPress)
 		$updateFields[] = 'tm_device_type';		// 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 		$updateFields[] = 'tm_language';		// 対応言語ID(「,」区切りで複数指定可)
 		$updateFields[] = 'tm_generator';		// テンプレート作成アプリケーション(値=artisteer,themler)
