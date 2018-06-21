@@ -3478,6 +3478,10 @@ class PageManager extends Core
 					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
 					if ($cmd != M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)以外のとき
 						$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
+					} else {
+						// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
+						$templateType = $gEnvManager->getCurrentTemplateType();
+						if ($templateType != 10) $this->addAdminScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 					}
 				} else {		// ログインしていない場合(ログイン画面等)
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
@@ -3489,6 +3493,10 @@ class PageManager extends Core
 				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW ||				// ログイン、ログアウト場合
 					($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){		// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);		// Bootstrap管理画面オプション
+				} else {
+					// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
+					$templateType = $gEnvManager->getCurrentTemplateType();
+					if ($templateType != 10) $this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 				}
 			}
 		} else {
