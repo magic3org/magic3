@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -79,7 +79,8 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			case 0:
 				$this->renderType = 'JOOMLA_OLD';
 				break;
-			case 10:
+			case 10:	// Bootstrap v3.0
+			case 11:	// Bootstrap v4.0
 				if ($isNav){
 					$this->renderType = 'BOOTSTRAP_NAV';		// Boostrapナビゲーションメニュー
 				} else {
@@ -105,7 +106,11 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				$templateFile = 'index_old.tmpl.html';
 				break;
 			case 'BOOTSTRAP_NAV':		// Bootstrapナビゲーションメニュー
-				$templateFile = 'index_bootstrap_nav.tmpl.html';
+				if ($this->templateType == 10){	// Bootstrap v3.0のとき
+					$templateFile = 'index_bootstrap_nav.tmpl.html';
+				} else {	// Bootstrap v4.0のとき
+					$templateFile = 'index_bootstrap_nav4.tmpl.html';
+				}
 				
 				// CSSファイルの追加
 				$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
@@ -215,7 +220,11 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 					
 				// サイト名の表示制御
 				if (!$showSitename){
-					$sitenameOptionClass = ' visible-xs';			// モニタが最小サイズの場合のみ表示
+					if ($this->templateType == 10){	// Bootstrap v3.0のとき
+						$sitenameOptionClass = ' visible-xs';			// モニタが最小サイズの場合のみ表示
+					} else {		// Bootstrap v4.0のとき
+						$sitenameOptionClass = ' d-lg-none';			// モニタが最小サイズの場合のみ表示
+					}
 					$this->tmpl->addVar("_widget", "sitename_option_class", $sitenameOptionClass);
 				}
 				// 検索フィールド表示制御
@@ -257,8 +266,21 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				// メニュー属性を取得
 				if (!empty($menuAttr['bootstyle'])) $navbarOptionClass[] = $menuAttr['bootstyle'];
 				
-				// 別の色を指定の場合
-				if ($anotherColor) $navbarOptionClass[] = 'navbar-inverse';
+				// メニューバーの色を設定
+				if ($this->templateType == 10){	// Bootstrap v3.0のとき
+					if ($anotherColor) $navbarOptionClass[] = 'navbar-inverse';
+				} else {		// Bootstrap v4.0のとき
+					// 折り返しポイントを設定。サイト名の表示制御「d-lg-none」と連携。
+					$navbarOptionClass[] = 'navbar-expand-lg';
+					
+					if ($anotherColor){		// 別の色を指定の場合
+						$navbarOptionClass[] = 'navbar-dark';
+						$navbarOptionClass[] = 'bg-dark';
+					} else {			// デフォルトカラー
+						$navbarOptionClass[] = 'navbar-light';
+						$navbarOptionClass[] = 'bg-light';
+					}
+				}
 
 				// データを画面に埋め込む
 				if (!empty($navbarOptionClass)) $this->tmpl->addVar("_widget", "navbar_option_class", ' ' . implode(' ', $navbarOptionClass));

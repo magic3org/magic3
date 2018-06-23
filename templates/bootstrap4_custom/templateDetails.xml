@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="template" version="4.1" format="bootstrap">
+  <name>bootstrap4_custom</name>
+  <creationDate>2018-06-24</creationDate>
+  <version>1.0</version>
+  <author></author>
+  <authorUrl></authorUrl>
+  <description>Bootstrap type template</description>
+</install>
