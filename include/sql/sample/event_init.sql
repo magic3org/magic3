@@ -19,6 +19,7 @@
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'art42_sample3' WHERE sc_id = 'default_template';
+UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_menu_hier';
 
 -- 管理画面ページデータ(デフォルトを変更)
 UPDATE _page_id SET pg_default_sub_id = 'front' WHERE pg_id = 'index' AND pg_type = 0;

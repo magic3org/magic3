@@ -19,7 +19,7 @@
 DELETE FROM _page_def WHERE pd_id = 'admin_index';
 INSERT INTO _page_def
 (pd_id,         pd_sub_id,      pd_position_id, pd_index, pd_widget_id,   pd_config_id, pd_visible, pd_editable, pd_title_visible) VALUES
-('admin_index', '',             'top',          1,        'admin_menu4',  0,            true,       false, false),
+('admin_index', '',             'top',          1,        'admin_menu',  0,            true,       false, false),
 ('admin_index', 'front',        'top',          2,        'admin/message',  0,            true,       false, false),
 ('admin_index', 'front',        'main',         1,        'admin_main',   0,            true,       false, false),
 ('admin_index', 'front',        'main',         2,        'admin/analytics',   0,            true,       true, false),

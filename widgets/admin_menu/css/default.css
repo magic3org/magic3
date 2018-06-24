@@ -1,0 +1,69 @@
+/* BootstrapのMagic3用の修正 */
+.navbar-brand {
+	font-weight: bold;	/* added by Magic3 */
+}
+.dropdown-menu-large .dropdown-header {
+	font-weight: bold;	/* added by Magic3 */
+}
+/* メニューバー固定用 */
+/*body { padding-top: 85px; }*/
+body { padding-top: 60px; }
+
+/*** パンくずリスト修正 ***/
+ol.breadcrumb {
+	margin-top:0;
+/*	margin-bottom:0;*/
+	padding-left:100px;
+	border-radius:0;
+}
+
+/*img.brand {
+	padding: 0;
+}*/
+.dropdown-menu img {
+	margin-right:5px;
+}
+img.home {
+	margin-top:-12px;
+	margin-bottom:-8px;
+}
+img.smalldevice {
+	margin-top:-12px;
+	margin-bottom:-8px;
+}
+img.avatar {
+	margin-right:5px;
+}
+.dropdown-menu-large > li > ul > li {
+	width:180px;
+}
+/*.dropdown-menu-large a.help {
+	margin-bottom:-50px;
+	margin-right:15px;
+}*/
+.dropdown-menu-large a.help {
+	position: absolute;
+	right:20px;
+	bottom:10px;
+	font-size:150%;
+}
+@media (min-width: 768px) {
+ul.pos-right {
+	float:right;
+}
+}
+a.dropdown-toggle.device_icon, a.dropdown-toggle.avatar_icon {
+/*	padding-top:16px;
+	padding-bottom:15px;*/
+	padding-top:14px;
+	padding-bottom:14px;
+	margin-top:0;
+	margin-bottom:0;
+}
+
+/* デバイスアイコンとユーザ項目間のスペーサー */
+@media (min-width: 768px) {
+li.user_menu {
+	margin-left:20px;
+}
+}
