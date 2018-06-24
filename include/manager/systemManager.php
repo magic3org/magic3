@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -40,6 +40,11 @@ class SystemManager extends Core
 	private $acceptLanguage;			// アクセス可能言語
 	private $systemLanguages;			// システムで利用可能な言語
 	private $hierarchicalPage;			// 階層化ページを使用するかどうか
+	
+	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
+	// DB定義
 	const CF_DEFAULT_LANG = 'default_lang';			// デフォルト言語
 	const CF_PERMIT_INIT_SYSTEM = 'permit_init_system';					// システム初期化可能かどうか
 	const CF_PERMIT_CHANGE_LANG = 'permit_change_lang';					// 言語変更可能かどうか
@@ -66,6 +71,7 @@ class SystemManager extends Core
 	const CF_UPLOAD_IMAGE_AUTORESIZE = 'upload_image_autoresize';		// 画像リサイズ機能を使用するかどうか
 	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH = 'upload_image_autoresize_max_width';		// 画像リサイズ機能最大画像幅
 	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT = 'upload_image_autoresize_max_height';		// 画像リサイズ機能最大画像高さ
+	const CF_SITE_MENU_HIER = 'site_menu_hier';		// サイトのメニューを階層化するかどうか
 
 	/**
 	 * コンストラクタ
@@ -684,6 +690,65 @@ class SystemManager extends Core
 			}
 		}
 		return $this->hierarchicalPage;
+	}
+	/**
+	 * サイトのメニューを階層化するかどうかを取得
+	 *
+	 * @return bool			true=階層化、false=階層化なし
+	 */
+	public function isSiteMenuHier()
+	{
+		$value = $this->getSystemConfig(self::CF_SITE_MENU_HIER);
+		return (bool)$value;
+	}
+	/**
+	 * サイトのメニューを階層化するかどうかを変更
+	 *
+	 * ・使用するメニュー管理画面を変更
+	 *
+	 * @param bool $isHier	true=階層化、false=階層化なし
+	 * @return bool			true=正常終了、false=異常終了
+	 */
+	public function changeSiteMenuHier($isHier)
+	{
+		// メニュー階層化の設定を更新
+		if ($isHier){
+			$this->db->updateSystemConfig(self::CF_SITE_MENU_HIER, '1');
+		} else {
+			$this->db->updateSystemConfig(self::CF_SITE_MENU_HIER, '0');
+		}
+		
+		// メニュー情報を更新
+		$ret = $this->_getMenuInfo($dummy, $itemId, $row);
+		if ($ret){
+			// メニュー管理画面を変更
+			if ($isHier){		// 多階層の場合
+				$ret = $this->db->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+			} else {
+				$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
+			}
+		}
+		return $ret;
+	}
+	/**
+	 * メニュー管理画面の情報を取得
+	 *
+	 * @param bool  $isHier		階層化メニューかどうか
+	 * @param int   $itemId		メニュー項目ID
+	 * @param array  $row		取得レコード
+	 * @return bool				取得できたかどうか
+	 */
+	function _getMenuInfo(&$isHier, &$itemId, &$row)
+	{
+		$isHier = false;	// 多階層メニューかどうか
+		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		if ($ret){
+			$isHier = true;
+		} else {
+			$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
+		}
+		if ($ret) $itemId = $row['ni_id'];
+		return $ret;
 	}
 }
 ?>

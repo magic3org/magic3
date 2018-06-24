@@ -890,7 +890,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
 			
 			// メニュー定義の編集画面のタイプを取得
-			$isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
+//			$isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
+			$isHierMenu = $this->gSystem->isSiteMenuHier();
 		
 			// メニュー定義画面のURLを作成
 			$taskValue = 'menudef';
@@ -949,13 +950,13 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return bool				true=多階層、false=単階層
 	 */
-	function getMenuIsHider()
+/*	function getMenuIsHider()
 	{
 		$isHier = false;	// 多階層メニューかどうか
 		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
 		if ($ret) $isHier = true;
 
 		return $isHier;
-	}
+	}*/
 }
 ?>

@@ -78,6 +78,10 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$isHier = $request->trimValueOf('menu_type');
 		
 		if ($act == 'update'){		// 設定更新のとき
+			// メニュー管理画面を変更
+			$ret = $this->gSystem->changeSiteMenuHier($isHier);
+			
+			/*
 			// メニュー情報を取得
 			$ret = $this->getMenuInfo($dummy, $itemId, $row);
 			if ($ret){
@@ -87,7 +91,7 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				} else {
 					$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 				}
-			}
+			}*/
 			if ($ret){
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				$replaceNew = true;			// データ再取得
@@ -113,7 +117,8 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		
 		if ($replaceNew){		// データ再取得のとき
 			// メニュー情報を取得
-			$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			//$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			$isHier = $this->gSystem->isSiteMenuHier();
 		}
 		// 値を埋め込む
 		if ($isHier){		// 階層化メニューのとき
@@ -134,7 +139,7 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 * @param array  $row		取得レコード
 	 * @return bool				取得できたかどうか
 	 */
-	function getMenuInfo(&$isHier, &$itemId, &$row)
+/*	function getMenuInfo(&$isHier, &$itemId, &$row)
 	{
 		$isHier = false;	// 多階層メニューかどうか
 		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
@@ -145,6 +150,6 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		if ($ret) $itemId = $row['ni_id'];
 		return $ret;
-	}
+	}*/
 }
 ?>
