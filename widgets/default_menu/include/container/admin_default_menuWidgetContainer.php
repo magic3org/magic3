@@ -27,9 +27,9 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $menuId;		// メニューID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_MENU_ID = 'main_menu';			// デフォルトメニューID
-	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
+//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+//	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	// 画面
 	const TASK_LIST = 'list';			// 設定一覧
 	
@@ -192,7 +192,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$replaceNew = true;			// データ再取得
 					
 					// メニュー管理画面を変更
-					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
+					$ret = $this->gSystem->changeSiteMenuHier($isHierMenu);
+/*					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
 					if ($ret){
 						// メニュー管理画面を変更
 						if ($isHierMenu){		// 多階層の場合
@@ -200,7 +201,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 						} else {
 							$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 						}
-					}
+					}*/
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -237,7 +238,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$replaceNew = true;			// データ再取得
 					
 					// メニュー管理画面を変更
-					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
+					$ret = $this->gSystem->changeSiteMenuHier($isHierMenu);
+/*					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
 					if ($ret){
 						// メニュー管理画面を変更
 						if ($isHierMenu){		// 多階層の場合
@@ -245,7 +247,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 						} else {
 							$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 						}
-					}
+					}*/
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
@@ -299,7 +301,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		// 階層化メニューを使用するかどうか取得
-		$this->getMenuInfo($isHierMenu, $itemId, $row);
+		//$this->getMenuInfo($isHierMenu, $itemId, $row);
+		$isHierMenu = $this->gSystem->isSiteMenuHier();
 		
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
@@ -434,7 +437,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 //		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
 
 		// 階層化メニューを使用するかどうか取得
-		$this->getMenuInfo($isHierMenu, $itemId, $row);
+		//$this->getMenuInfo($isHierMenu, $itemId, $row);
+		$isHierMenu = $this->gSystem->isSiteMenuHier();
 		
 		if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -522,7 +526,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	 * @param array  $row		取得レコード
 	 * @return bool				取得できたかどうか
 	 */
-	function getMenuInfo(&$isHier, &$itemId, &$row)
+/*	function getMenuInfo(&$isHier, &$itemId, &$row)
 	{
 		$isHier = false;	// 多階層メニューかどうか
 		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
@@ -533,6 +537,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 		if ($ret) $itemId = $row['ni_id'];
 		return $ret;
-	}
+	}*/
 }
 ?>

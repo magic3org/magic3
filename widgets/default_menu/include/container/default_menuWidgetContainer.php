@@ -37,6 +37,9 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	const LOGIN_FAIL_MARK = '<i class="glyphicon glyphicon-remove-circle error" title="ログイン失敗" rel="tooltip" data-placement="auto"></i> ';		// ログイン失敗表示
 	const LOGIN_FAIL_MESSAGE = '<p class="message error">ログインに失敗しました</p>';
 	const TASK_REGIST = 'regist';		// 会員登録画面へのリンク用タスク
+//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+//	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	
 	/**
 	 * コンストラクタ
@@ -150,7 +153,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		
 		$menuId		= $targetObj->menuId;	// メニューID
 		$name		= $targetObj->name;// 定義名
-		$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
+//		$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 		$limitUser			= $targetObj->limitUser;// ユーザを制限するかどうか
 		$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 		$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
@@ -158,6 +161,10 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$this->showLogin	= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 		$showRegist		= isset($targetObj->showRegist) ? $targetObj->showRegist : 0;			// 会員登録を表示するかどうか
 		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
+		
+		// 階層化メニューを使用するかどうか取得
+		//$this->getMenuInfo($this->isHierMenu, $itemId, $row);
+		$this->isHierMenu = $this->gSystem->isSiteMenuHier();
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'nav_login'){			// ログインのとき
@@ -347,8 +354,8 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			$itemCount = count($rows);
 			for ($i = 0; $i < $itemCount; $i++){
 				$row = $rows[$i];
-				$classArray = array();
-				$linkClassArray = array();
+				$classArray = array();		// 項目のクラス
+				$linkClassArray = array();	// リンクタグのクラス
 				$attr = '';
 				// Joomla用メニューデータ(デフォルト値)
 				$menuItem = new stdClass;		// Joomla用メニューデータ
@@ -404,6 +411,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				}
 				
 				// リンクタイプに合わせてタグを生成
+				if ($this->templateType == 11) array_unshift($linkClassArray, 'nav-link');		// Bootstrap v4.0のとき
 				$linkOption = '';
 				if (count($linkClassArray) > 0) $linkOption .= 'class="' . implode(' ', $linkClassArray) . '"';
 				switch ($row['md_link_type']){
@@ -442,8 +450,9 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						$this->menuTree[] = $menuItem;
 						
 						// ##### タグ作成 #####
+						if ($this->templateType == 11) array_unshift($classArray, 'nav-item');		// Bootstrap v4.0のとき
+				
 						if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-						//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $this->convertToDispString($name) . '</span></a></li>' . M3_NL;
 						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
 						break;
 					case 1:			// フォルダのとき
@@ -479,21 +488,41 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							// ##### タグ作成 #####
 							if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
 								//$classArray[] = 'dropdown';
-								$dropDownCaret = '';
-								if ($level == 0){
-									$dropDownCaret = ' <b class="caret"></b>';
-								} else {
-									$classArray[] = 'dropdown-submenu';
-								}
+								if ($this->templateType == 10){	// Bootstrap v3.0のとき
+									$dropDownCaret = '';
+									if ($level == 0){
+										$dropDownCaret = ' <b class="caret"></b>';
+									} else {
+										$classArray[] = 'dropdown-submenu';
+									}
 								
-								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
-								if (!empty($menuText)){
-									$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
-									$treeHtml .= $menuText;
-									$treeHtml .= '</ul>' . M3_NL;
+									if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
+									$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
+									if (!empty($menuText)){
+										$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
+										$treeHtml .= $menuText;
+										$treeHtml .= '</ul>' . M3_NL;
+									}
+									$treeHtml .= '</li>' . M3_NL;
+								} else {		// Bootstrap v4.0のとき
+								
+/*								
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+		  <div class="dropdown-divider"></div>
+		  <a class="dropdown-item" href="#">Separated link</a>
+		  <div class="dropdown-divider"></div>
+		  <h6 class="dropdown-header">Dropdown header</h6>
+		  <a class="dropdown-item" href="#">Normal item</a>
+		  <a class="dropdown-item disabled" href="#">Disabled item</a>
+		  <a class="dropdown-item active" href="#">Active item</a>
+        </div>
+      </li>*/
 								}
-								$treeHtml .= '</li>' . M3_NL;
 							} else {
 								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
 								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
@@ -613,5 +642,25 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		}
 		return false;
 	}
+	/**
+	 * メニュー管理画面の情報を取得
+	 *
+	 * @param bool  $isHier		階層化メニューかどうか
+	 * @param int   $itemId		メニュー項目ID
+	 * @param array  $row		取得レコード
+	 * @return bool				取得できたかどうか
+	 */
+/*	function getMenuInfo(&$isHier, &$itemId, &$row)
+	{
+		$isHier = false;	// 多階層メニューかどうか
+		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		if ($ret){
+			$isHier = true;
+		} else {
+			$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
+		}
+		if ($ret) $itemId = $row['ni_id'];
+		return $ret;
+	}*/
 }
 ?>
