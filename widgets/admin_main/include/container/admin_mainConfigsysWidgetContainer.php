@@ -158,6 +158,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
 		$uploadImageAutoresizeMaxWidth = $request->trimValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
 		$uploadImageAutoresizeMaxHeight = $request->trimValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
+		$isHier = $request->trimValueOf('menu_type');
 		
 		if ($act == 'update'){		// 設定更新のとき
 			$isErr = false;
@@ -271,7 +272,10 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT, $uploadImageAutoresizeMaxHeight)) $isErr = true;		// アップロード画像の自動リサイズ、画像最大高さ
 			}
-		
+			if (!$isErr){
+				if (!$this->gSystem->changeSiteMenuHier($isHier)) $isErr = true;// メニュー管理画面を変更
+			}
+			
 			if ($isErr){
 				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 			} else {
@@ -320,6 +324,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
+			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 			
 			// ### サイト定義ファイル(siteDef.php)にオプション定義を追加 ###
 			$adminUrl = $this->gEnv->getAdminUrl();			// 管理機能URL
@@ -400,6 +405,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
+			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 		}
 		// 言語選択メニューを作成
 		$this->db->getLangs($this->gSystem->getSystemLanguages(), array($this, 'langLoop'));
@@ -519,7 +525,12 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($smartphoneUseJqueryMobile) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "smartphone_use_jquery_mobile", $checked);		// スマートフォン画面でjQuery Mobileを使用
-
+		if ($isHier){		// 階層化メニューのとき
+			$this->tmpl->addVar("_widget", "menu_type_tree", 'checked');		// 多階層メニュー
+		} else {
+			$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
+		}
+		
 		// URL
 		$this->tmpl->addVar("_widget", "root_url", $this->gEnv->getRootUrl());
 		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
