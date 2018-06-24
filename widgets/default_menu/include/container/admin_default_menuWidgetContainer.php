@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -27,6 +27,9 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $menuId;		// メニューID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_MENU_ID = 'main_menu';			// デフォルトメニューID
+	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	// 画面
 	const TASK_LIST = 'list';			// 設定一覧
 	
@@ -172,7 +175,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj = new stdClass;
 				$newObj->menuId	= $this->menuId;		// メニューID
 				$newObj->name	= $name;// 表示名
-				$newObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
+//				$newObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 				$newObj->limitUser = $limitUser;					// ユーザを制限するかどうか
 				$newObj->useVerticalMenu	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 				$newObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
@@ -187,6 +190,17 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					
 					$this->configId = $defConfigId;		// 定義定義IDを更新
 					$replaceNew = true;			// データ再取得
+					
+					// メニュー管理画面を変更
+					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
+					if ($ret){
+						// メニュー管理画面を変更
+						if ($isHierMenu){		// 多階層の場合
+							$ret = $this->db->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+						} else {
+							$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
+						}
+					}
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -205,7 +219,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					} else {			// 新規で既存設定の更新
 						$targetObj->menuId	= $this->menuId;		// メニューID
 					}
-					$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
+//					$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 					$targetObj->limitUser = $limitUser;					// ユーザを制限するかどうか
 					$targetObj->useVerticalMenu 	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 					$targetObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
@@ -221,6 +235,17 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
 					$replaceNew = true;			// データ再取得
+					
+					// メニュー管理画面を変更
+					$ret = $this->getMenuInfo($dummy, $itemId, $row);// メニュー情報を取得
+					if ($ret){
+						// メニュー管理画面を変更
+						if ($isHierMenu){		// 多階層の場合
+							$ret = $this->db->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+						} else {
+							$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
+						}
+					}
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
@@ -236,7 +261,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			if ($replaceNew){		// データ再取得時
 				$this->menuId = self::DEFAULT_MENU_ID;
 				$name = $this->createDefaultName();			// デフォルト登録項目名
-				$$isHierMenu = 0;		// 階層化メニューを使用するかどうか
+//				$isHierMenu = 0;		// 階層化メニューを使用するかどうか
 				$limitUser = 0;					// ユーザを制限するかどうか
 				$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
 				$showSitename		= 1;		// サイト名を表示するかどうか
@@ -252,7 +277,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				if ($ret){
 					$this->menuId	= $targetObj->menuId;		// メニューID
 					$name			= $targetObj->name;// 名前
-					$isHierMenu		= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
+//					$isHierMenu		= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 					$limitUser		= $targetObj->limitUser;					// ユーザを制限するかどうか
 					$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 //					$showSitename		= $targetObj->showSitename;		// サイト名を表示するかどうか
@@ -272,6 +297,10 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->addVar("_widget", "menu_id_disabled", 'readonly');		// 値は送信する必要あり
 			}
 		}
+		
+		// 階層化メニューを使用するかどうか取得
+		$this->getMenuInfo($isHierMenu, $itemId, $row);
+		
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
 		
@@ -402,7 +431,10 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 
 		// 詳細画面からの引継ぎデータ
 		$menuId = $request->trimValueOf('menuid');
-		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
+//		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
+
+		// 階層化メニューを使用するかどうか取得
+		$this->getMenuInfo($isHierMenu, $itemId, $row);
 		
 		if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -481,6 +513,26 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			// シリアル番号を保存
 			$this->serialArray[] = $id;
 		}
+	}
+	/**
+	 * メニュー管理画面の情報を取得
+	 *
+	 * @param bool  $isHier		階層化メニューかどうか
+	 * @param int   $itemId		メニュー項目ID
+	 * @param array  $row		取得レコード
+	 * @return bool				取得できたかどうか
+	 */
+	function getMenuInfo(&$isHier, &$itemId, &$row)
+	{
+		$isHier = false;	// 多階層メニューかどうか
+		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		if ($ret){
+			$isHier = true;
+		} else {
+			$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
+		}
+		if ($ret) $itemId = $row['ni_id'];
+		return $ret;
 	}
 }
 ?>
