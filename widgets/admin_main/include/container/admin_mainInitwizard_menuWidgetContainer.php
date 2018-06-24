@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,9 +17,9 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwiz
 
 class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
-	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
+//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+//	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	
 	/**
 	 * コンストラクタ
@@ -62,7 +62,7 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
-			// メニュー項目IDを取得
+/*			// メニュー項目IDを取得
 			$ret = $this->getMenuInfo($isCurrentHier, $itemId, $row);
 
 			// メニュー管理画面を更新
@@ -70,7 +70,10 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
 			} else {
 				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
-			}
+			}*/
+			// メニュー管理画面を変更
+			$ret = $this->gSystem->changeSiteMenuHier($isHier);
+			
 			if ($ret){
 				// 次の画面へ遷移
 				$this->_redirectNextTask();
@@ -83,7 +86,9 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 		
 		if ($reloadData){		// データ再取得のとき
 			// メニュー情報を取得
-			$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			//$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			// メニューを階層化するかどうかを取得
+			$isHier = $this->gSystem->isSiteMenuHier();
 		}
 		$this->tmpl->addVar("_widget", "menu_hier_checked",			$this->convertToCheckedString($isHier));		// 階層化ありかどうか
 	}
@@ -95,7 +100,7 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 	 * @param array  $row		取得レコード
 	 * @return bool				取得できたかどうか
 	 */
-	function getMenuInfo(&$isHier, &$itemId, &$row)
+/*	function getMenuInfo(&$isHier, &$itemId, &$row)
 	{
 		$isHier = false;	// 多階層メニューかどうか
 		$ret = $this->_mainDb->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
@@ -106,6 +111,6 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 		}
 		if ($ret) $itemId = $row['ni_id'];
 		return $ret;
-	}
+	}*/
 }
 ?>

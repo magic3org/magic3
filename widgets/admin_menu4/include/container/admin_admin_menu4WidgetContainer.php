@@ -19,9 +19,9 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_menuDb.php');
 class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 {
 	protected $db;	// DB接続オブジェクト
-	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
+//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+//	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	
 	/**
@@ -118,6 +118,7 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		if ($replaceNew){		// データ再取得のとき
 			// メニュー情報を取得
 			//$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			// メニューを階層化するかどうかを取得
 			$isHier = $this->gSystem->isSiteMenuHier();
 		}
 		// 値を埋め込む

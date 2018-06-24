@@ -67,8 +67,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const MAINMENU_COL_STYLE = 'col-md-';	// Bootstrapのカラムクラス
 	const MENUBAR_HEIGHT = 60;			// メインメニューバーの高さ
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
-	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
 	
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況

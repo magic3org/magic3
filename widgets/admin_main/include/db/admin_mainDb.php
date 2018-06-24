@@ -2194,13 +2194,13 @@ class admin_mainDb extends BaseDb
 	 * @param bool $taskId		タスク
 	 * @return					true = 正常、false=異常
 	 */
-	function updateNavItemMenuType($itemId, $taskId)
+/*	function updateNavItemMenuType($itemId, $taskId)
 	{
 		$sql = 'UPDATE _nav_item SET ni_task_id = ? WHERE ni_id = ?';
 		$params = array($taskId, $itemId);
 		$retValue =$this->execStatement($sql, $params);
 		return $retValue;
-	}
+	}*/
 	/**
 	 * メニュー項目の表示制御
 	 *
