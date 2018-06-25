@@ -4122,6 +4122,17 @@ class PageManager extends Core
 				$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
 				$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
 				
+				// Googleマップライブラリの読み込み
+				if ($this->useGooglemaps){
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+					
+					// CKEditor拡張プラグイン用の定義
+					$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
+					if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
+				} else {
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+				}
+					
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;

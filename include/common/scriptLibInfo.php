@@ -805,7 +805,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	{
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
-										self::LIB_ELFINDER						=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										self::LIB_ELFINDER						=> array(self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 最新ではBootstrapを先に読ませない。elFinder v2.1.30以降で問題がなくなった?(2018/6/25)
 										self::LIB_ELFINDER112					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_ELFINDER115					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 //										self::LIB_ELFINDER121					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
