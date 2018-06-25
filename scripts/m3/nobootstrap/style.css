@@ -40,11 +40,17 @@
 .glyphicon-cog:before {
   content: "\e019";
 }
+.glyphicon-file:before {
+  content: "\e022";
+}
 .glyphicon-list-alt:before {
   content: "\e032";
 }
 .glyphicon-align-justify:before {
   content: "\e055";
+}
+.glyphicon-picture:before {
+  content: "\e060";
 }
 .glyphicon-check:before {
   content: "\e067";
