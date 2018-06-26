@@ -37,9 +37,6 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	const LOGIN_FAIL_MARK = '<i class="glyphicon glyphicon-remove-circle error" title="ログイン失敗" rel="tooltip" data-placement="auto"></i> ';		// ログイン失敗表示
 	const LOGIN_FAIL_MESSAGE = '<p class="message error">ログインに失敗しました</p>';
 	const TASK_REGIST = 'regist';		// 会員登録画面へのリンク用タスク
-//	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-//	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-//	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	
 	/**
 	 * コンストラクタ
@@ -411,7 +408,16 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				}
 				
 				// リンクタイプに合わせてタグを生成
-				if ($this->templateType == 11) array_unshift($linkClassArray, 'nav-link');		// Bootstrap v4.0のとき
+				// ### メニューがナビゲーションタイプの場合はテンプレートタイプに合わせたクラスを出力する。ナビゲーションタイプでない場合はプレーンなUL,LIタグを出力する。###
+				if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
+					if ($this->templateType == 11){// Bootstrap v4.0のとき
+						if ($level == 0){		// 1階層目の場合
+							array_unshift($linkClassArray, 'nav-link');
+						} else {			// 2階層目以下の場合
+							array_unshift($linkClassArray, 'dropdown-item');
+						}
+					}
+				}
 				$linkOption = '';
 				if (count($linkClassArray) > 0) $linkOption .= 'class="' . implode(' ', $linkClassArray) . '"';
 				switch ($row['md_link_type']){
@@ -450,7 +456,12 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						$this->menuTree[] = $menuItem;
 						
 						// ##### タグ作成 #####
-						if ($this->templateType == 11) array_unshift($classArray, 'nav-item');		// Bootstrap v4.0のとき
+						// ### メニューがナビゲーションタイプの場合はテンプレートタイプに合わせたクラスを出力する。ナビゲーションタイプでない場合はプレーンなUL,LIタグを出力する。###
+						if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
+							if ($this->templateType == 11){				// Bootstrap v4.0のとき
+								if ($level == 0) array_unshift($classArray, 'nav-item');		// 1階層目の場合
+							}
+						}
 				
 						if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
 						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
@@ -474,55 +485,53 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							array_push($parentTree, $index);
 							
 							// サブメニュー作成
-							$menuText = $this->createMenu($menuId, $row['md_id'], $level + 1, $hasSelectedChild, $parentTree);
+							$menuText = $this->createMenu($menuId, $row['md_id'], $level + 1, $hasSelectedChildSub, $parentTree);
+							if ($hasSelectedChildSub) $hasSelectedChild = true;			// さらに子孫が選択状態にあるときは現在の位置の状態を更新
 							
 							// 階層を戻す
 							array_pop($parentTree);
 							
 							// 子項目が選択中のときは「active」に設定
-							if ($hasSelectedChild) $classArray[] = 'active';
+							if ($hasSelectedChildSub) $classArray[] = 'active';
 
 							// 先頭に「parent」クラスを追加
 							array_unshift($classArray, 'parent');
 							
 							// ##### タグ作成 #####
+							// ### メニューがナビゲーションタイプの場合はテンプレートタイプに合わせたクラスを出力する。ナビゲーションタイプでない場合はプレーンなUL,LIタグを出力する。###
 							if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
-								//$classArray[] = 'dropdown';
+								$dropDownCaret = '';
+								
 								if ($this->templateType == 10){	// Bootstrap v3.0のとき
-									$dropDownCaret = '';
 									if ($level == 0){
 										$dropDownCaret = ' <b class="caret"></b>';
 									} else {
 										$classArray[] = 'dropdown-submenu';
 									}
-								
-									if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-									$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
-									if (!empty($menuText)){
-										$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
-										$treeHtml .= $menuText;
-										$treeHtml .= '</ul>' . M3_NL;
-									}
-									$treeHtml .= '</li>' . M3_NL;
 								} else {		// Bootstrap v4.0のとき
-								
-/*								
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-		  <div class="dropdown-divider"></div>
-		  <a class="dropdown-item" href="#">Separated link</a>
-		  <div class="dropdown-divider"></div>
-		  <h6 class="dropdown-header">Dropdown header</h6>
-		  <a class="dropdown-item" href="#">Normal item</a>
-		  <a class="dropdown-item disabled" href="#">Disabled item</a>
-		  <a class="dropdown-item active" href="#">Active item</a>
-        </div>
-      </li>*/
+									if ($level == 0){		// 1階層目の場合
+										array_unshift($classArray, 'nav-item dropdown');
+									} else {			// 2階層目以下の場合
+										array_unshift($classArray, 'dropdown-submenu');
+									}
 								}
+								
+								$linkClassArray[] = 'dropdown-toggle';
+								
+								// 子項目が選択中のときは「active」に設定
+								if ($hasSelectedChildSub) $linkClassArray[] = 'active';
+
+								$linkOption = '';
+								if (count($linkClassArray) > 0) $linkOption .= 'class="' . implode(' ', $linkClassArray) . '"';
+									
+								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
+								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . ' data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
+								if (!empty($menuText)){
+									$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
+									$treeHtml .= $menuText;
+									$treeHtml .= '</ul>' . M3_NL;
+								}
+								$treeHtml .= '</li>' . M3_NL;
 							} else {
 								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
 								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
@@ -642,25 +651,5 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		}
 		return false;
 	}
-	/**
-	 * メニュー管理画面の情報を取得
-	 *
-	 * @param bool  $isHier		階層化メニューかどうか
-	 * @param int   $itemId		メニュー項目ID
-	 * @param array  $row		取得レコード
-	 * @return bool				取得できたかどうか
-	 */
-/*	function getMenuInfo(&$isHier, &$itemId, &$row)
-	{
-		$isHier = false;	// 多階層メニューかどうか
-		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
-		if ($ret){
-			$isHier = true;
-		} else {
-			$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
-		}
-		if ($ret) $itemId = $row['ni_id'];
-		return $ret;
-	}*/
 }
 ?>
