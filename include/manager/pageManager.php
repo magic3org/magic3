@@ -3494,9 +3494,12 @@ class PageManager extends Core
 					($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){		// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);		// Bootstrap管理画面オプション
 				} else {
-					// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
-					$templateType = $gEnvManager->getCurrentTemplateType();
-					if ($templateType != 10) $this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
+					if ($gEnvManager->isSystemManageUser() ||		// システム運用権限がある場合
+						$gEnvManager->isContentEditableUser()){		// 投稿ユーザの場合
+						// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
+						$templateType = $gEnvManager->getCurrentTemplateType();
+						if ($templateType != 10) $this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
+					}
 				}
 			}
 		} else {
