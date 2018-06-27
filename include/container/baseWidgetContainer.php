@@ -132,20 +132,7 @@ class BaseWidgetContainer extends Core
 		// 描画出力タイプ
 		$templateType = $this->gEnv->getCurrentTemplateType();
 		$this->_renderType = $this->_getRenderType($templateType);
-/*		switch ($templateType){
-			case 0:
-				$this->_renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
-				break;
-			case 10:
-				$this->_renderType = M3_RENDER_BOOTSTRAP;		// Bootstrap 3.0テンプレート
-				break;
-			case 20:
-				$this->_renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート
-				break;
-			default:
-				$this->_renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
-				break;
-		}*/
+
 		// テンプレート作成アプリケーション
 		$this->_templateGeneratorType = $this->gEnv->getCurrentTemplateGenerator();
 		
@@ -581,8 +568,9 @@ class BaseWidgetContainer extends Core
 			case 0:
 				$renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
 				break;
-			case 10:
-				$renderType = M3_RENDER_BOOTSTRAP;		// Bootstrap 3.0テンプレート
+			case 10:			// Bootstrap 3.0テンプレート
+			case 11:			// Bootstrap 4.0テンプレート
+				$renderType = M3_RENDER_BOOTSTRAP;		// Bootstrapテンプレート
 				break;
 			case 20:
 				$renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート

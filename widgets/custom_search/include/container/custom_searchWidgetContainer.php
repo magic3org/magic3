@@ -75,9 +75,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-//		// テンプレートタイプに合わせて出力を変更
-//		$this->templateType = $this->gEnv->getCurrentTemplateType();
-//		if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		// テンプレートタイプに合わせて出力を変更
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
 			return 'index_bootstrap.tmpl.html';
 		} else {
