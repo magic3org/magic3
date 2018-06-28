@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -59,7 +59,11 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{	
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			return 'index_bootstrap.tmpl.html';
+			if ($this->_templateType == 11){		// Bootstrap v4.0テンプレートの場合
+				return 'index_bootstrap4.tmpl.html';
+			} else {
+				return 'index_bootstrap.tmpl.html';
+			}
 		} else if ($this->_renderType == M3_RENDER_WORDPRESS){		// WordPressテンプレートの場合
 			return 'index_wordpress.tmpl.html';
 		} else {
