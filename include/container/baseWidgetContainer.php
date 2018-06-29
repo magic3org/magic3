@@ -48,6 +48,7 @@ class BaseWidgetContainer extends Core
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_isSmallDeviceOptimize;				// 小画面デバイス最適化を行うかどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
+	protected $_templateType;						// テンプレートタイプ
 	protected $_renderType;							// 描画出力タイプ
 	protected $_renderDetailType;					// 描画出力タイプ(詳細)
 	protected $_templateGeneratorType;				// テンプレート作成アプリケーション
@@ -130,8 +131,8 @@ class BaseWidgetContainer extends Core
 		$this->_now			= date("Y/m/d H:i:s");						// 現在日時
 		
 		// 描画出力タイプ
-		$templateType = $this->gEnv->getCurrentTemplateType();
-		$this->_renderType = $this->_getRenderType($templateType);
+		$this->_templateType = $this->gEnv->getCurrentTemplateType();
+		$this->_renderType = $this->_getRenderType($this->_templateType);
 
 		// テンプレート作成アプリケーション
 		$this->_templateGeneratorType = $this->gEnv->getCurrentTemplateGenerator();
