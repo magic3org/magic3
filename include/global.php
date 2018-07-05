@@ -413,6 +413,7 @@ define('M3_REQUEST_CMD_FIND_WIDGET',				'findwidget');			// ウィジェット�
 define('M3_REQUEST_CMD_SHOW_WIDGET',      			'showwidget');			// ウィジェット単体表示
 define('M3_REQUEST_CMD_DO_WIDGET',      			'dowidget');			// ウィジェット単体オペレーション
 define('M3_REQUEST_CMD_CONFIG_WIDGET',      		'configwidget');		// ウィジェットの設定
+define('M3_REQUEST_CMD_CONFIG_TEMPLATE',      		'configtemplate');		// テンプレートの設定
 define('M3_REQUEST_CMD_PREVIEW',      				'preview');				// サイトのプレビューを表示
 define('M3_REQUEST_CMD_LOGIN',      				'login');				// ログイン
 define('M3_REQUEST_CMD_LOGOUT',      				'logout');				// ログアウト
