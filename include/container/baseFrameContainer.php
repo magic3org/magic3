@@ -357,6 +357,9 @@ class BaseFrameContainer extends Core
 			$createPage = false;		// ウィジェット単体処理モードに設定
 		} else if ($cmd == M3_REQUEST_CMD_CSS){		// CSS生成
 		
+		} else if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){		// テンプレートの設定
+			$createPage = false;		// ウィジェット単体処理モードに設定
+			$this->gPage->showWidget();	// ウィジェット表示
 		} else if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
 			$createPage = false;		// ウィジェット単体処理モードに設定
 		}
@@ -565,6 +568,11 @@ class BaseFrameContainer extends Core
 				// 指定のウィジェットを実行
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット設定のとき
 					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/admin/' . M3_FILENAME_INDEX;		// 管理用画面
+				} else if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){		// テンプレート設定の場合
+					$templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
+					
+					// テンプレート設定画面を取得
+					$widgetIndexFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/admin/' . M3_FILENAME_INDEX;
 				} else {
 					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
 				}
@@ -613,6 +621,7 @@ class BaseFrameContainer extends Core
 			
 			if ($cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示
 				$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェット設定のとき
+				$cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||		// テンプレートの設定
 				($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy))){		// ウィンドウオープンタイプ指定でウィジェット単体実行のとき
 				
 				// 現在の出力内容を取得し、一旦内容をクリア

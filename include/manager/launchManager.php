@@ -401,6 +401,45 @@ class LaunchManager extends Core
 		$this->_goDevice(2/*スマートフォン用*/, $filepath);
 	}
 	/**
+	 * テンプレート管理画面を実行
+	 *
+	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
+	 */
+	function goTemplate($filepath)
+	{
+		global $gEnvManager;
+		global $gRequestManager;
+
+		// 実行コマンドを取得
+		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		
+		$templateId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);// テンプレートID
+		
+		// ウィジェットの種別を設定
+		$gEnvManager->setIsSubWidget(false);			// 通常ウィジェットで起動
+
+		// コンテナクラス名作成
+		if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){		// テンプレート設定のとき
+			$containerClass = 'admin_' . $templateId . 'TemplateContainer';		// デフォルトで起動するコンテナクラス名「admin_ + テンプレートID + TemplateContainer」
+		}
+		
+		// コンテナクラス名修正
+		$containerClass = str_replace('/', '_', $containerClass);
+
+		// テンプレートのコンテナクラスファイルを読み込み
+		$containerPath = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/include/container/' . $containerClass . '.php';
+		if (file_exists($containerPath)){
+			require_once($containerPath);
+		} else {
+			echo 'file not found error: ' . $containerPath;
+		}
+		// コンテナクラスを起動
+		$widgetContainer = new $containerClass();
+		$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+		$widgetContainer->process($gRequestManager);
+		$gEnvManager->setCurrentWidgetObj(null);
+	}
+	/**
 	 * 各種デバイス用プログラムを実行
 	 *
 	 * @param int $type				1=携帯用プログラム、2=スマートフォン用プログラム

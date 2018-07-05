@@ -1,0 +1,67 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="act" />
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
+    <tbody>
+    <tr>
+	    <th>アクセスポイント</th>
+		<td>
+	    <div class="m3config_item col-sm-6"><select name="item_path" class="form-control">
+            <patTemplate:tmpl name="path_list">
+            <option value="{VALUE}" {SELECTED}>{NAME}</option>
+            </patTemplate:tmpl>
+            </select></div>
+		</td>
+	</tr>
+    <tr>
+	    <th>期間</th>
+		<td>
+            <div class="m3config_item col-sm-2"><select name="item_term" class="form-control">
+            <patTemplate:tmpl name="term_list">
+            <option value="{VALUE}" {SELECTED}>{NAME}</option>
+            </patTemplate:tmpl>
+            </select></div>
+		</td>
+	</tr>
+    <tr>
+	    <th>グラフサイズ</th>
+	    <td><div class="form-control-static m3config_item col-sm-1">幅：</div><div class="m3config_item col-sm-2"><input type="text" name="item_graph_width" class="form-control" value="{GRAPH_WIDTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static m3config_item col-sm-2">px</div>
+	    <div class="form-control-static m3config_item col-sm-1">高さ：</div><div class="m3config_item col-sm-2"><input type="text" name="item_graph_height" class="form-control" value="{GRAPH_HEIGHT}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static m3config_item col-sm-2">px</div>
+		</td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
+</form>
+</div>
+</patTemplate:tmpl>

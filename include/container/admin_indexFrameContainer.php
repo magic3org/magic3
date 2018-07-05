@@ -50,7 +50,7 @@ class admin_indexFrameContainer extends BaseFrameContainer
 					$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET ||		// 表示位置を表示するとき(ウィジェット付き)
 					$cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示
 					$cmd == M3_REQUEST_CMD_DO_WIDGET ||		// ウィジェット単体実行
-//					$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェットの設定
+					$cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||		// テンプレートの設定
 					$cmd == M3_REQUEST_CMD_GET_WIDGET_INFO ||	// ウィジェット各種情報取得(AJAX用)
 					$cmd == M3_REQUEST_CMD_SHOW_PHPINFO){	// phpinfoの表示
 			// 管理者権限がなければ実行できない
