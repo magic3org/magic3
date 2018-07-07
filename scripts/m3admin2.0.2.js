@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -94,6 +94,11 @@ function m3ShowConfigWindow(widgetId, configId, serial)
 		window.open(M3_DEFAULT_ADMIN_URL + "?cmd=configwidget&openby=other&widget=" + widgetId + 
 					"&_defconfig=" + configId + "&_defserial=" + serial, "config_" + widgetId);
 	}
+}
+// テンプレート設定用ウィンドウ表示
+function m3ShowTemplateConfigWindow(templateId)
+{
+	window.open(M3_DEFAULT_ADMIN_URL + "?cmd=configtemplate&openby=other&template=" + templateId, "configtemplate_" + templateId);
 }
 // ウィジェット表示微調整用ウィンドウ表示
 function m3ShowAdjustWindow(configId, serial, pageId, pageSubId)

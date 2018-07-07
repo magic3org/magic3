@@ -648,26 +648,14 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			$formatType .= $genarator . ' - ' . $version;
 		}
 
-		// 削除ボタン
-		$eventAttr = 'onclick="deleteline(\'' . $templateId . '\');"';
-		$deleteButtonTag = $this->gDesign->createTrashButton(''/*同画面*/, $this->_('Delete'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
-		// プレビューボタン
-		$eventAttr = 'onclick="previewInOtherWindow(\'' . $templateId . '\');"';
-		$previewButtonTag = $this->gDesign->createPreviewButton(''/*同画面*/, $this->_('Preview'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 		// ダウンロードボタン
 		$downloadDisabled = false;// ボタンの状態
 		if (!$isExistsTemplate) $downloadDisabled = true;
-/*		$downloadImg = $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ZIP_ICON_FILE);
-		if (empty($downloadDisabled)){
-			$downloadStr = 'ダウンロード';
-		} else {
-			$downloadStr = 'ダウンロード不可';
-		}
-		$downloadButtonTag = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" />';
-		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate(\'' . $templateId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
-		*/
 		$eventAttr = 'onclick="downloadTemplate(\'' . $templateId . '\');"';
 		$downloadButtonTag = $this->gDesign->createDownloadButton(''/*同画面*/, $this->_('.zip Download'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/, $downloadDisabled/*ボタン使用可否*/);
+		// テンプレート設定画面ボタン
+		$configDisabled = '';// ボタンの状態
+		if (!$fetchedRow['tm_has_admin']) $configDisabled = 'disabled';		// 管理画面がなければ使用不可
 		// テンプレート編集ボタン
 		$editDisabled = '';// ボタンの状態
 		$editUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $templateId;	// テンプレート編集画面
@@ -699,10 +687,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'update_dt'		=> $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
 //			'is_default'	=> $defaultCheck,										// デフォルトテンプレートかどうか
 			'image_tag'		=> $imageTag,		// 画像
-			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
-			'preview_button'	=> $previewButtonTag,		// プレビューボタン
 			'download_button' 	=> $downloadButtonTag,		// ダウンロードボタン
-//			'edit_button' 		=> $editButtonTag,			// テンプレート編集ボタン
+			'config_disabled' 	=> $configDisabled,			// テンプレート設定画面ボタンの使用可否
 			'edit_disabled'		=> $editDisabled,		// テンプレート編集ボタンの使用可否
 			'edit_url'			=> $editUrl,				// テンプレート画像編集用URL
 			'generate_css_url'	=> $generateCssUrl,			// テンプレートCSS生成用URL

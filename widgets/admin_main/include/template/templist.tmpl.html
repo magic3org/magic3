@@ -156,7 +156,7 @@ $(function(){
 	    <!--<td><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>-->
 	    <td>{UPDATE_DT}</td>
 	    <td>
-		<!--{DELETE_BUTTON}--> {PREVIEW_BUTTON} <!-- {DOWNLOAD_BUTTON}--> <!--{EDIT_BUTTON}-->
+		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="設定画面を表示" onclick="m3ShowTemplateConfigWindow('{ID}');" {CONFIG_DISABLED}><i class="glyphicon glyphicon-wrench"></i></a>
 <div class="dropdown" style="display: inline-block;">
   <button class="btn btn-sm btn-default dropdown-toggle {EDIT_DISABLED}" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     <i class="glyphicon glyphicon-edit"></i>&nbsp;<span class="caret"></span>
@@ -171,6 +171,7 @@ $(function(){
     その他&nbsp;<span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <li><a href="javascript:void(0);" onclick="previewInOtherWindow('{ID}');">レイアウトをプレビュー</a></li>
     <li {DEFAULT_DISABLED}><a href="javascript:void(0);" onclick="changeDefault('{ID}');">デフォルトを変更</a></li>
 	<li><a href="javascript:void(0);" onclick="downloadTemplate('{ID}');">ダウンロード</a></li>
 	<li><a href="javascript:void(0);" onclick="initTemplate('{ID}');">テンプレート初期化</a></li>

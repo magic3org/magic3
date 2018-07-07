@@ -206,7 +206,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin2.0.1.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin2.0.2.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.10.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.5.2.js';			// 一般、管理機能共通スクリプト
@@ -1575,6 +1575,7 @@ class PageManager extends Core
 						
 					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+					//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
 						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
 						
 						// Googleマップライブラリの読み込み
@@ -2936,6 +2937,7 @@ class PageManager extends Core
 	 * startWidget(),endWidget()は、以下のコマンドを処理する
 	 *  ・M3_REQUEST_CMD_SHOW_WIDGET(ウィジェットの単体表示)
 	 *  ・M3_REQUEST_CMD_CONFIG_WIDGET(ウィジェット設定画面)
+	 *  ・M3_REQUEST_CMD_CONFIG_TEMPLATE(テンプレート設定画面)
 	 *  ・M3_REQUEST_CMD_DO_WIDGET(ウィジェット単体実行)
 	 * Widgetの出力方法は、以下のパターンがある
 	 *  ・HTMLヘッダ付加 - Widget単体で画面出力するためにHTMLヘッダを付加するパターン
@@ -2990,7 +2992,8 @@ class PageManager extends Core
 
 		// ##### テンプレートのCSSの読み込み #####
 		// テンプレートは管理用テンプレートに固定されている
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェット設定のとき
+		//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェット設定のとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
 			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){	// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
 			if ($this->isHtml5){
@@ -3054,7 +3057,8 @@ class PageManager extends Core
 		}
 		// ##### スクリプト用出力用タグを埋め込む #####
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
 			echo self::MENUBAR_SCRIPT_TAGS;			// メニューバー出力用タグ
 		}
 		
@@ -3071,7 +3075,8 @@ class PageManager extends Core
 			echo '<body>' . M3_NL;
 		}
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
 			// ウィジェット情報を設定
 			$desc = $row['wd_description'];		// 説明
 			$gEnvManager->setCurrentWidgetParams('desc', $desc);
@@ -3083,7 +3088,7 @@ class PageManager extends Core
 		
 		// 別ウィンドウで表示のときは、「閉じる」ボタンを表示
 		if ($cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示のとき
-			$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||	// ウィジェット詳細設定画面のとき
+			$cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
 			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット単体実行でフロント画面編集モードのとき
 
 //			if ($this->isEditMode){// フロント画面編集モードのとき
@@ -3121,7 +3126,6 @@ class PageManager extends Core
 							'" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" /></a></div>' . M3_NL;
 //			}
 		}
-//		echo '<div class="row">' . M3_NL;
 		echo '<!-- Widget Start -->' . M3_NL;
 	}
 	/**
@@ -3130,6 +3134,7 @@ class PageManager extends Core
 	 * startWidget(),endWidget()は、以下のコマンドを処理する
 	 *  ・M3_REQUEST_CMD_SHOW_WIDGET(ウィジェットの単体表示)
 	 *  ・M3_REQUEST_CMD_CONFIG_WIDGET(ウィジェット設定画面)
+	 *  ・M3_REQUEST_CMD_CONFIG_TEMPLATE(テンプレート設定画面)
 	 *  ・M3_REQUEST_CMD_DO_WIDGET(ウィジェット単体実行)
 	 *
 	 * @param string $cmd			起動コマンド
@@ -3173,7 +3178,8 @@ class PageManager extends Core
 		// ##### 初期処理 #####
 		$replaceStr .= '$(function(){' . M3_NL;
 		// トップ位置修正
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット設定画面またはフロント画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// フロント画面編集モードのとき
 			if (!empty($this->adminSubNavbarDef) || !empty($this->adminBreadcrumbDef)){
 				$menubarHeight = $gDesignManager->getSubMenubarHeight();
 				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . '$("nav.secondlevel").css("margin-top", "0");' . M3_NL;
@@ -3194,23 +3200,7 @@ class PageManager extends Core
 		$destContent = str_replace(self::MENUBAR_SCRIPT_TAGS, $replaceStr, $destContent);
 		echo $destContent;// 変換したコンテンツを出力
 		
-//		echo '</div>' . M3_NL;			// row
 		echo '<!-- Widget End -->' . M3_NL;
-		
-		// ##### ウィジェットからの指定による処理 #####
-/*		if ($this->updateParentWindow){			// 親ウィンドウ再描画のとき
-			echo '<script type="text/javascript">' . M3_NL;
-			echo '//<![CDATA[' . M3_NL;
-			echo '$(function(){' . M3_NL;
-			if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット詳細設定画面のとき
-				echo str_repeat(M3_INDENT_SPACE, 1) . 'm3UpdateParentWindowByConfig(' . $this->updateDefSerial . ');' . M3_NL;// 更新する項目のページ定義シリアル番号
-			} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// ウィジェット単体実行のとき
-				echo str_repeat(M3_INDENT_SPACE, 1) . 'm3UpdateParentWindow();' . M3_NL;
-			}
-			echo '});' . M3_NL;
-			echo '//]]>' . M3_NL;
-			echo '</script>' . M3_NL;
-		}*/
 		
 		// Bootstrap用のタグ出力
 		if ($this->useBootstrap) echo '</div>' . M3_NL;
@@ -4033,6 +4023,7 @@ class PageManager extends Core
 				
 				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
+				//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
 					// ##### CKEditor用の設定 #####
 					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
 					
