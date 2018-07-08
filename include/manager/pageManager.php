@@ -2976,8 +2976,13 @@ class PageManager extends Core
 		// HTMLのヘッダ部(headタグ内)出力
 		$this->getHeader();
 
-		// 現在のウィジェットを取得
-		$widgetId = $gEnvManager->getCurrentWidgetId();		// カレントのウィジェットID
+		// ##### 作成対象がウィジェットの場合とテンプレートの場合に分ける #####
+		if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){			// テンプレート設定画面の場合
+			$templateId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);// テンプレートID
+		} else {
+			// 現在のウィジェットを取得
+			$widgetId = $gEnvManager->getCurrentWidgetId();		// カレントのウィジェットID
+		}
 		
 		// URLを作成
 		if ($gEnvManager->getUseSslAdmin()){
@@ -3062,12 +3067,19 @@ class PageManager extends Core
 			echo self::MENUBAR_SCRIPT_TAGS;			// メニューバー出力用タグ
 		}
 		
+		// ##### 作成対象がウィジェットの場合とテンプレートの場合に分ける #####
 		// ウィジェットのタイトルを設定
-		$title = $row['wd_name'];
-		if (empty($title)) $title = $row['wd_id'];
-		$gEnvManager->setCurrentWidgetTitle($title);
-		echo '<title>' . self::WIDGET_TITLE_START . htmlspecialchars($title) . self::WIDGET_TITLE_END . '</title>' . M3_NL;
+		if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){			// テンプレート設定画面の場合
+			$title = self::WIDGET_TITLE_START . 'テンプレート' . self::WIDGET_TITLE_END . ' ' . $templateId;
+			echo '<title>' . htmlspecialchars($title) . '</title>' . M3_NL;
+		} else {
+			$title = $row['wd_name'];
+			if (empty($title)) $title = $row['wd_id'];
+			$gEnvManager->setCurrentWidgetTitle($title);
+			echo '<title>' . self::WIDGET_TITLE_START . htmlspecialchars($title) . self::WIDGET_TITLE_END . '</title>' . M3_NL;
+		}
 		echo '</head>' . M3_NL;
+		
 		// タブでウィンドウを開く場合は背景を透過モードにする
 		if ($this->isTransparentMode){
 			echo '<body style="background-color:transparent;">' . M3_NL;
