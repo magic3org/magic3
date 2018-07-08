@@ -41,8 +41,9 @@ function deleteline(lineNo, serialNo){
 	return false;
 }
 function detailline(widgetId){
+	// 非使用時の処理
 	if (!widgetId) return false;
-	//m3ShowStandardWindow("?cmd=configwidget&openby=all&widget=" + widgetId);
+	
 	m3ShowConfigWindow(widgetId, 0, 0);
 	return false;
 }

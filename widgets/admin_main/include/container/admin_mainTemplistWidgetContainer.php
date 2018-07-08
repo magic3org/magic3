@@ -655,7 +655,11 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$downloadButtonTag = $this->gDesign->createDownloadButton(''/*同画面*/, $this->_('.zip Download'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/, $downloadDisabled/*ボタン使用可否*/);
 		// テンプレート設定画面ボタン
 		$configDisabled = '';// ボタンの状態
-		if (!$fetchedRow['tm_has_admin']) $configDisabled = 'disabled';		// 管理画面がなければ使用不可
+		$configTemplateId = $templateId;		// 設定画面用テンプレートID
+		if (!$fetchedRow['tm_has_admin']){
+			$configDisabled = 'disabled';		// 管理画面がなければ使用不可
+			$configTemplateId = '';
+		}
 		// テンプレート編集ボタン
 		$editDisabled = '';// ボタンの状態
 		$editUrl = '?task=' . self::TASK_TEMPIMAGE . '&' . M3_REQUEST_PARAM_TEMPLATE_ID . '=' . $templateId;	// テンプレート編集画面
@@ -681,6 +685,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			'serial'		=> $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
 			'id_str'		=> $idText,
 			'id'			=> $this->convertToDispString($templateId),			// ID
+			'template_id'	=> $this->convertToDispString($configTemplateId),	// 設定画面用テンプレートID
 			'name'			=> $name,		// 名前
 			'info_button'	=> $infoButtonTag,		// テンプレート情報URL
 			'format_type'	=> $formatType,		// テンプレート形式
