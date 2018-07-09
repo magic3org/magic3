@@ -63,6 +63,7 @@ class BaseWidgetContainer extends Core
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
 	protected $_isCmdAccess;					// cmd付きアクセスかどうか
+	protected $_cmd;							// コマンド
 	protected static $_token;					// 1リクエストで共通のトークンを使用する
 	// 現在の値
 	protected $_widgetId;		// 現在のウィジェットID
@@ -169,6 +170,7 @@ class BaseWidgetContainer extends Core
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);			// 処理タスク
 		$this->_isCmdAccess = $request->isCmdAccess();			// cmd付きアクセスかどうか
+		$this->_cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// コマンド
 		
 		// 引き継ぎパラメータを退避
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
@@ -292,10 +294,13 @@ class BaseWidgetContainer extends Core
 					} else {
 						$navbarDef->baseurl = $this->getUrlWithOptionParam();
 					}
-//					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
-//								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
 					$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ
 					$navbarDef->menu = $this->configMenubarMenuDef;
+					
+					// 画面タイプ設定
+					$navbarDef->type = 1;		// 1=ウィジェット設定画面、2=システム画面(共通設定画面等)、3=テンプレート設定画面
+					if ($this->_cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE) $navbarDef->type = 3;			// テンプレート設定画面
+					
 					$this->gPage->setAdminSubNavbarDef($navbarDef);
 				}
 			}
@@ -3636,9 +3641,7 @@ class BaseWidgetContainer extends Core
 	 */
 	function getUrlWithOptionParam()
 	{
-		$cmd = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
-		
-		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// フロント画面のウィジェット設定画面の場合
+		if ($this->_cmd == M3_REQUEST_CMD_DO_WIDGET){			// フロント画面のウィジェット設定画面の場合
 			$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . 
 						'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
 		} else {

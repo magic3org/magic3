@@ -581,13 +581,13 @@ class DesignManager extends Core
 	function createSubMenubar($navbarDef)
 	{
 		// タイトル作成
-		$titleTag = $this->createSubMenubarTitleTag($navbarDef, 1/*ウィジェット設定画面用アイコン*/);
+	//	$titleTag = $this->createSubMenubarTitleTag($navbarDef, 1/*ウィジェット設定画面用アイコン*/);
+		$titleTag = $this->createSubMenubarTitleTag($navbarDef, $navbarDef->type/*画面用アイコン*/);
 		
 		// メニュー作成
 		$menuTag = $this->createSubMenubarMenuTag($navbarDef);
 		
 		// メニューバー作成
-//		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
 		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel">';
 		$destHtml .= '<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#subnavbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>' . $titleTag . '</div>';
 		$destHtml .= '<div class="collapse navbar-collapse" id="subnavbar-collapse">' . $menuTag . '</div></nav>';
@@ -597,7 +597,7 @@ class DesignManager extends Core
 	 * サブメニューバーのタイトルタグ作成
 	 *
 	 * @param object $navbarDef			メニューバー定義
-	 * @param int $iconType				アイコンタイプ(0=なし、1=ウィジェット設定画面、2=システム画面(共通設定画面等))
+	 * @param int $iconType				アイコンタイプ(0=なし、1=ウィジェット設定画面、2=システム画面(共通設定画面等)、3=テンプレート設定画面)
 	 * @return string 					サブメニューバーのHTML
 	 */
 	function createSubMenubarTitleTag($navbarDef, $iconType = 0)
@@ -612,8 +612,10 @@ class DesignManager extends Core
 					$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
 					break;
 				case 2:		// 共通設定画面
-			//		$iconTag = '<i class="glyphicon glyphicon-wrench"></i> ';
 					$iconTag = '<i class="glyphicon glyphicon-tasks"></i> ';
+					break;
+				case 3:		// テンプレート設定画面
+					$iconTag = '<i class="glyphicon glyphicon-wrench"></i> ';
 					break;
 			}
 			if (empty($navbarDef->help)){

@@ -3071,6 +3071,7 @@ class PageManager extends Core
 		// ウィジェットのタイトルを設定
 		if ($cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){			// テンプレート設定画面の場合
 			$title = self::WIDGET_TITLE_START . 'テンプレート' . self::WIDGET_TITLE_END . ' ' . $templateId;
+			$gEnvManager->setCurrentWidgetTitle($title);
 			echo '<title>' . htmlspecialchars($title) . '</title>' . M3_NL;
 		} else {
 			$title = $row['wd_name'];
