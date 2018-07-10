@@ -29,48 +29,48 @@ function sendmessage(){
 <patTemplate:tmpl name="show_explanation" visibility="hidden"><p>{EXPLANATION}</p></patTemplate:tmpl>
 <patTemplate:tmpl name="show_name" visibility="hidden">
 <div class="form-group row">
-<label for="item_name" class="col-sm-4 col-form-label">お名前</label>
-<div class="col-sm-6"><input type="text" id="item_name" name="item_name" class="form-control" value="{NAME}" maxlength="50" {NAME_DISABLED} /></div>
+<label for="item_name" class="col-sm-3 col-form-label">お名前</label>
+<div class="col-sm-7"><input type="text" id="item_name" name="item_name" class="form-control" value="{NAME}" maxlength="50" {NAME_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_name_kana" visibility="hidden">
 <div class="form-group row">
-<label for="item_name_kana" class="col-sm-4 col-form-label">お名前(フリガナ)</label>
-<div class="col-sm-6"><input type="text" id="item_name_kana" name="item_name_kana" class="form-control" value="{NAME_KANA}" maxlength="50" {NAME_KANA_DISABLED} /></div>
+<label for="item_name_kana" class="col-sm-3 col-form-label">お名前(フリガナ)</label>
+<div class="col-sm-7"><input type="text" id="item_name_kana" name="item_name_kana" class="form-control" value="{NAME_KANA}" maxlength="50" {NAME_KANA_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_email" visibility="hidden">
 <div class="form-group row">
-<label for="item_email" class="col-sm-4 col-form-label">Eメール</label>
-<div class="col-sm-6"><input type="text" id="item_email" name="item_email" class="form-control" value="{EMAIL}" maxlength="50" {EMAIL_DISABLED} /></div>
+<label for="item_email" class="col-sm-3 col-form-label">Eメール</label>
+<div class="col-sm-7"><input type="text" id="item_email" name="item_email" class="form-control" value="{EMAIL}" maxlength="50" {EMAIL_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 <div class="form-group row">
-<label for="item_email2" class="col-sm-4 col-form-label">Eメール(確認)</label>
-<div class="col-sm-6"><input type="text" id="item_email2" name="item_email2" class="form-control" value="{EMAIL2}" maxlength="50" {EMAIL2_DISABLED} /></div>
+<label for="item_email2" class="col-sm-3 col-form-label">Eメール(確認)</label>
+<div class="col-sm-7"><input type="text" id="item_email2" name="item_email2" class="form-control" value="{EMAIL2}" maxlength="50" {EMAIL2_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_company_name" visibility="hidden">
 <div class="form-group row">
-<label for="item_company_name" class="col-sm-4 col-form-label">会社名</label>
-<div class="col-sm-6"><input type="text" id="item_company_name" name="item_company_name" class="form-control" value="{COMPANY_NAME}" maxlength="50" {COMPANY_NAME_DISABLED} /></div>
+<label for="item_company_name" class="col-sm-3 col-form-label">会社名</label>
+<div class="col-sm-7"><input type="text" id="item_company_name" name="item_company_name" class="form-control" value="{COMPANY_NAME}" maxlength="50" {COMPANY_NAME_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_zipcode" visibility="hidden">
 <div class="form-group row">
-<label for="item_zipcode" class="col-sm-4 col-form-label">郵便番号</label>
-<div class="col-sm-6"><input type="text" id="item_zipcode" name="item_zipcode" class="form-control" value="{ZIPCODE}" maxlength="10" {ZIPCODE_DISABLED} /></div>
+<label for="item_zipcode" class="col-sm-3 col-form-label">郵便番号</label>
+<div class="col-sm-7"><input type="text" id="item_zipcode" name="item_zipcode" class="form-control" value="{ZIPCODE}" maxlength="10" {ZIPCODE_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_state" visibility="hidden">
 <div class="form-group row">
-<label for="item_state" class="col-sm-4 col-form-label">都道府県</label>
-<div class="col-sm-6">
+<label for="item_state" class="col-sm-3 col-form-label">都道府県</label>
+<div class="col-sm-7">
 <select id="item_state" name="item_state" class="form-control" {STATE_DISABLED}>
 <option value=""> </option>
 <patTemplate:tmpl name="state_list">
@@ -91,7 +91,7 @@ function sendmessage(){
 <patTemplate:tmpl name="show_tel" visibility="hidden">
 <div class="form-group row">
 <label for="item_phone" class="col-sm-3 col-form-label">電話番号</label>
-<div class="col-sm-4"><input type="text" id="item_phone" name="item_phone" class="form-control" value="{PHONE}" maxlength="20" {PHONE_DISABLED} /></div>
+<div class="col-sm-7"><input type="text" id="item_phone" name="item_phone" class="form-control" value="{PHONE}" maxlength="20" {PHONE_DISABLED} /></div>
 <p class="col-sm-2 form-control-static">{REQUIRED}</p>
 </div>
 </patTemplate:tmpl>

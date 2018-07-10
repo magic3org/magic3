@@ -25,7 +25,8 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
 	const DEFAULT_TITLE_NAME = 'お問い合わせ';	// デフォルトのタイトル名
 	const DEFAULT_STR_REQUIRED = '<span class="required">*必須</span>';		// 「必須」表示用テキスト
-	const BOOTSTRAP_STR_REQUIRED = '<span class="label label-danger required">必須</span>';		// 「必須」表示用テキスト(Bootstrap出力用)
+	const BOOTSTRAP_STR_REQUIRED = '<span class="label label-danger required">必須</span>';		// 「必須」表示用テキスト(Bootstrap v3出力用)
+	const BOOTSTRAP4_STR_REQUIRED = '<span class="badge badge-danger required">必須</span>';		// 「必須」表示用テキスト(Bootstrap v4出力用)
 	
 	/**
 	 * コンストラクタ
@@ -54,10 +55,11 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			$this->tagRequired = self::BOOTSTRAP_STR_REQUIRED;		// 「必須」ラベルタグ
 			if ($this->_templateType == 10){	// Bootstrap v3.0のとき
+				$this->tagRequired = self::BOOTSTRAP_STR_REQUIRED;		// 「必須」ラベルタグ
 				return 'index_bootstrap.tmpl.html';
 			} else {			// Bootstrap v4.0のとき
+				$this->tagRequired = self::BOOTSTRAP4_STR_REQUIRED;		// 「必須」ラベルタグ
 				return 'index_bootstrap4.tmpl.html';
 			}
 		} else {
