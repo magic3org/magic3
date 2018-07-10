@@ -409,6 +409,7 @@ debug($contentItem->published);*/
 			}
 			break;
 		case 10:		// Bootstrap v3.0
+		case 11:		// Bootstrap v4.0
 			$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/article/default.php';		// ビュー作成処理
 			break;
 		}

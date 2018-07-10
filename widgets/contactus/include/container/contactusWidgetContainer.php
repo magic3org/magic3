@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -55,7 +55,11 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	{
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
 			$this->tagRequired = self::BOOTSTRAP_STR_REQUIRED;		// 「必須」ラベルタグ
-			return 'index_bootstrap.tmpl.html';
+			if ($this->_templateType == 10){	// Bootstrap v3.0のとき
+				return 'index_bootstrap.tmpl.html';
+			} else {			// Bootstrap v4.0のとき
+				return 'index_bootstrap4.tmpl.html';
+			}
 		} else {
 			$this->tagRequired = self::DEFAULT_STR_REQUIRED;		// 「必須」ラベルタグ
 			return 'index.tmpl.html';
