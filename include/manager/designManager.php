@@ -187,37 +187,47 @@ class DesignManager extends Core
 	 * @param string $type		メッセージタイプ(danger,error,warning,info,success)
 	 * @param string $preTag	前タグ
 	 * @param string $preTag	後タグ
+	 * @param int $templateType	テンプレートタイプ(99=レイアウト用テンプレート,0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,11=Bootstrap v4.0,20=jQuery Mobile,100=WordPress)
 	 * @return array 			クラス名
 	 */
-	function getBootstrapMessageClass($type, &$preTag = null, &$postTag = null)
+	function getBootstrapMessageClass($type, &$preTag = null, &$postTag = null, $templateType = 0)
 	{
 		$extClass = array();
 		
 		switch ($type){
-			case 'danger':
-				$extClass[] = 'alert';
-				$extClass[] = 'alert-danger';
-				break;
-			case 'error':
-				$extClass[] = 'alert';
-				$extClass[] = 'alert-error';
-				break;
-			case 'warning':
-				$extClass[] = 'alert';
-				$extClass[] = 'alert-warning';
-				break;
-			case 'info':
-				$extClass[] = 'alert';
-				$extClass[] = 'alert-info';
-				break;
-			case 'success':
-				$extClass[] = 'alert';
-				$extClass[] = 'alert-success';
-				break;
+		case 'danger':
+			$extClass[] = 'alert';
+			$extClass[] = 'alert-danger';
+			break;
+		case 'error':
+			$extClass[] = 'alert';
+			$extClass[] = 'alert-error';
+			break;
+		case 'warning':
+			$extClass[] = 'alert';
+			$extClass[] = 'alert-warning';
+			break;
+		case 'info':
+			$extClass[] = 'alert';
+			$extClass[] = 'alert-info';
+			break;
+		case 'success':
+			$extClass[] = 'alert';
+			$extClass[] = 'alert-success';
+			break;
 		}
+		
 		// メッセージ幅
-		$extClass[] = 'col-lg-6';
-		$extClass[] = 'col-lg-offset-3';
+		switch ($templateType){
+		case 10:		// Bootstrap v3.0
+			$extClass[] = 'col-lg-6';
+			$extClass[] = 'col-lg-offset-3';
+			break;
+		case 11:		// Bootstrap v4.0
+			$extClass[] = 'col-lg-6';
+			$extClass[] = 'offset-lg-3';
+			break;
+		}
 	
 		// 前後タグ
 		if (isset($preTag)) $preTag = '<div class="row">';

@@ -2267,7 +2267,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag, $this->_templateType);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
@@ -2288,7 +2288,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag, $this->_templateType);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 
@@ -2309,7 +2309,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('warning', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('warning', $preTag, $postTag, $this->_templateType);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 
@@ -2330,7 +2330,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag, $this->_templateType);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
@@ -2351,7 +2351,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag, $this->_templateType);
 				//$messageClassArray = $this->gDesign->getBootstrapMessageClass('success', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
@@ -2373,7 +2373,7 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('success', $preTag, $postTag);
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('success', $preTag, $postTag, $this->_templateType);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
