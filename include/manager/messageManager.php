@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -37,8 +37,6 @@ class MessageManager extends Core
 	const DEFAULT_MSG_ACCESS_DENY = 'アクセスできません';						// アクセス不可メッセージのデフォルト値
 	const DEFAULT_MSG_PAGE_NOT_FOUND = 'ページが見つかりません';						// ページが見つからないメッセージのデフォルト値
 	const DEFAULT_WORD_UNTITLED = '[未設定]';		// 用語未設定
-//	const LOCALE_TEXT_FILE_GETTEXT = '/php-gettext-1.0.10/gettext.php';			// 各言語対応テキスト処理用
-//	const LOCALE_TEXT_FILE_STREAMS = '/php-gettext-1.0.10/streams.php';			// 各言語対応テキスト処理用
 	const LOCALE_TEXT_FILE_GETTEXT = '/php-gettext-1.0.12/gettext.php';			// 各言語対応テキスト処理用
 	const LOCALE_TEXT_FILE_STREAMS = '/php-gettext-1.0.12/streams.php';			// 各言語対応テキスト処理用
 	
