@@ -283,8 +283,6 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 					} else {			// デフォルトカラー
 					//	$navbarOptionClass[] = 'navbar-light';
 					//	$navbarOptionClass[] = 'bg-light';
-
-						
 						$navbarOptionClass[] = 'navbar-dark';
 						$navbarOptionClass[] = 'bg-dark';
 					}
