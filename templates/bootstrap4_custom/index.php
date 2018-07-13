@@ -7,12 +7,23 @@ $document = $this;
 // Shortcut for template base url:
 $templateUrl = $document->baseurl . '/templates/' . $document->template;
 
+// テンプレートカスタマイズパラメータがある場合は取得
+$customCssData = $document->getCustomTemplateHeadCssData();
+if (empty($customCssData)){
+	$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';
+} else {
+	if (strStartsWith($customCssData, '/')){		// 相対パスの場合
+		$cssTag = '<link rel="stylesheet" href="' . $templateUrl . $customCssData . '" media="screen">';
+	} else {
+		$cssTag = $customCssData;
+	}
+}
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootstrap.min.css" media="screen">
+	<?php echo $cssTag; ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/fontawesome-all.min.css" media="screen">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>

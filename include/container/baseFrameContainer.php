@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,7 @@ class BaseFrameContainer extends Core
 {
 	protected $_db;	// DB接続オブジェクト
 	private $joomlaBufArray = array();			// Joomla!データ受け渡し用
+	private $templateCustomObj;				// テンプレートカスタマイズパラメータオブジェクト
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
 	const M_ADMIN_TEMPLATE = 'm/_admin';	// 携帯用管理画面テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
@@ -1440,6 +1441,28 @@ class BaseFrameContainer extends Core
 		} else {
 			return false;
 		}
+	}
+	/***********************************************************************************
+	 * 以下、テンプレート専用
+	 ***********************************************************************************/
+	/**
+	 * [カスタムテンプレート用] テンプレートのヘッダ部に出力するCSSのデータを取得
+	 *
+	 * @return string				CSS出力データ(HTMLタグ形式、または「/」から始まるCSSファイルの相対パス)。設定なしの場合は空文字列。
+	 */
+	function getCustomTemplateHeadCssData()
+	{
+		global $gEnvManager;
+		
+		if (!isset($this->templateCustomObj)){
+			$optionParams = $gEnvManager->getCurrentTemplateCustomParam();
+			if (empty($optionParams)){
+				$this->templateCustomObj = array();
+			} else {
+				$this->templateCustomObj = unserialize($optionParams);		// 連想配列に変換
+			}
+		}
+		return $this->templateCustomObj['head_css_data'];
 	}
 	/***********************************************************************************
 	 * 以下、Joomla!v1.5テンプレート専用
