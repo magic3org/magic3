@@ -129,6 +129,53 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 				}
 				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
+		} else if ($act == 'upload_css'){
+echo 'upload.....';
+			// アップロードされたファイルか？セキュリティチェックする
+/*			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
+				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
+
+				// ファイル名の解析
+				$pathParts = pathinfo($uploadFilename);
+				$ext = $pathParts['extension'];		// 拡張子
+				$templateName = basename($uploadFilename, '.' . $ext);		// 拡張子をはずす
+				$ext = strtolower($ext);
+				
+				// ファイル拡張子のチェック
+				if ($ext != 'zip'){
+					//$msg = 'zip圧縮のファイルのみアップロード可能です';
+					$msg = $this->_('Only zip format file is allowed to upload.');	// zip圧縮のファイルのみアップロード可能です
+					$this->setAppErrorMsg($msg);
+				}
+				
+				// テンポラリディレクトリの書き込み権限をチェック
+				if (!is_writable($this->gEnv->getWorkDirPath())){
+					//$msg = '一時ディレクトリに書き込み権限がありません。ディレクトリ：' . $this->gEnv->getWorkDirPath();
+					$msg = sprintf($this->_('You are not allowed to write temporary directory. (directory: %s)'), $this->gEnv->getWorkDirPath());	// 一時ディレクトリに書き込み権限がありません。(ディレクトリ：%s)
+					$this->setAppErrorMsg($msg);
+				}
+				
+				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+					// ファイルを保存するサーバディレクトリを指定
+					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+		
+					// アップされたテンポラリファイルを保存ディレクトリにコピー
+					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
+					if ($ret){
+
+					} else {
+						//$msg = 'ファイルのアップロードに失敗しました';
+						$msg = $this->_('Failed in uploading file.');		// ファイルのアップロードに失敗しました
+						$this->setAppErrorMsg($msg);
+					}
+					// テンポラリファイル削除
+					unlink($tmpFile);
+				}
+			} else {
+				//$msg = 'アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります - ' . $this->gSystem->getMaxFileSizeForUpload() . 'バイト)';
+				$msg = sprintf($this->_('Uploded file not found. (detail: The file may be over maximum size to be allowed to upload. Size %s bytes.'), $this->gSystem->getMaxFileSizeForUpload());	// アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%sバイト)
+				$this->setAppErrorMsg($msg);
+			}*/
 		} else {		// 初期表示の場合
 			$replaceNew = true;			// データ再取得
 		}
@@ -163,8 +210,7 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		$this->tmpl->addVar('_widget', 'upload_button', $UploadButtonTag);
 		
 		// 値を埋め込む
-		$this->tmpl->addVar("_widget", "graph_width", $graphWidth);// グラフ幅
-		$this->tmpl->addVar("_widget", "graph_height", $graphHeight);// グラフ高さ
+		$this->tmpl->addVar("_widget", "max_file_size", $this->gSystem->getMaxFileSizeForUpload(true/*数値のバイト数*/));			// アップロードファイルの最大サイズ
 	}
 	/**
 	 * CSSファイル選択メニュー作成

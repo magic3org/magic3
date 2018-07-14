@@ -19,6 +19,16 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function uploadCssCheck(){
+	if (!document.upload.upfile.value){
+		alert('アップロードファイルが選択されていません');
+		return;
+	}
+	if (!window.confirm('CSSファイルをアップロードしますか?')) return false;
+	document.upload.act.value = 'upload_css';
+	document.upload.submit();
+	return false;
+}
 $(function(){
 	m3SetConfigTable('mainconfig');
 	
@@ -74,7 +84,6 @@ $(function(){
                 <form enctype="multipart/form-data" method="post" name="upload">
                     <input type="hidden" name="act" />
 					<input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}" />
-                    <input type="hidden" name="item_type" />
                     <div class="input-group">
                         <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
                         <input type="text" class="form-control">
@@ -83,7 +92,7 @@ $(function(){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
-                <button type="button" class="btn btn-success" onclick="uploadCheck();">アップロード</button>
+                <button type="button" class="btn btn-success" onclick="uploadCssCheck();">アップロード</button>
             </div>
         </div>
     </div>
