@@ -25,6 +25,7 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 	private $isCssCdn;			// CSSがCDNかどうか
 	private $cssData;			// CSSフォイルのパス(「/」で開始)またはCDNタグ
 	const CSS_DIR = '/upload/css';		// CSSファイルディレクトリ
+	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	
 	const DEFAULT_GRAPH_WIDTH = 800;		// グラフ幅
 	const DEFAULT_GRAPH_HEIGHT = 280;		// グラフ高さ
@@ -146,9 +147,15 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 			}
 		}
 		
+		if ($this->isCssCdn){			// CSSがCDNかどうか
+			$this->tmpl->addVar('_widget', 'css_cdn_checked', 'checked');		// CDN
+		} else {
+			$this->tmpl->addVar('_widget', 'css_file_checked', 'checked');		// CSSファイル
+		}
+		
 		// CSSファイル選択メニュー作成
 		$ret = $this->createCssFileMenu();
-		if (!$ret) 
+		if (!$ret) $this->tmpl->setAttribute('css_file_list', 'visibility', 'hidden');
 
 		// アップロードボタン
 		$eventAttr = 'data-toggle="modal" data-target="#uploadModal"';		// ファイル選択ダイアログ起動
@@ -169,21 +176,36 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		$cssDir = $this->templatePath . '/' . self::CSS_DIR;
 		if (!is_dir ($cssDir)) return false;
 		
-		for ($i = 0; $i < count($this->termTypeArray); $i++){
-			$value = $this->termTypeArray[$i]['value'];
-			$name = $this->termTypeArray[$i]['name'];
+		// CSSファイルディレクトリ読み込み
+		$isExistsFile = false;		// CSSファイルが存在するかどうか
+		$dir = dir($cssDir);
+		while (($file = $dir->read()) !== false){
+			$filePath = $cssDir . '/' . $file;
+			$pathParts = pathinfo($file);
+			$ext = $pathParts['extension'];		// 拡張子
+				
+			// ファイルかどうかチェック
+			if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath) &&
+				$ext == self::CSS_FILE_EXT){		// 拡張子をチェック
+				$isExistsFile = true;
+				$value = $file;
+				$name = $file;
 			
-			$selected = '';
-			if ($value == $this->termType) $selected = 'selected';
+				// 選択状態を設定
+				$selected = '';
+				if (strStartsWith($this->cssData, '/') && $filePath == $this->templatePath . $this->cssData) $selected = 'selected';
 			
-			$row = array(
-				'value'    => $value,			// ページID
-				'name'     => $name,			// ページ名
-				'selected' => $selected														// 選択中かどうか
-			);
-			$this->tmpl->addVars('term_list', $row);
-			$this->tmpl->parseTemplate('term_list', 'a');
+				$row = array(
+					'value'    => $this->convertToDispString($value),
+					'name'     => $this->convertToDispString($name),
+					'selected' => $selected														// 選択中かどうか
+				);
+				$this->tmpl->addVars('css_file_list', $row);
+				$this->tmpl->parseTemplate('css_file_list', 'a');
+			}
 		}
+		$dir->close();
+		return $isExistsFile;
 	}
 }
 ?>
