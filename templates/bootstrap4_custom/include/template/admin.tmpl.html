@@ -21,6 +21,9 @@ function updateItem(){
 }
 $(function(){
 	m3SetConfigTable('mainconfig');
+	
+	// ファイル選択用ボタン作成
+	m3SetFileSelectButton();
 });
 //]]>
 </script>
@@ -57,5 +60,32 @@ $(function(){
 <input type="button" class="button" onclick="updateItem();" value="更新" />
 </div>
 </form>
+</div>
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">CSSファイルアップロード</h4>
+            </div>
+            <div class="modal-body">
+			    <p>CSSファイルを選択してください</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}" />
+                    <input type="hidden" name="item_type" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">アップロード</button>
+            </div>
+        </div>
+    </div>
 </div>
 </patTemplate:tmpl>

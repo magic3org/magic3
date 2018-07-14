@@ -19,8 +19,7 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class BaseAdminTemplateContainer extends BaseAdminWidgetContainer
 {
-//	const DEFAULT_WIDGET_TYPE = 'admin';		// ウィジェットタイプ
-//	const TASK_CONFIG_LIST = 'list';			// 設定一覧
+	protected $_templateId;			// テンプレートID
 	
 	/**
 	 * コンストラクタ
@@ -31,7 +30,7 @@ class BaseAdminTemplateContainer extends BaseAdminWidgetContainer
 		parent::__construct();
 		
 		// データ初期化
-//		$this->_widgetType = self::DEFAULT_WIDGET_TYPE;						// ウィジェットタイプ
+		$this->_templateId	= $this->gRequest->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);// テンプレートID
 	}
 	/**
 	 * 出力用の変数に値を設定する

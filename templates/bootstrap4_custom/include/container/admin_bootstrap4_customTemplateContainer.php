@@ -17,16 +17,15 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminTemplateContainer.php
 
 class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContainer
 {
-	private $graphTypeArray;	// グラフタイプ
-	private $termTypeArray;		// 期間タイプ
 	private $graphType;			// グラフ種別
 	private $path;				// アクセスパス
 	private $termType;				// 期間タイプ
-	const DEFAULT_ACCESS_PATH = 'index';		// デフォルトのアクセスパス(PC用アクセスポイント)
-	const ACCESS_PATH_ALL = '_all';				// アクセスパスすべて選択
-	const DEFAULT_TERM_TYPE = '30day';		// デフォルトの期間タイプ
-	const TERM_TYPE_ALL = '_all';				// 全データ表示選択
-	const DEFAULT_GRAPH_TYPE = 'pageview';		// デフォルトのグラフ種別
+
+	private $templatePath;		// テンプレートのパス
+	private $isCssCdn;			// CSSがCDNかどうか
+	private $cssData;			// CSSフォイルのパス(「/」で開始)またはCDNタグ
+	const CSS_DIR = '/upload/css';		// CSSファイルディレクトリ
+	
 	const DEFAULT_GRAPH_WIDTH = 800;		// グラフ幅
 	const DEFAULT_GRAPH_HEIGHT = 280;		// グラフ高さ
 	
@@ -38,21 +37,26 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		// グラフタイプ
-		$this->graphTypeArray = array(	array(	'name' => 'ページビュー',	'value' => 'pageview'),
-										array(	'name' => '訪問数',			'value' => 'visit'),
-										array(	'name' => '訪問者数',		'value' => 'visitor'));
-										
-		// 期間タイプ
-		$this->termTypeArray = array(	array(	'name' => '10日',	'value' => '10day'),
-										array(	'name' => '30日',	'value' => '30day'),
-										array(	'name' => '3ヶ月',	'value' => '3month'),
-										array(	'name' => '6ヶ月',	'value' => '6month'),
-										array(	'name' => '1年',	'value' => '1year'),
-										array(	'name' => '2年',	'value' => '2year'),
-										array(	'name' => '3年',	'value' => '3year'),
-										array(	'name' => '5年',	'value' => '5year'),
-										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
+		// 初期値設定
+		$this->templatePath = $this->gEnv->getTemplatesPath() . '/' . $this->_templateId;		// テンプレートのパス
+		$this->isCssCdn = false;			// CSSがCDNかどうか
+		$this->cssData = '';
+
+		// テンプレートカスタマイズ情報取得
+		$ret = $this->_db->getTemplate($this->_templateId, $row);
+		if ($ret){
+			$optionParams = $row['tm_custom_params'];
+			if (empty($optionParams)){
+				$templateCustomObj = array();
+			} else {
+				$templateCustomObj = unserialize($optionParams);		// 連想配列に変換
+			}
+			$cssData = $templateCustomObj['head_css_data'];
+			if (!empty($cssData)){
+				$this->cssData = $cssData;
+				if (!strStartsWith($this->cssData, '/')) $isCssCdn = true;		// 相対パスでないとき
+			}
+		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -93,6 +97,8 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 	 */
 	function _assign($request, &$param)
 	{
+		// 初期値取得
+		
 		$act = $request->trimValueOf('act');
 		
 		// 入力値を取得
@@ -130,8 +136,6 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 			$paramObj = $this->getWidgetParamObj();
 			if (empty($paramObj)){		// 既存データなしのとき
 				// デフォルト値設定
-				$this->path = self::DEFAULT_ACCESS_PATH;
-				$this->termType = self::DEFAULT_TERM_TYPE;
 				$graphWidth = self::DEFAULT_GRAPH_WIDTH;		// グラフ幅
 				$graphHeight = self::DEFAULT_GRAPH_HEIGHT;		// グラフ高さ
 			} else {
@@ -142,15 +146,13 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 			}
 		}
 		
-		// アクセスポイントメニュー作成
-//		$this->createPathMenu();
-		
-		// 期間メニュー作成
-//		$this->createTermMenu();
+		// CSSファイル選択メニュー作成
+		$ret = $this->createCssFileMenu();
+		if (!$ret) 
 
 		// アップロードボタン
-		$eventAttr = 'onclick="downloadTemplate(\'' . $templateId . '\');"';
-		$UploadButtonTag = $this->gDesign->createUploadButton(''/*同画面*/, 'アップロード', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		$eventAttr = 'data-toggle="modal" data-target="#uploadModal"';		// ファイル選択ダイアログ起動
+		$UploadButtonTag = $this->gDesign->createUploadButton(''/*同画面*/, 'アップロード', ''/*タグID*/, $eventAttr/*追加属性*/);
 		$this->tmpl->addVar('_widget', 'upload_button', $UploadButtonTag);
 		
 		// 値を埋め込む
@@ -158,55 +160,15 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		$this->tmpl->addVar("_widget", "graph_height", $graphHeight);// グラフ高さ
 	}
 	/**
-	 * アクセスパスメニュー作成
+	 * CSSファイル選択メニュー作成
 	 *
-	 * @return								なし
+	 * @return bool			true=ファイルあり、false=ファイルなし
 	 */
-	function createPathMenu()
+	function createCssFileMenu()
 	{
-		$selected = '';
-		if ($this->path == self::ACCESS_PATH_ALL){// アクセスパスすべて選択
-			$selected = 'selected';
-		}
-		$row = array(
-			'value'    => self::ACCESS_PATH_ALL,			// アクセスパス
-			'name'     => 'すべて表示',			// 表示文字列
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('path_list', $row);
-		$this->tmpl->parseTemplate('path_list', 'a');
-	}
-	/**
-	 * ページID、取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function pageIdLoop($index, $fetchedRow, $param)
-	{
-		$selected = '';
-		if ($fetchedRow['pg_path'] == $this->path){
-			$selected = 'selected';
-		}
-		$name = $this->convertToDispString($fetchedRow['pg_path']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
-		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['pg_path']),			// アクセスパス
-			'name'     => $name,			// ページ名
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('path_list', $row);
-		$this->tmpl->parseTemplate('path_list', 'a');
-		return true;
-	}
-	/**
-	 * 期間タイプ選択メニュー作成
-	 *
-	 * @return なし
-	 */
-	function createTermMenu()
-	{
+		$cssDir = $this->templatePath . '/' . self::CSS_DIR;
+		if (!is_dir ($cssDir)) return false;
+		
 		for ($i = 0; $i < count($this->termTypeArray); $i++){
 			$value = $this->termTypeArray[$i]['value'];
 			$name = $this->termTypeArray[$i]['name'];
