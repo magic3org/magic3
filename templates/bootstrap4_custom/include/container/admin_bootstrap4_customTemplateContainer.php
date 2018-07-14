@@ -14,11 +14,9 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminTemplateContainer.php');
-//require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_analyticsDb.php');
 
 class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $graphTypeArray;	// グラフタイプ
 	private $termTypeArray;		// 期間タイプ
 	private $graphType;			// グラフ種別
@@ -39,9 +37,6 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-//		$this->db = new admin_analyticsDb();
 		
 		// グラフタイプ
 		$this->graphTypeArray = array(	array(	'name' => 'ページビュー',	'value' => 'pageview'),
@@ -152,6 +147,11 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		
 		// 期間メニュー作成
 //		$this->createTermMenu();
+
+		// アップロードボタン
+		$eventAttr = 'onclick="downloadTemplate(\'' . $templateId . '\');"';
+		$UploadButtonTag = $this->gDesign->createUploadButton(''/*同画面*/, 'アップロード', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		$this->tmpl->addVar('_widget', 'upload_button', $UploadButtonTag);
 		
 		// 値を埋め込む
 		$this->tmpl->addVar("_widget", "graph_width", $graphWidth);// グラフ幅
@@ -175,8 +175,6 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		);
 		$this->tmpl->addVars('path_list', $row);
 		$this->tmpl->parseTemplate('path_list', 'a');
-		
-		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/);
 	}
 	/**
 	 * ページID、取得したデータをテンプレートに設定する

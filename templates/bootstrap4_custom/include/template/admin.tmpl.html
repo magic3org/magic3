@@ -32,29 +32,23 @@ $(function(){
 <table id="mainconfig">
     <tbody>
     <tr>
-	    <th>アクセスポイント</th>
+	    <th>CSS</th>
 		<td>
-	    <div class="m3config_item col-sm-6"><select name="item_path" class="form-control">
-            <patTemplate:tmpl name="path_list">
+		<div class="form-group clearfix">
+		<div class="radio m3config_item"><label class=""><input type="radio" name="item_css" value="file" {CSS_FILE_CHECKED} />ファイルを選択</label></div>
+	    <div class="m3config_item col-sm-6"><select name="item_file" class="form-control">
+		    <option value="">-- デフォルト --</option>
+            <patTemplate:tmpl name="file_list">
             <option value="{VALUE}" {SELECTED}>{NAME}</option>
             </patTemplate:tmpl>
-            </select></div>
-		</td>
-	</tr>
-    <tr>
-	    <th>期間</th>
-		<td>
-            <div class="m3config_item col-sm-2"><select name="item_term" class="form-control">
-            <patTemplate:tmpl name="term_list">
-            <option value="{VALUE}" {SELECTED}>{NAME}</option>
-            </patTemplate:tmpl>
-            </select></div>
-		</td>
-	</tr>
-    <tr>
-	    <th>グラフサイズ</th>
-	    <td><div class="form-control-static m3config_item col-sm-1">幅：</div><div class="m3config_item col-sm-2"><input type="text" name="item_graph_width" class="form-control" value="{GRAPH_WIDTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static m3config_item col-sm-2">px</div>
-	    <div class="form-control-static m3config_item col-sm-1">高さ：</div><div class="m3config_item col-sm-2"><input type="text" name="item_graph_height" class="form-control" value="{GRAPH_HEIGHT}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static m3config_item col-sm-2">px</div>
+            </select>
+		</div>
+		<div class="col-sm-6 side_buttons">{UPLOAD_BUTTON}</div>
+		</div>
+		<div class="form-group clearfix">
+		<div class="radio"><label><input type="radio" name="item_css" value="cdn" {CSS_CDN_CHECKED} />CDN(タグ形式)を入力</label></div>
+		<input type="text" name="item_cdn" class="form-control" value="{CDN}" />
+		</div>
 		</td>
 	</tr>
     </tbody>

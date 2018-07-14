@@ -697,6 +697,11 @@ span[rel="m3help"] { cursor: default; }
 	white-space: normal;
 	word-break: break-all;
 }
+.m3config_table .side_buttons {
+	display:inline-block;
+	margin-top:5px;
+	margin-bottom:5px;
+}
 .m3config_table_h_side_button {
 	margin-top:-3px;
 	margin-bottom:-2px;

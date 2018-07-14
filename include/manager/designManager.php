@@ -915,6 +915,34 @@ class DesignManager extends Core
 		return $buttonTag;
 	}
 	/**
+	 * アップロードボタンを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param bool $disabled	ボタンの使用可否
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createUploadButton($url, $title = '', $tagId = '', $attr = '', $disabled = false, $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		if ($disabled) $tagClass .= ' disabled';
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-cloud-upload"></i></a>';
+		return $buttonTag;
+	}
+	/**
 	 * 期間入力ボタンを作成
 	 *
 	 * @param string $url		リンク先(リンク先がない場合は空文字列)
