@@ -17,18 +17,13 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminTemplateContainer.php
 
 class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContainer
 {
-	private $graphType;			// グラフ種別
-	private $path;				// アクセスパス
-	private $termType;				// 期間タイプ
-
 	private $templatePath;		// テンプレートのパス
 	private $isCssCdn;			// CSSがCDNかどうか
 	private $cssData;			// CSSフォイルのパス(「/」で開始)またはCDNタグ
 	const CSS_DIR = '/upload/css';		// CSSファイルディレクトリ
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
-	
-	const DEFAULT_GRAPH_WIDTH = 800;		// グラフ幅
-	const DEFAULT_GRAPH_HEIGHT = 280;		// グラフ高さ
+	const DEFAULT_CSS_BASE_FILENAME = 'bootstrap';			// CSSファイル名のデフォルト
+	const FILENAME_MAX_NO = 99;			// ファイル名付加番号最大値
 	
 	/**
 	 * コンストラクタ
@@ -103,9 +98,6 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		$act = $request->trimValueOf('act');
 		
 		// 入力値を取得
-		$this->path = $request->trimValueOf('item_path');		// アクセスパス
-		$this->termType = $request->trimValueOf('item_term');				// 期間タイプ
-		$graphWidth = $request->trimValueOf('item_graph_width');		// グラフ幅
 		$graphHeight = $request->trimValueOf('item_graph_height');		// グラフ高さ
 		
 		$replaceNew = false;		// データを再取得するかどうか
@@ -116,7 +108,7 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$paramObj = new stdClass;
-				$paramObj->path = $this->path;				// アクセスパス
+				
 				$paramObj->termType = $this->termType;		// 期間タイプ
 				$paramObj->graphWidth = $graphWidth;		// グラフ幅
 				$paramObj->graphHeight = $graphHeight;		// グラフ高さ
@@ -130,52 +122,58 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
 		} else if ($act == 'upload_css'){
-echo 'upload.....';
 			// アップロードされたファイルか？セキュリティチェックする
-/*			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
+			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
 				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
 
 				// ファイル名の解析
 				$pathParts = pathinfo($uploadFilename);
 				$ext = $pathParts['extension'];		// 拡張子
-				$templateName = basename($uploadFilename, '.' . $ext);		// 拡張子をはずす
 				$ext = strtolower($ext);
 				
 				// ファイル拡張子のチェック
-				if ($ext != 'zip'){
-					//$msg = 'zip圧縮のファイルのみアップロード可能です';
-					$msg = $this->_('Only zip format file is allowed to upload.');	// zip圧縮のファイルのみアップロード可能です
+				if ($ext != self::CSS_FILE_EXT){
+					$msg = '拡張子がcssのファイルのみアップロード可能です';
 					$this->setAppErrorMsg($msg);
 				}
 				
-				// テンポラリディレクトリの書き込み権限をチェック
-				if (!is_writable($this->gEnv->getWorkDirPath())){
-					//$msg = '一時ディレクトリに書き込み権限がありません。ディレクトリ：' . $this->gEnv->getWorkDirPath();
-					$msg = sprintf($this->_('You are not allowed to write temporary directory. (directory: %s)'), $this->gEnv->getWorkDirPath());	// 一時ディレクトリに書き込み権限がありません。(ディレクトリ：%s)
+				// テンプレートディレクトリの書き込み権限をチェック
+				if (!is_writable($this->templatePath)){
+					$msg = 'テンプレートディレクトリに書き込み権限がありません。ディレクトリ：' . $this->templatePath;
 					$this->setAppErrorMsg($msg);
 				}
-				
-				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-					// ファイルを保存するサーバディレクトリを指定
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-		
-					// アップされたテンポラリファイルを保存ディレクトリにコピー
-					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
-					if ($ret){
 
+				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+					// CSSファイル格納ディレクトリを作成
+					$cssDir = $this->templatePath . self::CSS_DIR;
+					mkdir($cssDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+					
+					// ファイル名を作成
+					$filename = $pathParts['filename'];		// 拡張子以外
+					if (empty($filename)){
+						$baseFilename = self::DEFAULT_CSS_BASE_FILENAME;
+						$followFilename = '.' . $ext;
 					} else {
-						//$msg = 'ファイルのアップロードに失敗しました';
-						$msg = $this->_('Failed in uploading file.');		// ファイルのアップロードに失敗しました
+						$baseFilename = explode('.', $filename)[0];
+						$followFilename = ltrim($pathParts['basename'], $baseFilename);
+					}
+					$newCssFilename = $this->createDefaultName($cssDir, $baseFilename, $followFilename);
+					$newCssPath = $cssDir . '/' . $newCssFilename;
+
+					// アップロードされたCSSファイルをテンプレート内のuploadディレクトリにコピー
+					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $newCssPath);
+					if ($ret){
+						$msg = 'ファイルのアップロードが完了しました(ファイル名：' . $newCssFilename . ')';
+						$this->setGuidanceMsg($msg);
+					} else {
+						$msg = 'ファイルのアップロードに失敗しました';
 						$this->setAppErrorMsg($msg);
 					}
-					// テンポラリファイル削除
-					unlink($tmpFile);
 				}
 			} else {
-				//$msg = 'アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります - ' . $this->gSystem->getMaxFileSizeForUpload() . 'バイト)';
-				$msg = sprintf($this->_('Uploded file not found. (detail: The file may be over maximum size to be allowed to upload. Size %s bytes.'), $this->gSystem->getMaxFileSizeForUpload());	// アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%sバイト)
+				$msg = 'アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。' . $this->gSystem->getMaxFileSizeForUpload() . 'バイト)';
 				$this->setAppErrorMsg($msg);
-			}*/
+			}
 		} else {		// 初期表示の場合
 			$replaceNew = true;			// データ再取得
 		}
@@ -184,10 +182,9 @@ echo 'upload.....';
 			$paramObj = $this->getWidgetParamObj();
 			if (empty($paramObj)){		// 既存データなしのとき
 				// デフォルト値設定
-				$graphWidth = self::DEFAULT_GRAPH_WIDTH;		// グラフ幅
-				$graphHeight = self::DEFAULT_GRAPH_HEIGHT;		// グラフ高さ
+
 			} else {
-				$this->path = $paramObj->path;				// アクセスパス
+
 				$this->termType = $paramObj->termType;		// 期間タイプ
 				$graphWidth = $paramObj->graphWidth;		// グラフ幅
 				$graphHeight = $paramObj->graphHeight;		// グラフ高さ
@@ -219,7 +216,7 @@ echo 'upload.....';
 	 */
 	function createCssFileMenu()
 	{
-		$cssDir = $this->templatePath . '/' . self::CSS_DIR;
+		$cssDir = $this->templatePath . self::CSS_DIR;
 		if (!is_dir ($cssDir)) return false;
 		
 		// CSSファイルディレクトリ読み込み
@@ -229,6 +226,7 @@ echo 'upload.....';
 			$filePath = $cssDir . '/' . $file;
 			$pathParts = pathinfo($file);
 			$ext = $pathParts['extension'];		// 拡張子
+			$ext = strtolower($ext);
 				
 			// ファイルかどうかチェック
 			if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath) &&
@@ -252,6 +250,28 @@ echo 'upload.....';
 		}
 		$dir->close();
 		return $isExistsFile;
+	}
+	/**
+	 * デフォルトファイル名を作成
+	 *
+	 * @param string $dir					作成するファイルの格納ディレクトリ
+	 * @param string $baseFilename			ファイル名のヘッダ文字列
+	 * @param string $followFilename		ファイル名のヘッダ文字列以外
+	 * @return string						ファイル名。作成失敗の場合は空文字列が返る。
+	 */
+	function createDefaultName($dir, $baseFilename, $followFilename)
+	{
+		$name = $baseFilename . $followFilename;
+		$path = $dir . '/' . $name;
+		if (!file_exists($path)) return $name;
+		
+		// NOを付加したファイル名を作成
+		for ($i = 2; $i <= self::FILENAME_MAX_NO; $i++){
+			$name = $baseFilename . $i . $followFilename;
+			$path = $dir . '/' . $name;
+			if (!file_exists($path)) return $name;
+		}
+		return '';
 	}
 }
 ?>
