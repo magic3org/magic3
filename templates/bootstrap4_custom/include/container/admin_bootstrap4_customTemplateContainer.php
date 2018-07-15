@@ -20,6 +20,7 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 	private $templatePath;		// テンプレートのパス
 	private $isCssCdn;			// CSSがCDNかどうか
 	private $cssData;			// CSSフォイルのパス(「/」で開始)またはCDNタグ
+	private $cssFile;			// 選択中のCSSファイル
 	const CSS_DIR = '/upload/css';		// CSSファイルディレクトリ
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const DEFAULT_CSS_BASE_FILENAME = 'bootstrap';			// CSSファイル名のデフォルト
@@ -35,24 +36,6 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		
 		// 初期値設定
 		$this->templatePath = $this->gEnv->getTemplatesPath() . '/' . $this->_templateId;		// テンプレートのパス
-		$this->isCssCdn = false;			// CSSがCDNかどうか
-		$this->cssData = '';
-
-		// テンプレートカスタマイズ情報取得
-		$ret = $this->_db->getTemplate($this->_templateId, $row);
-		if ($ret){
-			$optionParams = $row['tm_custom_params'];
-			if (empty($optionParams)){
-				$templateCustomObj = array();
-			} else {
-				$templateCustomObj = unserialize($optionParams);		// 連想配列に変換
-			}
-			$cssData = $templateCustomObj['head_css_data'];
-			if (!empty($cssData)){
-				$this->cssData = $cssData;
-				if (!strStartsWith($this->cssData, '/')) $isCssCdn = true;		// 相対パスでないとき
-			}
-		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -94,32 +77,52 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 	function _assign($request, &$param)
 	{
 		// 初期値取得
-		
-		$act = $request->trimValueOf('act');
+		$this->isCssCdn = false;			// CSSがCDNかどうか
+		$this->cssData = '';
 		
 		// 入力値を取得
-		$graphHeight = $request->trimValueOf('item_graph_height');		// グラフ高さ
-		
+		$act = $request->trimValueOf('act');
+		$cssType = $request->trimValueOf('item_css_type');
+		if ($cssType == 'cdn') $this->isCssCdn = true;		// CSSがCDNかどうか
+		$this->cssFile = $request->trimValueOf('item_file');
+		$cssCdn = $request->valueOf('item_cdn');		// CDN文字列(タグ形式)
+		if ($this->isCssCdn){			// CSSにCDNを選択のとき
+			$this->cssData = $cssCdn;
+		} else {
+			$this->cssData = $this->cssFile;
+		}
+
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力チェック
-			$this->checkNumeric($graphWidth, 'グラフ幅');
-			$this->checkNumeric($graphHeight, 'グラフ高さ');
+			if ($this->isCssCdn){			// CSSにCDNを選択のとき
+				$this->checkInput($cssCdn, 'CDN');
+			}
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				$paramObj = new stdClass;
-				
-				$paramObj->termType = $this->termType;		// 期間タイプ
-				$paramObj->graphWidth = $graphWidth;		// グラフ幅
-				$paramObj->graphHeight = $graphHeight;		// グラフ高さ
-				$ret = $this->updateWidgetParamObj($paramObj);
+				// 保存用のCSSデータ作成
+				if ($this->isCssCdn){			// CSSにCDNを選択のとき
+					$saveCssData = $this->cssData;
+				} else {
+					if (empty($this->cssData)){
+						$saveCssData = '';			// デフォルトのCSS
+					} else {
+						$saveCssData = self::CSS_DIR . '/' . $this->cssData;		// 相対パスのCSSファイル
+					}
+				}
+				$templateCustomObj = array();
+				$templateCustomObj['head_css_data'] = $saveCssData;			// ヘッダ部CSSデータ
+
+				// テンプレート情報のカスタマイズパラメータを更新。
+				$updateParam = array();
+				$updateParam['tm_custom_params'] = serialize($templateCustomObj);
+				$ret = $this->_db->updateTemplate($this->_templateId, $updateParam);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データ再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
-				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
 		} else if ($act == 'upload_css'){
 			// アップロードされたファイルか？セキュリティチェックする
@@ -179,15 +182,30 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		}
 		
 		if ($replaceNew){		// データ再取得のとき
-			$paramObj = $this->getWidgetParamObj();
-			if (empty($paramObj)){		// 既存データなしのとき
-				// デフォルト値設定
-
-			} else {
-
-				$this->termType = $paramObj->termType;		// 期間タイプ
-				$graphWidth = $paramObj->graphWidth;		// グラフ幅
-				$graphHeight = $paramObj->graphHeight;		// グラフ高さ
+			$this->isCssCdn = false;			// CSSがCDNかどうか
+			$this->cssData = '';
+			$this->cssFile = '';		// 選択中のCSSファイル
+			$cssCdn = '';				// CDNデータ
+			
+			// テンプレートカスタマイズ情報取得
+			$ret = $this->_db->getTemplate($this->_templateId, $row);
+			if ($ret){
+				$optionParams = $row['tm_custom_params'];
+				if (empty($optionParams)){
+					$templateCustomObj = array();
+				} else {
+					$templateCustomObj = unserialize($optionParams);		// 連想配列に変換
+				}
+				$cssData = $templateCustomObj['head_css_data'];
+				if (!empty($cssData)){
+					$this->cssData = $cssData;
+					if (strStartsWith($this->cssData, '/')){		// CSSファイルの場合
+						$this->cssFile = basename($this->cssData);
+					} else {
+						$this->isCssCdn = true;		// CDNで設定
+						$cssCdn = $cssData;
+					}
+				}
 			}
 		}
 		
@@ -207,6 +225,7 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 		$this->tmpl->addVar('_widget', 'upload_button', $UploadButtonTag);
 		
 		// 値を埋め込む
+		$this->tmpl->addVar('_widget', 'cdn', $this->convertToDispString($cssCdn));		// CDN
 		$this->tmpl->addVar("_widget", "max_file_size", $this->gSystem->getMaxFileSizeForUpload(true/*数値のバイト数*/));			// アップロードファイルの最大サイズ
 	}
 	/**
@@ -237,7 +256,8 @@ class admin_bootstrap4_customTemplateContainer extends BaseAdminTemplateContaine
 			
 				// 選択状態を設定
 				$selected = '';
-				if (strStartsWith($this->cssData, '/') && $filePath == $this->templatePath . $this->cssData) $selected = 'selected';
+				//if (strStartsWith($this->cssData, '/') && $filePath == $this->templatePath . $this->cssData) $selected = 'selected';
+				if ($file == $this->cssFile) $selected = 'selected';
 			
 				$row = array(
 					'value'    => $this->convertToDispString($value),

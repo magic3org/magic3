@@ -762,6 +762,7 @@ class SystemDb extends BaseDb
 		$updateFields[] = 'tm_info_url';			// テンプレート情報URL
 		$updateFields[] = 'tm_custom_params';		// カスタマイズ用パラメータ
 		$updateFields[] = 'tm_editor_param';		// 編集エディタ用パラメータ
+		$updateFields[] = 'tm_has_admin';			// 管理画面があるかどうか
 		
 		// トランザクション開始
 		$this->startTransaction();

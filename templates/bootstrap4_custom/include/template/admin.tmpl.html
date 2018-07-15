@@ -47,7 +47,7 @@ $(function(){
 	    <th>CSS</th>
 		<td>
 		<div class="form-group clearfix">
-		<div class="radio m3config_item"><label class=""><input type="radio" name="item_css" value="file" {CSS_FILE_CHECKED} />ファイルを選択</label></div>
+		<div class="radio m3config_item"><label class=""><input type="radio" name="item_css_type" value="file" {CSS_FILE_CHECKED} />ファイルを選択</label></div>
 	    <div class="m3config_item col-sm-6"><select name="item_file" class="form-control">
 		    <option value="">-- デフォルト --</option>
             <patTemplate:tmpl name="css_file_list">
@@ -58,7 +58,7 @@ $(function(){
 		<div class="col-sm-6 side_buttons">{UPLOAD_BUTTON}</div>
 		</div>
 		<div class="form-group clearfix">
-		<div class="radio"><label><input type="radio" name="item_css" value="cdn" {CSS_CDN_CHECKED} />CDN(タグ形式)を入力</label></div>
+		<div class="radio"><label><input type="radio" name="item_css_type" value="cdn" {CSS_CDN_CHECKED} />CDN(HTML LINKタグ形式)を入力</label></div>
 		<input type="text" name="item_cdn" class="form-control" value="{CDN}" />
 		</div>
 		</td>
