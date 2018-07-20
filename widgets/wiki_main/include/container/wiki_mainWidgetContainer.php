@@ -218,10 +218,11 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			WikiParam::setPage($base);
 			$body  = convert_html(get_source($base, false, $serial));
 
+			// カノニカル属性を設定
+			$url = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . rawurlencode($base));
+			$this->gPage->setCanonicalUrl($url);
+							
 			// ビューカウントを更新
-			//if ($serial != 0 && !$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
-			//$this->gInstance->getAnalyzeManager()->updateContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
-			//}
 			$this->gInstance->getAnalyzeManager()->logContentView(wiki_mainCommonDef::$_viewContentType, $serial, $base);
 			
 //			if ($referer) ref_save($base);
