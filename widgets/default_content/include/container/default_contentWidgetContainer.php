@@ -390,6 +390,26 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				
 						// コンテンツアクセス不可のときはアクセス不可メッセージを出力
 						if ($showMessageDeny && !$this->_contentCreated) $this->setAppErrorMsg($messageDeny);
+						
+						// 単体コンテンツ表示の場合はカノニカル属性を設定
+						if ($this->_contentCreated && count($contentIdArray) == 1){
+							$accessPointUrl = '';		// コンテンツアクセスポイント
+							switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
+								case 0:		// PC
+								default:
+									$accessPointUrl = $this->gEnv->getDefaultUrl();
+									break;
+								case 1:		// 携帯
+									$accessPointUrl = $this->gEnv->getDefaultMobileUrl();
+									break;
+								case 2:		// スマートフォン
+									$accessPointUrl = $this->gEnv->getDefaultSmartphoneUrl();
+									break;
+							}
+			
+							$url = $this->getUrl($accessPointUrl . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentIdArray[0]);
+							$this->gPage->setCanonicalUrl($url);
+						}
 					} else {
 						$this->setAppErrorMsg('IDにエラー値があります');
 					}

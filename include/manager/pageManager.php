@@ -73,6 +73,9 @@ class PageManager extends Core
 	private $lastHeadCss;				// 最後に設定したHTMLヘッダにCSS出力する文字列
 	private $lastHeadScript;			// 最後に設定したHTMLヘッダにJavascript出力する文字列
 	private $lastHeadString;			// 最後に設定したHTMLヘッダに出力する任意文字列
+	private $headSubTitle = array();				// ヘッダタグサブタイトル
+	private $headSubTitleUrl = array();				// ヘッダサブタイトルのリンク先
+	private $headCanonicalUrl;				// カノニカル属性URL
 	private $initScript = '';				// ウィンドウ初期化時に実行されるスクリプト
 	private $outputByHtml = true;				// HTMLフォーマットで出力するかどうか
 	private $outputHead;				// HTMLヘッダ出力を行ったかどうか
@@ -84,8 +87,6 @@ class PageManager extends Core
 	private $isSystemPage;				// システム制御ページを表示するかどうか
 	private $libFiles;					// javascript追加用ライブラリ
 	private $pageDefRev = 234;				// 画面定義のリビジョン番号
-	private $headSubTitle = array();				// ヘッダタグサブタイトル
-	private $headSubTitleUrl = array();				// ヘッダサブタイトルのリンク先
 	private $pageInfo;					// すべてのページ情報
 	private $currentPageInfo;			// 現在のページのページ情報
 	private $configWidgetInfo;			// ウィジェット設定画面のウィジェットの情報
@@ -800,6 +801,16 @@ class PageManager extends Core
 				}
 			}
 		}
+	}
+	/**
+	 * ヘッダ部に出力するカノニカル属性URLを設定
+	 *
+	 * @param string $url		URL
+	 * @return 					なし
+	 */
+	function setCanonicalUrl($url)
+	{
+		if (!empty($url)) $this->headCanonicalUrl = $url;				// カノニカル属性URL
 	}
 	/**
 	 * RSSチャンネル部に出力するデータを設定
@@ -3690,7 +3701,7 @@ class PageManager extends Core
 			// サイト構築エンジン
 			$replaceStr .= '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;		
 
-			// Faviconの読み込み
+			// カノニカル属性、Faviconの読み込み
 			$templateId = $gEnvManager->getCurrentTemplateId();
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				// テンプレートのFaviconがない場合はシステムのデフォルトのFaviconを使用
@@ -3707,6 +3718,10 @@ class PageManager extends Core
 					}
 				}
 			} else {
+				// カノニカル属性
+				if (!empty($this->headCanonicalUrl)) $replaceStr .= '<link rel="canonical" href="' . convertUrlToHtmlEntity($this->headCanonicalUrl) .'" />' . M3_NL;				// カノニカル属性URL
+				
+				// Favicon
 				$faviconPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
 				if (file_exists($faviconPath)){		// ファイルが存在しているとき
 					$faviconFile = $templatesUrl . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
