@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -475,8 +475,13 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->gPage->setHeadSubTitle($entryRow['bl_name'], $blogUrl);
 			}
 		}
-		// ブログ記事データがないときはデータなしメッセージ追加
-		if (!$this->isExistsViewData){
+		
+		if ($this->isExistsViewData){
+			// カノニカル属性を設定
+			$url = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId);
+			$this->gPage->setCanonicalUrl($url);
+		} else {
+			// ブログ記事データがないときはデータなしメッセージ追加
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
 		}
