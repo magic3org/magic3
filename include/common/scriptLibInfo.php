@@ -377,6 +377,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER130_OPTION_CSS	= 'elfinder-2.1.30/css/theme.css';				// elFinder CSS
 
+	// 新バージョンリリースのためv2.1.39は削除
 	const ELFINDER139_VER			= '2.1.39';									// elFinderバージョン
 //	const ELFINDER139_FILENAME		= 'elfinder-2.1.39/js/elfinder.full.js';		// elFinder
 	const ELFINDER139_FILENAME		= 'elfinder-2.1.39/js/elfinder.min.js';		// elFinder
