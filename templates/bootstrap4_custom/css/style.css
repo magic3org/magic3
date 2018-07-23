@@ -1,12 +1,12 @@
 /* メニューバー固定用 */
 body {
-	padding-top: 75px;
+	padding-top: 4.5rem;
 }
 /* アンカー位置修正 */
 :target {
 	display: block;
 	position: relative;
-	top: -100px;
+	top: -5.5rem;
 	visibility: hidden;
 }
 .button {
