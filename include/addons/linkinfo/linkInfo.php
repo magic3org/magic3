@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -182,11 +182,42 @@ class linkInfo
 				list($tmp, $queryStr) = explode('?', $path);
 				list($this->contentType, $contentId) = $this->getContentType($queryStr);
 				
-				// コンテンツを取得
-				list($contentTitle, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
+				// ##### コンテンツから取得できない場合はページ名を取得 #####
+				if (empty($this->contentType)){
+					// ページサブID
+					parse_str($queryStr, $queryArray);
+					$subId = $queryArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
+
+					// ページID取得
+					switch ($accessPoint){
+						case '':			// PC用
+						default:
+							$defaultPageId = $gEnvManager->getDefaultPageId();
+							break;
+						case M3_DIR_NAME_MOBILE:			// 携帯用
+							$defaultPageId = $gEnvManager->getDefaultMobilePageId();
+							break;
+						case M3_DIR_NAME_SMARTPHONE:			// スマートフォン用
+							$defaultPageId = $gEnvManager->getDefaultSmartphonePageId();
+							break;
+					}
+					
+					$title = '';
+					$line = $gPageManager->getPageInfo($defaultPageId, $subId);
+					if (!empty($line) && !empty($line['pn_name'])) $title = $line['pn_name'];
+					
+					// ページ名が取得できないときは、ページIDの名前を取得
+					if (empty($title)){
+						$ret = $this->db->getPageRecord($subId, $row);
+						if ($ret) $title = $row['pg_name'];
+					}
+				} else {
+					// コンテンツを取得
+					list($title, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
+				}
 			} else {		// 外部リンクの場合
 			}
-			$gInstanceManager->getAjaxManager()->addData('title', $contentTitle);
+			$gInstanceManager->getAjaxManager()->addData('title', $title);
 		}
 	}
 	/**

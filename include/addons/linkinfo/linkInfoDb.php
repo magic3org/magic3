@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -86,6 +86,20 @@ class linkInfoDb extends BaseDb
 		$queryStr .= 'ORDER BY pageno, contentno';
 		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
 		return $retValue;
+	}
+	/**
+	 * ページ情報取得
+	 *
+	 * @param string $pageSubId		ページサブID
+	 * @param array $row			取得データ
+	 * @return bool					true=成功、false=失敗
+	 */
+	function getPageRecord($pageSubId, &$row)
+	{
+		$queryStr = 'SELECT * FROM _page_id ';
+		$queryStr .=  'WHERE pg_type = 1 ';
+		$queryStr .=  'AND pg_id = ?';
+		return $this->selectRecord($queryStr, array($pageSubId), $row);
 	}
 	/**
 	 * 汎用コンテンツ一覧を取得
