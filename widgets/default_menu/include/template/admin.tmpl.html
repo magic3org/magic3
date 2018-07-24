@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -166,17 +166,47 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_MENU_DESIGN}>デザイン</span></th>
+	    <th rowspan="9"><span {_HELP_MENU_DESIGN}>デザイン</span></th>
+		<th colspan="3">共通</th>
+	</tr>
+	<tr>
 	    <td colspan="3">
-		<h4>共通</h4>
-		<div class="checkbox"><label><input type="checkbox" id="is_hier" name="is_hier" {IS_HIER} {IS_HIER_DISABLED} />階層化あり</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_vertical_menu" {VERTICAL_MENU} />縦型メニュー</label></div>
-		<h4>Bootstrap型テンプレート用</h4>
-		<div class="checkbox"><label><input type="checkbox" name="item_show_sitename" {SHOW_SITENAME_CHECKED} />サイト名を常に表示</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_show_search" {SHOW_SEARCH_CHECKED} />検索フィールド表示</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_show_login" {SHOW_LOGIN_CHECKED} />ログイン表示</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_show_regist" {SHOW_REGIST_CHECKED} />会員登録表示</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_another_color" {ANOTHER_COLOR_CHECKED} />ナビゲーションバーの色を変更</label></div>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" id="is_hier" name="is_hier" {IS_HIER} {IS_HIER_DISABLED} />階層化あり</label></div></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_vertical_menu" {VERTICAL_MENU} />縦型メニュー</label></div></div>
+	    </td>
+	</tr>
+	<tr>
+		<th colspan="3">Bootstrap型テンプレート用</th>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_sitename" {SHOW_SITENAME_CHECKED} />サイト名を常に表示</label></div></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox m3config_item col-sm-3"><label><input type="checkbox" name="item_show_search" {SHOW_SEARCH_CHECKED} />検索フィールド表示</label></div>
+		<div class="form-control-static col-sm-3 m3config_item" style="width:10em;">プレースホルダー：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_placeholder" class="form-control" value="{PLACEHOLDER}" /></div>
+		</div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_login" {SHOW_LOGIN_CHECKED} />ログイン表示</label></div></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_regist" {SHOW_REGIST_CHECKED} />会員登録表示</label></div></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_another_color" {ANOTHER_COLOR_CHECKED} />ナビゲーションバーの色を変更</label></div></div>
 	    </td>
 	</tr>
     </tbody>

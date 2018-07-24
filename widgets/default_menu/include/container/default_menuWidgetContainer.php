@@ -158,6 +158,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$this->showLogin	= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 		$showRegist		= isset($targetObj->showRegist) ? $targetObj->showRegist : 0;			// 会員登録を表示するかどうか
 		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
+		$placeholder	= $targetObj->placeholder;			// 検索フィールドプレースホルダー文字列
 		
 		// 階層化メニューを使用するかどうか取得
 		//$this->getMenuInfo($this->isHierMenu, $itemId, $row);
@@ -232,7 +233,13 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 					$this->tmpl->addVar("_widget", "sitename_option_class", $sitenameOptionClass);
 				}
 				// 検索フィールド表示制御
-				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
+				if ($showSearch){
+					$this->tmpl->setAttribute('show_search', 'visibility', 'visible');
+					if (!empty($placeholder)){
+						$attr = 'placeholder="' . $this->convertToDispString($placeholder) . '"';
+						$this->tmpl->addVar('show_search', 'placeholder', $attr);// 検索フィールドプレースホルダー
+					}
+				}
 
 				// 会員登録表示制御
 				if ($showRegist){			// 会員登録を表示するかどうか

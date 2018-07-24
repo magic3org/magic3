@@ -27,6 +27,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $menuId;		// メニューID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_MENU_ID = 'main_menu';			// デフォルトメニューID
+	const DEFAULT_PLACEHOLDER = 'キーワード検索';			// デフォルトの検索フィールドプレースホルダー文字列
 //	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 //	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
 //	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
@@ -159,6 +160,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$showLogin			= $request->trimCheckedValueOf('item_show_login');			// ログインを表示するかどうか
 		$showRegist			= $request->trimCheckedValueOf('item_show_regist');			// 会員登録を表示するかどうか
 		$anotherColor		= $request->trimCheckedValueOf('item_another_color');		// 色を変更するかどうか
+		$placeholder		= $request->trimValueOf('item_placeholder');				// 検索フィールドプレースホルダー文字列
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -183,6 +185,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->showLogin			= $showLogin;			// ログインを表示するかどうか
 				$newObj->showRegist			= $showRegist;			// 会員登録を表示するかどうか
 				$newObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
+				$newObj->placeholder		= $placeholder;			// 検索フィールドプレースホルダー文字列
 		
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj, $this->menuId);
 				if ($ret){
@@ -228,6 +231,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->showLogin			= $showLogin;			// ログインを表示するかどうか
 					$targetObj->showRegist			= $showRegist;			// 会員登録を表示するかどうか
 					$targetObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
+					$targetObj->placeholder			= $placeholder;			// 検索フィールドプレースホルダー文字列
 				}
 
 				// 設定値を更新
@@ -271,6 +275,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$showLogin			= 0;			// ログインを表示するかどうか
 				$showRegist			= 0;			// 会員登録を表示するかどうか
 				$anotherColor		= 0;		// 色を変更するかどうか
+				$placeholder		= self::DEFAULT_PLACEHOLDER;			// 検索フィールドプレースホルダー文字列
 			}
 			$this->serialNo = 0;
 		} else {
@@ -289,6 +294,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$showLogin		= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 					$showRegist		= isset($targetObj->showRegist) ? $targetObj->showRegist : 0;			// 会員登録を表示するかどうか
 					$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
+					$placeholder	= $targetObj->placeholder;			// 検索フィールドプレースホルダー文字列
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -334,6 +340,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "show_login_checked", $this->convertToCheckedString($showLogin));			// ログインを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_regist_checked", $this->convertToCheckedString($showRegist));			// 会員登録を表示するかどうか
 		$this->tmpl->addVar("_widget", "another_color_checked", $this->convertToCheckedString($anotherColor));		// 色を変更するかどうか
+		$this->tmpl->addVar("_widget", "placeholder", $this->convertToDispString($placeholder));			// 検索フィールドプレースホルダー文字列
 					
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
