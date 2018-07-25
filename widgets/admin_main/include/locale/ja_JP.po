@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-28 06:28+0900\n"
-"PO-Revision-Date: 2018-06-28 06:28+0900\n"
+"POT-Creation-Date: 2018-07-25 16:15+0900\n"
+"PO-Revision-Date: 2018-07-25 16:16+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -156,7 +156,7 @@ msgstr "補助コンテンツ"
 #: ../container/admin_mainEditmenuWidgetContainer.php:56
 #: ../container/admin_mainMenudefWidgetContainer.php:178
 #: ../container/admin_mainSmenudefWidgetContainer.php:172
-#: ../help/help_adjustwidget.php:43 ../help/help_menudef.php:83
+#: ../help/help_adjustwidget.php:43 ../help/help_menudef.php:87
 msgid "Title"
 msgstr "タイトル"
 
@@ -166,7 +166,7 @@ msgstr "タイトル"
 #: ../container/admin_mainPagedefWidgetContainer.php:172
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:195
-#: ../help/help_menudef.php:63 ../help/help_pagedef.php:91
+#: ../help/help_menudef.php:67 ../help/help_pagedef.php:91
 msgid "Visible"
 msgstr "表示"
 
@@ -835,7 +835,8 @@ msgstr "未設定"
 #: ../container/admin_mainUserlistWidgetContainer.php:301
 #: ../container/admin_mainUserlistWidgetContainer.php:377
 #: ../container/admin_mainWidgetlistWidgetContainer.php:665
-#: ../help/help_menudef.php:43 ../help/help_userlist.php:47
+#: ../help/help_menudef.php:43 ../help/help_menudef.php:47
+#: ../help/help_userlist.php:47
 msgid "Name"
 msgstr "名前"
 
@@ -850,7 +851,7 @@ msgstr "オプション"
 #: ../container/admin_mainPortalWidgetContainer.php:101
 #: ../container/admin_mainPortalWidgetContainer.php:254
 #: ../container/admin_mainSmenudefWidgetContainer.php:175
-#: ../help/help_menudef.php:79
+#: ../help/help_menudef.php:83
 msgid "Description"
 msgstr "説明"
 
@@ -1022,7 +1023,7 @@ msgstr "メニュー項目詳細"
 #: ../container/admin_mainMenudefWidgetContainer.php:199
 #: ../container/admin_mainSmenudefWidgetContainer.php:161
 #: ../container/admin_mainSmenudefWidgetContainer.php:192
-#: ../help/help_menudef.php:47
+#: ../help/help_menudef.php:51
 msgid "Language"
 msgstr "言語"
 
@@ -1046,7 +1047,7 @@ msgstr "項目タイプ"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:165
-#: ../help/help_menudef.php:59
+#: ../help/help_menudef.php:63
 msgid "Action"
 msgstr "動作"
 
@@ -1065,7 +1066,7 @@ msgstr "別ウィンドウで表示"
 #: ../container/admin_mainPortalWidgetContainer.php:251
 #: ../container/admin_mainSmenudefWidgetContainer.php:168
 #: ../container/admin_mainSmenudefWidgetContainer.php:193
-#: ../help/help_menudef.php:55 ../help/help_pagedef.php:39
+#: ../help/help_menudef.php:59 ../help/help_pagedef.php:39
 msgid "URL"
 msgstr "URL"
 
@@ -1096,7 +1097,6 @@ msgstr "リンク先のコンテンツに連動"
 #: ../container/admin_mainSmenudefWidgetContainer.php:176
 #: ../container/admin_mainSmenudefWidgetContainer.php:189
 #: ../container/admin_mainTempimageWidgetContainer.php:286
-#: ../container/admin_mainTemplistWidgetContainer.php:653
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -1163,14 +1163,14 @@ msgstr "区分"
 #: ../container/admin_mainSmenudefWidgetContainer.php:196
 #: ../container/admin_mainTemplistWidgetContainer.php:531
 #: ../container/admin_mainWidgetlistWidgetContainer.php:672
-#: ../help/help_menudef.php:67 ../help/help_templist.php:59
+#: ../help/help_menudef.php:71 ../help/help_templist.php:59
 #: ../help/help_widgetlist.php:63
 msgid "Operation"
 msgstr "操作"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:204
 #: ../container/admin_mainSmenudefWidgetContainer.php:197
-#: ../help/help_menudef.php:75
+#: ../help/help_menudef.php:79
 msgid "Menu Layout"
 msgstr "メニューレイアウト"
 
@@ -1367,7 +1367,6 @@ msgid "Layout"
 msgstr "レイアウト"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:152
-#: ../container/admin_mainTemplistWidgetContainer.php:656
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -1575,9 +1574,9 @@ msgid "Can not access the page."
 msgstr "アクセスできません"
 
 #: ../container/admin_mainTempgeneratecssWidgetContainer.php:299
-#: ../container/admin_mainTemplistWidgetContainer.php:752
-#: ../container/admin_mainTemplistWidgetContainer.php:865
-#: ../container/admin_mainTemplistWidgetContainer.php:890
+#: ../container/admin_mainTemplistWidgetContainer.php:743
+#: ../container/admin_mainTemplistWidgetContainer.php:856
+#: ../container/admin_mainTemplistWidgetContainer.php:881
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
@@ -1846,11 +1845,11 @@ msgstr "テンプレートが見つかりません"
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:670
+#: ../container/admin_mainTemplistWidgetContainer.php:655
 msgid ".zip Download"
 msgstr ".zip ダウンロード"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:740
+#: ../container/admin_mainTemplistWidgetContainer.php:731
 msgid "Upload file is not the correct template format."
 msgstr ""
 "アップロードしたファイルは正しいテンプレートフォーマットではありません。"
@@ -2418,7 +2417,7 @@ msgstr "その他ボタン"
 msgid "Configure others."
 msgstr "その他の設定を行います。"
 
-#: ../help/help_editmenu.php:35 ../help/help_menudef.php:99
+#: ../help/help_editmenu.php:35 ../help/help_menudef.php:103
 #: ../help/help_userlist.php:103
 msgid "Go back Button"
 msgstr "戻るボタン"
@@ -2448,22 +2447,26 @@ msgid "Select items to edit or delete by using checkboxes."
 msgstr "編集や削除を行う項目を選択します。"
 
 #: ../help/help_menudef.php:44
-msgid ""
-"Definition name for menu item.<br />If 'Get Title' button is clicked, it is "
-"replaced with the content title on 'URL to link'."
-msgstr ""
-"メニュー項目の名前です。<br />「タイトル取得」ボタンを押すと、「リンク先URL」"
-"のコンテンツのタイトルを取得できます。"
+msgid "Definition name for menu item. It appears as the title."
+msgstr "メニュー項目の定義名です。タイトルとして表示されます。"
 
 #: ../help/help_menudef.php:48
+msgid ""
+"Definition name for menu item.  It appears as the title.<br />If 'Get Title' "
+"button is clicked, it is replaced with the content title on 'URL to link'."
+msgstr ""
+"メニュー項目の定義名です。タイトルとして表示されます。<br />「タイトル取得」"
+"ボタンを押すと、「リンク先URL」のコンテンツのタイトルを取得できます。"
+
+#: ../help/help_menudef.php:52
 msgid "Language for menu item."
 msgstr "メニュー項目の対応言語です。"
 
-#: ../help/help_menudef.php:51
+#: ../help/help_menudef.php:55
 msgid "Menu Item Type"
 msgstr "メニュー項目タイプ"
 
-#: ../help/help_menudef.php:52
+#: ../help/help_menudef.php:56
 msgid ""
 "You can select menu item type below.<br /><strong>Link</strong> - Normal "
 "link item to go page if selected.<br /><strong>Folder</strong> - Item has "
@@ -2475,18 +2478,18 @@ msgstr ""
 "ト」-画面遷移せず文字列を表示するだけの項目です。<br />「セパレータ」-区切り"
 "項目です。"
 
-#: ../help/help_menudef.php:56
+#: ../help/help_menudef.php:60
 msgid "Url to link."
 msgstr "メニュー項目をクリックしたときに表示されるURLです。"
 
-#: ../help/help_menudef.php:60
+#: ../help/help_menudef.php:64
 msgid ""
 "Select type to open page in the same window or in other window if clicked."
 msgstr ""
 "メニュー項目をクリックしたときにリンク先が同じウィンドウで表示するか、別ウィ"
 "ンドウで表示するかを指定します。"
 
-#: ../help/help_menudef.php:64
+#: ../help/help_menudef.php:68
 msgid ""
 "Control menu item visible status. If menu item is hidden when visible status "
 "unchecked.<br />When 'Cotrol visible status linked to contents.' is checked, "
@@ -2498,7 +2501,7 @@ msgstr ""
 "クを入れるとリンク先のコンテンツの表示状態に連動してメニュー項目を自動表示制"
 "御します。"
 
-#: ../help/help_menudef.php:68
+#: ../help/help_menudef.php:72
 msgid ""
 "You can operate the actions below.<br /><strong>Edit Contents</strong> - If "
 "the link target is contents, edit the contents."
@@ -2506,11 +2509,11 @@ msgstr ""
 "各種操作を行います。<br />●コンテンツを編集<br />メニュー項目のリンク先がコン"
 "テンツ表示の場合、表示されるコンテンツの編集を行います。"
 
-#: ../help/help_menudef.php:71
+#: ../help/help_menudef.php:75
 msgid "Select Link Type"
 msgstr "リンク先を選択"
 
-#: ../help/help_menudef.php:72
+#: ../help/help_menudef.php:76
 msgid ""
 "Select the link type of menu item. If 'contents' is selected, you can select "
 "the contents to view."
@@ -2518,49 +2521,49 @@ msgstr ""
 "リンク先を選択します。「コンテンツ」を選択した場合は、表示するコンテンツを指"
 "定します。[任意設定]を選択した場合は、任意のURLにリンク先を設定できます。"
 
-#: ../help/help_menudef.php:76
+#: ../help/help_menudef.php:80
 msgid "Change the order of items by dragging."
 msgstr "項目をドラッグして並び順を変えることができます。"
 
-#: ../help/help_menudef.php:80
+#: ../help/help_menudef.php:84
 msgid "Description about menu item."
 msgstr "メニュー項目についての説明です。"
 
-#: ../help/help_menudef.php:84
+#: ../help/help_menudef.php:88
 msgid "Configure the different value from 'Name' value. You can use HTML tags."
 msgstr ""
 "メニュー項目に「名前」と異なる表示を行う場合に設定します。HTMLタグが使用可能"
 "です。"
 
-#: ../help/help_menudef.php:87 ../help/help_userlist.php:91
+#: ../help/help_menudef.php:91 ../help/help_userlist.php:91
 msgid "New Button"
 msgstr "新規ボタン"
 
-#: ../help/help_menudef.php:88
+#: ../help/help_menudef.php:92
 msgid "Add menu item."
 msgstr "新規メニュー項目を追加します。"
 
-#: ../help/help_menudef.php:91 ../help/help_userlist.php:95
+#: ../help/help_menudef.php:95 ../help/help_userlist.php:95
 msgid "Edit Button"
 msgstr "編集ボタン"
 
-#: ../help/help_menudef.php:92
+#: ../help/help_menudef.php:96
 msgid "Edit menu item.<br />Select the menu item by using the left checkbox."
 msgstr ""
 "選択されているメニュー項目を編集します。<br />メニュー項目を選択するには、一"
 "覧の左端のチェックボックスにチェックを入れます。"
 
-#: ../help/help_menudef.php:95 ../help/help_userlist.php:99
+#: ../help/help_menudef.php:99 ../help/help_userlist.php:99
 msgid "Delete Button"
 msgstr "削除ボタン"
 
-#: ../help/help_menudef.php:96
+#: ../help/help_menudef.php:100
 msgid "Delete menu item.<br />Select the menu item by using the left checkbox."
 msgstr ""
 "選択されているメニュー項目を削除します。<br />メニュー項目を選択するには、一"
 "覧の左端のチェックボックスにチェックを入れます。"
 
-#: ../help/help_menudef.php:100
+#: ../help/help_menudef.php:104
 msgid "Go back to menu item list."
 msgstr "メニュー項目一覧へ戻ります。"
 
@@ -3233,9 +3236,6 @@ msgstr ""
 
 #~ msgid "Database maintenance such as data initializing."
 #~ msgstr "データの初期化などDBのメンテナンスを行います。"
-
-#~ msgid "Definition name for menu item."
-#~ msgstr "メニュー項目の名前です。"
 
 #~ msgid "Top"
 #~ msgstr "トップ"

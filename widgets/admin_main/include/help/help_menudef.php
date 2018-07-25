@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_menudef.php 4935 2012-06-05 09:40:47Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()				. '/helpConv.php' );
@@ -39,9 +39,13 @@ class help_menudef extends HelpConv
 				'title' =>	$this->_('Checkbox to Select'),			// 選択用チェックボックス
 				'body' =>	$this->_('Select items to edit or delete by using checkboxes.')		// 編集や削除を行う項目を選択します。
 			),
+			'menudef_list_name' => array(		// リスト用「名前」
+				'title' =>	$this->_('Name'),			// 名前
+				'body' =>	$this->_('Definition name for menu item. It appears as the title.')		// メニュー項目の定義名です。タイトルとして表示されます。
+			),
 			'menudef_name' => array(	
 				'title' =>	$this->_('Name'),			// 名前
-				'body' =>	$this->_('Definition name for menu item.<br />If \'Get Title\' button is clicked, it is replaced with the content title on \'URL to link\'.')		// メニュー項目の名前です。「タイトル取得」ボタンを押すと、リンク先URLのコンテンツのタイトルを取得できます。
+				'body' =>	$this->_('Definition name for menu item.  It appears as the title.<br />If \'Get Title\' button is clicked, it is replaced with the content title on \'URL to link\'.')		// メニュー項目の定義名です。タイトルとして表示されます。「タイトル取得」ボタンを押すと、リンク先URLのコンテンツのタイトルを取得できます。
 			),
 			'menudef_lang' => array(	
 				'title' =>	$this->_('Language'),			// 言語
