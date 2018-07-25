@@ -7165,12 +7165,15 @@ class PageManager extends Core
 	 */
 	function loadCssFilesByUrl($url)
 	{
+		// ##### cURLを使用する場合はセッションのブロックを解除する #####
+		session_write_close();
+		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_USERAGENT, M3_SYSTEM_NAME . '/' . M3_SYSTEM_VERSION);		// ユーザエージェント
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());		// セッションを維持
 		$content = curl_exec($ch);
 		curl_close($ch);
