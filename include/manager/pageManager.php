@@ -7279,6 +7279,9 @@ class PageManager extends Core
 	 */
 	function parseTemplate($templateId)
 	{
+		// ##### cURLを使用する場合はセッションのブロックを解除する #####
+		session_write_close();
+
 		// テンプレートのURL
 		$url = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_SHOW_POSITION . '&template=' . $templateId;
 		
@@ -7290,8 +7293,8 @@ class PageManager extends Core
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_USERAGENT, M3_SYSTEM_NAME . '/' . M3_SYSTEM_VERSION);		// ユーザエージェント
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());		// セッションを維持
 		$content = curl_exec($ch);
 		curl_close($ch);
