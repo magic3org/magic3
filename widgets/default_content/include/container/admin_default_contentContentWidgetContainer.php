@@ -1086,7 +1086,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
-		
+
 		// リンクボタン作成
 		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
 		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);

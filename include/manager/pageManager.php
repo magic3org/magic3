@@ -7121,12 +7121,23 @@ class PageManager extends Core
 	function loadCssFiles($templateId = '')
 	{
 		if (empty($templateId)) $templateId = $this->gSystem->defaultTemplateId();		// PC画面デフォルトのテンプレートを取得
-		
+
 		$ret = $this->db->getTemplate($templateId, $row);
 		if (!$ret) return false;
-		if (empty($row['tm_editor_param'])) return false;
-	
-		$editorParamObj = unserialize($row['tm_editor_param']);
+		
+		// 編集エディタ用パラメータが初期化されていない場合は初期化
+		if (empty($row['tm_editor_param'])){
+			// テンプレートを解析し、使用しているCSSファイルを取得
+			$editorParamObj = $this->parseTemplate($templateId);
+			
+			// テンプレートの情報を更新
+			$updateParam = array();
+			$updateParam['tm_editor_param'] = serialize($editorParamObj);
+			$ret = $this->db->updateTemplate($templateId, $updateParam);
+		} else {
+			$editorParamObj = unserialize($row['tm_editor_param']);
+		}
+		
 		if (isset($editorParamObj)){
 			$this->ckeditorCssFiles = array();
 			$cssFiles = $editorParamObj->cssFiles;
