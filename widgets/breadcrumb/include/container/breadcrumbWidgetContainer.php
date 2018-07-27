@@ -520,11 +520,21 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		$listAttr = '';		// リストタグの属性
 		$linkAttr = '';		// リンクタグの属性
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			if ($isNoLink){		// リンクなし項目の場合
-				$linkItem = '<li' . $listAttr .'>' . $this->convertToDispString($name) . '</li>';
-			} else {
-				$listAttr = ' class="active"';
-				$linkItem = '<li' . $listAttr .'><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+			if ($this->_templateType == 10){		// Bootstrap 3.0テンプレート
+				if ($isNoLink){		// リンクなし項目(カレントページ)の場合
+					$listAttr = ' class="active"';
+					$linkItem = '<li' . $listAttr . '>' . $this->convertToDispString($name) . '</li>';
+				} else {
+					$linkItem = '<li' . $listAttr . '><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+				}
+			} else if ($this->_templateType == 11){		// Bootstrap 4.0テンプレート
+				if ($isNoLink){		// リンクなし項目(カレントページ)の場合
+					$listAttr = ' class="breadcrumb-item active" aria-current="page"';
+					$linkItem = '<li' . $listAttr . '>' . $this->convertToDispString($name) . '</li>';
+				} else {
+					$listAttr = ' class="breadcrumb-item"';
+					$linkItem = '<li' . $listAttr .'><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+				}
 			}
 		} else {
 			if ($isNoLink){		// リンクなし項目の場合
@@ -556,7 +566,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 	function _createLinkOuter($innerTags)
 	{
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			return '<ol class="breadcrumb">' . $innerTags . '</ol>';
+			if ($this->_templateType == 10){		// Bootstrap 3.0テンプレート
+				return '<ol class="breadcrumb">' . $innerTags . '</ol>';
+			} else if ($this->_templateType == 11){		// Bootstrap 4.0テンプレート
+				return '<nav aria-label="breadcrumb"><ol class="breadcrumb">' . $innerTags . '</ol></nav>';
+			}
 		} else {
 			return '<span class="breadcrumbs pathway">' . $innerTags . '</span>';
 		}
