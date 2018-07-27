@@ -95,7 +95,10 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 				$menu = $allMenu[$i];
 				if (empty($allMenu[$i]['pd_sub_id'])){
 					$exceptPageStr = $menu['pd_except_sub_id'];
-					if (!empty($exceptPageStr)){
+					if (empty($exceptPageStr)){
+						$destMenu[] = $menu;
+						$hasGlobal = true;		// グローバルメニューを表示するページかどうか
+					} else {		// 例外ページありの場合
 						$exceptPageArray = explode(',', $exceptPageStr);
 						if (!in_array($pageSubId, $exceptPageArray)){
 							$destMenu[] = $menu;
@@ -108,7 +111,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		if (empty($destMenu)) return;
-	
+
 		// 重複しないメニューIDを作成
 		$menuIdArray = array();
 		for ($i = 0; $i < count($destMenu); $i++){
