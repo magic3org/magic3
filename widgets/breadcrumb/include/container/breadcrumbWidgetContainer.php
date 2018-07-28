@@ -157,43 +157,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		// トップ位置の判定
 		if ($this->isRootUrl($this->currentMacroUrl)) $isTop = true;
 
-		/*
-		// ルート階層名を取得
-		$homeName = self::DEFAULT_HOME_NAME;
-		$homeUrl = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . self::DEFAULT_HOME_URL;
-		for ($i = 0; $i < count($menuItems); $i++){
-			$url = $menuItems[$i]['md_link_url'];			// マクロ表記URLを取得
-			if ($this->isRootUrl($url)){		// ルートの場合
-				$homeName = $this->getCurrentLangString($menuItems[$i]['md_name']);
-				$homeUrl = $url;
-				break;
-			}
-		}*/
-		/*
-		// 現在のURLがルートのときは終了
-		$this->currentMacroUrl = $this->gEnv->getMacroPath($currentUrl);
-		if ($this->isRootUrl($this->currentMacroUrl)){// ルート位置の場合の処理
-			if ($visibleOnRoot){		// ルートのときリスト表示するとき
-				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
-				$this->tmpl->addVar("_widget", "link", $html);
-				
-				// Joomla!用データ追加
-				$item       = new stdClass;
-				$item->name = $this->convertToDispString($homeName);			// HTML文字エスケープ
-				$item->link = '';
-				$this->crumbs[] = $item;
-			}
-			
-			// Joomla用のメニュー階層データを設定
-			$menuData = array();
-			$menuData['crumbs'] = $this->crumbs;
-			$this->gEnv->setJoomlaMenuData($menuData);
-			return;
-		}*/
 		// 現在のURLがホームページのときは終了
 		if ($isHome){
 			if ($visibleOnRoot){		// ホームページで「ホーム」を表示するとき
-				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
+				//$html = $this->_createLinkOuter($this->convertToDispString($homeName));
+				$html = $this->_createLinkOuter($this->_createHomeTag($homeName));
 				$this->tmpl->addVar("_widget", "link", $html);
 				
 				// Joomla!用データ追加
@@ -223,7 +191,8 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			// 現在のページがデフォルトのページのときはトップ時と同じにする
 			if (count($this->currentQueryArray) == 1 && $this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID] == $this->gEnv->getDefaultPageSubId()){
 				if ($visibleOnRoot){		// ホームページで「ホーム」を表示するとき
-					$html = $this->_createLinkOuter($this->convertToDispString($homeName));
+					//$html = $this->_createLinkOuter($this->convertToDispString($homeName));
+					$html = $this->_createLinkOuter($this->_createHomeTag($homeName));
 					$this->tmpl->addVar("_widget", "link", $html);
 					
 					// Joomla!用データ追加
@@ -251,11 +220,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 
 				// ページサブID以外のパラメータをもつ場合のみリンクを作成
 				if (count($this->currentQueryArray) == 1 && isset($this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){		
-					$html = $this->_createLink($pageName);
+					$html = $this->_createLink($this->convertToDispString($pageName));
 				} else {
 					$pageUrl = $this->gEnv->createCurrentPageUrl();
 					$linkUrl = $this->getUrl($pageUrl, true/*リンク用*/);
-					$html = $this->_createLink($pageName, $linkUrl);
+					$html = $this->_createLink($this->convertToDispString($pageName), $linkUrl);
 					
 					// コンテンツ名が設定されている場合は出力
 					$titleArray = $this->gPage->getHeadSubTitle();
@@ -317,8 +286,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		// 「ホーム」項目を追加
 		if (!empty($html)){		// リンクが空のときは表示しない
 			$linkUrl = $this->getUrl($homeUrl, true/*リンク用*/);
-			$html = $this->_createLink($homeName, $linkUrl, true/*先頭にJoomla!用メニュー項目を追加*/) . $this->iconTag . $html;// リンクの間にアイコンを挿入
-			
+			$html = $this->_createLink($this->_createHomeTag($homeName), $linkUrl, true/*先頭にJoomla!用メニュー項目を追加*/) . $this->iconTag . $html;// リンクの間にアイコンを挿入
 			$html = $this->_createLinkOuter($html);
 			$this->tmpl->addVar("_widget", "link", $html);
 		}
@@ -394,11 +362,9 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			if ($i > 0) $outputHtml .= $this->iconTag;
 			
 			if (empty($linkUrl) || $i == $linkCount -1){		// 最後の項目はリンク作成しない
-				//$outputHtml .= $this->convertToDispString($name) . M3_NL;
-				$outputHtml .= $this->_createLink($name);
+				$outputHtml .= $this->_createLink($this->convertToDispString($name));
 			} else {
-				//$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
-				$outputHtml .= $this->_createLink($name, $linkUrl);
+				$outputHtml .= $this->_createLink($this->convertToDispString($name), $linkUrl);
 			}
 		}
 		return $outputHtml;
@@ -428,11 +394,9 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$outputHtml .= $this->iconTag;
 			
 			if (empty($linkUrl) || $i == $linkCount -1){		// 最後の項目はリンク作成しない
-				//$outputHtml .= $this->convertToDispString($name) . M3_NL;
-				$outputHtml .= $this->_createLink($name);
+				$outputHtml .= $this->_createLink($this->convertToDispString($name));
 			} else {
-				//$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
-				$outputHtml .= $this->_createLink($name, $linkUrl);
+				$outputHtml .= $this->_createLink($this->convertToDispString($name), $linkUrl);
 			}
 		}
 		return $outputHtml;
@@ -508,12 +472,12 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 	/**
 	 * リンク作成
 	 *
-	 * @param string  $name		タイトル
+	 * @param string  $nameTag	タイトルタグ
 	 * @param string  $url		リンク先URL。空の場合はリンクなし。
 	 * @param bool $addFirst	先頭にJoomla!用メニュー項目を追加するかどうか
 	 * @return string			タグ
 	 */
-	function _createLink($name, $url = '', $addFirst = false)
+	function _createLink($nameTag, $url = '', $addFirst = false)
 	{
 		$isNoLink = empty($url);		// リンクなし項目かどうか
 		$linkItem = '';
@@ -523,31 +487,31 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			if ($this->_templateType == 10){		// Bootstrap 3.0テンプレート
 				if ($isNoLink){		// リンクなし項目(カレントページ)の場合
 					$listAttr = ' class="active"';
-					$linkItem = '<li' . $listAttr . '>' . $this->convertToDispString($name) . '</li>';
+					$linkItem = '<li' . $listAttr . '>' . $nameTag . '</li>';
 				} else {
-					$linkItem = '<li' . $listAttr . '><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+					$linkItem = '<li' . $listAttr . '><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $nameTag . '</a></li>';
 				}
 			} else if ($this->_templateType == 11){		// Bootstrap 4.0テンプレート
 				if ($isNoLink){		// リンクなし項目(カレントページ)の場合
 					$listAttr = ' class="breadcrumb-item active" aria-current="page"';
-					$linkItem = '<li' . $listAttr . '>' . $this->convertToDispString($name) . '</li>';
+					$linkItem = '<li' . $listAttr . '>' . $nameTag . '</li>';
 				} else {
 					$listAttr = ' class="breadcrumb-item"';
-					$linkItem = '<li' . $listAttr .'><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+					$linkItem = '<li' . $listAttr .'><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $nameTag . '</a></li>';
 				}
 			}
 		} else {
 			if ($isNoLink){		// リンクなし項目の場合
-				$linkItem = $this->convertToDispString($name);
+				$linkItem = $nameTag;
 			} else {
 				$linkAttr = ' class="pathway"';
-				$linkItem = '<a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a>';
+				$linkItem = '<a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $nameTag . '</a>';
 			}
 		}
 		
 		// Joomla!用データ追加
 		$item       = new stdClass;
-		$item->name = $this->convertToDispString($name);			// HTML文字エスケープ
+		$item->name = $nameTag;			// HTML文字エスケープ
 		$item->link = $url;
 		if ($addFirst){		// 先頭にJoomla!用メニュー項目を追加する場合
 			array_unshift($this->crumbs, $item);
@@ -574,6 +538,25 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		} else {
 			return '<span class="breadcrumbs pathway">' . $innerTags . '</span>';
 		}
+	}
+	/**
+	 * 「ホーム」タグ作成
+	 *
+	 * @param string  $name		「ホーム」用文字列
+	 * @return string			タグ
+	 */
+	function _createHomeTag($name)
+	{
+		$homeTag = '';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			if ($this->_templateType == 10){		// Bootstrap 3.0テンプレート
+				$homeTag = '<i class="glyphicon glyphicon-home"></i>';
+			} else if ($this->_templateType == 11){		// Bootstrap 4.0テンプレート
+				$homeTag = '<i class="fas fa-home"></i>';
+			}
+		}
+		if (empty($homeTag)) $homeTag = $this->convertToDispString($name);
+		return $homeTag;
 	}
 }
 ?>
