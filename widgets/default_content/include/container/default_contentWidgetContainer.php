@@ -430,8 +430,8 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			
 			$this->tmpl->addVar("_widget", "data_role", $divAttr);
 		}
-		// HTMLサブタイトルを設定
-		// ヘッダタグのタイトル名が設定されている場合は、タイトル名を優先する
+		// ##### HTMLサブタイトルを設定 #####
+		// _setHeadMeta()でMETAタグタイトル($this->headTitle)がサブタイトルとして設定される。METAタグのタイトル名が設定されていない場合はページタイトル名(コンテンツ名)をサブタイトルに設定する。
 		if (empty($this->headTitle)) $this->gPage->setHeadSubTitle($this->pageTitle);
 		
 		// 運用可能ユーザの場合は編集用ボタンを表示

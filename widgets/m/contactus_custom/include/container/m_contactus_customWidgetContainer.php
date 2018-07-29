@@ -182,7 +182,7 @@ class m_contactus_customWidgetContainer extends BaseMobileWidgetContainer
 		
 		// HTMLサブタイトルを設定
 		//$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
-		$this->gPage->setHeadSubTitle();			// 共通設定画面の「タイトル」値を使用する
+		$this->gPage->setHeadSubTitle($this->gEnv->getCurrentWidgetHeadTitle());			// 共通設定画面の「タイトル」値を使用する
 
 		// パラメータ埋め込み
 		$this->tmpl->addVar('_widget', 'url', $this->gEnv->createCurrentPageUrlForMobile());		// Post用URL

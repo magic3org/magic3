@@ -230,7 +230,7 @@ class s_contactusWidgetContainer extends BaseWidgetContainer
 		}
 		// HTMLサブタイトルを設定
 //		$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
-		$this->gPage->setHeadSubTitle();			// 共通設定画面の「タイトル」値を使用する
+		$this->gPage->setHeadSubTitle($this->gEnv->getCurrentWidgetHeadTitle());			// 共通設定画面の「タイトル」値を使用する
 			
 		// タイトルの表示
 		if ($showTitle){
