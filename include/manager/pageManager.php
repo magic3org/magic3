@@ -565,23 +565,37 @@ class PageManager extends Core
 	/**
 	 * HTMLヘッダ「title」のサブタイトル出力する文字列を設定
 	 *
-	 * @param string $str   出力文字列
-	 * @param string $url   リンク先
+	 * @param string $str   	出力文字列
+	 * @param string $url   	リンク先
+	 * @param bool $isDefault	デフォルト値かどうか
+	 * @return					なし
 	 */
-	function setHeadSubTitle($str = '', $url = '')
+	function setHeadSubTitle($str = '', $url = '', $isDefault = false)
 	{
-		global $gEnvManager;
+		// ##### ページのサブタイトルはデフォルトでページのMETAタイトルを使用し、メインウィジェット側で上書きする #####
 		
-		if (is_string($str)){
-			// 空の場合はウィジェットのヘッドタイトルから取得
-			if (empty($str)) $str = $gEnvManager->getCurrentWidgetHeadTitle();
-
-			if (!empty($str)){
-				$this->headSubTitle[] = $str;
-				$this->headSubTitleUrl[] = $url;
-				$this->lastHeadTitle = $str;	// 最後に設定した値を退避
+		static $isUpdated = false;			// デフォルト値が更新されているかどうか
+		
+		if (!is_string($str) || empty($str)) return;
+		
+		// デフォルト値の場合はデータを初期化
+		if ($isDefault){
+			$this->headSubTitle = array();
+			$this->headSubTitleUrl = array();
+			$this->lastHeadTitle = '';
+			$isUpdated = false;
+		} else {			// デフォルトでない場合はデータを追加
+			if (!$isUpdated){			// デフォルト値が更新されていない場合は以前のデータを削除
+				$this->headSubTitle = array();
+				$this->headSubTitleUrl = array();
+				$this->lastHeadTitle = '';
+				$isUpdated = true;			// デフォルト値は更新された
 			}
 		}
+		// タイトル追加
+		$this->headSubTitle[] = $str;
+		$this->headSubTitleUrl[] = $url;
+		$this->lastHeadTitle = $str;	// 最後に設定した値を退避
 	}
 	/**
 	 * HTMLヘッダ「title」のサブタイトル出力する文字列を取得
@@ -1755,7 +1769,7 @@ class PageManager extends Core
 			$keyword	= $this->currentPageInfo['pn_meta_keywords'];		// ページキーワード
 			$headOthers	= $this->currentPageInfo['pn_head_others'];		// ヘッダその他タグ
 			
-			if (!empty($title)) $this->setHeadSubTitle($title);
+			if (!empty($title)) $this->setHeadSubTitle($title, '', true);		// デフォルト値として設定
 			if (!empty($desc)) $this->setHeadDescription($desc);
 			if (!empty($keyword)) $this->setHeadKeywords($keyword);
 			if (!empty($headOthers)) $this->setHeadOthers($headOthers);
@@ -1769,7 +1783,7 @@ class PageManager extends Core
 			$keyword	= $row['pn_meta_keywords'];		// ページキーワード
 			$headOthers = $row['pn_head_others'];		// ヘッダその他タグ
 			
-			if (!empty($title)) $this->setHeadSubTitle($title);
+			if (!empty($title)) $this->setHeadSubTitle($title, '', true);		// デフォルト値として設定
 			if (!empty($desc)) $this->setHeadDescription($desc);
 			if (!empty($keyword)) $this->setHeadKeywords($keyword);
 			if (!empty($headOthers)) $this->setHeadOthers($headOthers);
