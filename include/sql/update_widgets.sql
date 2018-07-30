@@ -68,7 +68,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'breadcrumb';
 INSERT INTO _widgets
 (wd_id,        wd_name,          wd_type,      wd_category_id, wd_template_type, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,                         wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('breadcrumb', 'パンくずリスト', 'breadcrumb', 'menu',         'bootstrap',      '4.2.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'メニュー定義からパンくずリストを作成', '',                'jquery.uploadfile', true,        true,           0, '2018-07-27', now(),    now());
+('breadcrumb', 'パンくずリスト', 'breadcrumb', 'menu',         'bootstrap',      '4.2.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'メニュー定義からパンくずリストを作成', '',                'jquery.uploadfile', true,        true,           10, '2018-07-27', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'slide_menu';
 INSERT INTO _widgets
 (wd_id,        wd_name,           wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

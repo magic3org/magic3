@@ -219,7 +219,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 				}
 
 				// ページサブID以外のパラメータをもつ場合のみリンクを作成
-				if (count($this->currentQueryArray) == 1 && isset($this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){		
+				if (count($this->currentQueryArray) == 1 && isset($this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){
 					$html = $this->_createLink($this->convertToDispString($pageName));
 				} else {
 					$pageUrl = $this->gEnv->createCurrentPageUrl();
@@ -228,9 +228,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 					
 					// コンテンツ名が設定されている場合は出力
 					$titleArray = $this->gPage->getHeadSubTitle();
-					if (count($titleArray) > 0){
-						$html .= $this->createTitleLink($titleArray);
-					}
+					if (count($titleArray) > 0) $html .= $this->createTitleLink($titleArray);
 				}
 			}
 		} else {		// メニュー上のページを表示する場合
