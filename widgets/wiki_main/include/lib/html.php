@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -418,8 +418,10 @@ function pkwk_common_headers()
  */
 function password_form()
 {
+	// ##### readコマンドでコンテンツを読み出す場合でも一旦editを通してこの関数が呼ばれる(read→edit) #####
 	global $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;		// パスワード認証用
 	global $gEnvManager;
+	global $gPageManager;
 	
 	// ###### パスワード認証処理 #####
 	$pass = WikiParam::getVar('pass');
@@ -427,9 +429,10 @@ function password_form()
 
 	// 編集権限をチェック
 	if (!$editAuth){			// 編集権限がない場合
-		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
+		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されている場合はログイン処理
 		} else {
 			// パスワード入力画面を作成
+			$msg = $_title_authorization_required;
 			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
 
 			// パスワード認証の場合は入力フィールドを表示
@@ -448,17 +451,24 @@ function password_form()
 					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				}
-			} else {
-				// パスワード認証ではない場合、編集権限がないページへのアクセスは不正アクセスとする
+			} else {		// パスワード認証でないとき
+/*				// パスワード認証ではない場合、編集権限がないページへのアクセスは不正アクセスとする
 				$widgetObj = $gEnvManager->getCurrentWidgetObj();
 				if (!empty($widgetObj)){
 					$page = WikiParam::getPage();
 					$msgDetail = 'アクセスをブロックしました。URL=' . $gEnvManager->getCurrentRequestUri();
 					$widgetObj->writeUserError(__METHOD__, 'Wikiページへの不正なアクセスを検出しました。ページ名=' . $page, 2200, $msgDetail);
-				}
+				}*/
+				
+				// ##### アクセス権限がないページへのアクセスは「未検出」とする #####
+				$msg = wiki_mainCommonDef::DEFAULT_NOT_FOUND_TITLE;
+				$body = '<p>' . wiki_mainCommonDef::DEFAULT_NOT_FOUND_MSG . '</p>';
+				
+				// HTTPステータスコードを404に設定
+				$gPageManager->setResponse(404/*存在しないページ*/);
 			}
 			return array(
-				'msg'	=> $_title_authorization_required,
+				'msg'	=> $msg,
 				'body'	=> $body
 			);
 		}

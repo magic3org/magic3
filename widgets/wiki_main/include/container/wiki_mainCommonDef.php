@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -57,6 +57,8 @@ class wiki_mainCommonDef
 	const DEFAULT_RECENT_CHANGES_COUNT		= 60;			// 最終更新ページ最大項目数
 	const DEFAULT_RECENT_DELETED_COUNT		= 60;			// 最終削除ページ最大項目数
 	const DEFAULT_UPLOAD_FILESIZE	= '1M';					// アップロードファイルの最大サイズデフォルトサイズ
+	const DEFAULT_NOT_FOUND_TITLE	= '未検出';				// Wikiコンテンツが見つからないときの画面タイトル
+	const DEFAULT_NOT_FOUND_MSG		= 'コンテンツが見つかりません';				// Wikiコンテンツが見つからないときの画面メッセージ
 	
 	/**
 	 * 定義値をDBから取得
