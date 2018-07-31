@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -871,6 +871,8 @@ function removeUrlParam($url, $param)
 			if ($i > 0) $destParam .= '&';
 			$destParam .= $key . '=' . $value;
 		}
+		// 最後に「=」がある場合は削除(Wiki名対応)
+		$destParam = rtrim($destParam, '=');
 		$destUrl .= '?' . $destParam;
 	}
 	return $destUrl;
