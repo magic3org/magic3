@@ -130,9 +130,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->titleSearchList)) $this->titleSearchList = blog_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;
 		$this->titleNoEntry = self::$_configArray[blog_mainCommonDef::CF_TITLE_NO_ENTRY];		// 記事なし時タイトル
 		if (empty($this->titleNoEntry)) $this->titleNoEntry = blog_mainCommonDef::DEFAULT_TITLE_NO_ENTRY;
-		$this->messageNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_NO_ENTRY];		// ブログ記事が登録されていないメッセージ
+		$this->messageNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_NO_ENTRY];		// ブログ記事が登録されていない(404未検出)メッセージ
 		if (empty($this->messageNoEntry)) $this->messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
-		$this->messageFindNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからないメッセージ
+		$this->messageFindNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからない(検索結果表示用)メッセージ
 		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 //		$this->startTitleTagLevel = self::$_configArray[blog_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
 //		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
@@ -268,7 +268,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 		// HTMLサブタイトルを設定
 		$this->gPage->setHeadSubTitle($this->pageTitle);
-		
+
 		// タイトルの設定
 /*		if ($this->useWidgetTitle){			// ウィジェットタイトルを使用するとき
 			if (!empty($this->title)) $this->widgetTitle = $this->title;	// ウィジェットタイトル
@@ -335,7 +335,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		if (!empty($entryRow)){		// 記事レコードがあるとき
 			$this->title = $entryRow['be_name'];			// ウィジェット用画面タイトル(仕様追加 2018/2/25)
-			$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
+//			$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
 		}
 		
 		// 入力値取得
@@ -364,7 +364,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					// コメントタイトル作成
 					if (!empty($entryRow)){		// 記事レコードがあるとき
 						$this->title = $entryRow['be_name'] . self::COMMENT_TITLE;
-						$this->pageTitle = $entryRow['be_name'] . self::COMMENT_TITLE;
+//						$this->pageTitle = $entryRow['be_name'] . self::COMMENT_TITLE;
 					}
 /*					$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $row);
 					if ($ret) $this->title = $row['be_name'] . self::COMMENT_TITLE;
@@ -484,8 +484,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			// ブログ記事データがないときはデータなしメッセージ追加
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
+			
+			// HTTPステータスコードの設定
+			$this->gPage->setResponse(404/*存在しないページ*/);
 		}
 		
+		// コンテンツタイトルを画面タイトルにする
+		$this->pageTitle = $this->title;
+			
 		// ### 前画面、次画面への遷移ボタンを追加 ###
 		if (empty($entryRow)) return;			// ブログ記事情報がない場合は終了
 		$regDate = $entryRow['be_regist_dt'];	// 登録日付
@@ -628,6 +634,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {	// ブログ記事データがないときはデータなしメッセージ追加
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
+				
+				// HTTPステータスコードの設定
+				$this->gPage->setResponse(404/*存在しないページ*/);
 			}
 		}
 	}
@@ -756,6 +765,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
+				
+				// HTTPステータスコードの設定
+				$this->gPage->setResponse(404/*存在しないページ*/);
 			}
 		} else if (!empty($year)){			// 年月日指定のとき
 			if (!empty($month) && !empty($day)){		// 日指定のとき
@@ -804,6 +816,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
+					
+					// HTTPステータスコードの設定
+					$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			} else if (!empty($month)){		// 月指定のとき
 				$this->showListType = 'month';				// 一覧表示タイプ(月)
@@ -850,6 +865,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
+					
+					// HTTPステータスコードの設定
+					$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			} else {		// 年指定のとき
 				$this->showListType = 'year';				// 一覧表示タイプ(年)
@@ -896,6 +914,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
+					
+					// HTTPステータスコードの設定
+					$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			}
 		}
