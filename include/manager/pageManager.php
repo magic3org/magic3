@@ -6140,6 +6140,10 @@ class PageManager extends Core
 	function setResponse($responseCode)
 	{
 		switch ($responseCode){
+			case 400:			// リクエストにエラーがあるとき
+				header('HTTP/1.1 400 Bad request');
+				header('Status: 400 Bad request');
+				break;
 			case 403:			// アクセス禁止のとき
 				header('HTTP/1.1 403 Forbidden');
 				header('Status: 403 Forbidden');

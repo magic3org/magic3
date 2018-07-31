@@ -46,15 +46,18 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	const DEFAULT_LIST_COUNT = 10;			// 最大リスト表示数
 	const DEFAULT_SEARCH_LIST_COUNT = 20;			// 最大リスト表示数(検索用)
 	const MESSAGE_NO_CONTENT		= 'コンテンツが見つかりません';
-	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
 	const DEFAULT_MESSAGE_DENY = 'コンテンツを表示できません';		// アクセス不可の場合のメッセージ
+	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const DOWNLOAD_ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
 	const DOWNLOAD_ICON_FILE = '/images/system/download32.png';		// 添付ファイルダウンロードアイコン
+	const DEFAULT_TITLE_LIST = 'コンテンツ一覧';		// コンテンツ一覧表示タイトル
 	const DEFAULT_TITLE_SEARCH = 'コンテンツ検索';		// 検索時のデフォルトタイトル
 	const DEFAULT_TITLE_SEARCH_RESULTS = 'コンテンツ検索結果';	// 検索実行後のデフォルトタイトル
+	const DEFAULT_TITLE_NO_CONTENT = '未検出';	// コンテンツが表示できない場合のタイトル
+	const DEFAULT_TITLE_ERROR = 'エラー';	// エラー発生時のタイトル
 	const EDIT_ICON_MIN_POS = 10;			// 編集アイコンの位置
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
 	const PASSWORD_FORM_NAME = 'check_password';		// パスワードチェック用フォーム名
@@ -389,7 +392,16 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 						}
 				
 						// コンテンツアクセス不可のときはアクセス不可メッセージを出力
-						if ($showMessageDeny && !$this->_contentCreated) $this->setAppErrorMsg($messageDeny);
+						if ($showMessageDeny && !$this->_contentCreated){
+							// タイトル設定
+							$this->headTitle = self::DEFAULT_TITLE_NO_CONTENT;	// コンテンツが表示できない場合のタイトル
+							
+							// メッセージ
+							$this->setAppErrorMsg($messageDeny);
+							
+							// HTTPステータスコードの設定
+							$this->gPage->setResponse(404/*存在しないページ*/);
+						}
 						
 						// 単体コンテンツ表示の場合はカノニカル属性を設定
 						if ($this->_contentCreated && count($contentIdArray) == 1){
@@ -411,7 +423,14 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 							$this->gPage->setCanonicalUrl($url);
 						}
 					} else {
+						// タイトル設定
+						$this->headTitle = self::DEFAULT_TITLE_ERROR;	// エラー発生時のタイトル
+						
+						// メッセージ
 						$this->setAppErrorMsg('IDにエラー値があります');
+						
+						// HTTPステータスコードの設定
+						$this->gPage->setResponse(400/*リクエストにエラー*/);
 					}
 				}
 			}
@@ -459,6 +478,11 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 	{
 		$contentLibObj = $this->gInstance->getObject(self::CONTENT_OBJ_ID);
 		$contentLibObj->getPublicContentList(self::DEFAULT_LIST_COUNT, 1/*最初のページ*/, 0/*コンテンツID(一覧)*/, $this->_now, null/*期間開始*/, null/*期間終了*/, ''/*検索キーワード*/, $this->_langId, 1/*降順*/, array($this, 'itemsLoop'));
+		
+		// HTMLメタタグを再設定
+		$this->headTitle = self::DEFAULT_TITLE_LIST;
+		$this->headDesc = '';
+		$this->headKeyword = '';
 	}
 	/**
 	 * ヘッダ部メタタグの設定
