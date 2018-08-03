@@ -44,6 +44,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用
 	const CF_MULTI_DOMAIN = 'multi_domain';		// マルチドメイン運用
+	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか
 	const CF_SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CF_MOBILE_USE_SESSION = 'mobile_use_session';		// 携帯でセッション管理を行うかどうか
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
@@ -140,6 +141,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$siteSmartphoneInPublic = ($request->trimValueOf('item_site_smartphone_in_public') == 'on') ? 1 : 0;	// スマートフォン用サイトの公開状況
 		$accessInIntranet	= $request->trimCheckedValueOf('item_access_in_intranet');		// イントラネット運用
 		$multiDomain = ($request->trimValueOf('item_multi_domain') == 'on') ? 1 : 0;// マルチドメイン運用
+		$useLandingPage		= $request->trimCheckedValueOf('item_use_landing_page');	// ランディングページ機能を使用するかどうか
 		$isActiveSitePc = ($request->trimValueOf('item_is_active_site_pc') == 'on') ? 1 : 0;	// PC用サイト有効
 		$isActiveSiteSmartphone = ($request->trimValueOf('item_is_active_site_smartphone') == 'on') ? 1 : 0;	// スマートフォン用サイト有効
 		$isActiveSiteMobile = ($request->trimValueOf('item_is_active_site_mobile') == 'on') ? 1 : 0;	// 携帯用サイト有効
@@ -201,6 +203,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_MULTI_DOMAIN, $multiDomain)) $isErr = true;// マルチドメイン運用
+			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(self::CF_USE_LANDING_PAGE, $useLandingPage)) $isErr = true;// ランディングページ機能を使用するかどうか
 			}
 			if (!$isErr){
 				if (!$this->updateActiveAccessPoint(0/*PC*/, $isActiveSitePc)) $isErr = true;// PC用サイト有効
@@ -305,6 +310,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);			// マルチドメイン運用
+			$useLandingPage		= $this->db->getSystemConfig(self::CF_USE_LANDING_PAGE);// ランディングページ機能を使用するかどうか
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
@@ -386,6 +392,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);// マルチドメイン運用
+			$useLandingPage		= $this->db->getSystemConfig(self::CF_USE_LANDING_PAGE);// ランディングページ機能を使用するかどうか
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
@@ -491,6 +498,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($multiDomain) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "multi_domain", $checked);// マルチドメイン運用
+		$this->tmpl->addVar("_widget", "use_landing_page_checked", $this->convertToCheckedString($useLandingPage));// ランディングページ機能を使用するかどうか
 		$checked = '';
 		if ($isActiveSitePc) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "is_active_site_pc", $checked);// PC用サイト有効

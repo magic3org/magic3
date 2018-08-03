@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2017 Magic3 Project.
+-- * @copyright  Copyright 2006-2018 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -215,7 +215,7 @@ CREATE TABLE _login_user (
     lu_password          CHAR(32)       DEFAULT ''                    NOT NULL,      -- ログインパスワード(MD5)
     lu_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ユーザ名
     lu_user_type         SMALLINT       DEFAULT 0                     NOT NULL,      -- ユーザタイプ(-1=未承認ユーザ、0=仮ユーザ、10=一般ユーザ、50=システム運営者、100=システム管理者)
-    lu_user_type_option  TEXT                                         NOT NULL,      -- ユーザタイプオプション(「ウィジェットID=ユーザタイプ」形式の前後「;」区切りで複数指定可)
+    lu_user_type_option  TEXT                                         NOT NULL,      -- ユーザタイプオプション(「ユーザオプションタイプ(page_manager(ページ運用者))」,「ウィジェットID=ユーザタイプ」形式の前後「;」区切りで複数指定可)
     lu_assign            TEXT                                         NOT NULL,      -- ログイン可能な機能(2バイト文字カンマ区切り、sy=システム管理機能、ec=EC、bg=ブログ、bs=BBS、rv=予約, wk=Wiki)
     lu_admin_widget      TEXT                                         NOT NULL,      -- システム運営者が管理可能なウィジェット(「,」区切りで複数指定可)
     lu_default_admin_url TEXT                                         NOT NULL,      -- デフォルトの管理画面のURL(「?」以降)

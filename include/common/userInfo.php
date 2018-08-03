@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,6 +33,8 @@ class UserInfo
 	//const USER_TYPE_EDITOR				= 30;				// 編集ユーザ
 	const USER_TYPE_MANAGER				= 50;				// システム運営者(ウィジェットの管理機能が使用可能)(このレベル以上が管理機能が使用できる)
 	const USER_TYPE_SYS_ADMIN			= 100;				// システム管理者
+	// ユーザオプションタイプ
+	const USER_OPT_TYPE_PAGE_MANAGER	= 'page_manager';	// ページ運用者(システム運用者の制限ありユーザ)
 	
 	/**
 	 * コンストラクタ
