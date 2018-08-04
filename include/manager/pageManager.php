@@ -6378,27 +6378,39 @@ class PageManager extends Core
 				$success = $gAccessManager->sendPassword($request);
 				return 3;
 			} else {
-				// ユーザ認証
-				$ret = $gAccessManager->userLogin($request);
-				if ($ret){
-					if (empty($redirectUrl)){
-						// システム運用可能ユーザの場合でリダイレクト先が設定されていない場合はデフォルトの管理画面URLへ遷移
-						$userInfo = $gEnvManager->getCurrentUserInfo();// ユーザ情報取得
-						if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){
-							$ret = $this->db->getLoginUserRecordById($userInfo->userId, $userInfoRow);
-							if ($ret && !empty($userInfoRow['lu_default_admin_url'])){
-								$redirectUrl = $gEnvManager->getDefaultAdminUrl() . $userInfoRow['lu_default_admin_url'];
-							}
-						}
-					}
-					
+				// 既にログイン状態の場合は一旦ログアウト
+				if ($gEnvManager->isCurrentUserLogined()){
+
+					// ログアウト処理
+					$gAccessManager->userLogout(true);
+			
 					// リダイレクト処理
 					$this->redirect($redirectUrl);
-					$success = true;		// ログイン成功
-				} else {	// ログイン失敗のとき
-					$success = false;		// ログイン失敗
+					
+					return 2;
+				} else {
+					// ユーザ認証
+					$ret = $gAccessManager->userLogin($request);
+					if ($ret){
+						if (empty($redirectUrl)){
+							// システム運用可能ユーザの場合でリダイレクト先が設定されていない場合はデフォルトの管理画面URLへ遷移
+							$userInfo = $gEnvManager->getCurrentUserInfo();// ユーザ情報取得
+							if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){
+								$ret = $this->db->getLoginUserRecordById($userInfo->userId, $userInfoRow);
+								if ($ret && !empty($userInfoRow['lu_default_admin_url'])){
+									$redirectUrl = $gEnvManager->getDefaultAdminUrl() . $userInfoRow['lu_default_admin_url'];
+								}
+							}
+						}
+					
+						// リダイレクト処理
+						$this->redirect($redirectUrl);
+						$success = true;		// ログイン成功
+					} else {	// ログイン失敗のとき
+						$success = false;		// ログイン失敗
+					}
+					return 1;
 				}
-				return 1;
 			}
 		} else if ($cmd == M3_REQUEST_CMD_LOGOUT){		// ログアウト
 			// ログアウト処理
