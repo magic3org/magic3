@@ -148,7 +148,11 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		if ($retValue == 0){		// 何も処理を行わなかったとき
 			if ($this->gEnv->isCurrentUserLogined()){	// ログインしている場合
-				if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
+				// #############################################################################################
+				// ##### 管理画面ダッシュボードへのアクセス制御はここで行う                                #####
+				// #############################################################################################
+				//if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
+				if ($this->gEnv->isSystemManageUser()){	// システム運用可能の場合(2018/8/5変更)
 					// ##### ポップアップメッセージ表示状態を取得 #####
 					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));
 					if (empty($popupStatus)){			// 1度もメッセージが表示されていない場合
@@ -203,6 +207,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					} else if ($task == 'pageid' ||				// ページID一覧
 								$task == 'pageid_detail'){		// ページID詳細
 						$task = 'pageid';
+					} else if ($task == self::TASK_LANDINGPAGE ||			// ランディングページ管理
+								$task == self::TASK_LANDINGPAGE_DETAIL){		// ランディングページ管理(詳細)
+						$task = self::TASK_LANDINGPAGE;
 					} else if ($task == 'menuid' ||				// メニューID一覧
 								$task == 'menuid_detail'){		// メニューID詳細
 						$task = 'menuid';
@@ -277,6 +284,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'pageinfo':		// ページ情報
 						case 'accesspoint':		// アクセスポイント
 						case 'pageid':			// ページID
+						case self::TASK_LANDINGPAGE:	// ランディングページ管理
 						case 'menuid':			// メニューID
 						case 'opelog':			// 運用ログ
 						case 'accesslog':			// アクセスログ

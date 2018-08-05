@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,6 +34,8 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_TEMPGENERATECSS			= 'tempgeneratecss';			// テンプレートCSS生成
 	const TASK_TEMPGENERATECSS_DETAIL	= 'tempgeneratecss_detail';		// テンプレートCSS生成(詳細)
 	const TASK_DB_ACCESSLOG		= 'dbaccesslog';			// DB管理アクセスログ
+	const TASK_LANDINGPAGE			= 'landingpage';			// ランディングページ管理
+	const TASK_LANDINGPAGE_DETAIL	= 'landingpage_detail';		// ランディングページ管理(詳細)
 	const TASK_TEST						= 'test';						// テスト画面
 	
 	/**
