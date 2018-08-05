@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-25 16:15+0900\n"
-"PO-Revision-Date: 2018-07-25 16:16+0900\n"
+"POT-Creation-Date: 2018-08-05 15:25+0900\n"
+"PO-Revision-Date: 2018-08-05 15:25+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -372,7 +372,7 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:182
-#: ../container/admin_mainWidgetContainer.php:436
+#: ../container/admin_mainWidgetContainer.php:445
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -935,10 +935,17 @@ msgstr ""
 "DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファ"
 "イル名: %s"
 
+#: ../container/admin_mainLandingpageWidgetContainer.php:147
+#: ../container/admin_mainServerinfoWidgetContainer.php:208
+#: ../container/admin_mainSitelistWidgetContainer.php:147
+#: ../container/admin_mainWidgetContainer.php:347
+msgid "Can not access the page."
+msgstr "アクセスできません"
+
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:35
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:431
+#: ../container/admin_mainWidgetContainer.php:440
 msgid "Login"
 msgstr "ログイン"
 
@@ -1567,12 +1574,6 @@ msgstr "ポータルのサイト情報を更新"
 msgid "Save"
 msgstr "保存"
 
-#: ../container/admin_mainServerinfoWidgetContainer.php:208
-#: ../container/admin_mainSitelistWidgetContainer.php:147
-#: ../container/admin_mainWidgetContainer.php:339
-msgid "Can not access the page."
-msgstr "アクセスできません"
-
 #: ../container/admin_mainTempgeneratecssWidgetContainer.php:299
 #: ../container/admin_mainTemplistWidgetContainer.php:743
 #: ../container/admin_mainTemplistWidgetContainer.php:856
@@ -1915,12 +1916,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:433
+#: ../container/admin_mainWidgetContainer.php:442
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
-#: ../container/admin_mainWidgetContainer.php:434 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:443 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1944,7 +1945,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 #: ../container/admin_mainUserlistWidgetContainer.php:304
 #: ../container/admin_mainUserlistWidgetContainer.php:380
-#: ../container/admin_mainWidgetContainer.php:435 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:444 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -2015,20 +2016,23 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:345
-#: ../container/admin_mainWidgetContainer.php:352
+#: ../container/admin_mainWidgetContainer.php:354
+msgid "You need to have permissions to access this page."
+msgstr "この画面を表示するにはアクセス権が必要です。"
+
+#: ../container/admin_mainWidgetContainer.php:361
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:357
+#: ../container/admin_mainWidgetContainer.php:366
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:411
+#: ../container/admin_mainWidgetContainer.php:420
 msgid "Correct url is this:"
 msgstr "正しいURLはこちらです："
 
-#: ../container/admin_mainWidgetContainer.php:432
+#: ../container/admin_mainWidgetContainer.php:441
 msgid "Send Password"
 msgstr "パスワード送信"
 

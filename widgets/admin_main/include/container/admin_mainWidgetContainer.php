@@ -151,7 +151,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				// #############################################################################################
 				// ##### 管理画面ダッシュボードへのアクセス制御はここで行う                                #####
 				// #############################################################################################
-				//if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
+//				if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
 				if ($this->gEnv->isSystemManageUser()){	// システム運用可能の場合(2018/8/5変更)
 					// ##### ポップアップメッセージ表示状態を取得 #####
 					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));
@@ -350,7 +350,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 							break;
 					}
 				} else {		// システム管理者以外の場合
-					$this->SetMsg(self::MSG_APP_ERR, $this->_('Failed to login.'));// ログインに失敗しました
+					//$this->SetMsg(self::MSG_APP_ERR, $this->_('Failed to login.'));// ログインに失敗しました
+					$this->SetMsg(self::MSG_APP_ERR, $this->_('You need to have permissions to access this page.'));		// この画面を表示するにはアクセス権が必要です。
+					$param = 'message';			// メッセージ画面表示
 				}
 			} else {		// ログインしていないとき
 				// メッセージは何も表示しないでログイン画面へ

@@ -121,7 +121,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			return;
 		}
 		
-		if (!$this->gEnv->isSystemAdmin()) return;	// システム管理者以外の場合は終了
+//		if (!$this->gEnv->isSystemAdmin()) return;	// システム管理者以外の場合は終了
+		if (!$this->gEnv->isSystemManageUser()) return;	// システム運用権限がない場合は終了(2018/8/5変更)
 		
 		$menu = $request->trimValueOf('menu');
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
