@@ -1382,8 +1382,9 @@ class PageManager extends Core
 				if ($paramCount == 0){
 					$this->isPageTopUrl = true;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 					
-					if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemAdmin() && empty($task)){
-						// ダッシュボード機能は、パラメータなし、管理者ディレクトリ、システム管理者の条件で使用可能
+					//if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemAdmin() && empty($task)){
+					if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser() && empty($task)){
+						// ダッシュボード機能は、パラメータなし、管理者ディレクトリ、システム運用者の条件で使用可能(2018/8/5変更)
 						// POST値にタスクがある場合はダッシュボードとしない
 						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_DASHBOARD, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 					}

@@ -54,8 +54,8 @@ class admin_indexFrameContainer extends BaseFrameContainer
 					$cmd == M3_REQUEST_CMD_GET_WIDGET_INFO ||	// ウィジェット各種情報取得(AJAX用)
 					$cmd == M3_REQUEST_CMD_SHOW_PHPINFO){	// phpinfoの表示
 			// 管理者権限がなければ実行できない
-			if ($gEnvManager->isSystemAdmin()){
-			//if ($this->gEnv->isSystemManageUser()){	// システム運用可能ユーザかどうか
+			//if ($gEnvManager->isSystemAdmin()){
+			if ($this->gEnv->isSystemManageUser()){	// システム運用可能ユーザかどうか(2018/8/5変更)
 				$ret = true;
 			} else {
 				// クッキーがないため権限を識別できない場合は、管理者キーをチェックする
