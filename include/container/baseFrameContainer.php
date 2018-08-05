@@ -301,8 +301,8 @@ class BaseFrameContainer extends Core
 		if ($cmd == M3_REQUEST_CMD_INIT_DB){	// DB初期化オペレーションのとき
 		} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION){		// 表示位置を表示するとき
 			// 管理者権限がある場合のみ実行可能
-			//if ($this->gEnv->isSystemAdmin()){
-			if ($isSystemAdmin){
+			//if ($isSystemAdmin){
+			if ($isSystemManageUser){			// システム運用者で表示可能(2018/8/5変更)
 				// ポジションの表示画面のアクセスは、すべて管理機能URLで受け付ける
 				// ページIDを再設定
 /*				$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);

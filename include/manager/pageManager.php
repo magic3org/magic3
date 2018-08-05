@@ -1356,7 +1356,8 @@ class PageManager extends Core
 		// ポジション表示の場合はページID、ページサブIDを再設定。再設定はシステム管理者のみ可能。
 		if (($cmd == M3_REQUEST_CMD_SHOW_POSITION ||					// 管理画面(ウィジェットなしポジション表示)のとき
 			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET) &&		// 管理画面(ウィジェット付きポジション表示)のとき
-			$gEnvManager->isSystemAdmin()){
+//			$gEnvManager->isSystemAdmin()){
+			$gEnvManager->isSystemManageUser()){	// システム運用可能の場合(2018/8/5変更)
 
 			$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
 			if (empty($pageId)) $pageId = $this->gEnv->getDefaultPageId();		// 値がないときはデフォルトのページIDを設定
