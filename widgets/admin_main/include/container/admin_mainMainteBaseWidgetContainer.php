@@ -120,6 +120,10 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'メニューID';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_TASKACCESS:						// 管理画面アクセス制御
+				$titles[] = 'マスター管理';
+				$titles[] = 'アクセス制御';
+				break;
 			case self::TASK_INITSYSTEM:		// DBメンテナンス
 				$titles[] = 'DB管理';
 				$titles[] = 'システム再インストール';
@@ -188,7 +192,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 														$task == self::TASK_PAGEID ||			// ページID
 														$task == self::TASK_PAGEID_DETAIL ||	// ページID詳細
 														$task == self::TASK_MENUID ||			// メニューID
-														$task == self::TASK_MENUID_DETAIL		// メニューID詳細
+														$task == self::TASK_MENUID_DETAIL ||		// メニューID詳細
+														$task == self::TASK_TASKACCESS				// 管理画面アクセス制御
 													),
 									'submenu'	=> array(
 										(Object)array(
@@ -229,6 +234,15 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 											'active'	=> (
 																$task == self::TASK_MENUID ||			// メニューID
 																$task == self::TASK_MENUID_DETAIL		// メニューID詳細
+															)
+										),
+										(Object)array(
+											'name'		=> 'アクセス制御',
+											'task'		=> self::TASK_TASKACCESS,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_TASKACCESS			// 管理画面アクセス制御
 															)
 										)
 									)
