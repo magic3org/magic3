@@ -36,6 +36,7 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_DB_ACCESSLOG		= 'dbaccesslog';			// DB管理アクセスログ
 	const TASK_LANDINGPAGE			= 'landingpage';			// ランディングページ管理
 	const TASK_LANDINGPAGE_DETAIL	= 'landingpage_detail';		// ランディングページ管理(詳細)
+	const TASK_TASKACCESS				= 'taskaccess';						// 管理画面アクセス制御
 	const TASK_TEST						= 'test';						// テスト画面
 	
 	/**

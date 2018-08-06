@@ -2062,6 +2062,25 @@ class EnvManager extends Core
 		return $isAdmin;
 	}
 	/**
+	 * 現在アクセス中のユーザにシステム運用者かどうかを返す
+	 *
+	 * @param string $optionType	ユーザオプションタイプ
+	 * @return bool					true=システム運用者、false=システム運用者ではない
+	 */
+	public function isSystemManager(&$optionType)
+	{
+		$isManager = false;
+		$userInfo = $this->getCurrentUserInfo();
+		if (is_null($userInfo)){		// ログインしていない場合
+		} else {
+			if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER){	// システム運用者の場合
+				$optionType = $userInfo->optionType;
+				$isManager = true;
+			}
+		}
+		return $isManager;
+	}
+	/**
 	 * 現在アクセス中のユーザにシステム運用権限があるかどうかを返す
 	 *
 	 * @return bool		true=システム運用可、false=システム運用不可

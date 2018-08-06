@@ -21,6 +21,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 	private $redirectUrl;		// リダイレクト先URL
 	private $content;			// メッセージ用コンテンツ
 	private $permitTask;		// 実行許可タスク
+	private $permitTask_manager;		// 実行許可タスク(システム運用者用)
+	private $permitTask_page_manager;		// 実行許可タスク(ページ運用者用)
 	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
@@ -34,7 +36,11 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->permitTask = array('test', 'initwizard');		// 実行許可タスク
+		// 実行許可タスク
+		$this->permitTask = array('test', 'initwizard');
+		$this->permitTask_page_manager = array('top');;		// 実行許可タスク(ページ運用者用)
+		// システム運用者用の実行許可タスクは設定から読み込む
+		$this->permitTask_manager = array('top');;		// 実行許可タスク(システム運用者用)
 	}
 	/**
 	 * ディスパッチ処理(メインコンテナのみ実行)
@@ -151,8 +157,13 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				// #############################################################################################
 				// ##### 管理画面ダッシュボードへのアクセス制御はここで行う                                #####
 				// #############################################################################################
-//				if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
-				if ($this->gEnv->isSystemManageUser()){	// システム運用可能の場合(2018/8/5変更)
+				// システム管理者か、システム運用者でアクセス可能なタスクかどうかをチェック
+				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+				if (empty($task)) $task = 'top';		// トップメニュー
+
+				if ($this->gEnv->isSystemAdmin() || 
+					($this->gEnv->isSystemManageUser() && in_array($task, $this->permitTask_manager))){	// システム運用可能の場合(2018/8/5変更)
+
 					// ##### ポップアップメッセージ表示状態を取得 #####
 					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));
 					if (empty($popupStatus)){			// 1度もメッセージが表示されていない場合
@@ -165,9 +176,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					}
 				
 					// 表示画面を決定
-					$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 					$taskSrc = $task;
-					if (empty($task) || $task == 'menuhelp'){	// デフォルト値
+					if ($task == 'menuhelp'){	// デフォルト値
 						$task = 'top';		// トップメニュー
 //					} else if ($task == 'menu'){		// マスター管理
 //						$task = 'pageinfo';			// ページ情報をデフォルトにする
@@ -302,6 +312,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'tenantserver':			// テナントサーバ管理
 						case 'analyzecalc':		// アクセス解析集計
 						case 'analyzegraph':		// アクセス解析グラフ表示
+						case self::TASK_TASKACCESS:			// 管理画面アクセス制御
 						
 						// 管理画面の設定用
 						case 'menu':			// 管理画面設定メニュー
