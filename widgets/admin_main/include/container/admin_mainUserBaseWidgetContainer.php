@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -77,6 +77,10 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'ユーザグループ';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_TASKACCESS:						// 管理画面アクセス制御
+				$titles[] = 'アクセス制御';
+				$titles[] = 'システム運用者';
+				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
 		
@@ -102,6 +106,14 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_USERGROUP || $task == self::TASK_USERGROUP_DETAIL),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'アクセス制御',
+									'task'		=> self::TASK_TASKACCESS,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_TASKACCESS),
 									'submenu'	=> array()
 								)
 							);

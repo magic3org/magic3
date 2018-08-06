@@ -272,6 +272,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'usergroup':	// ユーザグループ
 						case 'loginhistory':	// ログイン履歴
 //						case 'loginstatus':	// ログイン状況
+						case self::TASK_TASKACCESS:			// 管理画面アクセス制御
 						case 'widgetlist':	// ウィジェットリスト
 						case 'templist':	// テンプレートリスト
 						case 'tempimage':	// テンプレート画像編集
@@ -315,7 +316,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'tenantserver':			// テナントサーバ管理
 						case 'analyzecalc':		// アクセス解析集計
 						case 'analyzegraph':		// アクセス解析グラフ表示
-						case self::TASK_TASKACCESS:			// 管理画面アクセス制御
 						
 						// 管理画面の設定用
 						case 'menu':			// 管理画面設定メニュー

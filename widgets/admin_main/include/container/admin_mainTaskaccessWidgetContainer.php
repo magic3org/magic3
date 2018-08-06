@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainUserBaseWidgetContainer.php');
 
-class admin_mainTaskaccessWidgetContainer extends admin_mainMainteBaseWidgetContainer
+class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContainer
 {
 	private $allTaskArray;			// 変更可能なすべてのタスク
 	private $enableTaskArray;		// 実行可能なタスク
