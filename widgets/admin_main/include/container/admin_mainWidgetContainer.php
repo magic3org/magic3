@@ -21,11 +21,11 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 	private $redirectUrl;		// リダイレクト先URL
 	private $content;			// メッセージ用コンテンツ
 	private $permitTask;		// 実行許可タスク
-	private $permitTask_manager;		// 実行許可タスク(システム運用者用)
-	private $permitTask_page_manager;		// 実行許可タスク(ページ運用者用)
+//	private $permitTask_page_manager;		// 実行許可タスク(ページ運用者用)
 	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
+	const CF_SYSTEM_MANAGER_ENABLE_TASK	= 'system_manager_enable_task';	// システム運用者が実行可能な管理画面タスク
 	const SK_SHOW_POPUP_STATUS = 'show_popup_status';		// ポップアップメッセージの表示状態
 	
 	/**
@@ -38,9 +38,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// 実行許可タスク
 		$this->permitTask = array('test', 'initwizard');
-		$this->permitTask_page_manager = array('top');;		// 実行許可タスク(ページ運用者用)
-		// システム運用者用の実行許可タスクは設定から読み込む
-		$this->permitTask_manager = array('top');;		// 実行許可タスク(システム運用者用)
+//		$this->permitTask_page_manager = array('top');		// 実行許可タスク(ページ運用者用)
 	}
 	/**
 	 * ディスパッチ処理(メインコンテナのみ実行)
@@ -161,8 +159,13 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 				if (empty($task)) $task = 'top';		// トップメニュー
 
+				// システム運用者が実行可能なタスクを取得
+				$enableTaskArray = array();
+				$enableTask = $this->gSystem->getSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK);
+				if (!empty($enableTask)) $enableTaskArray = explode(',', $enableTask);
+				
 				if ($this->gEnv->isSystemAdmin() || 
-					($this->gEnv->isSystemManageUser() && in_array($task, $this->permitTask_manager))){	// システム運用可能の場合(2018/8/5変更)
+					($this->gEnv->isSystemManageUser() && in_array($task, $enableTaskArray))){	// システム運用可能の場合(2018/8/5変更)
 
 					// ##### ポップアップメッセージ表示状態を取得 #####
 					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));
