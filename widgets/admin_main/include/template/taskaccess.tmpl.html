@@ -31,14 +31,15 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="task" value="taskaccess" />
 <input type="hidden" name="act" />
+<input type="hidden" name="tasklist" value="{TASK_LIST}" />
 <h3><span {_HELP_TASKACCESS}>システム運用者アクセス制御</span></h3>
 <table id="config_table">
     <tbody>
     <tr>
 	    <th>使用可能タスク</th>
 	    <td>
-<patTemplate:tmpl name="content_type_list">
-<div class="checkbox"><label><input type="checkbox" name="item{INDEX}_selected" {CHECKED}>{NAME}</label></div>
+<patTemplate:tmpl name="task_list">
+<div class="checkbox"><label><input type="checkbox" name="item{INDEX}_checked" {CHECKED}>{NAME}</label></div>
 </patTemplate:tmpl>
 		</td>
 	</tr>

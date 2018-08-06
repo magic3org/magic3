@@ -17,6 +17,10 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainTaskaccessWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $allTaskArray;			// 変更可能なすべてのタスク
+	private $enableTaskArray;		// 実行可能なタスク
+	const CF_SYSTEM_MANAGER_ENABLE_TASK	= 'system_manager_enable_task';	// システム運用者が実行可能な管理画面タスク
+
 	/**
 	 * コンストラクタ
 	 */
@@ -24,6 +28,9 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->allTaskArray = array('top', 'userlist_detail');
+		$this->enableTaskArray = array();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -50,8 +57,59 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		// 管理用URL設定
-		$this->tmpl->addVar("_widget", "admin_url", $this->gEnv->getDefaultAdminUrl());
+		$act = $request->trimValueOf('act');
+		$taskList = explode(',', $request->trimValueOf('tasklist'));
+
+		// チェックされているタスクを取得
+		for ($i = 0; $i < count($taskList); $i++){
+			// 項目がチェックされているかを取得
+			$itemName = 'item' . $i . '_checked';
+			$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+			if ($itemValue) $this->enableTaskArray[] = $taskList[$i];
+		}
+			
+		if ($act == 'update'){		// 設定更新のとき
+			$permitTask = implode(',', $this->enableTaskArray);
+
+			$ret = $this->_db->updateSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK, $permitTask);		// システム運用者が実行可能な管理画面タスク
+			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+			} else {
+				$this->setAppErrorMsg('データ新に失敗しました');
+			}
+		}
+		
+		$permitTask = $this->_db->getSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK);	// システム運用者が実行可能な管理画面タスク
+		if (!empty($permitTask)) $this->enableTaskArray = explode(',', $permitTask);
+		
+		// タスク一覧作成
+		$this->createTaskList();
+		
+		$this->tmpl->addVar("_widget", "task_list", implode($this->allTaskArray, ','));		// 表示中のタスク
+	}
+	/**
+	 * タスク一覧作成
+	 *
+	 * @return なし
+	 */
+	function createTaskList()
+	{
+		for ($i = 0; $i < count($this->allTaskArray); $i++){
+			$value = $this->allTaskArray[$i];
+			$name = $value;
+			
+			$checked = '';
+			if (in_array($value, $this->enableTaskArray)) $checked = 'checked';
+			
+			$row = array(
+				'index'		=> $i,
+				'value'		=> $value,
+				'name'		=> $name,
+				'checked'	=> $checked									// 選択中かどうか
+			);
+			$this->tmpl->addVars('task_list', $row);
+			$this->tmpl->parseTemplate('task_list', 'a');
+		}
 	}
 }
 ?>
