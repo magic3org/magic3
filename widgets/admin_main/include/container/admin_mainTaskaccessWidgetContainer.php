@@ -35,6 +35,7 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 		$this->allTaskArray = array(
 										array(	'name' => 'ダッシュボード',		'value' => self::TASK_TOP),		// ダッシュボード(メッセージのみ)
 										array(	'name' => 'ユーザ詳細',			'value' => self::TASK_USERLIST_DETAIL),		// ユーザ詳細
+										array(	'name' => 'ログイン履歴',		'value' => self::TASK_LOGINHISTORY),		// ログイン履歴
 										array(	'name' => '運用ログ一覧',		'value' => self::TASK_OPELOG),				// 運用ログ一覧
 										array(	'name' => '運用ログ詳細',		'value' => self::TASK_OPELOG_DETAIL),		// 運用ログ詳細
 										array(	'name' => 'アクセスログ一覧',	'value' => self::TASK_ACCESSLOG),		// アクセスログ一覧
