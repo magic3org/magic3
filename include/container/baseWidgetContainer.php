@@ -281,7 +281,7 @@ class BaseWidgetContainer extends Core
 			if (method_exists($this, '_postAssign')) $this->_postAssign($request, $param);
 			
 			// サブメニューバーの作成
-			if ($isAdminDirAccess || $this->gPage->idEditMode()){			// 管理画面あるいは、フロント画面編集モードオンの場合
+			if ($isAdminDirAccess || $this->gPage->isEditMode()){			// 管理画面あるいは、フロント画面編集モードオンの場合
 				// 設定画面用パンくずリストの作成
 				if (!empty($this->configMenubarBreadcrumbTitleDef)) $this->gPage->setAdminBreadcrumbDef($this->configMenubarBreadcrumbTitleDef);
 				

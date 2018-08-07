@@ -26,6 +26,7 @@ class PageManager extends Core
 	private $systemHandleMode;			// システム制御遷移モード(1=サイト非公開時)
 	private $isPageEditable;		// フロント画面ページ編集可能モード
 	private $isTransparentMode;		// 画面透過モード
+	private $isPersonalMode;		// 機能アクセスパーソナルモード
 	private $isEditMode;			// フロント画面編集モード
 	private $isLayout;				// 画面レイアウト中かどうか
 	private $isPageTopUrl;			// ページトップ(サブページ内のトップ位置)のURLかどうか
@@ -900,9 +901,27 @@ class PageManager extends Core
 	 *
 	 * @return bool		true=編集モードオン、false=編集モードオフ
 	 */
-	function idEditMode()
+	function isEditMode()
 	{
 		return $this->isEditMode;
+	}
+	/**
+	 * 機能アクセスパーソナルモードを設定
+	 *
+	 * @return 				なし
+	 */
+	function setPersonalMode()
+	{
+		$this->isPersonalMode = true;
+	}
+	/**
+	 * 機能アクセスパーソナルモードを取得
+	 *
+	 * @return bool		true=パーソナルモードオン、false=パーソナルモードオフ
+	 */
+	function isPersonalMode()
+	{
+		return $this->isPersonalMode;
 	}
 	/**
 	 * 出力フォーマットがHTMLであるかを設定
