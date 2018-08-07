@@ -17,6 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainUserBas
 
 class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContainer
 {
+	private $allTasks;
 	private $allTaskArray;			// 変更可能なすべてのタスク
 	private $enableTaskArray;		// 実行可能なタスク
 	const CF_SYSTEM_MANAGER_ENABLE_TASK	= 'system_manager_enable_task';	// システム運用者が実行可能な管理画面タスク
@@ -29,8 +30,22 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->allTaskArray = array('top', 'userlist_detail');
+		// パラメータ初期化
 		$this->enableTaskArray = array();
+		$this->allTaskArray = array(
+										array(	'name' => 'ダッシュボード',		'value' => self::TASK_TOP),		// ダッシュボード(メッセージのみ)
+										array(	'name' => 'ユーザ詳細',			'value' => self::TASK_USERLIST_DETAIL),		// ユーザ詳細
+										array(	'name' => '運用ログ一覧',		'value' => self::TASK_OPELOG),				// 運用ログ一覧
+										array(	'name' => '運用ログ詳細',		'value' => self::TASK_OPELOG_DETAIL),		// 運用ログ詳細
+										array(	'name' => 'アクセスログ一覧',	'value' => self::TASK_ACCESSLOG),		// アクセスログ一覧
+										array(	'name' => 'アクセスログ詳細',	'value' => self::TASK_ACCESSLOG_DETAIL),		// アクセスログ詳細
+										array(	'name' => '検索語ログ一覧',		'value' => self::TASK_SEARCHWORDLOG),		// 検索語ログ一覧
+										array(	'name' => '検索語ログ詳細',		'value' => self::TASK_SEARCHWORDLOG_DETAIL),		// 検索語ログ詳細
+										array(	'name' => '集計',				'value' => self::TASK_CALC),		// 集計
+										array(	'name' => 'グラフ表示',			'value' => self::TASK_GRAPH),		// グラフ表示
+										array(	'name' => 'Awstats',			'value' => self::TASK_AWSTATS),		// Awstats
+										array(	'name' => 'ファイルブラウザ',	'value' => self::TASK_FILEBROWSE)		// ファイルブラウザ
+									);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -83,9 +98,10 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 		if (!empty($permitTask)) $this->enableTaskArray = explode(',', $permitTask);
 		
 		// タスク一覧作成
+		$this->allTasks = array();
 		$this->createTaskList();
 		
-		$this->tmpl->addVar("_widget", "task_list", implode($this->allTaskArray, ','));		// 表示中のタスク
+		$this->tmpl->addVar("_widget", "task_list", implode($this->allTasks, ','));		// 表示中のタスク
 	}
 	/**
 	 * タスク一覧作成
@@ -95,8 +111,8 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 	function createTaskList()
 	{
 		for ($i = 0; $i < count($this->allTaskArray); $i++){
-			$value = $this->allTaskArray[$i];
-			$name = $value;
+			$value = $this->allTaskArray[$i]['value'];
+			$name = $this->allTaskArray[$i]['name'];
 			
 			$checked = '';
 			if (in_array($value, $this->enableTaskArray)) $checked = 'checked';
@@ -104,11 +120,13 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 			$row = array(
 				'index'		=> $i,
 				'value'		=> $value,
-				'name'		=> $name,
+				'name'		=> $this->convertToDispString($name),
 				'checked'	=> $checked									// 選択中かどうか
 			);
 			$this->tmpl->addVars('task_list', $row);
 			$this->tmpl->parseTemplate('task_list', 'a');
+			
+			$this->allTasks[] = $value;		// 表示タスクを保存
 		}
 	}
 }

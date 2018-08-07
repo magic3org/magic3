@@ -22,11 +22,6 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const BREADCRUMB_TITLE	= 'ユーザ管理';		// パンくずリストトップタイトル
 	
 	// 画面
-	const TASK_USERLIST			= 'userlist';		// ユーザ一覧
-	const TASK_USERLIST_DETAIL	= 'userlist_detail';	// ユーザ詳細
-	const TASK_LOGINHISTORY	= 'loginhistory';		// ログイン履歴
-	const TASK_USERGROUP		= 'usergroup';		// ユーザグループ
-	const TASK_USERGROUP_DETAIL	= 'usergroup_detail';		// ユーザグループ詳細
 	const DEFAULT_TOP_PAGE = 'userlist';		// デフォルトのトップ画面
 	
 	/**

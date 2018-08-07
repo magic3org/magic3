@@ -18,25 +18,9 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const BREADCRUMB_TITLE	= 'メンテナンス';		// パンくずリストトップタイトル
+	
 	// 画面
-//	const TASK_RESBROWSE 		= 'resbrowse';		// ファイルブラウザ
-	const TASK_FILEBROWSE 		= 'filebrowse';		// ファイルブラウザ
-	const TASK_PAGEINFO			= 'pageinfo';	// ページ情報
-	const TASK_PAGEINFO_DETAIL	= 'pageinfo_detail';	// ページ情報
-	const TASK_ACCESSPOINT			= 'accesspoint';		// アクセスポイント
-	const TASK_ACCESSPOINT_DETAIL	= 'accesspoint_detail';		// アクセスポイント
-	const TASK_PAGEID			= 'pageid';		// ページID
-	const TASK_PAGEID_DETAIL	= 'pageid_detail';		// ページID
-	const TASK_MENUID			= 'menuid';		// メニューID
-	const TASK_MENUID_DETAIL	= 'menuid_detail';		// メニューID
-	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
-	const TASK_INSTALLDATA		= 'installdata';	// データインストール
-	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
-//	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
-	const TASK_INITWIZARD		= 'initwizard';		// 管理画面カスタムウィザード
-	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
-//	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
 	const DEFAULT_TASK			= 'filebrowse';		// デフォルト(ファイルブラウザ)
 	
 	const TASK_NAME_MAIN = 'メンテナンス';

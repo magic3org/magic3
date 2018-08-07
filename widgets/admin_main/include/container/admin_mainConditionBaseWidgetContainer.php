@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,17 +22,10 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	protected $_openBy;				// ウィンドウオープンタイプ
 	const BREADCRUMB_TITLE	= '運用状況';		// パンくずリストトップタイトル
 	const DIR_NAME_AWSTATS	= 'awstats';		// Awstatsディレクトリ名
+	
 	// 画面
-	const TASK_OPELOG	= 'opelog';			// 運用ログ一覧
-	const TASK_OPELOG_DETAIL 	= 'opelog_detail';		// 運用ログ詳細
-	const TASK_ACCESSLOG		= 'accesslog';				// アクセスログ一覧
-	const TASK_ACCESSLOG_DETAIL	= 'accesslog_detail';		// アクセスログ詳細
-	const TASK_SEARCHWORDLOG	= 'searchwordlog';				// 検索語ログ一覧
-	const TASK_SEARCHWORDLOG_DETAIL	= 'searchwordlog_detail';		// 検索語ログ詳細
-	const TASK_CALC		= 'analyzecalc';		// 集計
-	const TASK_GRAPH	= 'analyzegraph';		// グラフ表示
-	const TASK_AWSTATS		= 'awstats';		// Awstats表示
 	const DEFAULT_TOP_PAGE = 'accesslog';		// デフォルトのトップ画面
+	
 	// DB定義値
 	const CF_AWSTATS_DATA_PATH = 'awstats_data_path';		// Awstatsデータパス
 	

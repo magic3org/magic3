@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,11 +18,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const BREADCRUMB_TITLE	= '基本情報';		// パンくずリストトップタイトル
+	
 	// 画面
-	const TASK_CONFIGSITE		= 'configsite';			// サイト情報
-	const TASK_PAGEHEAD			= 'pagehead';			// ページヘッダ情報
-	const TASK_PAGEHEAD_DETAIL	= 'pagehead_detail';	// ページヘッダ情報詳細
-	const TASK_PORTAL			= 'portal';				// Magic3ポータル
 	const DEFAULT_TASK			= 'configsite';			// デフォルトの画面
 				
 	/**

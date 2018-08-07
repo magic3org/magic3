@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,13 +20,8 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 {
 	protected $_mainDb;			// DB接続オブジェクト
 	const BREADCRUMB_TITLE	= 'システム情報';		// パンくずリストトップタイトル
+	
 	// 画面
-	const TASK_CONFIGSYS		= 'configsys';	// システム基本設定
-	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
-	const TASK_CONFIGMESSAGE	= 'configmessage';	// メッセージ設定
-	const TASK_CONFIGIMAGE		= 'configimage';		// 画像設定
-	const TASK_CONFIGMAIL		= 'configmail';			// メールサーバ
-	const TASK_SERVER_ENV		= 'serverenv';	// サーバ環境
 	const DEFAULT_TASK			= 'configsys';		// デフォルト画面
 	
 	/**
