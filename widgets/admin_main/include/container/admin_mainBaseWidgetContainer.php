@@ -90,6 +90,9 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_LANDINGPAGE_DETAIL	= 'landingpage_detail';		// ランディングページ管理(詳細)
 	const TASK_TEST						= 'test';						// テスト画面
 	
+	// DBアクセス用
+	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか
+	
 	/**
 	 * コンストラクタ
 	 */

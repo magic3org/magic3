@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -665,10 +665,13 @@ class DesignManager extends Core
 			$tagId	= $menuItem->tagid;
 			$active = $menuItem->active;
 			$disabled	= $menuItem->disabled;
+			$visible	= isset($menuItem->visible) ? $menuItem->visible : true;
 			$task	= $menuItem->task;
 			$url	= $menuItem->url;
 			$help	= $menuItem->help;
 			$subMenu = $menuItem->submenu;
+			
+			if (!$visible) continue;			// 非表示の場合はタグ出力しない
 			
 			if (empty($subMenu)){		// サブメニューを持たない場合
 				if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
@@ -706,8 +709,11 @@ class DesignManager extends Core
 					$subTagId	= $subMenuItem->tagid;
 					$subActive	= $subMenuItem->active;
 					$subDisabled	= $subMenuItem->disabled;
+					$subVisible	= isset($subMenuItem->visible) ? $subMenuItem->visible : true;
 					$task		= $subMenuItem->task;
 					$url		= $subMenuItem->url;
+					
+					if (!$subVisible) continue;			// 非表示の場合はタグ出力しない
 					
 					$linkUrl = '';			// リンク先 
 					if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);

@@ -17,7 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const BREADCRUMB_TITLE	= 'メンテナンス';		// メンテナンス機能トップタイトル
+	const BREADCRUMB_TITLE	= 'メンテナンス';		// パンくずリスト用トップタイトル
 	
 	// 画面
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
@@ -59,7 +59,10 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->gPage->redirect($this->getUrl($mainteTopPage));
 			return;
 		}
-							
+		
+		// ##### メニュー項目の表示制御 #####
+		$visible_LandingPage = $this->gSystem->getSystemConfig(self::CF_USE_LANDING_PAGE);			// 「ランディングページ機能」の表示
+
 		// パンくずリストの作成
 		$titles = array();
 		$titles[] = self::BREADCRUMB_TITLE;
@@ -282,6 +285,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 												'task'		=> self::TASK_LANDINGPAGE,
 												'url'		=> '',
 												'tagid'		=> '',
+												'visible'	=> $visible_LandingPage,					// 表示制御
 												'active'	=> (
 																	$task == self::TASK_LANDINGPAGE		// ランディングページ管理
 																)
@@ -332,6 +336,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 												'task'		=> self::TASK_LANDINGPAGE,
 												'url'		=> '',
 												'tagid'		=> '',
+												'visible'	=> $visible_LandingPage,					// 表示制御
 												'active'	=> (
 																	$task == self::TASK_LANDINGPAGE		// ランディングページ管理
 																)
