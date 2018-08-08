@@ -17,7 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const BREADCRUMB_TITLE	= 'メンテナンス';		// パンくずリストトップタイトル
+	const BREADCRUMB_TITLE	= 'メンテナンス';		// メンテナンス機能トップタイトル
 	
 	// 画面
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
@@ -121,12 +121,16 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'アクセスログ';
 				break;
 			case self::TASK_INITWIZARD:		// 管理画面カスタムウィザード
-				$titles[] = '管理画面設定';
+				$titles[] = '管理機能設定';
 				$titles[] = '管理画面カスタムウィザード';
 				break;
 			case self::TASK_EDITMENU:		// 管理メニュー編集
-				$titles[] = '管理画面設定';
+				$titles[] = '管理機能設定';
 				$titles[] = '管理メニュー編集';
+				break;
+			case self::TASK_LANDINGPAGE:		// ランディングページ管理
+				$titles[] = '管理機能設定';
+				$titles[] = 'ランディングページ管理';
 				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
@@ -259,19 +263,29 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 								)
 							);
 							
-		// 設定によって「管理画面設定」は変更
+		// 設定によって「管理機能設定」は変更
 		if (M3_PERMIT_REINSTALL){			// 再インストール可能な場合は「システム再インストール」項目を表示
 			$navbarDef->menu[] =	(Object)array(
-										'name'		=> '管理画面設定',
+										'name'		=> '管理機能設定',
 										'task'		=> '',
 										'url'		=> '',
 										'tagid'		=> '',
 										'active'	=> (
 															$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
 															$task == self::TASK_EDITMENU ||			// 管理メニュー編集
+															$task == self::TASK_LANDINGPAGE	||		// ランディングページ管理
 															$task == self::TASK_INITSYSTEM			// システム再インストール
 														),
 										'submenu'	=> array(
+											(Object)array(
+												'name'		=> 'ランディングページ管理',
+												'task'		=> self::TASK_LANDINGPAGE,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_LANDINGPAGE		// ランディングページ管理
+																)
+											),
 											(Object)array(
 												'name'		=> '管理画面カスタムウィザード',
 												'task'		=> self::TASK_INITWIZARD,
@@ -303,15 +317,25 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									);
 		} else {
 			$navbarDef->menu[] =	(Object)array(
-										'name'		=> '管理画面設定',
+										'name'		=> '管理機能設定',
 										'task'		=> '',
 										'url'		=> '',
 										'tagid'		=> '',
 										'active'	=> (
 															$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
-															$task == self::TASK_EDITMENU			// 管理メニュー編集
+															$task == self::TASK_EDITMENU ||			// 管理メニュー編集
+															$task == self::TASK_LANDINGPAGE		// ランディングページ管理
 														),
 										'submenu'	=> array(
+											(Object)array(
+												'name'		=> 'ランディングページ管理',
+												'task'		=> self::TASK_LANDINGPAGE,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_LANDINGPAGE		// ランディングページ管理
+																)
+											),
 											(Object)array(
 												'name'		=> '管理画面カスタムウィザード',
 												'task'		=> self::TASK_INITWIZARD,
@@ -329,171 +353,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 												'active'	=> (
 																	$task == self::TASK_EDITMENU		// 管理メニュー編集
 																)
-											)
+											),
 										)
 									);
 		}
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
-		
-/*
-		// パンくずリストを作成
-		switch ($task){
-			case self::TASK_FILEBROWSE:		// ファイルブラウザ
-				$linkList = ' ファイル管理 &gt;&gt; ファイルブラウザ';
-				break;	
-			case self::TASK_PAGEINFO:	// ページ情報一覧
-			case self::TASK_PAGEINFO_DETAIL:	// ページ情報詳細
-				$linkList = ' マスター管理 &gt;&gt; ページ情報';
-				break;
-			case self::TASK_PAGEID:	// ページID一覧
-			case self::TASK_PAGEID_DETAIL:	// ページID詳細
-				$linkList = ' マスター管理 &gt;&gt; ページID';
-				break;
-			case self::TASK_MENUID:		// メニューID
-			case self::TASK_MENUID_DETAIL:		// メニューID
-				$linkList = ' マスター管理 &gt;&gt; メニューID';
-				break;
-			case self::TASK_INITSYSTEM:		// DBデータ初期化
-				$linkList = ' DB管理 &gt;&gt; データ初期化';
-				break;
-			case self::TASK_DBBACKUP:		// DBバックアップ
-				$linkList = ' DB管理 &gt;&gt; バックアップ';
-				break;
-			case self::TASK_DBCONDITION:		// DB状況
-				$linkList = ' DB管理 &gt;&gt; 状況';
-				break;
-		}
-		// ####### 上段メニューの作成 #######
-		$menuText = '<div id="configmenu-upper">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
-		
-		$current = '';
-		$baseUrl = $this->gEnv->getDefaultAdminUrl();
-		
-		// ファイル管理
-		$current = '';
-		$link = $baseUrl . '?task=' . self::TASK_FILEBROWSE;
-		if ($task == self::TASK_FILEBROWSE){		// ファイルブラウザ
-			$current = 'id="current"';
-		}
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>ファイル管理</span></a></li>' . M3_NL;
-		
-		// マスター管理
-		$current = '';
-		$link = $baseUrl . '?task=' . self::TASK_PAGEINFO;		// ページ情報一覧
-		if ($task == self::TASK_PAGEINFO ||						// ページ情報一覧
-			$task == self::TASK_PAGEINFO_DETAIL ||				// ページ情報詳細
-			$task == self::TASK_PAGEID ||						// ページID一覧
-			$task == self::TASK_PAGEID_DETAIL ||				// ページID詳細
-			$task == self::TASK_MENUID ||						// メニューID一覧
-			$task == self::TASK_MENUID_DETAIL){					// メニューID詳細
-			$current = 'id="current"';
-		}
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>マスター管理</span></a></li>' . M3_NL;
-		
-		// DB管理
-		$current = '';
-		$link = $baseUrl . '?task=' . self::TASK_INITSYSTEM;		// DBデータ初期化
-		if ($task == self::TASK_INITSYSTEM ||		// DBデータ初期化
-			$task == self::TASK_DBBACKUP ||		// DBバックアップ
-			$task == self::TASK_DBCONDITION){		// DB状況
-			$current = 'id="current"';
-		}
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>DB管理</span></a></li>' . M3_NL;
-		
-		// 上段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-		
-		// ####### 下段メニューの作成 #######
-		$menuText .= '<div id="configmenu-lower">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
-				
-		if ($task == self::TASK_FILEBROWSE){		// ファイルブラウザ
-			// ### ファイルブラウザ ###
-			$current = '';
-			$link = $baseUrl . '?task=' . self::TASK_FILEBROWSE;
-			if ($task == self::TASK_FILEBROWSE) $current = 'id="current"';
-
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_RESBROWSE);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ファイルブラウザ</span></a></li>' . M3_NL;
-		} else if ($task == self::TASK_PAGEINFO ||						// ページ情報一覧
-			$task == self::TASK_PAGEINFO_DETAIL ||				// ページ情報詳細
-			$task == self::TASK_PAGEID ||						// ページID一覧
-			$task == self::TASK_PAGEID_DETAIL ||				// ページID詳細
-			$task == self::TASK_MENUID ||						// メニューID一覧
-			$task == self::TASK_MENUID_DETAIL){					// メニューID詳細
-			
-			// ### ページ情報 ###
-			$current = '';
-			$link = $baseUrl . '?task=pageinfo';
-			if ($task == self::TASK_PAGEINFO || $task == self::TASK_PAGEINFO_DETAIL){
-				$current = 'id="current"';
-			}
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_PAGEINFO);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ページ情報</span></a></li>' . M3_NL;
-		
-			// ### ページID ###
-			$current = '';
-			$link = $baseUrl . '?task=pageid';
-			if ($task == self::TASK_PAGEID || $task == self::TASK_PAGEID_DETAIL){
-				$current = 'id="current"';
-			}
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_PAGEID);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ページID</span></a></li>' . M3_NL;
-		
-			// ### メニューID ###
-			$current = '';
-			$link = $baseUrl . '?task=menuid';
-			if ($task == self::TASK_MENUID || $task == self::TASK_MENUID_DETAIL){
-				$current = 'id="current"';
-			}
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_MENUID);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>メニューID</span></a></li>' . M3_NL;
-		} else if ($task == self::TASK_INITSYSTEM || 	// DBデータ初期化
-					$task == self::TASK_DBBACKUP ||		// DBバックアップ
-					$task == self::TASK_DBCONDITION){		// DB状況
-			// ### DBデータ初期化 ###
-			$current = '';
-			$link = $baseUrl . '?task=' . self::TASK_INITSYSTEM;
-			if ($task == self::TASK_INITSYSTEM) $current = 'id="current"';
-
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_INITSYSTEM);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>データ初期化</span></a></li>' . M3_NL;
-			
-			// ### DBバックアップ ###
-			$current = '';
-			$link = $baseUrl . '?task=' . self::TASK_DBBACKUP;
-			if ($task == self::TASK_DBBACKUP) $current = 'id="current"';
-
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_DBBACKUP);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>バックアップ</span></a></li>' . M3_NL;
-			
-			// ### DB状況 ###
-			$current = '';
-			$link = $baseUrl . '?task=' . self::TASK_DBCONDITION;
-			if ($task == self::TASK_DBCONDITION) $current = 'id="current"';
-
-			// ヘルプを作成
-			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_DBCONDITION);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>状況</span></a></li>' . M3_NL;
-		}
-		
-		// 上段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-		
-		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . self::TASK_NAME_MAIN . ' &gt;&gt;' . $linkList . '</label></div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-		$this->tmpl->addVar("_widget", "menu_items", $outputText);
-*/
 	}
 }
 ?>
