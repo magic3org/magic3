@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -14,19 +14,58 @@
 <script type="text/javascript">
 //<![CDATA[
 function newItem(){
-	document.main.task.value = 'sitelist_detail';
+	document.main.task.value = 'landingpage_detail';
 	document.main.act.value = 'new';
 	document.main.submit();
 	return true;
 }
-function editItemById(id){
-	document.main.task.value = 'sitelist_detail';
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'landingpage_detail';
+			document.main.act.value = 'edit';
+			document.main.pageid.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySubId(id){
+	document.main.task.value = 'landingpage_detail';
 	document.main.act.value = 'edit';
-	document.main.id.value = id;
+	document.main.pageid.value = id;
 	document.main.submit();
 }
 $(function() {
-	m3SetConfigTable('config_area');
+	m3SetConfigTable('config_table');
 });
 //]]>
 </script>
@@ -35,22 +74,35 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="landingpage" />
 <input type="hidden" name="act" />
-<input type="hidden" name="id" />
-<h3>ランディングページ一覧<div class="pull-right"><div class="btn-group btn-group-sm"><input type="button" class="button" onclick="newItem();" value="新規" /></div></div></h3>
-<table id="config_area">
+<input type="hidden" name="pageid" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+
+<h3 class="m3config_h"><span {_HELP_LANDINGPAGE_LIST}>ランディングページ一覧</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_LANDINGPAGE_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<table id="config_table">
     <thead>
     <tr>
-		<th style="width:35px;">No</th>
-	    <th style="width:200px;">ID</th>
-		<th style="width:200px;"><span>ページ名</span></th>
-		<th style="width:35px;">状態</th>
-	    <th style="width:120px;">作成日時</th>
-		<th>管理画面</th>
+	    <th class="select"><span {_HELP_LANDINGPAGE_CHECK}>選択</span></th>
+	    <th><span {_HELP_LANDINGPAGE_ID}>ID</span></th>
+	    <th style="width:250px;"><span {_HELP_LANDINGPAGE_NAME}>名前</span></th>
+	    <th><span {_HELP_LANDINGPAGE_STATUS}>状態</span></th>
+	    <th><span {_HELP_LANDINGPAGE_DATE}>作成日時</span></th>
+		<th><span {_HELP_LANDINGPAGE_ADMIN_LINK}>管理画面</span></th>
 	</tr>
     </thead>
     <tbody>
-	<patTemplate:tmpl name="pagelist">
-    <tr><td>{NO}</td><td>{ID}</td><td><a href="#" onclick="editItemById('{ID}');">{NAME}</a></td><td>{STATUS}</td><td>{DATE}</td><td>{LINK}</td></tr>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><div class="form-control-static m3config_item"><a href="#" onclick="editItemByMenuId('{ID}');">{ID}</a></div></td>
+	    <td>{NAME}</td>
+	    <td>{DATE}</td>
+	    <td>{LINK}</td>
+		<td>{ADMIN_LINK}</td>
+	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>

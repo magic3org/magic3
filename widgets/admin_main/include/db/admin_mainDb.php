@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -3478,6 +3478,35 @@ class admin_mainDb extends BaseDb
 		$queryStr .= 'ORDER BY pageno, contentno';
 		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
 		return $retValue;
+	}
+	/**
+	 * ランディングページリスト取得
+	 *
+	 * @param int		$limit		取得する項目数
+	 * @param int		$page		取得するページ(1～)
+	 * @param function $callback	コールバック関数
+	 * @return						なし
+	 */
+	function getLandingPageList($limit, $page, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
+		$queryStr  = 'SELECT * FROM _landing_page ';
+		$queryStr .=   'WHERE lp_deleted = false ';// 削除されていない
+		$queryStr .=   'ORDER BY lp_id limit ' . $limit . ' offset ' . $offset;
+		$this->selectLoop($queryStr, array(), $callback);
+	}
+	/**
+	 * ランディングページ総数取得
+	 *
+	 * @return int					総数
+	 */
+	function getLandingPageListCount()
+	{
+		$queryStr  = 'SELECT * FROM _landing_page ';
+		$queryStr .=   'WHERE lp_deleted = false ';// 削除されていない
+		return $this->selectRecordCount($queryStr, array());
 	}
 }
 ?>
