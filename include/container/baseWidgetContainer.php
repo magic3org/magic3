@@ -1427,9 +1427,10 @@ class BaseWidgetContainer extends Core
 	 * @param string $title		項目名
 	 * @param bool $passBlank	空を正常とするかどうか(true=空を正常とする、false=空の場合はエラーとする)
 	 * @param int $alphaType	英字タイプ(0=大文字小文字許可、1=小文字のみ許可、2=大文字のみ許可)
+	 * @param bool $alphaNumberLimited	ハイフン,アンダースコアを除いて英数のみに制限するかどうか
 	 * @return bool				false未入力、入力誤り
 	 */
-	function checkSingleByte($str, $title, $passBlank = false, $alphaType = 0)
+	function checkSingleByte($str, $title, $passBlank = false, $alphaType = 0, $alphaNumberLimited = false)
 	{
 		if ($passBlank && $str == '') return true;
 		
@@ -1439,25 +1440,40 @@ class BaseWidgetContainer extends Core
 		switch ($alphaType){
 			case 0:			// 大文字小文字許可
 			default:
-				if (preg_match("/[^0-9a-zA-Z-_]/", $str)){
-					//array_push($this->warningMessage, $title . 'は半角英数字／ハイフン／アンダースコア以外の入力はできません');
+				if ($alphaNumberLimited){		// 英数に制限の場合
+					$exp = '/[^0-9a-zA-Z]/';
+					$msg = $this->_g('%s can contain alphabets, numbers.');			// メッセージを取得「%sは半角英数字以外の入力はできません」
+				} else {
+					$exp = '/[^0-9a-zA-Z-_]/';
 					$msg = $this->_g('%s can contain alphabets, numbers, hyphen, underscore.');			// メッセージを取得「%sは半角英数字／ハイフン／アンダースコア以外の入力はできません」
+				}
+				if (preg_match($exp, $str)){
 					array_push($this->warningMessage, sprintf($msg, $title));
 					return false;
 				}
 				break;
 			case 1:			// 小文字のみ許可
-				if (preg_match("/[^0-9a-z-_]/", $str)){
-					//array_push($this->warningMessage, $title . 'は半角英小文字数字／ハイフン／アンダースコア以外の入力はできません');
+				if ($alphaNumberLimited){		// 英数に制限の場合
+					$exp = '/[^0-9a-z]/';
+					$msg = $this->_g('%s can contain lower alphabets, numbers.');			// メッセージを取得「%sは半角英小文字数字以外の入力はできません」
+				} else {
+					$exp = '/[^0-9a-z-_]/';
 					$msg = $this->_g('%s can contain lower alphabets, numbers, hyphen, underscore.');			// メッセージを取得「%sは半角英小文字数字／ハイフン／アンダースコア以外の入力はできません」
+				}
+				if (preg_match($exp, $str)){
 					array_push($this->warningMessage, sprintf($msg, $title));
 					return false;
 				}
 				break;
 			case 2:			// 大文字のみ許可
-				if (preg_match("/[^0-9A-Z-_]/", $str)){
-					//array_push($this->warningMessage, $title . 'は半角英大文字数字／ハイフン／アンダースコア以外の入力はできません');
+				if ($alphaNumberLimited){		// 英数に制限の場合
+					$exp = '/[^0-9A-Z]/';
+					$msg = $this->_g('%s can contain upper alphabets, numbers.');			// メッセージを取得「%sは半角英大文字数字以外の入力はできません」
+				} else {
+					$exp = '/[^0-9A-Z-_]/';
 					$msg = $this->_g('%s can contain upper alphabets, numbers, hyphen, underscore.');			// メッセージを取得「%sは半角英大文字数字／ハイフン／アンダースコア以外の入力はできません」
+				}
+				if (preg_match($exp, $str)){
 					array_push($this->warningMessage, sprintf($msg, $title));
 					return false;
 				}

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-25 09:32+0900\n"
-"PO-Revision-Date: 2017-07-25 09:33+0900\n"
+"POT-Creation-Date: 2018-08-10 13:06+0900\n"
+"PO-Revision-Date: 2018-08-10 13:08+0900\n"
 "Last-Translator: 平田直毅 <naoki@aplo.co.jp>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -16,90 +16,105 @@ msgstr ""
 "X-Generator: Poedit 2.0.2\n"
 "X-Poedit-SearchPath-0: ../container\n"
 
-#: ../container/baseWidgetContainer.php:1095
+#: ../container/baseWidgetContainer.php:1190
 #, php-format
 msgid "You must enter %s."
 msgstr "%sが入力されていません"
 
-#: ../container/baseWidgetContainer.php:1125
-#: ../container/baseWidgetContainer.php:1158
+#: ../container/baseWidgetContainer.php:1221
+#: ../container/baseWidgetContainer.php:1254
 #, php-format
 msgid "%s can contain alphabets, numbers, hyphen, underscore, period, atmark."
 msgstr "%sは半角英数字／ハイフン／アンダースコア／ピリオド／＠以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1131
+#: ../container/baseWidgetContainer.php:1227
 #, php-format
 msgid "%s is not valid E-mail format."
 msgstr "%sは正しいEメール形式ではありません"
 
-#: ../container/baseWidgetContainer.php:1184
-#: ../container/baseWidgetContainer.php:1264
+#: ../container/baseWidgetContainer.php:1280
+#: ../container/baseWidgetContainer.php:1360
 #, php-format
 msgid "%s can contain numbers and period."
 msgstr "%sは数値／ピリオド以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1210
+#: ../container/baseWidgetContainer.php:1306
 #, php-format
 msgid "%s is not valid URL format."
 msgstr "%sはURL以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1237
+#: ../container/baseWidgetContainer.php:1333
 #, php-format
 msgid "%s can contain numbers."
 msgstr "%sは半角数字以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1292
+#: ../container/baseWidgetContainer.php:1388
 #, php-format
 msgid "%s is not valid number format."
 msgstr "%sは数値のみ入力可能です"
 
-#: ../container/baseWidgetContainer.php:1318
+#: ../container/baseWidgetContainer.php:1414
 #, php-format
 msgid "%s can contain alphabets, numbers, hyphen, underscore, slash."
 msgstr "%sは半角英数字／ハイフン／アンダースコア／スラッシュ以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1348
+#: ../container/baseWidgetContainer.php:1445
+#, php-format
+msgid "%s can contain alphabets, numbers."
+msgstr "%sは半角英数字以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:1448
 #, php-format
 msgid "%s can contain alphabets, numbers, hyphen, underscore."
 msgstr "%sは半角英数字／ハイフン／アンダースコア以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1356
+#: ../container/baseWidgetContainer.php:1458
+#, php-format
+msgid "%s can contain lower alphabets, numbers."
+msgstr "%sは半角英小文字数字以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:1461
 #, php-format
 msgid "%s can contain lower alphabets, numbers, hyphen, underscore."
 msgstr "%sは半角英小文字数字／ハイフン／アンダースコア以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1364
+#: ../container/baseWidgetContainer.php:1471
+#, php-format
+msgid "%s can contain upper alphabets, numbers."
+msgstr "%sは半角英大文字数字以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:1474
 #, php-format
 msgid "%s can contain upper alphabets, numbers, hyphen, underscore."
 msgstr "%sは半角英大文字数字／ハイフン／アンダースコア以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1392
+#: ../container/baseWidgetContainer.php:1504
 #, php-format
 msgid "%s can contain alphabets and space."
 msgstr "%sは半角英字／空白以外の入力はできません"
 
-#: ../container/baseWidgetContainer.php:1419
+#: ../container/baseWidgetContainer.php:1531
 #, php-format
 msgid "%1$s can be max byte length %2$s."
 msgstr "%1$sは半角%2$s文字までの入力が可能です"
 
-#: ../container/baseWidgetContainer.php:1451
+#: ../container/baseWidgetContainer.php:1563
 #, php-format
 msgid "%s can be max length %s."
 msgstr "%sは%s文字までの入力が可能です"
 
-#: ../container/baseWidgetContainer.php:1494
-#: ../container/baseWidgetContainer.php:1514
+#: ../container/baseWidgetContainer.php:1606
+#: ../container/baseWidgetContainer.php:1626
 #, php-format
 msgid "%s is not valid Date format."
 msgstr "%sは正しい日付の形式ではありません"
 
-#: ../container/baseWidgetContainer.php:1556
-#: ../container/baseWidgetContainer.php:1571
+#: ../container/baseWidgetContainer.php:1668
+#: ../container/baseWidgetContainer.php:1683
 #, php-format
 msgid "%s is not valid Time format."
 msgstr "%sは正しい時刻の形式ではありません"
 
-#: ../container/baseWidgetContainer.php:2024
+#: ../container/baseWidgetContainer.php:2136
 msgid "minute;hour;day"
 msgstr "分;時間;日"
