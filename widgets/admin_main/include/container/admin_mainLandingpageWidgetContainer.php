@@ -247,16 +247,14 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		
 		if (empty($menuId)){		// 新規追加のとき
 			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// ランディングページID入力領域表示
+			$this->tmpl->setAttribute('show_account_input', 'visibility', 'visible');		// 初期パスワード入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
 			
 			$this->tmpl->addVar("show_id", "id", $this->convertToDispString($newId));			// ランディングページID
 		} else {
+			$this->tmpl->setAttribute('show_account', 'visibility', 'visible');		// アカウント情報領域表示
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// ランディングページID
-			
-			// 使用中のランディングページIDは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($menuId);		// ランディングページID使用数
-			if ($refCount > 0) $this->tmpl->addVar("update_button", "del_disabled", "disabled");		// 削除ボタン使用不可
 		}
 		
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名

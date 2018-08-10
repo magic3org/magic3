@@ -15,7 +15,7 @@
 //<![CDATA[
 function addItem(){
 	if (document.main.item_password.value == ''){
-		window.alert('パスワードが設定されていません');
+		window.alert('初期パスワードが設定されていません');
 		return false;
 	}
 	if (!window.confirm('項目を新規追加しますか?')) return false;
@@ -90,6 +90,7 @@ $(function(){
 	    <th><span {_HELP_LANDINGPAGE_REGIST_DATE}>作成日時</span></th>
 	    <td><div class="form-control-static">{DATE}</div></td>
 	</tr>
+	<patTemplate:tmpl name="show_account_input" visibility="hidden">
     <tr>
 	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ログイン<br />アカウント</span></th>
 	    <td><div class="form-control-static">{ACCOUNT}</div></td>
@@ -97,6 +98,13 @@ $(function(){
 	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
 		<div class="col-sm-12 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
 	</tr>
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_account" visibility="hidden">
+    <tr>
+	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ログイン<br />アカウント</span></th>
+	    <td colspan="3"><div class="form-control-static">{ACCOUNT}</div></td>
+	</tr>
+	</patTemplate:tmpl>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
