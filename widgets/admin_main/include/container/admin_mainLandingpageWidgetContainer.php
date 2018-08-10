@@ -19,12 +19,11 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $deviceType;	// 端末タイプ
 	private $serialArray = array();		// 表示されている項目シリアル番号
 
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
-	
+	//	const USER_OPTION = ';photo_main=author;';		// ログインユーザのユーザオプション
 	/**
 	 * コンストラクタ
 	 */
@@ -141,41 +140,74 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$act = $request->trimValueOf('act');
 		$menuId = $request->trimValueOf('serial');		// ランディングページID
 
-		$newMenuId = $request->trimValueOf('item_menuid');		// 新規ランディングページID
+		$newId = $request->trimValueOf('item_id');		// 新規ランディングページID
 		$name = $request->trimValueOf('item_name');		// 名前
-		$sortOrder = $request->trimValueOf('item_sort_order');		// ソート順
-		$this->deviceType = $request->trimValueOf('item_device_type');		// 端末タイプ
-		$targetWidget = $request->trimValueOf('item_target_widget');		// 対象ウィジェット
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
-			$this->checkSingleByte($newMenuId, 'ランディングページID');
+			$this->checkSingleByte($newId, 'ランディングページID', false/*空白不可*/, 1/*英小文字のみ*/, true/*英字数値のみ*/);
 			$this->checkInput($name, '名前');
-			$this->checkNumeric($sortOrder, 'ソート順');
 			
-			// 登録済みのページIDかどうかチェック
+			// ランディングページ名でユーザが登録されていないかチェック
 			if ($this->getMsgCount() == 0){
-				if ($this->db->isExistsMenuId($newMenuId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのランディングページIDです');
+				if ($this->_db->isExistsAccount($newId) ||
+					$this->db->isExistsLandingPage($newId)){
+					$this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのランディングページIDです');
+				}
 			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// ページIDの追加
-				$ret = $this->db->updateMenuId($newMenuId, $name, $sortOrder, $this->deviceType, $targetWidget);
-				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
-					
-					$menuId = $newMenuId;		// ランディングページID再設定
-					$replaceNew = true;			// データを再取得
+				// システム管理者は常にログイン可能
+				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
+				
+				// ユーザ種別が負のときはログイン不可
+				if (intval($this->userType) < 0) $canLogin = 0;
+				
+				// 保存データ作成
+				if (empty($start_date)){
+					$startDt = $this->gEnv->getInitValueOfTimestamp();
 				} else {
-					$this->setMsg(self::MSG_APP_ERR, 'データの追加に失敗しました');
+					$startDt = $start_date . ' ' . $start_time;
+				}
+				if (empty($end_date)){
+					$endDt = $this->gEnv->getInitValueOfTimestamp();
+				} else {
+					$endDt = $end_date . ' ' . $end_time;
+				}
+				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
+					$startDt = $this->gEnv->getInitValueOfTimestamp();
+					$endDt = $this->gEnv->getInitValueOfTimestamp();
+				}
+				
+				// 追加項目
+				$otherParams = array();
+				$otherParams['lu_email'] = $email;		// Eメール
+				$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
+				
+				$ret = $this->_db->addNewLoginUser($name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial, '', '', $this->userGroupArray, $otherParams);
+				
+				$ret = $this->_db->addNewLoginUser($name, $account, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, $canLogin, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
+																		$this->gEnv->getCurrentWidgetId()/*制限ウィジェット*/, photo_mainCommonDef::USER_OPTION);
+																		
+				if ($ret){		// データ追加成功のとき
+					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item added.'));	// データを追加しました
+					
+					// 運用ログ出力
+					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
+					if ($ret) $loginUserId = $row['lu_id'];
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					
+					$this->serialNo = $newSerial;
+					$reloadData = true;		// データの再読み込み
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in adding item.'));	// データ追加に失敗しました
 				}
 			}
 		} else if ($act == 'update'){		// 更新のとき
 			// 入力チェック
 			$this->checkSingleByte($menuId, 'ランディングページID');
 			$this->checkInput($name, '名前');
-			$this->checkNumeric($sortOrder, 'ソート順');
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
@@ -210,9 +242,6 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$ret = $this->db->getMenuId($menuId, $row);
 			if ($ret){
 				$name = $row['mn_name'];
-				$sortOrder = $row['mn_sort_order'];
-				$this->deviceType = $row['mn_device_type'];		// 端末タイプ
-				$targetWidget = $row['mn_widget_id'];			// 対象ウィジェット
 			}
 		}
 		
@@ -220,7 +249,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// ランディングページID入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
 			
-			$this->tmpl->addVar("show_id", "id", $newMenuId);			// ランディングページID
+			$this->tmpl->addVar("show_id", "id", $this->convertToDispString($newId));			// ランディングページID
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// ランディングページID
@@ -231,8 +260,6 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		}
 		
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
-		$this->tmpl->addVar("_widget", "sort_order", $sortOrder);		// ソート順
-		$this->tmpl->addVar("_widget", "target_widget", $targetWidget);		// 対象ウィジェット
 	}
 	/**
 	 * ランディングページIDをテンプレートに設定する

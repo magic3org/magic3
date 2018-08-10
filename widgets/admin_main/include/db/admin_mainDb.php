@@ -3508,5 +3508,18 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'WHERE lp_deleted = false ';// 削除されていない
 		return $this->selectRecordCount($queryStr, array());
 	}
+	/**
+	 * ランディングページIDの存在チェック
+	 *
+	 * @param string  $id			ページID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function isExistsLandingPage($id)
+	{
+		$queryStr = 'SELECT * FROM _landing_page ';
+		$queryStr .=  'WHERE lp_deleted = false ';// 削除されていない
+		$queryStr .=    'AND lp_id = ? ';
+		return $this->isRecordExists($queryStr, array($id));
+	}
 }
 ?>

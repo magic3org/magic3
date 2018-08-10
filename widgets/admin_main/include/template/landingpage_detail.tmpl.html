@@ -14,8 +14,13 @@
 <script type="text/javascript">
 //<![CDATA[
 function addItem(){
+	if (document.main.item_password.value == ''){
+		window.alert('パスワードが設定されていません');
+		return false;
+	}
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
+	document.main.password.value = hex_md5(document.main.item_password.value);
 	document.main.submit();
 	return true;
 }
@@ -39,6 +44,22 @@ function cancelItem(){
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
+	
+	// パスワード入力部作成
+	$("#item_password").on("keyup",function(){
+		if ($(this).val()){
+			$(".glyphicon-eye-open").show();
+		} else {
+			$(".glyphicon-eye-open").hide();
+		}
+	});
+	$(".glyphicon-eye-open").mousedown(function(){
+		$("#item_password").attr('type','text');
+	}).mouseup(function(){
+		$("#item_password").attr('type','password');
+	}).mouseout(function(){
+		$("#item_password").attr('type','password');
+	});
 });
 //]]>
 </script>
@@ -48,6 +69,8 @@ $(function(){
 <input type="hidden" name="task" value="landingpage_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="password" />
+
 <h3 class="m3config_h"><span {_HELP_LANDINGPAGE_DETAIL}>ランディングページ詳細</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_LANDINGPAGE_BUTTONS2}><div class="btn-group">
 <input type="button" class="button" onclick="cancelItem();" value="戻る" />
@@ -66,6 +89,13 @@ $(function(){
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
 	    <th><span {_HELP_LANDINGPAGE_REGIST_DATE}>作成日時</span></th>
 	    <td><div class="form-control-static">{DATE}</div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ログイン<br />アカウント</span></th>
+	    <td><div class="form-control-static">{ACCOUNT}</div></td>
+	    <th><span {_HELP_LANDINGPAGE_PWD}>初期パスワード</span></th>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<div class="col-sm-12 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
 	</tr>
     </tbody>
 </table>
