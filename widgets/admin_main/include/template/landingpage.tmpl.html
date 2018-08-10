@@ -39,6 +39,12 @@ function editItem(){
 	}
 	return true;
 }
+function editItemBySubId(id){
+	document.main.task.value = 'landingpage_detail';
+	document.main.act.value = 'edit';
+	document.main.pageid.value = id;
+	document.main.submit();
+}
 function delItem(){
 	if (document.main.seriallist.value){
 		var items = document.main.seriallist.value.split(",");
@@ -57,12 +63,6 @@ function delItem(){
 		}
 	}
 	return true;
-}
-function editItemBySubId(id){
-	document.main.task.value = 'landingpage_detail';
-	document.main.act.value = 'edit';
-	document.main.pageid.value = id;
-	document.main.submit();
 }
 $(function() {
 	m3SetConfigTable('config_table');

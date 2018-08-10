@@ -33,7 +33,8 @@ CREATE TABLE _landing_page (
     lp_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名
     lp_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 公開可否
 	lp_owner_id          INT            DEFAULT 0                     NOT NULL,      -- ページの所有者ID
-
+	lp_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ページ作成日時
+	
     lp_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     lp_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     lp_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者

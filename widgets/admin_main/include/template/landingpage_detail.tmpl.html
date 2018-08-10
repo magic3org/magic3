@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -13,107 +13,70 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function addItem()
-{
-	// 確認ダイアログ表示
-	m3Confirm('', 'サイトを新規追加しますか?\n所要時間: 約5分', function(result){
-		if (result){
-			document.main.act.value='add';
-			document.main.submit();
-			return true;
-		}
-	});
-/*	if (!window.confirm('サイトを新規追加しますか?')) return false;
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
-	document.main.submit();
-	return true;*/
-}
-function delItem()
-{
-	// 確認ダイアログ表示
-	m3Confirm('', 'サイトを削除しますか?\n所要時間: 約5分', function(result){
-		if (result){
-			document.main.act.value='delete';
-			document.main.submit();
-			return true;
-		}
-	});
-/*	if (!window.confirm('サイトを削除しますか?')) return false;
-	document.main.act.value = 'delete';
-	document.main.submit();
-	return true;*/
-}
-function cancelItem()
-{
-	document.main.task.value = 'sitelist';
 	document.main.submit();
 	return true;
 }
-function watchProcess(){
-	m3_ajax_request('', 'task=sitelist_detail&act=getinfo{CMD_TYPE}', function(request, retcode, jsondata){		// 正常終了
-		if (jsondata.code == '0'){			// 処理中の場合
-			watchProcess();
-		} else {		// 処理完了の場合
-			// 処理中ダイアログを非表示
-			m3HideProcessModal();
-			
-			m3Alert('success', '{MSG_COMPLETED}', function(){
-				// 画面再表示
-				window.location.href = window.location.href;
-			});
-		}
-	}, function(request){		// 異常終了
-		m3Alert('error', '{MSG_ERROR}');
-	});
+function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
 }
-function startWatchProcess()
-{
-	// 処理中ダイアログ表示
-	m3ShowProcessModal();
-	
-	// サーバ処理監視
-	watchProcess();
+function delItem(){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'landingpage';
+	document.main.submit();
+	return true;
 }
 $(function(){
-	m3SetConfigTable('config_table');
-<patTemplate:tmpl name="show_process_dialog" visibility="hidden">
-	// 処理結果監視を開始
-	startWatchProcess();
-</patTemplate:tmpl>
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
 });
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="sitelist_detail" />
+<input type="hidden" name="task" value="landingpage_detail" />
 <input type="hidden" name="act" />
-<input type="hidden" name="id" value="{ID}" />
-<h3>サイト詳細<div class="pull-right"><div class="btn-group btn-group-sm"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></div></div></h3>
-<table id="config_table">
+<input type="hidden" name="serial" value="{SERIAL}" />
+<h3 class="m3config_h"><span {_HELP_LANDINGPAGE_DETAIL}>ランディングページ詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_LANDINGPAGE_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <th><span {_HELP_SITELIST_HOST_NAME}>ホスト名</span></th>
-	    <td colspan="3"><patTemplate:tmpl name="input_hostname" visibility="hidden"><input type="text" name="item_hostname" class="form-control" value="{HOSTNAME}" maxlength="100" /></patTemplate:tmpl>{HOSTNAME}</td>
+	    <th><span {_HELP_LANDINGPAGE_ID_INPUT}>ID</span></th>
+	    <td style="width:200px;">{ID}<patTemplate:tmpl name="show_id" visibility="hidden"><input type="text" name="item_id" maxlength="50" value="{ID}" /></patTemplate:tmpl></td>
+	    <th><span {_HELP_LANDINGPAGE_NAME}>名前</span></th>
+	    <td><input type="text" name="item_name" class="form-control" value="{NAME}" maxlength="20" /></td>
 	</tr>
     <tr>
-	    <th>サイト名</th>
-	    <td style="width:400px;">{SITE_NAME}</td>
-	    <th>ホストID</th>
-	    <td>{HOST_ID}</td>
-	</tr>
-    <tr>
-	    <th>作成日時</th>
-	    <td>{DATE}</td>
-	    <th>Magic3バージョン</th>
-	    <td>{VERSION}</td>
+	    <th><span {_HELP_LANDINGPAGE_VISIBLE}>公開</span></th>
+	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
+	    <th><span {_HELP_LANDINGPAGE_REGIST_DATE}>作成日時</span></th>
+	    <td><div class="form-control-static">{DATE}</div></td>
 	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規作成" {ADD_BUTTON_DISABLED} /></patTemplate:tmpl>
-<patTemplate:tmpl name="update_button" visibility="hidden"><input type="button" class="button" onclick="delItem();" value="削除" {DEL_BUTTON_DISABLED} /></patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
 </div>
 </form>
 </div>

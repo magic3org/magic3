@@ -98,9 +98,9 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 					$delItems[] = $listedItem[$i];
 					
 					// 削除可能かチェック
-					$refCount = $this->_db->getMenuIdRefCount($listedItem[$i]);		// メニューID使用数
+					$refCount = $this->_db->getMenuIdRefCount($listedItem[$i]);		// ランディングページID使用数
 					if ($refCount > 0){		// 参照ありのときは削除できない
-						$this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません。メニューID=' . $listedItem[$i]);
+						$this->setMsg(self::MSG_USER_ERR, '使用中のランディングページIDは削除できません。ランディングページID=' . $listedItem[$i]);
 						break;
 					}
 				}
@@ -139,9 +139,9 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$menuId = $request->trimValueOf('serial');		// メニューID
+		$menuId = $request->trimValueOf('serial');		// ランディングページID
 
-		$newMenuId = $request->trimValueOf('item_menuid');		// 新規メニューID
+		$newMenuId = $request->trimValueOf('item_menuid');		// 新規ランディングページID
 		$name = $request->trimValueOf('item_name');		// 名前
 		$sortOrder = $request->trimValueOf('item_sort_order');		// ソート順
 		$this->deviceType = $request->trimValueOf('item_device_type');		// 端末タイプ
@@ -150,13 +150,13 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
-			$this->checkSingleByte($newMenuId, 'メニューID');
+			$this->checkSingleByte($newMenuId, 'ランディングページID');
 			$this->checkInput($name, '名前');
 			$this->checkNumeric($sortOrder, 'ソート順');
 			
 			// 登録済みのページIDかどうかチェック
 			if ($this->getMsgCount() == 0){
-				if ($this->db->isExistsMenuId($newMenuId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのメニューIDです');
+				if ($this->db->isExistsMenuId($newMenuId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのランディングページIDです');
 			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
@@ -165,7 +165,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
-					$menuId = $newMenuId;		// メニューID再設定
+					$menuId = $newMenuId;		// ランディングページID再設定
 					$replaceNew = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データの追加に失敗しました');
@@ -173,7 +173,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		} else if ($act == 'update'){		// 更新のとき
 			// 入力チェック
-			$this->checkSingleByte($menuId, 'メニューID');
+			$this->checkSingleByte($menuId, 'ランディングページID');
 			$this->checkInput($name, '名前');
 			$this->checkNumeric($sortOrder, 'ソート順');
 			
@@ -190,8 +190,8 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		} else if ($act == 'delete'){		// 削除のとき
 			// 参照ありのときは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($menuId);		// メニューID使用数
-			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません');
+			$refCount = $this->_db->getMenuIdRefCount($menuId);		// ランディングページID使用数
+			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のランディングページIDは削除できません');
 			
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
@@ -217,16 +217,16 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		}
 		
 		if (empty($menuId)){		// 新規追加のとき
-			$this->tmpl->setAttribute('show_menuid', 'visibility', 'visible');// メニューID入力領域表示
+			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// ランディングページID入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
 			
-			$this->tmpl->addVar("show_menuid", "menu_id", $newMenuId);			// メニューID
+			$this->tmpl->addVar("show_id", "id", $newMenuId);			// ランディングページID
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// メニューID
+			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// ランディングページID
 			
-			// 使用中のメニューIDは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($menuId);		// メニューID使用数
+			// 使用中のランディングページIDは削除できない
+			$refCount = $this->_db->getMenuIdRefCount($menuId);		// ランディングページID使用数
 			if ($refCount > 0) $this->tmpl->addVar("update_button", "del_disabled", "disabled");		// 削除ボタン使用不可
 		}
 		
@@ -235,7 +235,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$this->tmpl->addVar("_widget", "target_widget", $targetWidget);		// 対象ウィジェット
 	}
 	/**
-	 * メニューIDをテンプレートに設定する
+	 * ランディングページIDをテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
@@ -249,11 +249,11 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$accessPointName = str_replace('用アクセスポイント', '', $fetchedRow['pg_name']);		// アクセスポイント名
 		$row = array(
 			'index'		=> $index,			// インデックス番号
-			'value'		=> $value,			// メニューID
-			'name'		=> $this->convertToDispString($fetchedRow['mn_name']),			// メニューID名
+			'value'		=> $value,			// ランディングページID
+			'name'		=> $this->convertToDispString($fetchedRow['mn_name']),			// ランディングページID名
 			'access_point_name'	=> $this->convertToDispString($accessPointName),
 			'sort_order'	=> $this->convertToDispString($fetchedRow['mn_sort_order']),	// ソート順
-			'ref_count' => $this->_db->getMenuIdRefCount($value)		// メニューID使用数
+			'ref_count' => $this->_db->getMenuIdRefCount($value)		// ランディングページID使用数
 		);
 		$this->tmpl->addVars('id_list', $row);
 		$this->tmpl->parseTemplate('id_list', 'a');

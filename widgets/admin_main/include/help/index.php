@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -403,4 +403,32 @@ $HELP['initwizard_admin_email']['body'] = '管理者のメールアドレスで�
 // ########## サイト管理 ##########
 $HELP['sitelist_host_name']['title'] = 'ホスト名';
 $HELP['sitelist_host_name']['body'] = 'サイトを識別するための名前を設定します。ホスト名は運用するサイトのURL http://xxxxx.xxxxx.xxxxx/ の「xxxxx.xxxxx.xxxxx」の部分を設定します。';
+
+// ########## ランディングページ管理 ##########
+$HELP['landingpage']['title'] = 'ランディングページ管理';
+$HELP['landingpage']['body'] = 'ランディングページの管理を行います。';
+$HELP['landingpage_list']['title'] = 'ランディングページ一覧';
+$HELP['landingpage_list']['body'] = 'ランディングページの管理を行います。';
+$HELP['landingpage_detail']['title'] = 'ランディングページ詳細';
+$HELP['landingpage_detail']['body'] = 'ランディングページ情報を編集します。';
+$HELP['landingpage_check']['title'] = '選択用チェックボックス';
+$HELP['landingpage_check']['body'] = '編集や削除を行う項目を選択します。';
+$HELP['landingpage_id']['title'] = 'ランディングページID';
+$HELP['landingpage_id']['body'] = 'ランディングページIDを示します。';
+$HELP['landingpage_id_input']['title'] = 'ランディングページID';
+$HELP['landingpage_id_input']['body'] = 'ランディングページIDを入力します。半角英数字が使用可能です。';
+$HELP['landingpage_name']['title'] = '名前';
+$HELP['landingpage_name']['body'] = 'ランディングページのタイトルとして使用される名前です。';
+$HELP['landingpage_visible']['title'] = '公開';
+$HELP['landingpage_visible']['body'] = 'ランディングページを公開するかどうかを制御します。';
+$HELP['landingpage_regist_date']['title'] = '作成日時';
+$HELP['landingpage_regist_date']['body'] = 'ランディングページを作成した日時です。';
+$HELP['landingpage_new_btn']['title'] = '新規ボタン';
+$HELP['landingpage_new_btn']['body'] = '新規ランディングページ情報を追加します。';
+$HELP['landingpage_edit_btn']['title'] = '編集ボタン';
+$HELP['landingpage_edit_btn']['body'] = '選択されているランディングページ情報を編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['landingpage_del_btn']['title'] = '削除ボタン';
+$HELP['landingpage_del_btn']['body'] = '選択されているランディングページを削除します。<br />ランディングページを選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['landingpage_ret_btn']['title'] = '戻るボタン';
+$HELP['landingpage_ret_btn']['body'] = 'ランディングページ一覧へ戻ります。';
 ?>
