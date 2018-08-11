@@ -127,7 +127,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
 		$this->db->getLandingPageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'itemListLoop'));
-		if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
+		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
@@ -145,6 +145,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$newId = $request->trimValueOf('item_id');		// 新規ランディングページID
 		$name = $request->trimValueOf('item_name');		// ランディングページ名
 		$password = $request->trimValueOf('password');	// ページ運用者用初期パスワード
+		$visible = $request->trimCheckedValueOf('item_visible');		// 公開制御
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
@@ -164,16 +165,23 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			if ($this->getMsgCount() == 0){
 				$userName = $newId . self::DEFAULT_USER_NAME_SUFFIX;
 				
+				// ランディングページのページ運用ユーザを追加
 				$ret = $this->_db->addNewLoginUser($userName, $newId, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, 1/*ログイン可能*/, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
 															''/*制限ウィジェットなし*/, self::USER_TYPE_OPTION/*ページ運営者*/);
+				if ($ret){
+					// ユーザ情報取得
+					$ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row);
+					
+					// ランディングページ情報を新規追加
+					$ownerId = $row['lu_id'];
+					$ret= $this->db->updateLandingPage(0/*新規*/, $newId, $name, $visible, $ownerId, $newSerial);
+				}
 																		
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item added.'));	// データを追加しました
 					
 					// 運用ログ出力
-					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
-					if ($ret) $loginUserId = $row['lu_id'];
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $ownerId . ', username=' . $userName);
 					
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -213,6 +221,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		} else {		// 初期状態
 			$replaceNew = true;			// データを再取得
+			$visible = 1;			// 公開制御
 		}
 		// 表示データ再取得
 		if ($replaceNew){
@@ -235,6 +244,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		}
 		
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
+		$this->tmpl->addVar("_widget", "visible", $this->convertToCheckedString($visible));		// 公開制御
 	}
 	/**
 	 * ランディングページIDをテンプレートに設定する
@@ -246,22 +256,17 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		$value = $this->convertToDispString($fetchedRow['mn_id']);
-		
-		$accessPointName = str_replace('用アクセスポイント', '', $fetchedRow['pg_name']);		// アクセスポイント名
 		$row = array(
 			'index'		=> $index,			// インデックス番号
-			'value'		=> $value,			// ランディングページID
-			'name'		=> $this->convertToDispString($fetchedRow['mn_name']),			// ランディングページID名
-			'access_point_name'	=> $this->convertToDispString($accessPointName),
-			'sort_order'	=> $this->convertToDispString($fetchedRow['mn_sort_order']),	// ソート順
-			'ref_count' => $this->_db->getMenuIdRefCount($value)		// ランディングページID使用数
+			'id'		=> $this->convertToDispString($fetchedRow['lp_id']),			// ランディングページID
+			'name'		=> $this->convertToDispString($fetchedRow['lp_name']),			// ランディングページID名
+			'date'		=> $this->convertToDispDateTime($fetchedRow['lp_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 作成日時
 		);
-		$this->tmpl->addVars('id_list', $row);
-		$this->tmpl->parseTemplate('id_list', 'a');
+		$this->tmpl->addVars('itemlist', $row);
+		$this->tmpl->parseTemplate('itemlist', 'a');
 		
 		// 表示中項目のページサブIDを保存
-		$this->serialArray[] = $value;
+		$this->serialArray[] = $fetchedRow['lp_serial'];
 		return true;
 	}
 }

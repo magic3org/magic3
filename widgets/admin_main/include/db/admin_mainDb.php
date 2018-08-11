@@ -3521,5 +3521,130 @@ class admin_mainDb extends BaseDb
 		$queryStr .=    'AND lp_id = ? ';
 		return $this->isRecordExists($queryStr, array($id));
 	}
+	/**
+	 * ランディングページ情報を更新
+	 *
+	 * @param string $serial		シリアル番号(0のときは新規登録)
+	 * @param string $id			ランディングページID
+	 * @param string $name			名前
+	 * @param bool   $visible		表示制御
+	 * @param int    $ownerId		所有者ID
+	 * @param int $newSerial		新規シリアル番号
+	 * @return						true = 正常、false=異常
+	 */
+	function updateLandingPage($serial, $id, $name, $visible, $ownerId, &$newSerial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$regDt = $now;		// 作成日時
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 前レコードの削除状態チェック
+		$historyIndex = 0;
+		if (empty($serial)){		// 新規登録のとき
+			$queryStr = 'SELECT * FROM _landing_page ';
+			$queryStr .=  'WHERE lp_id = ? ';
+			$queryStr .=  'ORDER BY lp_history_index DESC ';
+			$ret = $this->selectRecord($queryStr, array($id), $row);
+			if ($ret){
+				if (!$row['lp_deleted']){		// レコード存在していれば終了
+					$this->endTransaction();
+					return false;
+				}
+				$historyIndex = $row['lp_history_index'] + 1;
+			}
+		} else {		// 更新のとき
+			// 指定のシリアルNoのレコードが削除状態でないかチェック
+			$queryStr  = 'SELECT * FROM _landing_page ';
+			$queryStr .=   'WHERE lp_serial = ? ';
+			$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+			if ($ret){		// 既に登録レコードがあるとき
+				if ($row['lp_deleted']){		// レコードが削除されていれば終了
+					$this->endTransaction();
+					return false;
+				}
+				$historyIndex = $row['lp_history_index'] + 1;
+				
+				// 識別ID,ページ所有者,作成日時は変更不可
+				$id = $row['lp_id'];
+				$ownerId = $row['lp_owner_id'];
+				$regDt = $row['lp_regist_dt'];		// 作成日時
+			} else {		// 存在しない場合は終了
+				$this->endTransaction();
+				return false;
+			}
+			
+			// 古いレコードを削除
+			$queryStr  = 'UPDATE _landing_page ';
+			$queryStr .=   'SET lp_deleted = true, ';	// 削除
+			$queryStr .=     'lp_update_user_id = ?, ';
+			$queryStr .=     'lp_update_dt = ? ';
+			$queryStr .=   'WHERE lp_serial = ?';
+			$ret = $this->execStatement($queryStr, array($userId, $now, intval($serial)));
+			if (!$ret){
+				$this->endTransaction();
+				return false;
+			}
+		}
+		
+		// データを追加
+		$queryStr = 'INSERT INTO _landing_page ';
+		$queryStr .=  '(lp_id, lp_history_index, lp_name, lp_visible, lp_owner_id, lp_regist_dt, lp_create_user_id, lp_create_dt) ';
+		$queryStr .=  'VALUES ';
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($visible), intval($ownerId), $regDt, $userId, $now));
+		
+		// 新規のシリアル番号取得
+		$queryStr = 'SELECT MAX(lp_serial) AS ns FROM _landing_page ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * ランディングページ情報の削除
+	 *
+	 * @param array $serial			シリアルNo
+	 * @return						true=成功、false=失敗
+	 */
+	function delLandingPage($serial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		if (!is_array($serial) || count($serial) <= 0) return true;
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		for ($i = 0; $i < count($serial); $i++){
+			$queryStr  = 'SELECT * FROM _landing_page ';
+			$queryStr .=   'WHERE lp_deleted = false ';		// 未削除
+			$queryStr .=     'AND lp_serial = ? ';
+			$ret = $this->isRecordExists($queryStr, array($serial[$i]));
+			// 存在しない場合は、既に削除されたとして終了
+			if (!$ret){
+				$this->endTransaction();
+				return false;
+			}
+		}
+		
+		// レコードを削除
+		$queryStr  = 'UPDATE _landing_page ';
+		$queryStr .=   'SET lp_deleted = true, ';	// 削除
+		$queryStr .=     'lp_update_user_id = ?, ';
+		$queryStr .=     'lp_update_dt = ? ';
+		$queryStr .=   'WHERE lp_serial in (' . implode($serial, ',') . ') ';
+		$this->execStatement($queryStr, array($user, $now));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>
