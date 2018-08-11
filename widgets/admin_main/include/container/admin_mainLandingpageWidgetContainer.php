@@ -140,14 +140,14 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$serial = $request->trimValueOf('serial');		// シリアル番号
+		$serialNo = $request->trimValueOf('serial');		// シリアル番号
 
 		$newId = $request->trimValueOf('item_id');		// 新規ランディングページID
 		$name = $request->trimValueOf('item_name');		// ランディングページ名
 		$password = $request->trimValueOf('password');	// ページ運用者用初期パスワード
 		$visible = $request->trimCheckedValueOf('item_visible');		// 公開制御
 
-		$replaceNew = false;		// データを再取得するかどうか
+		$reloadData = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
 			$this->checkSingleByte($newId, 'ランディングページID', false/*空白不可*/, 1/*英小文字のみ*/, true/*英字数値のみ*/);
@@ -173,7 +173,9 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 					$ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row);
 					
 					// ランディングページ情報を新規追加
-					$ownerId = $row['lu_id'];
+					$ownerId = $row['lu_id'];			// ランディングページ所有者ID
+					$account = $row['lu_account'];		// 所有者アカウント
+					$userName = $row['lu_name'];
 					$ret= $this->db->updateLandingPage(0/*新規*/, $newId, $name, $visible, $ownerId, $newSerial);
 				}
 																		
@@ -183,7 +185,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 					// 運用ログ出力
 					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $ownerId . ', username=' . $userName);
 					
-					$this->serialNo = $newSerial;
+					$serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in adding item.'));	// データ追加に失敗しました
@@ -200,7 +202,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				$ret = $this->db->updateMenuId($menuId, $name, $sortOrder, $this->deviceType, $targetWidget);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
-					$replaceNew = true;			// データを再取得
+					$reloadData = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
@@ -220,14 +222,14 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				}
 			}
 		} else {		// 初期状態
-			$replaceNew = true;			// データを再取得
-//			$serial = 0;			// シリアル番号
+			$reloadData = true;			// データを再取得
 			$visible = 1;			// 公開制御
 		}
 		// 表示データ再取得
-		if ($replaceNew){
-			$ret = $this->db->getLandingPageBySerial($serial, $row);
+		if ($reloadData){
+			$ret = $this->db->getLandingPageBySerial($serialNo, $row);
 			if ($ret){
+				$id = $row['lp_id'];
 				$name = $row['lp_name'];
 				$visible = $row['lp_visible'];
 				$date = $row['lp_regist_dt'];		// 作成日時
@@ -235,20 +237,21 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		}
 		
-		if (empty($serial)){		// 新規追加のとき
-			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// ランディングページID入力領域表示
+		if (empty($serialNo)){		// 新規追加のとき
+			$this->tmpl->setAttribute('show_id_input', 'visibility', 'visible');// ランディングページID入力領域表示
 			$this->tmpl->setAttribute('show_account_input', 'visibility', 'visible');		// 初期パスワード入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
 			
-			$this->tmpl->addVar("show_id", "id", $this->convertToDispString($newId));			// ランディングページID
+			$this->tmpl->addVar("show_id_input", "id", $this->convertToDispString($newId));			// ランディングページID
 		} else {
 			$this->tmpl->setAttribute('show_account', 'visibility', 'visible');		// アカウント情報領域表示
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 			
+			$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ランディングページID
 			$this->tmpl->addVar("show_account", "account", $this->convertToDispString($account));			// 所有者アカウント
 		}
 		
-		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($serial));		// シリアル番号
+		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($serialNo));		// シリアル番号
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
 		$this->tmpl->addVar("_widget", "visible", $this->convertToCheckedString($visible));		// 公開制御
 		$this->tmpl->addVar("_widget", "date", $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/));		// 作成日時

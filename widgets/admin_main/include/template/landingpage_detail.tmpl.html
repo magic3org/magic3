@@ -81,7 +81,7 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_LANDINGPAGE_ID_INPUT}>ID</span></th>
-	    <td style="width:200px;">{ID}<patTemplate:tmpl name="show_id" visibility="hidden"><input type="text" name="item_id" maxlength="50" value="{ID}" /></patTemplate:tmpl></td>
+	    <td style="width:200px;">{ID}<patTemplate:tmpl name="show_id_input" visibility="hidden"><input type="text" name="item_id" maxlength="50" value="{ID}" /></patTemplate:tmpl></td>
 	    <th><span {_HELP_LANDINGPAGE_NAME}>名前</span></th>
 	    <td><input type="text" name="item_name" class="form-control" value="{NAME}" maxlength="20" /></td>
 	</tr>
@@ -97,7 +97,7 @@ $(function(){
 	    <td><div class="form-control-static">{ACCOUNT}</div></td>
 	    <th><span {_HELP_LANDINGPAGE_PWD}>初期パスワード</span></th>
 	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
-		<div class="col-sm-12 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
+		<div class="col-sm-12 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" maxlength="15" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
 	</tr>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_account" visibility="hidden">
