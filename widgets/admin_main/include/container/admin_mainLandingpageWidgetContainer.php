@@ -140,7 +140,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$menuId = $request->trimValueOf('serial');		// ランディングページID
+		$serial = $request->trimValueOf('serial');		// シリアル番号
 
 		$newId = $request->trimValueOf('item_id');		// 新規ランディングページID
 		$name = $request->trimValueOf('item_name');		// ランディングページ名
@@ -221,17 +221,21 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		} else {		// 初期状態
 			$replaceNew = true;			// データを再取得
+//			$serial = 0;			// シリアル番号
 			$visible = 1;			// 公開制御
 		}
 		// 表示データ再取得
 		if ($replaceNew){
-			$ret = $this->db->getMenuId($menuId, $row);
+			$ret = $this->db->getLandingPageBySerial($serial, $row);
 			if ($ret){
-				$name = $row['mn_name'];
+				$name = $row['lp_name'];
+				$visible = $row['lp_visible'];
+				$date = $row['lp_regist_dt'];		// 作成日時
+				$account = $row['lu_account'];		// 所有者アカウント
 			}
 		}
 		
-		if (empty($menuId)){		// 新規追加のとき
+		if (empty($serial)){		// 新規追加のとき
 			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// ランディングページID入力領域表示
 			$this->tmpl->setAttribute('show_account_input', 'visibility', 'visible');		// 初期パスワード入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
@@ -240,11 +244,15 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		} else {
 			$this->tmpl->setAttribute('show_account', 'visibility', 'visible');		// アカウント情報領域表示
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// ランディングページID
+			
+			$this->tmpl->addVar("show_account", "account", $this->convertToDispString($account));			// 所有者アカウント
 		}
 		
+		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($serial));		// シリアル番号
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
 		$this->tmpl->addVar("_widget", "visible", $this->convertToCheckedString($visible));		// 公開制御
+		$this->tmpl->addVar("_widget", "date", $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/));		// 作成日時
+//		$this->tmpl->addVar("_widget", "account", $this->convertToDispString($account));		// 所有者アカウント
 	}
 	/**
 	 * ランディングページIDをテンプレートに設定する
@@ -258,6 +266,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	{
 		$row = array(
 			'index'		=> $index,			// インデックス番号
+			'serial'	=> $this->convertToDispString($fetchedRow['lp_serial']),			// シリアル番号
 			'id'		=> $this->convertToDispString($fetchedRow['lp_id']),			// ランディングページID
 			'name'		=> $this->convertToDispString($fetchedRow['lp_name']),			// ランディングページID名
 			'date'		=> $this->convertToDispDateTime($fetchedRow['lp_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 作成日時

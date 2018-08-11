@@ -3522,6 +3522,20 @@ class admin_mainDb extends BaseDb
 		return $this->isRecordExists($queryStr, array($id));
 	}
 	/**
+	 * ランディングページをシリアル番号で取得
+	 *
+	 * @param int		$serial				シリアル番号
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getLandingPageBySerial($serial, &$row)
+	{
+		$queryStr  = 'SELECT * FROM _landing_page LEFT JOIN _login_user ON lp_owner_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE lp_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}	
+	/**
 	 * ランディングページ情報を更新
 	 *
 	 * @param string $serial		シリアル番号(0のときは新規登録)
