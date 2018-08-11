@@ -125,6 +125,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
+		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		
 		$this->db->getLandingPageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'itemListLoop'));
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
