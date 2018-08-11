@@ -27,6 +27,8 @@ function changepwd(){
 	document.reguser_main.length.value = pwd.length;
 	document.reguser_main.act.value = 'update';
 	document.reguser_main.password.value = hex_md5(pwd);
+	document.reguser_main.password1.value = '';
+	document.reguser_main.password2.value = '';
 	document.reguser_main.submit();
 	return true;
 }

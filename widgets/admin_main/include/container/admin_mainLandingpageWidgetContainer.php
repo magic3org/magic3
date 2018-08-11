@@ -23,7 +23,9 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
-	//	const USER_OPTION = ';photo_main=author;';		// ログインユーザのユーザオプション
+	const DEFAULT_USER_NAME_SUFFIX = 'のページ運営者';	// ページ運営者ユーザ名
+	const USER_TYPE_OPTION = ';page_manager;';		// ランディングページ管理者用のユーザタイプオプション(ページ運営者)
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -141,13 +143,15 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$menuId = $request->trimValueOf('serial');		// ランディングページID
 
 		$newId = $request->trimValueOf('item_id');		// 新規ランディングページID
-		$name = $request->trimValueOf('item_name');		// 名前
+		$name = $request->trimValueOf('item_name');		// ランディングページ名
+		$password = $request->trimValueOf('password');	// ページ運用者用初期パスワード
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
 			$this->checkSingleByte($newId, 'ランディングページID', false/*空白不可*/, 1/*英小文字のみ*/, true/*英字数値のみ*/);
 			$this->checkInput($name, '名前');
+			$this->checkInput($password, '初期パスワード');
 			
 			// ランディングページ名でユーザが登録されていないかチェック
 			if ($this->getMsgCount() == 0){
@@ -158,37 +162,10 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// システム管理者は常にログイン可能
-				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
+				$userName = $newId . self::DEFAULT_USER_NAME_SUFFIX;
 				
-				// ユーザ種別が負のときはログイン不可
-				if (intval($this->userType) < 0) $canLogin = 0;
-				
-				// 保存データ作成
-				if (empty($start_date)){
-					$startDt = $this->gEnv->getInitValueOfTimestamp();
-				} else {
-					$startDt = $start_date . ' ' . $start_time;
-				}
-				if (empty($end_date)){
-					$endDt = $this->gEnv->getInitValueOfTimestamp();
-				} else {
-					$endDt = $end_date . ' ' . $end_time;
-				}
-				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
-					$startDt = $this->gEnv->getInitValueOfTimestamp();
-					$endDt = $this->gEnv->getInitValueOfTimestamp();
-				}
-				
-				// 追加項目
-				$otherParams = array();
-				$otherParams['lu_email'] = $email;		// Eメール
-				$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
-				
-				$ret = $this->_db->addNewLoginUser($name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial, '', '', $this->userGroupArray, $otherParams);
-				
-				$ret = $this->_db->addNewLoginUser($name, $account, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, $canLogin, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
-																		$this->gEnv->getCurrentWidgetId()/*制限ウィジェット*/, photo_mainCommonDef::USER_OPTION);
+				$ret = $this->_db->addNewLoginUser($userName, $newId, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, 1/*ログイン可能*/, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
+															''/*制限ウィジェットなし*/, self::USER_TYPE_OPTION/*ページ運営者*/);
 																		
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item added.'));	// データを追加しました

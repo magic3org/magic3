@@ -6,6 +6,7 @@
 function reserve_login(){
     document.reserve_main.act.value = 'reserve_login';
     document.reserve_main.password.value = hex_md5(document.reserve_main.reserve_password.value);
+	document.reserve_main.reserve_password.value = '';
     document.reserve_main.submit();
     return true;
 }

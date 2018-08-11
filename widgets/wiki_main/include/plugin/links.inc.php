@@ -66,7 +66,7 @@ function plugin_links_action()
   <input type="hidden" name="pass" />
   <div class="form-group"><label for="_p_links_adminpass">{$_links_messages['msg_adminpass']}</label>
   <input type="password" class="form-control" name="password" id="_p_links_adminpass" size="12" /></div>
-  <input type="submit" class="button btn" value="{$_links_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit" class="button btn" value="{$_links_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />
  </div>
 </form>
 EOD;
@@ -79,7 +79,7 @@ EOD;
   <input type="hidden" name="pass" />
   <label for="_p_links_adminpass">{$_links_messages['msg_adminpass']}</label>
   <input type="password" name="password" id="_p_links_adminpass" size="12" />
-  <input type="submit" class="button" value="{$_links_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit" class="button" value="{$_links_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />
  </div>
 </form>
 EOD;

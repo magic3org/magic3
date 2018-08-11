@@ -27,7 +27,9 @@ function changepwd(){
 	}
 	document.photo_main.length.value = pwd.length;
 	document.photo_main.act.value = 'update';
-    	document.photo_main.password.value = hex_md5(pwd);
+    document.photo_main.password.value = hex_md5(pwd);
+	document.photo_main.ec_password1.value = document.photo_main.ec_password1.value.replace(/./g, '*');
+	document.photo_main.ec_password2.value = document.photo_main.ec_password2.value.replace(/./g, '*');
 	document.photo_main.submit();
 	return true;
 }

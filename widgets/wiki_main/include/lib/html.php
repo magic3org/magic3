@@ -442,13 +442,13 @@ function password_form()
 					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
 					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
+					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" /></div>' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				} else {
 					$body .= '<form method="post" class="form">' . M3_NL;
 					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				}
 			} else {		// パスワード認証でないとき

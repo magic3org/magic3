@@ -35,6 +35,7 @@ function addItem(){
 	
 	document.main.act.value = 'add';
 	document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.item_password.value = '';
 	document.main.submit();
 	return true;
 }
@@ -42,6 +43,7 @@ function updateItem(){
 	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
 	document.main.act.value = 'update';
 	if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.item_password.value = '';
 	document.main.submit();
 	return true;
 }

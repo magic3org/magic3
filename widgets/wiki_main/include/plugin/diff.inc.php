@@ -120,7 +120,7 @@ function plugin_diff_delete($page)
 		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
 //		$body .= '<div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>' . M3_NL;
-		$body .= '<input type="submit"   name="ok"     class="button btn" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button btn" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
 		$body .= '</form>' . M3_NL;
 	} else {
 //		$body .= '<p>' . $_msg_diff_adminpass . '</p>' . M3_NL;
@@ -132,7 +132,7 @@ function plugin_diff_delete($page)
 		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
 //		$body .= '<input type="password" name="password" size="12" />' . M3_NL;
-		$body .= '<input type="submit"   name="ok"     class="button" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;
 	}

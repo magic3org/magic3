@@ -38,6 +38,7 @@ $(function(){
 		$("#gallery_category").slideToggle(300);
 		document.main.act.value = 'addcategory';
 		document.main.password.value = hex_md5(document.main.access_password.value);
+		document.main.access_password.value = '';
 		document.main.submit();
 		return false;
 	});

@@ -17,6 +17,7 @@ function reguser_login(){
 	var pwd = document.reguser_main.user_password.value;
 	document.reguser_main.act.value = 'user_login';
 	document.reguser_main.password.value = hex_md5(pwd);
+	document.reguser_main.user_password.value = '';
 	document.reguser_main.submit();
 	return true;
 }

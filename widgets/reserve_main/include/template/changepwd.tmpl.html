@@ -16,7 +16,9 @@ function changepwd(){
 	document.ec_main.task.value = 'changepwd';
 	document.ec_main.length.value = pwd.length;
 	document.ec_main.act.value = 'update';
-    	document.ec_main.password.value = hex_md5(pwd);
+    document.ec_main.password.value = hex_md5(pwd);
+	document.ec_main.ec_password1.value = '';
+	document.ec_main.ec_password2.value = '';
 	document.ec_main.submit();
 	return true;
 }

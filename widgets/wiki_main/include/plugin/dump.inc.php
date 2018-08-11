@@ -268,7 +268,7 @@ function plugin_dump_disp_form()
 </p>
 <p><label for="_p_dump_adminpass_dump"><strong>管理者パスワード</strong></label>
   <input type="password" name="password" id="_p_dump_adminpass_dump" size="12" />
-  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />
 </p>
  </div>
 </form>
@@ -292,7 +292,7 @@ EOD;
 </p>
 <p><label for="_p_dump_adminpass_restore"><strong>管理者パスワード</strong></label>
   <input type="password" name="password" id="_p_dump_adminpass_restore" size="12" />
-  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />
 </p>
  </div>
 </form>

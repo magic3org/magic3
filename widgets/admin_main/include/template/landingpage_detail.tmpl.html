@@ -21,6 +21,7 @@ function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
 	document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.item_password.value = '';
 	document.main.submit();
 	return true;
 }
