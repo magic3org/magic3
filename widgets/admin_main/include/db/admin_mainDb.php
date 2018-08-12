@@ -3522,7 +3522,7 @@ class admin_mainDb extends BaseDb
 		return $this->isRecordExists($queryStr, array($id));
 	}
 	/**
-	 * ランディングページをシリアル番号で取得
+	 * ランディングページをシリアル番号で取得(所有者のユーザ情報付加)
 	 *
 	 * @param int		$serial				シリアル番号
 	 * @param array     $row				レコード
@@ -3530,7 +3530,7 @@ class admin_mainDb extends BaseDb
 	 */
 	function getLandingPageBySerial($serial, &$row)
 	{
-		$queryStr  = 'SELECT * FROM _landing_page LEFT JOIN _login_user ON lp_owner_id = lu_id AND lu_deleted = false ';
+		$queryStr  = 'SELECT * FROM _landing_page LEFT JOIN _login_user ON lp_owner_id = lu_id AND lu_deleted = false ';	// 所有者のユーザ情報取得
 		$queryStr .=   'WHERE lp_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;

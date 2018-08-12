@@ -167,32 +167,34 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				$userName = $newId . self::DEFAULT_USER_NAME_SUFFIX;
+				$ownerName = $newId . self::DEFAULT_USER_NAME_SUFFIX;
 				
 				// ランディングページのページ運用ユーザを追加
-				$ret = $this->_db->addNewLoginUser($userName, $newId, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, 1/*ログイン可能*/, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
+				$ret = $this->_db->addNewLoginUser($ownerName, $newId, $password, UserInfo::USER_TYPE_MANAGER/*システム運用者*/, 1/*ログイン可能*/, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial, 
 															''/*制限ウィジェットなし*/, self::USER_TYPE_OPTION/*ページ運営者*/);
 				if ($ret){
 					// ユーザ情報取得
 					$ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row);
+					if ($ret){
+						$ownerId = $row['lu_id'];			// ランディングページ所有者ID
+						$ownerAccount = $row['lu_account'];		// 所有者アカウント
+						$ownerName = $row['lu_name'];
 					
-					// ランディングページ情報を新規追加
-					$ownerId = $row['lu_id'];			// ランディングページ所有者ID
-					$account = $row['lu_account'];		// 所有者アカウント
-					$userName = $row['lu_name'];
-					$ret= $this->db->updateLandingPage(0/*新規*/, $newId, $name, $visible, $ownerId, $newSerial);
+						// 運用ログ出力
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $ownerAccount, 2100, 'userid=' . $ownerId . ', username=' . $ownerName);
+						
+						// ランディングページ情報を新規追加
+						$ret= $this->db->updateLandingPage(0/*新規*/, $newId, $name, $visible, $ownerId, $newSerialNo);
+					}
 				}
 																		
 				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item added.'));	// データを追加しました
+					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
-					// 運用ログ出力
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $ownerId . ', username=' . $userName);
-					
-					$serialNo = $newSerial;
+					$serialNo = $newSerialNo;
 					$reloadData = true;		// データの再読み込み
 				} else {
-					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in adding item.'));	// データ追加に失敗しました
+					$this->setMsg(self::MSG_APP_ERR, 'データ追加に失敗しました');
 				}
 			}
 		} else if ($act == 'update'){		// 更新のとき
@@ -202,29 +204,44 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ランディングページ情報更新
-				$ret= $this->db->updateLandingPage($serialNo, ''/*未使用*/, $name, $visible, 0/*未使用*/, $newSerial);
+				$ret= $this->db->updateLandingPage($serialNo, ''/*未使用*/, $name, $visible, 0/*未使用*/, $newSerialNo);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
-					$serialNo = $newSerial;
+					$serialNo = $newSerialNo;
 					$reloadData = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
-			// 参照ありのときは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($menuId);		// ランディングページID使用数
-			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のランディングページIDは削除できません');
-			
-			// エラーなしの場合は、データを削除
-			if ($this->getMsgCount() == 0){
-				$ret = $this->db->delMenuId(array($menuId));
-				if ($ret){		// データ削除成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
-				} else {
-					$this->setMsg(self::MSG_APP_ERR, 'データ削除に失敗しました');
+			// ランディングページ情報取得
+			$ret = $this->db->getLandingPageBySerial($serialNo, $row);
+			if ($ret){
+				$userSerial = $row['lu_serial'];		// 所有者のユーザ情報のシリアル番号
+				
+				// ユーザ情報取得
+				$ret = $this->_db->getLoginUserRecordBySerial($userSerial, $row);
+				if ($ret){
+					$ownerId = $row['lu_id'];			// ランディングページ所有者ID
+					$ownerAccount = $row['lu_account'];		// 所有者アカウント
+					$ownerName = $row['lu_name'];
+					
+					// ユーザ情報削除
+					$ret = $this->db->delUserBySerial(array($userSerial));
+					if ($ret){
+						// 運用ログ出力
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $ownerAccount, 2100, 'userid=' . $ownerId . ', username=' . $ownerName);
+					}
 				}
+				// ランディングページ情報削除
+				$ret = $this->db->delLandingPage(array($serialNo));
+			}
+
+			if ($ret){		// データ削除成功のとき
+				$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'データ削除に失敗しました');
 			}
 		} else {		// 初期状態
 			$reloadData = true;			// データを再取得
@@ -239,7 +256,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				$visible = $row['lp_visible'];
 				$date = $row['lp_regist_dt'];		// 作成日時
 				$ownerId = $row['lp_owner_id'];			// ランディングページ所有者ID
-				$account = $row['lu_account'];		// 所有者アカウント
+				$ownerAccount = $row['lu_account'];		// 所有者アカウント
 			}
 		}
 		
@@ -254,7 +271,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 			
 			$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ランディングページID
-			$this->tmpl->addVar("show_account", "account", $this->convertToDispString($account));			// 所有者アカウント
+			$this->tmpl->addVar("show_account", "account", $this->convertToDispString($ownerAccount));			// 所有者アカウント
 			
 			// ランディングページURL
 			$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . M3_PAGE_SUB_ID_PREFIX_LANDING_PAGE . $id;
