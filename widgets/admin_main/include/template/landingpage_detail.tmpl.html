@@ -91,9 +91,13 @@ $(function(){
 	    <th><span {_HELP_LANDINGPAGE_REGIST_DATE}>作成日時</span></th>
 	    <td><div class="form-control-static">{DATE}</div></td>
 	</tr>
+    <tr>
+	    <th><span {_HELP_LANDINGPAGE_URL}>URL</span></th>
+	    <td colspan="3"><div class="form-control-static">{URL}</div></td>
+	</tr>
 	<patTemplate:tmpl name="show_account_input" visibility="hidden">
     <tr>
-	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ログイン<br />アカウント</span></th>
+	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ユーザ<br />アカウント</span></th>
 	    <td><div class="form-control-static">{ACCOUNT}</div></td>
 	    <th><span {_HELP_LANDINGPAGE_PWD}>初期パスワード</span></th>
 	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
@@ -102,7 +106,7 @@ $(function(){
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_account" visibility="hidden">
     <tr>
-	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ログイン<br />アカウント</span></th>
+	    <th><span {_HELP_LANDINGPAGE_ACCOUNT}>ユーザ<br />アカウント</span><div class="pull-right">{USER_DETAIL_BUTTON}</div></th>
 	    <td colspan="3"><div class="form-control-static">{ACCOUNT}</div></td>
 	</tr>
 	</patTemplate:tmpl>

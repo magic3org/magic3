@@ -25,6 +25,9 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const DEFAULT_USER_NAME_SUFFIX = 'のページ運営者';	// ページ運営者ユーザ名
 	const USER_TYPE_OPTION = ';page_manager;';		// ランディングページ管理者用のユーザタイプオプション(ページ運営者)
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	
 	/**
 	 * コンストラクタ
@@ -194,15 +197,16 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			}
 		} else if ($act == 'update'){		// 更新のとき
 			// 入力チェック
-			$this->checkSingleByte($menuId, 'ランディングページID');
 			$this->checkInput($name, '名前');
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// ページIDの更新
-				$ret = $this->db->updateMenuId($menuId, $name, $sortOrder, $this->deviceType, $targetWidget);
+				// ランディングページ情報更新
+				$ret= $this->db->updateLandingPage($serialNo, ''/*未使用*/, $name, $visible, 0/*未使用*/, $newSerial);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+					
+					$serialNo = $newSerial;
 					$reloadData = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
@@ -230,10 +234,11 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		if ($reloadData){
 			$ret = $this->db->getLandingPageBySerial($serialNo, $row);
 			if ($ret){
-				$id = $row['lp_id'];
+				$id = $row['lp_id'];			// ランディングページID
 				$name = $row['lp_name'];
 				$visible = $row['lp_visible'];
 				$date = $row['lp_regist_dt'];		// 作成日時
+				$ownerId = $row['lp_owner_id'];			// ランディングページ所有者ID
 				$account = $row['lu_account'];		// 所有者アカウント
 			}
 		}
@@ -250,13 +255,21 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 			
 			$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ランディングページID
 			$this->tmpl->addVar("show_account", "account", $this->convertToDispString($account));			// 所有者アカウント
+			
+			// ランディングページURL
+			$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . M3_PAGE_SUB_ID_PREFIX_LANDING_PAGE . $id;
+			$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// ランディングページURL
+			
+			// ユーザ情報へのリンク
+			$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $ownerId;		// ユーザ詳細画面URL
+			$buttonTag = $this->gDesign->createEditButton($userDetailUrl, 'ユーザ情報を編集');
+			$this->tmpl->addVar("show_account", "user_detail_button", $buttonTag);
 		}
 		
 		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($serialNo));		// シリアル番号
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
 		$this->tmpl->addVar("_widget", "visible", $this->convertToCheckedString($visible));		// 公開制御
 		$this->tmpl->addVar("_widget", "date", $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/));		// 作成日時
-//		$this->tmpl->addVar("_widget", "account", $this->convertToDispString($account));		// 所有者アカウント
 	}
 	/**
 	 * ランディングページIDをテンプレートに設定する
@@ -268,11 +281,21 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
+		if ($fetchedRow['lp_visible']){		// ランディングページが公開状態のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '公開中';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '非公開';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		$row = array(
 			'index'		=> $index,			// インデックス番号
 			'serial'	=> $this->convertToDispString($fetchedRow['lp_serial']),			// シリアル番号
 			'id'		=> $this->convertToDispString($fetchedRow['lp_id']),			// ランディングページID
 			'name'		=> $this->convertToDispString($fetchedRow['lp_name']),			// ランディングページID名
+			'status'	=> $statusImg,												// 公開状況
 			'date'		=> $this->convertToDispDateTime($fetchedRow['lp_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 作成日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
