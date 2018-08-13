@@ -98,19 +98,10 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				$itemName = 'item' . $i . '_selected';
 				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
 				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-					
-					// 削除可能かチェック
-					$refCount = $this->_db->getMenuIdRefCount($listedItem[$i]);		// ランディングページID使用数
-					if ($refCount > 0){		// 参照ありのときは削除できない
-						$this->setMsg(self::MSG_USER_ERR, '使用中のランディングページIDは削除できません。ランディングページID=' . $listedItem[$i]);
-						break;
-					}
-				}
+				if ($itemValue) $delItems[] = $listedItem[$i];		// チェック項目
 			}
-			if ($this->getMsgCount() == 0 && count($delItems) > 0){
-				$ret = $this->db->delMenuId($delItems);
+			if (count($delItems) > 0){
+				$ret = $this->_deleteLandingPage($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -215,28 +206,8 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
-			// ランディングページ情報取得
-			$ret = $this->db->getLandingPageBySerial($serialNo, $row);
-			if ($ret){
-				$userSerial = $row['lu_serial'];		// 所有者のユーザ情報のシリアル番号
-				
-				// ユーザ情報取得
-				$ret = $this->_db->getLoginUserRecordBySerial($userSerial, $row);
-				if ($ret){
-					$ownerId = $row['lu_id'];			// ランディングページ所有者ID
-					$ownerAccount = $row['lu_account'];		// 所有者アカウント
-					$ownerName = $row['lu_name'];
-					
-					// ユーザ情報削除
-					$ret = $this->db->delUserBySerial(array($userSerial));
-					if ($ret){
-						// 運用ログ出力
-						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $ownerAccount, 2100, 'userid=' . $ownerId . ', username=' . $ownerName);
-					}
-				}
-				// ランディングページ情報削除
-				$ret = $this->db->delLandingPage(array($serialNo));
-			}
+			// ランディングページ削除
+			$ret = $this->_deleteLandingPage(array($serialNo));
 
 			if ($ret){		// データ削除成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
@@ -321,6 +292,46 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// 表示中項目のページサブIDを保存
 		$this->serialArray[] = $fetchedRow['lp_serial'];
 		return true;
+	}
+	/**
+	 * ランディングページ削除
+	 *
+	 * @param array $serialArray	削除するランディングページのシリアル番号
+	 * @param bool					true=成功、false=失敗
+	 */
+	function _deleteLandingPage($serialArray)
+	{
+		$retStatus = true;		// 戻りステータス
+		
+		for ($i = 0; $i < count($serialArray); $i++){
+			$serialNo = $serialArray[$i];
+			
+			// ランディングページ情報取得
+			$ret = $this->db->getLandingPageBySerial($serialNo, $row);
+			if ($ret){
+				$userSerial = $row['lu_serial'];		// 所有者のユーザ情報のシリアル番号
+			
+				// ユーザ情報取得
+				$ret = $this->_db->getLoginUserRecordBySerial($userSerial, $row);
+				if ($ret){
+					$ownerId = $row['lu_id'];			// ランディングページ所有者ID
+					$ownerAccount = $row['lu_account'];		// 所有者アカウント
+					$ownerName = $row['lu_name'];
+				
+					// ユーザ情報削除
+					$ret = $this->db->delUserBySerial(array($userSerial));
+					if ($ret){
+						// 運用ログ出力
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $ownerAccount, 2100, 'userid=' . $ownerId . ', username=' . $ownerName);
+					}
+				}
+				// ランディングページ情報削除
+				$ret = $this->db->delLandingPage(array($serialNo));
+			}
+			if (!$ret) $retStatus = false;
+		}
+		
+		return $retStatus;
 	}
 }
 ?>
