@@ -44,4 +44,7 @@ CREATE TABLE _landing_page (
     UNIQUE               (lp_id,        lp_history_index)
 ) ENGINE=innodb;
 
+-- ウィジェット情報マスター
+ALTER TABLE _widgets ADD wd_personal_mode           BOOLEAN        DEFAULT false                 NOT NULL;      -- パーソナルモード対応かどうか
+
 -- *** システム標準テーブル ***
