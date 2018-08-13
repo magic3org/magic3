@@ -1371,6 +1371,14 @@ class PageManager extends Core
 		// デバッグモードの表示
 		if (M3_SYSTEM_DEBUG) echo 'Debug mode<br />';
 		
+		// ##### ユーザアクセスモードの設定 #####
+		if (($userInfo->userType == UserInfo::USER_TYPE_MANAGER && $userInfo->userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER)||			// ページ運用者の場合
+			$userInfo->userType < UserInfo::USER_TYPE_MANAGER){			// システム運用者よりも権限が低い場合
+			
+			// パーソナルモードをオン
+			$this->setPersonalMode();
+		}
+
 		// ##### ページIDの修正 #####
 		// ポジション表示の場合はページID、ページサブIDを再設定。再設定はシステム管理者のみ可能。
 		if (($cmd == M3_REQUEST_CMD_SHOW_POSITION ||					// 管理画面(ウィジェットなしポジション表示)のとき
