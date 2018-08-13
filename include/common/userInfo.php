@@ -21,7 +21,8 @@ class UserInfo
 	public $email;				// Eメール
 	public $userType;			// ユーザタイプ
 	public $adminWidget;		// アクセス可能ウィジェット(システム運用者の場合)。ウィジェットIDの配列
-	public $userTypeOption;			// ユーザタイプオプション
+	public $userTypeOption;			// ユーザタイプオプション文字列
+	public $userOptType;			// ユーザオプションタイプ(page_manager等)
 	public $_recordSerial;			// 更新時に使用
 	
 	// ユーザタイプ

@@ -199,6 +199,7 @@ define('M3_LANG_SEPARATOR',				"\t");									// 言語IDと内容を連結
 define('M3_MACRO_SEPARATOR',			'|');									// マクロキーと値を連結(変更予定)
 //define('M3_MACRO_SEPARATOR',			"\t");									// マクロキーと値を連結
 define('M3_MACRO_OPTION_SEPARATOR',		'|');									// マクロキーとオプションを連結
+define('M3_USER_TYPE_OPTION_SEPARATOR',	';');									// ユーザタイプオプション用セパレータ
 
 // デバイスタイプ
 define('M3_DEVICE_TYPE_PC',				0);		// PC
@@ -242,6 +243,9 @@ define('M3_COOKIE_ADMIN_WIDGET_TOOL',	'M3WIDGETTOOL');			// (管理機能用)ウ
 define('M3_VIEW_FORMAT_DATETIME',		'Y/m/d H:i:s');		// 日時
 define('M3_VIEW_FORMAT_DATE',			'Y/m/d');			// 日付
 define('M3_VIEW_FORMAT_TIME',			'H:i:s');			// 時間
+
+// 機能別ページサブID
+define('M3_PAGE_SUB_ID_PREFIX_LANDING_PAGE',	'lp_');		// ランディングページ用
 
 // 表示データタイプ
 // 機能タイプ

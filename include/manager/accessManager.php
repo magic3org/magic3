@@ -171,6 +171,23 @@ class AccessManager extends Core
 			$userInfo->userTypeOption = $row['lu_user_type_option'];			// ユーザタイプオプション
 			$userInfo->_recordSerial = $row['lu_serial'];	// レコードシリアル番号
 		
+			// ユーザオプションタイプを取得
+			$userInfo->userOptType = '';			// ユーザオプションタイプ(page_manager等)
+			if (!empty($userInfo->userTypeOption)){
+				$userOptionArray = explode(M3_USER_TYPE_OPTION_SEPARATOR, $userInfo->userTypeOption);
+				for ($i = 0; $i < count($userOptionArray); $i++){
+					$userOption = trim($userOptionArray[$i]);
+					if (!empty($userOption)){
+						// 「=」がない文字列の場合はユーザオプションタイプと認識
+						$pos = strpos($userOption, '=');
+						if ($pos === false){
+							$userInfo->userOptType = $userOption;
+							break;
+						}
+					}
+				}
+			}
+			
 			// アクセス可能ウィジェット(システム運用者の場合)
 			$userInfo->adminWidget = array();
 			if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER){	// システム運用可能ユーザのとき
