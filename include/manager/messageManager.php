@@ -66,6 +66,16 @@ class MessageManager extends Core
 		$this->guideMessage	= array_merge($this->guideMessage, $guideMessage);	// ガイダンス
 	}
 	/**
+	 * アプリケーションエラーメッセージを追加する
+	 *
+	 * @param string $message			メッセージ
+	 * @return 							なし
+	 */
+	function addErrorMessage($message)
+	{
+		$this->errorMessage[] = $message;
+	}
+	/**
 	 * アプリケーションエラーメッセージを取得
 	 *
 	 * @return array	アプリケーションエラーメッセージ

@@ -58,6 +58,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		// システム制御画面を表示する場合
 		// ログインの場合はログイン処理へ
 		$systemMode = $this->gPage->getSystemHandleMode();		// システム制御モード(0=設定なし、1=ログイン画面、10=サイト非公開、11=アクセス不可)
+
 		if ($systemMode > 0 &&
 				$cmd != M3_REQUEST_CMD_LOGOUT && 				// ログアウトはスルーして後のログアウト部分で処理
 				($cmd != M3_REQUEST_CMD_LOGIN || ($cmd == M3_REQUEST_CMD_LOGIN && $request->isGetMethod()))){	// GETで来たログインコマンドはログインとしない
@@ -124,8 +125,18 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->redirectUrl = removeUrlParam($this->gEnv->getCurrentRequestUri(), $removeParam);		// 遷移先
 			} else if (	$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||				// ウィジェットの設定
 						$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 表示位置を表示するとき(ウィジェット付き)
-				$param = 'userlogin';			// ユーザログイン画面表示
-				$this->redirectUrl = $this->gEnv->getCurrentRequestUri();		// 遷移先
+				
+				// ##### ウィジェット設定画面のアクセス権のチェック #####
+				// アクセス権がない場合はエラーメッセージを表示。メッセージを表示しない場合はログイン画面を表示。
+				// グローバルエラーメッセージが設定されている場合はエラーメッセージを表示
+				$errMessage = $this->gInstance->getMessageManager()->getErrorMessage();
+				if (count($errMessage) > 0){
+					$param = 'message';			// メッセージ画面
+					$this->getGlobalMsg();		// グローバルエラーメッセージを取得
+				} else {
+					$param = 'userlogin';			// ユーザログイン画面表示
+					$this->redirectUrl = $this->gEnv->getCurrentRequestUri();		// 遷移先
+				}
 			}
 			return true;
 		}
