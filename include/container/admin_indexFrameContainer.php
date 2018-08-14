@@ -62,16 +62,32 @@ class admin_indexFrameContainer extends BaseFrameContainer
 				$ret = $gAccessManager->isValidAdminKey();
 			}
 		} else if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェットの設定
-			if ($this->gEnv->isSystemManageUser()){	// システム運用可能ユーザかどうか
-				// システム運用者の場合はアクセス可能なウィジェットをチェック
+			// ### trueを返すとウィジェット設定画面が表示され、falseを返すとログイン画面が表示される。                               ###
+			// ### ログイン画面の場合、グローバルメッセージが設定されている場合はログイン画面の代わりにエラーメッセージが表示される。###
+			$ret = false;			// アクセス不可に初期化
+			if ($this->gEnv->isSystemAdmin()){		// システム管理者の場合
+				$ret = true;
+			} else if ($this->gEnv->isSystemManager($optionType)){				// システム運用者の場合
 				$widgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
-				$ret = $gEnvManager->canUseWidgetAdmin($widgetId);
-			} else {
-				// クッキーがないため権限を識別できない場合は、管理者キーをチェックする
-				$ret = $gAccessManager->isValidAdminKey();
+				
+				// ウィジェットが配置済みかどうかチェック。配置されていなければウィジェット設定画面へのアクセスは不可。
+				$canAccess = $this->_db->canAccessWidget($widgetId);
+				if ($canAccess){
+					// パーソナルモードでの起動の場合は、ウィジェットがパーソナルモード対応かどうかチェック
+					if ($this->gPage->isPersonalMode()){
+						if ($this->_db->getWidgetInfo($widgetId, $row)){
+							if ($row['wd_personal_mode']) $ret = true;			// パーソナルモード対応であればアクセス可能
+						}
+					} else {
+						// パーソナルモードでなければすべてのウィジェット設定画面にアクセス可能
+						$ret = true;
+					}
+				}
+
+				// システム運用者でアクセス権がない場合はログイン画面の代わりにグローバルエラーメッセージ出力
+				if (!$ret) $this->gInstance->getMessageManager()->addErrorMessage('アクセス権限がありません');
 			}
 		}
-
 		// 管理機能アクセス可能なときはヘルプ出力する
 		if ($ret) $gPageManager->setUseHelp(true);
 

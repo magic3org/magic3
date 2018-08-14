@@ -68,12 +68,16 @@ class MessageManager extends Core
 	/**
 	 * アプリケーションエラーメッセージを追加する
 	 *
-	 * @param string $message			メッセージ
+	 * @param string,array $message			メッセージ
 	 * @return 							なし
 	 */
 	function addErrorMessage($message)
 	{
-		$this->errorMessage[] = $message;
+		if (is_string($message)){
+			$this->errorMessage[] = $message;
+		} else if (is_array($message)){
+			$this->errorMessage	= array_merge($this->errorMessage, $message);		// アプリケーションエラー
+		}
 	}
 	/**
 	 * アプリケーションエラーメッセージを取得
@@ -83,6 +87,16 @@ class MessageManager extends Core
 	function getErrorMessage()
 	{	
 		return $this->errorMessage;
+	}
+	/**
+	 * アプリケーションエラーメッセージが存在するかどうかを返す
+	 *
+	 * @return bool		true=メッセージが存在する、false=存在しない
+	 */
+	function isExistsErrorMessage()
+	{
+		$ret = count($this->errorMessage) > 0 ? true : false;
+		return $ret;
 	}
 	/**
 	 * ユーザ操作のエラーメッセージを取得
