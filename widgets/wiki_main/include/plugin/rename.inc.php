@@ -364,7 +364,7 @@ function plugin_rename_phase3($pages)
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= $input;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-		$body .= '<input type="submit" class="button btn" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
+		$body .= '<input type="submit" class="button btn" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 		$body .= '</form>' . M3_NL;
 		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
 	} else {
@@ -376,7 +376,7 @@ function plugin_rename_phase3($pages)
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= $input;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-		$body .= '<input type="submit" class="button" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
+		$body .= '<input type="submit" class="button" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;
 		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;

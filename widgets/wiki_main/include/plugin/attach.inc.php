@@ -833,7 +833,7 @@ class AttachFile
 	//			$body .= '<div class="form-group"><label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
 	//			$body .= '<input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>' . M3_NL;
 				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-				$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
+				$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 				$body .= '</form>' . M3_NL;
 			}
 		} else {
@@ -870,7 +870,7 @@ class AttachFile
 	//			$body .= '<label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
 	//			$body .= '<input type="password" name="password" id="_p_attach_password" size="12" />' . M3_NL;
 				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-				$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = '';" />' . M3_NL;
+				$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 				$body .= '</div>' . M3_NL;
 				$body .= '</form>' . M3_NL;
 			}
