@@ -84,11 +84,17 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_SITELIST			= 'sitelist';			// サイト一覧
 	const TASK_SITELIST_DETAIL	= 'sitelist_detail';	// サイト詳細
 	const TASK_SERVERTOOL		= 'servertool';			// サーバ管理ツール
+	// 画面なし(直接実行)
+	const TASK_SITEOPEN			= 'siteopen';			// アクセスポイントの公開,非公開
 	// その他
 	const TASK_TOP					= 'top';					// ダッシュボード(メッセージのみ)
 	const TASK_LANDINGPAGE			= 'landingpage';			// ランディングページ管理
 	const TASK_LANDINGPAGE_DETAIL	= 'landingpage_detail';		// ランディングページ管理(詳細)
-	const TASK_TEST						= 'test';						// テスト画面
+	const TASK_MENUDEF				= 'menudef';				// 多階層メニュー定義
+	const TASK_MENUDEF_DETAIL		= 'menudef_detail';			// 多階層メニュー定義
+	const TASK_SMENUDEF				= 'smenudef';				// 単階層メニュー定義
+	const TASK_SMENUDEF_DETAIL		= 'smenudef_detail';		// 単階層メニュー定義詳細
+	const TASK_TEST					= 'test';						// テスト画面
 	
 	// DBアクセス用
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか

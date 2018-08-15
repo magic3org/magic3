@@ -45,7 +45,11 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 										array(	'name' => '集計',				'value' => self::TASK_CALC),		// 集計
 										array(	'name' => 'グラフ表示',			'value' => self::TASK_GRAPH),		// グラフ表示
 										array(	'name' => 'Awstats',			'value' => self::TASK_AWSTATS),		// Awstats
-										array(	'name' => 'ファイルブラウザ',	'value' => self::TASK_FILEBROWSE)		// ファイルブラウザ
+										array(	'name' => 'ファイルブラウザ',	'value' => self::TASK_FILEBROWSE),		// ファイルブラウザ
+										array(	'name' => 'メニュー定義',	'value' => self::TASK_MENUDEF),				// メニュー定義(TASK_MENUDEF_DETAIL,TASK_SMENUDEF,TASK_SMENUDEF_DETAIL共用)
+//										array(	'name' => 'メニュー定義',	'value' => self::TASK_MENUDEF_DETAIL),		// メニュー定義詳細(TASK_SMENUDEF_DETAIL共用)
+										// 画面なし(直接実行)
+										array(	'name' => 'アクセスポイントの公開,非公開',	'value' => self::TASK_SITEOPEN)		// アクセスポイントの公開,非公開
 									);
 	}
 	/**
@@ -85,8 +89,25 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 		}
 			
 		if ($act == 'update'){		// 設定更新のとき
+			// メニュー定義の場合は設定内容を修正
+			if (in_array(self::TASK_MENUDEF, $this->enableTaskArray)){
+				$this->enableTaskArray[] = self::TASK_MENUDEF_DETAIL;		// 多階層メニュー定義
+				$this->enableTaskArray[] = self::TASK_SMENUDEF;				// 単階層メニュー定義
+				$this->enableTaskArray[] = self::TASK_SMENUDEF_DETAIL;		// 単階層メニュー定義詳細
+			} else {
+				$delValues = array(
+									self::TASK_MENUDEF_DETAIL,		// 多階層メニュー定義
+									self::TASK_SMENUDEF,				// 単階層メニュー定義
+									self::TASK_SMENUDEF_DETAIL		// 単階層メニュー定義詳細
+							);
+				for ($i = 0; $i < count($delValues); $i++){
+					while (($index = array_search($delValues[$i], $this->enableTaskArray)) !== false) {
+						unset($this->enableTaskArray[$index]);
+					}
+				}
+			}
+			
 			$permitTask = implode(',', $this->enableTaskArray);
-
 			$ret = $this->_db->updateSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK, $permitTask);		// システム運用者が実行可能な管理画面タスク
 			if ($ret){
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -113,7 +134,7 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 	{
 		for ($i = 0; $i < count($this->allTaskArray); $i++){
 			$value = $this->allTaskArray[$i]['value'];
-			$name = $this->allTaskArray[$i]['name'];
+			$name = $this->allTaskArray[$i]['name'] . '(' . $value . ')';
 			
 			$checked = '';
 			if (in_array($value, $this->enableTaskArray)) $checked = 'checked';
