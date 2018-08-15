@@ -170,13 +170,14 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 				if (empty($task)) $task = 'top';		// トップメニュー
 
-				// システム運用者が実行可能なタスクを取得
+/*				// システム運用者が実行可能なタスクを取得
 				$enableTaskArray = array();
 				$enableTask = $this->gSystem->getSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK);
-				if (!empty($enableTask)) $enableTaskArray = explode(',', $enableTask);
+				if (!empty($enableTask)) $enableTaskArray = explode(',', $enableTask);*/
 				
 				if ($this->gEnv->isSystemAdmin() || 
-					($this->gEnv->isSystemManageUser() && in_array($task, $enableTaskArray))){	// システム運用可能の場合(2018/8/5変更)
+//					($this->gEnv->isSystemManageUser() && in_array($task, $enableTaskArray))){	// システム運用可能の場合(2018/8/5変更)
+					($this->gEnv->isSystemManageUser() && in_array($task, $this->gSystem->getSystemManagerEnableTask()))){	// システム運用可能の場合(2018/8/5変更)
 
 					// ##### ポップアップメッセージ表示状態を取得 #####
 					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));

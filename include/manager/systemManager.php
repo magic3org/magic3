@@ -72,7 +72,8 @@ class SystemManager extends Core
 	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH = 'upload_image_autoresize_max_width';		// 画像リサイズ機能最大画像幅
 	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT = 'upload_image_autoresize_max_height';		// 画像リサイズ機能最大画像高さ
 	const CF_SITE_MENU_HIER = 'site_menu_hier';		// サイトのメニューを階層化するかどうか
-
+	const CF_SYSTEM_MANAGER_ENABLE_TASK	= 'system_manager_enable_task';	// システム運用者が実行可能な管理画面タスク
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -749,6 +750,22 @@ class SystemManager extends Core
 		}
 		if ($ret) $itemId = $row['ni_id'];
 		return $ret;
+	}
+	/**
+	 * システム運用者が実行可能な管理画面タスクを取得
+	 *
+	 * @return array	実行可能タスク
+	 */
+	function getSystemManagerEnableTask()
+	{
+		static $enableTaskArray;
+		
+		if (!isset($enableTaskArray)){
+			$enableTaskArray = array();
+			$enableTask = $this->getSystemConfig(self::CF_SYSTEM_MANAGER_ENABLE_TASK);
+			if (!empty($enableTask)) $enableTaskArray = explode(',', $enableTask);
+		}
+		return $enableTaskArray;
 	}
 }
 ?>
