@@ -23,6 +23,9 @@ INSERT INTO _system_config
 ('use_landing_page',           '0',                   'ランディングページ機能を使用するかどうか'),
 ('system_manager_enable_task', 'top,userlist_detail,loginhistory', 'システム運用者が実行可能な管理画面タスク');
 
+-- 運用ログトラン
+ALTER TABLE _operation_log ADD ol_user_id           INT            DEFAULT 0                     NOT NULL;      -- 記録ユーザID(0=不明)
+
 -- ランディングページ情報マスター
 DROP TABLE IF EXISTS _landing_page;
 CREATE TABLE _landing_page (

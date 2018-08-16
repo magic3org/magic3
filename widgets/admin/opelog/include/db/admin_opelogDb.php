@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_opelogDb.php 4119 2011-05-07 13:31:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -18,16 +18,17 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class admin_opelogDb extends BaseDb
 {
 	/**
-	 * 運用ログ取得
+	 * 運用ログ取得(ユーザ制限機能付き)
 	 *
 	 * @param int		$level		取得ログのレベル
 	 * @param int		$status		取得するデータの状況(0=すべて、1=未参照のみ、2=参照済みのみ)
 	 * @param int		$limit		取得する項目数
 	 * @param int		$page		取得するページ(1～)
+	 * @param int		$userId		取得ログの作成者のユーザID。0の場合は制限なし。
 	 * @param function	$callback	コールバック関数
 	 * @return						なし
 	 */
-	function getOpeLogList($level, $status, $limit, $page, $callback)
+	function getOpeLogList($level, $status, $limit, $page, $userId, $callback)
 	{
 		// メッセージ種別
 		// 通常メッセージ: info=情報,warn=警告,user_info=ユーザ操作
@@ -40,63 +41,56 @@ class admin_opelogDb extends BaseDb
 		
 		// 必須参照項目のみに限定
 		$params = array();
-		$addWhere = '';
-		$addWhere .= 'WHERE ot_level >= ? ';
+		$addWhere = 'WHERE ot_level >= ? ';
 		$params[] = $level;
 
 		// 参照状況を制限
 		if ($status == 1){		// 未参照
-			if (empty($addWhere)){
-				$addWhere .= 'WHERE ';
-			} else {
-				$addWhere .= 'AND ';
-			}
-			$addWhere .= 'ol_checked = false ';
+			$addWhere .= 'AND ol_checked = false ';
 		} else if ($status == 2){	// 参照済み
-			if (empty($addWhere)){
-				$addWhere .= 'WHERE ';
-			} else {
-				$addWhere .= 'AND ';
-			}
-			$addWhere .= 'ol_checked = true ';
+			$addWhere .= 'AND ol_checked = true ';
 		}
+		
+		// ユーザの制限
+		if (!empty($userId)){
+			$addWhere .= 'AND ol_user_id = ? ';
+			$params[] = $userId;
+		}
+		
 		$queryStr .= $addWhere;
 		$queryStr .=  'ORDER BY ol_serial DESC limit ' . $limit . ' offset ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
-	 * 運用ログ総数取得
+	 * 運用ログ総数取得(ユーザ制限機能付き)
 	 *
 	 * @param int		$level		取得ログのレベル
 	 * @param int		$status		取得するデータの状況(0=すべて、1=未参照のみ、2=参照済みのみ)
+	 * @param int		$userId		取得ログの作成者のユーザID。0の場合は制限なし。
 	 * @return int					総数
 	 */
-	function getOpeLogCount($level, $status)
+	function getOpeLogCount($level, $status, $userId)
 	{
 		$queryStr = 'SELECT * FROM _operation_log LEFT JOIN _operation_type ON ol_type = ot_id ';
 		
 		// 必須参照項目のみに限定
 		$params = array();
-		$addWhere = '';
-		$addWhere .= 'WHERE ot_level >= ? ';
+		$addWhere = 'WHERE ot_level >= ? ';
 		$params[] = $level;
 
 		// 参照状況を制限
 		if ($status == 1){		// 未参照
-			if (empty($addWhere)){
-				$addWhere .= 'WHERE ';
-			} else {
-				$addWhere .= 'AND ';
-			}
-			$addWhere .= 'ol_checked = false ';
+			$addWhere .= 'AND ol_checked = false ';
 		} else if ($status == 2){	// 参照済み
-			if (empty($addWhere)){
-				$addWhere .= 'WHERE ';
-			} else {
-				$addWhere .= 'AND ';
-			}
-			$addWhere .= 'ol_checked = true ';
+			$addWhere .= 'AND ol_checked = true ';
 		}
+		
+		// ユーザの制限
+		if (!empty($userId)){
+			$addWhere .= 'AND ol_user_id = ? ';
+			$params[] = $userId;
+		}
+		
 		$queryStr .= $addWhere;
 		return $this->selectRecordCount($queryStr, $params);
 	}

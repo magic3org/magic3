@@ -3603,7 +3603,21 @@ class SystemDb extends BaseDb
 		} else {
 			$currentVer = $gSystemManager->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 		}
-		if ($currentVer >= 2014010201){
+		if ($currentVer >= 2018080701){
+			// トップ表示の場合は出力条件をチェック
+			if ($showTop && $isNoTopMessageExists){
+				// トップ表示のメッセージがあればログ出力しない
+				$queryStr  = 'SELECT * FROM _operation_log ';
+				$queryStr .=   'WHERE ol_checked = false ';
+				$queryStr .=     'AND ol_message_code = ? ';
+				$recordCount = $this->selectRecordCount($queryStr, array(intval($code)));
+				if ($recordCount > 0) $outputLog = false;				// ログ出力するかどうか
+			}
+			
+			// バージョン2018080701以降で「ol_user_id(記録ユーザID)」を追加(2018/8/17)
+			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_show_top, ol_widget_id, ol_user_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, intval($showTop), $gEnvManager->getCurrentWidgetId(), $gEnvManager->getCurrentUserId());
+		} else if ($currentVer >= 2014010201){
 			// トップ表示の場合は出力条件をチェック
 			if ($showTop && $isNoTopMessageExists){
 				// トップ表示のメッセージがあればログ出力しない

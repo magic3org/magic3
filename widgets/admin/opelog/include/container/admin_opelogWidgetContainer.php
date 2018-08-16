@@ -20,6 +20,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $currentYear;		// 現在の年号
+	private $ownerUserId;		// 取得ログの作成者を制限する場合のユーザID
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
 	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス(未参照のみ)
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
@@ -45,6 +46,10 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		$this->db = new admin_opelogDb();
 		
 		$this->currentYear = intval(date('Y'));
+		
+		// パーソナルモードで画面作成の場合はログ作成者を制限
+		$this->ownerUserId = 0;		// 取得ログの作成者を制限する場合のユーザID
+		if ($this->gPage->isPersonalMode()) $this->ownerUserId = $this->_userId;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -89,12 +94,6 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createList($request)
 	{
-//		$act = $request->trimValueOf('act');
-//		$this->clientIp = $this->gRequest->trimServerValueOf('REMOTE_ADDR');		// クライアントのIPアドレス
-//		$this->logLevel = $request->trimValueOf('loglevel');// 現在のログ表示レベル
-//		if ($this->logLevel == '') $this->logLevel = self::DEFAULT_LOG_LEVEL;		// 現在のログ表示レベル
-//		$this->logStatus = $request->trimValueOf('logstatus');// 現在のログ表示ステータス
-//		if ($this->logStatus == '') $this->logStatus = self::DEFAULT_LOG_STATUS;		// 現在のログ表示ステータス(0=すべて、1=未確認のみ、2=確認済みのみ)
 		$this->logLevel = self::DEFAULT_LOG_LEVEL;		// 現在のログ表示レベル
 		$this->logStatus = self::DEFAULT_LOG_STATUS;		// 現在のログ表示ステータス(0=すべて、1=未確認のみ、2=確認済みのみ)
 
@@ -116,12 +115,8 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		}
 		$pageNo = 1;
 		
-		// 表示するログレベル、ログステータス選択メニュー作成
-		//$this->createLogLevelMenu();
-		//$this->createLogStatusMenu();
-		
 		// 総数を取得
-		$totalCount = $this->db->getOpeLogCount($viewLevel, $this->logStatus);
+		$totalCount = $this->db->getOpeLogCount($viewLevel, $this->logStatus, $this->ownerUserId);
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $listCount) + 1;		// 総ページ数
@@ -135,8 +130,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "access_log_url", $accessLogUrl);
 		
 		// 運用ログを取得
-		$this->db->getOpeLogList($viewLevel, $this->logStatus, $listCount, $pageNo, array($this, 'logListLoop'));
-		//$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->db->getOpeLogList($viewLevel, $this->logStatus, $listCount, $pageNo, $this->ownerUserId, array($this, 'logListLoop'));
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 		
 		$this->tmpl->addVar('_widget', 'view_count', $viewCount);			// 一度に表示可能なリスト項目数
@@ -185,8 +179,6 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		// 操作画面リンク
 		if (!empty($fetchedRow['ol_link'])){
 			$iconTag = $this->gDesign->createAdminPageLink($iconTag, $fetchedRow['ol_link']);
-//			$link = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
-//			$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
 		}
 		
 		// 日時
