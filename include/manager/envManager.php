@@ -2067,14 +2067,14 @@ class EnvManager extends Core
 	 * @param string $optionType	ユーザオプションタイプ
 	 * @return bool					true=システム運用者、false=システム運用者ではない
 	 */
-	public function isSystemManager(&$optionType)
+	public function isSystemManager(&$optionType = NULL)
 	{
 		$isManager = false;
 		$userInfo = $this->getCurrentUserInfo();
 		if (is_null($userInfo)){		// ログインしていない場合
 		} else {
 			if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER){	// システム運用者の場合
-				$optionType = $userInfo->optionType;
+				$optionType = $userInfo->userOptType;
 				$isManager = true;
 			}
 		}
