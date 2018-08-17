@@ -69,7 +69,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 //	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 //	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const TASK_MENUDEF				= 'menudef';				// メニュー定義画面の使用可否のチェック用
+	const TASK_MENUDEF			= 'menudef';				// メニュー定義画面の使用可否のチェック用
+	const TASK_SITEOPEN			= 'siteopen';			// アクセスポイントの公開,非公開
 	
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
@@ -828,6 +829,9 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// パーソナルモードの場合はアクセスポイントの公開制御は使用不可
 		if ($this->gPage->isPersonalMode()) return '';
+		
+		// システム運用者の場合はアクセス許可がなければ表示しない
+		if ($this->gEnv->isSystemManager() && !in_array(self::TASK_SITEOPEN, $this->gSystem->getSystemManagerEnableTask())) return '';
 		
 		// サーバ管理でのシステム運用の場合はアクセスポイントの制御項目を表示しない
 		if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN) return '';		// サーバ管理の場合
