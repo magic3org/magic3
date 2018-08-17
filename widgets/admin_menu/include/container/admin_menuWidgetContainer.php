@@ -69,6 +69,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 //	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 //	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+	const TASK_MENUDEF				= 'menudef';				// メニュー定義画面の使用可否のチェック用
 	
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
@@ -861,10 +862,11 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createMenuDefMenu($deviceType, $isVisibleSite)
 	{
-		$menuTag = '';
+		// システム運用者の場合はアクセス許可がなければ表示しない
+		if ($this->gEnv->isSystemManager() && !in_array(self::TASK_MENUDEF, $this->gSystem->getSystemManagerEnableTask())) return '';
 		
 		// セパレータ
-		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+		$menuTag = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li class="divider hidden-xs"></li>' . M3_NL;
 	
 		// タイトル
