@@ -129,7 +129,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);		// ページIDを取得
 		$act = $request->trimValueOf('act');
 		
-		if ($act == 'opensite'){		// サイト公開制御
+		if ($act == 'opensite' && !$this->gPage->isPersonalMode()){		// サイト公開制御。パーソナルモードの場合は変更不可。
 			$deviceType = $request->trimIntValueOf('device', '0');
 			$isOpen = $request->trimIntValueOf('isopen', '0');		// サイトの公開状況
 
@@ -237,126 +237,132 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
 
 			// ##### メニューを作成 #####
-			// システムの表示モードを取得
-			$isSiteOperationModeOn = $this->gSystem->getSystemConfig(self::CF_SITE_OPERATION_MODE);		// サイト運用モード
+			// メインメニューの作成。パーソナルモードの場合はメインメニューは作成しない。
+			if ($this->gPage->isPersonalMode()){
+				$this->tmpl->setAttribute('mainmenu', 'visibility', 'hidden');
+			} else {		// メインメニュー表示の場合
+				// システムの表示モードを取得
+				$isSiteOperationModeOn = $this->gSystem->getSystemConfig(self::CF_SITE_OPERATION_MODE);		// サイト運用モード
 		
-			// トップレベル項目を取得
-			$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getCurrentLanguage();
-			if (!$this->db->getNavItems($navId, 0, $rows)){			// 現在の言語で取得できないときはデフォルト言語で取得
-				$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getDefaultLanguage();
-				if (!$this->db->getNavItems($navId, 0, $rows)){		// デフォルト言語で取得できないときは拡張子なしで取得
-					$navId = self::DEFAULT_NAV_ID;
-					$this->db->getNavItems($navId, 0, $rows);
-				}
-			}
-			
-			// カラム数を求める
-			$topMenuCount = count($rows);
-			$columnCount = 0;
-			$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
-			for ($i = 0; $i < $topMenuCount; $i++){
-				// 非表示オプション取得
-				$hideOptions = array();
-				if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
-				
-				// サイト運用モードがオンの場合は非表示項目を非表示にする
-				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
-				
-				// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
-				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
-					if (!$escapeColumnEnd) $columnCount++;
-					
-					$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
-				} else {		// 改行以外のとき
-					$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
-				}
-			}
-
-			// 最後が改行でない場合を修正
-			if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0 && !$escapeColumnEnd) $columnCount++;
-			$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
-			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
-			
-			$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
-			for ($i = 0; $i < $topMenuCount; $i++){
-				// 非表示オプション取得
-				$hideOptions = array();
-				if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
-				
-				// サイト運用モードがオンの場合は非表示項目を非表示にする
-				if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
-				
-				// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
-				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
-					// 改行読み飛ばしのときは終了
-					if ($escapeColumnEnd) continue;
-					
-					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
-					
-					$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
-				} else {		// 改行以外のとき
-					$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
-					
-					$topId = $rows[$i]['ni_id'];
-			
-					// サブレベル取得
-					$this->db->getNavItems($navId, $topId, $subRows);
-			
-					// ヘルプの作成
-					$helpText = '';
-					$title = $rows[$i]['ni_help_title'];
-					if (!empty($title)){
-						$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $rows[$i]['ni_help_body']);
+				// トップレベル項目を取得
+				$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getCurrentLanguage();
+				if (!$this->db->getNavItems($navId, 0, $rows)){			// 現在の言語で取得できないときはデフォルト言語で取得
+					$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getDefaultLanguage();
+					if (!$this->db->getNavItems($navId, 0, $rows)){		// デフォルト言語で取得できないときは拡張子なしで取得
+						$navId = self::DEFAULT_NAV_ID;
+						$this->db->getNavItems($navId, 0, $rows);
 					}
-								
-					// メニュー大項目
-					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL + 1);
-					$menuInner .= '<li class="dropdown-header"><span ' . $helpText . '>' . $this->convertToDispString($rows[$i]['ni_name']) . '</span></li>' . M3_NL;
+				}
+			
+				// カラム数を求める
+				$topMenuCount = count($rows);
+				$columnCount = 0;
+				$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+				for ($i = 0; $i < $topMenuCount; $i++){
+					// 非表示オプション取得
+					$hideOptions = array();
+					if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
+				
+					// サイト運用モードがオンの場合は非表示項目を非表示にする
+					if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
+				
+					// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
+					if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
+						if (!$escapeColumnEnd) $columnCount++;
 					
-					// メニュー小項目
-					if (count($subRows) > 0){
-						for ($l = 0; $l < count($subRows); $l++){
-							// 項目の種別
-							$itemType = $subRows[$l]['ni_view_control'];
+						$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+					} else {		// 改行以外のとき
+						$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
+					}
+				}
+
+				// 最後が改行でない場合を修正
+				if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0 && !$escapeColumnEnd) $columnCount++;
+				$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
+				$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
+			
+				$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+				for ($i = 0; $i < $topMenuCount; $i++){
+					// 非表示オプション取得
+					$hideOptions = array();
+					if (!empty($rows[$i]['ni_hide_option'])) $hideOptions = explode(',', $rows[$i]['ni_hide_option']);
+				
+					// サイト運用モードがオンの場合は非表示項目を非表示にする
+					if ($isSiteOperationModeOn && in_array('site_operation', $hideOptions)) continue;
+				
+					// ### 読み飛ばさない行が一行でもある場合は改行を出力する ###
+					if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
+						// 改行読み飛ばしのときは終了
+						if ($escapeColumnEnd) continue;
+					
+						$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
+					
+						$escapeColumnEnd = true;		// 改行読み飛ばしをリセット
+					} else {		// 改行以外のとき
+						$escapeColumnEnd = false;		// 改行読み飛ばしなしにセット
+					
+						$topId = $rows[$i]['ni_id'];
+			
+						// サブレベル取得
+						$this->db->getNavItems($navId, $topId, $subRows);
+			
+						// ヘルプの作成
+						$helpText = '';
+						$title = $rows[$i]['ni_help_title'];
+						if (!empty($title)){
+							$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $rows[$i]['ni_help_body']);
+						}
+								
+						// メニュー大項目
+						$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL + 1);
+						$menuInner .= '<li class="dropdown-header"><span ' . $helpText . '>' . $this->convertToDispString($rows[$i]['ni_name']) . '</span></li>' . M3_NL;
+					
+						// メニュー小項目
+						if (count($subRows) > 0){
+							for ($l = 0; $l < count($subRows); $l++){
+								// 項目の種別
+								$itemType = $subRows[$l]['ni_view_control'];
 							
-							// ヘルプの作成
-							$helpText = '';
-							$title = $subRows[$l]['ni_help_title'];
-							if (!empty($title)){
-								$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $subRows[$l]['ni_help_body']);
-							}
+								// ヘルプの作成
+								$helpText = '';
+								$title = $subRows[$l]['ni_help_title'];
+								if (!empty($title)){
+									$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $subRows[$l]['ni_help_body']);
+								}
 						
-							$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL + 2);
+								$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL + 2);
 							
-							switch ($itemType){
-								case 0:		// リンク項目
-								default:
-									$menuInner .= '<li><a href="';
-									$menuInner .= $this->getUrl($this->gEnv->getDefaultAdminUrl() . '?task=' . $subRows[$l]['ni_task_id']);	// 起動タスクパラメータを設定
-									if (!empty($subRows[$l]['ni_param'])){		// パラメータが存在するときはパラメータを追加
-										$menuInner .= '&' . M3_REQUEST_PARAM_OPERATION_TODO . '=' . urlencode($subRows[$l]['ni_param']);
-									}
-									$menuInner .= '" ><span ' . $helpText . '>' . $this->convertToDispString($subRows[$l]['ni_name']) . '</span></a></li>' . M3_NL;
-									break;
-								case 2:		// 使用不可
-									break;
-								case 3:		// セパレータ
-									$menuInner .= '<li class="divider hidden-xs"></li>' . M3_NL;
-									break;
+								switch ($itemType){
+									case 0:		// リンク項目
+									default:
+										$menuInner .= '<li><a href="';
+										$menuInner .= $this->getUrl($this->gEnv->getDefaultAdminUrl() . '?task=' . $subRows[$l]['ni_task_id']);	// 起動タスクパラメータを設定
+										if (!empty($subRows[$l]['ni_param'])){		// パラメータが存在するときはパラメータを追加
+											$menuInner .= '&' . M3_REQUEST_PARAM_OPERATION_TODO . '=' . urlencode($subRows[$l]['ni_param']);
+										}
+										$menuInner .= '" ><span ' . $helpText . '>' . $this->convertToDispString($subRows[$l]['ni_name']) . '</span></a></li>' . M3_NL;
+										break;
+									case 2:		// 使用不可
+										break;
+									case 3:		// セパレータ
+										$menuInner .= '<li class="divider hidden-xs"></li>' . M3_NL;
+										break;
+								}
 							}
 						}
+						$menuInner .= str_repeat(' ', 4);
 					}
-					$menuInner .= str_repeat(' ', 4);
 				}
+			
+				$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li>' . M3_NL;
+				$this->tmpl->addVar("mainmenu", "menu_inner", $menuInner);
+				
+				// メインメニューのカラム数が少ない場合はメインメニューの左位置を「メニュー」ボタンの左位置に合わせる
+				if ($columnCount <= 2) $this->tmpl->setAttribute('smallmainmenu', 'visibility', 'visible');
 			}
 			
-			$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li>' . M3_NL;
-			$this->tmpl->addVar("menu", "menu_inner", $menuInner);
-			$this->tmpl->addVar("menu", "widget_url", $this->getUrl($this->gEnv->getCurrentWidgetRootUrl()));	// ウィジェットのルートディレクトリ
+			//$this->tmpl->addVar("menu", "widget_url", $this->getUrl($this->gEnv->getCurrentWidgetRootUrl()));	// ウィジェットのルートディレクトリ
 			$this->tmpl->addVar("menu", "top_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));		// トップメニュー画面URL
-			
-			// メインメニューのカラム数が少ない場合はメインメニューの左位置を「メニュー」ボタンの左位置に合わせる
-			if ($columnCount <= 2) $this->tmpl->setAttribute('smallmainmenu', 'visibility', 'visible');
 			
 			// サイト表示
 			$siteName = $this->gEnv->getSiteName();
@@ -815,13 +821,14 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createAccessPointControlMenu($deviceType, $isVisibleSite)
 	{
-		$menuTag = '';
+		// パーソナルモードの場合はアクセスポイントの公開制御は使用不可
+		if ($this->gPage->isPersonalMode()) return '';
 		
 		// サーバ管理でのシステム運用の場合はアクセスポイントの制御項目を表示しない
-		if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN) return $menuTag;		// サーバ管理の場合
+		if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN) return '';		// サーバ管理の場合
 
 		// セパレータ
-		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+		$menuTag = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li class="divider hidden-xs"></li>' . M3_NL;
 		
 		// アクセスポイントの公開制御
