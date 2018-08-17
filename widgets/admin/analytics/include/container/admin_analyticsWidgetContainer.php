@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,6 +28,7 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 	private $graphDataStr;		// グラフデータ
 	private $maxPv = 0;				// 日次のページビュー最大値
 	private $yTickValueArray;		// Y軸の最大値
+	private $enableCalc;			// 集計処理の可否制御
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const DEFAULT_STR_NOT_CALC = '未集計';		// 未集計時の表示文字列
 	const DEFAULT_ACCESS_PATH = 'index';		// デフォルトのアクセスパス(PC用アクセスポイント)
@@ -65,6 +66,9 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
 		// Y軸の最大値
 		$this->yTickValueArray = array(1000000, 500000, 100000, 50000, 10000, 5000, 1000, 500, 100, 0);
+		
+		// パーソナルモードの場合は集計処理不可
+		if (!$this->gPage->isPersonalMode()) $this->enableCalc = true;			// 集計処理の可否制御
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -116,7 +120,7 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		$act = $request->trimValueOf('act');
-		if ($act == 'analytics_update'){		// 設定更新(再計算)のとき
+		if ($act == 'analytics_update' && $this->enableCalc){		// 集計処理可能で設定更新(再計算)のとき
 			$messageArray = array();
 			$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray);
 			if ($ret){
@@ -274,6 +278,9 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		$libInfo = $this->gPage->getScriptLibInfo(self::LIB_JQPLOT);
 		if (!empty($libInfo)) $libDir = $libInfo['dir'];
 		$this->tmpl->addVar("_widget", "lib_dir", $libDir);
+		
+		// 集計処理不可の場合は「集計」ボタンを隠す
+		if (!$this->enableCalc) $this->tmpl->setAttribute('show_calc_button', 'visibility', 'hidden');
 	}
 	/**
 	 * ページビューデータを取得
