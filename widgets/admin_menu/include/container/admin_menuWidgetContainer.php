@@ -410,9 +410,13 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
 			$this->tmpl->addVar("menu", "top_title", $preTitle . $topTitle);
 				
-			// システムバージョン
-			$this->tmpl->addVar("menu", "system", 'Magic3 v' . M3_SYSTEM_VERSION);
-			$this->tmpl->addVar("menu", "official_url", 'http://www.magic3.org');
+			// システムバージョン。パーソナルモードの場合は表示しない。
+			if ($this->gPage->isPersonalMode()){
+				$this->tmpl->setAttribute('system_version', 'visibility', 'hidden');
+			} else {
+				$this->tmpl->addVar("system_version", "system", 'Magic3 v' . M3_SYSTEM_VERSION);
+				$this->tmpl->addVar("system_version", "official_url", 'http://www.magic3.org');
+			}
 			
 			// ユーザ名
 			$userId = $this->gEnv->getCurrentUserId();
