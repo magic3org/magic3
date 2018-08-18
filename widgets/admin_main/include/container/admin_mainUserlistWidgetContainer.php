@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,6 @@ require_once($gEnvManager->getIncludePath() . '/common/userInfo.php');		// ユ�
 
 class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContainer
 {
-//	private $db;	// DB接続オブジェクト
 	private $serialNo;	// シリアルNo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $userTypeArray;		// ユーザ種別(-1=未承認ユーザ、0=仮ユーザ、10=一般ユーザ、50=システム運営者、100=システム管理者)
@@ -45,9 +44,6 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
-//		$this->_mainDb = new admin_mainDb();
 		
 		// ユーザタイプメニュー項目
 		$this->userTypeArray = array(	array(	'name' => '-- ' . $this->_('Unselected') . ' --',		'value' => ''),		// 未選択
