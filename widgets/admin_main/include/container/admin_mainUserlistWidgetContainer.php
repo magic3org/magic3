@@ -108,6 +108,17 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$localeText = array();
 		$task = $request->trimValueOf('task');
 		
+		// ##### アクセス権のチェック #####
+		// パーソナルモードの場合はログインしているユーザの情報のみ取得可能
+		if ($this->gPage->isPersonalMode()){
+			$userId = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
+			if ($userId != $this->_userId){
+				$this->replaceTemplateFile('message.tmpl.html');
+				$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
+				return;
+			}
+		}
+				
 		if ($task == 'userlist_detail'){		// 詳細画面
 			$this->createDetail($request);
 			
