@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -63,6 +63,25 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	{
 		$localeText = array();
 		$task = $request->trimValueOf('task');
+		
+		// ##### アクセス権のチェック #####
+		// パーソナルモードの場合はログインしているユーザの情報のみ取得可能
+		if ($this->gPage->isPersonalMode()){
+			$enableAccess = true;
+
+			// ユーザIDのチェック
+			if ($enableAccess){
+				$userId = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
+				if ($userId != $this->_userId) $enableAccess = false;
+			}
+
+			// アクセス不可の場合はエラーメッセージを出力して終了
+			if (!$enableAccess){
+				$this->replaceTemplateFile('message.tmpl.html');
+				$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
+				return;
+			}
+		}
 		
 		if ($task == self::TASK_LOGINHISTORY){			// ログイン履歴
 			$this->createList($request);

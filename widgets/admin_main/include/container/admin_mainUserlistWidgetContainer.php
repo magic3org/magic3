@@ -85,7 +85,11 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'userlist_detail'){		// 詳細画面
-			return 'userlist_detail.tmpl.html';
+			if ($this->gPage->isPersonalMode()){		// パーソナルモードの場合
+				return 'userlist_detail_personal.tmpl.html';
+			} else {
+				return 'userlist_detail.tmpl.html';
+			}
 		} else {			// 一覧画面
 			return 'userlist.tmpl.html';
 		}
@@ -107,8 +111,26 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		// ##### アクセス権のチェック #####
 		// パーソナルモードの場合はログインしているユーザの情報のみ取得可能
 		if ($this->gPage->isPersonalMode()){
-			$userId = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
-			if ($userId != $this->_userId){
+			$enableAccess = true;
+			
+			// ユーザ情報詳細のみアクセス可能
+			if ($task == 'userlist') $enableAccess = false;
+
+			// ユーザIDのチェック
+			if ($enableAccess){
+				$userId = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
+				if ($userId != $this->_userId) $enableAccess = false;
+			}
+
+			// シリアル番号が設定されている場合はチェック
+			$serialNo = intval($request->trimValueOf('serial'));		// 選択項目のシリアル番号
+			if (!empty($serialNo)){
+				$ret = $this->_mainDb->getUserById($userId, $row);// ユーザ情報を取得
+				if (!$ret || ($ret && $serialNo != $row['lu_serial'])) $enableAccess = false;
+			}
+
+			// アクセス不可の場合はエラーメッセージを出力して終了
+			if (!$enableAccess){
 				$this->replaceTemplateFile('message.tmpl.html');
 				$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
 				return;
@@ -304,86 +326,150 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$limitedMenu = false;		// ユーザタイプメニューの項目を制限するかどうか
 		$reloadData = false;		// データの再読み込み
 		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'update'){		// 行更新のとき
-			// 入力チェック
-			$this->checkInput($name, $this->_('Name'));		// 名前
-			//$this->checkInput($account, $this->_('Login Account'));	// アカウント
-			$this->checkLoginAccount($account, $this->_('Login Account'), true);// アカウント
-			$this->checkMailAddress($email, $this->_('Email'), true);		// Eメール
+			// ##### パーソナルモードの場合とパーソナルモードでない場合の処理を分ける #####
+			if ($this->gPage->isPersonalMode()){		// パーソナルモードの場合
+				// ### アカウントの変更は不可 ##
+				// 入力チェック
+				$this->checkInput($name, $this->_('Name'));		// 名前
+				$this->checkMailAddress($email, $this->_('Email'), true);		// Eメール
 		
-			// 期間範囲のチェック
-			if (!empty($start_date) && !empty($end_date)){
-				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid active term.'));	// 有効期間が不正です
-			}
+				// ユーザ情報を取得
+				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
+				if (!$ret) $this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+				
+				// エラーなしの場合は、データを更新
+				if ($this->getMsgCount() == 0){
+					// 管理権限ありのときは、ユーザタイプが変更できない
+					if ($row['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER) $this->userType = $row['lu_user_type']; 	// 管理画面が使用できるかどうか
 			
-			// アカウント重複チェック
-			// 設定データを取得
-			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
-			if ($ret){
-				if ($row['lu_account'] != $account && $this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, $this->_('Login account is duplicated.'));		// アカウントが重複しています
+					// システム管理者は常にログイン可能
+					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
+			
+					// ユーザ種別が負のときはログイン不可
+					if (intval($this->userType) < 0) $canLogin = 0;
+			
+					// 保存データ作成
+					if (empty($start_date)){
+						$startDt = $this->gEnv->getInitValueOfTimestamp();
+					} else {
+						$startDt = $start_date . ' ' . $start_time;
+					}
+					if (empty($end_date)){
+						$endDt = $this->gEnv->getInitValueOfTimestamp();
+					} else {
+						$endDt = $end_date . ' ' . $end_time;
+					}
+					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
+						$startDt = $this->gEnv->getInitValueOfTimestamp();
+						$endDt = $this->gEnv->getInitValueOfTimestamp();
+					}
+			
+					// 変更項目を取得
+					$chengedFields = array();
+					if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
+					if ($name != $row['lu_name']) $chengedFields[] = 'ユーザ名';
+					if ($email != $row['lu_email']) $chengedFields[] = 'Eメール';
+			
+					// 追加項目
+					$otherParams = array();
+					$otherParams['lu_email'] = $email;		// Eメール
+					$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
+					$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial,
+														null, null, $this->userGroupArray, $otherParams);
+					if ($ret){		// データ追加成功のとき
+						$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
+				
+						// 運用ログ出力
+						$changeFieldInfo = '';
+						if (!empty($chengedFields)) $changeFieldInfo = '('. implode(',', $chengedFields) . ')';
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $account, 2100, 'userid=' . $row['lu_id'] . ', username=' . $name);
+				
+						$this->serialNo = $newSerial;
+						$reloadData = true;		// データの再読み込み
+					} else {
+						$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
+					}
+				}
 			} else {
-				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
-			}
+				// 入力チェック
+				$this->checkInput($name, $this->_('Name'));		// 名前
+				$this->checkLoginAccount($account, $this->_('Login Account'));// アカウント
+				$this->checkMailAddress($email, $this->_('Email'), true);		// Eメール
+	
+				// 期間範囲のチェック
+				if (!empty($start_date) && !empty($end_date)){
+					if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid active term.'));	// 有効期間が不正です
+				}
+		
+				// アカウント重複チェック
+				// ユーザ情報を取得
+				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
+				if ($ret){
+					if ($row['lu_account'] != $account && $this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, $this->_('Login account is duplicated.'));		// アカウントが重複しています
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+				}
+		
+				// エラーなしの場合は、データを更新
+				if ($this->getMsgCount() == 0){
+					// 管理権限ありのときは、ユーザタイプが変更できない
+					if ($row['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER) $this->userType = $row['lu_user_type']; 	// 管理画面が使用できるかどうか
 			
-			// エラーなしの場合は、データを更新
-			if ($this->getMsgCount() == 0){
-				// 管理権限ありのときは、ユーザタイプが変更できない
-				if ($row['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER) $this->userType = $row['lu_user_type']; 	// 管理画面が使用できるかどうか
+					// システム管理者は常にログイン可能
+					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
+			
+					// ユーザ種別が負のときはログイン不可
+					if (intval($this->userType) < 0) $canLogin = 0;
+			
+					// 保存データ作成
+					if (empty($start_date)){
+						$startDt = $this->gEnv->getInitValueOfTimestamp();
+					} else {
+						$startDt = $start_date . ' ' . $start_time;
+					}
+					if (empty($end_date)){
+						$endDt = $this->gEnv->getInitValueOfTimestamp();
+					} else {
+						$endDt = $end_date . ' ' . $end_time;
+					}
+					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
+						$startDt = $this->gEnv->getInitValueOfTimestamp();
+						$endDt = $this->gEnv->getInitValueOfTimestamp();
+					}
+			
+					// 変更項目を取得
+					$chengedFields = array();
+					if ($account != $row['lu_account']) $chengedFields[] = 'アカウント';
+					if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
+					if ($name != $row['lu_name']) $chengedFields[] = 'ユーザ名';
+					if ($this->userType != $row['lu_user_type']) $chengedFields[] = 'ユーザ種別';
+					if ($email != $row['lu_email']) $chengedFields[] = 'Eメール';
+			
+					// 追加項目
+					$otherParams = array();
+					$otherParams['lu_email'] = $email;		// Eメール
+					$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
+					$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial,
+														null, null, $this->userGroupArray, $otherParams);
+					if ($ret){		// データ追加成功のとき
+						$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 				
-				// システム管理者は常にログイン可能
-				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
+						// 運用ログ出力
+						$changeFieldInfo = '';
+						if (!empty($chengedFields)) $changeFieldInfo = '('. implode(',', $chengedFields) . ')';
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $account, 2100, 'userid=' . $row['lu_id'] . ', username=' . $name);
 				
-				// ユーザ種別が負のときはログイン不可
-				if (intval($this->userType) < 0) $canLogin = 0;
-				
-				// 保存データ作成
-				if (empty($start_date)){
-					$startDt = $this->gEnv->getInitValueOfTimestamp();
-				} else {
-					$startDt = $start_date . ' ' . $start_time;
-				}
-				if (empty($end_date)){
-					$endDt = $this->gEnv->getInitValueOfTimestamp();
-				} else {
-					$endDt = $end_date . ' ' . $end_time;
-				}
-				if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
-					$startDt = $this->gEnv->getInitValueOfTimestamp();
-					$endDt = $this->gEnv->getInitValueOfTimestamp();
-				}
-				
-				// 変更項目を取得
-				$chengedFields = array();
-				if ($account != $row['lu_account']) $chengedFields[] = 'アカウント';
-				if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
-				if ($name != $row['lu_name']) $chengedFields[] = 'ユーザ名';
-				if ($this->userType != $row['lu_user_type']) $chengedFields[] = 'ユーザ種別';
-				if ($email != $row['lu_email']) $chengedFields[] = 'Eメール';
-				
-				// 追加項目
-				$otherParams = array();
-				$otherParams['lu_email'] = $email;		// Eメール
-				$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
-				$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial,
-													null, null, $this->userGroupArray, $otherParams);
-				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
-					
-					// 運用ログ出力
-					$changeFieldInfo = '';
-					if (!empty($chengedFields)) $changeFieldInfo = '('. implode(',', $chengedFields) . ')';
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $account, 2100, 'userid=' . $row['lu_id'] . ', username=' . $name);
-					
-					$this->serialNo = $newSerial;
-					$reloadData = true;		// データの再読み込み
-				} else {
-					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
+						$this->serialNo = $newSerial;
+						$reloadData = true;		// データの再読み込み
+					} else {
+						$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
+					}
 				}
 			}
 		} else if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'add'){		// 新規追加のとき
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
-			//$this->checkInput($account, $this->_('Login Account'));	// アカウント
-			$this->checkLoginAccount($account, $this->_('Login Account'), true);// アカウント
+			$this->checkLoginAccount($account, $this->_('Login Account'));// アカウント
 			$this->checkMailAddress($email, $this->_('Email'), true);		// Eメール
 			if ($this->userType == '') $this->setUserErrorMsg($this->_('User type not selected.'));		// ユーザ種別が選択されていません
 			
@@ -468,7 +554,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			}
 		}
 		if ($reloadData){		// データの再読み込み
-			// 設定データを取得
+			// ユーザ情報を取得
 			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 			if ($ret){
 				$name = $row['lu_name'];
@@ -500,12 +586,16 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				$updateDt = $row['lu_create_dt'];			// データ登録日時
 			}
 		}
-		// ユーザタイプ選択メニュー作成
-		$this->createUserTypeMenu($limitedMenu);
 		
-		// ユーザグループメニュー作成
-		$ret = $this->_mainDb->getAllUserGroupRows($this->_langId, $this->userGroupListData);
-		$this->createUserGroupMenu(self::USER_GROUP_COUNT);
+		// ##### パーソナルモードの場合はユーザタイプ、グループの選択不可
+		if (!$this->gPage->isPersonalMode()){
+			// ユーザタイプ選択メニュー作成
+			$this->createUserTypeMenu($limitedMenu);
+		
+			// ユーザグループメニュー作成
+			$ret = $this->_mainDb->getAllUserGroupRows($this->_langId, $this->userGroupListData);
+			$this->createUserGroupMenu(self::USER_GROUP_COUNT);
+		}
 		
 		// 取得データを設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
@@ -548,10 +638,6 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function userListLoop($index, $fetchedRow, $param)
 	{
-/*		$canLogin = '';
-		if ($fetchedRow['lu_enable_login']){
-			$canLogin = 'checked';
-		}*/
 		// アクセス制限
 		$adminWidget = '';
 		if (!empty($fetchedRow['lu_admin_widget'])) $adminWidget = '(' . $this->_('Limited') . ')';
