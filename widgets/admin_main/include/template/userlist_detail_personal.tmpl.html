@@ -13,37 +13,10 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function addItem(){
-	if (document.main.item_name.value == ''){
-		window.alert('{_LC_MSG_NO_NAME}');
-		return false;
-	}
-	if (document.main.item_account.value == ''){
-		window.alert('{_LC_MSG_NO_ACCOUNT}');
-		return false;
-	}
-	if (document.main.item_password.value == ''){
-		window.alert('{_LC_MSG_NO_PASSWORD}');
-		return false;
-	}
-	if (!window.confirm('{_LC_MSG_ADD}')) return false;
-	
-	document.main.act.value = 'add';
-	document.main.password.value = hex_md5(document.main.item_password.value);
-	document.main.item_password.value = '';
-	document.main.submit();
-	return true;
-}
 function updateItem(){
 	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
 	document.main.act.value = 'update';
 	if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
-	document.main.submit();
-	return true;
-}
-function delItem(){
-	if (!window.confirm('{_LC_MSG_DELETE}')) return false;
-	document.main.act.value = 'delete';
 	document.main.submit();
 	return true;
 }
@@ -137,11 +110,7 @@ $(function(){
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<patTemplate:tmpl name="add_button" visibility="hidden">
-	    <input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
-</patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />
 		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
 </patTemplate:tmpl>
 </div>

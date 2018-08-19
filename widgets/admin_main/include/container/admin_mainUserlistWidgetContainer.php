@@ -215,22 +215,38 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->_mainDb->delUserBySerial($delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg($this->_('Item deleted.'));		// データを削除しました
-					
-					// 運用ログ出力
-					for ($i = 0; $i < count($delItems); $i++){
-						$ret = $this->_mainDb->getUserBySerial($delItems[$i], $row, $groupRows);
-						if ($ret){
-							$account = $row['lu_account'];
-							$loginUserId = $row['lu_id'];
-							$name = $row['lu_name'];
-						}
-						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+				// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
+				for ($i = 0; $i < count($delItems); $i++){
+					// ユーザ情報を取得
+					$ret = $this->_mainDb->getUserBySerial($delItems[$i], $row, $groupRows);
+					if ($ret){
+						$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
+						if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $this->setMsg(self::MSG_APP_ERR, 'ページ管理画面からユーザを削除してください。アカウント: ' . $row['lu_account']);
+					} else {
+						$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+						break;
 					}
-				} else {
-					$this->setAppErrorMsg($this->_('Failed in deleting item.'));		// データ削除に失敗しました
+				}
+				
+				// エラーなしの場合は、データを更新
+				if ($this->getMsgCount() == 0){
+					$ret = $this->_mainDb->delUserBySerial($delItems);
+					if ($ret){		// データ削除成功のとき
+						$this->setGuidanceMsg($this->_('Item deleted.'));		// データを削除しました
+					
+						// 運用ログ出力
+						for ($i = 0; $i < count($delItems); $i++){
+							$ret = $this->_mainDb->getUserBySerial($delItems[$i], $row, $groupRows);
+							if ($ret){
+								$account = $row['lu_account'];
+								$loginUserId = $row['lu_id'];
+								$name = $row['lu_name'];
+							}
+							$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+						}
+					} else {
+						$this->setAppErrorMsg($this->_('Failed in deleting item.'));		// データ削除に失敗しました
+					}
 				}
 			}
 		}
@@ -339,6 +355,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				
 				// エラーなしの場合は、データを更新
 				if ($this->getMsgCount() == 0){
+					// ##### ユーザタイプがページ運用者の場合はユーザ名の変更不可 #####
+					$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
+					if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $name = $row['lu_name'];
+				
 					// 変更項目を取得
 					$chengedFields = array();
 					if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
@@ -500,16 +520,26 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				}
 			}
 		} else if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// 削除のとき
-			$ret = $this->_mainDb->delUserBySerial(array($this->serialNo));
-			if ($ret){		// データ削除成功のとき
-				$this->setMsg(self::MSG_GUIDANCE, $this->_('Item deleted.'));	// データを削除しました
+			// ユーザ情報を取得
+			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
+			if (!$ret) $this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+
+			// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
+			if ($ret){
+				$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
+				if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $this->setMsg(self::MSG_APP_ERR, 'ページ管理画面からユーザを削除してください');
+			}
 				
-				// 運用ログ出力
-				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
-				if ($ret) $loginUserId = $row['lu_id'];
-				$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in deleting item.'));	// データ削除に失敗しました
+			if ($this->getMsgCount() == 0){
+				$ret = $this->_mainDb->delUserBySerial(array($this->serialNo));
+				if ($ret){		// データ削除成功のとき
+					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item deleted.'));	// データを削除しました
+				
+					// 運用ログ出力
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $row['lu_account'], 2100, 'userid=' . $row['lu_id'] . ', username=' . $row['lu_name']);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in deleting item.'));	// データ削除に失敗しました
+				}
 			}
 		} else {
 			// 初期値を設定
