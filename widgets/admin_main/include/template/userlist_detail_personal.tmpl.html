@@ -11,10 +11,6 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<style type="text/css">@import url({_SCRIPTS_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
-<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar.js"></script>
-<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
-<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar-setup.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function addItem(){
@@ -69,17 +65,6 @@ function viewLoginHistory(){
 }
 $(function(){
 	m3SetConfigTable('userdetail');
-	
-	Calendar.setup({
-		inputField  : "item_start_date",         // ID of the input field
-		ifFormat    : "%Y/%m/%d",    // the date format
-		button      : "calenderbutton1"       // ID of the button
-	});
-	Calendar.setup({
-		inputField  : "item_end_date",         // ID of the input field
-		ifFormat    : "%Y/%m/%d",    // the date format
-		button      : "calenderbutton2"       // ID of the button
-	});
 	
 	// パスワード入力部作成
 	$("#item_password").on("keyup",function(){
@@ -137,7 +122,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USERTYPE}>{_LC_LABEL_USER_TYPE}</span></th>
-	    <td colspan="3">{USER_TYPE}</td>
+	    <td colspan="3"><div class="form-control-static m3config_item">{USER_TYPE}</div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_USERLIST_EMAIL}>{_LC_LABEL_EMAIL}</span></th>

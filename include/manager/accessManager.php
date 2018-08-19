@@ -174,7 +174,8 @@ class AccessManager extends Core
 			// ユーザオプションタイプを取得
 			$userInfo->userOptType = '';			// ユーザオプションタイプ(page_manager等)
 			if (!empty($userInfo->userTypeOption)){
-				$userOptionArray = explode(M3_USER_TYPE_OPTION_SEPARATOR, $userInfo->userTypeOption);
+				$userInfo->userOptType = UserInfo::parseUserTypeOption($userInfo->userTypeOption);
+/*				$userOptionArray = explode(M3_USER_TYPE_OPTION_SEPARATOR, $userInfo->userTypeOption);
 				for ($i = 0; $i < count($userOptionArray); $i++){
 					$userOption = trim($userOptionArray[$i]);
 					if (!empty($userOption)){
@@ -185,7 +186,7 @@ class AccessManager extends Core
 							break;
 						}
 					}
-				}
+				}*/
 			}
 			
 			// アクセス可能ウィジェット(システム運用者の場合)

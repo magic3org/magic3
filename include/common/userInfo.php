@@ -57,5 +57,25 @@ class UserInfo
 			return false;
 		}
 	}
+	/**
+	 * ユーザタイプオプション文字列を解析し、ユーザオプションタイプを取得
+	 *
+	 * @return string		ユーザオプションタイプ。取得できない場合は空文字列。
+	 */
+	static function parseUserTypeOption($option)
+	{
+		if (empty($option)) return '';
+		
+		$userOptionArray = explode(M3_USER_TYPE_OPTION_SEPARATOR, $option);
+		for ($i = 0; $i < count($userOptionArray); $i++){
+			$userOption = trim($userOptionArray[$i]);
+			if (!empty($userOption)){
+				// 「=」がない文字列の場合はユーザオプションタイプと認識
+				$pos = strpos($userOption, '=');
+				if ($pos === false) return $userOption;
+			}
+		}
+		return '';
+	}
 }
 ?>

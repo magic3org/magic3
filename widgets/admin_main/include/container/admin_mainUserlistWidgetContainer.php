@@ -339,31 +339,6 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				
 				// エラーなしの場合は、データを更新
 				if ($this->getMsgCount() == 0){
-					// 管理権限ありのときは、ユーザタイプが変更できない
-					if ($row['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER) $this->userType = $row['lu_user_type']; 	// 管理画面が使用できるかどうか
-			
-					// システム管理者は常にログイン可能
-					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN) $canLogin = 1;
-			
-					// ユーザ種別が負のときはログイン不可
-					if (intval($this->userType) < 0) $canLogin = 0;
-			
-					// 保存データ作成
-					if (empty($start_date)){
-						$startDt = $this->gEnv->getInitValueOfTimestamp();
-					} else {
-						$startDt = $start_date . ' ' . $start_time;
-					}
-					if (empty($end_date)){
-						$endDt = $this->gEnv->getInitValueOfTimestamp();
-					} else {
-						$endDt = $end_date . ' ' . $end_time;
-					}
-					if ($this->userType == UserInfo::USER_TYPE_SYS_ADMIN){		// システム管理者は有効期間の設定不可
-						$startDt = $this->gEnv->getInitValueOfTimestamp();
-						$endDt = $this->gEnv->getInitValueOfTimestamp();
-					}
-			
 					// 変更項目を取得
 					$chengedFields = array();
 					if (!empty($password) && $password != $row['lu_password']) $chengedFields[] = 'パスワード';
@@ -373,16 +348,15 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					// 追加項目
 					$otherParams = array();
 					$otherParams['lu_email'] = $email;		// Eメール
-					$otherParams['lu_skype_account'] = $skypeAccount;		// Skypeアカウント
-					$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial,
-														null, null, $this->userGroupArray, $otherParams);
+					$ret = $this->_db->updateLoginUser($this->serialNo, $name, null, $password, null, null, null, null, $newSerial,
+														null, null, null, $otherParams);
 					if ($ret){		// データ追加成功のとき
 						$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 				
 						// 運用ログ出力
 						$changeFieldInfo = '';
 						if (!empty($chengedFields)) $changeFieldInfo = '('. implode(',', $chengedFields) . ')';
-						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $account, 2100, 'userid=' . $row['lu_id'] . ', username=' . $name);
+						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報' . $changeFieldInfo . 'を更新しました。アカウント: ' . $row['lu_account'], 2100, 'userid=' . $row['lu_id'] . ', username=' . $row['lu_name']);
 				
 						$this->serialNo = $newSerial;
 						$reloadData = true;		// データの再読み込み
@@ -390,7 +364,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 						$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
 					}
 				}
-			} else {
+			} else {	// パーソナルモードではない場合
 				// 入力チェック
 				$this->checkInput($name, $this->_('Name'));		// 名前
 				$this->checkLoginAccount($account, $this->_('Login Account'));// アカウント
@@ -584,6 +558,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				$ret = $this->_db->getLoginUserRecordById($row['lu_create_user_id'], $userInfo);
 				if ($ret) $updateUser = $userInfo['lu_name'];	// データ登録者
 				$updateDt = $row['lu_create_dt'];			// データ登録日時
+				
+				// ユーザタイプ文字列を作成
+				$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
+				if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $userTypeStr = 'ページ運用者';
 			}
 		}
 		
@@ -604,7 +582,8 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$canLoginCheck = '';
 		if ($canLogin) $canLoginCheck = 'checked';
 		$this->tmpl->addVar("_widget", "can_login", $canLoginCheck);
-		$this->tmpl->addVar("_widget", "userid", $loginUserId);// ユーザID
+		$this->tmpl->addVar("_widget", "userid", $this->convertToDispString($loginUserId));// ユーザID
+		$this->tmpl->addVar("_widget", "user_type", $this->convertToDispString($userTypeStr));
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 有効期間開始日
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 有効期間開始時間

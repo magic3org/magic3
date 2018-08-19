@@ -2383,7 +2383,7 @@ class SystemDb extends BaseDb
 	 *
 	 * @param int $serial			シリアル番号
 	 * @param string  $name			ユーザ名
-	 * @param string  $account		アカウント
+	 * @param string  $account		アカウント(nullのときは更新しない)
 	 * @param string  $password		パスワード(空のときは更新しない)
 	 * @param int     $userType		ユーザ種別(nullのときは更新しない)
 	 * @param string $canLogin		ログイン可能かどうか(nullのときは更新しない)
@@ -2428,6 +2428,7 @@ class SystemDb extends BaseDb
 		if (!empty($password)) $pwd = $password;
 		
 		// 元の値を取得
+		if (is_null($account)) $account = $row['lu_account'];
 		if (is_null($userType)) $userType = $row['lu_user_type'];
 		if (is_null($canLogin)) $canLogin = $row['lu_enable_login'];
 		if (is_null($startDt)) $startDt = $row['lu_active_start_dt'];
