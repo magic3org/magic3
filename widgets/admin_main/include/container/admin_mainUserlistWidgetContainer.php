@@ -522,12 +522,12 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		} else if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// 削除のとき
 			// ユーザ情報を取得
 			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
-			if (!$ret) $this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
-
-			// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
 			if ($ret){
+				// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
 				$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
 				if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $this->setMsg(self::MSG_APP_ERR, 'ページ管理画面からユーザを削除してください');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
 			}
 				
 			if ($this->getMsgCount() == 0){
