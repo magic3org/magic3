@@ -33,6 +33,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 	const GUIDE_ICON_FILE = '/images/system/guide16.png';		// ガイダンスアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const MAX_MSG_LENGTH = 120;					// メッセージの長さ最大値
+	const TASK_OPELOG	= 'opelog';			// 運用ログ一覧
 	
 	/**
 	 * コンストラクタ
@@ -134,6 +135,10 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 		
 		$this->tmpl->addVar('_widget', 'view_count', $viewCount);			// 一度に表示可能なリスト項目数
+		
+		// ##### 表示制御 #####
+		// システム運用者の場合はアクセス許可がなければ詳細ボタンを表示しない
+		if ($this->gEnv->isSystemManager() && !in_array(self::TASK_OPELOG, $this->gSystem->getSystemManagerEnableTask())) $this->tmpl->setAttribute('show_detail_button', 'visibility', 'hidden');
 	}
 	/**
 	 * 運用ログ一覧取得したデータをテンプレートに設定する
