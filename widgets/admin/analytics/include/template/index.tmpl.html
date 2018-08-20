@@ -61,7 +61,7 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<h3 class="m3config_h">アクセス数</h3> <a href="?task=analyzegraph" class="btn btn-sm btn-warning m3config_h_side_small_button" role="button" rel="m3help" data-container="body" title="詳細"><i class="glyphicon glyphicon-hand-right"></i></a> ({DATE_TITLE}：{DATE})
+<h3 class="m3config_h">アクセス数</h3><patTemplate:tmpl name="show_detail_button"> <a href="?task=analyzegraph" class="btn btn-sm btn-warning m3config_h_side_small_button" role="button" rel="m3help" data-container="body" title="詳細"><i class="glyphicon glyphicon-hand-right"></i></a></patTemplate:tmpl> ({DATE_TITLE}：{DATE})
 <patTemplate:tmpl name="show_calc_button">
 <div class="m3config_h_side_buttons pull-right hidden-xs"><div class="btn-group">
 <input type="button" class="button" onclick="updateItem();" value="集計" />

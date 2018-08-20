@@ -40,7 +40,8 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_GRAPH_HEIGHT = 280;		// グラフ高さ
 	const LIB_JQPLOT = 'jquery.jqplot';		// ライブラリID
 	const LINE_DATA_HEAD = 'line';			// ラインデータ変数名ヘッダ
-			
+	const TASK_GRAPH				= 'analyzegraph';		// グラフ表示
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -281,6 +282,10 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 集計処理不可の場合は「集計」ボタンを隠す
 		if (!$this->enableCalc) $this->tmpl->setAttribute('show_calc_button', 'visibility', 'hidden');
+		
+		// ##### 表示制御 #####
+		// システム運用者の場合はアクセス許可がなければ詳細ボタンを表示しない
+		if ($this->gEnv->isSystemManager() && !in_array(self::TASK_GRAPH, $this->gSystem->getSystemManagerEnableTask())) $this->tmpl->setAttribute('show_detail_button', 'visibility', 'hidden');
 	}
 	/**
 	 * ページビューデータを取得
