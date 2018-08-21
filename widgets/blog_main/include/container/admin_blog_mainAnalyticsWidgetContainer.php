@@ -217,9 +217,11 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->createGraphData();
 		
 		// グラフ用データをスクリプト化
-		$graphDataXStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->xTitleArray)) . ']';
+//		$graphDataXStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->xTitleArray)) . ']';
+		$graphDataXStr = '[' . implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->xTitleArray)) . ']';
 		$graphDataYStr = '[' . implode(', ', $this->yValueArray) . ']';
-		$graphDataKeyStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->graphDataKeyArray)) . ']';
+//		$graphDataKeyStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->graphDataKeyArray)) . ']';
+		$graphDataKeyStr = '[' . implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->graphDataKeyArray)) . ']';
 
 		// グラフY座標最大値取得
 		$yMax = self::DEFAULT_Y_TICK_VALUE;
