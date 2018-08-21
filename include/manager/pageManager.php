@@ -1187,7 +1187,9 @@ class PageManager extends Core
 	function getMainContentTypes()
 	{
 		// 「value」値のみ取得
-		return array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
+		//return array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
+		$types = array_map(function($a){ return $a["value"]; }, $this->mainContentTypeInfo);
+		return $types;
 	}
 	/**
 	 * フロント画面で使用するサブコンテンツタイプを取得
@@ -1197,7 +1199,9 @@ class PageManager extends Core
 	function getSubContentTypes()
 	{
 		// 「value」値のみ取得
-		return array_map(create_function('$a', 'return $a["value"];'), $this->subContentTypeInfo);
+//		return array_map(create_function('$a', 'return $a["value"];'), $this->subContentTypeInfo);
+		$types = array_map(function($a){ return $a["value"]; }, $this->subContentTypeInfo);
+		return $types;
 	}
 	/**
 	 * フロント画面で使用する主要機能タイプ情報を取得
@@ -1216,7 +1220,9 @@ class PageManager extends Core
 	function getMainFeatureTypes()
 	{
 		// 「value」値のみ取得
-		return array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureTypeInfo);
+//		return array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureTypeInfo);
+		$types = array_map(function($a){ return $a["value"]; }, $this->mainFeatureTypeInfo);
+		return $types;
 	}
 	
 	/**
@@ -4104,14 +4110,16 @@ class PageManager extends Core
 						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
 						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
 						
-						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+						//$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+						$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
 					// CKEditor用(レイアウト)のCSSファイル
 					$cssFiles = array();
 					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
 					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+//					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
 					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					
 					// CKEditor用のテンプレートタイプ
@@ -4240,14 +4248,16 @@ class PageManager extends Core
 						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
 						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
 					
-						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+//						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+						$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
 					// CKEditor用(レイアウト)のCSSファイル
 					$cssFiles = array();
 					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
 					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+		//			$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
 					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					
 					// CKEditor用のテンプレートタイプ

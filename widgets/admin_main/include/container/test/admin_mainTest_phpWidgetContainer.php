@@ -25,19 +25,6 @@ class admin_mainTest_phpWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// フロント画面で使用する主要コンテンツタイプ
-		$this->mainContentTypeInfo	 = array(
-												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
-												array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
-												array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
-												array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
-												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
-												array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
-												array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
-												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
-												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
-											);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -64,8 +51,6 @@ class admin_mainTest_phpWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$a = array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
-		
 		var_dump($a);
 		
 		$act = $request->trimValueOf('act');
