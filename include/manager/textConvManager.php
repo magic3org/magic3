@@ -614,7 +614,8 @@ class TextConvManager extends Core
 		$dest = preg_replace('/<\/?blockquote>/si', '<hr />', $dest);
 		
 		// PREタグの処理
-		$dest = preg_replace_callback('/<pre\b[^>]*?>(.*?)<\/pre\b[^>]*?>/si', create_function('$matches', 'return "<hr />".nl2br(trim($matches[1]))."<hr />";'), $dest);
+		/*$dest = preg_replace_callback('/<pre\b[^>]*?>(.*?)<\/pre\b[^>]*?>/si', create_function('$matches', 'return "<hr />".nl2br(trim($matches[1]))."<hr />";'), $dest);*/
+		$dest = preg_replace_callback('/<pre\b[^>]*?>(.*?)<\/pre\b[^>]*?>/si', function($matches){ return "<hr />".nl2br(trim($matches[1]))."<hr />"; }, $dest);
 		
 		// 連続したタグをまとめる
 		$search = array(
@@ -1012,7 +1013,8 @@ class TextConvManager extends Core
 		$destStr = preg_replace($search, $replace, $src);
 		
 		// ##### /e modifier deprecated in PHP5.5 #####
-		$destStr = preg_replace_callback('/&#(\d+);/', create_function('$matches','return chr($matches[1]);'), $destStr);
+//		$destStr = preg_replace_callback('/&#(\d+);/', create_function('$matches','return chr($matches[1]);'), $destStr);
+		$destStr = preg_replace_callback('/&#(\d+);/', function($matches){ return chr($matches[1]); }, $destStr);
 		return $destStr;
 	}
 	/**
