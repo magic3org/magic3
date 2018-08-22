@@ -4452,7 +4452,8 @@ class SystemDb extends BaseDb
 			$queryStr .=     'af_file_deleted_dt = ?, ';
 			$queryStr .=     'af_delete_log_serial = ? ';
 			$queryStr .=   'WHERE af_content_type = ? AND af_file_deleted = false ';	// コンテンツタイプ
-			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+//			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(function($a){ return "'" . $a . "'"; }, $delFileId)) . ') ';
 			$this->execStatement($queryStr, array($now, $logSerial, $contentType));
 		}
 		
@@ -4614,7 +4615,8 @@ class SystemDb extends BaseDb
 			$queryStr .=     'af_file_deleted_dt = ?, ';
 			$queryStr .=     'af_delete_log_serial = ? ';
 			$queryStr .=   'WHERE af_content_type = ? AND af_file_deleted = false ';	// コンテンツタイプ
-			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+//			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(function($a){ return "'" . $a . "'"; }, $delFileId)) . ') ';
 			$this->execStatement($queryStr, array($now, $logSerial, $contentType));
 		}
 		
@@ -4673,7 +4675,8 @@ class SystemDb extends BaseDb
 			$queryStr .=     'af_file_deleted_dt = ?, ';
 			$queryStr .=     'af_delete_log_serial = ? ';
 			$queryStr .=   'WHERE af_content_type = ? AND af_file_deleted = false ';	// コンテンツタイプ
-			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+//			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(function($a){ return "'" . $a . "'"; }, $delFileId)) . ') ';
 			$this->execStatement($queryStr, array($now, $logSerial, $contentType));
 		}
 		
@@ -4710,7 +4713,8 @@ class SystemDb extends BaseDb
 		$queryStr .=     'AND af_client_id = ? ';
 		$queryStr .=     'AND af_content_id = \'\' ';		// 仮登録ファイル
 		$queryStr .=     'AND af_file_deleted = false ';
-		if (!empty($fileIdArray)) $queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $fileIdArray)) . ') ';
+//		if (!empty($fileIdArray)) $queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $fileIdArray)) . ') ';
+		if (!empty($fileIdArray)) $queryStr .=     'AND af_file_id in (' . implode(',', array_map(function($a){ return "'" . $a . "'"; }, $fileIdArray)) . ') ';
 		$ret = $this->selectRecords($queryStr, array($contentType, $clientId), $rows);
 		
 		// ファイル削除
@@ -4741,7 +4745,8 @@ class SystemDb extends BaseDb
 			$queryStr .=     'af_file_deleted_dt = ?, ';
 			$queryStr .=     'af_delete_log_serial = ? ';
 			$queryStr .=   'WHERE af_content_type = ? AND af_file_deleted = false ';	// コンテンツタイプ
-			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+//			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $delFileId)) . ') ';
+			$queryStr .=     'AND af_file_id in (' . implode(',', array_map(function($a){ return "'" . $a . "'"; }, $delFileId)) . ') ';
 			$this->execStatement($queryStr, array($now, $logSerial, $contentType));
 		}
 		
