@@ -49,7 +49,8 @@ $GLOBALS['_PEAR_destructor_object_list'] = array();
 $GLOBALS['_PEAR_shutdown_funcs']         = array();
 $GLOBALS['_PEAR_error_handler_stack']    = array();
 
-@ini_set('track_errors', true);
+// ### remove for Magic3 ###
+//@ini_set('track_errors', true);
 
 /**
  * Base class for other PEAR classes.  Provides rudimentary
@@ -155,7 +156,8 @@ class PEAR
      * @access public
      * @return void
      */
-    function __construct($error_class = null)
+	 // ### remove for Magic3 ###
+/*    function __construct($error_class = null)
     {
         $classname = strtolower(get_class($this));
         if ($this->_debug) {
@@ -180,7 +182,7 @@ class PEAR
                 $classname = get_parent_class($classname);
             }
         }
-    }
+    }*/
 
     /**
      * Only here for backwards compatibility.
@@ -189,10 +191,11 @@ class PEAR
      * @param string $error_class Which class to use for error objects,
      *                            defaults to PEAR_Error.
      */
-    public function PEAR($error_class = null)
+	 // ### remove for Magic3 ###
+/*    public function PEAR($error_class = null)
     {
         self::__construct($error_class);
-    }
+    }*/
 
     /**
      * Destructor (the emulated type of...).  Does nothing right now,
@@ -205,7 +208,8 @@ class PEAR
      * @access public
      * @return void
      */
-    function _PEAR() {
+	 // ### remove for Magic3 ###
+/*    function _PEAR() {
         if ($this->_debug) {
             printf("PEAR destructor called, class=%s\n", strtolower(get_class($this)));
         }
@@ -235,7 +239,7 @@ class PEAR
             array(get_class(), '_' . $method),
             array_merge(array(null), $arguments)
         );
-    }
+    }*/
 
     /**
     * If you have a class that's mostly/entirely static, and you need static
@@ -768,7 +772,8 @@ class PEAR
     }
 }
 
-function _PEAR_call_destructors()
+// ### remove for Magic3 ###
+/*function _PEAR_call_destructors()
 {
     global $_PEAR_destructor_object_list;
     if (is_array($_PEAR_destructor_object_list) &&
@@ -809,7 +814,7 @@ function _PEAR_call_destructors()
             call_user_func_array($value[0], $value[1]);
         }
     }
-}
+}*/
 
 /**
  * Standard PEAR error class for PHP 4
