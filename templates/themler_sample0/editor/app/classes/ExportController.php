@@ -235,7 +235,7 @@ class ExportController
     public function runUp($data)
     {
         // testing 16M of memory
-        $func = create_function("", "echo json_encode(array(error => 'memtest'));");
+        //$func = create_function("", "echo json_encode(array(error => 'memtest'));");
         $callback = new UnregisterableCallback($func);
         register_shutdown_function(array($callback, "call"));
         @str_repeat('.', 16 * 1024 * 1024);
