@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,9 +34,6 @@ class ScriptLibInfo
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」が設定可能。(PHP v5.3対応) 
-//	const SELECTED_LIB_ELFINDER = 'elfinder115';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」が設定可能。(PHP v5.3対応) 
-//	const SELECTED_LIB_ELFINDER = 'elfinder123';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」が設定可能。(PHP v5.3対応) 
 	const SELECTED_LIB_ELFINDER = 'elfinder130';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」が設定可能。(PHP v5.3対応) 
 //	const SELECTED_LIB_ELFINDER = 'elfinder139';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」「elfinder139」が設定可能。
 		
@@ -51,10 +48,6 @@ class ScriptLibInfo
 	const LIB_FCKEDITOR				= 'fckeditor';
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
-	const LIB_ELFINDER112			= 'elfinder112';			// v2.1.12
-	const LIB_ELFINDER115			= 'elfinder115';			// v2.1.15
-//	const LIB_ELFINDER121			= 'elfinder121';			// v2.1.21
-	const LIB_ELFINDER123			= 'elfinder123';			// v2.1.23
 	const LIB_ELFINDER130			= 'elfinder130';			// v2.1.30
 	const LIB_ELFINDER139			= 'elfinder139';			// v2.1.39
 	const LIB_MD5					= 'md5';
@@ -311,62 +304,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)→廃止
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 	
-	// elFinder v2.0版
-	const ELFINDER_VER				= '2.1';									// elFinderバージョン
-	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
-	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER_CSS				= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
-//	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
-/*
-	const ELFINDER_FILENAME			= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
-	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER_CSS				= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
-//	const ELFINDER_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
-*/
-	// elFinder v2.1.12版
-	const ELFINDER112_VER			= '2.1.12';									// elFinderバージョン
-//	const ELFINDER112_FILENAME		= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
-	const ELFINDER112_FILENAME		= 'elfinder-2.1.12/js/elfinder.min.js';		// elFinder
-	const ELFINDER112_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER112_CSS			= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER112_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
-//	const ELFINDER112_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.min.css';		// テーマファイル
-	const ELFINDER112_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.css';		// テーマファイル
-
-	// elFinder v2.1.15版
-	const ELFINDER115_VER			= '2.1.15';									// elFinderバージョン
-//	const ELFINDER115_FILENAME		= 'elfinder-2.1.15/js/elfinder.full.js';		// elFinder
-	const ELFINDER115_FILENAME		= 'elfinder-2.1.15/js/elfinder.min.js';		// elFinder
-	const ELFINDER115_LANG_FILENAME	= 'elfinder-2.1.15/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER115_CSS			= 'elfinder-2.1.15/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER115_OPTION_CSS		= 'elfinder-2.1.15/css/theme.css';				// elFinder CSS
-//	const ELFINDER115_THEME_CSS		= 'elfinder-2.1.15/theme/smoothness/jquery-ui.min.css';		// テーマファイル
-	const ELFINDER115_THEME_CSS		= 'elfinder-2.1.15/theme/smoothness/jquery-ui.css';		// テーマファイル
-
-/*	// elFinder v2.1.21版
-	const ELFINDER121_VER			= '2.1.21';									// elFinderバージョン
-//	const ELFINDER121_FILENAME		= 'elfinder-2.1.21/js/elfinder.full.js';		// elFinder
-	const ELFINDER121_FILENAME		= 'elfinder-2.1.21/js/elfinder.min.js';		// elFinder
-	const ELFINDER121_LANG_FILENAME	= 'elfinder-2.1.21/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER121_CSS			= 'elfinder-2.1.21/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER121_OPTION_CSS		= 'elfinder-2.1.21/css/theme.css';				// elFinder CSS
-//	const ELFINDER121_THEME_CSS		= 'elfinder-2.1.21/theme/smoothness/jquery-ui.min.css';		// テーマファイル
-	const ELFINDER121_THEME_CSS		= 'elfinder-2.1.21/theme/smoothness/jquery-ui.css';		// テーマファイル
-*/
-	// elFinder v2.1.23版
-	const ELFINDER123_VER			= '2.1.23';									// elFinderバージョン
-	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.full.js';		// elFinder
-//	const ELFINDER123_FILENAME		= 'elfinder-2.1.23/js/elfinder.min.js';		// elFinder
-	const ELFINDER123_LANG_FILENAME	= 'elfinder-2.1.23/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER123_CSS			= 'elfinder-2.1.23/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER123_OPTION_CSS	= 'elfinder-2.1.23/css/theme.css';				// elFinder CSS
-//	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.min.css';		// テーマファイル
-//	const ELFINDER123_THEME_CSS		= 'elfinder-2.1.23/theme/smoothness/jquery-ui.css';		// テーマファイル
-
 	// elFinder v2.1.30版
 	// elfinder.min.jsは変更なしで使用し、elfinder.full.cssはMagic3用にカスタマイズ
 	const ELFINDER130_VER			= '2.1.30';									// elFinderバージョン
@@ -539,10 +476,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array($ckeditorFile)),		// CKEditor
-						self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
-																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS),		// テーマは最初に読み込む
-																	'version'	=> self::ELFINDER_VER					// elFinderバージョン
-																	),
 						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
 																							self::JSCALENDAR_FILENAME,			// jscalendar
@@ -713,28 +646,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	
 			// ##### ライブラリ情報更新 ####
 			// elFinderの選択状態に応じてライブラリを入れ替え
-			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER112){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER112_FILENAME, self::ELFINDER112_LANG_FILENAME),		// elFinder v2.1.12
-															'css'		=> array(self::ELFINDER112_THEME_CSS, self::ELFINDER112_CSS, self::ELFINDER112_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER112_VER					// elFinderバージョン
-														);
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER115){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER115_FILENAME, self::ELFINDER115_LANG_FILENAME),		// elFinder v2.1.15
-															'css'		=> array(self::ELFINDER115_THEME_CSS, self::ELFINDER115_CSS, self::ELFINDER115_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER115_VER					// elFinderバージョン
-														);
-/*			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER121){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER121_FILENAME, self::ELFINDER121_LANG_FILENAME),		// elFinder v2.1.15
-															'css'		=> array(self::ELFINDER121_THEME_CSS, self::ELFINDER121_CSS, self::ELFINDER121_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER121_VER					// elFinderバージョン
-														);*/
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER123){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER123_FILENAME, self::ELFINDER123_LANG_FILENAME),		// elFinder v2.1.23
-														//	'css'		=> array(self::ELFINDER123_THEME_CSS, self::ELFINDER123_CSS, self::ELFINDER123_OPTION_CSS),	// テーマは最初に読み込む
-															'css'		=> array(self::ELFINDER123_CSS, self::ELFINDER123_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER123_VER					// elFinderバージョン
-														);
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER130){
+			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER130){
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER130_FILENAME, self::ELFINDER130_LANG_FILENAME),		// elFinder v2.1.30
 															'css'		=> array(self::ELFINDER130_CSS, self::ELFINDER130_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER130_VER					// elFinderバージョン
@@ -822,11 +734,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
 										self::LIB_ELFINDER						=> array(self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 最新ではBootstrapを先に読ませない。elFinder v2.1.30以降で問題がなくなった?(2018/6/25)
-										self::LIB_ELFINDER112					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_ELFINDER115					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-//										self::LIB_ELFINDER121					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_ELFINDER123					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_ELFINDER130					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2017/11/29)
+//										self::LIB_ELFINDER130					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2017/11/29)
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
 //										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),
