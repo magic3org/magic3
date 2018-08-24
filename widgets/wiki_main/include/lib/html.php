@@ -276,8 +276,8 @@ function make_line_rules($str)
 	static $pattern, $replace;
 
 	if (! isset($pattern)) {
-		$pattern = array_map(create_function('$a',
-			'return \'/\' . $a . \'/\';'), array_keys($line_rules));
+//		$pattern = array_map(create_function('$a', 'return \'/\' . $a . \'/\';'), array_keys($line_rules));
+		$pattern = array_map(function($a){ return '/' . $a . '/'; }, array_keys($line_rules));
 		$replace = array_values($line_rules);
 		unset($line_rules);
 	}
@@ -347,8 +347,9 @@ function make_heading(& $str, $strip = TRUE)
 
 	// Cut footnotes and tags
 //	if ($strip === TRUE) $str = strip_htmltag(make_link(preg_replace($NotePattern, '', $str)));
-	if ($strip === TRUE) $str = strip_htmltag(make_link(preg_replace_callback($NotePattern, create_function('$matches','return;'), $str)));		// PHP5.5用修正
-	
+//	if ($strip === TRUE) $str = strip_htmltag(make_link(preg_replace_callback($NotePattern, create_function('$matches','return;'), $str)));		// PHP5.5用修正
+	if ($strip === TRUE) $str = strip_htmltag(make_link(preg_replace_callback($NotePattern, function($matches){ return ''; }, $str)));
+
 	return $id;
 }
 

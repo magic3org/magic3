@@ -435,14 +435,17 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 					'|' . '&[^;]+;' .			// Ignore entities
 					'|' . '(' . $pattern . ')' .		// $matches[1]: Regex for a search word
 					'/sS';
-				$decorate_Nth_word = create_function(
+/*				$decorate_Nth_word = create_function(
 					'$matches',
 					'return (isset($matches[1])) ? ' .
 						'\'<strong class="word word' .
 							$id .
 						'">\' . $matches[1] . \'</strong>\' : ' .
 						'$matches[0];'
-				);
+				);*/
+				$decorate_Nth_word =	function($matches){
+											return (isset($matches[1])) ? '<strong class="word word' . $id .'">' . $matches[1] . '</strong>' : $matches[0];
+										};
 				$body  = preg_replace_callback($pattern, $decorate_Nth_word, $body);
 				$notes = preg_replace_callback($pattern, $decorate_Nth_word, $notes);
 				++$id;
