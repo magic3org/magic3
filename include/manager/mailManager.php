@@ -186,22 +186,26 @@ class MailManager extends Core
 		}
 		// CCのメールアドレスを設定
 		if (!empty($ccAddress)) $destHeader .= 'Cc: ' . $ccAddress . "\n";
-		$destHeader .= implode('', array_map(create_function('$a', 'return "Cc: " . $a . "\n";'), $ccAddressArray));
+//		$destHeader .= implode('', array_map(create_function('$a', 'return "Cc: " . $a . "\n";'), $ccAddressArray));
+		$destHeader .= implode('', array_map(function($a){ return "Cc: " . $a . "\n"; }, $ccAddressArray));
+
 		// BCCのメールアドレスを設定
 		if (!empty($bccAddress)) $destHeader .= 'Bcc: ' . $bccAddress . "\n";
-		$destHeader .= implode('', array_map(create_function('$a', 'return "Bcc: " . $a . "\n";'), $bccAddressArray));
+		//$destHeader .= implode('', array_map(create_function('$a', 'return "Bcc: " . $a . "\n";'), $bccAddressArray));
+		$destHeader .= implode('', array_map(function($a){ return "Bcc: " . $a . "\n"; }, $bccAddressArray));
 
 		// ##### メール件名、本文のマクロを置換 #####
 		// 件名を置換
 		if (!empty($titleParams)){		// 変換パラメータが設定されているとき
-			while (list($key, $val) = each($titleParams)){
+//			while (list($key, $val) = each($titleParams)){
+			foreach ($titleParams as $key => $val){
 				$destSubject = str_replace(M3_TAG_START . $key . M3_TAG_END, $val, $destSubject);
 			}
 		}
 		// 本文を置換
 		if (!empty($params)){		// 変換パラメータが設定されているとき
-			while (list($key, $val) = each($params)){
-				//$destContent = preg_replace("/\[#" . $key . "#\]/", $val, $destContent);
+			//while (list($key, $val) = each($params)){
+			foreach ($params as $key => $val){
 				$destContent = str_replace(M3_TAG_START . $key . M3_TAG_END, $val, $destContent);
 			}
 		}

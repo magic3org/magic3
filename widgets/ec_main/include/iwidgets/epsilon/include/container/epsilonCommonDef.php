@@ -57,7 +57,10 @@ class epsilonCommonDef
 				$xmlObj = @new SimpleXMLElement($output);
 				
 				foreach ($xmlObj->result as $resultKey => $resultValue){
-		    		list($resultAttrKey, $resultAttrValue) = each($resultValue);
+		    		//list($resultAttrKey, $resultAttrValue) = each($resultValue);
+					$resultAttrKeys = array_keys($resultValue);
+					$resultAttrKey = $resultAttrKeys[0];
+					$resultAttrValue = $resultValue[$resultAttrKey];
 					foreach ($resultAttrValue as $key => $value) $resultArray[$key] = mb_convert_encoding(urldecode($value), 'UTF-8', 'SJIS-win');
 				}
 
