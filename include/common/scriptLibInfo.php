@@ -35,7 +35,7 @@ class ScriptLibInfo
 
 	// ##### 選択中のライブラリ #####
 	const SELECTED_LIB_ELFINDER = 'elfinder130';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」が設定可能。(PHP v5.3対応) 
-//	const SELECTED_LIB_ELFINDER = 'elfinder139';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」「elfinder139」が設定可能。
+//	const SELECTED_LIB_ELFINDER = 'elfinder141';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」「elfinder141」が設定可能。
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -49,7 +49,7 @@ class ScriptLibInfo
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_ELFINDER130			= 'elfinder130';			// v2.1.30
-	const LIB_ELFINDER139			= 'elfinder139';			// v2.1.39
+	const LIB_ELFINDER141			= 'elfinder141';			// v2.1.41
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
@@ -314,14 +314,14 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER130_OPTION_CSS	= 'elfinder-2.1.30/css/theme.css';				// elFinder CSS
 
-	// 新バージョンリリースのためv2.1.39は削除
-	const ELFINDER139_VER			= '2.1.39';									// elFinderバージョン
-//	const ELFINDER139_FILENAME		= 'elfinder-2.1.39/js/elfinder.full.js';		// elFinder
-	const ELFINDER139_FILENAME		= 'elfinder-2.1.39/js/elfinder.min.js';		// elFinder
-	const ELFINDER139_LANG_FILENAME	= 'elfinder-2.1.39/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER139_CSS			= 'elfinder-2.1.39/css/elfinder.full.css';		// elFinder CSS
-//	const ELFINDER139_CSS			= 'elfinder-2.1.39/css/elfinder.min.css';		// elFinder CSS
-	const ELFINDER139_OPTION_CSS	= 'elfinder-2.1.39/css/theme.css';				// elFinder CSS
+	// elFinder v2.1.41版
+	const ELFINDER141_VER			= '2.1.41';									// elFinderバージョン
+//	const ELFINDER141_FILENAME		= 'elfinder-2.1.41/js/elfinder.full.js';		// elFinder
+	const ELFINDER141_FILENAME		= 'elfinder-2.1.41/js/elfinder.min.js';		// elFinder
+	const ELFINDER141_LANG_FILENAME	= 'elfinder-2.1.41/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER141_CSS			= 'elfinder-2.1.41/css/elfinder.full.css';		// elFinder CSS
+//	const ELFINDER141_CSS			= 'elfinder-2.1.41/css/elfinder.min.css';		// elFinder CSS
+	const ELFINDER141_OPTION_CSS	= 'elfinder-2.1.41/css/theme.css';				// elFinder CSS
 	
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
@@ -651,10 +651,10 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 															'css'		=> array(self::ELFINDER130_CSS, self::ELFINDER130_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER130_VER					// elFinderバージョン
 														);
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER139){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER139_FILENAME, self::ELFINDER139_LANG_FILENAME),		// elFinder v2.1.39
-															'css'		=> array(self::ELFINDER139_CSS, self::ELFINDER139_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER139_VER					// elFinderバージョン
+			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER141){
+				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER141_FILENAME, self::ELFINDER141_LANG_FILENAME),		// elFinder v2.1.41
+															'css'		=> array(self::ELFINDER141_CSS, self::ELFINDER141_OPTION_CSS),	// テーマは最初に読み込む
+															'version'	=> self::ELFINDER141_VER					// elFinderバージョン
 														);
 			}
 
