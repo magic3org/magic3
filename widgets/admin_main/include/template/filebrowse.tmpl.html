@@ -18,7 +18,8 @@ $(function(){
 	$(".container").removeClass("container");
 	var browserHeight = ($(window).height() - 200/*ヘッダ高さ*/) * 0.9;
 	
-	options = {	toolbar:[
+	// ツールバーボタン
+	var options = {	toolbar:[
 					['back', 'forward'],
 					// ['netmount'],
 					// ['reload'],
@@ -36,6 +37,18 @@ $(function(){
 					['help'],
 					['fullscreen']
 				] };
+	
+	// コンテキストメニュー
+	var contextmenu = {
+		// navbarfolder menu
+		navbar : ['open', 'opennew', 'download', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', '|', 'archive', '|', 'places', 'info', 'chmod', 'netunmount'],
+		// current directory menu
+		//cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'empty', 'hide', '|', 'view', 'sort', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen', '|', 'preference'],
+		cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'paste', '|', 'empty', 'hide', '|', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen'],
+		// current directory file menu
+		//files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', 'selectinvert', '|', 'places', 'info', 'chmod', 'netunmount']
+		files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', '|', 'places', 'info', 'chmod', 'netunmount']
+	};
 					
 	var elf = $('#elfinder').elfinder({
 		url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php',
@@ -44,6 +57,7 @@ $(function(){
 		lang: '{LANG}',             // language (OPTIONAL)
 		ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 		uiOptions: options,
+		contextmenu: contextmenu,
 		getFileCallback : function(files, fm){		// ダブルクリックのファイルオープン禁止
 			return false;
 		}
