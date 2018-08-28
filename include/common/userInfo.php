@@ -58,6 +58,21 @@ class UserInfo
 		}
 	}
 	/**
+	 * パーソナルモードユーザかどうか
+	 *
+	 * @return bool			true=パーソナルモードユーザ、false=パーソナルモードユーザではない
+	 */
+	function isPersonal()
+	{
+		$isPersonal = true;
+		if ($this->userType == self::USER_TYPE_SYS_ADMIN){	// システム管理者の場合
+			$isPersonal = false;
+		} else if ($this->userType == self::USER_TYPE_MANAGER && empty($this->userOptType)){			// システム運用者でユーザタイプオプションがない場合
+			$isPersonal = false;
+		}
+		return $isPersonal;
+	}
+	/**
 	 * ユーザタイプオプション文字列を解析し、ユーザオプションタイプを取得
 	 *
 	 * @return string		ユーザオプションタイプ。取得できない場合は空文字列。
