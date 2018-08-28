@@ -2121,6 +2121,7 @@ class EnvManager extends Core
 	 */
 	public function isResourceLimitedUser()
 	{
+		// リソースアクセス制限はページマネージャーのパーソナルモード時と同じにする
 		global $gInstanceManager;
 
 		$resourceLimited = true;
@@ -2128,9 +2129,8 @@ class EnvManager extends Core
 		if (!is_null($userInfo)){		// ログイン中の場合
 			if ($userInfo->userType == UserInfo::USER_TYPE_SYS_ADMIN){	// システム管理者の場合
 				$resourceLimited = false;
-			} else if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER){	// システム運用者の場合
-				$accessWidget = $userInfo->adminWidget;
-				if (empty($accessWidget)) $resourceLimited = false;
+			} else if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER && empty($userInfo->userOptType)){			// システム運用者でユーザタイプオプションがない場合
+				$resourceLimited = false;
 			}
 		}
 		return $resourceLimited;

@@ -84,7 +84,7 @@ function access($attr, $path, $data, $volume) {
 // ########## Magic3アクセス制御(開始) ##########
 // ディレクトリ参照範囲を制限
 $dirType = $gRequestManager->trimValueOf('dirtype');
-if (!empty($dirType) && !in_array($dirType, array('image', 'flash', 'file'))){
+if (!empty($dirType) && !in_array($dirType, array('image', 'file'))){
 	$gOpeLogManager->writeUserAccess(__METHOD__, 'ファイルブラウザへの不正なパラメータを検出しました。dirtype=' . $dirType , 3001, 'アクセスをブロックしました。');
 	exit(0);
 }
@@ -97,6 +97,13 @@ if (!empty($dirType)){
 
 // ディレクトリがない場合は作成
 if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+
+// アップロード可能なファイルを制限
+if ($dirType == 'image'){
+	$uploadAllow = array('image');
+} else {
+	$uploadAllow = array('image', 'application/pdf');		// 画像、PDFを許可
+}
 // ########## Magic3アクセス制御(終了) ##########
 
 // 画像の自動生成の設定
@@ -113,6 +120,9 @@ $opts = array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 			'path'          => $path,		// path to files (REQUIRED)
 			'URL'           => $url,		// URL to files (REQUIRED)
+			'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
+			'uploadAllow'   => $uploadAllow,// Mimetype allowed to upload
+			'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
 		)
 	),
