@@ -67,7 +67,8 @@ class JRegistry extends JObject
 	 * @return	object	The JRegistry object.
 	 * @since	1.5
 	 */
-	function &getInstance($id, $namespace = 'default')
+//	function &getInstance($id, $namespace = 'default')
+	public static function getInstance($id, $namespace = 'default')
 	{
 		static $instances;
 

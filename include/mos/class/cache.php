@@ -97,7 +97,8 @@ class JCache extends JObject
 	 * @return	object	A JCache object
 	 * @since	1.5
 	 */
-	function &getInstance($type = 'output', $options = array())
+	public static function getInstance($type = 'output', $options = array())
+	//function &getInstance($type = 'output', $options = array())
 	{
 		global $gEnvManager;
 		

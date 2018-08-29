@@ -192,7 +192,8 @@ class JDatabase extends JObject
 	 * @return JDatabase A database object
 	 * @since 1.5
 	*/
-	function &getInstance( $options	= array() )
+//	function &getInstance( $options	= array() )
+	public static function getInstance( $options	= array() )
 	{
 		static $instances;
 
