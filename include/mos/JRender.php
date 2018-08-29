@@ -382,6 +382,7 @@ debug($contentItem->published);*/
 					}
 				}
 				
+				// 一覧表示の場合は$this->lead_itemsにデータが入る
 				$this->lead_items = array();
 				$this->intro_items = array();
 				$this->link_items = array();
