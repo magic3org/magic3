@@ -1319,10 +1319,18 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$viewItem = new stdClass;
 		$viewItem->id			= $entryId;	// コンテンツID
 		$viewItem->title		= $title;	// コンテンツ名
-		if ($this->entryListDispType == 0){			// コンテンツ表示の場合
+		if ($this->entryListDispType == 0){			// 一覧の表示タイプがコンテンツ表示(カテゴリー、関連記事付き)の場合
 			$viewItem->introtext	= $this->buttonList . $buttonList . $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		} else {		// タイトル・概要表示の場合
-			$viewItem->introtext	= $this->buttonList . $buttonList . $this->convertToDispString($summary);		// 概要
+			// 「概要」または「本文1」を表示する
+			if (empty($summary)){		// 「概要」が設定されていない場合
+				// 「本文1」から画像を削除して概要を作成
+				$summaryHtml = $this->convertM3ToHtml($fetchedRow['be_html'], true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
+				$summaryHtml = $this->gInstance->getTextConvManager()->deleteTag($summaryHtml, array('img'));	// 画像タグは削除
+				$viewItem->introtext	= $this->buttonList . $buttonList . $summaryHtml;
+			} else {
+				$viewItem->introtext	= $this->buttonList . $buttonList . $this->convertToDispString($summary);		// 概要
+			}
 		}
 		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
