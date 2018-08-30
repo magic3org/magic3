@@ -584,6 +584,14 @@ debug($contentItem->published);*/
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		switch ($templateVer){
 			case 2:		// Joomla!v2.5テンプレート
+				if ($gEnvManager->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
+					$helper = $gEnvManager->getJoomlaRootPath() . '/render/breadcrumbHelper.php';
+					$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_breadcrumbs/default.php';		// パンくずリスト出力用スクリプト
+				} else {			// Artisteerで作成の場合は、ウィジェットの標準のパンくずリスト出力を使用する
+					$helper = '';
+					$menuPath = '';
+				}
+				break;
 			case 10:		// Bootstrapテンプレート
 				$helper = $gEnvManager->getJoomlaRootPath() . '/render/breadcrumbHelper.php';
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_breadcrumbs/default.php';		// パンくずリスト出力用スクリプト
