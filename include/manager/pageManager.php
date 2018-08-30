@@ -2555,6 +2555,7 @@ class PageManager extends Core
 	 */
 	function lateLaunchWidget($request, $srcBuf)
 	{
+		static $render;		// HTML生成オブジェクト
 		global $gEnvManager;
 		global $gErrorManager;
 		global $gDesignManager;
@@ -2564,7 +2565,10 @@ class PageManager extends Core
 		
 		// ウィジェットヘッダ(Joomla!1.0用)を出力のタイプを取得
 		$widgetHeaderType = $this->getTemplateWidgetHeaderType();
-					
+		
+		// テンプレートタイプ取得
+		$templateVer = $gEnvManager->getCurrentTemplateType();
+		
 		// 遅延実行ウィジェットをインデックス順にソート
 		asort($this->lateLaunchWidgetList, SORT_NUMERIC);
 		
@@ -2696,6 +2700,19 @@ class PageManager extends Core
 					$srcContents = ob_get_contents();
 					ob_end_clean();
 					
+					// ### テンプレート側のウィジェット生成処理使える場合はウィジェットの出力と入れ替える ###
+					// ### 先のrequire($widgetIndexFile)で必要なデータは作成されている                    ###
+					if ($templateVer >= 1 && $templateVer < 100){		// Joomla!v1.5,v2.5テンプレートのとき
+						$widgetType = $pageDefRec['wd_type'];		// ウィジェットタイプ
+						if ($widgetType == 'breadcrumb'){		// パンくずリスト
+							// 描画オブジェクト作成
+							if (!isset($render)) $render = new JRender();
+
+							$templateContents = $render->getBreadcrumbContents('', '', '', array(), array(), $pageDefRec, $templateVer);			// テンプレートバージョンのみ必要
+							if (!empty($templateContents)) $srcContents = $templateContents;
+						}
+					}
+
 					// ウィジェットの出力を取得
 					$tag = self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
 					$destBuf = str_replace($tag, $srcContents, $destBuf);
@@ -4649,7 +4666,7 @@ class PageManager extends Core
 
 						if (empty($cacheData)){		// キャッシュデータがないとき
 							ob_clean();
-							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $launchWidgetTag, $titleTag, $widgetHeaderType);
 							if (!$ret) break;
 							$widgetContent = ob_get_contents();
 							
@@ -4755,8 +4772,8 @@ class PageManager extends Core
 							$gEnvManager->setWpWidgetClass('');				// ウィジェットクラス名初期化
 							
 							ob_clean();
-					//		$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
-							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, 0/*タイトル出力なし*/);
+					//		$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $launchWidgetTag, $titleTag, $widgetHeaderType);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $launchWidgetTag, $titleTag, 0/*タイトル出力なし*/);
 							if (!$ret) break;
 							$widgetContent = ob_get_contents();
 
@@ -4910,7 +4927,7 @@ class PageManager extends Core
 							
 							// ウィジェットの出力を取得
 							ob_clean();
-							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, 0/*タイトル出力なし*/);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $launchWidgetTag, $titleTag, 0/*タイトル出力なし*/);
 							$widgetContent = ob_get_contents();
 
 							$trimContent = trim($widgetContent);
@@ -4960,7 +4977,13 @@ class PageManager extends Core
 										} else {
 											// ウィジェットタイプに応じた処理を実行
 											if ($widgetType == 'breadcrumb'){		// パンくずリスト
-												$moduleContent = $render->getBreadcrumbContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												$moduleContent = '';
+												
+												if (empty($launchWidgetTag)){			// 遅延実行の場合はここでパンくずリストを作成しないで遅延実行時に行う
+													$moduleContent = $render->getBreadcrumbContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												} else {
+													$moduleContent = $launchWidgetTag;		// 遅延実行ウィジェットのタグのみ取得
+												}
 												
 												// パンくずリストで作成できないときはデフォルトの出力を取得
 												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
@@ -5750,14 +5773,15 @@ class PageManager extends Core
 	 * ウィジェット出力を処理
 	 *
 	 * @param string $position			HTMLテンプレート上の書き出し位置
-	 * @param int $index			行番号
-	 * @param array $fetchedRow		fetch取得した行
-	 * @param string $style			ウィジェットの表示スタイル(空の場合=Joomla!v1.0テンプレート用、空以外=Joomla!v1.5テンプレート用)
-	 * @param string $titleTag    	タイトル埋め込み用タグ(遅延ウィジェットの場合のみ作成)
-	 * @param int $widgetHeaderType	ウィジェットタイトルを出力方法(0=出力なし、1=Joomla!v1.0PC用出力、2=Joomla!v1.0携帯用出力)
-	 * @return bool					処理を継続するかどうか(true=続行、false=中断)
+	 * @param int $index				行番号
+	 * @param array $fetchedRow			fetch取得した行
+	 * @param string $style				ウィジェットの表示スタイル(空の場合=Joomla!v1.0テンプレート用、空以外=Joomla!v1.5テンプレート用)
+	 * @param string $launchWidgetTag	遅延ウィジェット埋め込み用タグ(遅延ウィジェットの場合のみ作成)
+	 * @param string $titleTag    		タイトル埋め込み用タグ(遅延ウィジェットの場合のみ作成)
+	 * @param int $widgetHeaderType		ウィジェットタイトルを出力方法(0=出力なし、1=Joomla!v1.0PC用出力、2=Joomla!v1.0携帯用出力)
+	 * @return bool						処理を継続するかどうか(true=続行、false=中断)
 	 */
-	function pageDefLoop($position, $index, $fetchedRow, $style, &$titleTag, $widgetHeaderType = 0)
+	function pageDefLoop($position, $index, $fetchedRow, $style, &$launchWidgetTag, &$titleTag, $widgetHeaderType = 0)
 	{
 		global $gEnvManager;
 		global $gErrorManager;
@@ -5805,6 +5829,7 @@ class PageManager extends Core
 		}
 		
 		// パラメータ初期化
+		$launchWidgetTag = '';		// 遅延ウィジェット埋め込み用タグ
 		$titleTag = '';
 		
 		// ウィジェットID取得
@@ -5847,7 +5872,8 @@ class PageManager extends Core
 			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index, $fetchedRow);
 			
 			// 遅延実行用タグを埋め込む
-			echo self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
+			$launchWidgetTag = self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;		// 遅延ウィジェット埋め込み用タグ
+			echo $launchWidgetTag;
 			
 			// タイトル用タグ作成
 			$titleTag = self::WIDGET_ID_TITLE_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TITLE_TAG_END;
