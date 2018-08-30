@@ -226,6 +226,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 					$linkUrl = $this->getUrl($pageUrl, true/*リンク用*/);
 					$html = $this->_createLink($this->convertToDispString($pageName), $linkUrl);
 					
+					// ########## メインウィジェット実行後に取得可能になるので注意→ウィジェット実行順を遅らせる ##########
 					// コンテンツ名が設定されている場合は出力
 					$titleArray = $this->gPage->getHeadSubTitle();
 					if (count($titleArray) > 0) $html .= $this->createTitleLink($titleArray);
