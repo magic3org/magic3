@@ -576,9 +576,8 @@ debug($contentItem->published);*/
 */
 		$params->set('showHere',		0);
 		
-		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn」を読み込むかどうかを決定。
-		// 現在default_breadcrumbs_nnの出力ではうまく動作しない。ダミーの値を設定し、デフォルトのULタグでの出力を使用する。(2018/2/19)
-		$attribs['id'] = 100;
+		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn.php」を読み込む。デフォルトの1を使用する。
+		$attribs['id'] = 1;
 		
 		// 必要なスクリプトを読み込む
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
