@@ -568,13 +568,7 @@ debug($contentItem->published);*/
 		
 		// パラメータ作成
 		$params   = new JParameter();
-/*	//	$params->set('startLevel',		0);
-		$params->set('startLevel',		1);
-		$params->set('endLevel',		0);
-		$params->set('showAllChildren',	1);		// サブメニュー表示
-		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
-*/
-		$params->set('showHere',		0);
+		$params->set('showHere',		0);		// パンくずリストの左端ラベルを表示しない
 		
 		// idの値nnでテンプレート内の「/includes/breadcrumbs/default_breadcrumbs_nn.php」を読み込む。デフォルトの1を使用する。
 		$attribs['id'] = 1;
@@ -605,16 +599,8 @@ debug($contentItem->published);*/
 		if (is_readable($menuPath)){
 			// ウィジェットが出力したメニューコンテンツを設定
 			$gEnvManager->setJoomlaMenuContent($content);
-
-			// Joomla!2.5テンプレート用追加設定(2012/5/1 追加)
-			$GLOBALS['artx_settings']['menu']['show_submenus'] = true;
-			$GLOBALS['artx_settings']['vmenu']['show_submenus'] = true;
 			
 			ob_clean();
-/*			if ($templateVer == 2 ||		// Joomla!v2.5テンプレート
-				$templateVer == 10){		// Bootstrapテンプレート
-				require_once($gEnvManager->getJoomlaRootPath() . '/class/moduleHelper.php');
-			}*/
 			require($helper);		// デフォルトの出力方法
 			require($menuPath);		// 毎回実行する
 			$contents = ob_get_contents();
