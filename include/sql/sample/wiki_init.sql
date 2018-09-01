@@ -98,7 +98,7 @@ INSERT INTO _page_def
 ('index', '',        'left',         6,        'default_login_box',   0,            '',                   '',         true,             now()),
 ('index', '',        'footer',       2,       'default_footer',      0,            '',                   '',          false,        now()),
 ('index', '',        'footer',       10,       'gotop',              0,            '',                   '',          false,        now()),
-('index', '',        'main',         3,        'breadcrumb',         0,            '',                   '',          false,        now()),
+('index', '',        'breadcrumb',   3,        'breadcrumb',         0,            '',                   '',          false,        now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',          false,            now()),
 ('index', 'wiki',    'main',         5,        'wiki_main',          0,            '',                   '',          false,            now()),
 ('index', 'search',  'main',         5,        'custom_search',      1,            '名称未設定1',                   '',          false,            now()),
