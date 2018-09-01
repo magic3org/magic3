@@ -29,7 +29,7 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access protected
          */
-        function ArtxPageView(&$page) {
+        function __construct(&$page) {
             $this->page = & $page;
         }
 
@@ -210,8 +210,8 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxPage15(&$page) {
-            parent::ArtxPageView($page);
+        function __construct(&$page) {
+            parent::__construct($page);
         }
 
         /**
@@ -297,8 +297,8 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxPage16($page) {
-            parent::ArtxPageView($page);
+        function __construct($page) {
+            parent::__construct($page);
         }
 
         /**
@@ -423,7 +423,7 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access protected
          */
-        function ArtxContentView(&$component, &$params)
+        function __construct(&$component, &$params)
         {
             $this->_component = $component;
             $this->_componentParams = $params;
@@ -470,9 +470,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContent15(&$component, &$params)
+        function __construct(&$component, &$params)
         {
-            parent::ArtxContentView($component, $params);
+            parent::__construct($component, $params);
             $this->pageClassSfx = $this->_componentParams->get('pageclass_sfx');
             $this->showPageHeading = $this->_componentParams->def('show_page_title', 1);
             $this->pageHeading = $this->showPageHeading ? $this->_componentParams->get('page_title') : '';
@@ -508,9 +508,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContent16($component, $params)
+        function __construct($component, $params)
         {
-            parent::ArtxContentView($component, $params);
+            parent::__construct($component, $params);
             $this->pageClassSfx = $this->_component->pageclass_sfx;
             $this->showPageHeading = $this->_componentParams->def('show_page_heading', 1);
             $this->pageHeading = $this->showPageHeading ? $this->_componentParams->get('page_heading') : '';
@@ -699,7 +699,7 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access protected
          */
-        function ArtxContentGeneralArticleView(&$component, &$componentParams, &$article)
+        function __construct(&$component, &$componentParams, &$article)
         {
             // Initialization:
             $this->_component = &$component;
@@ -870,9 +870,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContentArticleView15(&$component, &$componentParams, &$article, $print)
+        function __construct(&$component, &$componentParams, &$article, $print)
         {
-            parent::ArtxContentGeneralArticleView($component, $componentParams, $article);
+            parent::__construct($component, $componentParams, $article);
 
             $this->print = $print;
             $this->canEdit = $this->_component->user->authorize('com_content', 'edit', 'content', 'all')
@@ -976,9 +976,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContentArticleView16($component, $componentParams, $article, $print)
+        function __construct($component, $componentParams, $article, $print)
         {
-            parent::ArtxContentGeneralArticleView($component, $componentParams, $article);
+            parent::__construct($component, $componentParams, $article);
 
             $user = JFactory::getUser();
 
@@ -1133,9 +1133,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContentFrontpageItemView15(&$component, &$componentParams, &$article)
+        function __construct(&$component, &$componentParams, &$article)
         {
-            parent::ArtxContentGeneralArticleView($component, $componentParams, $article);
+            parent::__construct($component, $componentParams, $article);
 
             $this->canEdit = $this->_component->user->authorize('com_content', 'edit', 'content', 'all')
                 || $this->_component->user->authorize('com_content', 'edit', 'content', 'own');
@@ -1259,9 +1259,9 @@ if (!defined('_ARTX_FUNCTIONS')) {
         /**
          * @access public
          */
-        function ArtxContentFeaturedItemView16($component, $componentParams, $article)
+        function __construct($component, $componentParams, $article)
         {
-            parent::ArtxContentGeneralArticleView($component, $componentParams, $article);
+            parent::__construct($component, $componentParams, $article);
 
             $this->canEdit = $this->_article->params->get('access-edit');
             $this->title = $this->_article->title;

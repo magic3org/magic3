@@ -57,6 +57,7 @@ $(function(){
 	</div></div>
     <div class="col-sm-9"><div class="row">
 	<?php if ($document->countModules('banner')): ?><div class="col-sm-12"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('breadcrumb')): ?><div class="col-sm-12"><jdoc:include type="modules" name="breadcrumb" style="bootblock" /></div><?php endif; ?>
 	<?php if ($document->countModules('top')): ?><div class="col-sm-12"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
 	<div class="col-sm-12"><jdoc:include type="component" style="bootblock" /></div>
 	<?php if ($document->countModules('bottom')): ?><div class="col-sm-12"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
@@ -64,6 +65,7 @@ $(function(){
 	</div></div>
 <?php else: ?>
 	<?php if ($document->countModules('banner')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('breadcrumb')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="breadcrumb" style="bootblock" /></div><?php endif; ?>
 	<?php if ($document->countModules('top')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
 	<div class="col-sm-offset-2 col-sm-8"><jdoc:include type="component" style="bootblock" /></div>
 	<?php if ($document->countModules('bottom')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
