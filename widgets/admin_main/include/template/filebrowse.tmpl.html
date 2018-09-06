@@ -18,25 +18,71 @@ $(function(){
 	$(".container").removeClass("container");
 	var browserHeight = ($(window).height() - 200/*ヘッダ高さ*/) * 0.9;
 	
-	// ツールバーボタン
-	var options = {	toolbar:[
-					['back', 'forward'],
-					// ['netmount'],
-					// ['reload'],
-					// ['home', 'up'],
-					['mkdir', 'mkfile', 'upload'],
-					['open', 'download', 'getfile'],
-					['info', 'chmod'],
-					['quicklook'],
-					['copy', 'cut', 'paste'],
-					['rm'],
-					['duplicate', 'rename', 'edit', 'resize'],
-					['extract', 'archive'],
-					['search'],
-					['view', 'sort'],
-					['help'],
-					['fullscreen']
-				] };
+	// ツールバーボタン、コンテキストメニューの設定
+	if (M3_PERSONAL_MODE){		// パーソナルモード起動の場合
+		// ファイルの圧縮解凍機能は使用不可
+		
+		// ツールバーボタン
+		var options = {	toolbar:[
+						['back', 'forward'],
+						// ['netmount'],
+						// ['reload'],
+						// ['home', 'up'],
+						['mkdir', 'mkfile', 'upload'],
+						['open', 'download', 'getfile'],
+						['info', 'chmod'],
+						['quicklook'],
+						['copy', 'cut', 'paste'],
+						['rm'],
+						['duplicate', 'rename', 'edit', 'resize'],
+						['search'],
+						['view', 'sort'],
+						['help'],
+						['fullscreen']
+					] };
+					
+		// コンテキストメニュー
+		var contextmenu = {
+			// navbarfolder menu
+			navbar : ['open', 'opennew', 'download', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', '|', 'archive', '|', 'places', 'info', 'chmod', 'netunmount'],
+			// current directory menu
+			cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'paste', '|', 'empty', 'hide', '|', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen'],
+			// current directory file menu
+			files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'selectall', '|', 'places', 'info', 'chmod', 'netunmount']
+		};
+	} else {
+		// ツールバーボタン
+		var options = {	toolbar:[
+						['back', 'forward'],
+						// ['netmount'],
+						// ['reload'],
+						// ['home', 'up'],
+						['mkdir', 'mkfile', 'upload'],
+						['open', 'download', 'getfile'],
+						['info', 'chmod'],
+						['quicklook'],
+						['copy', 'cut', 'paste'],
+						['rm'],
+						['duplicate', 'rename', 'edit', 'resize'],
+						['extract', 'archive'],
+						['search'],
+						['view', 'sort'],
+						['help'],
+						['fullscreen']
+					] };
+
+		// コンテキストメニュー
+		var contextmenu = {
+			// navbarfolder menu
+			navbar : ['open', 'opennew', 'download', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', '|', 'archive', '|', 'places', 'info', 'chmod', 'netunmount'],
+			// current directory menu
+			//cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'empty', 'hide', '|', 'view', 'sort', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen', '|', 'preference'],
+			cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'paste', '|', 'empty', 'hide', '|', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen'],
+			// current directory file menu
+			//files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', 'selectinvert', '|', 'places', 'info', 'chmod', 'netunmount']
+			files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', '|', 'places', 'info', 'chmod', 'netunmount']
+		};
+	}
 	/*
 		toolbar : [
 			['home', 'back', 'forward', 'up', 'reload'],
@@ -55,17 +101,6 @@ $(function(){
 			['fullscreen']
 		],
 		*/
-	// コンテキストメニュー
-	var contextmenu = {
-		// navbarfolder menu
-		navbar : ['open', 'opennew', 'download', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', '|', 'archive', '|', 'places', 'info', 'chmod', 'netunmount'],
-		// current directory menu
-		//cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'empty', 'hide', '|', 'view', 'sort', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen', '|', 'preference'],
-		cwd    : ['undo', 'redo', '|', 'back', 'up', 'reload', '|', 'upload', 'mkdir', 'paste', '|', 'empty', 'hide', '|', 'selectall', 'colwidth', '|', 'places', 'info', 'chmod', 'netunmount', '|', 'fullscreen'],
-		// current directory file menu
-		//files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', 'selectinvert', '|', 'places', 'info', 'chmod', 'netunmount']
-		files  : ['getfile', '|' ,'open', 'opennew', 'download', 'opendir', 'quicklook', '|', 'upload', 'mkdir', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', 'empty', 'hide', '|', 'rename', 'edit', 'resize', '|', 'archive', 'extract', '|', 'selectall', '|', 'places', 'info', 'chmod', 'netunmount']
-	};
 					
 	var elf = $('#elfinder').elfinder({
 		url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php',

@@ -4109,6 +4109,12 @@ class PageManager extends Core
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
 
+				// 起動がパーソナルモードかどうか
+				if ($this->isPersonalMode){
+					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
+				} else {
+					$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
+				}
 				// 管理画面の小画面デバイス最適化を行うかどうか
 				if ($gEnvManager->isSmallDeviceAdmin()){
 					$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
@@ -4223,7 +4229,14 @@ class PageManager extends Core
 				} else {
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
-					
+
+				// 起動がパーソナルモードかどうか
+				if ($this->isPersonalMode){
+					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
+				} else {
+					$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
+				}
+				
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
@@ -4247,6 +4260,9 @@ class PageManager extends Core
 					} else {
 						$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 					}
+				
+					// 起動がパーソナルモードかどうか(常にパーソナルモード)
+					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
 				
 					// 管理画面の小画面デバイス最適化を行うかどうか
 					if ($gEnvManager->isSmallDeviceAdmin()){
