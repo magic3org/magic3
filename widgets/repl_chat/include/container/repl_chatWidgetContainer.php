@@ -17,10 +17,11 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class repl_chatWidgetContainer extends BaseWidgetContainer
 {
-	private $wikiLibObj;		// Wikiコンテンツオブジェクト
+	private $cssFilePath;				// CSSファイル
+	
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = '簡易Wikiコンテンツ';		// デフォルトのウィジェットタイトル名
-	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
+	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	
 	/**
 	 * コンストラクタ
@@ -29,9 +30,6 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// Wikiコンテンツオブジェクト取得
-		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -58,6 +56,14 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// CSSファイルの設定
+//		$templateType = $gEnvManager->getCurrentTemplateType();
+////		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+//			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
+//		} else {
+			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
+//		}
+		
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
@@ -71,7 +77,6 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 		
 		// wikiコンテンツを変換
 		$text = $targetObj->text;		// コンテンツ
-		$text = $this->wikiLibObj->convertToHtml($text);
 							
 		// 画面に埋め込む
 		$this->tmpl->addVar("_widget", "content", $text);
@@ -86,6 +91,20 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->cssFilePath;
 	}
 }
 ?>
