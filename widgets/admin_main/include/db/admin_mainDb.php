@@ -2415,36 +2415,27 @@ class admin_mainDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
-//		$queryStr = 'SELECT * FROM _access_log LEFT JOIN _login_user on al_user_id = lu_id ';
 		$queryStr = 'SELECT al_serial,al_uri,al_ip,al_user_agent,al_accept_language,al_dt,lu_name,lu_avatar FROM _access_log LEFT JOIN _login_user on al_user_id = lu_id ';
+		
+		// CMD実行の場合は除く
+		$queryStr .=  'WHERE al_is_cmd = false ';
+		
 		if (!is_null($path)){
-			$queryStr .=  'WHERE al_path = ? ';
+			$queryStr .=  'AND al_path = ? ';
 			$params[] = $path;
 		}
 		// 日付範囲
 		if (!empty($startDt)){
-			if (count($params) > 0){
-				$queryStr .=    'AND ? <= al_dt ';
-			} else {
-				$queryStr .=    'WHERE ? <= al_dt ';
-			}
+			$queryStr .=    'AND ? <= al_dt ';
 			$params[] = $startDt;
 		}
 		if (!empty($endDt)){
-			if (count($params) > 0){
-				$queryStr .=    'AND al_dt < ? ';
-			} else {
-				$queryStr .=    'WHERE al_dt < ? ';
-			}
+			$queryStr .=    'AND al_dt < ? ';
 			$params[] = $endDt;
 		}
 		// IPアドレス
 		if (!empty($ip)){
-			if (count($params) > 0){
-				$queryStr .=    'AND al_ip = ? ';
-			} else {
-				$queryStr .=    'WHERE al_ip = ? ';
-			}
+			$queryStr .=    'AND al_ip = ? ';
 			$params[] = $ip;
 		}
 		$queryStr .=  'ORDER BY al_serial DESC limit ' . $limit . ' offset ' . $offset;
@@ -2462,39 +2453,30 @@ class admin_mainDb extends BaseDb
 	function getAccessLogCount($path, $startDt, $endDt, $ip)
 	{
 		$params = array();
-//		$queryStr = 'SELECT * FROM _access_log ';
 		$queryStr = 'SELECT COUNT(al_serial) AS ct FROM _access_log ';
+		
+		// CMD実行の場合は除く
+		$queryStr .=  'WHERE al_is_cmd = false ';
+		
 		if (!is_null($path)){
-			$queryStr .=  'WHERE al_path = ? ';
+			$queryStr .=  'AND al_path = ? ';
 			$params[] = $path;
 		}
 		// 日付範囲
 		if (!empty($startDt)){
-			if (count($params) > 0){
-				$queryStr .=    'AND ? <= al_dt ';
-			} else {
-				$queryStr .=    'WHERE ? <= al_dt ';
-			}
+			$queryStr .=    'AND ? <= al_dt ';
 			$params[] = $startDt;
 		}
 		if (!empty($endDt)){
-			if (count($params) > 0){
-				$queryStr .=    'AND al_dt < ? ';
-			} else {
-				$queryStr .=    'WHERE al_dt < ? ';
-			}
+			$queryStr .=    'AND al_dt < ? ';
 			$params[] = $endDt;
 		}
 		// IPアドレス
 		if (!empty($ip)){
-			if (count($params) > 0){
-				$queryStr .=    'AND al_ip = ? ';
-			} else {
-				$queryStr .=    'WHERE al_ip = ? ';
-			}
+			$queryStr .=    'AND al_ip = ? ';
 			$params[] = $ip;
 		}
-//		return $this->selectRecordCount($queryStr, $params);
+
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		if ($ret){
 			$count = $row['ct'];
