@@ -1,4 +1,4 @@
-.main-section{
+#repl_chat{
   width: 300px;
   position: fixed;
   right:50px;
@@ -8,7 +8,7 @@
 .first-section:hover{
   cursor: pointer;
 }
-.open-more{
+#repl_chat.open-more{
   bottom:0px;
   transition:1s;
 }
@@ -60,7 +60,7 @@
 .right-chat img{
   float:right;
 }
-.second-section{
+#repl_chat .second-section{
   padding: 0px;
   margin: 0px;
   background-color: #F3F3F3;
@@ -93,13 +93,13 @@
   background-color: #FFFFFF;
   color:#FD8468;
 }
-.third-section{
-/*.text-bar {*/
+.third-section {
+  width:100%;
+  margin-top:-1px;
   border-top: 1px solid #EEEEEE;
 }
 .text-bar input{
-  width:120%;
-  margin-left:-15px;
+  width:100%;
   padding:10px 10px;
   border:1px solid #fff;
 }
@@ -113,6 +113,10 @@
   margin-top: 8px;
   border-radius: 50%;
   text-align: center;
+  
+  position: absolute;
+  right:0px;
+  bottom:10px;
 }
 .left-chat:before{
   content: " ";
@@ -131,4 +135,20 @@
   bottom:150px;
   border:15px solid transparent;
   border-top-color:#fff; 
+}
+/* プレースホルダー */
+input:focus:placeholder-shown {
+color: transparent;
+}
+input:focus::-webkit-input-placeholder {
+color: transparent;
+}
+input:focus::-moz-placeholder {
+color: transparent;
+}
+input:focus:-ms-input-placeholder {
+color: transparent;
+}
+input:focus::-ms-input-placeholder {
+color: transparent;
 }

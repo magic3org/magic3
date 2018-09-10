@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -59,7 +59,7 @@ $(function(){
     <tr>
 	    <th>名前</th>
 	    <td>
-		<div class="col-sm-4 m3config_item">
+		<div class="col-sm-4 m3config_item justify-3">
 	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">
@@ -68,17 +68,26 @@ $(function(){
 	    </select>
 		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
+	    <div class="col-sm-4 m3config_item justify-3"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
     <tr>
-	    <th>コンテンツ</th>
-	    <td class="ckeditor"><textarea name="item_text" rows="20">{TEXT}</textarea></td>
+	    <th><span {_HELP_UNTITLEDTASK_APIKEY}>開発者向け<br />APIキー</span></th>
+	    <td><input type="text" name="item_apikey" value="{API_KEY}" maxlength="100" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLEDTASK_BOTID}>ボットID</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_botid" value="{BOT_ID}" maxlength="20" /></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLEDTASK_SCENARIOID}>シナリオID</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_scenarioid" value="{SCENARIO_ID}" maxlength="20" /></div></td>
 	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
+<div class="pull-left text-left" style="width:80%;"><i class="glyphicon glyphicon-info-sign"></i> チャットロボットRepl-AI(<a href="https://repl-ai.jp/">https://repl-ai.jp/</a>)を使用するには登録が必要です。設定値はRepl-AIの管理画面から取得してください。</div>
 <patTemplate:tmpl name="del_button" visibility="hidden">
 		<input type="button" class="button" onclick="deleteItem();" value="削除" />
 </patTemplate:tmpl>

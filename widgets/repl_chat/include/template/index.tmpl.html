@@ -24,7 +24,7 @@ $(function(){
 	faSpan.remove();
 
 	var html = '';
-	html += '<div class="main-section">';
+	html += '<div id="repl_chat">';
 	html += '<div class="row border-chat">';
 	html += '<div class="col-md-12 col-sm-12 col-xs-12 first-section">';
 	html += '<div class="row">';
@@ -45,15 +45,45 @@ $(function(){
 	html += '</div>';
 	html += '</div>';
 	html += '</div>';
-	html += '<div class="row border-chat third-section ">';
-	html += '<div class="col-md-10 text-bar">';
+	html += '<div class="row border-chat">';
+	html += '<div class="third-section text-bar">';
 	html += '<input type="text" id="chat_message" placeholder="メッセージをどうぞ">';
 	html += '</div>';
-	html += '<div class="col-md-2 text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
+	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
 	html += '</div>';
 	html += '</div>';
-
 	$("body").append(html);
+	
+	$(".left-first-section").click(function(){
+	    $('#repl_chat').toggleClass("open-more");
+	});
+	$("#chat_open_panel").click(function(){
+	    $('#repl_chat').toggleClass("open-more");
+	});
+	$("#chat_sendmessage").click(function(){
+		var message = $('#chat_message').val();
+		if (message == '') return;
+		
+		m3_ajax_request('', 'act=chatmsg&message=' + message, function(request, retcode, jsondata){		// 正常終了
+			// 返答メッセージを表示
+			/*if (jsondata.message){
+				if (jsondata.message != '') alert(jsondata.message);
+			}*/
+			$('#chat_message').val('');
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	});
+	
+	// チャット初期化
+	m3_ajax_request('', 'act=chatinit', function(request, retcode, jsondata){		// 正常終了
+		// 返答メッセージを表示
+		/*if (jsondata.message){
+			if (jsondata.message != '') alert(jsondata.message);
+		}*/
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
 });
 //]]>
 </script>

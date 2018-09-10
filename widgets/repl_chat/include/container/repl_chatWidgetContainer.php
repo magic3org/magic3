@@ -20,8 +20,11 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	private $cssFilePath;				// CSSファイル
 	
 	const DEFAULT_CONFIG_ID = 0;
-	const DEFAULT_TITLE = '簡易Wikiコンテンツ';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_TITLE = 'Repl-AIチャットロボット';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
+	const REPLAI_INIT_URL = 'https://api.repl-ai.jp/v1/registration';			// チャット初期化用API
+	const REPLAI_MESSAGE_URL = 'https://api.repl-ai.jp/v1/dialogue';		// チャットメッセージ送受信用API
+	const SESSION_KEY_APP_USER_ID = 'app_user_id';				// チャットユーザID保存用セッションキー
 	
 	/**
 	 * コンストラクタ
@@ -75,11 +78,71 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 			return;
 		}
 		
-		// wikiコンテンツを変換
-		$text = $targetObj->text;		// コンテンツ
-							
-		// 画面に埋め込む
-		$this->tmpl->addVar("_widget", "content", $text);
+		$act = $request->trimValueOf('act');
+		if ($act == 'chatinit'){	// チャット開始
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+        
+			$headers = array(
+				'Content-Type: application/json; charset=UTF-8',
+				'x-api-key: tUwueVKJzTPEiVNj4bdZgGLVThx3W84CkkXK2d7L'
+			);
+			$data = array(
+				'botId' => 'sample'
+			);
+
+			$options = array('http' => array(
+				'method' => 'POST',
+				'header' => implode("\r\n", $headers),
+				'content' => json_encode($data)
+			));
+
+			$context = stream_context_create($options);
+			$response = file_get_contents(self::REPLAI_INIT_URL, false, $context);
+			$res = json_decode($response);
+        
+			$message = '';
+			if (!empty($res->appUserId)){
+				// セッションにユーザIDを保存
+				$this->setWidgetSession(self::SESSION_KEY_APP_USER_ID, $res->appUserId);
+				
+				// 初回メッセージを取得
+				$data = array(
+					'appUserId'	=> $res->appUserId,
+					'botId'		=> 'sample',
+					'voiceText'	=> 'init',
+					'initTalkingFlag'	=> true,
+					'initTopicId'	=> 'simple'
+				);
+
+				$options = array('http' => array(
+					'method' => 'POST',
+					'header' => implode("\r\n", $headers),
+					'content' => json_encode($data)
+				));
+
+				$context = stream_context_create($options);
+				$response = file_get_contents(self::REPLAI_MESSAGE_URL, false, $context);
+				$res = json_decode($response);
+				$message = $res->systemText->expression;
+				//$res->systemText->utterance		// 音声合成用テキスト
+				//$res->serverSendTime		// レスポンス時刻
+			}
+			// フロントへ返す値を設定
+			$this->gInstance->getAjaxManager()->addData('message', $message);
+			return;
+		} else if ($act == 'chatmsg'){	// フロントからのメッセージを受信
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+
+			// セッションからユーザIDを取得
+			$appUserId = $this->setWidgetSession(self::SESSION_KEY_APP_USER_ID);
+			$peerid = $request->trimValueOf('peerid');
+			
+			// フロントへ返す値を設定
+			$this->gInstance->getAjaxManager()->addData('result', $ret);		// メール送信結果
+			return;
+		}
 	}
 	/**
 	 * ウィジェットのタイトルを設定

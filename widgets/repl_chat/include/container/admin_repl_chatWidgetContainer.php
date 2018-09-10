@@ -106,8 +106,10 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		
 		// 入力値を取得
-		$name	= $request->trimValueOf('item_name');	// ヘッダタイトル
-		$text	= $request->valueOf('item_text');		// コンテンツ
+		$name	= $request->trimValueOf('item_name');	// 設定名
+		$apiKey	= $request->valueOf('item_apikey');		// Repl-AIのAPIキー
+		$botId		= $request->valueOf('item_botid');		// ボットID
+		$scenarioId	= $request->valueOf('item_scenarioid');		// シナリオID
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
