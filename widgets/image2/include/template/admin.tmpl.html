@@ -122,7 +122,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_IMAGE_NAME_INPUT}>名前</span></th>
 	    <td>
-		<div class="col-sm-4 m3config_item">
+		<div class="col-sm-4 m3config_item justify-3">
 	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="_config_name_list">
@@ -131,7 +131,7 @@ $(function(){
 	    </select>
 		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" maxlength="40" /></div>
+	    <div class="col-sm-4 m3config_item justify-3"><input type="text" name="item_name" class="form-control" value="{NAME}" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
