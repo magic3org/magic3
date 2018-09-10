@@ -22,6 +22,8 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 	private $configId;		// 定義ID
 	private $paramObj;		// パラメータ保存用オブジェクト
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
+	const DEFAULT_BOT_ID = 'sample';				// デフォルトのボットID
+	const DEFAULT_SCENARIO_ID = 'simple';				// デフォルトのシナリオID
 	
 	/**
 	 * コンストラクタ
@@ -106,15 +108,18 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		
 		// 入力値を取得
-		$name	= $request->trimValueOf('item_name');	// 設定名
-		$apiKey	= $request->valueOf('item_apikey');		// Repl-AIのAPIキー
-		$botId		= $request->valueOf('item_botid');		// ボットID
-		$scenarioId	= $request->valueOf('item_scenarioid');		// シナリオID
+		$name		= $request->trimValueOf('item_name');	// 設定名
+		$apiKey		= $request->trimValueOf('item_apikey');		// Repl-AIのAPIキー
+		$botId		= $request->trimValueOf('item_botid');		// ボットID
+		$scenarioId	= $request->trimValueOf('item_scenarioid');		// シナリオID
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
 			// 入力チェック
 			$this->checkInput($name, '名前');
+			$this->checkInput($apiKey, 'APIキー');
+			$this->checkInput($botId, 'ボットID');
+			$this->checkInput($scenarioId, 'シナリオID');
 			
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
@@ -131,7 +136,9 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 				$newObj = new stdClass;
 				$newObj->id		= $newConfigId;// 定義ID
 				$newObj->name	= $name;// 表示名
-				$newObj->text = $text;		// コンテンツ
+				$newObj->apiKey = $apiKey;		// Repl-AIのAPIキー
+				$newObj->botId = $botId;		// ボットID
+				$newObj->scenarioId = $scenarioId;		// シナリオID
 			
 				// ウィジェットパラメータオブジェクト更新
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -146,12 +153,18 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
+			$this->checkInput($apiKey, 'APIキー');
+			$this->checkInput($botId, 'ボットID');
+			$this->checkInput($scenarioId, 'シナリオID');
+			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
-					$targetObj->text		= $text;					// コンテンツ
+					$targetObj->apiKey = $apiKey;		// Repl-AIのAPIキー
+					$targetObj->botId = $botId;		// ボットID
+					$targetObj->scenarioId = $scenarioId;		// シナリオID
 				}
 				
 				// 設定値を更新
@@ -179,7 +192,9 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
-				$text = '';		// コンテンツ
+				$apiKey = '';		// Repl-AIのAPIキー
+				$botId = self::DEFAULT_BOT_ID;		// ボットID
+				$scenarioId = self::DEFAULT_SCENARIO_ID;		// シナリオID
 			}
 			$this->serialNo = 0;
 		} else {
@@ -187,7 +202,9 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$name	= $targetObj->name;	// 名前
-					$text	= $targetObj->text;		// コンテンツ
+					$apiKey = $targetObj->apiKey;		// Repl-AIのAPIキー
+					$botId = $targetObj->botId;		// ボットID
+					$scenarioId = $targetObj->scenarioId;		// シナリオID
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -199,7 +216,9 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
-		$this->tmpl->addVar("_widget", "text",	$text);					// コンテンツ
+		$this->tmpl->addVar("_widget", "api_key",	$this->convertToDispString($apiKey));		// Repl-AIのAPIキー
+		$this->tmpl->addVar("_widget", "bot_id",	$this->convertToDispString($botId));		// ボットID
+		$this->tmpl->addVar("_widget", "scenario_id",	$this->convertToDispString($scenarioId));		// シナリオID
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
