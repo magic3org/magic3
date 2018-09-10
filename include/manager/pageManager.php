@@ -4819,6 +4819,15 @@ class PageManager extends Core
 									$title = '';			// タイトルは非表示
 								}
 							
+								// 強制的にタイトルを非表示にする場合はタイトルを修正
+								if (!empty($title) && $this->pageDefRows[$i]['wd_hide_title']){
+									if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+										$title = '[' . $title . ']';
+									} else {
+										$title = '';
+									}
+								}
+								
 								// WordPress用パラメータ作成
 								$params = array();				// ウィジェットごとの属性
 								if (!empty($widgetClassName))  $params['moduleclass'] = $widgetClassName;	// ウィジェットクラス名
@@ -4972,6 +4981,15 @@ class PageManager extends Core
 											$title = '';			// タイトルは非表示
 										}
 									
+										// 強制的にタイトルを非表示にする場合はタイトルを修正
+										if (!empty($title) && $this->pageDefRows[$i]['wd_hide_title']){
+											if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+												$title = '[' . $title . ']';
+											} else {
+												$title = '';
+											}
+										}
+										
 										// Joomla用パラメータ作成
 										$params = array();				// ウィジェットごとの属性
 										$widgetType = $this->pageDefRows[$i]['wd_type'];		// ウィジェットタイプ
