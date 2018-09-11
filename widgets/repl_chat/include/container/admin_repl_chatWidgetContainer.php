@@ -23,7 +23,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 	private $paramObj;		// パラメータ保存用オブジェクト
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_BOT_ID = 'sample';				// デフォルトのボットID
-	const DEFAULT_SCENARIO_ID = 'simple';				// デフォルトのシナリオID
+	const DEFAULT_SCENARIO_ID = 'aisatsu';				// デフォルトのシナリオID
 	
 	/**
 	 * コンストラクタ
@@ -112,7 +112,8 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 		$apiKey		= $request->trimValueOf('item_apikey');		// Repl-AIのAPIキー
 		$botId		= $request->trimValueOf('item_botid');		// ボットID
 		$scenarioId	= $request->trimValueOf('item_scenarioid');		// シナリオID
-		
+		$isPanelOpen = $request->trimCheckedValueOf('item_panelopen');		// 起動時にパネルを開くかどうか
+
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
 			// 入力チェック
@@ -139,6 +140,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->apiKey = $apiKey;		// Repl-AIのAPIキー
 				$newObj->botId = $botId;		// ボットID
 				$newObj->scenarioId = $scenarioId;		// シナリオID
+				$newObj->isPanelOpen = $isPanelOpen;		// 起動時にパネルを開くかどうか
 			
 				// ウィジェットパラメータオブジェクト更新
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -165,6 +167,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->apiKey = $apiKey;		// Repl-AIのAPIキー
 					$targetObj->botId = $botId;		// ボットID
 					$targetObj->scenarioId = $scenarioId;		// シナリオID
+					$targetObj->isPanelOpen = $isPanelOpen;		// 起動時にパネルを開くかどうか
 				}
 				
 				// 設定値を更新
@@ -195,6 +198,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 				$apiKey = '';		// Repl-AIのAPIキー
 				$botId = self::DEFAULT_BOT_ID;		// ボットID
 				$scenarioId = self::DEFAULT_SCENARIO_ID;		// シナリオID
+				$isPanelOpen = '1';		// 起動時にパネルを開くかどうか
 			}
 			$this->serialNo = 0;
 		} else {
@@ -205,6 +209,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 					$apiKey = $targetObj->apiKey;		// Repl-AIのAPIキー
 					$botId = $targetObj->botId;		// ボットID
 					$scenarioId = $targetObj->scenarioId;		// シナリオID
+					$isPanelOpen = $targetObj->isPanelOpen;		// 起動時にパネルを開くかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -219,6 +224,7 @@ class admin_repl_chatWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "api_key",	$this->convertToDispString($apiKey));		// Repl-AIのAPIキー
 		$this->tmpl->addVar("_widget", "bot_id",	$this->convertToDispString($botId));		// ボットID
 		$this->tmpl->addVar("_widget", "scenario_id",	$this->convertToDispString($scenarioId));		// シナリオID
+		$this->tmpl->addVar("_widget", "panel_open_checked",	$this->convertToCheckedString($isPanelOpen));	// 起動時にパネルを開くかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御

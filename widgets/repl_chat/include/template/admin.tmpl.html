@@ -84,10 +84,14 @@ $(function(){
 	    <th><span {_HELP_UNTITLEDTASK_SCENARIOID}>シナリオID</span></th>
 	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_scenarioid" value="{SCENARIO_ID}" maxlength="20" /></div></td>
 	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLEDTASK_INIT}>初期状態</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_panelopen" {PANEL_OPEN_CHECKED} />パネルを開く</label></div></td>
+	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<div class="pull-left text-left" style="width:80%;"><i class="glyphicon glyphicon-info-sign"></i> チャットロボットRepl-AI(<a href="https://repl-ai.jp/">https://repl-ai.jp/</a>)を使用するには登録が必要です。設定値はRepl-AIの管理画面から取得してください。</div>
+<div class="pull-left text-left" style="width:80%;"><i class="glyphicon glyphicon-info-sign"></i> チャットロボットRepl-AI(<a href="https://repl-ai.jp/">https://repl-ai.jp/</a>)を使用するには登録が必要です。設定値(APIキー,ボットID,シナリオID)はRepl-AIの管理画面から取得してください。</div>
 <patTemplate:tmpl name="del_button" visibility="hidden">
 		<input type="button" class="button" onclick="deleteItem();" value="削除" />
 </patTemplate:tmpl>
