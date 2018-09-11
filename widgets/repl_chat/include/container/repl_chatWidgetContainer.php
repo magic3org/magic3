@@ -20,7 +20,7 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	private $cssFilePath;				// CSSファイル
 	
 	const DEFAULT_CONFIG_ID = 0;
-	const DEFAULT_TITLE = 'Repl-AIチャットロボット';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_TITLE = 'Repl-AIチャットボット';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const REPLAI_INIT_URL = 'https://api.repl-ai.jp/v1/registration';			// チャット初期化用API
 	const REPLAI_MESSAGE_URL = 'https://api.repl-ai.jp/v1/dialogue';		// チャットメッセージ送受信用API
@@ -77,18 +77,26 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
 		}
-		
+
+		// 設定値取得
+		$apiKey = $targetObj->apiKey;		// Repl-AIのAPIキー
+		$botId = $targetObj->botId;		// ボットID
+		$scenarioId = $targetObj->scenarioId;		// シナリオID
+		$isPanelOpen = $targetObj->isPanelOpen;		// 起動時にパネルを開くかどうか
+					
 		$act = $request->trimValueOf('act');
+		$message = $request->trimValueOf('message');
+		$token = $request->trimValueOf('token');
 		if ($act == 'chatinit'){	// チャット開始
 			// ##### ウィジェット出力処理中断 ######
 			$this->gPage->abortWidget();
         
 			$headers = array(
 				'Content-Type: application/json; charset=UTF-8',
-				'x-api-key: tUwueVKJzTPEiVNj4bdZgGLVThx3W84CkkXK2d7L'
+				'x-api-key: ' . $apiKey				// APIキー
 			);
 			$data = array(
-				'botId' => 'sample'
+				'botId' => $botId		// ボットID
 			);
 
 			$options = array('http' => array(
@@ -101,18 +109,18 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 			$response = file_get_contents(self::REPLAI_INIT_URL, false, $context);
 			$res = json_decode($response);
         
-			$message = '';
+			$retMessage = '';
 			if (!empty($res->appUserId)){
 				// セッションにユーザIDを保存
-				$this->setWidgetSession(self::SESSION_KEY_APP_USER_ID, $res->appUserId);
-				
+				$this->setWidgetSession(self::SESSION_KEY_APP_USER_ID, $res->appUserId, $token);
+
 				// 初回メッセージを取得
 				$data = array(
 					'appUserId'	=> $res->appUserId,
-					'botId'		=> 'sample',
+					'botId'		=> $botId,				// ボットID
 					'voiceText'	=> 'init',
 					'initTalkingFlag'	=> true,
-					'initTopicId'	=> 'simple'
+					'initTopicId'		=> $scenarioId	// シナリオID
 				);
 
 				$options = array('http' => array(
@@ -124,25 +132,58 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 				$context = stream_context_create($options);
 				$response = file_get_contents(self::REPLAI_MESSAGE_URL, false, $context);
 				$res = json_decode($response);
-				$message = $res->systemText->expression;
+				$retMessage = $res->systemText->expression;
+debug($retMessage);
 				//$res->systemText->utterance		// 音声合成用テキスト
 				//$res->serverSendTime		// レスポンス時刻
 			}
 			// フロントへ返す値を設定
-			$this->gInstance->getAjaxManager()->addData('message', $message);
+			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			return;
 		} else if ($act == 'chatmsg'){	// フロントからのメッセージを受信
 			// ##### ウィジェット出力処理中断 ######
 			$this->gPage->abortWidget();
 
 			// セッションからユーザIDを取得
-			$appUserId = $this->setWidgetSession(self::SESSION_KEY_APP_USER_ID);
-			$peerid = $request->trimValueOf('peerid');
-			
+			$appUserId = $this->getWidgetSession(self::SESSION_KEY_APP_USER_ID, ''/*未使用*/, $token);
+
+			$retMessage = '';
+			if (!empty($appUserId)){
+				$headers = array(
+					'Content-Type: application/json; charset=UTF-8',
+					'x-api-key: ' . $apiKey				// APIキー
+				);
+				
+				// メッセージを取得
+				$data = array(
+					'appUserId'	=> $appUserId,
+					'botId'		=> $botId,				// ボットID
+					'voiceText'	=> $message,				// Repl-AIに送信するメッセージ
+					'initTalkingFlag'	=> false
+//					'initTopicId'		=> $scenarioId	// シナリオID
+				);
+				$options = array('http' => array(
+					'method' => 'POST',
+					'header' => implode("\r\n", $headers),
+					'content' => json_encode($data)
+				));
+
+				$context = stream_context_create($options);
+				$response = file_get_contents(self::REPLAI_MESSAGE_URL, false, $context);
+				$res = json_decode($response);
+				$retMessage = $res->systemText->expression;
+debug($retMessage);
+			}
 			// フロントへ返す値を設定
-			$this->gInstance->getAjaxManager()->addData('result', $ret);		// メール送信結果
+			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			return;
 		}
+		
+		// パネル初期状態を設定
+		if (!empty($isPanelOpen)) $this->tmpl->setAttribute("show_panel_open", "visibility", "visible");
+		
+		// 画面埋め込みデータ
+		$this->tmpl->addVar("_widget", "token", $this->generateToken());// 画面識別用トークン
 	}
 	/**
 	 * ウィジェットのタイトルを設定

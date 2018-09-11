@@ -23,6 +23,7 @@ $(function(){
 	}
 	faSpan.remove();
 
+	var initCompleted = false;		// 初期化状態
 	var html = '';
 	html += '<div id="repl_chat">';
 	html += '<div class="row border-chat">';
@@ -39,14 +40,15 @@ $(function(){
 	html += '</div>';
 	html += '<div class="row border-chat">';
 	html += '<div class="col-md-12 col-sm-12 col-xs-12 second-section">';
-	html += '<div class="chat-section">';
-	html += '<ul>';
+	html += '<div id="chat-section" class="chat-section">';
+	html += '<ul id="chat_body">';
 	html += '</ul>';
 	html += '</div>';
 	html += '</div>';
 	html += '</div>';
 	html += '<div class="row border-chat">';
 	html += '<div class="third-section text-bar">';
+	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
 	html += '<input type="text" id="chat_message" placeholder="メッセージをどうぞ">';
 	html += '</div>';
 	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
@@ -54,36 +56,86 @@ $(function(){
 	html += '</div>';
 	$("body").append(html);
 	
+	// チャット初期処理
+	function init()
+	{
+		if (initCompleted) return;		// 初期化状態
+
+		// チャット初期化
+		m3_ajax_request('repl_chat', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
+			// 返答メッセージを表示
+			if (jsondata.message){
+				if (jsondata.message != ''){
+					var messageHtml = '';
+					messageHtml += '<li>';
+					messageHtml += '<div class="left-chat">';
+					messageHtml += '<img src="image/man01.png">';
+					messageHtml += '<p>' + jsondata.message + '</p>';
+					//messageHtml += '<span>2 min</span>
+					messageHtml += '</div>';
+					messageHtml += '</li>';
+					$("#chat_body").append(messageHtml);
+					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
+				}
+			}
+			initCompleted = true;			// 初期化終了
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+	
 	$(".left-first-section").click(function(){
-	    $('#repl_chat').toggleClass("open-more");
+		init();
+		$('#repl_chat').toggleClass("open-chat");
 	});
 	$("#chat_open_panel").click(function(){
-	    $('#repl_chat').toggleClass("open-more");
+		init();
+		$('#repl_chat').toggleClass("open-chat");
 	});
 	$("#chat_sendmessage").click(function(){
 		var message = $('#chat_message').val();
 		if (message == '') return;
 		
-		m3_ajax_request('', 'act=chatmsg&message=' + message, function(request, retcode, jsondata){		// 正常終了
+		var messageHtml = '';
+		messageHtml += '<li>';
+		messageHtml += '<div class="right-chat">';
+		messageHtml += '<img src="image/man02.png">';
+		messageHtml += '<p>' + message + '</p>';
+		//messageHtml += '<span>2 min</span>';
+		messageHtml += '</div>';
+		messageHtml += '</li>';
+		$("#chat_body").append(messageHtml);
+		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
+					
+		m3_ajax_request('repl_chat', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
-			/*if (jsondata.message){
-				if (jsondata.message != '') alert(jsondata.message);
-			}*/
+			if (jsondata.message){
+				if (jsondata.message != ''){
+					messageHtml = '';
+					messageHtml += '<li>';
+					messageHtml += '<div class="left-chat">';
+					messageHtml += '<img src="image/man01.png">';
+					messageHtml += '<p>' + jsondata.message + '</p>';
+					//messageHtml += '<span>2 min</span>
+					messageHtml += '</div>';
+					messageHtml += '</li>';
+					$("#chat_body").append(messageHtml);
+					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'slow');
+				}
+			}
 			$('#chat_message').val('');
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
 		});
 	});
 	
-	// チャット初期化
-	m3_ajax_request('', 'act=chatinit', function(request, retcode, jsondata){		// 正常終了
-		// 返答メッセージを表示
-		/*if (jsondata.message){
-			if (jsondata.message != '') alert(jsondata.message);
-		}*/
-	}, function(request){		// 異常終了
-		alert('通信に失敗しました。');
-	});
+<patTemplate:tmpl name="show_panel_open" visibility="hidden">
+	// パネルオープンでの初期化
+	$('#repl_chat').toggleClass("open-chat");
+	
+	// チャット開始
+	init();
+</patTemplate:tmpl>
 });
 //]]>
 </script>
