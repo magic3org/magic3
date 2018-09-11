@@ -86,18 +86,9 @@ $(function(){
 		});
 	}
 	
-	$(".left-first-section").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
-	});
-	$("#chat_open_panel").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
-	});
-	
-	// メッセージ送信処理
-	//$("#chat_sendmessage").click(function(){
-	$('#chat_form').submit(function(){
+	// メッセージ送信
+	function send()
+	{
 		var message = $('#chat_message').val();
 		if (message == '') return;
 		
@@ -132,6 +123,23 @@ $(function(){
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
 		});
+	}
+		
+	$(".left-first-section").click(function(){
+		init();
+		$('#repl_chat').toggleClass("open-chat");
+	});
+	$("#chat_open_panel").click(function(){
+		init();
+		$('#repl_chat').toggleClass("open-chat");
+	});
+	
+	// メッセージ送信処理
+	$("#chat_sendmessage").click(function(){
+		send();
+	});
+	$('#chat_form').submit(function(){
+		send();
 		return false;			// SUBMITは行わない
 	});
 	
