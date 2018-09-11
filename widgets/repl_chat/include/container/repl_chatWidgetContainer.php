@@ -25,6 +25,9 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	const REPLAI_INIT_URL = 'https://api.repl-ai.jp/v1/registration';			// チャット初期化用API
 	const REPLAI_MESSAGE_URL = 'https://api.repl-ai.jp/v1/dialogue';		// チャットメッセージ送受信用API
 	const SESSION_KEY_APP_USER_ID = 'app_user_id';				// チャットユーザID保存用セッションキー
+	const DEFAULT_BOT_AVATAR = 'bot.png';		// チャットボットアバター画像
+	const DEFAULT_GUEST_AVATAR = 'guest.png';	// ゲストアバター画像
+	const AVATAR_IMAGE_SIGE = 50;				// アバター画像サイズ
 	
 	/**
 	 * コンストラクタ
@@ -133,7 +136,6 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 				$response = file_get_contents(self::REPLAI_MESSAGE_URL, false, $context);
 				$res = json_decode($response);
 				$retMessage = $res->systemText->expression;
-debug($retMessage);
 				//$res->systemText->utterance		// 音声合成用テキスト
 				//$res->serverSendTime		// レスポンス時刻
 			}
@@ -172,13 +174,18 @@ debug($retMessage);
 				$response = file_get_contents(self::REPLAI_MESSAGE_URL, false, $context);
 				$res = json_decode($response);
 				$retMessage = $res->systemText->expression;
-debug($retMessage);
 			}
 			// フロントへ返す値を設定
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			return;
 		}
-		
+		// アバター画像URL設定
+		$avatarUrl = $this->getUrl($this->gEnv->getCurrentWidgetRootUrl()) . '/images/';
+		$botAvatar = $avatarUrl . self::DEFAULT_BOT_AVATAR;		// チャットボットアバター画像
+		$guestAvatar = $avatarUrl . self::DEFAULT_GUEST_AVATAR;	// ゲストアバター画像
+		$this->tmpl->addVar("_widget", "bot_avatar", $botAvatar);
+		$this->tmpl->addVar("_widget", "guest_avatar", $guestAvatar);
+	
 		// パネル初期状態を設定
 		if (!empty($isPanelOpen)) $this->tmpl->setAttribute("show_panel_open", "visibility", "visible");
 		
