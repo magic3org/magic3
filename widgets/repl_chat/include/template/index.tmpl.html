@@ -48,14 +48,16 @@ $(function(){
 	html += '</div>';
 	html += '<div class="row border-chat">';
 	html += '<div class="third-section text-bar">';
+	html += '<form action="#" method="post" id="chat_form">';
 	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
 	html += '<input type="text" id="chat_message" placeholder="メッセージをどうぞ">';
+	html += '</form>';
 	html += '</div>';
 	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
 	html += '</div>';
 	html += '</div>';
 	$("body").append(html);
-	
+
 	// チャット初期処理
 	function init()
 	{
@@ -92,7 +94,10 @@ $(function(){
 		init();
 		$('#repl_chat').toggleClass("open-chat");
 	});
-	$("#chat_sendmessage").click(function(){
+	
+	// メッセージ送信処理
+	//$("#chat_sendmessage").click(function(){
+	$('#chat_form').submit(function(){
 		var message = $('#chat_message').val();
 		if (message == '') return;
 		
@@ -127,6 +132,7 @@ $(function(){
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
 		});
+		return false;			// SUBMITは行わない
 	});
 	
 <patTemplate:tmpl name="show_panel_open" visibility="hidden">

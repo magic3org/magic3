@@ -27,7 +27,6 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	const SESSION_KEY_APP_USER_ID = 'app_user_id';				// チャットユーザID保存用セッションキー
 	const DEFAULT_BOT_AVATAR = 'bot.png';		// チャットボットアバター画像
 	const DEFAULT_GUEST_AVATAR = 'guest.png';	// ゲストアバター画像
-	const AVATAR_IMAGE_SIGE = 50;				// アバター画像サイズ
 	
 	/**
 	 * コンストラクタ
