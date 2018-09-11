@@ -685,6 +685,16 @@ class BaseWidgetContainer extends Core
 		}
 	}
 	/**
+	 * 任意用途のトークン生成
+	 *
+	 * @return string			生成トークン
+	 */
+	function generateToken()
+	{
+		$token = md5(time() . $this->gAccess->getAccessLogSerialNo());
+		return $token;
+	}
+	/**
 	 * POSTデータのトークン認証機能を使用するかどうかを取得
 	 *
 	 * @return bool		true=正常、false=不正
@@ -3174,11 +3184,13 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $key		セッション格納用のキー
 	 * @param string $default	値を設定しない場合のデフォルト値
+	 * @param string $token		同一ウィジェット内で区別する場合のキー付加文字列
 	 * @return なし
 	 */
-	function setWidgetSession($key, $default = '')
+	function setWidgetSession($key, $default = '', $token = '')
 	{
 		$keyName = M3_SESSION_WIDGET . $this->gEnv->getCurrentWidgetId() . ':' . $key;
+		if (!empty($token)) $keyName .= ':' . $token;
 		$this->gRequest->setSessionValue($keyName, $default);
 	}
 	/**
@@ -3189,11 +3201,13 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $key		セッション格納用のキー
 	 * @param string $default	値が存在しない場合のデフォルト値
+	 * @param string $token		同一ウィジェット内で区別する場合のキー付加文字列
 	 * @return string			値
 	 */
-	function getWidgetSession($key, $default = '')
+	function getWidgetSession($key, $default = '', $token = '')
 	{
 		$keyName = M3_SESSION_WIDGET . $this->gEnv->getCurrentWidgetId() . ':' . $key;
+		if (!empty($token)) $keyName .= ':' . $token;
 		return $this->gRequest->getSessionValue($keyName, $default);
 	}
 	/**
