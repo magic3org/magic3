@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,7 +25,7 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 	private $cssFiles;		// CSSファイル
 	private $cssDir;		// CSSファイル読み込みディレクトリ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
-	const DEFAULT_CSS = "input.button {\n    border:2px outset #FF3366;\n    background-color:#FF3366;\n}\n";
+	const DEFAULT_CSS = "/* sample css */\ninput.button {\n    border:2px outset #FF3366;\n    background-color:#FF3366;\n}\n";
 	const CSS_DIR = '/resource/css';			// CSSファイル格納ディレクトリ
 	const FIELD_HEAD = 'item_file_';					// CSSファイル選択項目名ヘッダ
 	const CSS_MAX_LENGTH = 60000;					// CSS文字列の最大長
@@ -184,6 +184,56 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
+		} else if ($act == 'upload'){		// メニュー定義ファイルアップロード
+			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
+				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
+				
+				// ファイル名の重複チェック
+				for ($i = 0; $i < count($files); $i++){
+					$filePath = $files[$i];
+					$fileName = basename($filePath);
+					if (strcasecmp($uploadFilename, $fileName) == 0){
+						$msg = $this->_('The same filename exists.');	// 同名のファイルが存在します。
+						$this->setUserErrorMsg($msg);
+						break;
+					}
+				}
+				// ファイル名の解析
+				$pathParts = pathinfo($uploadFilename);
+				$ext = strtolower($pathParts['extension']);		// 拡張子
+				 
+				// ファイルフォーマット、拡張子のチェック
+				if (mime_content_type($_FILES['upfile']['tmp_name']) != 'text/plain' || $ext != 'css'){
+					$msg = $this->_('Only css file is allowed to upload.');	// CSSファイルのみアップロード可能です。
+					$this->setUserErrorMsg($msg);
+				}
+				
+				// ディレクトリの書き込み権限をチェック
+				if (!is_writable($this->cssDir)){
+					$msg = sprintf($this->_('You are not allowed to write temporary directory. (directory: %s)'), $this->cssDir);	// 一時ディレクトリに書き込み権限がありません。(ディレクトリ：%s)
+					$this->setAppErrorMsg($msg);
+				}
+				
+				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+					// アップされたテンポラリファイルをCSSディレクトリにコピー
+					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $this->cssDir . '/' . $uploadFilename);
+					if ($ret){
+						$msg = $this->_('CSS file is uploaded.');		// CSSファイルをアップロードしました。
+						$this->setGuidanceMsg($msg . ' ' . $uploadFilename);
+						
+						// CSSファイル再取得
+						$files = $this->getFiles($this->cssDir);
+						
+						$replaceNew = true;			// データ再取得
+					} else {
+						$msg = $this->_('Failed in uploading file.');		// ファイルアップロードに失敗しました。
+						$this->setAppErrorMsg($msg);
+					}
+				}
+			} else {
+				$msg = sprintf($this->_('Uploded file not found. (detail: The file may be over maximum size to be allowed to upload. Size %s bytes.)'), $this->gSystem->getMaxFileSizeForUpload());	// アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%sバイト)
+				$this->setAppErrorMsg($msg);
+			}
 		} else if ($act == 'select'){	// 定義IDを変更
 			$replaceNew = true;			// データ再取得
 		} else {	// 初期起動時、または上記以外の場合
@@ -238,6 +288,7 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "css_dir", $this->cssDir);	// CSSファイル読み込みディレクトリ
 		$this->tmpl->addVar("_widget", "file_count", count($files));	// CSSファイル数
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
+		$this->tmpl->addVar("_widget", "max_file_size", $this->gSystem->getMaxFileSizeForUpload(true/*数値のバイト数*/));			// アップロードファイルの最大サイズ
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき

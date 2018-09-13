@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -40,8 +40,21 @@ function clearHtml()
 {
 	document.main.item_css.value = '';
 }
+function uploadCheck(){
+	if (!document.upload.upfile.value){
+		alert('ファイルを選択してください');
+		return false;
+	}
+	if (!window.confirm('ファイルをアップロードしますか?')) return false;
+	document.upload.act.value = 'upload';
+	document.upload.submit();
+	return false;
+}
 $(function(){
 	m3SetConfigTable('mainconfig');
+	
+	// ファイル選択用ボタン作成
+	m3SetFileSelectButton();
 });
 //]]>
 </script>
@@ -57,6 +70,8 @@ $(function(){
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="listItem();" value="設定一覧" />
 </div></div></div>
+
+
 <table id="mainconfig">
     <tbody>
     <tr>
@@ -81,8 +96,8 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CSS_FILE}>CSSファイル</span></th>
-	    <td><div class="form-control-static m3config_item">ディレクトリ：{CSS_DIR}</div>
+	    <th><span {_HELP_CSS_FILE}>CSSファイル</span><br /><input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="アップロード" /></th>
+	    <td><div class="form-control-static m3config_item col-sm-12">ディレクトリ：{CSS_DIR}</div>
 	    <patTemplate:tmpl name="itemlist"><div class="checkbox"><label><input type="checkbox" name="item_file_{INDEX}" value="{VALUE}" {FILE_CHECKED} />{NAME}</label></div></patTemplate:tmpl>
 	    </td>
 	</tr>
@@ -97,5 +112,31 @@ $(function(){
 </patTemplate:tmpl>
 </div>
 </form>
+</div>
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">CSSファイルアップロード</h4>
+            </div>
+            <div class="modal-body">
+			    <p>アップロードするファイルを選択してください</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">アップロード</button>
+            </div>
+        </div>
+    </div>
 </div>
 </patTemplate:tmpl>
