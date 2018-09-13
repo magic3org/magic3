@@ -445,7 +445,7 @@ abstract class elFinderVolumeDriver {
 		// required to fix bug on macos
 		// However, we recommend to use the Normalizer plugin instead this option
 		'utf8fix'      => false,
-		 //                           й                 ё              Й               Ё              Ø         Å
+		 //                           й                 ё              Й               Ё              O         A
 		'utf8patterns' => array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308", "\u00d8A", "\u030a"),
 		'utf8replace'  => array("\u0439",        "\u0451",       "\u0419",       "\u0401",       "\u00d8", "\u00c5"),
 		// cache control HTTP headers for commands `file` and  `get`
@@ -6109,14 +6109,16 @@ abstract class elFinderVolumeDriver {
 			$this->procExec(ELFINDER_TAR_PATH . ' --version', $o, $ctar);
 			
 			if ($ctar == 0) {
+				/* disabled by Magic3(2018/9/14)
 				$arcs['create']['application/x-tar']  = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-cf', 'ext' => 'tar');
-				$arcs['extract']['application/x-tar'] = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-xf', 'ext' => 'tar', 'toSpec' => '-C ');
+				$arcs['extract']['application/x-tar'] = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-xf', 'ext' => 'tar', 'toSpec' => '-C ');*/
 				unset($o);
 				$this->procExec(ELFINDER_GZIP_PATH . ' --version', $o, $c);
 				if ($c == 0) {
 					$arcs['create']['application/x-gzip']  = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-czf', 'ext' => 'tgz');
 					$arcs['extract']['application/x-gzip'] = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-xzf', 'ext' => 'tgz', 'toSpec' => '-C ');
 				}
+				/* disabled by Magic3(2018/9/14)
 				unset($o);
 				$this->procExec(ELFINDER_BZIP2_PATH . ' --version', $o, $c);
 				if ($c == 0) {
@@ -6128,7 +6130,7 @@ abstract class elFinderVolumeDriver {
 				if ($c == 0) {
 					$arcs['create']['application/x-xz']  = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-cJf', 'ext' => 'xz');
 					$arcs['extract']['application/x-xz'] = array('cmd' => ELFINDER_TAR_PATH, 'argc' => '-xJf', 'ext' => 'xz', 'toSpec' => '-C ');
-				}
+				}*/
 			}
 			unset($o);
 			$this->procExec(ELFINDER_ZIP_PATH . ' -h', $o, $c);
@@ -6140,6 +6142,7 @@ abstract class elFinderVolumeDriver {
 			if ($c == 0) {
 				$arcs['extract']['application/zip'] = array('cmd' => ELFINDER_UNZIP_PATH, 'argc' => '-q',  'ext' => 'zip', 'toSpec' => '-d ');
 			}
+			/* disabled by Magic3(2018/9/14)
 			unset($o);
 			$this->procExec(ELFINDER_RAR_PATH . ' --version', $o, $c);
 			if ($c == 0 || $c == 7) {
@@ -6171,8 +6174,7 @@ abstract class elFinderVolumeDriver {
 				if (substr(PHP_OS, 0, 3) === 'WIN' && empty($arcs['extract']['application/x-rar'])) {
 					$arcs['extract']['application/x-rar'] = array('cmd' => ELFINDER_7Z_PATH, 'argc' => 'x -trar -y', 'ext' => 'rar', 'toSpec' => '-o');
 				}
-			}
-		
+			}*/
 		}
 		
 		// Use PHP ZipArchive Class
