@@ -356,7 +356,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'css_add';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_template_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('css_add', 'CSS追加',  'bootstrap,wordpress', '2.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'テンプレートのCSSに加えてCSS定義を追加するためのウィジェットです。',               false,           false,       true,         true,        true,         false,                                true,                true,              0,  3,             1, '2017-07-25', now(),         now());
+('css_add', 'CSS追加',  'bootstrap,wordpress', '3.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'テンプレートのCSSに加えてCSS定義を追加するためのウィジェットです。',               false,           false,       true,         true,        true,         false,                                true,                true,              0,  3,             1, '2018-09-13', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'print';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES

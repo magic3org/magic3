@@ -131,8 +131,7 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 		if ($act == 'add'){// 新規追加
 			// 入力チェック
 			$this->checkInput($name, '名前');
-//			$this->checkInput($this->css, 'CSS');
-			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH);	// CSS文字列
+			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH, true/*空OK*/);	// CSS文字列
 			
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
@@ -163,8 +162,7 @@ class admin_css_addWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
-			//$this->checkInput($this->css, 'CSS');
-			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH);	// CSS文字列
+			$this->checkByteSize($this->css, 'CSS', self::CSS_MAX_LENGTH, true/*空OK*/);	// CSS文字列
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
