@@ -5966,6 +5966,11 @@ abstract class elFinderVolumeDriver {
 		if ($bgcolor === 'transparent'){
 			imagealphablending($image, false);
 			imagesavealpha($image, true);
+			
+			/***** サムネール等のPNG画像ではリサイズした画像の空白背景部分が透過にならず黒になるバグがあるため空白背景部分に背景色を設定する by Magic3 *****/
+			$bgcolor1 = imagecolorallocatealpha($image, 0, 0, 0, 127);
+			imagefill($image, 0, 0, $bgcolor1);
+			/***** ここまで *****/
 		} else {
 			list($r, $g, $b) = sscanf($bgcolor, "#%02x%02x%02x");
 			$bgcolor1 = imagecolorallocate($image, $r, $g, $b);
