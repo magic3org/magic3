@@ -618,7 +618,15 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('show_list_detail', 'visibility', 'visible');// 一覧を詳細表示
 		}
 		// ウィジェットタイプ選択メニュー作成
-		$this->createWidgetTypeMenu();
+		$widgetTypeCount = count($this->widgetTypeArray);
+		if ($widgetTypeCount > 1){
+			$this->createWidgetTypeMenu();
+		} else {
+			$this->tmpl->setAttribute('show_widget_type_menu', 'visibility', 'hidden');// ウィジェットタイプメニューを非表示
+			
+			// PC用以外の場合はウィジェットタイプを固定表示
+			if ($widgetTypeCount == 1 && $this->widgetTypeArray[0]['value'] != '0') $this->tmpl->addVar("_widget", "widget_type", '(' . $this->widgetTypeArray[0]['name'] . ')');
+		}
 		
 		// ウィジェットリストを取得
 		$this->db->getAllWidgetList(intval($this->widgetType), array($this, 'widgetListLoop'));
