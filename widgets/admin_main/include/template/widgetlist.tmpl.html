@@ -85,6 +85,11 @@ function changeType(){
 	document.main.submit();
 	return true;
 }
+function changeSelectWorking(){
+	document.main.act.value = 'changeworking';
+	document.main.submit();
+	return true;
+}
 function showReloadArea()
 {
 	$('#reload_area').slideToggle('slow');
@@ -126,6 +131,8 @@ $(function(){
 </patTemplate:tmpl>
 {AREA_OPEN_BUTTON}<input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
 </h3>
+<div class="checkbox m3config_h_side_label" style="margin-left:20px;"><label><input type="checkbox" name="item_select_working_widget" onclick="changeSelectWorking();" {SELECT_WORKING_WIDGET_CHECKED} />稼働ウィジェットのみ表示</label></div>
+
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_WIDGETLIST_BUTTONS}><div class="btn-group">
 <input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="{_LC_LABEL_UPLOAD}" />
 <input type="button" class="button" onclick="getInfo();" value="最新情報" />

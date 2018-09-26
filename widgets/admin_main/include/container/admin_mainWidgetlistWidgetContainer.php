@@ -26,6 +26,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $widgetTypeArray;		// ウィジェットタイプ
 	private $widgetType;			// 現在のウィジェットタイプ
 	private $showDetail;			// 詳細表示するかどうか
+	private $selectWorkingWidget;		// 稼働中のウィジェットのみ表示するかどうか
 	private $defaultImageSize = 32;		// ウィジェット画像サイズ
 	private $isExistsWidgetList;		// ウィジェットが存在するかどうか
 	private $labelTextArray;		// ラベルテキスト退避用
@@ -136,7 +137,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($this->widgetType == '') $this->widgetType = '0';		// デフォルトはPC用ウィジェット
 //		$this->showDetail = ($request->trimValueOf('item_show_detail') == 'on') ? 1 : 0;		// 詳細表示するかどうか
 		$this->showDetail = $request->trimValueOf('item_show_detail');
-				
+		$this->selectWorkingWidget = $request->trimCheckedValueOf('item_select_working_widget');		// 稼働中のウィジェットのみ表示するかどうか
+		
 		if ($act == 'readnew'){		// ウィジェット再読み込みのとき
 			$addWidgetCount = 0;
 			// ウィジェット一覧取得
@@ -597,7 +599,11 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				$msg = $this->_('The widget is already the latest version.');		// ウィジェットはすでに最新バージョンです
 				$this->setAppErrorMsg($msg);
 			}
+		} else if ($act == 'changeworking'){		// 稼働中のウィジェットのみ表示するかどうかを変更
+		} else {		// 初期起動時
+			$this->selectWorkingWidget = '1';		// 稼働中のウィジェットのみ表示するかどうか
 		}
+		
 		// ウィジェットのタイプごとの処理
 		switch ($this->widgetType){
 			case '0':		// PC用テンプレート
@@ -637,6 +643,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!empty($this->showDetail)) $showDetailValue = '1';
 		$this->tmpl->addVar("_widget", "show_detail", $showDetailValue);		// 詳細表示
 		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリを設定
+		$this->tmpl->addVar("_widget", "select_working_widget_checked", $this->convertToCheckedString($this->selectWorkingWidget));// 稼働中のウィジェットのみ表示するかどうか
+		
 		// 拡張表示ボタン
 		if ($this->showDetail){			// 詳細表示の場合
 			$title = $this->_('Close Detail');		// 詳細を非表示
@@ -851,6 +859,14 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$latestVersion = $fetchedRow['wd_latest_version'];
 		$requiredVersion = $fetchedRow['wd_required_version'];		// 動作に必要なシステムバージョン
 
+		// ウィジェットの稼働状況
+		if (empty($fetchedRow['pd_widget_id']) || !$fetchedRow['wd_active']){		// ウィジェットが停止中の場合
+			$isWorking = false;
+		} else {
+			$isWorking = true;
+		}
+		if ($this->selectWorkingWidget && !$isWorking) return true;// 稼働中のウィジェットのみ表示場合で、稼働していないウィジェットの場合は処理を飛ばす
+		
 		// ウィジェットが存在するかどうかチェック
 		$isExistsWidget = false;
 		$widgetId = $fetchedRow['wd_id'];// ウィジェットID
@@ -871,15 +887,13 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$active = 'checked';
 		}
 		
-		// ウィジェットの稼動状態
-		if (empty($fetchedRow['pd_widget_id']) || !$fetchedRow['wd_active']){		// ウィジェットが停止中の場合
-			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			//$iconTitle = $this->_('Stop');		// 停止
-			$iconTitle = $this->labelTextArray['label_stop'];
-		} else {
+		// ウィジェットの稼動状態アイコン
+		if ($isWorking){
 			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			//$iconTitle = $this->_('Active');	// 稼働中
 			$iconTitle = $this->labelTextArray['label_active'];
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = $this->labelTextArray['label_stop'];
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
