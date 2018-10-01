@@ -297,7 +297,11 @@ function plugin_edit_write()
 	//header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
 //	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
 //	exit;
-	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
+	// 編集権限がある場合はプレビューモードで画面を表示
+	$urlOption = '';
+	if (WikiConfig::isUserWithEditAuth()) $urlOption = '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+		
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false) . $urlOption);
 }
 
 /**
@@ -315,6 +319,10 @@ function plugin_edit_cancel()
 	$refer = WikiParam::getRefer();
 	if (!empty($refer)) $page = $refer;
 	
-	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
+	// 編集権限がある場合はプレビューモードで画面を表示
+	$urlOption = '';
+	if (WikiConfig::isUserWithEditAuth()) $urlOption = '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+	
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false) . $urlOption);
 }
 ?>

@@ -344,29 +344,33 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$r_page = rawurlencode($page);
 		$script = WikiParam::getScript();
 
+		// Wikiコンテンツの編集権限を取得
+		$urlOption = '';
+		if (WikiConfig::isUserWithEditAuth()) $urlOption = '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;		// 編集権限がある場合はプレビューモードで画面を表示
+			
 		// リンク作成
-		$this->resLink['add']      = $script . WikiParam::convQuery("?cmd=add&amp;page=$r_page");
-		$this->resLink['backup']   = $script . WikiParam::convQuery("?cmd=backup&amp;page=$r_page");
-		$this->resLink['copy']     = $script . WikiParam::convQuery("?plugin=template&amp;refer=$r_page");
-		$this->resLink['diff']     = $script . WikiParam::convQuery("?cmd=diff&amp;page=$r_page");
-		$this->resLink['edit']     = $script . WikiParam::convQuery("?cmd=edit&amp;page=$r_page");
-		$this->resLink['filelist'] = $script . WikiParam::convQuery("?cmd=filelist");
-		$this->resLink['freeze']   = $script . WikiParam::convQuery("?cmd=freeze&amp;page=$r_page");
-		$this->resLink['help']     = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getHelpPage()));
-		$this->resLink['list']     = $script . WikiParam::convQuery("?cmd=list");
-		$this->resLink['new']      = $script . WikiParam::convQuery("?plugin=newpage&amp;refer=$r_page");
-		$this->resLink['rdf']      = $script . WikiParam::convQuery("?cmd=rss&amp;ver=1.0");
-		$this->resLink['recent']   = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getWhatsnewPage()));
-//		$this->resLink['refer']    = $script . WikiParam::convQuery("?plugin=referer&amp;page=$r_page");
-		$this->resLink['reload']   = $script . WikiParam::convQuery("?$r_page");
-		$this->resLink['rename']   = $script . WikiParam::convQuery("?plugin=rename&amp;refer=$r_page");
-		$this->resLink['rss']      = $script . WikiParam::convQuery("?cmd=rss");
-		$this->resLink['rss10']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=1.0"); // Same as 'rdf'
-		$this->resLink['rss20']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=2.0");
-		$this->resLink['search']   = $script . WikiParam::convQuery("?cmd=search");
-		$this->resLink['top']      = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getDefaultPage()));
-		$this->resLink['unfreeze'] = $script . WikiParam::convQuery("?cmd=unfreeze&amp;page=$r_page");
-		$this->resLink['upload']   = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=upload&amp;page=$r_page");
+		$this->resLink['add']      = $script . WikiParam::convQuery("?cmd=add&amp;page=$r_page") . $urlOption;
+		$this->resLink['backup']   = $script . WikiParam::convQuery("?cmd=backup&amp;page=$r_page") . $urlOption;
+		$this->resLink['copy']     = $script . WikiParam::convQuery("?plugin=template&amp;refer=$r_page") . $urlOption;
+		$this->resLink['diff']     = $script . WikiParam::convQuery("?cmd=diff&amp;page=$r_page") . $urlOption;
+		$this->resLink['edit']     = $script . WikiParam::convQuery("?cmd=edit&amp;page=$r_page") . $urlOption;
+		$this->resLink['filelist'] = $script . WikiParam::convQuery("?cmd=filelist") . $urlOption;
+		$this->resLink['freeze']   = $script . WikiParam::convQuery("?cmd=freeze&amp;page=$r_page") . $urlOption;
+		$this->resLink['help']     = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getHelpPage())) . $urlOption;
+		$this->resLink['list']     = $script . WikiParam::convQuery("?cmd=list") . $urlOption;
+		$this->resLink['new']      = $script . WikiParam::convQuery("?plugin=newpage&amp;refer=$r_page") . $urlOption;
+		$this->resLink['rdf']      = $script . WikiParam::convQuery("?cmd=rss&amp;ver=1.0") . $urlOption;
+		$this->resLink['recent']   = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getWhatsnewPage())) . $urlOption;
+//		$this->resLink['refer']    = $script . WikiParam::convQuery("?plugin=referer&amp;page=$r_page") . $urlOption;
+		$this->resLink['reload']   = $script . WikiParam::convQuery("?$r_page") . $urlOption;
+		$this->resLink['rename']   = $script . WikiParam::convQuery("?plugin=rename&amp;refer=$r_page") . $urlOption;
+		$this->resLink['rss']      = $script . WikiParam::convQuery("?cmd=rss") . $urlOption;
+		$this->resLink['rss10']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=1.0") . $urlOption; // Same as 'rdf'
+		$this->resLink['rss20']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=2.0") . $urlOption;
+		$this->resLink['search']   = $script . WikiParam::convQuery("?cmd=search") . $urlOption;
+		$this->resLink['top']      = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getDefaultPage())) . $urlOption;
+		$this->resLink['unfreeze'] = $script . WikiParam::convQuery("?cmd=unfreeze&amp;page=$r_page") . $urlOption;
+		$this->resLink['upload']   = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=upload&amp;page=$r_page") . $urlOption;
 
 		// Set toolbar-specific images
 		$this->resImage['reload']   = 'reload.png';
