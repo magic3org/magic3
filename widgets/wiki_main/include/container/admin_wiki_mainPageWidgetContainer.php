@@ -534,7 +534,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?" . rawurlencode($id), false/*URLエンコードしない*/);
-//		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
 		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
 		$previewStr = 'プレビュー';
 		

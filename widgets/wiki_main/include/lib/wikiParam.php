@@ -27,7 +27,7 @@ class WikiParam
 	private static $refer;
 	private static $digest;
 	private static $arg;			// URLパラメータ
-	private static $ignoreParams = array(M3_REQUEST_PARAM_PAGE_SUB_ID);		// 受け付けないパラメータ
+	private static $ignoreParams = array(M3_REQUEST_PARAM_PAGE_SUB_ID, M3_REQUEST_PARAM_OPERATION_COMMAND);		// 受け付けないパラメータ
 	private static $subId = '';			// Magic3のページサブID指定
 	
 	/**
