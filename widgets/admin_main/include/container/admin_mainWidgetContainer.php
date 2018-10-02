@@ -444,7 +444,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$adminUrl = $this->gEnv->getAdminUrl() . '/';
 				if (!strStartsWith($this->gEnv->getCurrentScriptUrl(), $adminUrl)){
 					$adminUrlLink = '<a href="' . $this->convertUrlToHtmlEntity($adminUrl) . '">' . $this->convertToDispString($adminUrl) . '</a>';
-					$this->SetMsg(self::MSG_APP_ERR, $this->_('Correct url is this:') . ' ' . $adminUrlLink);		// 正しいURLはこちらです：
+					$this->SetMsg(self::MSG_APP_ERR, $this->_('Correct administration url is this:') . ' ' . $adminUrlLink);		// 管理画面の正しいURLはこちらです：
 				}
 												
 				if (!empty($this->redirectUrl)){		// 遷移先

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-19 16:13+0900\n"
-"PO-Revision-Date: 2018-08-19 16:14+0900\n"
+"POT-Creation-Date: 2018-10-03 06:59+0900\n"
+"PO-Revision-Date: 2018-10-03 06:59+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -490,7 +490,7 @@ msgstr "メールサーバ設定"
 
 #: ../container/admin_mainCreateconfigWidgetContainer.php:86
 #: ../container/admin_mainTemplistWidgetContainer.php:414
-#: ../container/admin_mainWidgetlistWidgetContainer.php:503
+#: ../container/admin_mainWidgetlistWidgetContainer.php:505
 #, php-format
 msgid "Failed in downloading file. (detail: %s)"
 msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
@@ -835,7 +835,7 @@ msgstr "未設定"
 #: ../container/admin_mainUserlistWidgetContainer.php:349
 #: ../container/admin_mainUserlistWidgetContainer.php:389
 #: ../container/admin_mainUserlistWidgetContainer.php:465
-#: ../container/admin_mainWidgetlistWidgetContainer.php:665
+#: ../container/admin_mainWidgetlistWidgetContainer.php:681
 #: ../help/help_menudef.php:43 ../help/help_menudef.php:47
 #: ../help/help_userlist.php:47
 msgid "Name"
@@ -870,12 +870,12 @@ msgstr "管理メニュー定義ファイル"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:204
 #: ../container/admin_mainTemplistWidgetContainer.php:534
-#: ../container/admin_mainWidgetlistWidgetContainer.php:676
+#: ../container/admin_mainWidgetlistWidgetContainer.php:692
 msgid "Upload"
 msgstr "アップロード"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:205
-#: ../container/admin_mainWidgetlistWidgetContainer.php:75
+#: ../container/admin_mainWidgetlistWidgetContainer.php:76
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -902,7 +902,7 @@ msgstr "スクリプト実行に失敗しました"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:330
 #: ../container/admin_mainTemplistWidgetContainer.php:374
-#: ../container/admin_mainWidgetlistWidgetContainer.php:463
+#: ../container/admin_mainWidgetlistWidgetContainer.php:465
 #, php-format
 msgid ""
 "Uploded file not found. (detail: The file may be over maximum size to be "
@@ -1171,7 +1171,7 @@ msgstr "区分"
 #: ../container/admin_mainPagedefWidgetContainer.php:174
 #: ../container/admin_mainSmenudefWidgetContainer.php:196
 #: ../container/admin_mainTemplistWidgetContainer.php:531
-#: ../container/admin_mainWidgetlistWidgetContainer.php:672
+#: ../container/admin_mainWidgetlistWidgetContainer.php:688
 #: ../help/help_menudef.php:71 ../help/help_templist.php:59
 #: ../help/help_widgetlist.php:63
 msgid "Operation"
@@ -1462,17 +1462,17 @@ msgid "Failed in deleting data."
 msgstr "データ削除に失敗しました"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:595
-#: ../container/admin_mainWidgetlistWidgetContainer.php:72
+#: ../container/admin_mainWidgetlistWidgetContainer.php:73
 msgid "Update line"
 msgstr "行を更新"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:596
-#: ../container/admin_mainWidgetlistWidgetContainer.php:73
+#: ../container/admin_mainWidgetlistWidgetContainer.php:74
 msgid "Delete line"
 msgstr "行を削除"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:600
-#: ../container/admin_mainWidgetlistWidgetContainer.php:74
+#: ../container/admin_mainWidgetlistWidgetContainer.php:75
 msgid "Show config window"
 msgstr "設定画面を表示"
 
@@ -1630,7 +1630,7 @@ msgid "Filename"
 msgstr "ファイル名"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:289
-#: ../container/admin_mainWidgetlistWidgetContainer.php:666
+#: ../container/admin_mainWidgetlistWidgetContainer.php:682
 msgid "Status"
 msgstr "状態"
 
@@ -1666,7 +1666,7 @@ msgstr "作成"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:298
 #: ../container/admin_mainTemplistWidgetContainer.php:535
-#: ../container/admin_mainWidgetlistWidgetContainer.php:677
+#: ../container/admin_mainWidgetlistWidgetContainer.php:693
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -1683,17 +1683,17 @@ msgid "Failed in updating item."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:68
-#: ../container/admin_mainWidgetlistWidgetContainer.php:63
+#: ../container/admin_mainWidgetlistWidgetContainer.php:64
 msgid "For PC"
 msgstr "PC用"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:69
-#: ../container/admin_mainWidgetlistWidgetContainer.php:64
+#: ../container/admin_mainWidgetlistWidgetContainer.php:65
 msgid "For Smartphone"
 msgstr "スマートフォン用"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:70
-#: ../container/admin_mainWidgetlistWidgetContainer.php:65
+#: ../container/admin_mainWidgetlistWidgetContainer.php:66
 msgid "For Mobile"
 msgstr "携帯用"
 
@@ -1730,12 +1730,12 @@ msgid "Failed in deleting template directory. (directory: %s)"
 msgstr "テンプレートのディレクトリが削除できませんでした。(ディレクトリ： %s)"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:267
-#: ../container/admin_mainWidgetlistWidgetContainer.php:299
+#: ../container/admin_mainWidgetlistWidgetContainer.php:301
 msgid "Only zip format file is allowed to upload."
 msgstr "zip圧縮のファイルのみアップロード可能です"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:274
-#: ../container/admin_mainWidgetlistWidgetContainer.php:306
+#: ../container/admin_mainWidgetlistWidgetContainer.php:308
 #, php-format
 msgid "You are not allowed to write temporary directory. (directory: %s)"
 msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
@@ -1761,8 +1761,8 @@ msgid "Failed in moving directory. (directory: %s)"
 msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:366
-#: ../container/admin_mainWidgetlistWidgetContainer.php:436
-#: ../container/admin_mainWidgetlistWidgetContainer.php:455
+#: ../container/admin_mainWidgetlistWidgetContainer.php:438
+#: ../container/admin_mainWidgetlistWidgetContainer.php:457
 msgid "Failed in uploading file."
 msgstr "ファイルのアップロードに失敗しました"
 
@@ -1785,7 +1785,7 @@ msgid "Default template is not selected."
 msgstr "デフォルトテンプレートが選択されていません。"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:517
-#: ../container/admin_mainWidgetlistWidgetContainer.php:655
+#: ../container/admin_mainWidgetlistWidgetContainer.php:671
 msgid "Update line?"
 msgstr "行を更新しますか?"
 
@@ -1794,12 +1794,12 @@ msgid "Delete tmplate?"
 msgstr "テンプレートを削除しますか?"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:519
-#: ../container/admin_mainWidgetlistWidgetContainer.php:657
+#: ../container/admin_mainWidgetlistWidgetContainer.php:673
 msgid "File not selected."
 msgstr "アップロードするファイルが選択されていません"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:520
-#: ../container/admin_mainWidgetlistWidgetContainer.php:658
+#: ../container/admin_mainWidgetlistWidgetContainer.php:674
 msgid "Upload file."
 msgstr "ファイルをアップロードします"
 
@@ -1809,12 +1809,12 @@ msgid "Template List"
 msgstr "テンプレート一覧"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:523
-#: ../container/admin_mainWidgetlistWidgetContainer.php:662
+#: ../container/admin_mainWidgetlistWidgetContainer.php:678
 msgid "Install Directory:"
 msgstr "インストールディレクトリ:"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:524
-#: ../container/admin_mainWidgetlistWidgetContainer.php:663
+#: ../container/admin_mainWidgetlistWidgetContainer.php:679
 #: ../help/help_templist.php:71 ../help/help_widgetlist.php:75
 msgid "Reload directory"
 msgstr "ディレクトリ再読み込み"
@@ -1837,7 +1837,7 @@ msgid "Template Upload (zip compressed file)"
 msgstr "テンプレートアップロード(zip圧縮ファイル)"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:533
-#: ../container/admin_mainWidgetlistWidgetContainer.php:674
+#: ../container/admin_mainWidgetlistWidgetContainer.php:690
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
 
@@ -1980,7 +1980,7 @@ msgstr "回数"
 #: ../container/admin_mainUserlistWidgetContainer.php:226
 #: ../container/admin_mainUserlistWidgetContainer.php:354
 #: ../container/admin_mainUserlistWidgetContainer.php:404
-#: ../container/admin_mainUserlistWidgetContainer.php:525
+#: ../container/admin_mainUserlistWidgetContainer.php:530
 msgid "Failed in getting data."
 msgstr "データ取得に失敗しました"
 
@@ -2037,182 +2037,182 @@ msgid "Password sent."
 msgstr "パスワードを送信しました"
 
 #: ../container/admin_mainWidgetContainer.php:447
-msgid "Correct url is this:"
-msgstr "正しいURLはこちらです："
+msgid "Correct administration url is this:"
+msgstr "管理画面の正しいURLはこちらです："
 
 #: ../container/admin_mainWidgetContainer.php:468
 msgid "Send Password"
 msgstr "パスワード送信"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:66
+#: ../container/admin_mainWidgetlistWidgetContainer.php:67
 msgid "For Administration"
 msgstr "管理用"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:70
+#: ../container/admin_mainWidgetlistWidgetContainer.php:71
 msgid "Active"
 msgstr "稼働中"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:71
+#: ../container/admin_mainWidgetlistWidgetContainer.php:72
 msgid "Stop"
 msgstr "停止"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:76
+#: ../container/admin_mainWidgetlistWidgetContainer.php:77
 msgid "Download disabled"
 msgstr "ダウンロード不可"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:210
+#: ../container/admin_mainWidgetlistWidgetContainer.php:212
 #, php-format
 msgid "New widgets added. (widgets count=%d)"
 msgstr "新規ウィジェットを追加しました(追加数=%d)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:213
+#: ../container/admin_mainWidgetlistWidgetContainer.php:215
 msgid "No new widgets added."
 msgstr "新規ウィジェットはありません"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:227
+#: ../container/admin_mainWidgetlistWidgetContainer.php:229
 msgid "Line updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:229
+#: ../container/admin_mainWidgetlistWidgetContainer.php:231
 msgid "Failed in updating line."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:257
+#: ../container/admin_mainWidgetlistWidgetContainer.php:259
 #, php-format
 msgid "Widget deleted. (widget ID: %s)"
 msgstr "ウィジェットを削除しました。(ウィジェットID： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:260
+#: ../container/admin_mainWidgetlistWidgetContainer.php:262
 #, php-format
 msgid "Failed in deleting widget directory. (directory: %s)"
 msgstr "ウィジェットのディレクトリが削除できませんでした。(ディレクトリ： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:264
+#: ../container/admin_mainWidgetlistWidgetContainer.php:266
 #, php-format
 msgid "You are not allowed to delete widget directory. (directory: %s)"
 msgstr "ウィジェットのディレクトリの削除権限がありません。(ディレクトリ： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:268
-#: ../container/admin_mainWidgetlistWidgetContainer.php:908
+#: ../container/admin_mainWidgetlistWidgetContainer.php:270
+#: ../container/admin_mainWidgetlistWidgetContainer.php:930
 msgid "Widget not found."
 msgstr "ウィジェットが見つかりません"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:315
+#: ../container/admin_mainWidgetlistWidgetContainer.php:317
 #, php-format
 msgid "The widget already exists. (widget ID: %s)"
 msgstr "ウィジェットがすでに存在します。(ウィジェットID： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:345
+#: ../container/admin_mainWidgetlistWidgetContainer.php:347
 #, php-format
 msgid "Failed in getting file list from zip file. (detail: %s)"
 msgstr "zipファイルの内容のリスト取得に失敗しました。(要因:： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:357
+#: ../container/admin_mainWidgetlistWidgetContainer.php:359
 msgid "Failed in deleting widget directory."
 msgstr "ウィジェットのディレクトリが削除できませんでした"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:420
+#: ../container/admin_mainWidgetlistWidgetContainer.php:422
 msgid "Widget installed successfully."
 msgstr "ウィジェットのインストールが完了しました。"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:424
-#: ../container/admin_mainWidgetlistWidgetContainer.php:581
+#: ../container/admin_mainWidgetlistWidgetContainer.php:426
+#: ../container/admin_mainWidgetlistWidgetContainer.php:583
 msgid "Widget updated successfully."
 msgstr "ウィジェットの更新が完了しました。"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:428
+#: ../container/admin_mainWidgetlistWidgetContainer.php:430
 #, php-format
 msgid "Current version is %s."
 msgstr "バージョンは%sです。"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:432
+#: ../container/admin_mainWidgetlistWidgetContainer.php:434
 #, php-format
 msgid "File uploaded. (widget ID: %s)"
 msgstr "ファイルのアップロードが完了しました。(ウィジェットID： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:443
+#: ../container/admin_mainWidgetlistWidgetContainer.php:445
 #, php-format
 msgid "Failed in uploading file. (detail: %s)"
 msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:449
+#: ../container/admin_mainWidgetlistWidgetContainer.php:451
 msgid "The zip filename is different from directory name."
 msgstr ""
 "zipファイルのファイル名とディレクトリ名が異なっているか、全角文字が含まれてい"
 "ます"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:524
+#: ../container/admin_mainWidgetlistWidgetContainer.php:526
 msgid "Latest widget information gotten."
 msgstr "最新のウィジェット情報を取得しました"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:584
+#: ../container/admin_mainWidgetlistWidgetContainer.php:586
 msgid "Failed in updating widget."
 msgstr "ウィジェットの更新に失敗しました"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:590
+#: ../container/admin_mainWidgetlistWidgetContainer.php:592
 msgid "Connection count is over the limit. Wait a minute, connect again."
 msgstr "接続回数の上限を超えました。しばらく待ってから再度接続してください"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:592
+#: ../container/admin_mainWidgetlistWidgetContainer.php:594
 msgid "Failed in connecting to GitHub."
 msgstr "GitHubへの接続に失敗しました"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:597
+#: ../container/admin_mainWidgetlistWidgetContainer.php:599
 msgid "The widget is already the latest version."
 msgstr "ウィジェットはすでに最新バージョンです"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:634
+#: ../container/admin_mainWidgetlistWidgetContainer.php:650
 msgid "Close Detail"
 msgstr "詳細を非表示"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:637
+#: ../container/admin_mainWidgetlistWidgetContainer.php:653
 msgid "Open Detail"
 msgstr "詳細を表示"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:654
+#: ../container/admin_mainWidgetlistWidgetContainer.php:670
 msgid "Get new information of widgets?"
 msgstr "ウィジェットの最新情報を取得しますか?"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:656
+#: ../container/admin_mainWidgetlistWidgetContainer.php:672
 msgid "Delete widget?"
 msgstr "ウィジェットを削除しますか?"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:659
+#: ../container/admin_mainWidgetlistWidgetContainer.php:675
 msgid "Update widget?"
 msgstr "ウィジェットを更新しますか?"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:660
+#: ../container/admin_mainWidgetlistWidgetContainer.php:676
 #: ../help/help_widgetlist.php:31
 msgid "Widget List"
 msgstr "ウィジェット一覧"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:667
+#: ../container/admin_mainWidgetlistWidgetContainer.php:683
 msgid "Version"
 msgstr "バージョン"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:668
+#: ../container/admin_mainWidgetlistWidgetContainer.php:684
 msgid "Latest"
 msgstr "最新"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:669
+#: ../container/admin_mainWidgetlistWidgetContainer.php:685
 #: ../help/help_widgetlist.php:55
 msgid "Available"
 msgstr "配置可"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:670
+#: ../container/admin_mainWidgetlistWidgetContainer.php:686
 #: ../help/help_widgetlist.php:59
 msgid "Enable"
 msgstr "実行可"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:671
+#: ../container/admin_mainWidgetlistWidgetContainer.php:687
 msgid "Release Date"
 msgstr "リリース日"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:673
+#: ../container/admin_mainWidgetlistWidgetContainer.php:689
 msgid "Widget Upload (zip compressed file)"
 msgstr "ウィジェットアップロード(zip圧縮ファイル)"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:675
+#: ../container/admin_mainWidgetlistWidgetContainer.php:691
 msgid "Replace widget if exists."
 msgstr "ウィジェットが存在する場合は置き換え"
 

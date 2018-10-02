@@ -3570,9 +3570,11 @@ class PageManager extends Core
 				}
 			} else {		// フロント画面へのアクセスの場合
 				// ### Bootstrapのjsとcssはテンプレート側で読み込む ###
-//				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// Bootstrapライブラリ
-				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW ||				// ログイン、ログアウト場合
+				// ### フロントからプレビューコマンドでログイン画面を表示させるパターンがあるので注意 ###
+//				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW ||				// ログイン、ログアウト場合
+				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || ($cmd == M3_REQUEST_CMD_PREVIEW && !$gEnvManager->isCurrentUserLogined()) ||				// ログイン、ログアウト場合
 					($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){		// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
+					
 					$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);		// Bootstrap管理画面オプション
 				} else {
 					if ($gEnvManager->isSystemManageUser() ||		// システム運用権限がある場合
@@ -4014,7 +4016,9 @@ class PageManager extends Core
 					$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 				}
 				
-				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+				// ### フロントからプレビューコマンドでログイン画面を表示させるパターンがあるので注意 ###
+//				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || ($cmd == M3_REQUEST_CMD_PREVIEW && !$gEnvManager->isCurrentUserLogined())){				// ログイン、ログアウト場合
 					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
 					$count = count($this->defaultAdminDirScriptFiles);
 					for ($i = 0; $i < $count; $i++){
