@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,6 +28,7 @@ require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 //class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetContainer
 class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 {
+	private $currentYear;		// 現在の年号
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $blogId;		// 所属ブログ
@@ -42,18 +43,23 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	private $useComment;// コメント機能を使用するかどうか
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
+	const SMALL_ICON_SIZE = 16;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
+	const LINK_PAGE_COUNT_S		= 5;			// リンクページ数(小画面用)
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
+	const SMALL_ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
+	const SMALL_INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
 	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
+	const DATETIME_FORMAT = 'Y年n月j日($1) H:i:s';		// 日付時間フォーマット
 	
 	/**
 	 * コンストラクタ
@@ -62,6 +68,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->currentYear = intval(date('Y'));
 	}
 	/**
 	 * ウィジェット初期化
@@ -100,9 +108,17 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$task = $request->trimValueOf('task');
 		
 		if ($task == 'entry_detail'){		// 詳細画面
-			return 'admin_entry_detail.tmpl.html';
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				return 'admin_entry_detail_small.tmpl.html';
+			} else {
+				return 'admin_entry_detail.tmpl.html';
+			}
 		} else {			// 一覧画面
-			return 'admin_entry.tmpl.html';
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				return 'admin_entry_small.tmpl.html';
+			} else {
+				return 'admin_entry.tmpl.html';
+			}
 		}
 	}
 	/**
@@ -279,7 +295,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
 		// ページングリンク作成
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT_S, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		} else {
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		}
 		
 		// 記事項目リストを取得
 		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'), $this->blogId);
@@ -406,7 +426,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				// 取得できないときは一部初期化
 				//$name = '';				// タイトル
 				//$html = '';				// HTML
-				$status = 0;				// エントリー状況
+				//$status = 0;				// エントリー状況
+				$status = 1;				// エントリー状況(編集中)
 				$reg_user = '';				// 投稿者
 				$update_user = '';// 更新者
 				$update_dt = '';							
@@ -447,6 +468,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// サムネール画像を取得
 				$thumbFilename = '';
+				$thumbSrcPath = '';			// サムネール画像の元のファイル
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					// 次の記事IDを取得
 					$nextEntryId = self::$_mainDb->getNextEntryId();
@@ -458,6 +480,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $nextEntryId, $thumbPath, $destFilename);
 							if ($ret) $thumbFilename = implode(';', $destFilename);
 						}
+						
+						// サムネールの元の画像を取得
+						$thumbSrcPath = str_replace($this->gEnv->getResourcePath(), '', $thumbPath);
 					}
 				}
 				
@@ -466,6 +491,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
 										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'be_thumb_src'			=> $thumbSrcPath,		// サムネール画像の元のファイル
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
 
@@ -562,6 +588,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// サムネール画像を取得
 				$thumbFilename = '';
+				$thumbSrcPath = '';			// サムネール画像の元のファイル
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
 						// コンテンツからアイキャッチ画像を作成
@@ -579,6 +606,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
 							$thumbFilename = implode(';', $destFilename);
 						}
+						
+						// サムネールの元の画像を取得
+						$thumbSrcPath = str_replace($this->gEnv->getResourcePath(), '', $thumbPath);
 					} else {		// 記事非公開の場合
 						// 公開ディレクトリのアイキャッチ画像を削除
 						blog_mainCommonDef::removeEyecatchImageInPublicDir($this->entryId);
@@ -590,6 +620,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
 										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'be_thumb_src'			=> $thumbSrcPath,		// サムネール画像の元のファイル
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
 
@@ -771,6 +802,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$otherParams = array();
 			$otherParams['be_name']				= $name;
 			$otherParams['be_blog_id']			= $this->blogId;
+			$otherParams['be_status']			= $status;
 			$otherParams['be_regist_user_id']	= $userId;				// 投稿者
 			$otherParams['be_regist_dt']		= $regDt;
 			$otherParams['be_show_comment']		= $showComment;
@@ -843,7 +875,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				$reg_user = $row['reg_user_name'];				// 投稿者
 				$entry_date = $this->timestampToDate($row['be_regist_dt']);		// 投稿日
 				$entry_time = $this->timestampToTime($row['be_regist_dt']);		// 投稿時間
-				$update_user = $this->convertToDispString($row['lu_name']);// 更新者
+				//$update_user = $this->convertToDispString($row['lu_name']);// 更新者
+				$update_user = $this->convertToDispString($row['update_user_name']);// 更新者
 				$update_dt = $this->convertToDispDateTime($row['be_create_dt']);
 				$start_date = $this->convertToDispDate($row['be_active_start_dt']);	// 公開期間開始日
 				$start_time = $this->convertToDispTime($row['be_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
@@ -894,7 +927,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				$desc = '';		// 簡易説明
 				$metaDesc = '';		// ページ要約(METAタグ)
 				$metaKeyword = '';		// ページキーワード(METAタグ)
-				$status = 0;				// エントリー状況
+				//$status = 0;				// エントリー状況
+				$status = 1;				// エントリー状況(編集中)
 				$reg_user = '';				// 投稿者
 				$entry_date = date("Y/m/d");		// 投稿日
 				$entry_time = date("H:i:s");		// 投稿時間
@@ -965,12 +999,20 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 簡易説明
 		$this->tmpl->addVar("_widget", "meta_desc", $this->convertToDispString($metaDesc));		// ページ要約(METAタグ)
 		$this->tmpl->addVar("_widget", "meta_keyword", $this->convertToDispString($metaKeyword));		// ページキーワード(METAタグ)
-		switch ($status){
-			case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
-			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
-			case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
-		}	
-		$this->tmpl->addVar("_widget", "entry_user", $reg_user);	// 投稿者
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			switch ($status){
+				case 1:	$this->tmpl->addVar("_widget", "checked_edit", 'checked');		break;
+				case 2:	$this->tmpl->addVar("_widget", "checked_public", 'checked');	break;
+				case 3:	$this->tmpl->addVar("_widget", "checked_closed", 'checked');	break;
+			}
+		} else {
+			switch ($status){
+				case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
+				case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
+				case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
+			}
+		}
+		$this->tmpl->addVar("_widget", "entry_user", $this->convertToDispString($reg_user));	// 投稿者
 		$this->tmpl->addVar("_widget", "entry_date", $entry_date);	// 投稿日
 		$this->tmpl->addVar("_widget", "entry_time", $entry_time);	// 投稿時
 		$this->tmpl->addVar("_widget", "update_user", $update_user);	// 更新者
@@ -987,6 +1029,40 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar('_widget', 'current_widget', $this->_widgetId);		// AJAX用ウィジェットID
 		
+		// 投稿日時
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$resistDtTimestamp = strtotime($row['be_regist_dt']);
+			$weekTypeArray = array('日', '月', '火', '水', '木', '金', '土');// 曜日表示名
+			$datetimeStr = $date = date(self::DATETIME_FORMAT, $resistDtTimestamp);
+			$datetimeStr = str_replace('$1', $weekTypeArray[intval(date('w', $resistDtTimestamp))], $datetimeStr);
+			$this->tmpl->addVar("_widget", "entry_datetime_text", '<div class="form-control-static m3config_item">' . $datetimeStr . '</div>');
+		}
+				
+		// 記事状態ラベル
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$statusLabelTag = '';
+			switch ($status){
+			case 1:				// 編集中
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-warning">編集中</span>';
+				$statusPanelTitle = '編集中';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-warning';				// 記事状態パネルのカラー
+				break;
+			case 2:			// 公開
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-success">公開</span>';
+				$statusPanelTitle = '公開';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-success';		// 記事状態パネルのカラー
+				break;
+			case 3:			// 非公開
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-warning">非公開</span>';
+				$statusPanelTitle = '非公開';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-warning';		// 記事状態パネルのカラー
+				break;
+			}
+			$this->tmpl->addVar("_widget", "status_label", $statusLabelTag);
+			$this->tmpl->addVar("_widget", "status_panel_color", $statusPanelColor);
+			$this->tmpl->addVar("_widget", "status_panel_title", $statusPanelTitle);
+		}
+		 
 		// 公開期間エリア表示ボタン
 		$activeTermButton = $this->gDesign->createTermButton(''/*同画面*/, self::TOOLTIP_ACTIVE_TERM, self::TAG_ID_ACTIVE_TERM);
 		$this->tmpl->addVar("_widget", "active_term_button", $activeTermButton);
@@ -1097,16 +1173,27 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$endDt = $fetchedRow['be_active_end_dt'];
 		
 		$isActive = false;		// 公開状態
-		if ($fetchedRow['be_status'] == 2) $isActive = $this->isActive($startDt, $endDt, $now);// 表示可能
+		if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $now);// 表示可能
 		
-		if ($isActive){		// コンテンツが公開状態のとき
-			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = '公開中';
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			if ($isActive){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_ACTIVE_ICON_FILE;			// 公開中アイコン
+				$iconTitle = '公開中';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_INACTIVE_ICON_FILE;		// 非公開アイコン
+				$iconTitle = '非公開';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SMALL_ICON_SIZE . '" height="' . self::SMALL_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		} else {
-			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = '非公開';
+			if ($isActive){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+				$iconTitle = '公開中';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+				$iconTitle = '非公開';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// アイキャッチ画像
 		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
@@ -1116,6 +1203,18 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$iconTitle = 'アイキャッチ画像';
 		}
 		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+		// 投稿日時
+		$outputDate = $fetchedRow['be_regist_dt'];
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){		// 年号が今日の年号のとき
+				$dispDate = $this->convertToDispDate($outputDate, 11/*年省略,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+			} else {
+				$dispDate = $this->convertToDispDate($outputDate, 3/*短縮年,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+			}
+		} else {
+			$dispDate = $this->convertToDispDateTime($outputDate, 0/*ロングフォーマット*/, 10/*時分*/);
+		}
 		
 		$row = array(
 			'index' => $index,		// 項目番号
@@ -1131,7 +1230,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			//'view_count' => $totalViewCount,									// 参照数
 			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
 			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
+//			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
+			'reg_date' => $dispDate
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
@@ -1277,7 +1377,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	 * @param timestamp	$now			基準日時
 	 * @return bool						true=公開可能、false=公開不可
 	 */
-	function isActive($startDt, $endDt, $now)
+	function _isActive($startDt, $endDt, $now)
 	{
 		$isActive = false;		// 公開状態
 
