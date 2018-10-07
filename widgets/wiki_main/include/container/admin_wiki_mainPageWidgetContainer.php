@@ -399,20 +399,28 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 
 		$act = $request->trimValueOf('act');
 		$id	= $request->trimValueOf('item_id');		// WikiコンテンツID
+		$body = $request->trimValueOf('item_body');		// Wikiコンテンツ本文
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 項目追加の場合
 			// 入力チェック
 			$this->checkInput($id, 'ID');
+			$this->checkInput($body, '本文');
+			
+			// Wikiコンテンツの存在確認
+			if ($this->getMsgCount() == 0 && WikiPage::isPage($id)) $this->setUserErrorMsg('同じIDのWikiコンテンツが存在します');
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-//				$ret = $this->db->addCategory(0, $this->langId, $name, 0, $index, $visible, $userId, $newSerial);
+				// Wikiコンテンツ追加
+				page_write($id, $body);
+				
+				// シリアル番号更新
+				$ret = self::$_mainDb->getPage($id, $row);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
-					// シリアル番号更新
-					$this->serialNo = $newSerial;
+					$this->serialNo = $row['wc_serial'];
 					$replaceNew = true;			// データを再取得
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
@@ -420,15 +428,24 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			}
 		} else if ($act == 'update'){		// 項目更新の場合
 			// 入力チェック
+			$this->checkInput($body, '本文');
 			
+			// 更新前のデータかどうかをチェック
+			$ret = self::$_mainDb->getPageBySerial($this->serialNo, $row);
+			if (($ret && $row['wc_deleted']) || !$ret) $this->setUserErrorMsg('更新に失敗しました');
+	
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->updateCategory($this->serialNo, $name, 0, $index, $visible, $userId, $newSerial);
+				// Wikiコンテンツ更新
+				$id = $row['wc_id'];
+				page_write($id, $body);
+				
+				// シリアル番号更新
+				$ret = self::$_mainDb->getPage($id, $row);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
-					// 登録済みのカテゴリーを取得
-					$this->serialNo = $newSerial;
+					$this->serialNo = $row['wc_serial'];
 					$replaceNew = true;			// データを再取得
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
@@ -470,7 +487,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				// Wikiコンテンツを取得
 		//		$body = convert_html(get_source($id, false, $this->serialNo));		// コンテンツのダイジェストを取得
 				$body = get_source($id, true);		// コンテンツのダイジェストを取得
-				$digest = md5($body);
 			}
 		}
 		// #### 更新、新規登録部をを作成 ####
@@ -486,7 +502,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
 		
 		$this->tmpl->addVar("_widget", "body", $this->convertToDispString($body));	// コンテンツ本文
-		$this->tmpl->addVar("_widget", "digest", $this->convertToDispString($digest));	// コンテンツ変更確認用ダイジェスト
 		if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
 		if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
 	}
