@@ -36,6 +36,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	const SORT_DOWN_ICON_FILE = '/images/system/arrow_down10.png';		// ソート昇順アイコン
 	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	const DEFAULT_SORT_KEY = 'id';		// デフォルトのソートキー
+	const GUEST_USER = 'ゲスト';			// コンテンツ更新者がログインユーザでない場合のユーザ表示用
 	
 	/**
 	 * コンストラクタ
@@ -84,7 +85,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'page_detail'){	// 詳細画面
-//			return $this->createDetail($request);
+			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
 		}
@@ -394,20 +395,15 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 */
 	function createDetail($request)
 	{
-		$userId = $this->gEnv->getCurrentUserId();
-		
-		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 
-		$name	= $request->trimValueOf('item_name');		// カテゴリー名称
-		$index	= $request->trimValueOf('item_index');		// 表示順
-		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;			// 表示するかどうか
+		$act = $request->trimValueOf('act');
+		$id	= $request->trimValueOf('item_id');		// WikiコンテンツID
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 項目追加の場合
 			// 入力チェック
-			$this->checkInput($name, '名前');
-			$this->checkNumeric($index, '表示順');
+			$this->checkInput($id, 'ID');
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
@@ -424,8 +420,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			}
 		} else if ($act == 'update'){		// 項目更新の場合
 			// 入力チェック
-			$this->checkInput($name, '名前');
-			$this->checkNumeric($index, '表示順');		
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
@@ -441,53 +435,58 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				}
 			}
 		} else if ($act == 'delete'){		// 項目削除の場合
-			$ret = $this->db->delCategoryBySerial(array($this->serialNo));
-			if ($ret){		// データ削除成功のとき
+			// 指定のWikiページを削除
+			$ret = self::$_mainDb->getPageBySerial($this->serialNo, $row);
+			if (!$ret) $this->setUserErrorMsg('削除項目が選択されていません');
+			
+			// エラーなしの場合はデータを削除
+			if ($this->getMsgCount() == 0){
+				$id = $row['wc_id'];
+				page_write($id, '');
+			
 				$this->setGuidanceMsg('データを削除しました');
-			} else {
-				$this->setAppErrorMsg('データ削除に失敗しました');
+								
+				// リンク情報再構築
+				$this->wikiLibObj->initLinks();
 			}
 		} else {	// 初期表示
 			// 入力値初期化
 			if (empty($this->serialNo)){		// シリアル番号
-				$name = '';		// 名前
-//				$index = $this->db->getMaxIndex($this->langId) + 1;	// 表示順
-				$visible = 1;	// 表示状態
+				$id = '';		// WikiコンテンツID
 			} else {
 				$replaceNew = true;			// データを再取得
 			}
 		}
 		// データを再取得のとき
 		if ($replaceNew){
-			$ret = $this->db->getCategoryBySerial($this->serialNo, $row);
+			$ret = self::$_mainDb->getPageBySerial($this->serialNo, $row);
 			if ($ret){
 				// 取得値を設定
-				$id = $row['bc_id'];		// ID
-//				$this->langId = $row['bc_language_id'];		// 言語ID
-				$name = $row['bc_name'];		// 名前
-				$index = $row['bc_sort_order'];	// 表示順
-				$visible = $row['bc_visible'];	// 表示状態
-				$updateUser = $this->convertToDispString($row['lu_name']);	// 更新者
-				$updateDt = $this->convertToDispDateTime($row['bc_create_dt']);	// 更新日時
+				$id = $row['wc_id'];		// ID
+				$updateUser = $this->convertToDispString($row['create_user_name']);	// コンテンツ更新者
+				if (empty($updateUser)) $updateUser = self::GUEST_USER;
+				$updateDt = $this->convertToDispDateTime($row['wc_content_dt']);	// コンテンツ更新日時
+				
+				// Wikiコンテンツを取得
+		//		$body = convert_html(get_source($id, false, $this->serialNo));		// コンテンツのダイジェストを取得
+				$body = get_source($id, true);		// コンテンツのダイジェストを取得
+				$digest = md5($body);
 			}
 		}
 		// #### 更新、新規登録部をを作成 ####
 		if (empty($this->serialNo)){		// シリアル番号のときは新規とする
-			$this->tmpl->addVar("_widget", "id", '新規');
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
+			$this->tmpl->setAttribute('show_input_id', 'visibility', 'visible');// WikiコンテンツID入力エリア
+			$this->tmpl->addVar("show_input_id", "id", $this->convertToDispString($id));	// WikiコンテンツID
 		} else {
-			$this->tmpl->addVar("_widget", "id", $id);
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+			$this->tmpl->setAttribute('show_id', 'visibility', 'visible');// WikiコンテンツID
+			$this->tmpl->addVar("show_id", "id", $this->convertToDispString($id));			// WikiコンテンツID
 		}
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
-		$this->tmpl->addVar("_widget", "name", $name);		// 名前
-		$this->tmpl->addVar("_widget", "index", $index);		// 表示順
 		
-		$visibleStr = '';
-		if ($visible){	// 項目の表示
-			$visibleStr = 'checked';
-		}
-		$this->tmpl->addVar("_widget", "visible", $visibleStr);		// 表示状態
+		$this->tmpl->addVar("_widget", "body", $this->convertToDispString($body));	// コンテンツ本文
+		$this->tmpl->addVar("_widget", "digest", $this->convertToDispString($digest));	// コンテンツ変更確認用ダイジェスト
 		if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
 		if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
 	}

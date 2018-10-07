@@ -106,7 +106,7 @@ $(function(){
 <h3 class="m3config_h"><span {_HELP_PAGE_LIST}>Wikiページ一覧</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_PAGE_BUTTONS}><div class="btn-group">
 <input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="アップロード" />
-<!--<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" />--><input type="button" class="button" onclick="delItem();" value="削除" />
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 
 <table id="mainconfig">
@@ -125,7 +125,7 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><!--<a href="#" onclick="editItemBySerial({SERIAL});">-->{ID}<!--</a>--></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
 		<td>{STATUS}</td>
 		<td class="number">{VIEW_COUNT}</td>
 		<td class="number">{ATTACH_COUNT}</td>
