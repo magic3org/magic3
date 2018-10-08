@@ -501,6 +501,14 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		}
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
 		
+		if (empty($id)){
+			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');		// プレビューボタン使用不可
+		} else {
+			$previewUrl = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?" . rawurlencode($id), false/*URLエンコードしない*/);
+			$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
+			$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
+		}
+		$this->tmpl->addVar("_widget", "body", $this->convertToDispString($body));	// コンテンツ本文
 		$this->tmpl->addVar("_widget", "body", $this->convertToDispString($body));	// コンテンツ本文
 		if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
 		if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
