@@ -4903,5 +4903,63 @@ class SystemDb extends BaseDb
 		$retValue =$this->execStatement($sql, $params);
 		return $retValue;
 	}
+	/**
+	 * 個人最適化パラメータ取得
+	 *
+	 * @param  string $clientId			クライアントID
+	 * @return string					シリアライズされたパラメータデータ
+	 */
+	function getPersonalizeParam($clientId)
+	{
+		// パラメータエラーチェック
+		if (empty($clientId)) return null;
+		
+		$sql = 'SELECT pz_param FROM _personalize_param WHERE pz_id = ?';
+		$params = array($clientId); 
+		$this->selectRecord($sql, $params, $row);
+		return $row['pz_param'];
+    }
+	/**
+	 * 個人最適化パラメータ更新
+	 *
+	 * @param string  $clientId			クライアントID
+	 * @param string  $serializedParam	シリアライズしたデータ
+	 * @return bool						true = 成功、false = 失敗
+	 */
+	function updatePersonalizeParam($clientId, $serializedParam)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		
+		// パラメータエラーチェック
+		if (empty($clientId)) return false;
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// データが存在する場合は更新。存在しない場合は新規追加
+		$queryStr  = 'SELECT * FROM _personalize_param ';
+		$queryStr .=   'WHERE pz_id = ?';
+		$ret = $this->selectRecord($queryStr, array($clientId), $row);
+		if ($ret){
+			$queryStr  = 'UPDATE _personalize_param ';
+			$queryStr .=   'SET pz_param = ?, ';
+			$queryStr .=     'pz_update_dt = ? ';
+			$queryStr .=   'WHERE pz_id = ?';
+			$ret = $this->execStatement($queryStr, array($serializedParam, $now, $clientId));
+		} else {
+			$queryStr  = 'INSERT INTO _personalize_param (';
+			$queryStr .=   'pz_id, ';
+			$queryStr .=   'pz_param, ';
+			$queryStr .=   'pz_update_dt ';
+			$queryStr .= ') VALUES (';
+			$queryStr .=   '?, ?, ?';
+			$queryStr .= ')';
+			$ret = $this->execStatement($queryStr, array($clientId, $serializedParam, $now));
+		}
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>

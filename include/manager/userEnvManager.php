@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,9 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class UserEnvManager extends Core
 {
+	private $db;						// DBオブジェクト
 	private $widgetId;					// 処理対象ウィジェット
+	private $personalizeParams;		// 個人最適化パラメータ
 	const WORK_DIR_EXPIRE_HOUR = 1;		// 作業ディレクトリ自動削除時間
 	
 	/**
@@ -29,6 +31,9 @@ class UserEnvManager extends Core
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// システムDBオブジェクト取得
+		$this->db = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * ユーザ環境マネージャの使用宣言(このマネージャーを使用する場合は必ず呼び出す)
@@ -175,6 +180,50 @@ class UserEnvManager extends Core
 		} else {
 			return unserialize($serializedObj);
 		}
+	}
+	/**
+	 * 個人最適化パラメータを取得
+	 *
+	 * @return array			ウィジェットオブジェクト。取得できないときはnull。
+	 */
+	function getPersonalizeParams()
+	{
+		if (!isset($this->personalizeParams)){
+			$clientId = $this->gAccess->getClientId();
+			if (empty($clientId)){
+				$this->personalizeParams = array();
+			} else {
+				$serializedParam = $this->db->getPersonalizeParam($clientId);
+				if (empty($serializedParam)){
+					$this->personalizeParams = array();
+				} else {
+					$this->personalizeParams = unserialize($serializedParam);
+				}
+			}
+		}
+		return $this->personalizeParams;
+	}
+	/**
+	 * 個人最適化パラメータを更新
+	 *
+	 * @param array $params		格納するウィジェットパラメータ
+	 * @return bool				true=更新成功、false=更新失敗
+	 */
+	function updatePersonalizeParams($params)
+	{
+		if (empty($params)){
+			$serializedParam = null;
+		} else {
+			$serializedParam = serialize($params);
+		}
+		
+		$ret = false;
+		$clientId = $this->gAccess->getClientId();
+		if (!empty($clientId)){
+			$ret = $this->db->updatePersonalizeParam($clientId, $serializedParam);
+			if ($ret) $this->personalizeParams = $params;
+		}
+		return $ret;
 	}
 }
 ?>
