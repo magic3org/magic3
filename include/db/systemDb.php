@@ -207,12 +207,13 @@ class SystemDb extends BaseDb
 	 * @param string $agent			クライアントアプリケーション
 	 * @param string $language		クライアント認識可能言語
 	 * @param string $path			アクセスパス
+	 * @param string $landingPageId	ランディングページID
 	 * @param bool   $isCookie		クッキーがあるかどうか
 	 * @param bool   $isCrawler		クローラかどうか
 	 * @param bool   $isCmd			コマンド実行かどうか
 	 * @return int					アクセスログシリアルNo(ログ保存失敗のときは0)
 	 */
-	function accessLog($user, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd)
+	function accessLog($user, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $landingPageId, $isCookie, $isCrawler, $isCmd)
 	{
 		global $gSystemManager;
 		
@@ -238,7 +239,30 @@ class SystemDb extends BaseDb
 		} else {
 			$currentVer = $gSystemManager->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 		}
-		if ($currentVer >= 2015070201){
+		if ($currentVer >= 2018101201){
+			// バージョン2018101201以降で「al_landing_page_id(ランディングページID)」を追加(2018/10/12)
+			$queryStr = 'INSERT INTO _access_log (';
+			$queryStr .=  'al_user_id, ';
+			$queryStr .=  'al_cookie_value, ';
+			$queryStr .=  'al_session, ';
+			$queryStr .=  'al_ip, ';
+			$queryStr .=  'al_method, ';
+			$queryStr .=  'al_uri, ';
+			$queryStr .=  'al_referer, ';
+			$queryStr .=  'al_request, ';
+			$queryStr .=  'al_user_agent, ';
+			$queryStr .=  'al_accept_language, ';
+			$queryStr .=  'al_path, ';
+			$queryStr .=  'al_landing_page_id, ';
+			$queryStr .=  'al_cookie, ';
+			$queryStr .=  'al_crawler, ';
+			$queryStr .=  'al_is_cmd, ';
+			$queryStr .=  'al_dt ';
+			$queryStr .=  ') VALUES (';
+			$queryStr .=  '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now()';
+			$queryStr .=  ')';
+			$ret = $this->execStatement($queryStr, array($user, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $landingPageId, intval($isCookie), intval($isCrawler), intval($isCmd)));
+		} else if ($currentVer >= 2015070201){
 			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
 			$queryStr = 'INSERT INTO _access_log (';
 			$queryStr .=  'al_user_id, ';
