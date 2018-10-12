@@ -473,7 +473,7 @@ class AccessManager extends Core
 		$agent		= $gRequestManager->trimServerValueOf('HTTP_USER_AGENT');		// クライアントアプリケーション
 		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
 		$cmd		= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);	// 実行コマンド
-		$pageSubId	= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);		// ページサブID
+		$pageSubId	= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);		// ページサブID
 		
 		$request = '';
 		foreach ($_REQUEST as $strKey => $strValue ) {
