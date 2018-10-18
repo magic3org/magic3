@@ -53,22 +53,10 @@ DELETE FROM _widgets WHERE wd_id = 'default_menu';
 INSERT INTO _widgets
 (wd_id,          wd_name,              wd_type, wd_type_option, wd_category_id, wd_template_type, wd_version, wd_required_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('default_menu', 'デフォルトメニュー', 'menu',  'nav',          'menu',         'bootstrap',      '4.0.0',   '2.9.4',        'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '画面に複数配置が可能な標準のメニューです。単階層または多階層でメニューを定義します。テンプレートに合わせて多様な表示ができます。「user3」ポジションに配置するとナビゲーションタイプのメニューが表示できます。', '', '', true,  true,              true, 2,          1, '2014-12-10', now(),         now());
-DELETE FROM _widgets WHERE wd_id = 'accordion_menu';
-INSERT INTO _widgets
-(wd_id,            wd_name,                  wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('accordion_menu', 'アコーディオンメニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる2階層のアコーディオンメニューです。', 'jquery-ui.accordion', 'jquery-ui.accordion', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
-DELETE FROM _widgets WHERE wd_id = 'dropdown_menu';
-INSERT INTO _widgets
-(wd_id,            wd_name,                 wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('dropdown_menu', 'ドロップダウンメニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のドロップダウンメニューです。', true, true, 'jquery.bgiframe,jquery.hoverintent', 'jquery.bgiframe,jquery.hoverintent', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'breadcrumb';
 INSERT INTO _widgets
 (wd_id,        wd_name,          wd_type,      wd_category_id, wd_template_type, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,                         wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('breadcrumb', 'パンくずリスト', 'breadcrumb', 'menu',         'bootstrap',      '4.2.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'メニュー定義からパンくずリストを作成', '',                'jquery.uploadfile', true,        true,           10, '2018-07-27', now(),    now());
-DELETE FROM _widgets WHERE wd_id = 'slide_menu';
-INSERT INTO _widgets
-(wd_id,        wd_name,           wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('slide_menu', 'スライドメニュー', 'menu', 'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'スライドオープンできる2階層のメニューです。', 'jquery', 'jquery', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
 -- ウィジェット情報(PC用/汎用コンテンツ)
 DELETE FROM _widgets WHERE wd_id = 'default_content';
 INSERT INTO _widgets
@@ -266,10 +254,6 @@ DELETE FROM _widgets WHERE wd_id = 'pretty_photo';
 INSERT INTO _widgets
 (wd_id,          wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,  wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('pretty_photo', 'プリティフォト', 'image', '2.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'サムネール表示した画像を拡大します。', 'jquery.prettyphoto', 'jquery.tablednd,jquery.prettyphoto,elfinder',               true,         true,        true,         true,                                true,                true,              0,  3,             1, '2017-02-20', now(),         now());
-DELETE FROM _widgets WHERE wd_id = 'picasa';
-INSERT INTO _widgets
-(wd_id,    wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                 wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('picasa', 'Picasaアルバム', 'image',        '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Picasaウェブアルバムを表示。', true,         true,                true,           1, 1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'photoslide2';
 INSERT INTO _widgets
 (wd_id,         wd_name,               wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -508,10 +492,6 @@ INSERT INTO _widgets
 ('m/bbs_2ch_search_box', '2ちゃんねる風BBS-検索', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '2ちゃんねる風BBS記事を検索するためのボックス。', 1, true,      false,               true,           now(),         now());
 
 -- ウィジェット情報(スマートフォン用/メニュー)
-DELETE FROM _widgets WHERE wd_id = 's/slide_menu';
-INSERT INTO _widgets
-(wd_id,          wd_name,            wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/slide_menu', 'スライドメニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'スライドオープンできる2階層のメニューです。', 2, 'jquery', 'jquery', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 's/jquery_menu';
 INSERT INTO _widgets
 (wd_id,           wd_name,                   wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
