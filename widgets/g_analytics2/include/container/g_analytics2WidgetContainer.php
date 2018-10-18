@@ -17,8 +17,7 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class g_analytics2WidgetContainer extends BaseWidgetContainer
 {
-	private $account;		// Google AnalyticsのプロファイルのID
-	private $script;		// ヘッダ用javascript
+	private $trackingId;		// Google AnalyticsのトラッキングID
 	
 	/**
 	 * コンストラクタ
@@ -53,30 +52,19 @@ class g_analytics2WidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$this->account = '';	// Google AnalyticsのプロファイルのID
+		$this->trackingId = '';	// Google AnalyticsのトラッキングID
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
-			$this->account	= $paramObj->account;
+			$this->trackingId	= $paramObj->trackingId;
 		}
 
-		// ヘッダ用Javascript作成
-		// アカウント番号が空のときは出力しない
-		$this->script = '';
-		if (!empty($this->account)) $this->script = $this->getParsedTemplateData('default.tmpl.js', array($this, 'makeScript'));
-	}
-	/**
-	 * JavascriptをHTMLヘッダ部に設定
-	 *
-	 * CSSデータをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addScriptToHead($request, &$param)
-	{
-		return $this->script;
+		// Google Analyticsトラッキングコード作成
+		// トラッキングIDが空のときは出力しない
+		$script = '';
+		if (!empty($this->trackingId)) $script = $this->getParsedTemplateData('default.tmpl.js', array($this, 'makeScript'));
+		
+		// トラッキングコードをHEADタグの先頭に追加
+		if (!empty($script)) $this->gPage->setHeadFirstTag($script);
 	}
 	/**
 	 * Javascriptデータ作成処理コールバック
@@ -86,7 +74,7 @@ class g_analytics2WidgetContainer extends BaseWidgetContainer
 	 */
 	function makeScript($tmpl)
 	{
-		$tmpl->addVar("_tmpl", "account_no",	$this->account);		// Google AnalyticsのプロファイルのID
+		$tmpl->addVar("_tmpl", "tracking_id",	$this->trackingId);		// Google AnalyticsのトラッキングID
 	}
 }
 ?>
