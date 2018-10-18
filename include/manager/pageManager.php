@@ -66,6 +66,7 @@ class PageManager extends Core
 	private $lastHeadTitle;				// 最後にヘッダ部titleにセットした文字列
 	private $lastHeadDescription;		// 最後にヘッダ部descriptionにセットした文字列
 	private $lastHeadKeywords;			// 最後にヘッダ部keywordsにセットした文字列
+	private $headFirstTag;				// HTMLヘッダに最初に出力するタグ文字列
 	private $headCss = array();			// HTMLヘッダにCSS出力する文字列
 	private $headScript = array();		// HTMLヘッダにJavascript出力する文字列
 	private $headPreMobileScript = array();		// HTMLヘッダにJavascript出力する文字列(jQueryMobile用挿入スクリプト)
@@ -816,6 +817,16 @@ class PageManager extends Core
 				}
 			}
 		}
+	}
+	/**
+	 * HTMLヘッダに最初に出力するタグ文字列を設定
+	 *
+	 * @param string $str	追加するタグ文字列
+	 * @return 				なし
+	 */
+	function setHeadFirstTag($str)
+	{
+		if (!empty($str)) $this->headFirstTag = $str;
 	}
 	/**
 	 * ヘッダ部に出力するカノニカル属性URLを設定
@@ -3035,7 +3046,6 @@ class PageManager extends Core
 		$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 
-//		$isHtml5 = false;		// HTML5で出力するかどうか
 		$tempVer = $gEnvManager->getCurrentTemplateType();		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
 		if (intval($tempVer) >= 2) $this->isHtml5 = true;		// HTML5で出力するかどうか				
 		
@@ -3489,7 +3499,6 @@ class PageManager extends Core
 			// サイト構築エンジン
 			echo '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;
 		} else {		// PC用サイト、管理用サイト、スマートフォン用サイトのとき
-//			$isHtml5 = false;		// HTML5で出力するかどうか
 			if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
 				$this->isHtml5 = true;
 			} else {
@@ -3498,10 +3507,11 @@ class PageManager extends Core
 			}
 			
 			// ********** メタタグの設定 **********
+			// HTMLヘッダに最初に出力するタグ文字列がある場合は出力
+			if (!empty($this->headFirstTag)) echo $this->headFirstTag;
+
 			// キャラクターセット
-			//if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
 			if ($this->isHtml5){
-				//echo '<meta http-equiv="content-type" content="text/html; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
 				echo '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
 			} else {
 				echo '<meta http-equiv="content-script-type" content="text/javascript" />' . M3_NL;
