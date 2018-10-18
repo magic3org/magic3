@@ -80,6 +80,7 @@ class PageManager extends Core
 	private $headCanonicalUrl;				// カノニカル属性URL
 	private $initScript = '';				// ウィンドウ初期化時に実行されるスクリプト
 	private $outputByHtml = true;				// HTMLフォーマットで出力するかどうか
+	private $outputByStandardHead;		// HTML文書の標準のヘッダタグを出力するかどうか
 	private $outputHead;				// HTMLヘッダ出力を行ったかどうか
 	private $outputTheme;				// jQueryUIテーマ出力を行ったかどうか
 	private $outputAjaxResponseBody;	// AJAX用のレスポンスボディデータかどうか
@@ -124,7 +125,7 @@ class PageManager extends Core
 	const WIDGET_ID_TITLE_TAG_END = '}}';						// 遅延実行用タグ(タイトル埋め込み用)
 	const WIDGET_ID_SEPARATOR = ',';
 	const HEAD_TAGS				= '{{HEAD_TAGS}}';				// HTMLヘッダ出力用タグ
-	const MENUBAR_TAGS			= '{{MENUBAR_TAGS}}';				// メニューバー出力用タグ
+	const MENUBAR_TAGS			= '{{MENUBAR_TAGS}}';			// メニューバー出力用タグ
 	const MENUBAR_SCRIPT_TAGS	= '{{MENUBAR_SCRIPT_TAGS}}';				// メニューバー出力用スクリプトタグ
 	const WIDGET_ICON_IMG_SIZE = 32;			// ウィジェットアイコンサイズ
 	const WIDGET_INVISIBLE_CLASS = 'm3invisible';			// 非表示ウィジェットクラス
@@ -2793,8 +2794,16 @@ class PageManager extends Core
 
 		// ##### ヘッダ部分の置換 #####
 		if ($this->outputHead){				// HTMLヘッダ出力を行っているとき
+			$replaceStr = '';
+			
+			// HTMLヘッダに最初に出力するタグ文字列がある場合は追加
+			if (!empty($this->headFirstTag)) $replaceStr .= $this->headFirstTag;
+			
+			// METAタグcharset等のHTML文書の標準のヘッダタグを出力
+			if ($this->outputByStandardHead) $replaceStr .= $this->getStandardHead();
+		
 			// タグ変換用文字列の取得
-			$replaceStr = $this->getHeaderOutput();
+			$replaceStr .= $this->getHeaderOutput();
 			
 			// HTMLヘッダのデータ埋め込み
 			$destBuf = str_replace(self::HEAD_TAGS, $replaceStr, $destBuf);
@@ -3478,26 +3487,39 @@ class PageManager extends Core
 	 */
 	function getHeader()
 	{
+		// ヘッダタグ変換の設定
+		$this->outputHead = true;				// HTMLヘッダ出力を行ったかどうか
+		$this->outputByStandardHead = true;		// HTML文書の標準のヘッダタグを出力するか
+		
+		// ##### Magic3システムで必要なヘッダ出力用のタグを埋め込む #####
+		echo self::HEAD_TAGS;			// HTMLヘッダの埋め込みデータ
+	}
+	/**
+	 * HTML文書の標準のヘッダタグを出力
+	 *
+	 * @return string			標準ヘッダ文字列
+	 */
+	function getStandardHead()
+	{
 		global $gEnvManager;
 		global $gRequestManager;
-
-		$this->outputHead = true;				// HTMLヘッダ出力を行ったかどうか
+		
+		$headStr = '';			// ヘッダ文字列;
 		
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		// ######### 携帯用サイトの場合は別にヘッダを作成する #########
-		if ($gEnvManager->getIsMobileSite()){
+		if ($gEnvManager->getIsMobileSite()){		// 携帯サイトの場合
 			// キャラクターセット
-			echo '<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=' . $gEnvManager->getMobileCharset() . '" />' . M3_NL;
+			$headStr .= '<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=' . $gEnvManager->getMobileCharset() . '" />' . M3_NL;
 
 			// キャッシュを保存させない
-			echo '<meta http-equiv="Pragma" content="no-cache" />' . M3_NL;
-			echo '<meta http-equiv="Cache-Control" content="no-cache" />' . M3_NL;
-			echo '<meta http-equiv="Expires" content="-1" />' . M3_NL;
+			$headStr .= '<meta http-equiv="Pragma" content="no-cache" />' . M3_NL;
+			$headStr .= '<meta http-equiv="Cache-Control" content="no-cache" />' . M3_NL;
+			$headStr .= '<meta http-equiv="Expires" content="-1" />' . M3_NL;
 		
 			// サイト構築エンジン
-			echo '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;
+			$headStr .= '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;
 		} else {		// PC用サイト、管理用サイト、スマートフォン用サイトのとき
 			if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
 				$this->isHtml5 = true;
@@ -3506,21 +3528,17 @@ class PageManager extends Core
 				if (intval($tempVer) >= 2) $this->isHtml5 = true;
 			}
 			
-			// ********** メタタグの設定 **********
-			// HTMLヘッダに最初に出力するタグ文字列がある場合は出力
-			if (!empty($this->headFirstTag)) echo $this->headFirstTag;
-
 			// キャラクターセット
 			if ($this->isHtml5){
-				echo '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
+				$headStr .= '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
 			} else {
-				echo '<meta http-equiv="content-script-type" content="text/javascript" />' . M3_NL;
-				echo '<meta http-equiv="content-style-type" content="text/css" />' . M3_NL;
-				echo '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
+				$headStr .= '<meta http-equiv="content-script-type" content="text/javascript" />' . M3_NL;
+				$headStr .= '<meta http-equiv="content-style-type" content="text/css" />' . M3_NL;
+				$headStr .= '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
 			}
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				// Bootstrapで必要なMETAタグを追加
-				echo '<meta name="viewport" content="width=device-width, initial-scale=1">' . M3_NL;
+				$headStr .= '<meta name="viewport" content="width=device-width, initial-scale=1">' . M3_NL;
 			}
 			
 			// 基準ディレクトリの指定
@@ -3532,10 +3550,10 @@ class PageManager extends Core
 				} else {
 					$rootUrl = $gEnvManager->getRootUrl();
 				}
-				echo '<base href="' . $rootUrl . '/" />' . M3_NL;
+				$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
 			}
 		}
-		echo self::HEAD_TAGS;			// HTMLヘッダの埋め込みデータ
+		return $headStr;
 	}
 	/**
 	 * HTMLヘッダ出力文字列の取得

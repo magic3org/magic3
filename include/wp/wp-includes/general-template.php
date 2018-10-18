@@ -2618,7 +2618,7 @@ function wp_head() {
 	// ##### Magic3のヘッダ出力用タグを出力 #####
 	global $gPageManager;
 	$gPageManager->enableReplaceHead();
-	echo '{{HEAD_TAGS}}';			// ヘッダ部マクロ
+	echo '{{HEAD_TAGS}}';			// HTMLヘッダ出力用タグ
 }
 
 /**
