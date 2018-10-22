@@ -357,8 +357,8 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_read_scripts'; $boolFields[] = 'wd_read_scripts';		// スクリプトディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_read_css'; $boolFields[] = 'wd_read_css';			// cssディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_use_ajax'; $boolFields[] = 'wd_use_ajax';			// Ajax共通ライブラリを読み込むかどうか
-    	$updateFields[] = 'wd_active'; $boolFields[] = 'wd_use_ajax';			// 一般ユーザが実行可能かどうか
-    	$updateFields[] = 'wd_available'; $boolFields[] = 'wd_use_ajax';		// メニューから選択可能かどうか
+    	$updateFields[] = 'wd_active'; $boolFields[] = 'wd_active';			// 一般ユーザが実行可能かどうか
+    	$updateFields[] = 'wd_available'; $boolFields[] = 'wd_available';		// メニューから選択可能かどうか
 		$updateFields[] = 'wd_editable'; $boolFields[] = 'wd_editable';			// データ編集可能かどうか
 		$updateFields[] = 'wd_edit_content'; $boolFields[] = 'wd_edit_content';	// 主要コンテンツ編集可能かどうか
 		$updateFields[] = 'wd_has_admin'; $boolFields[] = 'wd_has_admin';			// 管理画面があるかどうか
