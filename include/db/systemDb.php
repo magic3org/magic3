@@ -1940,10 +1940,14 @@ class SystemDb extends BaseDb
 	{
 		$queryStr = 'SELECT * FROM _iwidgets ';
 		$queryStr .=  'WHERE iw_deleted = false ';// 削除されていない
-		$queryStr .=  'AND (iw_widget_id = ? OR iw_id = \'\') ';	// 空の場合は共通項目
+//		$queryStr .=  'AND (iw_widget_id = ? OR iw_id = \'\') ';	// 空の場合は共通項目
+		// インナーウィジェットIDフォーマット「ウィジェットID,インナーID」、共通のインナーウィジェットIDフォーマット「インナーID」
+		$widgetId = addslashes($widgetId);		// 「'"\」文字をエスケープ
+		$queryStr .=   'AND (iw_id LIKE \'' . $widgetId . ',%\' ';		// インナーウィジェットID
+		$queryStr .=   'OR iw_id NOT LIKE \'%,%\') ';					// 共通インナーウィジェットID
 		$queryStr .=  'AND iw_type = ? ';
 		$queryStr .=  'ORDER BY iw_id';
-		$this->selectLoop($queryStr, array($widgetId, $type), $callback);
+		$this->selectLoop($queryStr, array($type), $callback);
 	}
 	/**
 	 * インナーウィジェット情報取得
