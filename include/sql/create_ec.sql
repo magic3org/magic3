@@ -28,25 +28,37 @@ CREATE TABLE commerce_config (
     PRIMARY KEY          (cg_id)
 ) ENGINE=innodb;
 INSERT INTO commerce_config
-(cg_id,                    cg_value, cg_name,                        cg_index) VALUES
-('default_currency',       'JPY',    'デフォルト通貨',               0),
-('default_tax_type',       'sales',  'デフォルト課税タイプ',         1),
-('tax_in_price',           '0',      '税処理区分',                   2),      -- 0=外税、1=内税
-('price_calc_type',        '0',      '金額端数処理',                 3),      -- 0=切り捨て、1=切り上げ、2=四捨五入
-('tax_calc_type',          '0',      '税端数処理',                   4),      -- 0=切り捨て、1=切り上げ、2=四捨五入
-('use_email',              '1',      'メール送信機能',               5),
-('shop_email',             '',       'ショップ宛てメールアドレス',   6),
-('auto_email_sender',      '',       '自動送信メール送信元アドレス', 7),
-('shop_name',              '',       'ショップ名',                   8),
-('shop_owner',             '',       'ショップオーナー名',           9),
-('shop_address',           '',       'ショップ住所',                 10),
-('shop_phone',             '',       'ショップ電話番号',             11),
-('category_select_count',  '2',      '商品カテゴリー選択可能数',     12),
-('order_cancel_hour',      '24',     '注文のキャンセル可能時間',     13),
-('disp_product_count',     '10',     '商品一覧表示項目数',           14),
-('decrement_view_stock_count',              '1',      '注文時の表示在庫数デクリメント',               15),
-('permit_non_member_order', '0',      '非会員からの注文受付',         16),
-('hierarchical_category',  '1',      '階層化商品カテゴリー',         17);
+(cg_id,                         cg_value, cg_name,                        cg_index) VALUES
+('default_currency',            'JPY',    'デフォルト通貨',               0),
+('default_tax_type',            'sales',  'デフォルト課税タイプ',         1),
+('tax_in_price',                '0',      '税処理区分',                   2),      -- 0=外税、1=内税
+('price_calc_type',             '0',      '金額端数処理',                 3),      -- 0=切り捨て、1=切り上げ、2=四捨五入
+('tax_calc_type',               '0',      '税端数処理',                   4),      -- 0=切り捨て、1=切り上げ、2=四捨五入
+('use_email',                   '1',      'メール送信機能',               5),
+('shop_email',                  '',       'ショップ宛てメールアドレス',   6),
+('auto_email_sender',           '',       '自動送信メール送信元アドレス', 7),
+('shop_name',                   '',       'ショップ名',                   8),
+('shop_owner',                  '',       'ショップオーナー名',           9),
+('shop_address',                '',       'ショップ住所',                 10),
+('shop_phone',                  '',       'ショップ電話番号',             11),
+('category_select_count',       '2',      '商品カテゴリー選択可能数',     12),
+('order_cancel_hour',           '24',     '注文のキャンセル可能時間',     13),
+('disp_product_count',          '10',     '商品一覧表示項目数',           14),
+('decrement_view_stock_count',  '1',      '注文時の表示在庫数デクリメント', 15),
+('permit_non_member_order',     '0',      '非会員からの注文受付',           16),
+('hierarchical_category',       '1',      '階層化商品カテゴリー',           17),
+('auto_stock',                  '1',      '在庫自動処理',                   100),
+('accept_order',                '1',      '注文の受付',                     101),
+('use_member_address',          '1',      '会員登録の住所使用',             105),
+('auto_regist_member',          '1',      '自動会員登録',                   106),
+('sell_product_photo',          '0',      'フォト商品販売',                 107),
+('sell_product_download',       '0',      'ダウンロード商品販売',           108),
+('member_notice',               '',       '会員向けお知らせ',               109),
+('email_to_order_product',      '',       '商品受注時メール送信先',         110),
+('thumb_type',                  's=80c.jpg;mw=160x120c.jpg;l=200c.jpg',   '製品サムネールタイプ定義', 111),
+('product_default_image',       '0_72c.jpg;0_80c.jpg;0_200c.jpg',         '製品デフォルト画像', 112),
+('use_sale_price',              '0',      'セール価格使用',                 100),
+('price_suffix',                '(税込)', '価格表示接尾辞',                 100);
 
 -- 単位マスター
 DROP TABLE IF EXISTS unit_type;
@@ -80,20 +92,19 @@ INSERT INTO unit_type (ut_id, ut_language_id, ut_name, ut_description, ut_symbol
 DROP TABLE IF EXISTS tax_rate;
 CREATE TABLE tax_rate (
     tr_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 税率ID
-    tr_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
+    tr_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
     tr_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 名称
     tr_rate              DECIMAL(7,4)   DEFAULT 0                     NOT NULL,      -- 税率(%)
     tr_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限開始日時
     tr_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限終了日時
-    PRIMARY KEY          (tr_id,        tr_priority)
+    PRIMARY KEY          (tr_id,        tr_index)
 ) ENGINE=innodb;
-INSERT INTO tax_rate (tr_id, tr_priority, tr_name, tr_rate) VALUES ('rate_sales', 0, '消費税率', '5.00');
+INSERT INTO tax_rate (tr_id, tr_name, tr_rate) VALUES ('rate_sales', '消費税率', '8.00');
 
 -- 税種別マスター
 DROP TABLE IF EXISTS tax_type;
 CREATE TABLE tax_type (
     tt_id                VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 種別ID
-    tt_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     tt_tax_rate_type     INT            DEFAULT 0                     NOT NULL,      -- 税率種別(0=税率なし、1=固定(tax_rateテーブル))
     tt_tax_inout         SMALLINT       DEFAULT 0                     NOT NULL,      -- 内税外税区分(0=外税、1=内税)
     tt_tax_rate_id       VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 税率ID
@@ -101,10 +112,10 @@ CREATE TABLE tax_type (
     tt_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     tt_geo_zone_id       TEXT                                         NOT NULL,      -- 対象区域(,区切り)
     tt_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
-    PRIMARY KEY          (tt_id,        tt_language_id)
+    PRIMARY KEY          (tt_id)
 ) ENGINE=innodb;
-INSERT INTO tax_type (tt_id, tt_language_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('sales', 'ja', 1, 'rate_sales', '課税(外税)',   '1', 0);
-INSERT INTO tax_type (tt_id, tt_language_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('notax', 'ja', 0, '',           '非課税', '1', 1);
+INSERT INTO tax_type (tt_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('sales', 1, 'rate_sales', '課税(外税)',   '1', 0);
+INSERT INTO tax_type (tt_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('notax', 0, '',           '非課税', '1', 1);
 
 -- 地理的地域マスター
 DROP TABLE IF EXISTS geo_zone;
@@ -283,13 +294,11 @@ CREATE TABLE price_type (
     pr_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (pr_id,        pr_language_id)
 ) ENGINE=innodb;
--- INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('suggest', 'ja', 10, '希望小売価格',  1);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('selling', 'ja', 10, '通常価格',      2);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('bargain', 'ja', 10, '特価',          3);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('member',  'ja', 10, '会員価格',      3);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale1',   'ja', 11, '売上価格1',     4);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale2',   'ja', 11, '売上価格2',     5);
-INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 12, '仕入価格',      6);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('regular', 'ja', 10, '通常価格',      1);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('sale',    'ja', 11, 'セール価格',    2);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('member',  'ja', 12, '会員価格',      3);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('disposal','ja', 13, '処分価格',      4);
+INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('buying',  'ja', 20, '仕入価格',      5);
 
 -- 商品受注状況マスター
 DROP TABLE IF EXISTS order_status;
@@ -549,11 +558,10 @@ CREATE TABLE product_price (
     pp_product_class     VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品クラス(空=デフォルト商品,photo=フォト商品)
     pp_product_id        INT            DEFAULT 0                     NOT NULL,      -- 商品ID(0=デフォルト商品価格)
     pp_product_type_id   VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品タイプ(ダウンロード商品等)
-    pp_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     pp_price_type_id     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 価格の種別ID(price_typeテーブル)
+    pp_currency_id       VARCHAR(3)     DEFAULT ''                    NOT NULL,      -- 通貨種別
     pp_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
         
-    pp_currency_id       VARCHAR(3)     DEFAULT ''                    NOT NULL,      -- 通貨種別
     pp_price             DECIMAL(15,4)  DEFAULT 0                     NOT NULL,      -- 単価(税抜)
     pp_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限開始日時
     pp_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限終了日時
@@ -564,7 +572,7 @@ CREATE TABLE product_price (
     pp_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     pp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pp_serial),
-    UNIQUE               (pp_product_class,     pp_product_id,    pp_product_type_id,    pp_language_id,      pp_price_type_id,      pp_history_index)
+    UNIQUE               (pp_product_class,     pp_product_id,    pp_product_type_id,     pp_price_type_id, pp_currency_id,     pp_history_index)
 ) ENGINE=innodb;
 
 -- 商品情報マスター
@@ -578,8 +586,9 @@ CREATE TABLE product (
     pt_name              VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 商品名称
     pt_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 商品コード
     pt_product_type      SMALLINT       DEFAULT 0                     NOT NULL,      -- 商品タイプ(1=単品商品(親子なし)、2=単品商品(親子)、10=セット商品、20=オプション商品)
-    pt_description       TEXT                                         NOT NULL,      -- 商品説明
-    pt_description_short VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 商品説明(簡易)
+	pt_sell_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 販売状態(0=未設定、1=カート可(一時停止中)、2=販売中、3=販売不可)
+    pt_html              TEXT                                         NOT NULL,      -- 商品説明
+    pt_description       TEXT                                         NOT NULL,      -- 商品概要
     pt_admin_note        VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 管理者用備考
     pt_category_id       INT            DEFAULT 0                     NOT NULL,      -- 商品カテゴリーID(廃止)
     pt_related_product   TEXT                                         NOT NULL,      -- 関連商品ID(,区切り)
@@ -587,10 +596,16 @@ CREATE TABLE product (
     pt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     pt_default_price     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 優先する価格タイプ
     pt_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
+    pt_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
+    pt_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 公開期間(開始)
+    pt_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 公開期間(終了)
     pt_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル
     pt_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
     pt_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
     pt_search_keyword    VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 検索キーワード(「,」区切り)
+    pt_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
+    pt_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
+    pt_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     pt_site_url          TEXT                                         NOT NULL,      -- 詳細情報のサイト
     pt_unit_type_id      VARCHAR(4)     DEFAULT ''                    NOT NULL,      -- 販売の基準となる単位種別
     pt_unit_quantity     DECIMAL(5,2)   DEFAULT 0                     NOT NULL,      -- 1販売単位となる数量
@@ -602,13 +617,12 @@ CREATE TABLE product (
     pt_deliv_size        VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品サイズ-送料計算に使用
     pt_deliv_fee         DECIMAL(15,4)  DEFAULT 0                     NOT NULL,      -- 商品単位送料-送料計算に使用
     pt_tax_type_id       VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 税種別ID
-    
     pt_attr_menu         TEXT                                         NOT NULL,      -- 商品タイプが単品商品(親子なし)の場合の商品属性選択メニュー(メニュー間区切り「;」、メニュー内区切り「,」)
     pt_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 商品タイプが単品商品(親子)の場合の商品親ID
     pt_attr_condition    TEXT                                         NOT NULL,      -- 商品タイプが単品商品(親子)の場合の商品属性の条件(,区切り)
     pt_product_set       TEXT                                         NOT NULL,      -- 商品タイプがセット商品の場合の組み合わせ商品ID(,区切り)
     pt_option_price      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品タイプがオプション商品の場合の価格設定
-    
+
     pt_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     pt_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     pt_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
@@ -712,6 +726,7 @@ INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VA
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('suggest', 'ja', 'おすすめ',   1);
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('few',     'ja', '残りわずか', 2);
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('limited', 'ja', '限定品',     3);
+INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('sale',    'ja', 'セール',     4);
 
 -- ショッピングカートトラン
 DROP TABLE IF EXISTS shop_cart;
@@ -752,6 +767,8 @@ CREATE TABLE product_status (
     ps_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
 
     ps_value             VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 値
+    ps_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期間(開始)
+    ps_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有期間(終了)
 
     ps_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     ps_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時

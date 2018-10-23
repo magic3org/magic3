@@ -549,6 +549,7 @@ CREATE TABLE _templates (
 	tm_info_url          TEXT                                         NOT NULL,      -- テンプレート情報URL
 	tm_custom_params     TEXT                                         NOT NULL,      -- カスタマイズ用パラメータ
     tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ(廃止予定)
+    tm_attr              TEXT                                         NOT NULL,      -- その他属性(「,」区切り)(woocommerce等)
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか

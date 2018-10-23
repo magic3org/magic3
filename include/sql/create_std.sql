@@ -132,6 +132,7 @@ CREATE TABLE content (
     cn_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
 	cn_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
     cn_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
+	cn_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
     cn_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     cn_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
     cn_related_url       TEXT                                         NOT NULL,      -- 関連URL(「;」区切り)
@@ -254,6 +255,7 @@ CREATE TABLE blog_id (
     
     bl_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
     bl_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
+	bl_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
     bl_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル
     bl_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
     bl_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード

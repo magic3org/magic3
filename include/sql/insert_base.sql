@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2017081601',               'DBバージョン'),
+('db_version',                  '2017112901',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_no',                   '-1',                       'サーバ管理No'),
 ('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
@@ -64,6 +64,7 @@ INSERT INTO _system_config
 ('use_template_id_in_session',  '1',                        'セッションにテンプレートIDを保存'),
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
+('external_jquery',             '0',                        'システム外部のjQueryを使用'),
 ('use_jquery',                  '1',                        'フロント画面にjQueryを使用(廃止予定)'),
 ('default_theme',               'smoothness',               'フロント画面用jQueryUIテーマ'),
 ('admin_default_theme',         'smoothness',               '管理画面用jQueryUIテーマ'),
