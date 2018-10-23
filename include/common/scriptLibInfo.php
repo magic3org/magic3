@@ -74,7 +74,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_BGIFRAME		= 'jquery.bgiframe';
 	const LIB_JQUERY_HOVERINTENT	= 'jquery.hoverintent';
 	const LIB_JQUERY_TABLEDND		= 'jquery.tablednd';
-	const LIB_JQUERY_SIMPLEMODAL	= 'jquery.simplemodal';
 	const LIB_JQUERY_COOKIE			= 'jquery.cookie';
 	const LIB_JQUERY_FORMAT			= 'jquery.format';
 	const LIB_JQUERY_FORMTIPS		= 'jquery.formtips';
@@ -96,7 +95,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
 	const LIB_JQUERY_IDTABS			= 'jquery.idtabs';
 	const LIB_JQUERY_BXSLIDER		= 'jquery.bxslider';
-	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
 	const LIB_JQUERY_FORM			= 'jquery.form';
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
 //	const LIB_JQUERY_UPLOADFILE4	= 'jquery.uploadfile4';		// jQuery Uploadfile v4版
@@ -137,7 +135,6 @@ class ScriptLibInfo
 	const JQUERY_FITTEXT_VER		= '1.2';
 	const JQUERY_IDTABS_VER			= '2.2';
 	const JQUERY_BXSLIDER_VER		= '4.1.2';
-	const JQUERY_FITVIDS_VER		= '1.1';
 	const JQUERY_FORM_VER			= '3.51.0';
 //	const JQUERY_UPLOADFILE_VER		= '3.1.10';
 	const JQUERY_UPLOADFILE_VER		= '4.0.10';
@@ -184,9 +181,8 @@ class ScriptLibInfo
 	const JQUERY_BGIFRAME_FILENAME		= 'jquery/jquery.bgiframe.min.js';
 	const JQUERY_HOVERINTENT_FILENAME	= 'jquery/jquery.hoverIntent.min.js';
 //	const JQUERY_TABLEDND_FILENAME		= 'jquery/jquery.tablednd_0_5.js';
-const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
+	const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_TABLEDND_CSS			= 'jquery/jquery.tablednd.css';
-	const JQUERY_SIMPLEMODAL_FILENAME	= 'jquery/jquery.simplemodal-1.3.5.min.js';
 	const JQUERY_COOKIE_FILENAME		= 'jquery/jquery.cookie.js';
 //	const JQUERY_FORMAT_FILENAME		= 'jquery/jquery.format.1.03.js';
 	const JQUERY_FORMAT_FILENAME		= 'jquery/jquery.format.1.05.js';
@@ -220,7 +216,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_IDTABS_FILENAME		= 'jquery/jquery.idTabs.min.js';
 	const JQUERY_BXSLIDER_FILENAME		= 'jquery/bxslider/jquery.bxslider.min.js';
 	const JQUERY_BXSLIDER_CSS			= 'jquery/bxslider/jquery.bxslider.css';
-	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
 	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
 //	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
 //	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
@@ -263,7 +258,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_IDTABS_URL				= 'http://www.sunsean.com/idTabs/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
-	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
 	const JQUERY_FORM_URL				= 'http://malsup.com/jquery/form/';
 	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
 	const JQUERY_JCROP_URL				= 'http://deepliquid.com/content/Jcrop.html';
@@ -319,19 +313,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const CODEMIRROR_JAVASCRIPT_FILENAME	= 'codemirror-3.1/mode/javascript/javascript.js';	// CodeMirror Javascript
 
 	// jQuery UI用ファイル
-/*
-	// jQuery UI 1.9.2
-	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.9.2/jquery.ui.accordion.min.js';		// Widgets Accordion
-	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
-	const JQUERY_UI_WIDGETS_BUTTON_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.button.min.js';			// Widgets Button
-	const JQUERY_UI_WIDGETS_DATEPICKER_FILENAME		= 'jquery/ui/1.9.2/jquery.ui.datepicker.min.js';		// Widgets Datepicker
-	const JQUERY_UI_WIDGETS_DATEPICKER_LANG_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.datepicker-ja.js';		// Widgets Datepicker
-	const JQUERY_UI_WIDGETS_DIALOG_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.dialog.min.js';			// Widgets Dialog
-	const JQUERY_UI_WIDGETS_PROGRESSBAR_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.progressbar.min.js';		// Widgets Progressbar
-	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.slider.min.js';			// Widgets Slider
-	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.tabs.min.js';				// Widgets Tabs
-	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.9.2/jquery.effects.min.js';					// Effects
-*/
 	// jQuery UI 1.11.4
 	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.11.4/jquery.ui.accordion.min.js';		// Widgets Accordion
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.11.4/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
@@ -476,7 +457,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_JQUERY_HOVERINTENT	=>	array(	'script' 	=> array(self::JQUERY_HOVERINTENT_FILENAME)),
 						self::LIB_JQUERY_TABLEDND		=>	array(	'script' 	=> array(self::JQUERY_TABLEDND_FILENAME),	// jquery.tablednd用のファイル
 																	'css'		=> array(self::JQUERY_TABLEDND_CSS)),
-						self::LIB_JQUERY_SIMPLEMODAL	=>	array(	'script'	=> array(self::JQUERY_SIMPLEMODAL_FILENAME)),// jquery.simplemodal用のファイル
 						self::LIB_JQUERY_COOKIE			=>	array(	'script' 	=> array(self::JQUERY_COOKIE_FILENAME),
 																	'url'		=> self::JQUERY_COOKIE_URL,
 																	'version'	=> self::JQUERY_COOKIE_VER),
@@ -544,9 +524,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	'css'		=> array(self::JQUERY_BXSLIDER_CSS),
 																	'url'		=> self::JQUERY_BXSLIDER_URL,
 																	'version'	=> self::JQUERY_BXSLIDER_VER),
-						self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
-																	'url'		=> self::JQUERY_FITVIDS_URL,
-																	'version'	=> self::JQUERY_FITVIDS_VER),
 						self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
 																	'url'		=> self::JQUERY_FORM_URL,
 																	'version'	=> self::JQUERY_FORM_VER),
@@ -703,37 +680,19 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 		static $jQueryUiInfo;		// jQuery UIの情報
 
 		if (!isset($jQueryUiInfo)){
-/*			if (self::$jQueryVer == 0){		// デフォルトのとき
-				$jQueryUiInfo = array();
-			} else {*/
-			/*
-				$jQueryUiInfo = array(
-					self::LIB_JQUERY_UI_WIDGETS_ACCORDION		=> array(self::LIB_JQUERY_UI),		// Widgets Accordion
-					self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE	=> array(self::LIB_JQUERY_UI),		// Widgets Autocomplete
-					self::LIB_JQUERY_UI_WIDGETS_BUTTON			=> array(self::LIB_JQUERY_UI),		// Widgets Button
-					self::LIB_JQUERY_UI_WIDGETS_DATEPICKER		=> array(self::LIB_JQUERY_UI),		// Widgets Datepicker
-					self::LIB_JQUERY_UI_WIDGETS_DIALOG			=> array(self::LIB_JQUERY_UI,		// Widgets Dialog
-																			self::LIB_JQUERY_UI_PLUS,
-																			self::LIB_JQUERY_UI_WIDGETS_BUTTON),
-					self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR		=> array(self::LIB_JQUERY_UI),		// Widgets Progressbar
-					self::LIB_JQUERY_UI_WIDGETS_SLIDER			=> array(self::LIB_JQUERY_UI),		// Widgets Slider
-					self::LIB_JQUERY_UI_WIDGETS_TABS			=> array(self::LIB_JQUERY_UI),		// Widgets Tabs
-					self::LIB_JQUERY_UI_EFFECTS					=> array(self::LIB_JQUERY_UI)		// Effects
-				);*/
-				$defaultLib = array(self::LIB_JQUERY, self::LIB_JQUERY_UI);
-				$jQueryUiInfo = array(
-					self::LIB_JQUERY_UI_WIDGETS_ACCORDION		=> $defaultLib,		// Widgets Accordion
-					self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE	=> $defaultLib,		// Widgets Autocomplete
-					self::LIB_JQUERY_UI_WIDGETS_BUTTON			=> $defaultLib,		// Widgets Button
-					self::LIB_JQUERY_UI_WIDGETS_DATEPICKER		=> $defaultLib,		// Widgets Datepicker
-					self::LIB_JQUERY_UI_WIDGETS_DIALOG			=> array_merge($defaultLib,		// Widgets Dialog
-																			array(self::LIB_JQUERY_UI_WIDGETS_BUTTON)),
-					self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR		=> $defaultLib,		// Widgets Progressbar
-					self::LIB_JQUERY_UI_WIDGETS_SLIDER			=> $defaultLib,		// Widgets Slider
-					self::LIB_JQUERY_UI_WIDGETS_TABS			=> $defaultLib,		// Widgets Tabs
-					self::LIB_JQUERY_UI_EFFECTS					=> $defaultLib		// Effects
-				);
-//			}
+			$defaultLib = array(self::LIB_JQUERY, self::LIB_JQUERY_UI);
+			$jQueryUiInfo = array(
+				self::LIB_JQUERY_UI_WIDGETS_ACCORDION		=> $defaultLib,		// Widgets Accordion
+				self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE	=> $defaultLib,		// Widgets Autocomplete
+				self::LIB_JQUERY_UI_WIDGETS_BUTTON			=> $defaultLib,		// Widgets Button
+				self::LIB_JQUERY_UI_WIDGETS_DATEPICKER		=> $defaultLib,		// Widgets Datepicker
+				self::LIB_JQUERY_UI_WIDGETS_DIALOG			=> array_merge($defaultLib,		// Widgets Dialog
+																		array(self::LIB_JQUERY_UI_WIDGETS_BUTTON)),
+				self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR		=> $defaultLib,		// Widgets Progressbar
+				self::LIB_JQUERY_UI_WIDGETS_SLIDER			=> $defaultLib,		// Widgets Slider
+				self::LIB_JQUERY_UI_WIDGETS_TABS			=> $defaultLib,		// Widgets Tabs
+				self::LIB_JQUERY_UI_EFFECTS					=> $defaultLib		// Effects
+			);
 		}
 		return $jQueryUiInfo;
 	}
