@@ -18,7 +18,6 @@ class ScriptLibInfo
 	private static $libs;						// ライブラリ情報
 	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(
-											'1.6'	=> 'jquery-1.6.4.min.js',// jQueryバージョン
 											'1.7'	=> 'jquery-1.7.2.min.js',
 											'1.8'	=> 'jquery-1.8.3.min.js',
 											'1.9'	=> 'jquery-1.9.1.min.js',
@@ -52,7 +51,6 @@ class ScriptLibInfo
 	const LIB_ELFINDER141			= 'elfinder141';			// v2.1.41
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
-	const LIB_SWFOBJECT				= 'swfobject';
 	const LIB_JSCALENDAR			= 'jscalendar';			// カレンダーライブラリ
 	const LIB_BOOTSTRAP				= 'bootstrap';
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
@@ -90,7 +88,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_QTIP2			= 'jquery.qtip2';
 	const LIB_JQUERY_CALCULATION	= 'jquery.calculation';
 	const LIB_JQUERY_JQPLOT			= 'jquery.jqplot';
-	const LIB_JQUERY_YOUTUBEPLAYER	= 'jquery.youtubeplayer';
 	const LIB_JQUERY_JSTREE			= 'jquery.jstree';
 	const LIB_JQUERY_IFRAME			= 'jquery.iframe';
 	const LIB_JQUERY_RATY			= 'jquery.raty';
@@ -215,7 +212,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
 	const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.8/jquery.jqplot.min.js';
 	const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
-	const JQUERY_YOUTUBEPLAYER_FILENAME	= 'jquery/jquery.youtube.player.js';
 	const JQUERY_JSTREE_FILENAME		= 'jquery/jstree/jquery.jstree.js';
 //	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.5.0.min.js';
 //	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.7.1.min.js';
@@ -297,7 +293,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
 
 	// ファイル名
-	//const JQUERY_L_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery最新版(v1.6.4)		// 2012/10/13～
 //	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
@@ -326,7 +321,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
 	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
-	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 	const JSCALENDAR_FILENAME		= 'jscalendar-1.0/calendar.js';				// jscalendar
 	const JSCALENDAR_LANG_FILENAME	= 'jscalendar-1.0/lang/calendar-ja.js';		// jscalendar言語ファイル
 	const JSCALENDAR_SETUP_FILENAME	= 'jscalendar-1.0/calendar-setup.js';		// jscalendarセットアップファイル
@@ -386,7 +380,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.11.4/jquery.effects.min.js';					// Effects
 
 	// スマートフォン用jQueryファイル
-	//const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
 	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要
 //	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.2.1.min.js';					// JQuery Mobile
 //	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.2.1.min.css';				// JQuery Mobile
@@ -429,7 +422,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 		$filename = '';
 		if ($type == 0){	// jQuery
 			$filename = self::$jQueryVersionArray[(string)self::$jQueryVer];
-			//if (empty($filename)) $filename = self::JQUERY_L_FILENAME;	// jQuery本体
 		} else if ($type == 1){	// Core
 			$filename = self::JQUERY_UI_CORE_FILENAME;	// jquery UI
 //		} else if ($type == 2){	// Plus
@@ -471,12 +463,11 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
-						self::LIB_SOCKETIO			=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
+						self::LIB_SOCKETIO				=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
 						self::LIB_WEBRTC				=>	array(	'script' 	=> array(self::WEBRTC_ADAPTER_FILENAME)),			// WebRTC
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array($ckeditorFile)),		// CKEditor
-						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
 																							self::JSCALENDAR_FILENAME,			// jscalendar
 																							self::JSCALENDAR_LANG_FILENAME,		// jscalendar言語ファイル
@@ -485,16 +476,11 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	'css'		=> array(
 																							self::JSCALENDAR_CSS				// jscalendarCSS
 																						)),
-/*						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
-																	'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
-																	*/
 						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
 						self::LIB_BOOTSTRAP_ADMIN		=>	array(	'script' 	=> array(self::BOOTSTRAP_DIALOG_FILENAME),
 																	'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
 																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS,
 																							self::BOOTSTRAP_DIALOG_CSS)),	// Bootstrap管理画面用オプション
-/*																	'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
-																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),*/
 						self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																	'css'		=> array(self::NOBOOTSTRAP_CSS)),
 
@@ -559,7 +545,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	'dir'		=> self::JQUERY_JQPLOT_DIR,
 																	'url'		=> self::JQUERY_JQPLOT_URL,
 																	'version'	=> self::JQUERY_JQPLOT_VER),
-						self::LIB_JQUERY_YOUTUBEPLAYER	=>	array(	'script'	=> array(self::JQUERY_YOUTUBEPLAYER_FILENAME)),// jquery.youtubeplayer用のファイル
 						self::LIB_JQUERY_JSTREE			=>	array(	'script' 	=> array(self::JQUERY_JSTREE_FILENAME),	// jquery.jstree用のファイル
 																	'url'		=> self::JQUERY_JSTREE_URL,
 																	'version'	=> self::JQUERY_JSTREE_VER),
