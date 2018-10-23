@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -327,7 +327,8 @@ class admin_ec_mainDelivmethodWidgetContainer extends admin_ec_mainBaseWidgetCon
 	 */
 	function iWidgetLoop($index, $fetchedRow, $param)
 	{
-		$id = $fetchedRow['iw_widget_id'] . ',' . $fetchedRow['iw_id'];
+	//	$id = $fetchedRow['iw_widget_id'] . ',' . $fetchedRow['iw_id'];
+		$id = $fetchedRow['iw_id'];
 		$selected = '';
 		if ($id == $this->iWidgetId){		// 選択中のインナーウィジェット
 			$selected = 'selected';
