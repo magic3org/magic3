@@ -33,8 +33,7 @@ class ScriptLibInfo
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = 'elfinder130';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」「elfinder141」が設定可能。
-	const SELECTED_LIB_ELFINDER = 'elfinder141';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder123」「elfinder130」「elfinder141」が設定可能。
+	const SELECTED_LIB_ELFINDER = 'elfinder141';		// 選択中のelFinder、「elfinder141」が設定可能。
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -47,7 +46,6 @@ class ScriptLibInfo
 	const LIB_FCKEDITOR				= 'fckeditor';
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
-	const LIB_ELFINDER130			= 'elfinder130';			// v2.1.30
 	const LIB_ELFINDER141			= 'elfinder141';			// v2.1.41
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
@@ -298,16 +296,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 //	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)→廃止
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
-	
-	// elFinder v2.1.30版
-	// elfinder.min.jsは変更なしで使用し、elfinder.full.cssはMagic3用にカスタマイズ
-	const ELFINDER130_VER			= '2.1.30';									// elFinderバージョン
-//	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.full.js';		// elFinder
-	const ELFINDER130_FILENAME		= 'elfinder-2.1.30/js/elfinder.min.js';		// elFinder
-	const ELFINDER130_LANG_FILENAME	= 'elfinder-2.1.30/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.full.css';		// elFinder CSS
-//	const ELFINDER130_CSS			= 'elfinder-2.1.30/css/elfinder.min.css';		// elFinder CSS
-	const ELFINDER130_OPTION_CSS	= 'elfinder-2.1.30/css/theme.css';				// elFinder CSS
 
 	// elFinder v2.1.41版
 	const ELFINDER141_VER			= '2.1.41';									// elFinderバージョン
@@ -631,12 +619,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	
 			// ##### ライブラリ情報更新 ####
 			// elFinderの選択状態に応じてライブラリを入れ替え
-			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER130){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER130_FILENAME, self::ELFINDER130_LANG_FILENAME),		// elFinder v2.1.30
-															'css'		=> array(self::ELFINDER130_CSS, self::ELFINDER130_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER130_VER					// elFinderバージョン
-														);
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER141){
+			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER141){
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER141_FILENAME, self::ELFINDER141_LANG_FILENAME),		// elFinder v2.1.41
 															'css'		=> array(self::ELFINDER141_CSS, self::ELFINDER141_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER141_VER					// elFinderバージョン
@@ -718,9 +701,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	{
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
-										//self::LIB_ELFINDER						=> array(self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 最新ではBootstrapを先に読ませない。elFinder v2.1.30以降で問題がなくなった?(2018/6/25)
 										self::LIB_ELFINDER						=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// Bootstrapを先に読み込む。elFinder v2.1.30では必要?(2018/8/23)
-//										self::LIB_ELFINDER130					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2017/11/29)
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
 //										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),
