@@ -52,7 +52,6 @@ class CacheManager extends Core
 			//M3_REQUEST_PARAM_FROM,			// メッセージの送信元ウィジェットID
 			//M3_REQUEST_PARAM_VIEW_STYLE,			// 表示スタイル
 			//M3_REQUEST_PARAM_FORWARD,			// 画面遷移用パラメータ
-			//M3_REQUEST_PARAM_ADMIN_KEY,		// 管理者一時キー
 			//M3_REQUEST_PARAM_OPEN_BY,			// ウィンドウの開き方
 			//M3_REQUEST_PARAM_SHOW_HEADER,			// ヘッダ部表示制御
 			//M3_REQUEST_PARAM_SHOW_FOOTER,			// フッタ部表示制御

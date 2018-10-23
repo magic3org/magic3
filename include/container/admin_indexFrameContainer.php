@@ -55,12 +55,7 @@ class admin_indexFrameContainer extends BaseFrameContainer
 					$cmd == M3_REQUEST_CMD_SHOW_PHPINFO){	// phpinfoの表示
 			// 管理者権限がなければ実行できない
 			//if ($gEnvManager->isSystemAdmin()){
-			if ($this->gEnv->isSystemManageUser()){	// システム運用可能ユーザかどうか(2018/8/5変更)
-				$ret = true;
-			} else {
-				// クッキーがないため権限を識別できない場合は、管理者キーをチェックする
-				$ret = $gAccessManager->isValidAdminKey();
-			}
+			if ($this->gEnv->isSystemManageUser()) $ret = true;	// システム運用可能ユーザかどうか(2018/8/5変更)
 		} else if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェットの設定
 			// ### trueを返すとウィジェット設定画面が表示され、falseを返すとログイン画面が表示される。                               ###
 			// ### ログイン画面の場合、グローバルメッセージが設定されている場合はログイン画面の代わりにエラーメッセージが表示される。###

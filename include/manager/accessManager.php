@@ -195,14 +195,6 @@ class AccessManager extends Core
 				$adminWidget = trim($row['lu_admin_widget']);
 				if (!empty($adminWidget)) $userInfo->adminWidget = explode(',', $adminWidget);
 			}
-			
-			// システム運用可能ユーザの場合は、管理者キーを発行(2011/9/16 修正)
-			if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){	// システム運用可能ユーザのとき
-				$adminKey = $this->createAdminKey();
-				if ($this->db->addAdminKey($adminKey, $accessIp)) $userInfo->_adminKey = $adminKey;
-			} else {
-				$userInfo->_adminKey = '';
-			}
 		
 			// インスタンスマネージャーとセッションに保存
 			$gInstanceManager->setUserInfo($userInfo);
@@ -655,15 +647,6 @@ class AccessManager extends Core
 		return $this->_clientId;				// クライアントID(クッキー用)
 	}
 	/**
-	 * 管理者用一時キーを作成
-	 */
-	function createAdminKey()
-	{
-		global $gRequestManager;
-			
-		return md5($gRequestManager->trimServerValueOf('REMOTE_ADDR') . time());
-	}
-	/**
 	 * 変更前のセッションIDを設定
 	 *
 	 * @param string $sessionId		セッションID
@@ -762,27 +745,6 @@ class AccessManager extends Core
 		} else {
 			return false;
 		}
-	}
-	/**
-	 * 管理者認証用一時キーが存在するかどうか
-	 *
-	 * @return bool			true=完了、false=未完了
-	 */
-	function isValidAdminKey()
-	{
-		global $gRequestManager;
-		static $isValidAdminKey;
-		
-		if (!isset($isValidAdminKey)){
-			// 管理者一時キーを取得
-			$adminKey = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ADMIN_KEY);
-			if (empty($adminKey)){
-				$isValidAdminKey = false;
-			} else {
-				$isValidAdminKey = $this->db->isValidAdminKey($adminKey, $gRequestManager->trimServerValueOf('REMOTE_ADDR'));
-			}
-		}
-		return $isValidAdminKey;
 	}
 	/**
 	 * URL用のパラメータとして使用するセッションIDを取得

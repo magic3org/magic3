@@ -356,7 +356,6 @@ define('M3_REQUEST_PARAM_OPERATION_TODO',      		'todo');			// 指定ウィジ�
 define('M3_REQUEST_PARAM_FROM',						'from');			// メッセージの送信元ウィジェットID。遷移元画面。
 define('M3_REQUEST_PARAM_VIEW_STYLE',				'style');			// 表示スタイル
 define('M3_REQUEST_PARAM_FORWARD',					'forward');			// 画面遷移用パラメータ
-define('M3_REQUEST_PARAM_ADMIN_KEY',				'adminkey');		// 管理者一時キー
 define('M3_REQUEST_PARAM_OPEN_BY',					'openby');			// ウィンドウの開き方
 define('M3_REQUEST_PARAM_SHOW_HEADER',				'head');			// ヘッダ部表示制御
 define('M3_REQUEST_PARAM_SHOW_FOOTER',				'foot');			// フッタ部表示制御

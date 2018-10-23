@@ -407,7 +407,6 @@ class PageManager extends Core
 			M3_REQUEST_PARAM_FROM					=> 18,		// メッセージの送信元ウィジェットID
 			M3_REQUEST_PARAM_VIEW_STYLE				=> 19,		// 表示スタイル
 			M3_REQUEST_PARAM_FORWARD				=> 20,		// 画面遷移用パラメータ
-			M3_REQUEST_PARAM_ADMIN_KEY				=> 21,		// 管理者一時キー
 			M3_REQUEST_PARAM_OPEN_BY				=> 22,		// ウィンドウの開き方
 			M3_REQUEST_PARAM_SHOW_HEADER			=> 23,		// ヘッダ部表示制御
 			M3_REQUEST_PARAM_SHOW_FOOTER			=> 24,		// フッタ部表示制御
@@ -1335,9 +1334,9 @@ class PageManager extends Core
 			}
 		} else {
 			// 管理者キーがあればGETまたはPOST値のセッションIDを使用する
-			if ($gEnvManager->isAdminDirAccess()){
-				if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
-			}
+//			if ($gEnvManager->isAdminDirAccess()){
+//				if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
+//			}
 		}
 
 		// 最終HTML(ページ全体で使用するHTML)の出力

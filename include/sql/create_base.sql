@@ -168,7 +168,7 @@ CREATE TABLE _session (
     PRIMARY KEY  (ss_id)
 ) ENGINE=innodb;
 
--- 管理者一時キートラン
+-- 管理者一時キートラン(廃止予定)
 DROP TABLE IF EXISTS _admin_key;
 CREATE TABLE _admin_key (
     ak_id                CHAR(32)       DEFAULT ''                    NOT NULL,      -- ID

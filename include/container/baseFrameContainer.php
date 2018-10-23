@@ -454,7 +454,7 @@ class BaseFrameContainer extends Core
 			}
 			
 			// 管理権限がない場合は、ウィジェットのページへの配置状況からアクセス権限をチェックする
-			if (!$isSystemManageUser && !$this->gAccess->isValidAdminKey() && !$this->_db->canAccessWidget($widgetId)){
+			if (!$isSystemManageUser && !$this->_db->canAccessWidget($widgetId)){
 				// アクセスエラーのログを残す
 				$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd, self::ERR_MESSAGE_ACCESS_DENY);
 				
@@ -464,7 +464,7 @@ class BaseFrameContainer extends Core
 			}
 			
 			// ################# パラメータチェック ################
-			if (!$isSystemManageUser && !$this->gAccess->isValidAdminKey() && $this->gEnv->isServerConnector()){		// サーバ接続の場合
+			if (!$isSystemManageUser && $this->gEnv->isServerConnector()){		// サーバ接続の場合
 				// クエリーパラメータはウィジェットIDのみ正常とする
 				$params = $request->getQueryArray();
 				$paramCount = count($params);

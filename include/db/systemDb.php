@@ -19,7 +19,6 @@ class SystemDb extends BaseDb
 {
 	const MAX_ACCESS_LOG_FIELD_LENGTH = 300;				// ログテーブルのフィールドの最大長
 	const MAX_ACCESS_LOG_REQUEST_LENGTH = 500;				// リクエストの最大長
-	const ADMIN_KEY_LIFETIME = 1440;							// 管理者一時キーの生存期間(分)
 	const INDEX_ADD_VALUE = 5;								// 表示順の増加分
 	
 	/**
@@ -3047,81 +3046,6 @@ class SystemDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
-	}
-	/**
-	 * エラーのログインログを追加
-	 *
-	 * @param string $account		入力アカウント
-	 * @param string $ip			IPアドレス
-	 * @param int  $logSerial		アクセスログシリアル番号
-	 * @return						true=成功、false=失敗
-	 */
-/*	function addErrorLoginLog($account, $ip, $logSerial)
-	{
-		// トランザクション開始
-		$this->startTransaction();
-
-		$queryStr = 'INSERT INTO _login_err_log (';
-		$queryStr .=  'le_account, ';
-		$queryStr .=  'le_ip, ';
-		$queryStr .=  'le_access_log_serial ';
-		$queryStr .=  ') VALUES (';
-		$queryStr .=  '?, ?, ?';
-		$queryStr .=  ')';
-		$this->execStatement($queryStr, array($account, $ip, $logSerial));
-				
-		// トランザクション確定
-		$ret = $this->endTransaction();
-		return $ret;
-	}*/
-	/**
-	 * 管理者一時キーを登録
-	 *
-	 * @param string $key			登録キー
-	 * @param string $ip			IPアドレス
-	 * @return						true=成功、false=失敗
-	 */
-	function addAdminKey($key, $ip)
-	{
-		// トランザクション開始
-		$this->startTransaction();
-
-		$queryStr = 'INSERT INTO _admin_key (';
-		$queryStr .=  'ak_id, ';
-		$queryStr .=  'ak_ip, ';
-		$queryStr .=  'ak_create_dt ';
-		$queryStr .=  ') VALUES (';
-		$queryStr .=  '?, ?, now()';
-		$queryStr .=  ')';
-		$this->execStatement($queryStr, array($key, $ip));
-				
-		// トランザクション確定
-		$ret = $this->endTransaction();
-		return $ret;
-	}
-	/**
-	 * 有効な管理者一時キーかどうか
-	 *
-	 * @param string $key	アカウント
-	 * @param string $ip	ユーザのアクセス元IP
-	 * @return				true=有効、false=無効
-	 */
-	function isValidAdminKey($key, $ip)
-	{
-		$queryStr = 'SELECT * FROM _admin_key ';
-		$queryStr .=  'WHERE ak_id = ? ';
-		$queryStr .=    'AND ak_ip = ?';
-		$ret = $this->selectRecord($queryStr, array($key, $ip), $row);
-		if ($ret){	// 有効期間もチェック
-			$lifeTime = self::ADMIN_KEY_LIFETIME;
-			if (strtotime("-$lifeTime minutes") <= strtotime($row['ak_create_dt'])){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
 	}
 	/**
 	 * ウィジェットパラメータ更新

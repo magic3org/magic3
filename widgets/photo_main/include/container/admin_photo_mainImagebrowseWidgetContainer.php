@@ -359,14 +359,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL
-/*		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-//		$uploadUrl .= '&' . M3_REQUEST_PARAM_ADMIN_KEY . '=' . $this->gEnv->getAdminKey();	// 管理者キー
-		//$uploadUrl .= '&path=' . $this->adaptWindowsPath($path);
-		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
-		*/
 		$param = M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
 		$param .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
 		$param .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ

@@ -51,12 +51,7 @@ class connectorFrameContainer extends BaseFrameContainer
 			}
 		} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行
 			// 管理者権限がなければ実行できない
-			if ($this->gEnv->isSystemManageUser()){	// システム運用可能ユーザかどうか
-				$ret = true;
-			} else {
-				// クッキーがないため権限を識別できない場合は、管理者キーをチェックする
-				$ret = $this->gAccess->isValidAdminKey();
-			}
+			if ($this->gEnv->isSystemManageUser()) $ret = true;	// システム運用可能ユーザかどうか
 		}
 		return $ret;
 	}

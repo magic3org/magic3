@@ -2029,22 +2029,6 @@ class EnvManager extends Core
 		return $hasOption;
 	}
 	/**
-	 * 管理者用一時キーを取得
-	 *
-	 * @return string		管理者キー、管理者でないときは空文字列
-	 */
-	public function getAdminKey()
-	{
-		global $gInstanceManager;
-
-		$userInfo = $gInstanceManager->getUserInfo();
-		if (is_null($userInfo)){		// ログインしていない場合
-			return '';
-		} else {
-			return $userInfo->_adminKey;
-		}
-	}
-	/**
 	 * 現在アクセス中のユーザに管理者権限があるかどうかを返す
 	 *
 	 * @return bool		true=ログイン中かつ管理者権限あり、false=未ログインまたはログイン中であるが管理者権限なし
