@@ -1,8 +1,0 @@
-{
-  "name": "chatroom",
-  "version": "0.0.1",
-  "description": "Multiroom chat server",
-  "dependencies": {
-    "socket.io": "~2.1.1"
-  }
-}
