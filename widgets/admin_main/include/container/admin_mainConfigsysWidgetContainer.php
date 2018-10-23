@@ -78,7 +78,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
 		
-		$this->wysiwygMenuData = array('fckeditor' => 'FCKEditor 2.6.6', 'ckeditor' => 'CKEditor 4.4.2');		// WYSIWYGエディター選択メニューデータ
+		$this->wysiwygMenuData = array('ckeditor' => 'CKEditor 4.4.2');		// WYSIWYGエディター選択メニューデータ
 	}
 	/**
 	 * テンプレートファイルを設定

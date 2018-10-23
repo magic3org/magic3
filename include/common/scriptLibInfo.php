@@ -29,7 +29,7 @@ class ScriptLibInfo
 											'2.2'	=> 'jquery-2.2.4.min.js',
 											'3.1'	=> 'jquery-3.1.0.min.js'
 										);
-	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
+	private static $wysiwygEditorType = 'ckeditor';		// WYSIWYGエディタータイプ
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
@@ -42,8 +42,7 @@ class ScriptLibInfo
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
 	const LIB_JQUERY_UI				= 'jquery-ui';
-	const LIB_WYSIWYG_EDITOR		= 'wysiwyg_editor';			// LIB_FCKEDITORまたはLIB_CKEDITOR
-	const LIB_FCKEDITOR				= 'fckeditor';
+	const LIB_WYSIWYG_EDITOR		= 'wysiwyg_editor';			// LIB_CKEDITOR
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_ELFINDER141			= 'elfinder141';			// v2.1.41
@@ -287,13 +286,9 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_NUMERIC_URL			= 'http://www.texotela.co.uk/code/jquery/numeric/';
 	const JQUERY_STICKY_URL				= 'http://stickyjs.com/';
 
-	// ディレクトリ名
-	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
-
 	// ファイル名
 //	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
-	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 //	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)→廃止
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 
@@ -454,7 +449,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_SOCKETIO				=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
 						self::LIB_WEBRTC				=>	array(	'script' 	=> array(self::WEBRTC_ADAPTER_FILENAME)),			// WebRTC
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
-						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array($ckeditorFile)),		// CKEditor
 						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
 																							self::JSCALENDAR_FILENAME,			// jscalendar
@@ -627,7 +621,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			}
 
 			// WYSIWYGエディターに合わせてライブラリを設定
-			self::$libs[self::LIB_WYSIWYG_EDITOR] = self::$libs[self::getWysiwygEditorLibId()];		// LIB_FCKEDITORまたはLIB_CKEDITOR
+			self::$libs[self::LIB_WYSIWYG_EDITOR] = self::$libs[self::getWysiwygEditorLibId()];		// LIB_CKEDITOR
 
 			// 使用するjQueryバージョンに合わせてファイルを追加
 			self::$libs[self::LIB_JQUERY] = array(	'script' => array(self::getJQueryFilename(0)));	// jquery
@@ -784,7 +778,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	/**
 	 * WYSIWYGエディターのタイプを設定
 	 *
-	 * @param string $type	エディタータイプ(fckeditorまたはckeditor)
+	 * @param string $type	エディタータイプ(ckeditor)
 	 * @return			なし
 	 */
 	static function setWysiwygEditorType($type)
@@ -798,13 +792,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	 */
 	static function getWysiwygEditorLibId()
 	{
-		switch (self::$wysiwygEditorType){
-			case 'fckeditor':
-			default:
-				return self::LIB_FCKEDITOR;
-			case 'ckeditor':
-				return self::LIB_CKEDITOR;
-		}
+		return self::LIB_CKEDITOR;
 	}
 	/**
 	 * スクリプトを取得

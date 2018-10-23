@@ -214,7 +214,6 @@ class PageManager extends Core
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.10.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.5.2.js';			// 一般、管理機能共通スクリプト
-//	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// フロント画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.2.1.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// フロント画面編集用のCSS
@@ -263,10 +262,6 @@ class PageManager extends Core
 		// アクセスする画面に応じてjQueryのバージョンを設定
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$value = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
-			
-			if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET && strStartsWith($widgetId, 'm/')){// 携帯用アクセスポイント用の管理画面の場合はWYSIWYGエディターはFCKEditorに固定
-				$this->wysiwygEditor = ScriptLibInfo::LIB_FCKEDITOR;				// FCKEditorに固定
-			}
 			
 			// 管理画面にBOOTSTRAPを使用するかどうか(初期値)
 			$this->useBootstrap = self::USE_BOOTSTRAP_ADMIN;
@@ -1710,7 +1705,6 @@ class PageManager extends Core
 					
 //						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// フロント画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
