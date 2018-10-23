@@ -79,14 +79,12 @@ class ScriptLibInfo
 	const LIB_JQUERY_FORMAT			= 'jquery.format';
 	const LIB_JQUERY_FORMTIPS		= 'jquery.formtips';
 	const LIB_JQUERY_FACEBOX		= 'jquery.facebox';
-	const LIB_JQUERY_CURVYCORNERS	= 'jquery.curvycorners';
 	const LIB_JQUERY_PRETTYPHOTO	= 'jquery.prettyphoto';
 	const LIB_JQUERY_QTIP			= 'jquery.qtip';
 	const LIB_JQUERY_QTIP2			= 'jquery.qtip2';
 	const LIB_JQUERY_CALCULATION	= 'jquery.calculation';
 	const LIB_JQUERY_JQPLOT			= 'jquery.jqplot';
 	const LIB_JQUERY_JSTREE			= 'jquery.jstree';
-	const LIB_JQUERY_IFRAME			= 'jquery.iframe';
 	const LIB_JQUERY_RATY			= 'jquery.raty';
 	const LIB_JQUERY_MOUSEWHEEL		= 'jquery.mousewheel';
 	const LIB_JQUERY_CLOUDCAROUSEL	= 'jquery.cloudcarousel';
@@ -99,7 +97,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_IDTABS			= 'jquery.idtabs';
 	const LIB_JQUERY_BXSLIDER		= 'jquery.bxslider';
 	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
-	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
 	const LIB_JQUERY_FORM			= 'jquery.form';
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
 //	const LIB_JQUERY_UPLOADFILE4	= 'jquery.uploadfile4';		// jQuery Uploadfile v4版
@@ -129,7 +126,6 @@ class ScriptLibInfo
 	const JQUERY_CALCULATION_VER	= '0.4.07';
 	const JQUERY_JQPLOT_VER			= '1.0.8';
 	const JQUERY_JSTREE_VER			= '1.0-rc3';
-	const JQUERY_IFRAME_VER			= '2.0.0';
 	const JQUERY_RATY_VER			= '1.4.3';
 	const JQUERY_MOUSEWHEEL_VER		= '3.0.6';
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
@@ -142,7 +138,6 @@ class ScriptLibInfo
 	const JQUERY_IDTABS_VER			= '2.2';
 	const JQUERY_BXSLIDER_VER		= '4.1.2';
 	const JQUERY_FITVIDS_VER		= '1.1';
-	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
 	const JQUERY_FORM_VER			= '3.51.0';
 //	const JQUERY_UPLOADFILE_VER		= '3.1.10';
 	const JQUERY_UPLOADFILE_VER		= '4.0.10';
@@ -198,7 +193,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_FORMTIPS_FILENAME		= 'jquery/jquery.formtips.1.2.packed.js';
 	const JQUERY_FACEBOX_FILENAME		= 'jquery/facebox.js';
 	const JQUERY_FACEBOX_CSS			= 'jquery/facebox.css';
-	const JQUERY_CURVYCORNERS_FILENAME	= 'jquery/jquery.curvycorners.packed.js';
 	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyphoto-3.1.6';
 	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyphoto-3.1.6/js/jquery.prettyPhoto.js';
 	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyphoto-3.1.6/css/prettyPhoto.css';
@@ -210,11 +204,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.8/jquery.jqplot.min.js';
 	const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_JSTREE_FILENAME		= 'jquery/jstree/jquery.jstree.js';
-//	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.5.0.min.js';
-//	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.7.1.min.js';
-//	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.9.1.min.js';
-	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.2.0.0.min.js';
-	const JQUERY_IFRAME_BROWSER_FILENAME	= 'jquery/jquery.iframe-auto-height.browser.js';			// jQuery.iframe用ブラウザ判定
 	const JQUERY_RATY_FILENAME			= 'jquery/raty/jquery.raty.js';
 	const JQUERY_MOUSEWHEEL_FILENAME	= 'jquery/jquery.mousewheel.js';
 	const JQUERY_CLOUDCAROUSEL_FILENAME	= 'jquery/cloud-carousel.1.0.5.min.js';
@@ -232,8 +221,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_BXSLIDER_FILENAME		= 'jquery/bxslider/jquery.bxslider.min.js';
 	const JQUERY_BXSLIDER_CSS			= 'jquery/bxslider/jquery.bxslider.css';
 	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
-	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
-	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
 	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
 //	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
 //	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
@@ -259,14 +246,12 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_CLUETIP_URL			= 'http://plugins.learningjquery.com/cluetip/';
 	const JQUERY_COOKIE_URL				= 'https://github.com/carhartl/jquery-cookie';
 	const JQUERY_FACEBOX_URL			= 'http://defunkt.github.com/facebox/';
-	const JQUERY_CURVYCORNERS_URL		= 'http://code.google.com/p/jquerycurvycorners/';
 	const JQUERY_PRETTYPHOTO_URL		= 'http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/';
 	const JQUERY_QTIP_URL				= 'http://craigsworks.com/projects/qtip/';
 	const JQUERY_QTIP2_URL				= 'http://qtip2.com/';
 	const JQUERY_CALCULATION_URL		= 'http://www.pengoworks.com/workshop/jquery/calculation/calculation.plugin.htm';
 	const JQUERY_JQPLOT_URL				= 'http://www.jqplot.com/';
 	const JQUERY_JSTREE_URL				= 'http://www.jstree.com/';
-	const JQUERY_IFRAME_URL				= 'https://github.com/house9/jquery-iframe-auto-height';
 	const JQUERY_RATY_URL				= 'http://www.wbotelhos.com/raty/';
 	const JQUERY_MOUSEWHEEL_URL			= 'https://github.com/brandonaaron/jquery-mousewheel';
 	const JQUERY_CLOUDCAROUSEL_URL		= 'http://www.professorcloud.com/mainsite/carousel.htm';
@@ -279,7 +264,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
 	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
-	const JQUERY_RESPONSIVETABLE_URL	= 'http://gergeo.se/RWD-Table-Patterns';
 	const JQUERY_FORM_URL				= 'http://malsup.com/jquery/form/';
 	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
 	const JQUERY_JCROP_URL				= 'http://deepliquid.com/content/Jcrop.html';
@@ -287,9 +271,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_STICKY_URL				= 'http://stickyjs.com/';
 
 	// ファイル名
-//	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
-//	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)→廃止
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 
 	// elFinder v2.1.41版
@@ -439,8 +421,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			if (!empty($param)) $googleMapsParams = '?key=' . $param;
 			
 			// CKEditorのスクリプトファイルを取得
-//			$ckeditorFile = self::CKEDITOR_FILENAME;		// CKEditor(デフォルト)
-//			if (self::$ckeditorVer == 1) $ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
 			$ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
 			
 			// ##### ライブラリ情報初期化 ####
@@ -505,8 +485,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_JQUERY_FACEBOX		=>	array(	'script' 	=> array(self::JQUERY_FACEBOX_FILENAME),	// jquery.facebox用のファイル
 																	'css'		=> array(self::JQUERY_FACEBOX_CSS),
 																	'url'		=> self::JQUERY_FACEBOX_URL),
-						self::LIB_JQUERY_CURVYCORNERS	=> array(	'script'	=> array(self::JQUERY_CURVYCORNERS_FILENAME),
-																	'url'		=> self::JQUERY_CURVYCORNERS_URL),
 						self::LIB_JQUERY_PRETTYPHOTO	=>	array(	'script' 	=> array(self::JQUERY_PRETTYPHOTO_FILENAME),	// jquery.prettyPhoto用のファイル
 																	'css'		=> array(self::JQUERY_PRETTYPHOTO_CSS),
 																	'dir'		=> self::JQUERY_PRETTYPHOTO_DIR,				// 格納ディレクトリ
@@ -530,9 +508,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_JQUERY_JSTREE			=>	array(	'script' 	=> array(self::JQUERY_JSTREE_FILENAME),	// jquery.jstree用のファイル
 																	'url'		=> self::JQUERY_JSTREE_URL,
 																	'version'	=> self::JQUERY_JSTREE_VER),
-						self::LIB_JQUERY_IFRAME			=>	array(	'script'	=> array(self::JQUERY_IFRAME_FILENAME, self::JQUERY_IFRAME_BROWSER_FILENAME),		// jquery.iframe-auto-height用のファイル
-																	'url'		=> self::JQUERY_IFRAME_URL,
-																	'version'	=> self::JQUERY_IFRAME_VER),
 						self::LIB_JQUERY_RATY			=>	array(	'script'	=> array(self::JQUERY_RATY_FILENAME),		// jquery.raty用のファイル
 																	'url'		=> self::JQUERY_RATY_URL,
 																	'version'	=> self::JQUERY_RATY_VER),
@@ -572,10 +547,6 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
 																	'url'		=> self::JQUERY_FITVIDS_URL,
 																	'version'	=> self::JQUERY_FITVIDS_VER),
-						self::LIB_JQUERY_RESPONSIVETABLE	=> array(	'script' 	=> array(self::JQUERY_RESPONSIVETABLE_FILENAME),
-																		'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
-																		'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
-																		'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
 						self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
 																	'url'		=> self::JQUERY_FORM_URL,
 																	'version'	=> self::JQUERY_FORM_VER),
