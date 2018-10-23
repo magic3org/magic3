@@ -549,6 +549,7 @@ CREATE TABLE _templates (
 	tm_info_url          TEXT                                         NOT NULL,      -- テンプレート情報URL
 	tm_custom_params     TEXT                                         NOT NULL,      -- カスタマイズ用パラメータ
     tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ(廃止予定)
+    tm_editor_param      TEXT                                         NOT NULL,      -- 編集エディタ用パラメータ
     tm_attr              TEXT                                         NOT NULL,      -- その他属性(「,」区切り)(woocommerce等)
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
@@ -728,6 +729,7 @@ CREATE TABLE _iwidgets (
     iw_admin_file        VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 管理機能起動クラスのファイル名
     iw_admin_class       VARCHAR(200)   DEFAULT ''                    NOT NULL,      -- 管理機能起動クラス名
     iw_db                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 対応DB種(mysql,pgsql等を「,」区切りで指定)
+	iw_params            TEXT                                         NOT NULL,      -- 追加パラメータ(「;」区切り)
 	
     iw_checked_out       BOOLEAN        DEFAULT false                 NOT NULL,      -- チェックアウト中かどうか
     iw_checked_out_dt    TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時

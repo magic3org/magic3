@@ -622,6 +622,8 @@ CREATE TABLE product (
     pt_attr_condition    TEXT                                         NOT NULL,      -- 商品タイプが単品商品(親子)の場合の商品属性の条件(,区切り)
     pt_product_set       TEXT                                         NOT NULL,      -- 商品タイプがセット商品の場合の組み合わせ商品ID(,区切り)
     pt_option_price      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 商品タイプがオプション商品の場合の価格設定
+    pt_download          BOOLEAN        DEFAULT false                 NOT NULL,      -- ダウンロード商品かどうか
+    pt_delivery          BOOLEAN        DEFAULT true                  NOT NULL,      -- 配送が必要な商品かどうか
 
     pt_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     pt_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
@@ -1097,48 +1099,48 @@ VALUES              ('ecmail',   'ecMail',       'Eコマースメール連携',
 
 -- インナーウィジェット
 -- インナーウィジェット(配送方法)
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'flatrate';
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,flatrate';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,      iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'flatrate', '定額', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'classrate';
+('', 'ec_main,flatrate', '定額', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,classrate';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'classrate', '購入額基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'staterate';
+('', 'ec_main,classrate', '購入額基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,staterate';
+INSERT INTO _iwidgets
+(iw_widget_id, iw_id,       iw_name,       iw_type,   iw_params,                   iw_author,      iw_copyright, iw_license,   iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('',    'ec_main,staterate', '送付先基準', 'DELIVERY', 'wc_support=shipping-zones', 'Naoki Hirata', 'Magic3.org', 'GPL',         0,      10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,quantityrate';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'staterate', '送付先基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'quantityrate';
+('', 'ec_main,quantityrate', '商品数基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,productrate';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'quantityrate', '商品数基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'productrate';
+('', 'ec_main,productrate', '商品別規定', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,weightrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'productrate', '商品別規定', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'weightrate';
-INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'weightrate', '送付先+重量基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+(iw_widget_id, iw_id,        iw_name,           iw_type,    iw_params,                   iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('',    'ec_main,weightrate', '送付先+重量基準', 'DELIVERY', 'wc_support=shipping-zones', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 -- インナーウィジェット(支払方法)
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'epsilon';
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,epsilon';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,     iw_name,          iw_type,    iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_online, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'epsilon', 'イプシロン決済', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                true,      now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'exchange_classrate';
+('', 'ec_main,epsilon', 'イプシロン決済', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                true,      now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,exchange_classrate';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,     iw_name,          iw_type,    iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_online, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'exchange_classrate', '代金引換(購入額基準)', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                false,      now(),         now());
+('', 'ec_main,exchange_classrate', '代金引換(購入額基準)', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                false,      now(),         now());
 -- インナーウィジェット(注文計算)
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'lotbuying';
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,lotbuying';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,       iw_name,          iw_type,     iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'lotbuying', 'まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
-DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'product_lotbuying';
+('', 'ec_main,lotbuying', 'まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = '' AND iw_id = 'ec_main,product_lotbuying';
 INSERT INTO _iwidgets
 (iw_widget_id, iw_id,               iw_name,                iw_type,     iw_author,      iw_copyright, iw_license,                iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'product_lotbuying', '商品別まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
+('', 'ec_main,product_lotbuying', '商品別まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
 
 -- メール内容
 DELETE FROM _mail_form WHERE mf_id = 'regist_member_to_backoffice';

@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2017112901',               'DBバージョン'),
+('db_version',                  '2018010701',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_no',                   '-1',                       'サーバ管理No'),
 ('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
