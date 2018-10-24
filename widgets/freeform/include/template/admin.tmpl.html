@@ -1,0 +1,367 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    フリーレイアウトお問い合わせ
+ * @author     株式会社 毎日メディアサービス
+ * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.m-media.co.jp
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(operation){
+	if (operation == 'add'){
+		if (!window.confirm('項目を新規追加しますか?')) return false;
+		document.main.act.value = 'add';
+	} else {
+		if (!window.confirm('設定を更新しますか?')) return false;
+		document.main.act.value='update';
+	}
+	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
+
+	// 必須入力
+	var requiredArray = new Array();
+	$("#field_list input:checkbox.required").each(function(index){
+		if (this.checked){
+			requiredArray.push('1');
+		} else {
+			requiredArray.push('0');
+		}
+	});
+	document.main.required.value = requiredArray.join(',');
+
+	// タイトルを表示するかどうか
+	var titleVisibleArray = new Array();
+	$("#field_list input:checkbox.titlevisible").each(function(index){
+		if (this.checked){
+			titleVisibleArray.push('1');
+		} else {
+			titleVisibleArray.push('0');
+		}
+	});
+	document.main.titlevisible.value = titleVisibleArray.join(',');
+
+	// 半角英字
+	var alphabetArray = new Array();
+	$("#field_list input:checkbox.alphabet").each(function(index){
+		if (this.checked){
+			alphabetArray.push('1');
+		} else {
+			alphabetArray.push('0');
+		}
+	});
+	document.main.alphabet.value = alphabetArray.join(',');
+	
+	// 半角数値
+	var numberArray = new Array();
+	$("#field_list input:checkbox.number").each(function(index){
+		if (this.checked){
+			numberArray.push('1');
+		} else {
+			numberArray.push('0');
+		}
+	});
+	document.main.number.value = numberArray.join(',');
+	
+	// 編集不可
+	var disabledArray = new Array();
+	$("#field_list input:checkbox.disabled").each(function(index){
+		if (this.checked){
+			disabledArray.push('1');
+		} else {
+			disabledArray.push('0');
+		}
+	});
+	document.main.disabled.value = disabledArray.join(',');
+	
+	document.main.submit();
+	return true;
+}
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
+// お問い合わせ項目を追加
+function addLine()
+{
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td style="text-align:center;"><span class="m3drag_rowno"></span></td>';
+	lineText += '<td style="vertical-align:top;">';
+	lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
+	lineText += '<hr class="border" />';
+	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="option_area" style="display:none;"><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div></div>';
+	lineText += '</td>';
+	lineText += '<td style="vertical-align:top;">';
+	lineText += '<input type="text" name="item_desc[]" maxlength="100" />';
+	lineText += '<hr class="border" />';
+	lineText += '<div class="form-group clearfix" style="margin-bottom:0;"><input type="text" name="item_def[]" maxlength="500" /></div>';
+	lineText += '<div class="option_area" style="display:none;margin-top:15px;">';
+	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" maxlength="60" /></div></div>';
+	lineText += '<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" />半角数値</label></div></div>';
+	lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" maxlength="1" /></div></div>';
+	lineText += '<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" maxlength="60" /></div>';
+	lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
+	lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
+	lineText += '</div>';
+	lineText += '</td>';
+	lineText += '<td style="text-align:center;vertical-align:top;"><div style="margin:6px auto 0;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></div><div style="margin:22px auto 0;width:32px;height:32px;">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>';
+	lineText += '</tr>';
+	$('#field_list').append(lineText);
+	
+	// 項目一覧を再設定
+	m3SetDragDropTable('field_list', reorder_callback);
+	
+	// オプション領域を再作成
+	setupOptionArea();
+}
+// 項目順変更時処理
+function reorder_callback()
+{
+	$("#field_list tr .replaceTag").each(function(index){
+		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
+		$(this).val(replaceTag);
+	});
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
+	return true;
+}
+// オプション領域を再作成
+function setupOptionArea()
+{
+	$('#field_list').find('tr .button_open').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideDown(300);
+		rowObj.find('.button_open').css({'display':'none'});
+		rowObj.find('.button_close').css({'display':'block'});
+		
+		m3AdjustParentWindow();
+	});
+	$('#field_list').find('tr .button_close').off('click').on('click', function(){
+		var rowObj = $(this).parents('.m3drag_row');
+		rowObj.find('.option_area').slideUp(300);
+		rowObj.find('.button_open').css({'display':'block'});
+		rowObj.find('.button_close').css({'display':'none'});
+		
+		m3AdjustParentWindow();
+	});
+}
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 300);
+	m3SetWysiwygEditor('item_upload_area', 100/* 高さ */);
+	m3SetWysiwygEditor('item_content_complete', 150/* 高さ */);
+
+	// お問い合わせ項目部作成
+	m3SetDragDropTable('field_list', reorder_callback);
+	
+	// オプション領域を再作成
+	setupOptionArea();
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="fieldcount" />
+<input type="hidden" name="required" />
+<input type="hidden" name="titlevisible" />
+<input type="hidden" name="alphabet" />
+<input type="hidden" name="number" />
+<input type="hidden" name="disabled" />
+<!-- m3:PostParam -->
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_UNTITLED_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_DISABLED}/>
+</div></div></div>
+
+<table id="mainconfig">
+    <tbody>
+    <tr>
+	    <th><span {_HELP_UNTITLED_NAME_INPUT}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
+	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規 --</option>
+	        <patTemplate:tmpl name="title_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <div class="col-sm-4 m3config_item following"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div>
+	    </patTemplate:tmpl>
+		<div class="pull-right">
+		<div class="form-control-static col-sm-1 m3config_item" style="width:4em;">言語：</div>
+		<div class="col-sm-3 m3config_item" style="width:10em;">
+	    <select name="item_lang">
+	       <patTemplate:tmpl name="lang_list">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+        </select>
+		</div>
+		</div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_PAGE_TITLE}>画面タイトル</span></th>
+	    <td><input type="text" name="item_page_title" value="{PAGE_TITLE}" maxlength="60" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_FIELD}>お問い合わせ<br />項目</span></th>
+	    <td>
+	    <table id="field_list">
+	    <thead>
+	    <tr><th rowspan="2" style="width:35px;">移動</th><th rowspan="2" style="width:35px;">No</th><th>タイトル</th><th>説明</th><th rowspan="2" style="width:35px;">操作</th></tr>
+	    <tr><th>タイプ</th><th>定義/埋め込みタグ</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="field_list">
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
+	    <td style="text-align:center;"><span class="m3drag_rowno"></span></td>
+	    <td style="vertical-align:top;">
+		<div class="form-group clearfix last">
+		<div class="m3config_item col-sm-9"><input type="text" name="item_title[]" value="{TITLE}" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示</label></div></div>
+		</div>
+		<hr class="border" />
+	    <select name="item_type[]">
+	       <patTemplate:tmpl name="type_list2">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+        </select>
+		<div class="option_area" style="display:none;"><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />入力必須</label></div></div>
+	    </td>
+		<td style="vertical-align:top;">
+	    <input type="text" name="item_desc[]" value="{DESC}" maxlength="100" />
+		<hr class="border" />
+	    <div class="form-group clearfix" style="margin-bottom:0;"><input type="text" name="item_def[]" value="{DEF}" maxlength="500" /></div>
+		
+		<div class="option_area" style="display:none;margin-top:15px;">
+	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" value="{DEFAULT}" maxlength="60" /></div></div>
+		<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値</label></div></div>
+	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" value="{FIELD_ID}" maxlength="1" /></div></div>
+		<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" value="{CALC}" maxlength="60" /></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</label></div>
+		<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>
+		</div>
+		</td>
+	    <td style="text-align:center;vertical-align:top;"><div style="margin:6px auto 0;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></div><div style="margin:22px auto 0;width:32px;height:32px;">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+	    <div><input type="button" class="button" onclick="addLine();" value="追加" /></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_FIELD_CONTROL}>お問い合わせ<br />項目制御</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_hide_in_complete" {HIDE_IN_COMPLETE_CHECKED} />送信完了画面に項目を表示しない</label></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th>規定タグID</th>
+	    <td>{TAG_ID_STR}<input type="hidden" name="item_confirm_button" value="{CONFIRM_BUTTON}" /><input type="hidden" name="item_send_button" value="{SEND_BUTTON}" /><input type="hidden" name="item_cancel_button" value="{CANCEL_BUTTON}" /><input type="hidden" name="item_reset_button" value="{RESET_BUTTON}" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_TEMPLATE}>本文レイアウト</span></th>
+	    <td class="ckeditor"><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_COMPLETE_CONTENT}>完了画面<br />コンテンツ</span></th>
+	    <td class="ckeditor"><textarea name="item_content_complete" rows="3">{CONTENT_COMPLETE}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_CSS}>CSS</span></th>
+	    <td><textarea name="item_css" rows="3">{CSS}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_JAVASCRIPT}>JavaScript</span></th>
+	    <td><textarea name="item_script" rows="3">{SCRIPT}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_DESIGN}>デザイン</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_artisteer" {USE_ARTISTEER} />Artisteer対応(チェックボックス,ラジオボタン等)</label></div>
+		<div class="form-group"><div class="form-control-static col-sm-2 m3config_item">必須ラベル：</div><div class="col-sm-10 m3config_item" ><input type="text" class="form-control" name="item_required_label" value="{REQUIRED_LABEL}" maxlength="200" /></div></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_MESSAGE}>メッセージ</span></th>
+	    <td>
+<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item">確認画面：</div><div class="col-sm-10 m3config_item" ><input type="text" class="form-control" name="item_msg_confirm" value="{MSG_CONFIRM}" maxlength="200" /></div></div>
+<div class="form-group last"><div class="form-control-static col-sm-2 m3config_item">完了画面：</div><div class="col-sm-10 m3config_item" ><input type="text" class="form-control" name="item_msg_complete" value="{MSG_COMPLETE}" maxlength="200" /></div></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_EMAIL}>メール送信</span></th>
+	    <td>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" maxlength="60" style="width:32em;" />
+		</div>
+		<div class="form-group last">
+	    <div class="form-control-static m3config_item col-sm-1" style="width:12em;">送信先メールアドレス：</div><input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" maxlength="40" style="width:24em;" />
+		</div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_USER_EMAIL}>確認メール</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信</label></div>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" maxlength="60" style="width:32em;" />
+		</div>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:12em;">返信先メールアドレス：</div><input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" maxlength="40" style="width:24em;" />
+		</div>
+	    本文：<br />
+	    <textarea name="item_user_email_format" rows="3">{USER_EMAIL_FORMAT}</textarea>
+		</td>
+	</tr>
+    <tr>
+	    <th rowspan="3"><span {_HELP_UNTITLED_UPLOAD}>ファイル<br />アップローダ</span></th>
+	    <td>
+<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item" style="width:9em;">最大ファイル数：</div><div class="col-sm-4 m3config_item" style="width:4em;"><input type="text" class="form-control" name="item_upload_max_count" value="{UPLOAD_MAX_COUNT}" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-2 m3config_item following" style="width:15em;">最大ファイルサイズ(バイト)：</div><div class="col-sm-4 m3config_item" style="width:6em;"><input type="text" class="form-control" name="item_upload_max_size" value="{UPLOAD_MAX_SIZE}" maxlength="4" /></div></div>
+<div class="form-group"><div class="form-control-static col-sm-1 m3config_item">拡張子：</div><div class="col-sm-11 m3config_item" ><input type="text" class="form-control" name="item_upload_file_extension" value="{UPLOAD_FILE_EXTENSION}" maxlength="200" /></div></div>
+	    </td>
+	</tr>
+	<tr>
+		<th>アップロードエリア</th>
+	</tr>
+    <tr>
+	    <td class="ckeditor"><textarea name="item_upload_area">{UPLOAD_AREA}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_ACCESS_KEY}>発行アクセスキー</span></th>
+	    <td><input type="text" name="item_access_key" value="{ACCESS_KEY}" maxlength="60" /></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem('update');" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem('add');" value="新規追加" />
+</patTemplate:tmpl>
+</div>
+</form>
+</div>
+</patTemplate:tmpl>

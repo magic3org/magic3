@@ -1,0 +1,47 @@
+/**
+ * CSS作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    フリーレイアウトお問い合わせ
+ * @author     株式会社 毎日メディアサービス
+ * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.m-media.co.jp
+ */
+<patTemplate:tmpl name="_tmpl">
+.tipped {
+	color: #BBB;
+}
+.ajax-file-upload-statusbar {
+	margin-top: 10px;
+	padding-bottom: 5px;
+	border: 1px solid #0ba1b5;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+.ajax-file-upload-progress {
+	margin: 0 10px 15px 10px;
+	position: relative;
+	display: inline-block;
+}
+.ajax-file-upload-bar {
+	width: 0;
+	height: 20px;
+	border-radius: 3px;
+	color:#FFFFFF;
+	background-color: #0ba1b5;
+}
+.ajax-file-upload-percent {
+	position: absolute;
+	display: inline-block;
+	top: 3px;
+	left: 48%;
+}
+/* for Bootstrap template */
+/*.ajax-file-upload-statusbar button {
+	margin-top: -8px;
+}*/
+</patTemplate:tmpl>
