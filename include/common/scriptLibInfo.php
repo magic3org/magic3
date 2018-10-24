@@ -69,7 +69,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_CYCLE			= 'jquery.cycle';
 	const LIB_JQUERY_CODEPRESS		= 'jquery.codepress';
 	const LIB_JQUERY_CLUETIP		= 'jquery.cluetip';
-	const LIB_JQUERY_SIMPLETREE		= 'jquery.simpletree';
 	const LIB_JQUERY_BGIFRAME		= 'jquery.bgiframe';
 	const LIB_JQUERY_HOVERINTENT	= 'jquery.hoverintent';
 	const LIB_JQUERY_TABLEDND		= 'jquery.tablednd';
@@ -168,8 +167,6 @@ class ScriptLibInfo
 	const JQUERY_CODEPRESS_FILENAME		= 'jquery/jquery.Codepress.js';
 	const JQUERY_CLUETIP_FILENAME		= 'jquery/jquery.cluetip.js';
 	const JQUERY_CLUETIP_CSS			= 'jquery/jquery.cluetip.css';
-	const JQUERY_SIMPLETREE_FILENAME	= 'jquery/jquery.simple.tree.js';
-	const JQUERY_SIMPLETREE_CSS			= 'jquery/simple.tree.css';
 	const JQUERY_BGIFRAME_FILENAME		= 'jquery/jquery.bgiframe.min.js';
 	const JQUERY_HOVERINTENT_FILENAME	= 'jquery/jquery.hoverIntent.min.js';
 //	const JQUERY_TABLEDND_FILENAME		= 'jquery/jquery.tablednd_0_5.js';
@@ -433,8 +430,6 @@ class ScriptLibInfo
 						self::LIB_JQUERY_CLUETIP		=>	array(	'script' 	=> array(self::JQUERY_CLUETIP_FILENAME),// jquery.cluetip用のファイル
 																	'css'		=> array(self::JQUERY_CLUETIP_CSS),
 																	'url'		=> self::JQUERY_CLUETIP_URL),
-						self::LIB_JQUERY_SIMPLETREE		=>	array(	'script' 	=> array(self::JQUERY_SIMPLETREE_FILENAME),// jquery.simpletree用のファイル
-																	'css'		=> array(self::JQUERY_SIMPLETREE_CSS)),
 						self::LIB_JQUERY_BGIFRAME		=>	array(	'script' 	=> array(self::JQUERY_BGIFRAME_FILENAME)),	// jquery.bgiframe用のファイル
 						self::LIB_JQUERY_HOVERINTENT	=>	array(	'script' 	=> array(self::JQUERY_HOVERINTENT_FILENAME)),
 						self::LIB_JQUERY_TABLEDND		=>	array(	'script' 	=> array(self::JQUERY_TABLEDND_FILENAME),	// jquery.tablednd用のファイル
