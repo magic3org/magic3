@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath()				. '/GUMP-1.3/gump.class.php' );
 
 class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 {
@@ -74,9 +73,9 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 			    'street' => 'aasadfa'
 			);
 
-			$validated = GUMP::is_valid($data, array(
+/*			$validated = GUMP::is_valid($data, array(
 			    'street' => 'required|street_address'
-			));
+			));*/
 
 			if($validated === true) {
 			    echo "Valid Street Address!";

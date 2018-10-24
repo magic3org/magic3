@@ -13,7 +13,6 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
 require_once($gEnvManager->getLibPath()				. '/pclzip-2-8-2/pclzip.lib.php');
 
 class ZipArchiver
