@@ -164,10 +164,6 @@ DELETE FROM _widgets WHERE wd_id = 'ec_product_slide';
 INSERT INTO _widgets
 (wd_id,              wd_name,                        wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('ec_product_slide', 'Eコマース-商品スライド表示', 'commerce',     '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '商品画像をカテゴリー単位でスライド表示する。', 'jquery', 'jquery',   true,        false,               false,true,           0, 0, '2012-10-28', now(), now());
-DELETE FROM _widgets WHERE wd_id = 'ec_product_carousel';
-INSERT INTO _widgets
-(wd_id,                 wd_name,                          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('ec_product_carousel', 'Eコマース - 商品カルーセル表示', 'commerce',     '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '商品画像をランダムでカルーセル表示する。', 'jquery.cloudcarousel,jquery.mousewheel', '',   true,        false,               false,true,           0, 0, '2012-11-01', now(), now());
 -- ウィジェット情報(PC用/フォトギャラリー)
 DELETE FROM _widgets WHERE wd_id = 'photo_main';
 INSERT INTO _widgets

@@ -66,7 +66,6 @@ class ScriptLibInfo
 	// jQueryプラグイン
 	const LIB_JQUERY_EASING			= 'jquery.easing';
 	const LIB_JQUERY_JCAROUSEL		= 'jquery.jcarousel';
-	const LIB_JQUERY_THICKBOX		= 'jquery.thickbox';
 	const LIB_JQUERY_CYCLE			= 'jquery.cycle';
 	const LIB_JQUERY_CODEPRESS		= 'jquery.codepress';
 	const LIB_JQUERY_CLUETIP		= 'jquery.cluetip';
@@ -80,13 +79,11 @@ class ScriptLibInfo
 	const LIB_JQUERY_FACEBOX		= 'jquery.facebox';
 	const LIB_JQUERY_PRETTYPHOTO	= 'jquery.prettyphoto';
 	const LIB_JQUERY_QTIP			= 'jquery.qtip';
-	const LIB_JQUERY_QTIP2			= 'jquery.qtip2';
 	const LIB_JQUERY_CALCULATION	= 'jquery.calculation';
 	const LIB_JQUERY_JQPLOT			= 'jquery.jqplot';
 	const LIB_JQUERY_JSTREE			= 'jquery.jstree';
 	const LIB_JQUERY_RATY			= 'jquery.raty';
 	const LIB_JQUERY_MOUSEWHEEL		= 'jquery.mousewheel';
-	const LIB_JQUERY_CLOUDCAROUSEL	= 'jquery.cloudcarousel';
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
 	const LIB_JQUERY_FULLCALENDAR_GOOGLE	= 'jquery.fullcalendar.google';			// Google連携オプション
@@ -116,17 +113,14 @@ class ScriptLibInfo
 
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
-	const JQUERY_THICKBOX_VER		= '3.1';
 	const JQUERY_COOKIE_VER			= '1.4.0';
 	const JQUERY_PRETTYPHOTO_VER	= '3.1.6';
 	const JQUERY_QTIP_VER			= '1.0';
-	const JQUERY_QTIP2_VER			= '2.1.1';
 	const JQUERY_CALCULATION_VER	= '0.4.07';
 	const JQUERY_JQPLOT_VER			= '1.0.8';
 	const JQUERY_JSTREE_VER			= '1.0-rc3';
 	const JQUERY_RATY_VER			= '1.4.3';
 	const JQUERY_MOUSEWHEEL_VER		= '3.0.6';
-	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
 //	const JQUERY_FULLCALENDAR_VER	= '2.2.6';
 	const JQUERY_FULLCALENDAR_VER	= '2.3.1';
@@ -170,8 +164,6 @@ class ScriptLibInfo
 	const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.8.min.js';		// jQuery1.4.2対応版
 //	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.packed.js';
 	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.js';
-	const JQUERY_THICKBOX_FILENAME		= 'jquery/thickbox3.1.js';
-	const JQUERY_THICKBOX_CSS			= 'jquery/thickbox.css';
 	const JQUERY_CYCLE_FILENAME			= 'jquery/jquery.cycle.all.pack.js';
 	const JQUERY_CODEPRESS_FILENAME		= 'jquery/jquery.Codepress.js';
 	const JQUERY_CLUETIP_FILENAME		= 'jquery/jquery.cluetip.js';
@@ -194,15 +186,12 @@ class ScriptLibInfo
 	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyphoto-3.1.6/css/prettyPhoto.css';
 //	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
 	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.0-rc3.min.js';
-	const JQUERY_QTIP2_FILENAME			= 'jquery/qtip2-2.1.1/jquery.qtip.min.js';
-	const JQUERY_QTIP2_CSS				= 'jquery/qtip2-2.1.1/jquery.qtip.min.css';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
 	const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.8/jquery.jqplot.min.js';
 	const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_JSTREE_FILENAME		= 'jquery/jstree/jquery.jstree.js';
 	const JQUERY_RATY_FILENAME			= 'jquery/raty/jquery.raty.js';
 	const JQUERY_MOUSEWHEEL_FILENAME	= 'jquery/jquery.mousewheel.js';
-	const JQUERY_CLOUDCAROUSEL_FILENAME	= 'jquery/cloud-carousel.1.0.5.min.js';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
 	const JQUERY_FULLCALENDAR_FILENAME			= 'jquery/fullcalendar-2.3.1/fullcalendar.js';
 	const JQUERY_FULLCALENDAR_LANG_FILENAME		= 'jquery/fullcalendar-2.3.1/lang/{LANG}.js';			// 言語ファイル
@@ -237,19 +226,16 @@ class ScriptLibInfo
 	const BOOTSTRAP_DATETIMEPICKER_URL	= 'https://github.com/Eonasdan/bootstrap-datetimepicker';
 	const BOOTSTRAP_TOGGLE_URL			= 'https://github.com/minhur/bootstrap-toggle';
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
-	const JQUERY_THICKBOX_URL			= 'http://thickbox.net/';
 	const JQUERY_CLUETIP_URL			= 'http://plugins.learningjquery.com/cluetip/';
 	const JQUERY_COOKIE_URL				= 'https://github.com/carhartl/jquery-cookie';
 	const JQUERY_FACEBOX_URL			= 'http://defunkt.github.com/facebox/';
 	const JQUERY_PRETTYPHOTO_URL		= 'http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/';
 	const JQUERY_QTIP_URL				= 'http://craigsworks.com/projects/qtip/';
-	const JQUERY_QTIP2_URL				= 'http://qtip2.com/';
 	const JQUERY_CALCULATION_URL		= 'http://www.pengoworks.com/workshop/jquery/calculation/calculation.plugin.htm';
 	const JQUERY_JQPLOT_URL				= 'http://www.jqplot.com/';
 	const JQUERY_JSTREE_URL				= 'http://www.jstree.com/';
 	const JQUERY_RATY_URL				= 'http://www.wbotelhos.com/raty/';
 	const JQUERY_MOUSEWHEEL_URL			= 'https://github.com/brandonaaron/jquery-mousewheel';
-	const JQUERY_CLOUDCAROUSEL_URL		= 'http://www.professorcloud.com/mainsite/carousel.htm';
 	const JQUERY_SCROLLTO_URL			= 'http://flesler.blogspot.jp/2007/10/jqueryscrollto.html';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
@@ -442,10 +428,6 @@ class ScriptLibInfo
 						self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),
 																	'url'		=> self::JQUERY_JCAROUSEL_URL,
 																	'version'	=> self::JQUERY_JCAROUSEL_VER),			// jquery.jcarousel用のファイル
-						self::LIB_JQUERY_THICKBOX		=>	array(	'script' 	=> array(self::JQUERY_THICKBOX_FILENAME),// jquery.thickbox用のファイル
-																	'css'		=> array(self::JQUERY_THICKBOX_CSS),
-																	'url'		=> self::JQUERY_THICKBOX_URL,
-																	'version'	=> self::JQUERY_THICKBOX_VER),
 						self::LIB_JQUERY_CYCLE			=>	array(	'script' 	=> array(self::JQUERY_CYCLE_FILENAME)),		// jquery.cycle用のファイル
 						self::LIB_JQUERY_CODEPRESS		=>	array(	'script' 	=> array(self::JQUERY_CODEPRESS_FILENAME)),	// jquery.codepress用のファイル
 						self::LIB_JQUERY_CLUETIP		=>	array(	'script' 	=> array(self::JQUERY_CLUETIP_FILENAME),// jquery.cluetip用のファイル
@@ -473,10 +455,6 @@ class ScriptLibInfo
 						self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル
 																	'url'		=> self::JQUERY_QTIP_URL,
 																	'version'	=> self::JQUERY_QTIP_VER),
-						self::LIB_JQUERY_QTIP2			=>	array(	'script' 	=> array(self::JQUERY_QTIP2_FILENAME),	// jquery.qtip2用のファイル
-																	'css'		=> array(self::JQUERY_QTIP2_CSS),
-																	'url'		=> self::JQUERY_QTIP2_URL,
-																	'version'	=> self::JQUERY_QTIP2_VER),
 						self::LIB_JQUERY_CALCULATION	=>	array(	'script' 	=> array(self::JQUERY_CALCULATION_FILENAME),	// jquery.calculation用のファイル
 																	'url'		=> self::JQUERY_CALCULATION_URL,
 																	'version'	=> self::JQUERY_CALCULATION_VER),
@@ -494,9 +472,6 @@ class ScriptLibInfo
 						self::LIB_JQUERY_MOUSEWHEEL		=>	array(	'script'	=> array(self::JQUERY_MOUSEWHEEL_FILENAME),		// jquery.mousewheel用のファイル
 																	'url'		=> self::JQUERY_MOUSEWHEEL_URL,
 																	'version'	=> self::JQUERY_MOUSEWHEEL_VER),
-						self::LIB_JQUERY_CLOUDCAROUSEL	=>	array(	'script'	=> array(self::JQUERY_CLOUDCAROUSEL_FILENAME),		// jquery.cloudcarousel用のファイル
-																	'url'		=> self::JQUERY_CLOUDCAROUSEL_URL,
-																	'version'	=> self::JQUERY_CLOUDCAROUSEL_VER),
 						self::LIB_JQUERY_SCROLLTO		=>	array(	'script' 	=> array(self::JQUERY_SCROLLTO_FILENAME),	// jquery.scrollto用のファイル
 																	'url'		=> self::JQUERY_SCROLLTO_URL,
 																	'version'	=> self::JQUERY_SCROLLTO_VER),
