@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2017 Magic3 Project.
+-- * @copyright  Copyright 2006-2018 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -138,16 +138,16 @@ INSERT INTO _widgets
 ('ec_cart', 'Eコマース-カート', 'commerce',     '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',              10,                'Eコマースでカート内の商品を表示する',   true,    true,           100, 0, 0, '2012-11-24', now(),      now());
 DELETE FROM _widgets WHERE wd_id = 'ec_product_header';
 INSERT INTO _widgets
-(wd_id,               wd_name,                  wd_type, wd_category_id, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('ec_product_header', 'Eコマース-商品ヘッダ', 'ECHD',  'commerce',     '1.0.0',  '',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Eコマース商品メニューと連携するウィジェットです。商品メニュー選択時に商品ヘッダコンテンツを表示します。',    true,         true,        false,        false,               false,true,           0, 1, 2, now(), now());
+(wd_id,               wd_name,                wd_category_id, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('ec_product_header', 'Eコマース-商品ヘッダ', 'commerce',     '1.0.0',  '',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Eコマース商品メニューと連携するウィジェットです。商品メニュー選択時に商品ヘッダコンテンツを表示します。',    true,         true,        false,        false,               false,true,           0, 1, 2, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ec_product_display2';
 INSERT INTO _widgets
 (wd_id,                 wd_name,                     wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                               wd_has_admin, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('ec_product_display2', 'Eコマース-新着おすすめ2', 'commerce',     '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '商品のおすすめや新着などの一覧を表示する。', true,                       true,true,  0,         1, 1, '2013-1-15', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ec_search_box';
 INSERT INTO _widgets
-(wd_id,           wd_name,            wd_type, wd_category_id, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('ec_search_box', 'Eコマース-検索', 'ECSR',  'commerce',     '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Eコマース商品検索ボックス。',     true,         true,        false,         false,               false,true,               0, 1, -1, now(),    now());
+(wd_id,           wd_name,          wd_category_id, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('ec_search_box', 'Eコマース-検索', 'commerce',     '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Eコマース商品検索ボックス。',     true,         true,        false,         false,               false,true,               0, 1, -1, now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'ec_product_random';
 INSERT INTO _widgets
 (wd_id,               wd_name,                        wd_category_id, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -217,12 +217,12 @@ INSERT INTO _widgets
 ('calendar', '汎用カレンダー', 'calendar',      'subcontent',   true,            '2.2.0',   '2.10.7',            'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '様々な情報をカレンダー表示する汎用カレンダー', 'jquery.fullcalendar,jquery.qtip',                'datetype_detail=jquery.tablednd,jquery.timepicker;date_detail=jquery-ui.datepicker,jquery-ui.dialog,jquery.timepicker,jquery.tablednd,jquery.json;event_detail=ckeditor_m3toolbar;',   true,                true, true,         true,                true,  '2015-05-24', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'news_headline';
 INSERT INTO _widgets
-(wd_id,      wd_name,         wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_has_rss, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('news_headline', '新着情報-ヘッドライン', 1,         'news',          'subcontent',   true,            'news_main',          '1.1.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトの最新情報をリスト表示する。', '',                '',                 true,  false, true,      true,                true,  '2018-01-15', now(),         now());
+(wd_id,      wd_name,                      wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_has_rss, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('news_headline', '新着情報-ヘッドライン', 'news',          'subcontent',   true,            'news_main',          '1.1.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトの最新情報をリスト表示する。', '',                '',                 true,  false, true,      true,                true,  '2018-01-15', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'news_main';
 INSERT INTO _widgets
-(wd_id,          wd_name,           wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('news_main', '新着情報-メイン', 1,         'news',          'subcontent',   true,            '',                   '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '最新情報管理ウィジェット', '',                '',                false,  true,         false,                true,  '2017-02-06', now(),         now());
+(wd_id,       wd_name,           wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('news_main', '新着情報-メイン', 'news',          'subcontent',   true,            '',                   '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '最新情報管理ウィジェット', '',                '',                false,  true,         false,                true,  '2017-02-06', now(),         now());
 -- ウィジェット情報(PC用/検索)
 DELETE FROM _widgets WHERE wd_id = 'custom_search';
 INSERT INTO _widgets
@@ -273,8 +273,9 @@ INSERT INTO _widgets
 ('wiki_update', 'Wiki-更新リスト', 'wiki',     'bootstrap',   '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wikiコンテンツの最新更新リストを表示。', '', '', true,  false,              true, true, '2014-07-20', now(),         now());
 -- ウィジェット情報(PC用/その他)
 DELETE FROM _widgets WHERE wd_id = 'default_footer';
-INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('default_footer',     'デフォルトフッタ',           'DFOT', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'フッタ部分に表示し、著作権の表示を行う。',      true,         true,        false,        false,               false,true,           0, 1, -1, now(), now());
+INSERT INTO _widgets
+(wd_id,            wd_name,            wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('default_footer', 'デフォルトフッタ', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'フッタ部分に表示し、著作権の表示を行う。',      true,         true,        false,        false,               false,true,           0, 1, -1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'custom_header';
 INSERT INTO _widgets
 (wd_id,           wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
@@ -288,8 +289,9 @@ INSERT INTO _widgets
 (wd_id,          wd_name,              wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,               wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('access_count', 'アクセスカウンター', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトのアクセス数を表示。', false,        true,         false,true,           0, 0, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'bbs_login_box';
-INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('bbs_login_box',         '掲示板-ログイン',            'BBML', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, '掲示板の会員ログイン用ボックス。', 'md5',      true,         true,        false,        false,               false,true,               0, 2, -1, now(),    now());
+INSERT INTO _widgets
+(wd_id,           wd_name,           wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('bbs_login_box', '掲示板-ログイン', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, '掲示板の会員ログイン用ボックス。', 'md5',      true,         true,        false,        false,               false,true,               0, 2, -1, now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'contactus';
 INSERT INTO _widgets
 (wd_id,       wd_name,            wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -299,8 +301,9 @@ INSERT INTO _widgets
 (wd_id,    wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,         wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('qrcode', 'QRコード', '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'QRコードを作成表示。', true,         true,        true,         true,                false,               true,           '2015-07-03',  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'reserve_main';
-INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('reserve_main',            '予約-メイン',         'RESM', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, '予約管理のメインプログラム。',       true,         true,        true,         true,               false,true,           0, 0, 2, now(), now());
+INSERT INTO _widgets
+(wd_id,          wd_name,       wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('reserve_main', '予約-メイン', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, '予約管理のメインプログラム。',       true,         true,        true,         true,               false,true,           0, 0, 2, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'phpcode';
 INSERT INTO _widgets
 (wd_id,     wd_name,         wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                  wd_add_script_lib_a,  wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -399,8 +402,8 @@ INSERT INTO _widgets
 ('skyway', 'SkyWay', '0.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                1,         'SkyWayサンプルプログラム', true,        true,         true,                false,               true,           '2018-04-26',  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'repl_chat';
 INSERT INTO _widgets
-(wd_id,       wd_name,                 wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                          wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('repl_chat', 'Repl-AIチャットボット', 'bootstrap',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', true,        true,         true,                true,          true,                true,           '2018-09-08',  now(),         now());
+(wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                          wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('repl_chat', 'Repl-AIチャットボット', 1,         'bootstrap',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', true,        true,         true,                true,          true,                true,           '2018-09-08',  now(),         now());
 
 -- ウィジェット情報(携帯用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'm/menu';
@@ -441,16 +444,16 @@ INSERT INTO _widgets
 -- ウィジェット情報(携帯用/その他)
 DELETE FROM _widgets WHERE wd_id = 'm/contactus';
 INSERT INTO _widgets
-(wd_id,      wd_name,          wd_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
-('m/contactus', '簡易お問い合わせ', 'MCON',  '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'お問い合わせの入力データをメールで送る。', 1,               true,      true,         true,              now(),         now());
+(wd_id,      wd_name,               wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
+('m/contactus', '簡易お問い合わせ', '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'お問い合わせの入力データをメールで送る。', 1,               true,      true,         true,              now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'm/custom_header';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
 ('m/custom_header', 'カスタムヘッダ', '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'ヘッダ部を表示する。', 1,               true,      true,         true,              now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'm/custom_footer';
 INSERT INTO _widgets
-(wd_id,      wd_name,          wd_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
-('m/custom_footer', 'カスタムフッタ', 'MCSF',  '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フッタ部に表示し、著作権等の表示を行う。', 1,              true,      true,         true,              now(),         now());
+(wd_id,      wd_name,                 wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
+('m/custom_footer', 'カスタムフッタ', '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フッタ部に表示し、著作権等の表示を行う。', 1,              true,      true,         true,              now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'm/custom_header';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
