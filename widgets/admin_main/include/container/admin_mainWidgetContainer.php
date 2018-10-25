@@ -339,7 +339,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'install':			// インストール
 						case 'sitelist':		// サイト一覧
 						case 'createconfig':	// 設定ファイル作成
-						case 'test':			// テスト用画面
 							$this->gLaunch->goSubWidget($task);
 							return false;
 						case 'logout':		// ログアウト処理
@@ -357,6 +356,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 									// テストタスクの場合はクラスロード用ディレクトリ追加
 									switch ($taskStart){
 									case self::TASK_TEST:
+										if ($task == 'test') return false;			// 「task」の場合は空画面表示
+										
 										$path = $this->gEnv->getCurrentWidgetContainerPath() . '/' . self::TASK_TEST;
 										$this->gLaunch->addLoadPath($path);
 										break;
