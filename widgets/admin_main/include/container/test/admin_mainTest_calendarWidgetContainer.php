@@ -43,7 +43,7 @@ class admin_mainTest_calendarWidgetContainer extends admin_mainBaseWidgetContain
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_calendar.tmpl.html';
+		return 'test/test_calendar.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

@@ -46,7 +46,7 @@ class admin_mainTest_ckeditorWidgetContainer extends admin_mainBaseWidgetContain
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_ckeditor.tmpl.html';
+		return 'test/test_ckeditor.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

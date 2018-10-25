@@ -64,7 +64,7 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test.tmpl.html';
+		return 'test/test.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

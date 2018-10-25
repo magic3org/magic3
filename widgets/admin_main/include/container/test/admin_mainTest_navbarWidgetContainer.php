@@ -43,7 +43,7 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_navbar.tmpl.html';
+		return 'test/test_navbar.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

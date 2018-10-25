@@ -43,7 +43,7 @@ class admin_mainTest_bootstrapWidgetContainer extends admin_mainBaseWidgetContai
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_bootstrap.tmpl.html';
+		return 'test/test_bootstrap.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

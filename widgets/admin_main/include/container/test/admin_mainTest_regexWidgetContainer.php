@@ -38,7 +38,7 @@ class admin_mainTest_regexWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_regex.tmpl.html';
+		return 'test/test_regex.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

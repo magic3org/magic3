@@ -43,7 +43,7 @@ class admin_mainTest_inputWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_input.tmpl.html';
+		return 'test/test_input.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
