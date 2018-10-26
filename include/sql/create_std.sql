@@ -118,6 +118,7 @@ CREATE TABLE content (
     cn_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル
     cn_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
     cn_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
+	cn_head_others       TEXT                                         NOT NULL,      -- HEADタグその他
     cn_disp_type         SMALLINT       DEFAULT 0                     NOT NULL,      -- 表示タイプ(0=プレーン、1=インナーフレーム)
     cn_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否
     cn_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
@@ -130,12 +131,14 @@ CREATE TABLE content (
     cn_password          CHAR(32)       DEFAULT ''                    NOT NULL,      -- アクセス制限パスワード(MD5)
     cn_search_content    TEXT                                         NOT NULL,      -- 検索用コンテンツ
     cn_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
-	cn_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
+    cn_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
     cn_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
-	cn_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
+    cn_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
     cn_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     cn_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
     cn_related_url       TEXT                                         NOT NULL,      -- 関連URL(「;」区切り)
+    cn_attach_access_key VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 添付ファイルアクセスキー
+    cn_attach_access_url TEXT                                         NOT NULL,      -- 添付ファイルアクセスキー取得用URL
     cn_script_lib        TEXT                                         NOT NULL,      -- 共通スクリプトライブラリ(ライブラリ名で指定、「,」区切りで複数指定可)
     cn_script            TEXT                                         NOT NULL,      -- Javascriptスクリプト
     
@@ -255,7 +258,7 @@ CREATE TABLE blog_id (
     
     bl_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
     bl_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
-	bl_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
+    bl_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
     bl_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル
     bl_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
     bl_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
@@ -287,7 +290,7 @@ CREATE TABLE blog_category (
     bc_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
 
     bc_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
-	bc_html              TEXT                                         NOT NULL,      -- 説明
+    bc_html              TEXT                                         NOT NULL,      -- 説明
     bc_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 親カテゴリID
     bc_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     bc_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
@@ -317,16 +320,16 @@ CREATE TABLE blog_entry (
     be_search_tag        VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 検索用タグ(「,」区切り)
     be_theme_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ブログテーマID(廃止予定)
     be_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
-	be_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
+    be_thumb_src         TEXT                                         NOT NULL,      -- サムネールの元のファイル(リソースディレクトリからの相対パス)
     be_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     be_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
-	be_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
-	be_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
+    be_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
+    be_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
     be_show_comment      BOOLEAN        DEFAULT true                  NOT NULL,      -- コメントを表示するかどうか
     be_receive_comment   BOOLEAN        DEFAULT false                 NOT NULL,      -- コメントの受け付け可否
     be_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
     be_blog_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ブログID
-	be_master_serial     INT            DEFAULT 0                     NOT NULL,      -- 作成元レコードのシリアル番号
+    be_master_serial     INT            DEFAULT 0                     NOT NULL,      -- 作成元レコードのシリアル番号
     be_regist_user_id    INT            DEFAULT 0                     NOT NULL,      -- エントリー作者
     be_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 投稿日時
     be_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ブログ記事更新日時
@@ -509,7 +512,7 @@ CREATE TABLE bbs_member (
 -- BBS投稿ログトラン
 DROP TABLE IF EXISTS bbs_post_log;
 CREATE TABLE bbs_post_log (
-    sl_user_id        	 INT            DEFAULT 0                     NOT NULL,      -- 投稿ユーザID
+    sl_user_id           INT            DEFAULT 0                     NOT NULL,      -- 投稿ユーザID
     sl_count             INT            DEFAULT 0                     NOT NULL,      -- 投稿回数
     sl_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 最終投稿日時
     PRIMARY KEY  (sl_user_id)

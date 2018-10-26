@@ -30,7 +30,8 @@ INSERT INTO content_config
 ('smartphone', 'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3),
 ('',           'use_jquery',      '0', 'jQueryスクリプト作成', 0),
 ('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0),
-('',           'use_content_template',      '0', 'コンテンツ単位のテンプレート設定', 0);
+('',           'use_content_template',      '0', 'コンテンツ単位のテンプレート設定', 0),
+('',           'auto_generate_attach_file_list',      '1', '添付ファイルリストを自動作成');
 
 -- 新着情報設定マスター
 INSERT INTO news_config
@@ -231,6 +232,9 @@ VALUES                 ('regist_user_completed', 'ja',           'ユーザ自�
 DELETE FROM _mail_form WHERE mf_id = 'send_tmp_password';
 INSERT INTO _mail_form (mf_id,           mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
 VALUES                 ('send_tmp_password', 'ja',           '仮パスワード送信', '仮パスワードを送信します。\nこのパスワードでログインし、パスワードを再設定してください。\n\nパスワード　[#PASSWORD#]',                               now());
+DELETE FROM _mail_form WHERE mf_id = 'skyway_call';
+INSERT INTO _mail_form (mf_id,           mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('skyway_call', 'ja',              'SkyWay呼び出し応答用',     'SkyWay呼び出しがありました。以下のURLにアクセスすると応答できます。\n\n[#URL#]',                             now());
 
 -- テンプレート情報
 TRUNCATE TABLE _templates;
@@ -238,13 +242,11 @@ INSERT INTO _templates
 (tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version, tm_info_url) VALUES
 ('_admin',                       '_admin',                         2,       0,              false,     true,             false,        '',           '',         ''),
 ('_system',                       '_system',                       1,       0,              false,     false,            false,        '',           '',         ''),
-('_layout',                       '_layout',                       1,       0,              false,     false,            false,        '',           '',         ''),
-('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         '',           '',         ''),
-('art41_sample2',                 'art41_sample2',                 2,       0,              false,     false,            true,         '',           '',         ''),
+('_layout',                       '_layout',                       99,       0,              false,     false,            false,        '',           '',         ''),
 ('art42_sample3',                 'art42_sample3',                 2,       0,              false,     false,            true,         '',           '',         ''),
-('art42_sample4',                 'art42_sample4',                 2,       0,              false,     false,            true,         '',           '',         ''),
 ('art42_sample5',                 'art42_sample5',                 2,       0,              false,     false,            true,         '',           '',         ''),
 ('themler_sample0',               'themler_sample0',               2,       0,              false,     false,            true,         'themler',    '1.0.220',  ''),
+('themler_old',                   'themler_old',                   2,       0,              false,     false,            true,         'themler',    '1.0.68',   ''),
 ('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         '',           '',         ''),
 ('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         '',           '',         ''),
 ('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         '',           '',         ''),

@@ -427,6 +427,21 @@ CREATE TABLE _access_ip (
     UNIQUE               (ai_type, ai_ip, ai_ip_mask, ai_server_id)
 ) ENGINE=innodb;
 
+-- セッションアクセスキー管理マスター
+DROP TABLE IF EXISTS _session_access_key;
+CREATE TABLE _session_access_key (
+    sk_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    sk_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- アクセスキー
+    sk_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID
+	sk_content_id        VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID。コンテンツがない場合はウィジェット定義ID。
+
+    sk_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- アクセスキータイプ(0=参照,1=発行)
+    sk_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    sk_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    PRIMARY KEY          (sk_serial),
+    UNIQUE               (sk_id, sk_widget_id, sk_content_id)
+) ENGINE=innodb;
+
 -- ナビゲーション項目マスター
 DROP TABLE IF EXISTS _nav_item;
 CREATE TABLE _nav_item (
@@ -444,6 +459,7 @@ CREATE TABLE _nav_item (
     ni_help_body         TEXT                                         NOT NULL,      -- ヘルプ本文
     ni_url               TEXT                                         NOT NULL,      -- リンク先URL
     ni_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
+    ni_hide_option       TEXT                                         NOT NULL,      -- 非表示制御オプション(「,」区切りで指定。値=site_operation(サイト運用モード時))
     PRIMARY KEY          (ni_nav_id,    ni_id)
 ) ENGINE=innodb;
 
@@ -546,8 +562,8 @@ CREATE TABLE _templates (
     tm_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレート名
     tm_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     tm_url               TEXT                                         NOT NULL,      -- 取得先URL
-	tm_info_url          TEXT                                         NOT NULL,      -- テンプレート情報URL
-	tm_custom_params     TEXT                                         NOT NULL,      -- カスタマイズ用パラメータ
+    tm_info_url          TEXT                                         NOT NULL,      -- テンプレート情報URL
+    tm_custom_params     TEXT                                         NOT NULL,      -- カスタマイズ用パラメータ
     tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ(廃止予定)
     tm_editor_param      TEXT                                         NOT NULL,      -- 編集エディタ用パラメータ
     tm_attr              TEXT                                         NOT NULL,      -- その他属性(「,」区切り)(woocommerce等)
@@ -613,7 +629,7 @@ CREATE TABLE _widgets (
     wd_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用ウィジェットかどうか
     wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか
-	wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか
+    wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか
     wd_read_scripts      BOOLEAN        DEFAULT false                 NOT NULL,      -- スクリプトディレクトリを自動読み込みするかどうか(廃止予定)
     wd_read_css          BOOLEAN        DEFAULT false                 NOT NULL,      -- cssディレクトリを自動読み込みするかどうか(廃止予定)
     wd_use_ajax          BOOLEAN        DEFAULT false                 NOT NULL,      -- Ajax共通ライブラリを読み込むかどうか
@@ -641,7 +657,7 @@ CREATE TABLE _widgets (
     wd_admin_class       VARCHAR(200)   DEFAULT ''                    NOT NULL,      -- 管理機能起動クラス名
     wd_db                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 対応DB種(mysql,pgsql等を「,」区切りで指定)
     wd_table_access_type INT            DEFAULT 0                     NOT NULL,      -- テーブルのアクセス範囲(0=テーブル未使用、1=共通テーブルのみ、2=独自テーブル)
-	
+
     wd_checked_out       BOOLEAN        DEFAULT false                 NOT NULL,      -- チェックアウト中かどうか
     wd_checked_out_dt    TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時
     wd_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
@@ -729,8 +745,8 @@ CREATE TABLE _iwidgets (
     iw_admin_file        VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 管理機能起動クラスのファイル名
     iw_admin_class       VARCHAR(200)   DEFAULT ''                    NOT NULL,      -- 管理機能起動クラス名
     iw_db                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 対応DB種(mysql,pgsql等を「,」区切りで指定)
-	iw_params            TEXT                                         NOT NULL,      -- 追加パラメータ(「;」区切り)
-	
+    iw_params            TEXT                                         NOT NULL,      -- 追加パラメータ(「;」区切り)
+
     iw_checked_out       BOOLEAN        DEFAULT false                 NOT NULL,      -- チェックアウト中かどうか
     iw_checked_out_dt    TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時
     iw_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
@@ -782,11 +798,11 @@ CREATE TABLE _page_id (
     pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイント時使用)
     pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイント時使用)
     pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)(ページID種別がアクセスポイント時使用)
-	pg_function_type     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- システム用機能タイプ
+    pg_function_type     VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- システム用機能タイプ
     pg_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名称
     pg_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     pg_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
-	pg_frontend          BOOLEAN        DEFAULT false                 NOT NULL,      -- フロント画面用かどうか(ページID種別がアクセスポイント時)、pg_analyticsは廃止
+    pg_frontend          BOOLEAN        DEFAULT false                 NOT NULL,      -- フロント画面用かどうか(ページID種別がアクセスポイント時)、pg_analyticsは廃止
     pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がアクセスポイント時使用)
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
@@ -845,6 +861,8 @@ CREATE TABLE _page_def (
     pd_config_id         INT            DEFAULT 0                     NOT NULL,      -- ウィジェット定義ID
     pd_config_name       VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ウィジェット定義名
     pd_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
+    pd_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- コンテンツの種別
+    pd_content_id        TEXT                                         NOT NULL,      -- コンテンツID
     pd_suffix            VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
     pd_title             TEXT                                         NOT NULL,      -- タイトル
     pd_h_tag_level       INT            DEFAULT 0                     NOT NULL,      -- タイトル用のHタグのトップレベル(0=設定なし、0以外=Hタグレベル)
@@ -855,7 +873,7 @@ CREATE TABLE _page_def (
     pd_view_control_type INT            DEFAULT 0                     NOT NULL,      -- 表示出力の制御タイプ(0=常時表示、1=ログイン時のみ表示、2=非ログイン時のみ表示)
     pd_view_page_state   INT            DEFAULT 0                     NOT NULL,      -- ページ状況での表示制御タイプ(0=常時表示、1=トップ時のみ表示)
     pd_view_option       TEXT                                         NOT NULL,      -- 表示オプション
-	pd_visible_condition TEXT                                         NOT NULL,      -- ウィジェット表示条件。「キー=値」の形式でURLクエリーパラメータを指定。複数のクエリーパラメータ条件は「,」で区切り、条件のまとまりは「;」で区切る。
+    pd_visible_condition TEXT                                         NOT NULL,      -- ウィジェット表示条件。「キー=値」の形式でURLクエリーパラメータを指定。複数のクエリーパラメータ条件は「,」で区切り、条件のまとまりは「;」で区切る。
     pd_edit_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 編集状態(0=編集完了、1=編集中)
     pd_top_content       TEXT                                         NOT NULL,      -- 上部コンテンツ
     pd_bottom_content    TEXT                                         NOT NULL,      -- 下部コンテンツ

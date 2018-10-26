@@ -586,7 +586,7 @@ CREATE TABLE product (
     pt_name              VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 商品名称
     pt_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 商品コード
     pt_product_type      SMALLINT       DEFAULT 0                     NOT NULL,      -- 商品タイプ(1=単品商品(親子なし)、2=単品商品(親子)、10=セット商品、20=オプション商品)
-	pt_sell_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 販売状態(0=未設定、1=カート可(一時停止中)、2=販売中、3=販売不可)
+    pt_sell_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 販売状態(0=未設定、1=カート可(一時停止中)、2=販売中、3=販売不可)
     pt_html              TEXT                                         NOT NULL,      -- 商品説明
     pt_description       TEXT                                         NOT NULL,      -- 商品概要
     pt_admin_note        VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 管理者用備考
