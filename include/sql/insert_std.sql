@@ -31,7 +31,7 @@ INSERT INTO content_config
 ('',           'use_jquery',      '0', 'jQueryスクリプト作成', 0),
 ('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0),
 ('',           'use_content_template',      '0', 'コンテンツ単位のテンプレート設定', 0),
-('',           'auto_generate_attach_file_list',      '1', '添付ファイルリストを自動作成');
+('',           'auto_generate_attach_file_list',      '1', '添付ファイルリストを自動作成', 0);
 
 -- 新着情報設定マスター
 INSERT INTO news_config
