@@ -47,6 +47,11 @@ DELETE FROM _widgets WHERE wd_id = 'admin/remotecontent';
 INSERT INTO _widgets
 (wd_id,                 wd_name,                  wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('admin/remotecontent', 'リモート表示コンテンツ', true,     'admin',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       false,        true,           1,               '2016-02-11',  now(),         now());
+-- ウィジェット情報(サーバ連携用)
+DELETE FROM _widgets WHERE wd_id = 'c/updateinfo';
+INSERT INTO _widgets
+(wd_id,          wd_name,    wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,         wd_available, wd_editable, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
+('c/updateinfo', '新着登録(サーバ連携)', true,     '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サーバ連携で新着情報を登録する。', false,        false,       false,        true,           now(),         now());
 
 -- ウィジェット情報(PC用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';
@@ -342,8 +347,8 @@ INSERT INTO _widgets
 ('gotop', '上へ参ります', '2.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '画面トップへ移動', 'jquery',          'elfinder',                  true,         true,        true,        false,               false,               true,           1,             -1, '2016-08-02', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'portal_updateinfo';
 INSERT INTO _widgets
-(wd_id,              wd_name,                          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_install_dt, wd_create_dt) VALUES
-('portal_updateinfo', 'コンテンツ更新情報(ポータル用)', '1.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'テナントサーバのコンテンツ更新情報を表示', true,         false,               false,                true, 0,          0, true, now(),         now());
+(wd_id,               wd_name,                          wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description, wd_available, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_install_dt, wd_create_dt) VALUES
+('portal_updateinfo', 'コンテンツ更新情報(ポータル用)', '1.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'テナントサーバのコンテンツ更新情報を表示', false, true,         false,               false,                true, 0,          0, true, now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'bbs_2ch_main';
 INSERT INTO _widgets
 (wd_id,          wd_name,                  wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,  wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
@@ -402,8 +407,8 @@ INSERT INTO _widgets
 ('skyway', 'SkyWay', '0.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                1,         'SkyWayサンプルプログラム', true,        true,         true,                false,               true,           '2018-04-26',  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'repl_chat';
 INSERT INTO _widgets
-(wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                          wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('repl_chat', 'Repl-AIチャットボット', 1,         'bootstrap',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', true,        true,         true,                true,          true,                true,           '2018-09-08',  now(),         now());
+(wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                            wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('repl_chat', 'Repl-AIチャットボット', 1,         'bootstrap',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', false,        true,        true,         true,                true,          true,                true,           '2018-09-08',  now(),         now());
 
 -- ウィジェット情報(携帯用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'm/menu';
@@ -592,9 +597,3 @@ DELETE FROM _widgets WHERE wd_id = 's/lang_changer';
 INSERT INTO _widgets
 (wd_id,          wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('s/lang_changer', '言語変更', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '表示言語変更', 2, '',          '',         false,        false,               false,true,           1, -1, '2012-05-21', now(), now());
-
--- ウィジェット情報(サーバ連携用)
-DELETE FROM _widgets WHERE wd_id = 'c/updateinfo';
-INSERT INTO _widgets
-(wd_id,          wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,         wd_available, wd_editable, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
-('c/updateinfo', '新着登録', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '新着情報を登録する。', false,        false,       false,        true,           now(),         now());
