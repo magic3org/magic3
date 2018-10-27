@@ -178,11 +178,7 @@ class luis_chatWidgetContainer extends BaseWidgetContainer
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			return;
 		}
-		$content = 'こんにちは、平田です。';
-//		$content = 'hello';
-//		$uri = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/f7a4c43e-3e86-4866-a7f6-77513ebe4e00?subscription-key=293cb3ff7a25430c8b0d52b2417297b7&timezoneOffset=-360&q=';
-		$uri = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/f7a4c43e-3e86-4866-a7f6-77513ebe4e00?timezoneOffset=-360&q='. urlencode($content);
-		$key = '293cb3ff7a25430c8b0d52b2417297b7';
+
 		
 //		$result = self::SendPost($uri, $key, $content);
 		$result = self::SendGet($uri, $key);
