@@ -1,0 +1,154 @@
+#repl_chat{
+  width: 300px;
+  position: fixed;
+  right:50px;
+  bottom:-350px;
+  background-color: #FFFFFF;
+}
+.first-section:hover{
+  cursor: pointer;
+}
+#repl_chat.open-chat{
+  bottom:0px;
+  transition:1s;
+}
+.border-chat{
+  border:1px solid #FD8468;
+  margin: 0px;
+}
+.first-section{
+  background-color:#FD8468;
+}
+.first-section p{
+  color:#fff;
+  margin:0px;
+  padding: 10px 0px;
+}
+.first-section p:hover{
+  color:#fff;
+  cursor: pointer;
+}
+.right-first-section{
+   text-align: right;
+}
+.right-first-section i{
+  color:#fff;
+  font-size: 15px;
+  padding: 12px 3px;
+}
+.right-first-section i:hover{
+  color:#fff;
+}
+.chat-section ul li{
+  list-style: none;
+  margin-top:10px;
+  position: relative;
+}
+.chat-section{
+  overflow-y:scroll;
+  height:300px;
+}
+.chat-section ul{
+  padding: 0px;
+}
+.left-chat img,.right-chat img{
+  width:50px;
+  height:50px;
+  float:left;
+  margin:0px 10px;
+}
+.right-chat img{
+  float:right;
+}
+#repl_chat .second-section{
+  padding: 0px;
+  margin: 0px;
+  background-color: #F3F3F3;
+  height: 300px;
+}
+.left-chat,.right-chat{
+  overflow: hidden;
+}
+.left-chat p,.right-chat p{
+  background-color:#FD8468;
+  padding: 10px;
+  color:#fff;
+  border-radius: 5px; 
+  float:left;
+  width:70%;
+  margin-bottom:5px;
+}
+.left-chat span,.right-chat span{
+  position: absolute;
+  left:70px;
+  top:60px;
+  color:#B7BCC5;
+  margin-top: 5px;
+}
+.right-chat span{
+  left:15px;
+}
+.right-chat p{
+  float:right;
+  background-color: #FFFFFF;
+  color:#FD8468;
+}
+.third-section {
+  width:100%;
+  margin-top:-1px;
+  border-top: 1px solid #EEEEEE;
+}
+.text-bar input{
+  width:100%;
+  padding:10px 10px;
+  border:1px solid #fff;
+}
+/*.text-bar a i{*/
+.text-bar-icon a i{
+  background-color:#FD8468;
+  color:#fff;
+  width:30px;
+  height:30px;
+  padding:7px 0px;
+  margin-top: 8px;
+  border-radius: 50%;
+  text-align: center;
+  
+  position: absolute;
+  right:0px;
+  bottom:10px;
+}
+.left-chat:before{
+  content: " ";
+  position:absolute;
+  top:0px;
+  left:55px;
+  bottom:150px;
+  border:15px solid transparent;
+  border-top-color:#FD8468; 
+}
+.right-chat:before{
+  content: " ";
+  position:absolute;
+  top:0px;
+  right:55px;
+  bottom:150px;
+  border:15px solid transparent;
+  border-top-color:#fff; 
+}
+/* プレースホルダー */
+input:focus:placeholder-shown {
+color: transparent;
+}
+input:focus::-webkit-input-placeholder {
+color: transparent;
+}
+input:focus::-moz-placeholder {
+color: transparent;
+}
+input:focus:-ms-input-placeholder {
+color: transparent;
+}
+input:focus::-ms-input-placeholder {
+color: transparent;
+}

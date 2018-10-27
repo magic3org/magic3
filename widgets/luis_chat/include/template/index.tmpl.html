@@ -1,0 +1,156 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// FontAwesomeのクラスが未定義の場合は動的にCSSを読み込む
+	var faSpan = $('<span class="fa" style="display:none"></span>').appendTo('body');
+	var fontFamily = faSpan .css('font-family');
+	if (fontFamily.indexOf('Font Awesome') == -1){
+		var style = '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">';
+		$('head link:last').after(style);
+	}
+	faSpan.remove();
+
+	var initCompleted = false;		// 初期化状態
+	var html = '';
+	html += '<div id="repl_chat">';
+	html += '<div class="row border-chat">';
+	html += '<div class="col-md-12 col-sm-12 col-xs-12 first-section">';
+	html += '<div class="row">';
+	html += '<div class="col-md-8 col-sm-6 col-xs-6 left-first-section">';
+	html += '<p>Chat</p>';
+	html += '</div>';
+	html += '<div class="col-md-4 col-sm-6 col-xs-6 right-first-section">';
+	html += '<a href="javascript:void(0);" id="chat_open_panel"><i class="fa fa-minus" aria-hidden="true"></i></a>';
+	html += '</div>';
+	html += '</div>';
+	html += '</div>';
+	html += '</div>';
+	html += '<div class="row border-chat">';
+	html += '<div class="col-md-12 col-sm-12 col-xs-12 second-section">';
+	html += '<div id="chat-section" class="chat-section">';
+	html += '<ul id="chat_body">';
+	html += '</ul>';
+	html += '</div>';
+	html += '</div>';
+	html += '</div>';
+	html += '<div class="row border-chat">';
+	html += '<div class="third-section text-bar">';
+	html += '<form action="#" method="post" id="chat_form">';
+	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
+	html += '<input type="text" id="chat_message" placeholder="メッセージをどうぞ">';
+	html += '</form>';
+	html += '</div>';
+	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
+	html += '</div>';
+	html += '</div>';
+	$("body").append(html);
+
+	// チャット初期処理
+	function init()
+	{
+		if (initCompleted) return;		// 初期化状態
+
+		// チャット初期化
+		m3_ajax_request('repl_chat', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
+			// 返答メッセージを表示
+			if (jsondata.message){
+				if (jsondata.message != ''){
+					var messageHtml = '';
+					messageHtml += '<li>';
+					messageHtml += '<div class="left-chat">';
+					messageHtml += '<img src="{BOT_AVATAR}">';
+					messageHtml += '<p>' + jsondata.message + '</p>';
+					//messageHtml += '<span>2 min</span>
+					messageHtml += '</div>';
+					messageHtml += '</li>';
+					$("#chat_body").append(messageHtml);
+					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
+				}
+			}
+			initCompleted = true;			// 初期化終了
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+	
+	// メッセージ送信
+	function send()
+	{
+		var message = $('#chat_message').val();
+		if (message == '') return;
+		
+		var messageHtml = '';
+		messageHtml += '<li>';
+		messageHtml += '<div class="right-chat">';
+		messageHtml += '<img src="{GUEST_AVATAR}">';
+		messageHtml += '<p>' + message + '</p>';
+		//messageHtml += '<span>2 min</span>';
+		messageHtml += '</div>';
+		messageHtml += '</li>';
+		$("#chat_body").append(messageHtml);
+		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
+					
+		m3_ajax_request('repl_chat', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
+			// 返答メッセージを表示
+			if (jsondata.message){
+				if (jsondata.message != ''){
+					messageHtml = '';
+					messageHtml += '<li>';
+					messageHtml += '<div class="left-chat">';
+					messageHtml += '<img src="{BOT_AVATAR}">';
+					messageHtml += '<p>' + jsondata.message + '</p>';
+					//messageHtml += '<span>2 min</span>
+					messageHtml += '</div>';
+					messageHtml += '</li>';
+					$("#chat_body").append(messageHtml);
+					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'slow');
+				}
+			}
+			$('#chat_message').val('');
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+		
+	$(".left-first-section").click(function(){
+		init();
+		$('#repl_chat').toggleClass("open-chat");
+	});
+	$("#chat_open_panel").click(function(){
+		init();
+		$('#repl_chat').toggleClass("open-chat");
+	});
+	
+	// メッセージ送信処理
+	$("#chat_sendmessage").click(function(){
+		send();
+	});
+	$('#chat_form').submit(function(){
+		send();
+		return false;			// SUBMITは行わない
+	});
+	
+<patTemplate:tmpl name="show_panel_open" visibility="hidden">
+	// パネルオープンでの初期化
+	$('#repl_chat').toggleClass("open-chat");
+	
+	// チャット開始
+	init();
+</patTemplate:tmpl>
+});
+//]]>
+</script>
+</patTemplate:tmpl>
