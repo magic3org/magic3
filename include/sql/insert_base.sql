@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2018052101',               'DBバージョン'),
+('db_version',                  '2018070701',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_no',                   '-1',                       'サーバ管理No'),
 ('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
@@ -57,7 +57,8 @@ INSERT INTO _system_config
 ('access_in_intranet',          '0',                        'イントラネット運用'),
 ('site_operation_mode',         '0',                        'サイト運用モード'),
 ('multi_device_admin',          '0',                        'マルチデバイス最適化管理画面'),
-('default_menu_def_type',       '1',                        'デフォルトのメニュー定義画面タイプ'),  -- 0=多階層,1=単階層
+('default_menu_def_type',       '1',                        'デフォルトのメニュー定義画面タイプ'),  -- 0=多階層,1=単階層(廃止予定)
+('site_menu_hier',              '1',                        'サイトのメニューを階層化するかどうか'),
 ('default_template',            'art42_sample5',            'PCフロント画面用デフォルトテンプレート'),
 ('admin_default_template',      '_admin',                   '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
@@ -267,7 +268,7 @@ INSERT INTO _page_info
 -- ページ定義マスター
 INSERT INTO _page_def
 (pd_id,         pd_sub_id,      pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_visible, pd_editable, pd_title_visible, pd_visible_condition) VALUES
-('admin_index', '',             'top',          1,        'admin_menu',         0,            true,       false,       false,            ''),
+('admin_index', '',             'top',          1,        'admin_menu',          0,            true,       false,       false,            ''),
 ('admin_index', 'front',        'top',          2,        'admin/message',       0,            true,       false,       false,            ''),
 ('admin_index', 'front',        'main',         1,        'admin_main',          0,            true,       false,       false,            ''),
 ('admin_index', 'front',        'main',         2,        'admin/analytics',     0,            true,       true,        false,            ''),
@@ -275,8 +276,7 @@ INSERT INTO _page_def
 ('admin_index', 'front',        'left',         1,        'admin/loginuser',     0,            true,       true,        true,             ''),
 ('admin_index', 'content',      'main',         1,        'admin_main',          0,            true,       false,       false,            ''),
 ('admin_index', 'content',      'left',         1,        'admin/remotecontent', 0,            true,       true,        true,             'task=dummy'),
-('admin_index', 'content',      'right',        1,        'admin/remotecontent', 0,            true,       true,        true,             'task=help'),
-('connector',   'content',      'main',         1,        'c/updateinfo',        0,            true,       false,       true,             '');
+('admin_index', 'content',      'right',        1,        'admin/remotecontent', 0,            true,       true,        true,             'task=help');
 
 -- サイト定義マスター
 INSERT INTO _site_def

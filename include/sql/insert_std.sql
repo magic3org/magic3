@@ -239,29 +239,30 @@ VALUES                 ('skyway_call', 'ja',              'SkyWay呼び出し応
 -- テンプレート情報
 TRUNCATE TABLE _templates;
 INSERT INTO _templates
-(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version, tm_info_url) VALUES
-('_admin',                       '_admin',                         2,       0,              false,     true,             false,        '',           '',         ''),
-('_system',                       '_system',                       1,       0,              false,     false,            false,        '',           '',         ''),
-('_layout',                       '_layout',                       99,       0,              false,     false,            false,        '',           '',         ''),
-('art42_sample3',                 'art42_sample3',                 2,       0,              false,     false,            true,         '',           '',         ''),
-('art42_sample5',                 'art42_sample5',                 2,       0,              false,     false,            true,         '',           '',         ''),
-('themler_sample0',               'themler_sample0',               2,       0,              false,     false,            true,         'themler',    '1.0.220',  ''),
-('themler_old',                   'themler_old',                   2,       0,              false,     false,            true,         'themler',    '1.0.68',   ''),
-('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         '',           '',         ''),
-('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         '',           '',         ''),
-('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         '',           '',         ''),
-('bootstrap_cerulean_head',       'bootstrap_cerulean_head',       10,      0,              false,     true,             true,         '',           '',         ''),
-('bs_honoka3',                    'bs_honoka3',                    10,      0,              false,     true,             true,         '',           '',         'http://honokak.osaka/'),
-('bs_single_gray',                'bs_single_gray',                10,      0,              false,     true,             true,         '',           '',         'https://startbootstrap.com/template-overviews/grayscale/'),
-('bs_single_orange',              'bs_single_orange',              10,      0,              false,     true,             true,         '',           '',         'https://startbootstrap.com/template-overviews/creative/'),
-('wisteria',                      'wisteria',                      100,     0,              false,     false,            true,         '',           '',         'https://wpfriendship.com/'),
-('shop-isle',                     'shop-isle',                     100,     0,              false,     false,            true,         '',           '',         'https://themeisle.com/'),
-('m/default',                     'm/default',                     0,       1,              true,      false,            true,         '',           '',         ''),
-('m/smallfont',                   'm/smallfont',                   0,       1,              true,      false,            true,         '',           '',         ''),
-('s/default_simple',              's/default_simple',              1,       2,              false,     false,            true,         '',           '',         ''),
-('s/default_jquery',              's/default_jquery',              1,       2,              false,     false,            true,         '',           '',         ''),
-('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     false,            true,         '',           '',         ''),
-('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     false,            true,         '',           '',         '');
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_has_admin, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version, tm_info_url) VALUES
+('_admin',                       '_admin',                         2,       0,              false,        false,     true,             false,        '',           '',         ''),
+('_system',                       '_system',                       1,       0,              false,        false,     false,            false,        '',           '',         ''),
+('_layout',                       '_layout',                       99,      0,              false,        false,     false,            false,        '',           '',         ''),
+('art42_sample3',                 'art42_sample3',                 2,       0,              false,        false,     false,            true,         '',           '',         ''),
+('art42_sample5',                 'art42_sample5',                 2,       0,              false,        false,     false,            true,         '',           '',         ''),
+('themler_sample0',               'themler_sample0',               2,       0,              false,        false,     false,            true,         'themler',    '1.0.220',  ''),
+('themler_old',                   'themler_old',                   2,       0,              false,        false,     false,            true,         'themler',    '1.0.68',   ''),
+('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,        false,     true,             true,         '',           '',         ''),
+('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,        false,     true,             true,         '',           '',         ''),
+('bootstrap_united',              'bootstrap_united',              10,      0,              false,        false,     true,             true,         '',           '',         ''),
+('bootstrap_cerulean_head',       'bootstrap_cerulean_head',       10,      0,              false,        false,     true,             true,         '',           '',         ''),
+('bootstrap4_custom',             'bootstrap4_custom',             11,      0,              true,         false,     true,             true,         '',           '',         ''),
+('bs_honoka3',                    'bs_honoka3',                    10,      0,              false,        false,     true,             true,         '',           '',         'http://honokak.osaka/'),
+('bs_single_gray',                'bs_single_gray',                10,      0,              false,        false,     true,             true,         '',           '',         'https://startbootstrap.com/template-overviews/grayscale/'),
+('bs_single_orange',              'bs_single_orange',              10,      0,              false,        false,     true,             true,         '',           '',         'https://startbootstrap.com/template-overviews/creative/'),
+('wisteria',                      'wisteria',                      100,     0,              false,        false,     false,            true,         '',           '',         'https://wpfriendship.com/'),
+('shop-isle',                     'shop-isle',                     100,     0,              false,        false,     false,            true,         '',           '',         'https://themeisle.com/'),
+('m/default',                     'm/default',                     0,       1,              false,        true,      false,            true,         '',           '',         ''),
+('m/smallfont',                   'm/smallfont',                   0,       1,              false,        true,      false,            true,         '',           '',         ''),
+('s/default_simple',              's/default_simple',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
+('s/default_jquery',              's/default_jquery',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
+('s/default_jquery13',           's/default_jquery13',             1,       2,              false,        false,     false,            true,         '',           '',         ''),
+('s/art42_sample2',               's/art42_sample2',               1,       2,              false,        false,     false,            true,         '',           '',         '');
 
 -- メニューIDマスター
 INSERT INTO _menu_id

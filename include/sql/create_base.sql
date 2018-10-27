@@ -570,6 +570,7 @@ CREATE TABLE _templates (
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
+	tm_has_admin         BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理画面があるかどうか
     tm_clean_type        INT            DEFAULT 0                     NOT NULL,      -- 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)
     
     tm_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
