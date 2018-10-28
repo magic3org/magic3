@@ -42,10 +42,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const PC_ICON_FILE = '/images/system/device/pc.png';		// PCアイコン
 	const SMARTPHONE_ICON_FILE = '/images/system/device/smartphone.png';		// スマートフォンアイコン
-	const MOBILE_ICON_FILE = '/images/system/device/mobile.png';		// 携帯アイコン
 	const PC_CLOSED_ICON_FILE = '/images/system/device/pc_closed.png';		// PCアイコン(非公開)
 	const SMARTPHONE_CLOSED_ICON_FILE = '/images/system/device/smartphone_closed.png';		// スマートフォンアイコン(非公開)
-	const MOBILE_CLOSED_ICON_FILE = '/images/system/device/mobile_closed.png';		// 携帯アイコン(非公開)
 	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
 	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
 	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
@@ -75,7 +73,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
 	const CF_SITE_PC_IN_PUBLIC		= 'site_pc_in_public';				// PC用サイトの公開状況
-	const CF_SITE_MOBILE_IN_PUBLIC	= 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
@@ -137,7 +134,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 
 			$siteInPublic			= $this->gSystem->siteInPublic();			// サイト全体の公開状況
 			$sitePcInPublic			= $this->gSystem->sitePcInPublic();			// PC用サイトの公開状況
-			$siteMobileInPublic		= $this->gSystem->siteMobileInPublic();		// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic();	// スマートフォン用サイトの公開状況
 			
 			switch ($deviceType){
@@ -149,29 +145,11 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 							$this->_db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 1);		// サイト運用開始
 							
 							$this->_db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, 1);	// PCサイト公開
-							$this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, 0);	// 携帯サイト公開
 							$this->_db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, 0);	// スマートフォンサイト公開
 						}
 					} else {
 						if ($siteInPublic){		// 全サイト公開のとき
 							$this->_db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, 0);	// PCサイト非公開
-						}
-					}
-					break;
-				case 1:			// 携帯用画面のとき
-					if ($isOpen){
-						if ($siteInPublic){		// 全サイト公開のとき
-							$this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, 1);	// 携帯サイト公開
-						} else {
-							$this->_db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 1);		// サイト運用開始
-							
-							$this->_db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, 0);	// PCサイト公開
-							$this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, 1);	// 携帯サイト公開
-							$this->_db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, 0);	// スマートフォンサイト公開
-						}
-					} else {
-						if ($siteInPublic){		// 全サイト公開のとき
-							$this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, 0);	// 携帯サイト非公開
 						}
 					}
 					break;
@@ -183,7 +161,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 							$this->_db->updateSystemConfig(self::CF_SITE_IN_PUBLIC, 1);		// サイト運用開始
 							
 							$this->_db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, 0);	// PCサイト公開
-							$this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, 0);	// 携帯サイト公開
 							$this->_db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, 1);	// スマートフォンサイト公開
 						}
 					} else {
@@ -539,7 +516,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		// アクセスポイントごとの公開状況
 		$sitePcInPublic			= $this->gSystem->sitePcInPublic();			// PC用サイトの公開状況
 		$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic();	// スマートフォン用サイトの公開状況
-		$siteMobileInPublic		= $this->gSystem->siteMobileInPublic();		// 携帯用サイトの公開状況
 		
 		// PC用サイトアイコン作成
 		$isActiveSite = $this->gSystem->getSiteActiveStatus(0);		// PC用サイト
@@ -584,30 +560,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$iconTag .= $this->createContentMenu(2, $isVisibleSite);// コンテンツ編集メニュー付加
 			$iconTag .= $this->createMenuDefMenu(2, $isVisibleSite);				// メニュー定義編集メニュー付加
 			$iconTag .= $this->createAccessPointControlMenu(2, $isVisibleSite);				// アクセスポイント公開制御メニュー付加
-			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
-			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '</li>' . M3_NL;
-			$menuTag .= $iconTag;
-		}
-
-		// 携帯用サイトアイコン作成
-		$isActiveSite = $this->gSystem->getSiteActiveStatus(1);		// 携帯用サイト
-		if ($isActiveSite){
-			$iconTitle = '携帯用アクセスポイント';
-			$isVisibleSite = false;		// 公開中かどうか
-			if ($isOpen && $siteMobileInPublic){
-				$iconUrl = $this->gEnv->getRootUrl() . self::MOBILE_ICON_FILE;
-				$isVisibleSite = true;		// 公開中かどうか
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::MOBILE_CLOSED_ICON_FILE;// サイト非公開
-			}
-			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
-        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
-						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="left" data-container="body" title="' . $iconTitle . '" rel="m3help">';
-			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
-        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
-			$iconTag .= $this->createContentMenu(1, $isVisibleSite);			// コンテンツ編集メニュー付加
-			$iconTag .= $this->createMenuDefMenu(1, $isVisibleSite);				// メニュー定義編集メニュー付加
-			$iconTag .= $this->createAccessPointControlMenu(1, $isVisibleSite);				// アクセスポイント公開制御メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '</li>' . M3_NL;
 			$menuTag .= $iconTag;
@@ -733,9 +685,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			case 0:			// PC用画面のとき
 			default:
 				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(0, \'' . $this->gEnv->getDefaultUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
-				break;
-			case 1:			// 携帯用画面のとき
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(1, \'' . $this->gEnv->getDefaultMobileUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
 				break;
 			case 2:			// スマートフォン用画面のとき
 				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(2, \'' . $this->gEnv->getDefaultSmartphoneUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
@@ -883,9 +832,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			case 0:			// PC用画面のとき
 			default:
 				$pageId = $this->gEnv->getDefaultPageId();
-				break;
-			case 1:			// 携帯用画面のとき
-				$pageId = $this->gEnv->getDefaultMobilePageId();
 				break;
 			case 2:			// スマートフォン用画面のとき
 				$pageId = $this->gEnv->getDefaultSmartphonePageId();

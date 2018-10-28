@@ -1280,8 +1280,6 @@ class BaseFrameContainer extends Core
 			// PC用サイト、携帯用サイト、スマートフォン用サイトの公開状況をチェック
 			if ($this->gEnv->getIsPcSite()){
 				if ($this->gSystem->sitePcInPublic()) return true;
-			} else if ($this->gEnv->getIsMobileSite()){
-				if ($this->gSystem->siteMobileInPublic()) return true;
 			} else if ($this->gEnv->getIsSmartphoneSite()){
 				if ($this->gSystem->siteSmartphoneInPublic()) return true;
 			}

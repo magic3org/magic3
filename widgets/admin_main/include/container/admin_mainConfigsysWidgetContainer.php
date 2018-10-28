@@ -35,7 +35,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_USE_SSL_ADMIN = 'use_ssl_admin';		// 管理画面にSSL機能を使用するかどうか
 	const CF_SITE_IN_PUBLIC = 'site_in_public';			// サイト公開状況
 	const CF_SITE_PC_IN_PUBLIC = 'site_pc_in_public';				// PC用サイトの公開状況
-	const CF_SITE_MOBILE_IN_PUBLIC = 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';			// スマートフォンの自動遷移
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
@@ -131,7 +130,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$multiDeviceAdmin = ($request->trimValueOf('item_multi_device_admin') == 'on') ? 1 : 0;// マルチデバイス最適化管理画面
 		$smartphoneAutoRedirect = ($request->trimValueOf('item_smartphone_auto_redirect') == 'on') ? 1 : 0;		// スマートフォンの自動遷移
 		$sitePcInPublic = ($request->trimValueOf('item_site_pc_in_public') == 'on') ? 1 : 0;			// PC用サイトの公開状況
-		$siteMobileInPublic = ($request->trimValueOf('item_site_mobile_in_public') == 'on') ? 1 : 0;	// 携帯用サイトの公開状況
 		$siteSmartphoneInPublic = ($request->trimValueOf('item_site_smartphone_in_public') == 'on') ? 1 : 0;	// スマートフォン用サイトの公開状況
 		$accessInIntranet	= $request->trimCheckedValueOf('item_access_in_intranet');		// イントラネット運用
 		$multiDomain = ($request->trimValueOf('item_multi_domain') == 'on') ? 1 : 0;// マルチドメイン運用
@@ -178,9 +176,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, $sitePcInPublic)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, $siteMobileInPublic)) $isErr = true;
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, $siteSmartphoneInPublic)) $isErr = true;
@@ -283,7 +278,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
 			$workDir = $this->db->getSystemConfig(self::CF_WORK_DIR);
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
-			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);			// マルチドメイン運用
@@ -360,7 +354,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
 			$workDir				= $this->db->getSystemConfig(self::CF_WORK_DIR);
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
-			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);// マルチドメイン運用

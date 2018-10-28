@@ -29,7 +29,6 @@ class SystemManager extends Core
 	private $permitInitSystem;						// システム初期化可能かどうか
 	private $siteInPublic;				// Webサイトの公開状況
 	private $sitePcInPublic;			// PC用サイトの公開状況
-	private $siteMobileInPublic;		// 携帯用サイトの公開状況
 	private $siteSmartphoneInPublic;	// スマートフォン用サイトの公開状況
 	private $smartphoneAutoRedirect;	// スマートフォンの自動遷移
 	private $usePageCache;		// 表示キャッシュ機能を使用するかどうか
@@ -50,7 +49,6 @@ class SystemManager extends Core
 	const CF_REGENERATE_SESSION_ID = 'regenerate_session_id';			// セッションIDを毎回更新するかどうか
 	const CF_SITE_IN_PUBLIC = 'site_in_public';	// Webサイトの公開状況
 	const CF_SITE_PC_IN_PUBLIC = 'site_pc_in_public';				// PC用サイトの公開状況
-	const CF_SITE_MOBILE_IN_PUBLIC = 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
 	const CF_PAGE_CACHE_LIFETIME = 'page_cache_lifetime';		// 画面キャッシュの更新時間(分)
@@ -90,7 +88,6 @@ class SystemManager extends Core
 		$this->permitInitSystem		= false;			// システム初期化可能かどうか
 		$this->siteInPublic = '1';				// Webサイトの公開状況
 		$this->sitePcInPublic = '1';			// PC用サイトの公開状況
-		$this->siteMobileInPublic = '1';		// 携帯用サイトの公開状況
 		$this->siteSmartphoneInPublic = '1';	// スマートフォン用サイトの公開状況
 		$this->smartphoneAutoRedirect = '0';	// スマートフォンの自動遷移
 		$this->usePageCache = '0';		// 表示キャッシュ機能を使用するかどうか
@@ -183,8 +180,6 @@ class SystemManager extends Core
 			if ($this->siteInPublic == '') $this->siteInPublic = '1';		// デフォルトは公開
 			$this->sitePcInPublic		= $this->getSystemConfig(self::CF_SITE_PC_IN_PUBLIC);			// PC用サイトの公開状況
 			if ($this->sitePcInPublic == '') $this->sitePcInPublic = '1';		// デフォルトは公開
-			$this->siteMobileInPublic	= $this->getSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC);	// 携帯用サイトの公開状況
-			if ($this->siteMobileInPublic == '') $this->siteMobileInPublic = '1';		// デフォルトは公開
 			$this->siteSmartphoneInPublic	= $this->getSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC);	// スマートフォン用サイトの公開状況
 			if ($this->siteSmartphoneInPublic == '') $this->siteSmartphoneInPublic = '1';		// デフォルトは公開
 			$this->smartphoneAutoRedirect	= $this->getSystemConfig(self::CF_SMARTPHONE_AUTO_REDIRECT);	// スマートフォンの自動遷移
@@ -553,20 +548,6 @@ class SystemManager extends Core
 			if ($this->sitePcInPublic == '') $this->sitePcInPublic = '1';		// デフォルトは公開
 		}
 		return $this->sitePcInPublic;			// PC用サイトの公開状況
-	}
-	/**
-	 * 携帯用サイトを公開するかどうか
-	 *
-	 * @param bool $reload	再取得するかどうか
-	 * @return bool			true=公開、false=非公開
-	 */
-	public function siteMobileInPublic($reload = false)
-	{
-		if ($reload){
-			$this->siteMobileInPublic	= $this->db->getSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC);	// 携帯用サイトの公開状況
-			if ($this->siteMobileInPublic == '') $this->siteMobileInPublic = '1';		// デフォルトは公開
-		}
-		return $this->siteMobileInPublic;			// 携帯用サイトの公開状況
 	}
 	/**
 	 * スマートフォン用サイトを公開するかどうか
