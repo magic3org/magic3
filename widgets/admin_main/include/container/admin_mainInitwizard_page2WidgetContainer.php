@@ -56,12 +56,10 @@ class admin_mainInitwizard_page2WidgetContainer extends admin_mainInitwizardBase
 		// アクセスポイントの使用状況を取得
 		$siteOpenPc			= $this->isActiveAccessPoint(0/*PC*/);			// PC用サイトの公開状況
 		$siteOpenSmartphone = $this->isActiveAccessPoint(2/*スマートフォン*/);	// スマートフォン用サイトの公開状況
-		$siteOpenMobile		= $this->isActiveAccessPoint(1/*携帯*/);	// 携帯用サイトの公開状況
 		
 		$act = $request->trimValueOf('act');
 		$pageDefaultPc = $request->trimValueOf('page_default_pc');
 		$pageDefaultSmartphone = $request->trimValueOf('page_default_smartphone');
-		$pageDefaultMobile = $request->trimValueOf('page_default_mobile');
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
@@ -71,9 +69,6 @@ class admin_mainInitwizard_page2WidgetContainer extends admin_mainInitwizardBase
 			}
 			if ($siteOpenSmartphone){
 				$this->_db->updateDefaultPageSubId($this->gEnv->getDefaultSmartphonePageId(), $pageDefaultSmartphone);
-			}
-			if ($siteOpenMobile){
-				$this->_db->updateDefaultPageSubId($this->gEnv->getDefaultMobilePageId(), $pageDefaultMobile);
 			}
 			if ($ret){
 				// 次の画面へ遷移
@@ -107,17 +102,6 @@ class admin_mainInitwizard_page2WidgetContainer extends admin_mainInitwizardBase
 			
 			$this->tmpl->setAttribute('page_smartphone', 'visibility', 'visible');		// スマートフォン用アクセスポイント
 			if (!$isFirstAccessPoint) $this->tmpl->addVar("page_smartphone", "offset_class", 'col-lg-offset-3');
-			$isFirstAccessPoint = false;
-		}
-		if ($siteOpenMobile){
-			// デフォルトのページID取得
-			$this->deviceType = 1;
-			$this->defaultPageId = $this->gEnv->getDefaultPageSubIdByPageId($this->gEnv->getDefaultMobilePageId());
-			
-			$this->_mainDb->getPageIdList(array($this, 'pageLoop'), 1/*ページサブIDを指定*/);
-			
-			$this->tmpl->setAttribute('page_mobile', 'visibility', 'visible');		// 携帯用アクセスポイント
-			if (!$isFirstAccessPoint) $this->tmpl->addVar("page_mobile", "offset_class", 'col-lg-offset-3');		
 			$isFirstAccessPoint = false;
 		}
 	}
@@ -177,10 +161,6 @@ class admin_mainInitwizard_page2WidgetContainer extends admin_mainInitwizardBase
 			case 0:		// PC
 				$this->tmpl->addVars('page_list_pc', $row);
 				$this->tmpl->parseTemplate('page_list_pc', 'a');
-				break;
-			case 1:		// 携帯
-				$this->tmpl->addVars('page_list_mobile', $row);
-				$this->tmpl->parseTemplate('page_list_mobile', 'a');
 				break;
 			case 2:		// スマートフォン
 				$this->tmpl->addVars('page_list_smartphone', $row);

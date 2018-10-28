@@ -61,8 +61,6 @@ class admin_mainEditmenuWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// 管理機能ウィジェットの選択可能画面
 		$this->adminPages = array(	array('task' => 'pagedef',				'name' => $this->_('PC Page'),		// PC用画面編集
 																			'desc' => $this->_('Edit page for PC.')),		// PC用Webサイトの画面を作成します。
-									array('task' => 'pagedef_mobile',		'name' => $this->_('Mobile Page'),		// 携帯用画面編集
-																			'desc' => $this->_('Edit page for Mobile.')),		// 携帯用Webサイトの画面を作成します。
 									array('task' => 'pagedef_smartphone',	'name' => $this->_('Smartphone Page'),		// スマートフォン用画面編集
 																			'desc' => $this->_('Edit page for Smartphone.')),		// スマートフォン用Webサイトの画面を作成します。
 									array('task' => 'widgetlist',			'name' => $this->_('Widget Administration'),		// ウィジェット管理

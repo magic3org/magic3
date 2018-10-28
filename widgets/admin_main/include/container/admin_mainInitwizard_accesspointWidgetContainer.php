@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -58,7 +58,6 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		$act = $request->trimValueOf('act');
 		$siteOpenPc			= $request->trimCheckedValueOf('site_open_pc');			// PC用サイトの公開状況
 		$siteOpenSmartphone = $request->trimCheckedValueOf('site_open_smartphone');	// スマートフォン用サイトの公開状況
-		$siteOpenMobile		= $request->trimCheckedValueOf('site_open_mobile');	// 携帯用サイトの公開状況
 	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
@@ -67,10 +66,6 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 			if ($ret){
 				$ret = $this->updateActiveAccessPoint(2/*スマートフォン*/, $siteOpenSmartphone);
 				$this->setMenuItemVisible(2/*スマートフォン*/, $siteOpenSmartphone);
-			}
-			if ($ret){
-				$ret = $this->updateActiveAccessPoint(1/*携帯*/, $siteOpenMobile);
-				$this->setMenuItemVisible(1/*携帯*/, $siteOpenMobile);
 			}
 			if ($ret){
 				// 次の画面へ遷移
@@ -85,12 +80,10 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		if ($reloadData){		// データ再取得のとき
 			$siteOpenPc			= $this->isActiveAccessPoint(0/*PC*/);			// PC用サイトの公開状況
 			$siteOpenSmartphone = $this->isActiveAccessPoint(2/*スマートフォン*/);	// スマートフォン用サイトの公開状況
-			$siteOpenMobile		= $this->isActiveAccessPoint(1/*携帯*/);	// 携帯用サイトの公開状況
 		}
 
 		$this->tmpl->addVar("_widget", "site_open_pc_checked",			$this->convertToCheckedString($siteOpenPc));
 		$this->tmpl->addVar("_widget", "site_open_smartphone_checked",	$this->convertToCheckedString($siteOpenSmartphone));
-		$this->tmpl->addVar("_widget", "site_open_mobile_checked",		$this->convertToCheckedString($siteOpenMobile));
 		$this->tmpl->addVar("_widget", "url_pc",			$this->convertToDispString($this->gEnv->getDefaultUrl()));
 		$this->tmpl->addVar("_widget", "url_smartphone",	$this->convertToDispString($this->gEnv->getDefaultSmartphoneUrl()));
 		$this->tmpl->addVar("_widget", "url_mobile",		$this->convertToDispString($this->gEnv->getDefaultMobileUrl()));
@@ -165,9 +158,6 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 			case 0:		// PC
 			default:
 				$taskId = 'pagedef';
-				break;
-			case 1:		// 携帯
-				$taskId = 'pagedef_mobile';
 				break;
 			case 2:		// スマートフォン
 				$taskId = 'pagedef_smartphone';

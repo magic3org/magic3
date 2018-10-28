@@ -214,7 +214,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 								$task == self::TASK_TEMPGENERATECSS_DETAIL){	// テンプレートCSS生成(詳細)
 						$task = self::TASK_TEMPGENERATECSS;
 					} else if ($task == 'pagedef_detail' ||		// ページ定義詳細
-								$task == 'pagedef_mobile' ||	// 携帯用ページ定義
 								$task == 'pagedef_smartphone'){		// スマートフォン用ページ定義
 						$task = 'pagedef';
 					} else if ($task == 'edittable' ||		// テーブルデータ編集一覧

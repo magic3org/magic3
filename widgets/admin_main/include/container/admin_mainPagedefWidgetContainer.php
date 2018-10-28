@@ -117,9 +117,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$titles = array(self::BREADCRUMB_TITLE);
 		
 		switch ($task){
-			case 'pagedef_mobile':		// 携帯用設定画面のとき
-				$titles[] = self::BREADCRUMB_TITLE_MOBILE;
-				break;
 			case 'pagedef_smartphone':		// スマートフォン用設定画面のとき
 				$titles[] = self::BREADCRUMB_TITLE_SMARTPHONE;
 				break;
@@ -199,9 +196,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$layoutMode = $request->trimValueOf('layoutmode');// テンプレートモード(空=デザインテンプレート,plain=デザインなしテンプレート)
 		if (empty($this->pageId)){
 			switch ($task){
-				case 'pagedef_mobile':		// 携帯用設定画面のとき
-					$this->pageId = $this->gEnv->getDefaultMobilePageId();				// 携帯用デフォルト値取得
-					break;
 				case 'pagedef_smartphone':		// スマートフォン用設定画面のとき
 					$this->pageId = $this->gEnv->getDefaultSmartphonePageId();				// スマートフォン用デフォルト値取得
 					break;
@@ -236,9 +230,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$templateId = $request->trimValueOf('sel_template');		// テンプレートID
 			if (!empty($templateId)){
 				switch ($task){
-					case 'pagedef_mobile':		// 携帯用設定画面のとき
-						$this->gSystem->changeDefaultMobileTemplate($templateId);
-						break;
 					case 'pagedef_smartphone':		// スマートフォン用設定画面のとき
 						$this->gSystem->changeDefaultSmartphoneTemplate($templateId);
 						break;
