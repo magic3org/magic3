@@ -22,13 +22,13 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2018070701',               'DBバージョン'),
+('db_version',                  '2018101201',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_no',                   '-1',                       'サーバ管理No'),
 ('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
 ('realtime_server_port',        '',                         'リアルタイムサーバポート番号'),
 ('server_url',                  '',                         'サーバURL'),
-('system_type',                 '',                         'システム運用タイプ'),
+('system_type',                 '',                         'システム運用タイプ'),  -- serveradmin=サーバ運用
 ('default_lang',                'ja',                       'デフォルト言語'),
 ('multi_language',               '0',                       '多言語対応'),
 ('accept_language',             '',                         'アクセス可能言語'),
@@ -47,6 +47,7 @@ INSERT INTO _system_config
 ('site_pc_in_public',           '1',                        'PC用サイト公開'),
 ('site_mobile_in_public',       '1',                        '携帯用サイト公開'),
 ('site_smartphone_in_public',   '1',                        'スマートフォン用サイト公開'),
+('system_manager_enable_task', 'top,userlist_detail,loginhistory', 'システム運用者が実行可能な管理画面タスク'),
 ('site_access_exception_ip',    '',                         'サイトアクセス制御なしIP'),
 ('toppage_image_path',          '',                         '管理画面トップページ画像パス'),
 ('mobile_encoding',             'SJIS-win',                 '携帯用出力変換エンコード'),
@@ -111,6 +112,7 @@ INSERT INTO _system_config
 ('site_mobile_url',              '',                        '携帯用サイトURL'),
 ('site_smartphone_url',          '',                        'スマートフォン用サイトURL'),
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
+('use_landing_page',             '0',                        'ランディングページ機能を使用するかどうか'),
 ('auto_login',                   '1',                        'フロント画面自動ログイン機能'),
 ('auto_login_admin',             '0',                        '管理画面自動ログイン機能'),
 ('server_tools_user',            '',                         '管理ツールアカウント'),

@@ -90,6 +90,7 @@ CREATE TABLE _operation_log (
     ol_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 実行ウィジェットID(ファイル名)
     ol_method            TEXT                                         NOT NULL,      -- 実行メソッド
     ol_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
+	ol_user_id           INT            DEFAULT 0                     NOT NULL,      -- 記録ユーザID(0=不明)
     ol_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (ol_serial)
 ) ENGINE=innodb;
@@ -274,6 +275,17 @@ CREATE TABLE _login_user_info (
     UNIQUE               (li_id,        li_history_index)
 ) ENGINE=innodb;
 
+-- 個人最適化パラメータトラン
+DROP TABLE IF EXISTS _personalize_param;
+CREATE TABLE _personalize_param (
+    pz_id                CHAR(32)       DEFAULT ''                    NOT NULL,      -- クライアントID
+    
+    pz_param             TEXT                                         NOT NULL,      -- パラメータオブジェクトをシリアライズしたもの
+    pz_update_ip         VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- レコード更新アクセス元IP(IPv6対応)
+    pz_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    PRIMARY KEY          (pz_id)
+) ENGINE=innodb;
+
 -- 自動ログインマスター
 DROP TABLE IF EXISTS _auto_login;
 CREATE TABLE _auto_login (
@@ -363,6 +375,7 @@ CREATE TABLE _access_log (
     al_user_agent        TEXT                                         NOT NULL,      -- アクセスプログラム
     al_accept_language   VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- クライアントの認識可能言語
     al_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
+	al_landing_page_id   VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ランディングページID
     al_is_cmd            BOOLEAN        DEFAULT false                 NOT NULL,      -- コマンド実行かどうか
     al_cookie            BOOLEAN        DEFAULT false                 NOT NULL,      -- クッキーがあるかどうか
     al_crawler           BOOLEAN        DEFAULT false                 NOT NULL,      -- クローラかどうか
@@ -629,7 +642,8 @@ CREATE TABLE _widgets (
     wd_add_css_a         TEXT                                         NOT NULL,      -- (管理機能用)追加CSSファイル(相対パス表記、「,」区切りで複数指定可)
     wd_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用ウィジェットかどうか
     wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
-    wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか
+    wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか(wd_hide_titleと統合?)
+	wd_hide_title        BOOLEAN        DEFAULT false                 NOT NULL,      -- 実稼働時に強制的にタイトルを非表示にするかどうか(廃止予定?)
     wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか
     wd_read_scripts      BOOLEAN        DEFAULT false                 NOT NULL,      -- スクリプトディレクトリを自動読み込みするかどうか(廃止予定)
     wd_read_css          BOOLEAN        DEFAULT false                 NOT NULL,      -- cssディレクトリを自動読み込みするかどうか(廃止予定)
@@ -645,6 +659,7 @@ CREATE TABLE _widgets (
     wd_initialized       BOOLEAN        DEFAULT false                 NOT NULL,      -- 初期化完了かどうか
     wd_use_cache         BOOLEAN        DEFAULT false                 NOT NULL,      -- キャッシュ機能を使用するかどうか
     wd_has_rss           BOOLEAN        DEFAULT false                 NOT NULL,      -- RSS機能があるかどうか
+	wd_personal_mode     BOOLEAN        DEFAULT false                 NOT NULL,      -- パーソナルモード対応かどうか
     wd_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
     wd_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
 --    wd_cache_interval    INT            DEFAULT 0                     NOT NULL,      -- キャッシュの更新時間(分)
@@ -906,6 +921,27 @@ CREATE TABLE _page_def_set (
     ds_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     ds_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     PRIMARY KEY          (ds_id)
+) ENGINE=innodb;
+
+-- ランディングページ情報マスター
+DROP TABLE IF EXISTS _landing_page;
+CREATE TABLE _landing_page (
+    lp_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    lp_id                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ランディングページID
+    lp_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+    
+    lp_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名
+    lp_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 公開可否
+	lp_owner_id          INT            DEFAULT 0                     NOT NULL,      -- ページの所有者ID
+	lp_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ページ作成日時
+	
+    lp_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    lp_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    lp_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    lp_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    lp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (lp_serial),
+    UNIQUE               (lp_id,        lp_history_index)
 ) ENGINE=innodb;
 
 -- キャッシュトラン
