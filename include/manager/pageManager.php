@@ -2490,8 +2490,6 @@ class PageManager extends Core
 									if (empty($curTemplate)){
 										if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
 											$curTemplate = $this->gSystem->defaultTemplateId();
-										} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
-											$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
 										} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
 											$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 										}
@@ -3451,11 +3449,7 @@ class PageManager extends Core
 				$docTypeStr = '<!DOCTYPE html PUBLIC "-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN" "xhtml-basic10-plus.dtd">';
 			}
 		}
-		if ($gEnvManager->getIsMobileSite()){		// 携帯用サイトへのアクセスの場合
-			echo '<?xml version="1.0" encoding="' . $gEnvManager->getMobileCharset() . '" ?>' . M3_NL;
-		} else {
-			echo '<?xml version="1.0" encoding="' . M3_HTML_CHARSET . '" ?>' . M3_NL;
-		}
+		echo '<?xml version="1.0" encoding="' . M3_HTML_CHARSET . '" ?>' . M3_NL;
 		if (empty($docTypeStr)) $docTypeStr = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo $docTypeStr . M3_NL;
 	}
@@ -3502,49 +3496,36 @@ class PageManager extends Core
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		if ($gEnvManager->getIsMobileSite()){		// 携帯サイトの場合
-			// キャラクターセット
-			$headStr .= '<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=' . $gEnvManager->getMobileCharset() . '" />' . M3_NL;
-
-			// キャッシュを保存させない
-			$headStr .= '<meta http-equiv="Pragma" content="no-cache" />' . M3_NL;
-			$headStr .= '<meta http-equiv="Cache-Control" content="no-cache" />' . M3_NL;
-			$headStr .= '<meta http-equiv="Expires" content="-1" />' . M3_NL;
+		if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
+			$this->isHtml5 = true;
+		} else {
+			$tempVer = $gEnvManager->getCurrentTemplateType();		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
+			if (intval($tempVer) >= 2) $this->isHtml5 = true;
+		}
 		
-			// サイト構築エンジン
-			$headStr .= '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;
-		} else {		// PC用サイト、管理用サイト、スマートフォン用サイトのとき
-			if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
-				$this->isHtml5 = true;
+		// キャラクターセット
+		if ($this->isHtml5){
+			$headStr .= '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
+		} else {
+			$headStr .= '<meta http-equiv="content-script-type" content="text/javascript" />' . M3_NL;
+			$headStr .= '<meta http-equiv="content-style-type" content="text/css" />' . M3_NL;
+			$headStr .= '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
+		}
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			// Bootstrapで必要なMETAタグを追加
+			$headStr .= '<meta name="viewport" content="width=device-width, initial-scale=1">' . M3_NL;
+		}
+		
+		// 基準ディレクトリの指定
+		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
+			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
+		
+			if ($gEnvManager->getUseSslAdmin()){
+				$rootUrl = $gEnvManager->getSslRootUrl();
 			} else {
-				$tempVer = $gEnvManager->getCurrentTemplateType();		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
-				if (intval($tempVer) >= 2) $this->isHtml5 = true;
+				$rootUrl = $gEnvManager->getRootUrl();
 			}
-			
-			// キャラクターセット
-			if ($this->isHtml5){
-				$headStr .= '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
-			} else {
-				$headStr .= '<meta http-equiv="content-script-type" content="text/javascript" />' . M3_NL;
-				$headStr .= '<meta http-equiv="content-style-type" content="text/css" />' . M3_NL;
-				$headStr .= '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
-			}
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				// Bootstrapで必要なMETAタグを追加
-				$headStr .= '<meta name="viewport" content="width=device-width, initial-scale=1">' . M3_NL;
-			}
-			
-			// 基準ディレクトリの指定
-			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
-				$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
-			
-				if ($gEnvManager->getUseSslAdmin()){
-					$rootUrl = $gEnvManager->getSslRootUrl();
-				} else {
-					$rootUrl = $gEnvManager->getRootUrl();
-				}
-				$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
-			}
+			$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
 		}
 		return $headStr;
 	}
@@ -5621,8 +5602,6 @@ class PageManager extends Core
 			if (empty($curTemplate)){
 				if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
 					$curTemplate = $this->gSystem->defaultTemplateId();
-				} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
-					$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
 				} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
 					$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 				}
@@ -7554,8 +7533,6 @@ class PageManager extends Core
 		$templateId = '';
 		if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
 			$templateId = $this->gSystem->defaultTemplateId();
-		} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
-			$templateId = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
 		} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
 			$templateId = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 		}

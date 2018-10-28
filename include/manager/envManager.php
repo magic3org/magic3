@@ -61,7 +61,6 @@ class EnvManager extends Core
 	private $canUseDbSession;	// DBセッションが使用できるかどうか
 	private $canUseDb;			// DBが使用可能状態にあるかどうか
 	private $canUseCookie;		// クッキーが使用可能かどうか
-	private $mobileUseSession;	// 携帯でセッション管理を使用するかどうか
 	private $canChangeLang;		// 言語変更可能かどうか
 	private $useSsl;			// SSL機能を使用するかどうか
 	private $useSslAdmin;		// 管理画面にSSL機能を使用するかどうか
@@ -77,7 +76,6 @@ class EnvManager extends Core
 	private $isSmartphoneSite;	// スマートフォン用URLへのアクセスかどうか
 	private $isSubWidget;		// サブウィジェットの起動かどうか
 	private $isServerConnector;	// サーバ接続かどうか
-	private $mobileEncoding;	// 携帯用の入力、出力エンコーディング
 	private $workDir;			// 作業用ディレクトリ
 	private $userAgent = array();	// アクセス端末の情報
 	private $menuAttr = array();		// メニューの表示属性
@@ -98,8 +96,6 @@ class EnvManager extends Core
 	const DEFAULT_CSV_NL_CODE = 'csv_nl_code';		// デフォルトのCSV改行コード
 	const DEFAULT_CSV_FILE_SUFFIX = 'csv_file_suffix';		// デフォルトのCSVファイル拡張子
 	const MULTI_LANGUAGE = 'multi_language';		// 多言語対応かどうか
-	const MOBILE_ENCODING = 'mobile_encoding';		// 携帯用入出力エンコーディング
-	const MOBILE_CHARSET = 'mobile_charset';		// 携帯用HTML上のエンコーディング表記
 	const DEFAULT_THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
 	const CONFIG_ID_WORK_DIR = 'work_dir';			// 作業用ディレクトリ
 	const DEFAULT_PAGE_ID = 'index';					// デフォルトのページID
@@ -111,14 +107,12 @@ class EnvManager extends Core
 	const USER_AGENT_TYPE_MOBILE = 'mobile';			// アクセス端末の種類(携帯)
 	const CF_CSV_DOWNLOAD_ENCODING = 'csv_download_encoding';			// CSVダウンロードエンコーディング
 	const CF_CSV_UPLOAD_ENCODING = 'csv_upload_encoding';			// CSVアップロードエンコーディング
-	const CF_MOBILE_USE_SESSION = 'mobile_use_session';		// 携帯でセッション管理を行うかどうか
 	const CF_USE_SSL = 'use_ssl';		// SSL機能を使用するかどうか
 	const CF_USE_SSL_ADMIN = 'use_ssl_admin';		// 管理画面にSSL機能を使用するかどうか
 	const CF_SSL_URL = 'ssl_root_url';				// SSL用のルートURL
 	const CF_DEFAULT_LANG = 'default_lang';			// デフォルト言語
 	const CF_MULTI_DOMAIN = 'multi_domain';			// マルチドメイン運用かどうか
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
-	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
 	const CF_REALTIME_SERVER_PORT = 'realtime_server_port';		// リアルタイムサーバ用ポート番号
 	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const DEFAULT_SITE_NAME = 'サイト名未設定';		// 管理画面用のデフォルトサイト名
@@ -244,9 +238,6 @@ class EnvManager extends Core
 		$this->useSsl = $this->gSystem->getSystemConfig(self::CF_USE_SSL);		// SSL機能を使用するかどうか
 		$this->useSslAdmin = $this->gSystem->getSystemConfig(self::CF_USE_SSL_ADMIN);		// 管理画面にSSL機能を使用するかどうか
 		$this->sslUrl = $this->gSystem->getSystemConfig(self::CF_SSL_URL);			// SSL用URL
-		$this->mobileEncoding = $this->gSystem->getSystemConfig(self::MOBILE_ENCODING);	// 携帯用の入力、出力エンコーディング
-		$this->mobileCharset = $this->gSystem->getSystemConfig(self::MOBILE_CHARSET);		// 携帯用HTML上のエンコーディング表記
-		$this->mobileUseSession = $this->gSystem->getSystemConfig(self::CF_MOBILE_USE_SESSION);	// 携帯でセッション管理を使用するかどうか
 		$value = $this->gSystem->getSystemConfig(self::CONFIG_ID_WORK_DIR);// 作業用ディレクトリ
 		if (!empty($value)) $this->workDir = $value;
 	}
@@ -262,8 +253,6 @@ class EnvManager extends Core
 			$url = '';
 			if ($this->isSmartphoneSite){
 				$url = $this->gSystem->getSystemConfig(self::CF_SITE_SMARTPHONE_URL);	// スマートフォン用サイトURL
-			} else if ($this->isMobileSite){
-				$url = $this->gSystem->getSystemConfig(self::CF_SITE_MOBILE_URL);		// 携帯用サイトURL
 			}
 			if (!empty($url)) $this->currentDomainRootUrl = $url;
 		}
@@ -789,23 +778,8 @@ class EnvManager extends Core
 	 */
 	public function getDefaultMobileUrl($withMobileParam = false, $withFilename = true)
 	{
-		static $mobileUrl;
-		
-		if ($this->multiDomain){			// マルチドメイン運用の場合
-			if (!isset($mobileUrl)) $mobileUrl = $this->gSystem->getSystemConfig(self::CF_SITE_MOBILE_URL);		// 携帯用サイトURL
-
-			if (empty($mobileUrl)){
-				$url = M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE;
-			} else {
-				$url = $mobileUrl;
-			}
-		} else {
-			$url = M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE;
-		}
+		$url = M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE;
 		if ($withFilename) $url .= '/' . M3_FILENAME_INDEX;
-		if ($withMobileParam){		// 携帯用のパラメータを付加するとき
-			$url = createUrl($url, $this->_getMobileUrlParam());
-		}
 		return $url;
 	}
 	/**
@@ -2433,9 +2407,6 @@ class EnvManager extends Core
 	 */
 	public function createCurrentPageUrlForMobile($addParam = '', $withSessionId = true)
 	{
-		// 携帯用パラメータ取得
-		$param = $this->_getMobileUrlParam($withSessionId);
-		
 		// ページサブID付加
 		$param['sub'] = $this->getCurrentPageSubId();
 
@@ -2555,42 +2526,6 @@ class EnvManager extends Core
 	public function getUseSslAdmin()
 	{
 		return $this->useSslAdmin;
-	}
-	/**
-	 * 携帯用の入出力エンコーディングを設定
-	 *
-	 * @param string		エンコーディング
-	 */
-	public function setMobileEncoding($value)
-	{
-		$this->mobileEncoding = $value;
-	}
-	/**
-	 * 携帯用の入出力エンコーディングを取得
-	 *
-	 * @return string		エンコーディング
-	 */
-	public function getMobileEncoding()
-	{
-		return $this->mobileEncoding;
-	}
-	/**
-	 * 携帯用HTML上のエンコーディング表記を設定
-	 *
-	 * @param string		エンコーディング
-	 */
-	public function setMobileCharset($value)
-	{
-		$this->mobileCharset = $value;
-	}
-	/**
-	 * 携帯用HTML上のエンコーディング表記を取得
-	 *
-	 * @return string		エンコーディング
-	 */
-	public function getMobileCharset()
-	{
-		return $this->mobileCharset;
 	}
 	/**
 	 * DBセッションが使用できるかどうか
@@ -3003,31 +2938,6 @@ class EnvManager extends Core
 			}
 		}
 		return $isSmartphone;
-	}
-	/**
-	 * 携帯用のURLパラメータを取得
-	 *
-	 * @param bool   $withSessionId	セッションIDを付加するかどうか
-	 * @return array				URLパラメータ
-	 */
-	function _getMobileUrlParam($withSessionId = true)
-	{
-		global $gInstanceManager;
-		
-		$param = array();
-		$agent = $gInstanceManager->getMobileAgent();
-		if (method_exists($agent, 'isNonMobile')){
-			if (!$agent->isNonMobile()){			// 携帯端末でのアクセスの場合
-				// ログインしている場合はセッションIDを付加(セッション管理機能が使用可能なときのみ)
-				//if (!empty($this->mobileUseSession) && $this->isCurrentUserLogined()) $param[session_name()] = session_id();
-				// ログイン状況に関わらずセッションIDを付加(セッション管理機能が使用可能なときのみ)
-				if ($withSessionId && !empty($this->mobileUseSession)) $param[session_name()] = session_id();
-					
-				// ドコモ端末の場合はiモードIDを送信させる
-				if ($agent->isDoCoMo()) $param['guid'] = 'ON';
-			}
-		}
-		return $param;
 	}
 	/**
 	 * 管理画面の小画面デバイス最適化を行うかどうか

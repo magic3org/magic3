@@ -26,7 +26,6 @@ class BaseFrameContainer extends Core
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
-//	const CF_MOBILE_AUTO_REDIRECT = 'mobile_auto_redirect';		// 携帯の自動遷移
 	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
 		
 	/**
@@ -276,14 +275,6 @@ class BaseFrameContainer extends Core
 				return;
 			}
 			// #################### URLの遷移 #######################
-			//if ($this->gSystem->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT)){		// 携帯自動遷移を行う場合
-			if ($this->gSystem->mobileAutoRedirect()){		// 携帯自動遷移を行う場合
-				// 携帯のときは携帯用URLへ遷移
-				if ($this->gEnv->isMobile() && !$this->gEnv->getIsMobileSite()){
-					$this->gPage->redirect($this->gEnv->getDefaultMobileUrl(true/*携帯用パラメータ付加*/), true/*遷移時のダイアログ表示を抑止*/);
-					return;
-				}
-			}
 			if ($this->gSystem->smartphoneAutoRedirect()){		// スマートフォン自動遷移を行う場合
 				// スマートフォンのときはスマートフォンURLへ遷移
 				if ($this->gEnv->isSmartphone() && !$this->gEnv->getIsSmartphoneSite()){
@@ -673,26 +664,20 @@ class BaseFrameContainer extends Core
 		$this->gEnv->setCurrentTemplateId($curTemplate, $subTemplateId);
 
 		// テンプレート情報を取得
-		$convType = 0;		// 変換処理タイプ(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
-		if ($this->gEnv->getIsMobileSite()){
-			$convType = -1;		// 携帯サイト用変換
-		} else {
+//		$convType = 0;		// 変換処理タイプ(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+//		if ($this->gEnv->getIsMobileSite()){
+//			$convType = -1;		// 携帯サイト用変換
+//		} else {
 			// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
 			$convType = $this->gEnv->getCurrentTemplateType();
-		}
+//		}
 
 		// バッファリングの準備
 		if (method_exists($this, '_prepareBuffer')) $this->_prepareBuffer($request);
 	
 		// ################### バッファリング開始 ######################
 		// ob_end_flush()までの出力をバッファリングする
-		if ($convType == -1){// 携帯用サイトの場合は出力エンコーディングを変更
-			$mobileEncoding = $this->gEnv->getMobileEncoding();		// 携帯用エンコーディングを取得
-			mb_http_output($mobileEncoding);
-			ob_start("mb_output_handler"); // 出力のバッファリング開始
-		} else {
-			ob_start();
-		}
+		ob_start();
 
 		// サブクラスの前処理を実行
 		if (method_exists($this, '_preBuffer')) $this->_preBuffer($request);
@@ -1133,17 +1118,6 @@ class BaseFrameContainer extends Core
 	
 		// 遅延実行ウィジェットの出力を埋め込む。HTMLヘッダ出力する。
 		$destContents = $this->gPage->lateLaunchWidget($request, $srcContents);
-
-		// 携帯インターフェイスのときのときは、手動変換後、バイナリコード(絵文字等)を埋め込む
-		if ($convType == -1){			// 携帯アクセスポイントの場合
-			// 出力するコードに変換
-			$destContents = mb_convert_encoding($destContents, $mobileEncoding, M3_ENCODING);
-	
-			// コンテンツ変換メソッドがある場合は実行
-			if (method_exists($this, '_convContents')){
-				$destContents = $this->_convContents($destContents);// 絵文字埋め込み処理等
-			}
-		}
 		
 		// ##### CSS生成の場合は、すべてのウィジェット実行後出力を削除する #####
 		if ($cmd == M3_REQUEST_CMD_CSS) $destContents = '';		// CSS生成のとき
@@ -1229,8 +1203,6 @@ class BaseFrameContainer extends Core
 					if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
 						$curTemplate = $this->gSystem->defaultTemplateId();
 						$subTemplateId = $this->gSystem->defaultSubTemplateId();
-					} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
-						$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
 					} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
 						$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 					} else if ($pageId == $this->gEnv->getDefaultAdminPageId() ||		// 管理サイトのとき
@@ -1266,9 +1238,7 @@ class BaseFrameContainer extends Core
 				
 				// セッションにないときはデフォルトを取得
 				if (empty($curTemplate)){
-					if ($this->gEnv->getIsMobileSite()){// 携帯用サイトの場合
-						$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
-					} else if ($this->gEnv->getIsSmartphoneSite()){// スマートフォン用サイトの場合
+					if ($this->gEnv->getIsSmartphoneSite()){// スマートフォン用サイトの場合
 						$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 					} else {
 						$curTemplate = $this->gSystem->defaultTemplateId();

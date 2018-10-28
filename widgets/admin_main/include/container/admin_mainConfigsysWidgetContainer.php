@@ -37,16 +37,13 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SITE_PC_IN_PUBLIC = 'site_pc_in_public';				// PC用サイトの公開状況
 	const CF_SITE_MOBILE_IN_PUBLIC = 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
-	const CF_MOBILE_AUTO_REDIRECT = 'mobile_auto_redirect';					// 携帯の自動遷移
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';			// スマートフォンの自動遷移
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
-	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
 	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
 	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用
 	const CF_MULTI_DOMAIN = 'multi_domain';		// マルチドメイン運用
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか
 	const CF_SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
-	const CF_MOBILE_USE_SESSION = 'mobile_use_session';		// 携帯でセッション管理を行うかどうか
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
 	const CF_USE_TEMPLATE_ID_IN_SESSION = 'use_template_id_in_session';			// セッションにテンプレートIDを保存
 	const CF_SSL_URL = 'ssl_root_url';				// SSL用のルートURL
@@ -128,14 +125,11 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$sslUrl = $request->trimValueOf('item_ssl_url');			// SSL用のURL
 		$connectServerUrl = $request->trimValueOf('item_connect_server_url');			// ポータル接続先URL
 		$siteSmartphoneUrl = $request->trimValueOf('item_site_smartphone_url');		// スマートフォン用サイトURL
-		$siteMobileUrl = $request->trimValueOf('item_site_mobile_url');		// 携帯用サイトURL
 		$usePageCache = ($request->trimValueOf('item_use_page_cache') == 'on') ? 1 : 0;		// 表示キャッシュ機能を使用するかどうか
 		$canChangeTemplate = ($request->trimValueOf('item_can_change_template') == 'on') ? 1 : 0;		// ユーザによるテンプレート変更を許可するかどうか
 		$canDetailConfig = ($request->trimValueOf('item_can_detail_config') == 'on') ? 1 : 0;		// 詳細システム設定が可能かどうか
 		$multiDeviceAdmin = ($request->trimValueOf('item_multi_device_admin') == 'on') ? 1 : 0;// マルチデバイス最適化管理画面
-		$mobileAutoRedirect = ($request->trimValueOf('item_mobile_auto_redirect') == 'on') ? 1 : 0;		// 携帯の自動遷移
 		$smartphoneAutoRedirect = ($request->trimValueOf('item_smartphone_auto_redirect') == 'on') ? 1 : 0;		// スマートフォンの自動遷移
-		$mobileUseSession = ($request->trimValueOf('item_mobile_use_session') == 'on') ? 1 : 0;		// 携帯でセッション管理するかどうか
 		$sitePcInPublic = ($request->trimValueOf('item_site_pc_in_public') == 'on') ? 1 : 0;			// PC用サイトの公開状況
 		$siteMobileInPublic = ($request->trimValueOf('item_site_mobile_in_public') == 'on') ? 1 : 0;	// 携帯用サイトの公開状況
 		$siteSmartphoneInPublic = ($request->trimValueOf('item_site_smartphone_in_public') == 'on') ? 1 : 0;	// スマートフォン用サイトの公開状況
@@ -144,7 +138,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$useLandingPage		= $request->trimCheckedValueOf('item_use_landing_page');	// ランディングページ機能を使用するかどうか
 		$isActiveSitePc = ($request->trimValueOf('item_is_active_site_pc') == 'on') ? 1 : 0;	// PC用サイト有効
 		$isActiveSiteSmartphone = ($request->trimValueOf('item_is_active_site_smartphone') == 'on') ? 1 : 0;	// スマートフォン用サイト有効
-		$isActiveSiteMobile = ($request->trimValueOf('item_is_active_site_mobile') == 'on') ? 1 : 0;	// 携帯用サイト有効
 		$configWindowOpenByTab = ($request->trimValueOf('item_config_window_open_by_tab') == 'on') ? 1 : 0;			// ウィジェット設定画面をタブで開くかどうか
 		$multiLanguage = ($request->trimValueOf('item_multi_language') == 'on') ? 1 : 0;			// 多言語対応
 		$lang = $request->trimValueOf('item_lang');
@@ -181,13 +174,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 				if (!$this->db->updateSystemConfig(self::CF_MULTI_DEVICE_ADMIN, $multiDeviceAdmin)) $isErr = true;// マルチデバイス最適化管理画面
 			}
 			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_MOBILE_AUTO_REDIRECT, $mobileAutoRedirect)) $isErr = true;
-			}
-			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SMARTPHONE_AUTO_REDIRECT, $smartphoneAutoRedirect)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_MOBILE_USE_SESSION, $mobileUseSession)) $isErr = true;// 携帯でセッション管理するかどうか
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, $sitePcInPublic)) $isErr = true;
@@ -214,9 +201,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 				if (!$this->updateActiveAccessPoint(2/*スマートフォン*/, $isActiveSiteSmartphone)) $isErr = true;// スマートフォン用サイト有効
 			}
 			if (!$isErr){
-				if (!$this->updateActiveAccessPoint(1/*携帯*/, $isActiveSiteMobile)) $isErr = true;// 携帯用サイト有効
-			}
-			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE, $configWindowOpenByTab)) $isErr = true;			// ウィジェット設定画面をタブで開くかどうか
 			}
 			if (!$isErr){
@@ -234,10 +218,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				$siteSmartphoneUrl = rtrim($siteSmartphoneUrl, '/');// 最後の「/」を除く
 				if (!$this->db->updateSystemConfig(self::CF_SITE_SMARTPHONE_URL, $siteSmartphoneUrl)) $isErr = true;// スマートフォン用サイトURL
-			}
-			if (!$isErr){
-				$siteMobileUrl = rtrim($siteMobileUrl, '/');// 最後の「/」を除く
-				if (!$this->db->updateSystemConfig(self::CF_SITE_MOBILE_URL, $siteMobileUrl)) $isErr = true;// 携帯用サイトURL
 			}
 			if (!$isErr){
 				$workDir = rtrim($workDir, '/');// 最後の「/」を除く
@@ -300,10 +280,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
 			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
-//			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
-			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
-			$mobileUseSession = $this->db->getSystemConfig(self::CF_MOBILE_USE_SESSION);// 携帯でセッション管理するかどうか
 			$workDir = $this->db->getSystemConfig(self::CF_WORK_DIR);
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
 			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
@@ -313,9 +290,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$useLandingPage		= $this->db->getSystemConfig(self::CF_USE_LANDING_PAGE);// ランディングページ機能を使用するかどうか
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
-			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
 			$siteSmartphoneUrl = $this->db->getSystemConfig(self::CF_SITE_SMARTPHONE_URL);		// スマートフォン用サイトURL
-			$siteMobileUrl = $this->db->getSystemConfig(self::CF_SITE_MOBILE_URL);		// 携帯用サイトURL
 			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
@@ -382,10 +357,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
 			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
-//			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
-			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
-			$mobileUseSession = $this->db->getSystemConfig(self::CF_MOBILE_USE_SESSION);// 携帯でセッション管理するかどうか
 			$workDir				= $this->db->getSystemConfig(self::CF_WORK_DIR);
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
 			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
@@ -395,9 +367,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$useLandingPage		= $this->db->getSystemConfig(self::CF_USE_LANDING_PAGE);// ランディングページ機能を使用するかどうか
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
-			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
 			$siteSmartphoneUrl = $this->db->getSystemConfig(self::CF_SITE_SMARTPHONE_URL);		// スマートフォン用サイトURL
-			$siteMobileUrl = $this->db->getSystemConfig(self::CF_SITE_MOBILE_URL);		// 携帯用サイトURL
 			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
@@ -433,11 +403,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		// サイトURL
 		$this->tmpl->addVar("_widget", "site_url", $this->gEnv->getRootUrl());
 		$this->tmpl->addVar("show_site_pc_open", "pc_access_url", $this->gEnv->getDefaultUrl());
-		$this->tmpl->addVar("show_site_mobile_open", "mobile_access_url", $this->gEnv->getDefaultMobileUrl());
 		$this->tmpl->addVar("show_site_smartphone_open", "smartphone_access_url", $this->gEnv->getDefaultSmartphoneUrl());
 		$this->tmpl->addVar("_widget", "admin_access_url", $this->gEnv->getDefaultAdminUrl());
-		// 携帯画面エンコード
-		$this->tmpl->addVar("show_site_mobile_open", "mobile_encode", $this->gEnv->getMobileEncoding());
 		
 		// サイト運用状況を設定
 		$checked = '';
@@ -454,12 +421,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->setAttribute('show_site_pc_open', 'visibility', 'visible');
 		} else {
 			$this->tmpl->setAttribute('show_site_pc_close', 'visibility', 'visible');
-		}
-		$isActiveSite = $this->gSystem->getSiteActiveStatus(1);		// 携帯用サイト
-		if ($isActiveSite){
-			$this->tmpl->setAttribute('show_site_mobile_open', 'visibility', 'visible');
-		} else {
-			$this->tmpl->setAttribute('show_site_mobile_close', 'visibility', 'visible');
 		}
 		$isActiveSite = $this->gSystem->getSiteActiveStatus(2);		// スマートフォン用サイト
 		if ($isActiveSite){
@@ -489,9 +450,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		if ($sitePcInPublic) $checked = 'checked';
 		$this->tmpl->addVar("show_site_pc_open", "site_pc_in_public", $checked);// PC用サイトの公開状況
 		$checked = '';
-		if ($siteMobileInPublic) $checked = 'checked';
-		$this->tmpl->addVar("show_site_mobile_open", "site_mobile_in_public", $checked);// 携帯用サイトの公開状況
-		$checked = '';
 		if ($siteSmartphoneInPublic) $checked = 'checked';
 		$this->tmpl->addVar("show_site_smartphone_open", "site_smartphone_in_public", $checked);// スマートフォン用サイトの公開状況
 		$this->tmpl->addVar("_widget", "access_in_intranet", $this->convertToCheckedString($accessInIntranet));// イントラネット運用
@@ -505,9 +463,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($isActiveSiteSmartphone) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "is_active_site_smartphone", $checked);// スマートフォン用サイト有効
-		$checked = '';
-		if ($isActiveSiteMobile) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "is_active_site_mobile", $checked);// 携帯用サイト有効
 		$checked = '';
 		if ($useSsl) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "use_ssl", $checked);// SSL機能を使用するかどうか
@@ -543,7 +498,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "root_url", $this->gEnv->getRootUrl());
 		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
 		$this->tmpl->addVar("_widget", "site_smartphone_url", $siteSmartphoneUrl);		// スマートフォン用サイトURL
-		$this->tmpl->addVar("_widget", "site_mobile_url", $siteMobileUrl);		// 携帯用サイトURL
 		
 		// 共有SSL用のURL
 		if (!empty($sslUrl)){
@@ -559,14 +513,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "can_detail_config", $checked);
 		$this->tmpl->addVar("_widget", "multi_device_admin", $this->convertToCheckedString($multiDeviceAdmin));// マルチデバイス最適化管理画面
 		$checked = '';
-		if (!empty($mobileAutoRedirect)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "mobile_auto_redirect", $checked);// 携帯の自動遷移
-		$checked = '';
 		if (!empty($smartphoneAutoRedirect)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "smartphone_auto_redirect", $checked);// スマートフォンの自動遷移
-		$checked = '';
-		if (!empty($mobileUseSession)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "mobile_use_session", $checked);
 		$checked = '';
 		if (!empty($configWindowOpenByTab)) $checked = 'checked'; 			// ウィジェット設定画面をタブで開くかどうか
 		$this->tmpl->addVar("_widget", "config_window_open_by_tab", $checked);

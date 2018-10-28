@@ -32,9 +32,6 @@ class m_indexFrameContainer extends BaseFrameContainer
 	 */
 	function _prepareBuffer($request)
 	{
-		// 携帯の機種に応じて出力エンコーディングを設定する
-		//$encode = 'SJIS';
-		//$this->gEnv->setMobileEncoding($encode);
 	}
 	/**
 	 * ビュー作成の前処理

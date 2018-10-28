@@ -24,7 +24,6 @@ class SystemManager extends Core
 	private $defaultAdminTemplateId;				// 管理画面用テンプレートID
 	private $defaultTemplateId;						// PC用テンプレートID
 	private $defaultSubTemplateId;						// PC用サブテンプレートID
-	private $defaultMobileTemplateId;				// 携帯用テンプレートID
 	private $defaultSmartphoneTemplateId;				// スマートフォン用テンプレートID
 	private $adminDefaultTheme;			// 管理画面用jQueryUIテーマ
 	private $permitInitSystem;						// システム初期化可能かどうか
@@ -32,7 +31,6 @@ class SystemManager extends Core
 	private $sitePcInPublic;			// PC用サイトの公開状況
 	private $siteMobileInPublic;		// 携帯用サイトの公開状況
 	private $siteSmartphoneInPublic;	// スマートフォン用サイトの公開状況
-	private $mobileAutoRedirect;		// 携帯の自動遷移
 	private $smartphoneAutoRedirect;	// スマートフォンの自動遷移
 	private $usePageCache;		// 表示キャッシュ機能を使用するかどうか
 	private $pageCacheLifetime;	// 画面キャッシュの更新時間(分)
@@ -58,13 +56,11 @@ class SystemManager extends Core
 	const CF_PAGE_CACHE_LIFETIME = 'page_cache_lifetime';		// 画面キャッシュの更新時間(分)
 	const CF_DEFAULT_TEMPLATE			= 'default_template';			// システム定義値取得用キー(PC用デフォルトテンプレート)
 	const CF_DEFAULT_SUB_TEMPLATE		= 'default_sub_template';			// システム定義値取得用キー(PC用デフォルトサブテンプレート)
-	const CF_DEFAULT_TEMPLATE_MOBILE	= 'mobile_default_template';	// システム定義値取得用キー(携帯用デフォルトテンプレート)
 	const CF_DEFAULT_TEMPLATE_SMARTPHONE	= 'smartphone_default_template';	// システム定義値取得用キー(スマートフォン用デフォルトテンプレート)
 	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const CF_DEFAULT_THEME = 'default_theme';		// フロント画面用jQueryUIテーマ
 	const CF_ACCEPT_LANGUAGE	= 'accept_language';	// アクセス可能言語
 	const CF_ADMIN_DEFAULT_TEMPLATE = 'admin_default_template';		// 管理用デフォルトテンプレート
-	const CF_MOBILE_AUTO_REDIRECT = 'mobile_auto_redirect';		// 携帯の自動遷移
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';		// スマートフォンの自動遷移
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const DEFAULT_PAGE_CACHE_LIFETIME = 1440;		// デフォルトの画面キャッシュの更新時間(分)。1日ごと。
@@ -89,7 +85,6 @@ class SystemManager extends Core
 		$this->defaultAdminTemplateId = '';				// 管理画面用テンプレートID
 		$this->defaultTemplateId = '';						// PC用テンプレートID
 		$this->defaultSubTemplateId = '';						// PC用サブテンプレートID
-		$this->defaultMobileTemplateId = '';				// 携帯用テンプレートID
 		$this->defaultSmartphoneTemplateId = '';			// スマートフォン用テンプレートID
 		$this->adminDefaultTheme = '';			// 管理画面用jQueryUIテーマ
 		$this->permitInitSystem		= false;			// システム初期化可能かどうか
@@ -97,7 +92,6 @@ class SystemManager extends Core
 		$this->sitePcInPublic = '1';			// PC用サイトの公開状況
 		$this->siteMobileInPublic = '1';		// 携帯用サイトの公開状況
 		$this->siteSmartphoneInPublic = '1';	// スマートフォン用サイトの公開状況
-		$this->mobileAutoRedirect = '0';		// 携帯の自動遷移
 		$this->smartphoneAutoRedirect = '0';	// スマートフォンの自動遷移
 		$this->usePageCache = '0';		// 表示キャッシュ機能を使用するかどうか
 		$this->pageCacheLifetime = self::DEFAULT_PAGE_CACHE_LIFETIME;	// 画面キャッシュの更新時間(分)
@@ -173,7 +167,6 @@ class SystemManager extends Core
 			$this->defaultAdminTemplateId	= $this->getSystemConfig(self::CF_ADMIN_DEFAULT_TEMPLATE);				// 管理画面用テンプレートID
 			$this->defaultTemplateId		= $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE);	// PC用テンプレートID
 			$this->defaultSubTemplateId		= $this->getSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE);						// PC用サブテンプレートID
-			$this->defaultMobileTemplateId	= $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE_MOBILE);// 携帯用テンプレートID
 			$this->defaultSmartphoneTemplateId = $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE);		// スマートフォン用テンプレートID
 			$this->adminDefaultTheme = $this->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);			// 管理画面用jQueryUIテーマ
 			if ($this->getSystemConfig(self::CF_PERMIT_INIT_SYSTEM) == '1'){// システム初期化可能かどうか
@@ -194,8 +187,6 @@ class SystemManager extends Core
 			if ($this->siteMobileInPublic == '') $this->siteMobileInPublic = '1';		// デフォルトは公開
 			$this->siteSmartphoneInPublic	= $this->getSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC);	// スマートフォン用サイトの公開状況
 			if ($this->siteSmartphoneInPublic == '') $this->siteSmartphoneInPublic = '1';		// デフォルトは公開
-			$this->mobileAutoRedirect	= $this->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);	// 携帯の自動遷移
-			if ($this->mobileAutoRedirect == '') $this->mobileAutoRedirect = '0';
 			$this->smartphoneAutoRedirect	= $this->getSystemConfig(self::CF_SMARTPHONE_AUTO_REDIRECT);	// スマートフォンの自動遷移
 			if ($this->smartphoneAutoRedirect == '') $this->smartphoneAutoRedirect = '0';
 			$this->usePageCache	= $this->getSystemConfig(self::CF_USE_PAGE_CACHE);	// 表示キャッシュ機能を使用するかどうか
@@ -357,19 +348,6 @@ class SystemManager extends Core
 		return $this->defaultSubTemplateId;
 	}
 	/**
-	 * 携帯用デフォルトのテンプレートIDを取得
-	 *
-	 * @param bool $reload	再取得するかどうか
-	 * @return string	デフォルトのテンプレートID
-	 */
-	function defaultMobileTemplateId($reload = false)
-	{
-		if ($reload){
-			$this->defaultMobileTemplateId		= $this->db->getSystemConfig(self::CF_DEFAULT_TEMPLATE_MOBILE);
-		}
-		return $this->defaultMobileTemplateId;
-	}
-	/**
 	 * スマートフォン用デフォルトのテンプレートIDを取得
 	 *
 	 * @param bool $reload	再取得するかどうか
@@ -397,20 +375,6 @@ class SystemManager extends Core
 		// データ再取得
 		$this->defaultTemplateId(true);
 		$this->defaultSubTemplateId(true);
-		return $ret;
-	}
-	/**
-	 * 携帯用デフォルトテンプレートの変更
-	 *
-	 * @param string  $templateId	デフォルトテンプレートID
-	 * @return						true=成功、false=失敗
-	 */
-	function changeDefaultMobileTemplate($templateId)
-	{
-		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_TEMPLATE_MOBILE, $templateId);
-		
-		// データ再取得
-		$this->defaultMobileTemplateId(true);
 		return $ret;
 	}
 	/**
@@ -617,20 +581,6 @@ class SystemManager extends Core
 			if ($this->siteSmartphoneInPublic == '') $this->siteSmartphoneInPublic = '1';		// デフォルトは公開
 		}
 		return $this->siteSmartphoneInPublic;			// スマートフォン用サイトの公開状況
-	}
-	/**
-	 * 携帯の自動遷移を行うかどうか
-	 *
-	 * @param bool $reload	再取得するかどうか
-	 * @return bool			true=公開、false=非公開
-	 */
-	public function mobileAutoRedirect($reload = false)
-	{
-		if ($reload){
-			$this->mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);	// 携帯の自動遷移
-			if ($this->mobileAutoRedirect == '') $this->mobileAutoRedirect = '0';
-		}
-		return $this->mobileAutoRedirect;
 	}
 	/**
 	 * スマートフォンの自動遷移を行うかどうか

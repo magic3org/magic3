@@ -641,7 +641,7 @@ CREATE TABLE _widgets (
     wd_add_scripts_a     TEXT                                         NOT NULL,      -- (管理機能用)追加スクリプトファイル(相対パス表記、「,」区切りで複数指定可)
     wd_add_css_a         TEXT                                         NOT NULL,      -- (管理機能用)追加CSSファイル(相対パス表記、「,」区切りで複数指定可)
     wd_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用ウィジェットかどうか
-    wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
+    wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(廃止予定)
     wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか(wd_hide_titleと統合?)
 	wd_hide_title        BOOLEAN        DEFAULT false                 NOT NULL,      -- 実稼働時に強制的にタイトルを非表示にするかどうか(廃止予定?)
     wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか

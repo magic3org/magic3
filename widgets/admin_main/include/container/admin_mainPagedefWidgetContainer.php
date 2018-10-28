@@ -214,14 +214,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		
 		// デフォルトテンプレート取得
 		switch ($task){
-			case 'pagedef_mobile':	// 携帯用設定画面のとき
-				$this->templateId = $this->gSystem->defaultMobileTemplateId();
-				$deviceType = 1;		// デバイスタイプ(携帯)
-				$taskStr = 'pagedef_mobile';
-				$previewWidth = '600px';
-				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_top_border layout_side_border"');		// プレビューエリアにトップとサイドのボーダーラインを付加
-				$this->tmpl->addVar("_widget", "template_normal_disabled", 'disabled');
-				break;
 			case 'pagedef_smartphone':		// スマートフォン用設定画面
 				$this->templateId = $this->gSystem->defaultSmartphoneTemplateId();
 				$deviceType = 2;		// デバイスタイプ(スマートフォン)

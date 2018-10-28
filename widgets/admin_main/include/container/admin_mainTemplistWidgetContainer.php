@@ -462,10 +462,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				$this->defalutTemplate = $this->gSystem->defaultTemplateId();// デフォルトのテンプレート
 				$installDir = $this->gEnv->getTemplatesPath();// テンプレート格納ディレクトリ
 				break;
-			case '1':		// 携帯用テンプレート
-				$this->defalutTemplate = $this->gSystem->defaultMobileTemplateId();// デフォルトのテンプレート
-				$installDir = $this->gEnv->getTemplatesPath() . '/' . M3_DIR_NAME_MOBILE;// テンプレート格納ディレクトリ
-				break;
 			case '2':		// スマートフォン用テンプレート
 				$this->defalutTemplate = $this->gSystem->defaultSmartphoneTemplateId();// デフォルトのテンプレート
 				$installDir = $this->gEnv->getTemplatesPath() . '/' . M3_DIR_NAME_SMARTPHONE;// テンプレート格納ディレクトリ

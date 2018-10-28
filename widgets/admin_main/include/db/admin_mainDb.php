@@ -21,8 +21,6 @@ class admin_mainDb extends BaseDb
 	private $now;		// 現在日時
 	private $userId;		// ログイン中のユーザ
 	private $maxNo;		// 最大管理番号
-//	const CF_DEFAULT_TEMPLATE			= 'default_template';			// システム定義値取得用キー(PC用デフォルトテンプレート)
-//	const CF_DEFAULT_TEMPLATE_MOBILE	= 'mobile_default_template';	// システム定義値取得用キー(携帯用デフォルトテンプレート)
 	
 	// 取得値
 	const CAN_DETAIL_CONFIG = 'permit_detail_config';				// 詳細設定が可能かどうか

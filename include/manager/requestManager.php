@@ -284,52 +284,6 @@ class RequestManager extends Core
 		return preg_replace($search, $replace, $src);
 	}
 	/**
-	 * (携帯用)POST,GETから値を取得(トリミング(前後の空白削除)あり)
-	 *
-	 * POSTまたはGETから値を取得し、トリミング(前後の空白削除)する
-	 * デフォルトでHTMLタグを取り除く
-	 * 携帯用の文字コード変換を行う
-	 *
-	 * @param string $name		キー値
-	 * @param string $default  	値が存在しないときのデフォルト値
-	 * @return string			取得値
-	 */
-	public function mobileTrimValueOf($name, $default = '')
-	{
-		// 携帯用エンコーディングを取得
-		$mobileEncoding = $this->gEnv->getMobileEncoding();
-		
-		// 入力データの文字コードをシステム内部コードに変換する
-		$srcValue = $this->trimValueOf($name, $default);
-		if (is_array($srcValue)){		// 配列の場合
-			$destValue = array();
-			if (function_exists('mb_convert_encoding')){
-				foreach (array_keys($srcValue) as $key){
-					$destValue[] = mb_convert_encoding($srcValue[$key], M3_ENCODING, $mobileEncoding);
-				}
-			}
-		} else {
-			$destValue = '';
-			if (function_exists('mb_convert_encoding')) $destValue = mb_convert_encoding($srcValue, M3_ENCODING, $mobileEncoding);
-		}
-		return $destValue;
-	}
-	/**
-	 * 携帯用のテキストに変換
-	 *
-	 * @param string $srcStr	変換するデータ
-	 * @return string			変換後データ
-	 */
-	function convMobileText($srcStr)
-	{
-		// 携帯用エンコーディングを取得
-		$mobileEncoding = $this->gEnv->getMobileEncoding();
-		
-		$destStr = '';
-		if (function_exists('mb_convert_encoding')) $destStr = mb_convert_encoding($srcStr, $mobileEncoding, M3_ENCODING);
-		return $destStr;
-	}
-	/**
 	 * 取得メソッドがGETかどうか
 	 *
 	 * @return bool			true=GETメソッド、false=GET以外

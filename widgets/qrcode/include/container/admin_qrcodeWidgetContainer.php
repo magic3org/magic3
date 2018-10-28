@@ -70,7 +70,7 @@ class admin_qrcodeWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else {		// 初期表示の場合
 			// デフォルト値の設定
-			$qrData = $this->gEnv->getDefaultMobileUrl();			// QRコード化するデータ、デフォルト値は携帯サイトURL
+			$qrData = 'http://example.com';			// QRコード化するデータデフォルト
 			$desc = '';				// 説明
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){

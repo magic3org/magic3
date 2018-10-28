@@ -99,7 +99,7 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th rowspan="4">アクセスポイント</th>
+	    <th rowspan="3">アクセスポイント</th>
 	    <th>管理用</th><td><div class="form-control-static"><a href="#" onclick="previewInOtherWindow(0, '{ADMIN_ACCESS_URL}');">{ADMIN_ACCESS_URL}</a></div></td>
 	</tr>
     <tr>
@@ -111,11 +111,6 @@ $(function(){
 	    <th>スマートフォン用</th><td><patTemplate:tmpl name="show_site_smartphone_open" visibility="hidden"><div class="checkbox"><label><input type="checkbox" name="item_site_smartphone_in_public" {SITE_SMARTPHONE_IN_PUBLIC} />公開</label></div>
 	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(2, '{SMARTPHONE_ACCESS_URL}');">{SMARTPHONE_ACCESS_URL}</a></div></patTemplate:tmpl>
 		<patTemplate:tmpl name="show_site_smartphone_close" visibility="hidden"><div class="form-control-static">閉鎖中</div></patTemplate:tmpl></td>
-	</tr>
-    <tr>
-	    <th>携帯用</th><td><patTemplate:tmpl name="show_site_mobile_open" visibility="hidden"><div class="checkbox col-sm-6 m3config_item"><label><input type="checkbox" name="item_site_mobile_in_public" {SITE_MOBILE_IN_PUBLIC} />公開</label></div><div class="form-control-static col-sm-6 text-right m3config_item">画面エンコーディング：{MOBILE_ENCODE}</div>
-	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(1, '{MOBILE_ACCESS_URL}');">{MOBILE_ACCESS_URL}</a></div></patTemplate:tmpl>
-		<patTemplate:tmpl name="show_site_mobile_close" visibility="hidden"><div class="form-control-static">閉鎖中</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_ADMIM_MODE}>管理画面モード</span></th>
@@ -137,14 +132,11 @@ $(function(){
 		<patTemplate:tmpl name="show_ssl_url_expiredt" visibility="hidden"><div class="col-sm-6 m3config_item"><input type="text" name="item_ssl_url" class="form-control" value="{SSL_URL}" maxlength="200" /></div><div class="form-control-static col-sm-6 m3config_item" style="padding-left:10px;">SSL証明書期限：{SSL_EXPIRE_DT}</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
-	    <th rowspan="3"><span {_HELP_CONFIGSYS_ACCESS_POINT}>アクセスポイント</span></th>
+	    <th rowspan="2"><span {_HELP_CONFIGSYS_ACCESS_POINT}>アクセスポイント</span></th>
 	    <th><span {_HELP_CONFIGSYS_SITE_PC}>PC用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_pc" {IS_ACTIVE_SITE_PC} />有効</label></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効</label></div>マルチドメインURL：<input type="text" name="item_site_smartphone_url" class="form-control" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIGSYS_SITE_MOBILE}>携帯用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_mobile" {IS_ACTIVE_SITE_MOBILE} />有効</label></div>マルチドメインURL：<input type="text" id="item_site_mobile_url" name="item_site_mobile_url" class="form-control" value="{SITE_MOBILE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
 	</tr>
     <tr>
 	    <th>ネットワーク</th>
@@ -171,13 +163,6 @@ $(function(){
     <tr>
 	    <th>スマートフォン</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_auto_redirect" {SMARTPHONE_AUTO_REDIRECT} />スマートフォンでのアクセスを自動的にスマートフォンURLへ遷移</label></div></td>
-	</tr>
-    <tr>
-	    <th rowspan="2">携帯</th>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_mobile_auto_redirect" {MOBILE_AUTO_REDIRECT} />携帯でのアクセスを自動的に携帯URLへ遷移</label></div></td>
-	</tr>
-    <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_mobile_use_session" {MOBILE_USE_SESSION} />携帯でユーザ管理を行う(セッション管理)</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="3">管理画面</th>
