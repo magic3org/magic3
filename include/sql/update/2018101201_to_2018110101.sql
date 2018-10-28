@@ -19,7 +19,6 @@
 -- *** システムベーステーブル ***
 -- システム設定マスター
 DELETE FROM _system_config WHERE sc_id = 'site_mobile_in_public'; -- 携帯用サイト公開
-
 DELETE FROM _system_config WHERE sc_id = 'site_mobile_url'; -- 携帯用サイトURL
 DELETE FROM _system_config WHERE sc_id = 'mobile_auto_redirect'; -- 携帯アクセスの自動遷移
 DELETE FROM _system_config WHERE sc_id = 'mobile_use_session'; -- 携帯セッション管理
@@ -48,7 +47,7 @@ INSERT INTO _nav_item
 (100,   0,            0,        'admin_menu',    '_page',              0,               true,       '',       'site_operation', '画面管理',             '画面管理',             'Webサイトのデザインや機能を管理します。'),
 (101,   100,          0,        'admin_menu',    'pagedef',            0,               true,       '',       '',               'PC画面',         'PC画面編集',         'PC用Webサイトの画面を作成します。'),
 (102,   100,          1,        'admin_menu',    'pagedef_smartphone', 0,               false,      '',       '',               'スマートフォン画面', 'スマートフォン画面編集',       'スマートフォン用Webサイトの画面を作成します。'),
-(103,   100,          2,        'admin_menu',    '_104',               3,               true,       '',       '',               'セパレータ',                 '',                     ''),
+(103,   100,          2,        'admin_menu',    '_103',               3,               true,       '',       '',               'セパレータ',                 '',                     ''),
 (104,   100,          3,        'admin_menu',    'widgetlist',         0,               true,       '',       '',               'ウィジェット管理',     'ウィジェット管理',     'ウィジェットの管理を行います。'),
 (105,   100,          4,        'admin_menu',    'templist',           0,               true,       '',       '',               'テンプレート管理',     'テンプレート管理',     'テンプレートの管理を行います。'),
 (106,   100,          5,        'admin_menu',    'smenudef',           0,               true,       '',       '',               'メニュー管理', 'メニュー管理', 'メニュー定義を管理します。'),
@@ -64,7 +63,7 @@ INSERT INTO _nav_item
 (10100, 0,            0,        'admin_menu.en', '_page',              0,               true,       '',       'site_operation', 'Edit Page',             'Edit Page',             'Edit page for design and function.'),
 (10101, 10100,        0,        'admin_menu.en', 'pagedef',            0,               true,       '',       '',               'PC Page',         'PC Page',         'Edit page for PC.'),
 (10102, 10100,        1,        'admin_menu.en', 'pagedef_smartphone', 0,               false,      '',       '',               'Smartphone Page', 'Smartphone Page',       'Edit page for Smartphone.'),
-(10103, 10100,        2,        'admin_menu.en', '_10104',             3,               true,       '',       '',               'Separator',                 '',                     ''),
+(10103, 10100,        2,        'admin_menu.en', '_10103',             3,               true,       '',       '',               'Separator',                 '',                     ''),
 (10104, 10100,        3,        'admin_menu.en', 'widgetlist',         0,               true,       '',       '',               'Widget Administration',     'Widget Administration',     'Administrate widgets with widget config window.'),
 (10105, 10100,        4,        'admin_menu.en', 'templist',           0,               true,       '',       '',               'Template Administration',     'Template Administration',     'Administrate templates.'),
 (10106, 10100,        5,        'admin_menu.en', 'smenudef',           0,               true,       '',       '',               'Menu Administration', 'Menu Administration', 'Administrate menu definition.'),
