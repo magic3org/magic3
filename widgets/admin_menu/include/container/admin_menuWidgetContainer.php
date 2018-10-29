@@ -28,9 +28,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
-//	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
-//	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
-//	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
 	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
 	const TOP_MENU_ICON_FILE = '/images/system/home32_menu.png';		// トップ遷移アイコン(サイト運用モード)

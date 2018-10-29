@@ -20,15 +20,10 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/scriptLibInfo.php');
 class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $adminTheme;		// 管理画面用jQueryUIテーマ
-	private $defaultTheme;		// フロント画面用jQueryUIテーマ
 	private $systemTemplate;// システム画面用テンプレート
 	private $jqueryVersion;			// jQueryバージョン
-	private $wysiwygMenuData;		// WYSIWYGエディター選択メニューデータ
-	private $wysiwygEditor;			// 管理画面用WYSIWYGエディター
-	const DEFAULT_THEME_DIR = '/ui/themes';				// jQueryUIテーマ格納ディレクトリ
 	const DEFAULT_SYSTEM_TEMPLATE_ID = '_system';				// デフォルトのシステム画面用テンプレート
-	const DEFAULT_JQUERY_VERSION = '1.8';				// デフォルトのjQueryバージョン
+	const DEFAULT_JQUERY_VERSION = '1.9';				// デフォルトのjQueryバージョン
 	
 	// DB定義値
 	const CF_USE_SSL = 'use_ssl';		// SSL機能を使用するかどうか
@@ -44,20 +39,16 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか
 	const CF_SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
-	const CF_USE_TEMPLATE_ID_IN_SESSION = 'use_template_id_in_session';			// セッションにテンプレートIDを保存
 	const CF_SSL_URL = 'ssl_root_url';				// SSL用のルートURL
 	const CF_CONNECT_SERVER_URL = 'default_connect_server_url';			// ポータル接続先URL
 	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 	const CF_SYSTEM_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
-	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
-	const CF_DEFAULT_THEME = 'default_theme';		// フロント画面用jQueryUIテーマ
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const CF_MULTI_LANGUAGE = 'multi_language';			// 多言語対応
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
 	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 //	const CF_USE_JQUERY = 'use_jquery';			// jQueryを常に使用するかどうか
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
-	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	const CF_DEFAULT_LANG		= 'default_lang';					// デフォルト言語
@@ -73,8 +64,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
-		
-		$this->wysiwygMenuData = array('ckeditor' => 'CKEditor 4.4.2');		// WYSIWYGエディター選択メニューデータ
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -125,7 +114,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$connectServerUrl = $request->trimValueOf('item_connect_server_url');			// ポータル接続先URL
 		$siteSmartphoneUrl = $request->trimValueOf('item_site_smartphone_url');		// スマートフォン用サイトURL
 		$usePageCache = ($request->trimValueOf('item_use_page_cache') == 'on') ? 1 : 0;		// 表示キャッシュ機能を使用するかどうか
-		$canChangeTemplate = ($request->trimValueOf('item_can_change_template') == 'on') ? 1 : 0;		// ユーザによるテンプレート変更を許可するかどうか
 		$canDetailConfig = ($request->trimValueOf('item_can_detail_config') == 'on') ? 1 : 0;		// 詳細システム設定が可能かどうか
 		$multiDeviceAdmin = ($request->trimValueOf('item_multi_device_admin') == 'on') ? 1 : 0;// マルチデバイス最適化管理画面
 		$smartphoneAutoRedirect = ($request->trimValueOf('item_smartphone_auto_redirect') == 'on') ? 1 : 0;		// スマートフォンの自動遷移
@@ -141,13 +129,10 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$lang = $request->trimValueOf('item_lang');
 		$workDir = $request->trimValueOf('item_work_dir');
 		$this->systemTemplate = $request->trimValueOf('item_systemplate');	// システム画面用テンプレート
-		$this->adminTheme = $request->trimValueOf('item_admin_theme');		// 管理画面用jQueryUIテーマ
-		$this->defaultTheme = $request->trimValueOf('item_default_theme');		// フロント画面用jQueryUIテーマ
 		$this->jqueryVersion = $request->trimValueOf('item_jquery_version');		// jQueryバージョン
 		$externalJquery = $request->trimCheckedValueOf('item_external_jquery');		// システム外部のjQueryを使用するかどうか
 //		$useJquery = ($request->trimValueOf('item_use_jquery') == 'on') ? 1 : 0;			// 常にjQueryを使用するかどうか
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
-		$this->wysiwygEditor = $request->trimValueOf('item_wysiwyg_editor');			// 管理画面用WYSIWYGエディター
 		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
 		$uploadImageAutoresizeMaxWidth = $request->trimValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
 		$uploadImageAutoresizeMaxHeight = $request->trimValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
@@ -164,7 +149,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr) if (!$this->db->updateSystemConfig(self::CF_USE_SSL_ADMIN, $useSslAdmin)) $isErr = true;			// SSL機能を使用するかどうか
 			if (!$isErr) if (!$this->db->updateSystemConfig(self::CF_HIERARCHICAL_PAGE, $useHierPage)) $isErr = true;			// 階層化ページを使用するかどうか
 			if (!$isErr) if (!$this->db->updateSystemConfig(self::CF_USE_PAGE_CACHE, $usePageCache)) $isErr = true;			// 表示キャッシュ機能を使用するかどうか
-			if (!$isErr) if (!$this->db->updateSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION, $canChangeTemplate)) $isErr = true;// ユーザによるテンプレート変更を許可するかどうか
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_PERMIT_DETAIL_CONFIG, $canDetailConfig)) $isErr = true;
 			}
@@ -221,13 +205,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SYSTEM_TEMPLATE, $this->systemTemplate)) $isErr = true;// システム画面用テンプレート
 			}
-			// 管理画面用jQueryUIテーマは「smoothness」に固定(2017/4/25)
-//			if (!$isErr){
-//				if (!$this->db->updateSystemConfig(self::CF_ADMIN_DEFAULT_THEME, $this->adminTheme)) $isErr = true;// 管理画面用jQueryUIテーマ
-//			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_DEFAULT_THEME, $this->defaultTheme)) $isErr = true;// フロント画面用jQueryUIテーマ
-			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_JQUERY_VERSION, $this->jqueryVersion)) $isErr = true;// jQueryバージョン
 			}
@@ -240,9 +217,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE, $smartphoneUseJqueryMobile)) $isErr = true;// スマートフォン画面でjQuery Mobileを使用
 			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_WYSIWYG_EDITOR, $this->wysiwygEditor)) $isErr = true;// 管理画面用WYSIWYGエディター
-			}		
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE, $uploadImageAutoresize)) $isErr = true;		// アップロード画像の自動リサイズを行うかどうか
 			}
@@ -272,7 +246,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$sslUrl				= $this->db->getSystemConfig(self::CF_SSL_URL);			// SSLのURL
 			$connectServerUrl	= $this->db->getSystemConfig(self::CF_CONNECT_SERVER_URL);// ポータル接続先URL
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
-			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
 			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -288,14 +261,11 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
-			$this->adminTheme = $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);		// 管理画面用jQueryUIテーマ
-			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
-			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
@@ -348,7 +318,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$sslUrl				= $this->db->getSystemConfig(self::CF_SSL_URL);			// SSLのURL
 			$connectServerUrl	= $this->db->getSystemConfig(self::CF_CONNECT_SERVER_URL);// ポータル接続先URL
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
-			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
 			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -364,14 +333,11 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
-			$this->adminTheme = $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);		// 管理画面用jQueryUIテーマ
-			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
-			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
@@ -383,15 +349,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		// システム画面用テンプレート作成
 		$this->db->getAllTemplateList(0/*PC用*/, array($this, 'sysTemplateLoop'), false/*利用不可も表示*/);
 		
-		// jQueryUIテーマ選択メニュー作成
-		$this->createAdminThemeMenu($this->gEnv->getSystemRootPath() . self::DEFAULT_THEME_DIR);
-		$this->createDefaultThemeMenu($this->gEnv->getSystemRootPath() . self::DEFAULT_THEME_DIR);
-		
 		// jQueryバージョン選択メニュー作成
 		$this->createJqueryVerMenu(ScriptLibInfo::getJQueryVersionInfo());
-		
-		// WYSIWYGエディター選択メニュー作成
-		$this->createWysiwygMenu();
 		
 		// サイトURL
 		$this->tmpl->addVar("_widget", "site_url", $this->gEnv->getRootUrl());
@@ -468,9 +427,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($usePageCache) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "use_page_cache", $checked);	// 表示キャッシュ機能を使用するかどうか
-		$checked = '';
-		if ($canChangeTemplate) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "can_change_template", $checked);	// ユーザによるテンプレート変更を許可するかどうか
 		$checked = '';
 		if ($multiLanguage) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "multi_language", $checked);	// 多言語対応かどうか
@@ -621,79 +577,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		return true;
 	}
 	/**
-	 * jQueryUIテーマの選択メニューを作成
-	 *
-	 * @param string $dir		テーマのディレクトリ
-	 * @return 					なし
-	 */
-	function createAdminThemeMenu($themeDir)
-	{
-		if (is_dir($themeDir)){
-			$dir = dir($themeDir);
-			while (($file = $dir->read()) !== false){
-				$filePath = $themeDir . '/' . $file;
-				// ディレクトリかどうかチェック
-				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) &&
-					strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のディレクトリは読み込まない
-
-					$selected = '';
-					if ($file == $this->adminTheme) $selected = 'selected';
-					
-					$row = array(
-						'value'    => $this->convertToDispString($file),			// テーマID
-						'name'     => $this->convertToDispString($file),
-						'selected' => $selected			// 選択中かどうか
-					);
-					$this->tmpl->addVars('admin_theme_list', $row);
-					$this->tmpl->parseTemplate('admin_theme_list', 'a');
-				}
-			}
-			$dir->close();
-		}
-	}
-	/**
-	 * jQueryUIテーマの選択メニューを作成
-	 *
-	 * @param string $dir		テーマのディレクトリ
-	 * @return 					なし
-	 */
-	function createDefaultThemeMenu($themeDir)
-	{
-		$selected = '';
-		if (empty($this->defaultTheme)) $selected = 'selected';
-		
-		$row = array(
-			'value'    => '',			// テーマID
-			'name'     => '-- 指定なし --',
-			'selected' => $selected			// 選択中かどうか
-		);
-		$this->tmpl->addVars('theme_list', $row);
-		$this->tmpl->parseTemplate('theme_list', 'a');
-					
-		if (is_dir($themeDir)){
-			$dir = dir($themeDir);
-			while (($file = $dir->read()) !== false){
-				$filePath = $themeDir . '/' . $file;
-				// ディレクトリかどうかチェック
-				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) &&
-					strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のディレクトリは読み込まない
-
-					$selected = '';
-					if ($file == $this->defaultTheme) $selected = 'selected';
-					
-					$row = array(
-						'value'    => $this->convertToDispString($file),			// テーマID
-						'name'     => $this->convertToDispString($file),
-						'selected' => $selected			// 選択中かどうか
-					);
-					$this->tmpl->addVars('theme_list', $row);
-					$this->tmpl->parseTemplate('theme_list', 'a');
-				}
-			}
-			$dir->close();
-		}
-	}
-	/**
 	 * システム画面用テンプレート一覧を作成
 	 *
 	 * @param int $index			行番号(0～)
@@ -741,28 +624,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			);
 			$this->tmpl->addVars('jquery_version_list', $row);
 			$this->tmpl->parseTemplate('jquery_version_list', 'a');
-		}
-	}
-	/**
-	 * WYSIWYGエディター選択メニュー作成
-	 *
-	 * @return 							なし
-	 */
-	function createWysiwygMenu()
-	{
-		foreach ($this->wysiwygMenuData as $key => $value){
-			$name = $value;
-			
-			$selected = '';
-			if ($key == $this->wysiwygEditor) $selected = 'selected';
-			
-			$row = array(
-				'value'    => $this->convertToDispString($key),
-				'name'     => $this->convertToDispString($name),
-				'selected' => $selected			// 選択中かどうか
-			);
-			$this->tmpl->addVars('wysiwyg_editor_list', $row);
-			$this->tmpl->parseTemplate('wysiwyg_editor_list', 'a');
 		}
 	}
 	/**

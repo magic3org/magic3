@@ -66,7 +66,7 @@ INSERT INTO _system_config
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
 ('default_sub_template',        '',                         'PCフロント画面用デフォルトサブテンプレート'),
 ('msg_template',                '_system',                  'メッセージ表示用テンプレート'),
-('use_template_id_in_session',  '1',                        'セッションにテンプレートIDを保存'),
+('use_template_id_in_session',  '1',                        'セッションにテンプレートIDを保存'), -- 廃止予定
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
 ('external_jquery',             '0',                        'システム外部のjQueryを使用'),
@@ -94,7 +94,7 @@ INSERT INTO _system_config
 ('portal_server_version',        '',                        'ポータルサーババージョン'),
 ('portal_server_url',            'http://magic3.me',        'ポータルサーバURL'),
 ('site_registered_in_portal',    '0',                       'ポータルサーバへのサイトの登録状況'),
-('config_window_open_type',      '1',                       '設定画面のウィンドウ表示タイプ'),
+('config_window_open_type',      '1',                       '設定画面のウィンドウ表示タイプ'),  -- 廃止予定
 ('config_window_style',          'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900',               '設定画面の表示属性'),
 ('dev_use_latest_script_lib',    '0',                       '最新JavaScriptライブラリの使用(開発用)'),
 ('google_api_key',               '',                        'GoogleAPIキー'),

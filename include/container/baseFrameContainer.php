@@ -1155,15 +1155,7 @@ class BaseFrameContainer extends Core
 		$subTemplateId = '';
 		$isSystemManageUser = $this->gEnv->isSystemManageUser();		// システム運用可能かどうか
 		$useSubClassDefine = true;			// サブクラスでの定義を使用するかどうか
-		
-		// テンプレート変更のときは、セッションのテンプレートIDを変更
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
-		if ($cmd == M3_REQUEST_CMD_CHANGE_TEMPLATE){
-			// テンプレートIDをセッションに残す場合
-			if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
-				$request->setSessionValue(M3_SESSION_CURRENT_TEMPLATE, $request->trimValueOf(M3_SYSTEM_TAG_CHANGE_TEMPLATE));
-			}
-		}
 
 		// サブクラスでテンプレートIDを指定している場合はそちらを使用
 		$templateDefined = false;		// テンプレート固定かどうか
@@ -1218,15 +1210,6 @@ class BaseFrameContainer extends Core
 				// ページ用のテンプレートがあるときは優先
 				$pageTemplateId = $this->gPage->getTemplateIdFromCurrentPageInfo($subTemplateId);
 				if (!empty($pageTemplateId)) $curTemplate = $pageTemplateId;
-
-				// テンプレートIDをセッションから取得
-				if (empty($curTemplate) && !$isSystemManageUser){			// システム運用者はセッション値を使用できない
-					if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
-						if (!$this->gEnv->getIsMobileSite() && !$this->gEnv->getIsSmartphoneSite()){
-							$curTemplate = $request->getSessionValue(M3_SESSION_CURRENT_TEMPLATE);// 携帯サイト、スマートフォンサイトでないときはセッション値を取得
-						}
-					}
-				}
 				
 				// オプションのテンプレートがある場合はオプションを優先
 				list($optionTemplate, $optionSubTemplate) = $this->gPage->getOptionTemplateId();
@@ -1252,17 +1235,6 @@ class BaseFrameContainer extends Core
 			// テンプレートが１つもみつからないときは、管理用テンプレートを使用
 			$curTemplate = $this->gSystem->defaultAdminTemplateId();
 			echo 'template not found. viewing by administration template. [' . $curTemplate . ']';
-		} else {	// セッションにテンプレートIDを保存
-			// テンプレートIDをセッションに残す場合
-/*			if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
-				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
-					$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
-				} else {
-					if (!$this->gEnv->getIsMobileSite() && !$this->gEnv->getIsSmartphoneSite() && !$templateDefined){		// PC用画面でサブクラス固定でないとき場合は保存
-						$request->setSessionValue(M3_SESSION_CURRENT_TEMPLATE, $curTemplate);
-					}
-				}
-			}*/
 		}
 		return $curTemplate;
 	}

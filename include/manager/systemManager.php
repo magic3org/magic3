@@ -33,7 +33,6 @@ class SystemManager extends Core
 	private $smartphoneAutoRedirect;	// スマートフォンの自動遷移
 	private $usePageCache;		// 表示キャッシュ機能を使用するかどうか
 	private $pageCacheLifetime;	// 画面キャッシュの更新時間(分)
-	private $useTemplateIdInSession;	// テンプレートIDをセッションに保存するかどうか
 	private $acceptLanguage;			// アクセス可能言語
 	private $systemLanguages;			// システムで利用可能な言語
 	private $hierarchicalPage;			// 階層化ページを使用するかどうか
@@ -45,7 +44,6 @@ class SystemManager extends Core
 	const CF_DEFAULT_LANG = 'default_lang';			// デフォルト言語
 	const CF_PERMIT_INIT_SYSTEM = 'permit_init_system';					// システム初期化可能かどうか
 	const CF_PERMIT_CHANGE_LANG = 'permit_change_lang';					// 言語変更可能かどうか
-	const CF_USE_TEMPLATE_ID_IN_SESSION = 'use_template_id_in_session';			// セッションのテンプレートIDを使用するかどうか
 	const CF_REGENERATE_SESSION_ID = 'regenerate_session_id';			// セッションIDを毎回更新するかどうか
 	const CF_SITE_IN_PUBLIC = 'site_in_public';	// Webサイトの公開状況
 	const CF_SITE_PC_IN_PUBLIC = 'site_pc_in_public';				// PC用サイトの公開状況
@@ -92,7 +90,6 @@ class SystemManager extends Core
 		$this->smartphoneAutoRedirect = '0';	// スマートフォンの自動遷移
 		$this->usePageCache = '0';		// 表示キャッシュ機能を使用するかどうか
 		$this->pageCacheLifetime = self::DEFAULT_PAGE_CACHE_LIFETIME;	// 画面キャッシュの更新時間(分)
-		$this->useTemplateIdInSession = true;	// テンプレートIDをセッションに残すかどうか
 		$this->acceptLanguage = array();			// アクセス可能言語
 		$this->systemLanguages = array('ja', 'en');			// システムで利用可能な言語
 		$this->hierarchicalPage = false;			// 階層化ページを使用するかどうか
@@ -170,11 +167,6 @@ class SystemManager extends Core
 				$this->permitInitSystem = true;
 			} else {
 				$this->permitInitSystem = false;
-			}
-			if ($this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION) == '1'){// テンプレートIDをセッションに保存するかどうか
-				$this->useTemplateIdInSession = true;
-			} else {
-				$this->useTemplateIdInSession = false;
 			}
 			$this->siteInPublic		= $this->getSystemConfig(self::CF_SITE_IN_PUBLIC);			// Webサイトの公開状況
 			if ($this->siteInPublic == '') $this->siteInPublic = '1';		// デフォルトは公開
@@ -284,24 +276,6 @@ class SystemManager extends Core
 		} else {
 			return false;
 		}
-	}
-	/**
-	 * テンプレートIDをセッションに保存するかどうかを取得
-	 *
-	 * @param bool $reload	再取得するかどうか
-	 * @return bool			true=変更可能、false=変更不可
-	 */
-	function useTemplateIdInSession($reload = false)
-	{
-		if ($reload){
-			$retValue = $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);
-			if ($retValue == '1'){
-				$this->useTemplateIdInSession = true;
-			} else {
-				$this->useTemplateIdInSession = false;
-			}
-		}
-		return $this->useTemplateIdInSession;
 	}
 	/**
 	 * 管理画面用のデフォルトのテンプレートIDを取得

@@ -26,6 +26,11 @@ DELETE FROM _system_config WHERE sc_id = 'mobile_encoding'; -- 携帯用出力�
 DELETE FROM _system_config WHERE sc_id = 'mobile_charset'; -- 携帯HTML上でのエンコーディング表記
 DELETE FROM _system_config WHERE sc_id = 'mobile_default_template'; -- 携帯画面用デフォルトテンプレート
 DELETE FROM _system_config WHERE sc_id = 'mobile_default_menu_id'; -- WordPressテンプレートで使用(現在未使用)
+DELETE FROM _system_config WHERE sc_id = 'use_template_id_in_session'; -- セッションにテンプレートIDを保存
+DELETE FROM _system_config WHERE sc_id = 'config_window_open_type'; -- 設定画面のウィンドウ表示タイプ
+UPDATE _system_config SET sc_value = 'smoothness' WHERE sc_id = 'default_theme';
+UPDATE _system_config SET sc_value = 'smoothness' WHERE sc_id = 'admin_default_theme';
+UPDATE _system_config SET sc_value = 'ckeditor' WHERE sc_id = 'wysiwyg_editor';
 
 -- ウィジェット情報
 DELETE FROM _widgets WHERE wd_mobile = true;

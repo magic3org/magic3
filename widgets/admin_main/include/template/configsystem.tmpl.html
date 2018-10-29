@@ -142,10 +142,10 @@ $(function(){
 	    <th>ネットワーク</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></div></td>
 	</tr>
-    <tr>
+<!--    <tr>
 	    <th>ポータル</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_landing_page" {USE_LANDING_PAGE_CHECKED} />ランディングページ機能を使用</label></div></td>
-	</tr>
+	</tr>-->
     <tr>
 	    <th rowspan="2">URL</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</label></div></td>
@@ -165,25 +165,7 @@ $(function(){
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_auto_redirect" {SMARTPHONE_AUTO_REDIRECT} />スマートフォンでのアクセスを自動的にスマートフォンURLへ遷移</label></div></td>
 	</tr>
     <tr>
-	    <th rowspan="3">管理画面</th>
-	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">管理画面用jQueryUIテーマ</div>
-	    <div class="col-sm-4 m3config_item"><select name="item_admin_theme" class="form-control">
-	        <patTemplate:tmpl name="admin_theme_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select></div>
-	    </td>
-	</tr>
-    <tr>
-		<td colspan="2"><div class="form-control-static col-sm-3 m3config_item">WYSIWYGエディター</div>
-	    <div class="col-sm-4 m3config_item"><select name="item_wysiwyg_editor" class="form-control">
-	        <patTemplate:tmpl name="wysiwyg_editor_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select></div>
-		</td>
-	</tr>
-    <tr>
+	    <th>管理画面</th>
 	    <td colspan="2">
 		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></div>
 		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_multi_device_admin" {MULTI_DEVICE_ADMIN} />マルチデバイス最適化</label></div></div>
@@ -191,7 +173,7 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th rowspan="2">フロント画面</th>
+	    <th>フロント画面</th>
 	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">jQueryバージョン：</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_jquery_version" class="form-control">
 	        <patTemplate:tmpl name="jquery_version_list">
@@ -201,15 +183,6 @@ $(function(){
 		<div class="col-sm-5"><div class="checkbox"><label><input type="checkbox" name="item_external_jquery" {EXTERNAL_JQUERY} />外部のjQueryを使用</label></div></div>
 		<!--<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} />jQueryを常に使用</label></div></div>-->
 		<!--<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)</label></div></div>-->
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2"><div class="form-control-static col-sm-3 m3config_item">jQueryUIテーマ</div>
-	    <div class="col-sm-4 m3config_item"><select name="item_default_theme" class="form-control">
-	        <patTemplate:tmpl name="theme_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select></div>
 		</td>
 	</tr>
     <tr>
@@ -226,7 +199,7 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th rowspan="2">テンプレート</th>
+	    <th>テンプレート</th>
 	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">システム画面テンプレート</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_systemplate" class="form-control">
 	        <patTemplate:tmpl name="systemplate_list">
@@ -234,9 +207,6 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select></div>
 	    </td>
-	</tr>
-    <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_change_template" {CAN_CHANGE_TEMPLATE} />一般ユーザによるテンプレートの変更を許可</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">言語</th>
