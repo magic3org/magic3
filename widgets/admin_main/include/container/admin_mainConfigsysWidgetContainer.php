@@ -566,15 +566,22 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	 */
 	function sysTemplateLoop($index, $fetchedRow, $param)
 	{
-		$selected = '';
-		if ($fetchedRow['tm_id'] == $this->systemTemplate){
-			$selected = 'selected';
-		}
+		$templateId = $fetchedRow['tm_id'];
+		
+
 		$name = $fetchedRow['tm_name'];
-		if ($fetchedRow['tm_id'] == self::DEFAULT_SYSTEM_TEMPLATE_ID) $name = '[デフォルト]';
+		if ($templateId == self::DEFAULT_SYSTEM_TEMPLATE_ID){
+			$name = '[デフォルト]';
+		} else if (strStartsWith($templateId, '_')){			// 「_」で始まるテンプレートは表示しない
+			return true;
+		}
+		
+		// 選択状態
+		$selected = '';
+		if ($templateId == $this->systemTemplate) $selected = 'selected';
 		
 		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['tm_id']),			// テンプレートID
+			'value'    => $this->convertToDispString($templateId),			// テンプレートID
 			'name'     => $this->convertToDispString($name),			// テンプレート名名
 			'selected' => $selected														// 選択中かどうか
 		);
