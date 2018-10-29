@@ -46,7 +46,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_MULTI_LANGUAGE = 'multi_language';			// 多言語対応
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
 	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
-//	const CF_USE_JQUERY = 'use_jquery';			// jQueryを常に使用するかどうか
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
@@ -129,7 +128,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->systemTemplate = $request->trimValueOf('item_systemplate');	// システム画面用テンプレート
 		$this->jqueryVersion = $request->trimValueOf('item_jquery_version');		// jQueryバージョン
 		$externalJquery = $request->trimCheckedValueOf('item_external_jquery');		// システム外部のjQueryを使用するかどうか
-//		$useJquery = ($request->trimValueOf('item_use_jquery') == 'on') ? 1 : 0;			// 常にjQueryを使用するかどうか
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
 		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
 		$uploadImageAutoresizeMaxWidth = $request->trimValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
@@ -206,9 +204,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_EXTERNAL_JQUERY, $externalJquery)) $isErr = true;// システム外部のjQueryを使用するかどうか
 			}
-/*			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_USE_JQUERY, $useJquery)) $isErr = true;// 常にjQueryを使用するかどうか
-			}*/
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE, $smartphoneUseJqueryMobile)) $isErr = true;// スマートフォン画面でjQuery Mobileを使用
 			}
@@ -258,7 +253,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
-//			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
@@ -329,7 +323,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 			$externalJquery = $this->db->getSystemConfig(self::CF_EXTERNAL_JQUERY);// システム外部のjQueryを使用するかどうか
-//			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
@@ -424,9 +417,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		if ($multiLanguage) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "multi_language", $checked);	// 多言語対応かどうか
 		$this->tmpl->addVar("_widget", "external_jquery", $this->convertToCheckedString($externalJquery));// システム外部のjQueryを使用するかどうか
-//		$checked = '';
-//		if ($useJquery) $checked = 'checked';
-//		$this->tmpl->addVar("_widget", "use_jquery", $checked);		// 常にjQueryを使用するかどうか
 		$checked = '';
 		if ($smartphoneUseJqueryMobile) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "smartphone_use_jquery_mobile", $checked);		// スマートフォン画面でjQuery Mobileを使用

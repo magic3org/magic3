@@ -161,7 +161,6 @@ class PageManager extends Core
 	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_ADMIN_JQUERY_VERSION = 'admin_jquery_version';			// 管理画面用jQueryバージョン
-	const CF_USE_JQUERY = 'use_jquery';				// jQueryを常に使用するかどうか
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const SD_HEAD_OTHERS	= 'head_others';		// ヘッダその他タグ
 	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
@@ -1672,8 +1671,7 @@ class PageManager extends Core
 				}
 			} else {		// フロント画面へのアクセスのとき
 				// フロント画面用スクリプトファイル追加
-				$value = $gSystemManager->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
-				if ($value) $this->addScriptFile($this->selectedJQueryFilename);
+				$this->addScriptFile($this->selectedJQueryFilename);// 常にjQueryを使用
 		
 				if ($cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
 					$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない

@@ -136,7 +136,8 @@ $(function(){
 	    <th><span {_HELP_CONFIGSYS_SITE_PC}>PC用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_pc" {IS_ACTIVE_SITE_PC} />有効</label></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効</label></div>マルチドメインURL：<input type="text" name="item_site_smartphone_url" class="form-control" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
+	    <th><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効</label></div>
+		<!--マルチドメインURL：<input type="text" name="item_site_smartphone_url" class="form-control" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" />--></td>
 	</tr>
     <tr>
 	    <th>ネットワーク</th>
@@ -146,13 +147,13 @@ $(function(){
 	    <th>ポータル</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_landing_page" {USE_LANDING_PAGE_CHECKED} />ランディングページ機能を使用</label></div></td>
 	</tr>-->
-    <tr>
-	    <th rowspan="2">URL</th>
+<!--    <tr>
+	    <th>URL</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</label></div></td>
-	</tr>
-    <tr>
+	</tr>-->
+<!--    <tr>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_hier_page" {USE_HIER_PAGE} />ページの階層化</label></div></td>
-	</tr>
+	</tr>-->
     <tr>
 	    <th rowspan="2">SSL</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_ssl_admin" {USE_SSL_ADMIN} />管理画面にSSLを使用</label></div></td>
@@ -180,7 +181,6 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select></div>
 		<div class="col-sm-5"><div class="checkbox"><label><input type="checkbox" name="item_external_jquery" {EXTERNAL_JQUERY} />外部のjQueryを使用</label></div></div>
-		<!--<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} />jQueryを常に使用</label></div></div>-->
 		<!--<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)</label></div></div>-->
 		</td>
 	</tr>
