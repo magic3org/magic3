@@ -77,23 +77,13 @@ function m3AdjustHeight(obj, min)
 // 一般ウィンドウ表示
 function m3ShowStandardWindow(url)
 {
-	if (M3_CONFIG_WINDOW_OPEN_TYPE == 0){
-		window.open(url, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
-	} else {
-		window.open(url, "");
-	}
+	window.open(url, "");
 }
 // 設定用ウィンドウ表示
 function m3ShowConfigWindow(widgetId, configId, serial)
 {
-	if (M3_CONFIG_WINDOW_OPEN_TYPE == 0){
-		window.open(M3_DEFAULT_ADMIN_URL + "?cmd=configwidget&openby=other&widget=" + widgetId + 
-					"&_defconfig=" + configId + "&_defserial=" + serial, "config_" + widgetId,
-					"toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
-	} else {
-		window.open(M3_DEFAULT_ADMIN_URL + "?cmd=configwidget&openby=other&widget=" + widgetId + 
+	window.open(M3_DEFAULT_ADMIN_URL + "?cmd=configwidget&openby=other&widget=" + widgetId + 
 					"&_defconfig=" + configId + "&_defserial=" + serial, "config_" + widgetId);
-	}
 }
 // テンプレート設定用ウィンドウ表示
 function m3ShowTemplateConfigWindow(templateId)
@@ -103,14 +93,8 @@ function m3ShowTemplateConfigWindow(templateId)
 // ウィジェット表示微調整用ウィンドウ表示
 function m3ShowAdjustWindow(configId, serial, pageId, pageSubId)
 {
-	if (M3_CONFIG_WINDOW_OPEN_TYPE == 0){
-		window.open(M3_DEFAULT_ADMIN_URL + "?task=adjustwidget&openby=simple" + 
-					"&_defconfig=" + configId + "&_defserial=" + serial + "&_page=" + pageId + "&_sub=" + pageSubId, "adjust_" + serial,
-					"toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
-	} else {
-		window.open(M3_DEFAULT_ADMIN_URL + "?task=adjustwidget&openby=simple" + 
+	window.open(M3_DEFAULT_ADMIN_URL + "?task=adjustwidget&openby=simple" + 
 					"&_defconfig=" + configId + "&_defserial=" + serial + "&_page=" + pageId + "&_sub=" + pageSubId, "adjust_" + serial);
-	}
 }
 // 各種端末用プレビューウィンドウ表示
 function m3ShowPreviewWindow(type, url)

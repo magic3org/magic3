@@ -157,7 +157,6 @@ class PageManager extends Core
 	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用かどうか
 	const CF_USE_LATEST_SCRIPT_LIB = 'dev_use_latest_script_lib';		// 最新のJavaScriptライブラリを使用するかどうか
 	const CF_GOOGLE_MAPS_KEY = 'google_maps_key';				// Googleマップ利用キー
-	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
 	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
@@ -4073,9 +4072,6 @@ class PageManager extends Core
 				$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptUrl) . '"></script>' . M3_NL;
 			}
 			
-			// 設定値取得
-			$openType = $this->gSystem->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
-			
 			// ##### ページへJavascriptの埋め込む #####
 			// JavaScriptグローバル変数の設定
 			//$replaceStr .= '<script type="text/javascript">' . M3_NL;
@@ -4091,7 +4087,6 @@ class PageManager extends Core
 					
 				// 管理画面のオープン設定
 				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
-				if ($openType != '') $replaceStr .= 'var M3_CONFIG_WINDOW_OPEN_TYPE = ' . $openType . ';' . M3_NL;
 				
 				// ページID、ページサブID
 				$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;
@@ -4212,7 +4207,6 @@ class PageManager extends Core
 				}
 			} else if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
-				if ($openType != '') $replaceStr .= 'var M3_CONFIG_WINDOW_OPEN_TYPE = ' . $openType . ';' . M3_NL;
 				
 				// ページID、ページサブID
 				$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;

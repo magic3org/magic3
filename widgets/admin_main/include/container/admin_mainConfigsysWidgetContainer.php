@@ -41,7 +41,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
 	const CF_SSL_URL = 'ssl_root_url';				// SSL用のルートURL
 	const CF_CONNECT_SERVER_URL = 'default_connect_server_url';			// ポータル接続先URL
-	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 	const CF_SYSTEM_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const CF_MULTI_LANGUAGE = 'multi_language';			// 多言語対応
@@ -124,7 +123,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$useLandingPage		= $request->trimCheckedValueOf('item_use_landing_page');	// ランディングページ機能を使用するかどうか
 		$isActiveSitePc = ($request->trimValueOf('item_is_active_site_pc') == 'on') ? 1 : 0;	// PC用サイト有効
 		$isActiveSiteSmartphone = ($request->trimValueOf('item_is_active_site_smartphone') == 'on') ? 1 : 0;	// スマートフォン用サイト有効
-		$configWindowOpenByTab = ($request->trimValueOf('item_config_window_open_by_tab') == 'on') ? 1 : 0;			// ウィジェット設定画面をタブで開くかどうか
 		$multiLanguage = ($request->trimValueOf('item_multi_language') == 'on') ? 1 : 0;			// 多言語対応
 		$lang = $request->trimValueOf('item_lang');
 		$workDir = $request->trimValueOf('item_work_dir');
@@ -178,9 +176,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			}
 			if (!$isErr){
 				if (!$this->updateActiveAccessPoint(2/*スマートフォン*/, $isActiveSiteSmartphone)) $isErr = true;// スマートフォン用サイト有効
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE, $configWindowOpenByTab)) $isErr = true;			// ウィジェット設定画面をタブで開くかどうか
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_MULTI_LANGUAGE, $multiLanguage)) $isErr = true;			// 多言語対応
@@ -258,7 +253,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$siteSmartphoneUrl = $this->db->getSystemConfig(self::CF_SITE_SMARTPHONE_URL);		// スマートフォン用サイトURL
-			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
@@ -330,7 +324,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$siteSmartphoneUrl = $this->db->getSystemConfig(self::CF_SITE_SMARTPHONE_URL);		// スマートフォン用サイトURL
-			$configWindowOpenByTab = $this->db->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);			// ウィジェット設定画面をタブで開くかどうか
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
@@ -464,9 +457,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if (!empty($smartphoneAutoRedirect)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "smartphone_auto_redirect", $checked);// スマートフォンの自動遷移
-		$checked = '';
-		if (!empty($configWindowOpenByTab)) $checked = 'checked'; 			// ウィジェット設定画面をタブで開くかどうか
-		$this->tmpl->addVar("_widget", "config_window_open_by_tab", $checked);
 
 		$this->tmpl->addVar("_widget", "upload_image_autoresize", $this->convertToCheckedString($uploadImageAutoresize));			// アップロード画像の自動リサイズを行うかどうか
 		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_width", $uploadImageAutoresizeMaxWidth);		// アップロード画像の自動リサイズ、画像最大幅
