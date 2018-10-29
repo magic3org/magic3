@@ -257,8 +257,6 @@ INSERT INTO _templates
 ('bs_single_orange',              'bs_single_orange',              10,      0,              false,        false,     true,             true,         '',           '',         'https://startbootstrap.com/template-overviews/creative/'),
 ('wisteria',                      'wisteria',                      100,     0,              false,        false,     false,            true,         '',           '',         'https://wpfriendship.com/'),
 ('shop-isle',                     'shop-isle',                     100,     0,              false,        false,     false,            true,         '',           '',         'https://themeisle.com/'),
-('m/default',                     'm/default',                     0,       1,              false,        true,      false,            true,         '',           '',         ''),
-('m/smallfont',                   'm/smallfont',                   0,       1,              false,        true,      false,            true,         '',           '',         ''),
 ('s/default_simple',              's/default_simple',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
 ('s/default_jquery',              's/default_jquery',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
 ('s/default_jquery13',           's/default_jquery13',             1,       2,              false,        false,     false,            true,         '',           '',         ''),
