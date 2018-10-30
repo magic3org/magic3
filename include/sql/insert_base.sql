@@ -72,7 +72,6 @@ INSERT INTO _system_config
 ('head_title_format',           '$1;$1 - $2;$1 - $2 - $3;', 'HTMLヘッダタイトルフォーマット'),
 ('default_h_tag_level',         '2',                        'ウィジェットのHタグレベル'),
 ('smartphone_auto_redirect',    '0',                        'スマートフォンアクセスの自動遷移'),
-('smartphone_use_jquery_mobile', '0',                       'スマートフォン画面でjQuery Mobileを使用'),
 ('distribution_name',            'magic3.org',              'ディストリビューション名'),
 ('distribution_version',         '',                        'ディストリビューションバージョン'),
 ('use_ssl',                      '0',                       'SSL通信'),
