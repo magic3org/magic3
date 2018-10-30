@@ -173,15 +173,26 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th>フロント画面</th>
-	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">jQueryバージョン：</div>
+	    <th><span {_HELP_CONFIGSYS_FRONT_PAGE}>フロント画面</span></th>
+	    <td colspan="2">
+		<div class="form-group clearfix">
+		<div class="form-control-static col-sm-3 m3config_item">jQueryバージョン：</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_jquery_version" class="form-control">
 	        <patTemplate:tmpl name="jquery_version_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select></div>
 		<div class="col-sm-5"><div class="checkbox"><label><input type="checkbox" name="item_external_jquery" {EXTERNAL_JQUERY} />外部のjQueryを使用</label></div></div>
+		</div>
 		<!--<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)</label></div></div>-->
+		<div class="form-group clearfix">
+		<div class="form-control-static col-sm-3 m3config_item">システム画面テンプレート</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_systemplate" class="form-control">
+	        <patTemplate:tmpl name="systemplate_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select></div>
+		</div>
 		</td>
 	</tr>
     <tr>
@@ -190,22 +201,12 @@ $(function(){
 		<div class="radio m3config_inline_item"><label><input type="radio" name="menu_type" value="1" {MENU_TYPE_TREE} />多階層</label></td>
 	</tr>
     <tr>
-	    <th>アップロード</th>
+	    <th><span {_HELP_CONFIGSYS_UPLOAD}>アップロード</span></th>
 	    <td colspan="2"><div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_upload_image_autoresize" {UPLOAD_IMAGE_AUTORESIZE} />画像のリサイズ</label></div></div>
 		<div class="form-control-static col-sm-2 m3config_item">最大サイズ</div>
 		<div class="form-control-static col-sm-1 m3config_item">幅：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_width" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
 		<div class="form-control-static col-sm-1 m3config_item">高さ：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_height" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
 		</td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIGSYS_TEMPLATE}>テンプレート</span></th>
-	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">システム画面テンプレート</div>
-	    <div class="col-sm-4 m3config_item"><select name="item_systemplate" class="form-control">
-	        <patTemplate:tmpl name="systemplate_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select></div>
-	    </td>
 	</tr>
     <tr>
 	    <th rowspan="2">言語</th>
