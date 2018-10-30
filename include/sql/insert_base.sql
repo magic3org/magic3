@@ -69,7 +69,6 @@ INSERT INTO _system_config
 ('admin_default_theme',         'smoothness',               '管理画面用jQueryUIテーマ'),
 ('jquery_version',               '1.9',                     'jQueryバージョン(PC用)'),
 ('admin_jquery_version',         '1.9',                     '管理画面用jQueryバージョン'),
-('s:jquery_version',             '1.9',                     'jQueryバージョン(スマートフォン用)'),
 ('head_title_format',           '$1;$1 - $2;$1 - $2 - $3;', 'HTMLヘッダタイトルフォーマット'),
 ('default_h_tag_level',         '2',                        'ウィジェットのHタグレベル'),
 ('smartphone_auto_redirect',    '0',                        'スマートフォンアクセスの自動遷移'),

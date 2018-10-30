@@ -68,7 +68,6 @@ class PageManager extends Core
 	private $headFirstTag;				// HTMLヘッダに最初に出力するタグ文字列
 	private $headCss = array();			// HTMLヘッダにCSS出力する文字列
 	private $headScript = array();		// HTMLヘッダにJavascript出力する文字列
-	private $headPreMobileScript = array();		// HTMLヘッダにJavascript出力する文字列(jQueryMobile用挿入スクリプト)
 	private $headString = array();		// HTMLヘッダに出力する任意文字列
 	private $exportCss = array();		// 外部出力でCSS出力する文字列
 	private $lastHeadCss;				// 最後に設定したHTMLヘッダにCSS出力する文字列

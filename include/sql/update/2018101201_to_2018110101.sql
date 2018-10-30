@@ -29,6 +29,7 @@ DELETE FROM _system_config WHERE sc_id = 'mobile_default_menu_id'; -- WordPress�
 DELETE FROM _system_config WHERE sc_id = 'use_template_id_in_session'; -- セッションにテンプレートIDを保存
 DELETE FROM _system_config WHERE sc_id = 'config_window_open_type'; -- 設定画面のウィンドウ表示タイプ
 DELETE FROM _system_config WHERE sc_id = 'use_jquery'; -- フロント画面にjQueryを使用
+DELETE FROM _system_config WHERE sc_id = 's:jquery_version'; -- jQueryバージョン(スマートフォン用)
 UPDATE _system_config SET sc_value = 'smoothness' WHERE sc_id = 'default_theme';
 UPDATE _system_config SET sc_value = 'smoothness' WHERE sc_id = 'admin_default_theme';
 UPDATE _system_config SET sc_value = 'ckeditor' WHERE sc_id = 'wysiwyg_editor';

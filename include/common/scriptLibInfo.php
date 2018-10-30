@@ -18,8 +18,6 @@ class ScriptLibInfo
 	private static $libs;						// ライブラリ情報
 	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(
-											'1.7'	=> 'jquery-1.7.2.min.js',
-											'1.8'	=> 'jquery-1.8.3.min.js',
 											'1.9'	=> 'jquery-1.9.1.min.js',
 											'1.10'	=> 'jquery-1.10.2.min.js',
 											'1.11'	=> 'jquery-1.11.3.min.js',
@@ -58,9 +56,6 @@ class ScriptLibInfo
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
 	const LIB_BOOTSTRAP_TOGGLE				= 'bootstrap.toggle';
-
-	// スマートフォン用jQueryライブラリ
-	const LIB_JQUERYS				= 'jquerys';
 
 	// jQueryプラグイン
 	const LIB_JQUERY_EASING			= 'jquery.easing';
@@ -307,9 +302,6 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.11.4/jquery.effects.min.js';					// Effects
 
-	// スマートフォン用jQueryファイル
-	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要
-
 	// ##### 外部ライブラリ #####
 	const LIB_GOOGLEMAPS			= 'googlemaps';
 //	const GOOGLEMAPS_FILENAME		= 'http://maps.google.com/maps/api/js?sensor=true';
@@ -336,7 +328,7 @@ class ScriptLibInfo
 	/**
 	 * jQueryファイル名取得
 	 *
-	 * @param  int    $type	ファイルの種別(0=jQuery、1=jQuery UI Core、2=jQuery UI Plus、10=スマートフォン用jQuery)
+	 * @param  int    $type	ファイルの種別(0=jQuery、1=jQuery UI Core)
 	 * @return string		jQueryファイル名を取得
 	 */
 	static function getJQueryFilename($type = 0)
@@ -346,10 +338,6 @@ class ScriptLibInfo
 			$filename = self::$jQueryVersionArray[(string)self::$jQueryVer];
 		} else if ($type == 1){	// Core
 			$filename = self::JQUERY_UI_CORE_FILENAME;	// jquery UI
-//		} else if ($type == 2){	// Plus
-//			$filename = self::JQUERY_L_UI_PLUS_FILENAME;	// jquery UI
-		} else if ($type == 10){	// スマートフォン用jQuery
-			$filename = self::JQUERYS_FILENAME;
 		}
 		return $filename;
 	}
@@ -550,10 +538,6 @@ class ScriptLibInfo
 			self::$libs[self::LIB_JQUERY_UI_WIDGETS_SLIDER]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_SLIDER_FILENAME));		// Widgets Slider
 			self::$libs[self::LIB_JQUERY_UI_WIDGETS_TABS]			= array(	'script' => array(self::JQUERY_UI_WIDGETS_TABS_FILENAME));			// Widgets Tabs
 			self::$libs[self::LIB_JQUERY_UI_EFFECTS]				= array(	'script' => array(self::JQUERY_UI_EFFECTS_FILENAME));				// Effects
-
-
-			// スマートフォン用jQueryライブラリ
-			self::$libs[self::LIB_JQUERYS] 			= array(	'script' => array(self::getJQueryFilename(10)));		// スマートフォン用jQuery
 
 			// 外部ライブラリ
 			self::$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME . $googleMapsParams));
