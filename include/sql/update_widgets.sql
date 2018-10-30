@@ -399,8 +399,8 @@ INSERT INTO _widgets
 ('slogan', 'スローガン',  '1.1.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'ヘッダ等の前面にメッセージテキストを表示。レスポンシブウェブ対応。',                      'jquery.fittext',         '',        true,         false,                                true,                true,              '2014-08-09', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'skyway';
 INSERT INTO _widgets
-(wd_id,    wd_name,  wd_status, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_status, wd_description,             wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('skyway', 'SkyWay', 1, '0.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                1,         'SkyWayサンプルプログラム', false, true,        true,         true,                false,               true,           '2018-04-26',  now(),         now());
+(wd_id,    wd_name,  wd_status, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('skyway', 'SkyWay', 1, '0.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'SkyWayサンプルプログラム', false, true,        true,         true,                false,               true,           '2018-04-26',  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'repl_chat';
 INSERT INTO _widgets
 (wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                            wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
