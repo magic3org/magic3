@@ -258,8 +258,6 @@ INSERT INTO _templates
 ('wisteria',                      'wisteria',                      100,     0,              false,        false,     false,            true,         '',           '',         'https://wpfriendship.com/'),
 ('shop-isle',                     'shop-isle',                     100,     0,              false,        false,     false,            true,         '',           '',         'https://themeisle.com/'),
 ('s/default_simple',              's/default_simple',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
-('s/default_jquery',              's/default_jquery',              1,       2,              false,        false,     false,            true,         '',           '',         ''),
-('s/default_jquery13',           's/default_jquery13',             1,       2,              false,        false,     false,            true,         '',           '',         ''),
 ('s/art42_sample2',               's/art42_sample2',               1,       2,              false,        false,     false,            true,         '',           '',         '');
 
 -- メニューIDマスター

@@ -345,13 +345,6 @@ class BaseWidgetContainer extends Core
 				// ヘッダにJavascriptを追加
 				if (!empty($scriptFile)) $this->gPage->addHeadScriptFile($scriptFile);
 			}
-			// 各ウィジェットごとの追加Javascript(jQueryMobile用挿入ファイル)を取得し、ヘッダに設定
-			if (method_exists($this, '_addPreMobileScriptFileToHead')){
-				$scriptFile = $this->_addPreMobileScriptFileToHead($request, $param);
-				
-				// ヘッダにJavascriptを追加
-				if (!empty($scriptFile)) $this->gPage->addHeadPreMobileScriptFile($scriptFile);
-			}
 			// RSS情報を取得し、ヘッダに設定
 			if (method_exists($this, '_addRssFileToHead')){
 				$rssFileInfo = $this->_addRssFileToHead($request, $param);
@@ -373,13 +366,6 @@ class BaseWidgetContainer extends Core
 				
 				// ヘッダにJavascriptを追加
 				if (!empty($script)) $this->gPage->addHeadScript($script);
-			}
-			// 各ウィジェットごとのJavascriptを取得し、ヘッダに設定
-			if (method_exists($this, '_addPreMobileScriptToHead')){
-				$script = $this->_addPreMobileScriptToHead($request, $param);
-				
-				// ヘッダにJavascriptを追加
-				if (!empty($script)) $this->gPage->addHeadPreMobileScript($script);
 			}
 			// 各ウィジェットごとのHead追加文字列を取得し、ヘッダに設定
 			if (method_exists($this, '_addStringToHead')){

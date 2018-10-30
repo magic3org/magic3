@@ -44,6 +44,8 @@ DELETE FROM _page_info WHERE pn_id = 'm_index';
 
 -- テンプレート情報
 DELETE FROM _templates WHERE tm_mobile = true;
+DELETE FROM _templates WHERE tm_id = 's/default_jquery';
+DELETE FROM _templates WHERE tm_id = 's/default_jquery13';
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';

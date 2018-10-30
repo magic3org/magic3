@@ -40,7 +40,6 @@ class PageManager extends Core
 	private $defaultAdminDirScriptFiles;	// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
 	private $defaultAdminDirCssFiles;	// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
 	private $headScriptFiles = array();		// ウィジェットからの追加で読み込むスクリプトファイル
-	private $headPreMobileScriptFiles = array();// ウィジェットからの追加で読み込むスクリプトファイル(jQueryMobile用挿入ファイル)
 	private $headCssFiles = array();		// ウィジェットからの追加で読み込むCSSファイル
 	private $headRssFiles = array();		// HTMLヘッダに出力するRSS配信情報
 	private $currentWidgetPosition;			// 現在のウィジェットのポジション
@@ -102,7 +101,6 @@ class PageManager extends Core
 	private $rssChannel;				// RSSチャンネルデータ
 	private $selectedJQueryFilename;		// 使用対象のjQueryファイル
 	private $selectedJQueryUiFilename;		// 使用対象のjQuery UIファイル
-	private $selectedJQueryMobileFilename;		// 使用対象のjQueryMobileファイル
 	private $urlParamOrder;					// URLパラメータの並び順
 	private $wysiwygEditor;				// 管理画面用WYSIWYGエディター
 	private $optionTemplateId;			// 追加設定するテンプレートID
@@ -161,7 +159,6 @@ class PageManager extends Core
 	const CF_EXTERNAL_JQUERY = 'external_jquery';			// システム外部のjQueryを使用するかどうか
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_ADMIN_JQUERY_VERSION = 'admin_jquery_version';			// 管理画面用jQueryバージョン
-	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const SD_HEAD_OTHERS	= 'head_others';		// ヘッダその他タグ
 	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
 	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
@@ -652,19 +649,6 @@ class PageManager extends Core
 		}
 	}
 	/**
-	 * HTMLヘッダに出力するJavascriptの文字列(jQueryMobile用挿入スクリプト)を設定
-	 *
-	 * @param string $script	追加するJavascript内容
-	 * @return 					なし
-	 */
-	function addHeadPreMobileScript($script)
-	{
-		$destScript = trim($script);
-		if (!empty($destScript)){
-			if (!in_array($script, $this->headPreMobileScript)) $this->headPreMobileScript[] = $script;
-		}
-	}
-	/**
 	 * HTMLヘッダに出力する任意文字列を設定
 	 *
 	 * @param string $str	追加する任意文字列
@@ -749,24 +733,6 @@ class PageManager extends Core
 		} else {		// 文字列の場合
 			$destScript = trim($scriptFile);
 			if (!empty($destScript) && !in_array($destScript, $this->headScriptFiles)) $this->headScriptFiles[] = $destScript;
-		}
-	}
-	/**
-	 * HTMLヘッダに出力するJavascriptファイル(jQueryMobile用挿入ファイル)を追加
-	 *
-	 * @param string,array $scriptFile	JavascriptファイルURLパス
-	 * @return 					なし
-	 */
-	function addHeadPreMobileScriptFile($scriptFile)
-	{
-		if (is_array($scriptFile)){	// 配列の場合
-			for ($i = 0; $i < count($scriptFile); $i++){
-				$destScript = trim($scriptFile[$i]);
-				if (!empty($destScript) && !in_array($destScript, $this->headPreMobileScriptFiles)) $this->headPreMobileScriptFiles[] = $destScript;
-			}
-		} else {		// 文字列の場合
-			$destScript = trim($scriptFile);
-			if (!empty($destScript) && !in_array($destScript, $this->headPreMobileScriptFiles)) $this->headPreMobileScriptFiles[] = $destScript;
 		}
 	}
 	/**
@@ -1619,17 +1585,6 @@ class PageManager extends Core
 		
 		// 画面設定取得
 		$gDispManager->load();
-			
-		// ##### 画面に必要なスクリプトを追加 #####
-		// スマートフォン用URLのときはスマートフォン用のjQueryを使用
-		if ($gEnvManager->getIsSmartphoneSite()){
-			$this->selectedJQueryFilename = ScriptLibInfo::getJQueryFilename(10);			// スマートフォン用jQueryファイル
-			
-			if (isset($this->libFiles[ScriptLibInfo::LIB_JQUERYS_MOBILE]['script'])){
-				$scriptFiles = $this->libFiles[ScriptLibInfo::LIB_JQUERYS_MOBILE]['script'];
-				if (count($scriptFiles) > 0) $this->selectedJQueryMobileFilename = $scriptFiles[0];		// 使用対象のjQueryMobileファイル
-			}
-		}
 		
 		// Magic3管理用のスクリプトを追加
 		if (!$gEnvManager->getIsMobileSite()){		// 携帯用URL以外のとき
@@ -2014,40 +1969,32 @@ class PageManager extends Core
 			$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
 		} else if (strncmp($lib, 'jquery.', 7) == 0){		// jQueryプラグインのとき
 			$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-			if (strcmp($lib, 'jquery.mobile') == 0){	// jQueryMobileファイルのとき
-				// ##### jQueryMobileが読み込まれる前に読み込む必要があるスクリプトを設定 #####
-				if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
-					for ($i = 0; $i < count($this->headPreMobileScriptFiles); $i++){
-						$this->addScriptFile($this->headPreMobileScriptFiles[$i]);		// 通常機能用のスクリプト追加
+
+			// 依存ライブラリ追加
+			$dependentLib = ScriptLibInfo::getDependentLib($lib);
+			if (isset($dependentLib)){
+				for ($i = 0; $i < count($dependentLib); $i++){
+					$addLib = $dependentLib[$i];
+			
+					// ライブラリのファイルを追加
+					if (isset($this->libFiles[$addLib]['script'])){
+						$scriptFiles = $this->libFiles[$addLib]['script'];
+						for ($m = 0; $m < count($scriptFiles); $m++){
+							$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+						}
 					}
-				}
-			} else {
-				// 依存ライブラリ追加
-				$dependentLib = ScriptLibInfo::getDependentLib($lib);
-				if (isset($dependentLib)){
-					for ($i = 0; $i < count($dependentLib); $i++){
-						$addLib = $dependentLib[$i];
-				
-						// ライブラリのファイルを追加
-						if (isset($this->libFiles[$addLib]['script'])){
-							$scriptFiles = $this->libFiles[$addLib]['script'];
-							for ($m = 0; $m < count($scriptFiles); $m++){
-								$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
-							}
+					// ライブラリの言語ファイルを追加
+					if (isset($this->libFiles[$addLib]['script_lang'])){
+						$scriptFiles = ScriptLibInfo::getLangScript($addLib);
+						for ($m = 0; $m < count($scriptFiles); $m++){
+							$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
 						}
-						// ライブラリの言語ファイルを追加
-						if (isset($this->libFiles[$addLib]['script_lang'])){
-							$scriptFiles = ScriptLibInfo::getLangScript($addLib);
-							for ($m = 0; $m < count($scriptFiles); $m++){
-								$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
-							}
-						}
-						// ライブラリのCSSファイルを追加
-						if (isset($this->libFiles[$addLib]['css'])){
-							$cssFiles = $this->libFiles[$addLib]['css'];
-							for ($m = 0; $m < count($cssFiles); $m++){
-								$this->addCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
-							}
+					}
+					// ライブラリのCSSファイルを追加
+					if (isset($this->libFiles[$addLib]['css'])){
+						$cssFiles = $this->libFiles[$addLib]['css'];
+						for ($m = 0; $m < count($cssFiles); $m++){
+							$this->addCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
 						}
 					}
 				}
@@ -3796,19 +3743,6 @@ class PageManager extends Core
 					$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
 				}
 			}
-			// ##### 追加ライブラリの読み込み #####
-			if ($gEnvManager->getIsSmartphoneSite()){			// スマートフォン用URLのとき
-				$value = $gSystemManager->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面で常にjQuery Mobileを使用
-				if ($value){
-					// ##### jQueryMobileが読み込まれる前に読み込む必要があるスクリプトを設定 #####
-					if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
-						for ($l = 0; $l < count($this->headPreMobileScriptFiles); $l++){
-							$this->addScriptFile($this->headPreMobileScriptFiles[$l]);		// 通常機能用のスクリプト追加
-						}
-					}
-					$this->addScriptFile($this->selectedJQueryMobileFilename);
-				}
-			}
 			
 			// ##### Ajaxライブラリの読み込み #####
 			if (!$gEnvManager->isAdminDirAccess()){		// 通常画面へのアクセスのとき
@@ -3981,20 +3915,6 @@ class PageManager extends Core
 
 					// 外部のjQueryを使用する場合はSCRIPTタグを出力しない
 					if ($defaultScriptFile == $this->selectedJQueryFilename && $useExternalJquery) continue;
-					
-					// ##### jQueryMobileスクリプトを追加する場合は直前に初期化スクリプトを追加 #####
-					if ($defaultScriptFile == $this->selectedJQueryMobileFilename){
-						if (count($this->headPreMobileScript) > 0){
-							$replaceStr .= '<script type="text/javascript">' . M3_NL;
-							$replaceStr .= '//<![CDATA[' . M3_NL;
-							for ($j = 0; $j < count($this->headPreMobileScript); $j++){
-								$replaceStr .= $this->headPreMobileScript[$j];
-							}
-							$replaceStr .= M3_NL;
-							$replaceStr .= '//]]>' . M3_NL;
-							$replaceStr .= '</script>' . M3_NL;
-						}
-					}
 					
 					// スクリプトのURLを修正
 					if (strncasecmp($defaultScriptFile, 'http://', 7) == 0 || strncasecmp($defaultScriptFile, 'https://', 8) == 0){

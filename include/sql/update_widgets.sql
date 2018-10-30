@@ -410,25 +410,16 @@ INSERT INTO _widgets
 (wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                            wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('luis_chat', 'LUISチャットボット', 1,         '',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'LUISサービスと連携したチャットボット', false,        true,        true,         true,                true,          true,                true,           '2018-10-27',  now(),         now());
 
--- ウィジェット情報(スマートフォン用/メニュー)
-DELETE FROM _widgets WHERE wd_id = 's/jquery_menu';
-INSERT INTO _widgets
-(wd_id,           wd_name,                   wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_menu', 'jQueryページ-メニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のメニュー', 2,              'jquery.mobile',       '',            true,                       true,true,           1, 1, '2012-06-07', now(), now());
 -- ウィジェット情報(スマートフォン用/汎用コンテンツ)
 DELETE FROM _widgets WHERE wd_id = 's/content';
 INSERT INTO _widgets
 (wd_id,       wd_parent_id,      wd_name,                   wd_type,   wd_content_type, wd_category_id, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('s/content', 'default_content', '汎用コンテンツ-メイン', 'content', 'content',       'content',      true, '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '汎用コンテンツを管理し、画面に表示します。', 2,         '', 'content_detail=ckeditor_m3toolbar,jquery.tablednd;other=ckeditor_m3toolbar', true, true,         true,           0, '2014-11-22', now(), now());
-DELETE FROM _widgets WHERE wd_id = 's/jquery_content_menu';
-INSERT INTO _widgets
-(wd_id,                   wd_name,                             wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_content_menu', 'jQueryページ-コンテンツメニュー', 'menu',  'content',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のコンテンツリンクメニュー', 2,              'jquery.mobile',          '',            true,                       true,true,           1, 1, now(), now());
 -- ウィジェット情報(スマートフォン用/ブログ)
 DELETE FROM _widgets WHERE wd_id = 's/blog';
 INSERT INTO _widgets
 (wd_id,    wd_name,           wd_type, wd_content_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/blog', 'ブログ-メイン', 'blog',  'blog',          'blog',         '1.0.3',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログの記事を表示する。jQueryページ対応。', 2,              'jquery.cookie,jquery.mobile',       'elfinder,ckeditor_m3toolbar',            true, true,                      false,true,           1, 2, '2012-03-26', now(), now());
+('s/blog', 'ブログ-メイン', 'blog',  'blog',          'blog',         '1.0.3',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログの記事を表示する。jQueryページ対応。', 2,              'jquery.cookie',       'elfinder,ckeditor_m3toolbar',            true, true,                      false,true,           1, 2, '2012-03-26', now(), now());
 DELETE FROM _widgets WHERE wd_id = 's/blog_category';
 INSERT INTO _widgets
 (wd_id,             wd_name,             wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -447,23 +438,6 @@ DELETE FROM _widgets WHERE wd_id = 's/banner';
 INSERT INTO _widgets
 (wd_id,      wd_parent_id, wd_name,      wd_content_type, wd_category_id, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('s/banner', 'banner3',    'バナー表示', 'banner',        'subcontent',   true,            '3.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', 2, '',                'elfinder',                  true, true,         true,                true,  0,         1, '2015-01-02', now(),         now());
--- ウィジェット情報(スマートフォン用/デザイン)
-DELETE FROM _widgets WHERE wd_id = 's/jquery_header';
-INSERT INTO _widgets
-(wd_id,             wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_header', 'jQueryページ-ヘッダ', 'design',       '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のヘッダ', 2,              'jquery.mobile',          'ckeditor_m3toolbar',            true, true,                      true,true, 10,           1, 1, now(), now());
-DELETE FROM _widgets WHERE wd_id = 's/jquery_localize';
-INSERT INTO _widgets
-(wd_id,               wd_name,                   wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_localize', 'jQueryページ-日本語化', 'design',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のメッセージ日本語化ウィジェット', 2,              'jquery.mobile',          '',            false, false,                      false,true, 0,           3, -1, now(), now());
-DELETE FROM _widgets WHERE wd_id = 's/jquery_footer';
-INSERT INTO _widgets
-(wd_id,             wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_footer', 'jQueryページ-フッタ', 'design',       '1.0.3',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のフッタ', 2,              'jquery.mobile',          'ckeditor_m3toolbar',            true, false,                      true,true, 1, 1, '2014-04-20', now(), now());
-DELETE FROM _widgets WHERE wd_id = 's/jquery_init';
-INSERT INTO _widgets
-(wd_id,           wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_init', 'jQueryページ-初期化', 'design',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用の初期化(mobileinit)スクリプト', 2,              'jquery.mobile',          '',            true, true,                      true,true, 3, 1, now(), now());
 -- ウィジェット情報(スマートフォン用/会員)
 DELETE FROM _widgets WHERE wd_id = 's/login';
 INSERT INTO _widgets

@@ -61,7 +61,6 @@ class ScriptLibInfo
 
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
-	const LIB_JQUERYS_MOBILE		= 'jquery.mobile';
 
 	// jQueryプラグイン
 	const LIB_JQUERY_EASING			= 'jquery.easing';
@@ -310,12 +309,6 @@ class ScriptLibInfo
 
 	// スマートフォン用jQueryファイル
 	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要
-//	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.2.1.min.js';					// JQuery Mobile
-//	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.2.1.min.css';				// JQuery Mobile
-//	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.3.0.min.js';					// JQuery Mobile
-//	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.3.0.min.css';				// JQuery Mobile
-	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.3.2.min.js';					// JQuery Mobile
-	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.3.2.min.css';				// JQuery Mobile
 
 	// ##### 外部ライブラリ #####
 	const LIB_GOOGLEMAPS			= 'googlemaps';
@@ -561,8 +554,7 @@ class ScriptLibInfo
 
 			// スマートフォン用jQueryライブラリ
 			self::$libs[self::LIB_JQUERYS] 			= array(	'script' => array(self::getJQueryFilename(10)));		// スマートフォン用jQuery
-			self::$libs[self::LIB_JQUERYS_MOBILE]		= array(	'script' 	=> array(self::JQUERYS_MOBILE_FILENAME),	// JQuery Mobile
-															'css'		=> array(self::JQUERYS_MOBILE_CSS));
+
 			// 外部ライブラリ
 			self::$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME . $googleMapsParams));
 		}
