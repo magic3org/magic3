@@ -647,7 +647,7 @@ class SystemDb extends BaseDb
 	 */
 	function getAvailableWidgetList($type, &$rows)
 	{
-		$queryStr  = 'SELECT * FROM _widgets LEFT JOIN _widget_category ON wd_category_id = wt_id AND wt_deleted = false ';
+		$queryStr  = 'SELECT * FROM _widgets LEFT JOIN _widget_category ON wd_category_id = wt_id ';
 		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
 		$queryStr .=     'AND wd_available = true ';		// メニューから選択可能なもの
 		$queryStr .=     'AND wt_visible = true ';		// カテゴリー表示可能
@@ -664,7 +664,6 @@ class SystemDb extends BaseDb
 				$queryStr .=    'AND wd_mobile = true ';		// 携帯用
 				break;
 		}
-		//$queryStr .=   'ORDER BY wd_id';
 		$queryStr .=   'ORDER BY wt_sort_order, wd_sort_order, wd_id';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;

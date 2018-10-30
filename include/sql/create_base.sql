@@ -688,21 +688,11 @@ CREATE TABLE _widgets (
 -- ウィジェットカテゴリマスター
 DROP TABLE IF EXISTS _widget_category;
 CREATE TABLE _widget_category (
-    wt_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     wt_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
-    wt_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
-
     wt_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
     wt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     wt_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
-
-    wt_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
-    wt_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
-    wt_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
-    wt_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
-    wt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
-    PRIMARY KEY          (wt_serial),
-    UNIQUE               (wt_id,        wt_history_index)
+    PRIMARY KEY          (wt_id)
 ) ENGINE=innodb;
 
 -- ウィジェットパラメータマスター

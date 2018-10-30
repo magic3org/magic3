@@ -483,20 +483,19 @@ INSERT INTO _operation_type
 
 -- ウィジェットカテゴリマスター
 INSERT INTO _widget_category
-(wt_id,        wt_name,                wt_sort_order) VALUES
-('',           'その他',               100),
-('content',    '汎用コンテンツ',       1),
-('blog',       'ブログ',               2),
-('bbs',        'BBS',                  3),
-('commerce',   'Eコマース',            4),
-('photo',      'フォトギャラリー',     5),
-('event',      'イベント情報',         6),
-('wiki',       'Wiki',                 7),
-('user',       'ユーザ作成コンテンツ', 8),
-('member',     '会員',                 9),
-('subcontent', '補助コンテンツ',       20),
-('search',     '検索',                 21),
-('menu',       'メニュー',             22),
-('image',      '画像',                 23),
-('design',     'デザイン',             24),
-('admin',      '管理画面用',           50);
+(wt_id,        wt_name,                wt_sort_order, wt_visible) VALUES
+('',           'その他',               100,           true),
+('content',    '汎用コンテンツ',       1,             true),
+('blog',       'ブログ',               2,             true),
+('bbs',        'BBS',                  3,             false),
+('commerce',   'Eコマース',            4,             false),
+('photo',      'フォトギャラリー',     5,             false),
+('event',      'イベント情報',         6,             false),
+('wiki',       'Wiki',                 7,             true),
+('member',     '会員',                 9,             false),
+('subcontent', '補助コンテンツ',       20,            true),
+('search',     '検索',                 21,            true),
+('menu',       'メニュー',             22,            true),
+('image',      '画像',                 23,            true),
+('design',     'デザイン',             24,            true),
+('admin',      '管理画面用',           50,            true);

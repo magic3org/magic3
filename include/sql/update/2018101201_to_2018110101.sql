@@ -83,4 +83,31 @@ INSERT INTO _nav_item
 (10302, 10300,        1,        'admin_menu.en', 'configsys',          0,               true,       '',       '',               'System Information',         'System Information',         'Configure sytem information.'),
 (10303, 10300,        2,        'admin_menu.en', 'mainte',             0,               true,       '',       '',               'System Maintenance', 'System Maintenance', 'Maintenance about file system and database.');
 
+-- ウィジェットカテゴリマスター
+DROP TABLE IF EXISTS _widget_category;
+CREATE TABLE _widget_category (
+    wt_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
+    wt_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
+    wt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    wt_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
+    PRIMARY KEY          (wt_id)
+) ENGINE=innodb;
+INSERT INTO _widget_category
+(wt_id,        wt_name,                wt_sort_order, wt_visible) VALUES
+('',           'その他',               100,           true),
+('content',    '汎用コンテンツ',       1,             true),
+('blog',       'ブログ',               2,             true),
+('bbs',        'BBS',                  3,             false),
+('commerce',   'Eコマース',            4,             false),
+('photo',      'フォトギャラリー',     5,             false),
+('event',      'イベント情報',         6,             false),
+('wiki',       'Wiki',                 7,             true),
+('member',     '会員',                 9,             false),
+('subcontent', '補助コンテンツ',       20,            true),
+('search',     '検索',                 21,            true),
+('menu',       'メニュー',             22,            true),
+('image',      '画像',                 23,            true),
+('design',     'デザイン',             24,            true),
+('admin',      '管理画面用',           50,            true);
+
 -- *** システム標準テーブル ***
