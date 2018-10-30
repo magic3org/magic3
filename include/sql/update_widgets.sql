@@ -277,10 +277,6 @@ INSERT INTO _widgets
 (wd_id,                wd_name,                       wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,  wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('wiki_update', 'Wiki-更新リスト', 'wiki',     'bootstrap',   '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wikiコンテンツの最新更新リストを表示。', '', '', true,  false,              true, true, '2014-07-20', now(),         now());
 -- ウィジェット情報(PC用/その他)
-DELETE FROM _widgets WHERE wd_id = 'default_footer';
-INSERT INTO _widgets
-(wd_id,            wd_name,            wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('default_footer', 'デフォルトフッタ', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'フッタ部分に表示し、著作権の表示を行う。',      true,         true,        false,        false,               false,true,           0, 1, -1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'custom_header';
 INSERT INTO _widgets
 (wd_id,           wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES

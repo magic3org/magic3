@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,8 +17,6 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class admin_custom_footerWidgetContainer extends BaseAdminWidgetContainer
 {
-	const IMAGE_DIR = 'images';				// 画像ディレクトリ名
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -72,7 +70,7 @@ class admin_custom_footerWidgetContainer extends BaseAdminWidgetContainer
 		} else {		// 初期表示の場合
 			// デフォルト値設定
 			$footContent = '';	// フッタコンテンツ
-			$footContent .= '<div align="center">(C) ' . date("Y") . ' Magic3.org</div>' . M3_NL;
+			$footContent .= '<div align="center">(C) ' . date("Y") . ' Magic3.org.</div>' . M3_NL;
 			$footContent .= '<div align="center"><a href="http://www.magic3.org">Magic3 ' . M3_SYSTEM_VERSION . '</a> is licensed under the terms of the GNU General Public License.</div>' . M3_NL;
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: custom_footerWidgetContainer.php 2222 2009-08-12 06:50:26Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -51,7 +51,7 @@ class custom_footerWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$footContent = '';	// フッタコンテンツ
-		$footContent .= '<div align="center">(C) ' . date("Y") . ' Magic3.org</div>' . M3_NL;
+		$footContent .= '<div align="center">(C) ' . date("Y") . ' Magic3.org.</div>' . M3_NL;
 		$footContent .= '<div align="center"><a href="http://www.magic3.org">Magic3 ' . M3_SYSTEM_VERSION . '</a> is licensed under the terms of the GNU General Public License.</div>' . M3_NL;
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
