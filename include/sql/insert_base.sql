@@ -489,7 +489,7 @@ INSERT INTO _widget_category
 ('commerce',   'Eコマース',            4,             false),
 ('photo',      'フォトギャラリー',     5,             false),
 ('event',      'イベント情報',         6,             false),
-('wiki',       'Wiki',                 7,             true),
+('wiki',       'Wiki',                 7,             false),
 ('member',     '会員',                 9,             false),
 ('subcontent', '補助コンテンツ',       20,            true),
 ('search',     '検索',                 21,            true),
