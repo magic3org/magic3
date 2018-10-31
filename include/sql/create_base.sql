@@ -169,15 +169,6 @@ CREATE TABLE _session (
     PRIMARY KEY  (ss_id)
 ) ENGINE=innodb;
 
--- 管理者一時キートラン(廃止予定)
-DROP TABLE IF EXISTS _admin_key;
-CREATE TABLE _admin_key (
-    ak_id                CHAR(32)       DEFAULT ''                    NOT NULL,      -- ID
-    ak_ip                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセス元IP(IPv6対応)
-    ak_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
-    PRIMARY KEY  (ak_id)
-) ENGINE=innodb;
-
 -- クライアント設定値
 DROP TABLE IF EXISTS _client_param;
 CREATE TABLE _client_param (
@@ -347,16 +338,6 @@ CREATE TABLE _login_log (
     ll_pre_login_dt      TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 前回ログイン日時
     ll_last_login_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 最終ログイン日時
     PRIMARY KEY  (ll_user_id)
-) ENGINE=innodb;
-
--- ユーザログインエラートラン(廃止予定)
-DROP TABLE IF EXISTS _login_err_log;
-CREATE TABLE _login_err_log (
-    le_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    le_account           VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ログインアカウント
-    le_ip                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセス元IP(IPv6対応)
-    le_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
-    PRIMARY KEY          (le_serial)
 ) ENGINE=innodb;
 
 -- ユーザアクセスログトラン

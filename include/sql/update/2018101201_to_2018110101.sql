@@ -114,4 +114,24 @@ INSERT INTO _widget_category
 ('design',     'デザイン',             24,            true),
 ('admin',      '管理画面用',           50,            true);
 
+-- 未使用テーブル削除
+DROP TABLE IF EXISTS _admin_key;  -- 管理者一時キートラン
+DROP TABLE IF EXISTS _login_err_log;  -- ユーザログインエラートラン
+
 -- *** システム標準テーブル ***
+-- 未使用テーブル削除
+DROP TABLE IF EXISTS menu;  -- メニューマスター
+DROP TABLE IF EXISTS menu_item;  -- メニュー項目マスター
+
+DROP TABLE IF EXISTS quiz_config;  -- クイズ設定マスター
+DROP TABLE IF EXISTS quiz_set_id;  -- クイズパターンセットIDマスター
+DROP TABLE IF EXISTS quiz_item_def;  -- クイズ問題定義マスター
+DROP TABLE IF EXISTS quiz_user_post;  -- クイズユーザ回答トラン
+
+DROP TABLE IF EXISTS mblog_config;  -- マイクロブログ設定マスター
+DROP TABLE IF EXISTS mblog_thread;  -- マイクロブログスレッドマスター
+DROP TABLE IF EXISTS mblog_thread_message;  -- マイクロブログスレッドメッセージトラン
+DROP TABLE IF EXISTS mblog_member;  -- マイクロブログ会員情報マスター
+
+DROP TABLE IF EXISTS event_comment;  -- イベントコメントトラン
+
