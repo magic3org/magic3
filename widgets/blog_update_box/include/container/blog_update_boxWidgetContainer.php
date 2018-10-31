@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath()	. '/blog_update_boxDb.php');
-require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 
 class blog_update_boxWidgetContainer extends BaseWidgetContainer
 {

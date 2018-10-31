@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath()	. '/event_categoryDb.php');
-//require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 
 class event_categoryWidgetContainer extends BaseWidgetContainer
 {

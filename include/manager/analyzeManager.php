@@ -107,23 +107,9 @@ class AnalyzeManager extends Core
 		if (empty($keyword)) return false;
 		
 		// 端末タイプを判定
-		$deviceType = 0;	// 端末をPCに初期化
-		if ($this->gEnv->isMobile()){		// 携帯のとき
-			$deviceType = 1;
-		}		// スマートフォンのとき
 		
 		// クライアントIDを取得
-		$cid = '';
-		switch ($deviceType){
-			case 0:			// PC
-			case 2:			// スマートフォン
-			default:
-				$cid = $this->gAccess->getClientId();// クッキー値のクライアントID
-				break;
-			case 1:			// 携帯
-				$cid = $this->gEnv->getMobileId();	// 携帯端末ID
-				break;
-		}
+		$cid = $this->gAccess->getClientId();// クッキー値のクライアントID
 		
 		// スペース区切りの場合はワードを分割
 		// 全角英数を半角に、半角カナ全角ひらがなを全角カナに変換
@@ -135,7 +121,7 @@ class AnalyzeManager extends Core
 		$path = $this->gEnv->getAccessPath();
 		
 		// 検索キーワードログ書き込み
-		$this->db->writeSearchWordLog($deviceType, $cid, $widgetId, $keyword, $basicWord, $path);
+		$this->db->writeSearchWordLog(0/*デバイスタイプ*/, $cid, $widgetId, $keyword, $basicWord, $path);
 		return true;
 	}
 	/**

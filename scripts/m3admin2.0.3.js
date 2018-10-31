@@ -444,28 +444,6 @@ function m3OpenFlashFileBrowser(seturl_callback)
 	});
 }
 /**
- * TextAreaをHTMLエディターに変更
- *
- * @param string id			TextAreaタグのIDまたはname
- * @param bool	isMobile	携帯用のツールバー表示
- * @return なし
- */
-function m3_setHtmlEditor(id, isMobile)
-{
-	var oFCKeditor		= new FCKeditor(id);
-	oFCKeditor.BasePath	= M3_ROOT_URL + '/scripts/fckeditor2.6.6/';
-	oFCKeditor.Config['CustomConfigurationsPath'] = M3_ROOT_URL + '/scripts/m3/fckconfig.js';
-	if (isMobile == null || isMobile == false){
-		oFCKeditor.ToolbarSet	= "M3Default";			// ツールバーリソース名
-	} else {
-		oFCKeditor.ToolbarSet	= "M3MobileDefault";	// ツールバーリソース名
-	}
-	oFCKeditor.Width	= "100%";
-	oFCKeditor.Height	= "100%";
-	oFCKeditor.Value	= 'This is some <strong>sample text<\/strong>. You are using <a href="http://www.fckeditor.net/">FCKeditor<\/a>.';
-	oFCKeditor.ReplaceTextarea();
-}
-/**
  * TextAreaをWYSIWYGエディターに変更
  *
  * @param string id				TextAreaタグのIDまたはname

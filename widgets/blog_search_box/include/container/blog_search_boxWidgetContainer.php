@@ -14,7 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
-require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 
 class blog_search_boxWidgetContainer extends BaseWidgetContainer
 {

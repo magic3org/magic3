@@ -2215,30 +2215,22 @@ class PageManager extends Core
 		if (headers_sent($filename, $linenum)){		// HTTPヘッダが既に送信されているとき
 			echo "$filename の $linenum 行目でヘッダがすでに送信されています。";
 		} else {
-			if ($gEnvManager->isMobile()){		// 携帯の場合
-				// ドコモ端末の場合はリクエストヘッダにXHTMLを指定しないとXHTMLを処理しない
-				$agent = $gInstanceManager->getMobileAgent();
-				if ($agent->isDoCoMo()){	// ドコモ端末のとき
-					header('Content-Type: application/xhtml+xml;');
-				}
-			} else {
-				// キャッシュを無効にする場合
-				header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
-				header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
-				header('Cache-Control: post-check=0, pre-check=0', false);
-				header('Pragma: no-cache');
-		
-				// 更新日時
-				header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-		
-				// 文字コード設定
-				header('Content-Type: text/html; charset=UTF-8');			// 2018/4/19 Firefoxで文字化けが起きる場合があるので追加
-				
-				// Ajax用JSON型データをHTTPヘッダに格納
-				$gInstanceManager->getAjaxManager()->header();
-			}
+			// キャッシュを無効にする場合
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0', false);
+			header('Pragma: no-cache');
+	
+			// 更新日時
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+	
+			// 文字コード設定
+			header('Content-Type: text/html; charset=UTF-8');			// 2018/4/19 Firefoxで文字化けが起きる場合があるので追加
+			
+			// Ajax用JSON型データをHTTPヘッダに格納
+			$gInstanceManager->getAjaxManager()->header();
+
 			// システム制御画面が設定されている場合はステータスコードを変更
-			//if ($this->gEnv->getIsMaintenance()){
 			if (!$this->isRedirect){			// リダイレクトがセットされていない場合
 				switch ($this->systemHandleMode){
 					case 10:			// サイト非公開(システムメンテナンス)
@@ -2948,7 +2940,7 @@ class PageManager extends Core
 		if ($this->isWidgetAbort) $contents .= 'NO DATA' . M3_NL;
 		
 		// Magic3出力コメント
-		if (!$gEnvManager->isMobile() && $this->outputByHtml){		// 携帯以外で、HTML出力のとき
+		if ($this->outputByHtml){		// HTML出力のとき
 			$contents .= '<!-- created by ' . M3_SYSTEM_NAME . ' v' . M3_SYSTEM_VERSION . ' - http://www.magic3.org -->' . M3_NL;
 			$contents .= '<!-- convert time: ' . sprintf('%01.03f', microtime(true) - M3_MTIME) . ' -->' . M3_NL;
 		}
@@ -3332,60 +3324,6 @@ class PageManager extends Core
 	 */
 	function endWidgetXml()
 	{
-	}
-	/**
-	 * 携帯用ドキュメントタイプ出力
-	 *
-	 * @return string				ドキュメントタイプ出力
-	 */
-	function getMobileDocType()
-	{
-		global $gEnvManager;
-		global $gInstanceManager;
-		global $gRequestManager;
-		
-		$docTypeStr = '';		// 出力するDocType
-		$agent = $gInstanceManager->getMobileAgent();
-		if ($agent->isDoCoMo()){	// ドコモ端末のとき
-			$htmlVer = $agent->getHTMLVersion();
-			switch ($htmlVer){
-				case '4.0':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				case '5.0':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.1) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				case '6.0':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.0) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				case '7.0':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.1) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				case '7.1':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.2) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				case '7.2':
-					$docTypeStr = '<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.3) 1.0//EN" "i-xhtml_4ja_10.dtd">';
-					break;
-				default:
-					if (preg_match("/^DoCoMo\/1\.0/i", $gRequestManager->trimServerValueOf('HTTP_USER_AGENT'))){		// mova端末のとき
-						// mova端末のときはドキュメントタイプなしにすると画面表示可能
-						return '';
-					}
-					break;
-			}
-		} else if ($agent->isEZweb()){	// au端末のとき
-			if ($agent->isWAP2()){
-				$docTypeStr = '<!DOCTYPE html PUBLIC "-//OPENWAVE//DTD XHTML 1.0//EN" "http://www.openwave.com/DTD/xhtml-basic.dtd">';
-			}
-		} else if ($agent->isSoftBank()){	// ソフトバンク端末のとき
-			if ($agent->isTypeW() || $agent->isType3GC()){
-				$docTypeStr = '<!DOCTYPE html PUBLIC "-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN" "xhtml-basic10-plus.dtd">';
-			}
-		}
-		echo '<?xml version="1.0" encoding="' . M3_HTML_CHARSET . '" ?>' . M3_NL;
-		if (empty($docTypeStr)) $docTypeStr = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-		echo $docTypeStr . M3_NL;
 	}
 	/**
 	 * デフォルトのXML宣言取得

@@ -14,16 +14,6 @@
  * @link       http://www.magic3.org
  */
 /**
- * 携帯用ドキュメントタイプ取得
- *
- * @return 						なし
- */
-function m3MobileDocType()
-{
-	global $gPageManager;
-	$gPageManager->getMobileDocType();
-}
-/**
  * ウィジェット埋め込み
  *
  * テンプレートから固定で直接ウィジェットを呼び出すための関数

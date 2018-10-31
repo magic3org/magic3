@@ -8,12 +8,11 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(M3_SYSTEM_INCLUDE_PATH . '/common/htmlEdit.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class TextConvManager extends Core
@@ -27,9 +26,6 @@ class TextConvManager extends Core
 	private $convBr;			// 改行変換するかどうか
 	private $contentInfo;		// コンテンツの情報
 	private $htmlEscapedValue;	// 変換後の値をHTMLエスケープ処理するかどうか
-	const DEFAULT_MOBILE_IMAGE_WIDTH = 240;		// 携帯用画像のデフォルトサイズ(幅)
-	const DEFAULT_MOBILE_IMAGE_HEIGHT = 320;	// 携帯用画像のデフォルトサイズ(高さ)
-	const DEFAULT_MOBILE_IMAGE_FILE_EXT = 'gif';		// 携帯用画像の形式
 	const CONTENT_MACRO_OPTION_SEPARATOR = ';';			// コンテンツマクロのオプション設定の区切り
 	const NO_DATA_DISP_LABEL = '名称未設定';			// データがない場合の表示ラベル
 	const NO_TIME_DATA_DISP_LABEL = '名称未設定';			// 時間データがない場合の表示ラベル
@@ -73,7 +69,6 @@ class TextConvManager extends Core
 			$key = $keywords[$i];
 			$value = $this->db->getKeyValue($key, $tmp);
 			if ($convBr){// 改行コード変換の場合
-				//$value = HtmlEdit::convLineBreakToBr($value);
 				$value = $this->convLineBreakToBr($value);
 			}
 			$dest = str_replace(M3_TAG_START . $key . M3_TAG_END, $value, $dest);
@@ -89,7 +84,6 @@ class TextConvManager extends Core
 	function parseUserMacro($src)
 	{
 		$fields = array();
-//		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
 		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';	// オプションパラメータは「|」以降(2015/4/20変更)
 		
 		if (is_array($src)){
@@ -495,246 +489,6 @@ class TextConvManager extends Core
 		return $tag;
     }
 	/**
-	 * Magic3絵文字タグを携帯端末に合わせて変換
-	 *
-	 * @param string $src		変換するデータ
-	 * @param string $dest      変換後データ
-	 * @return bool				true=成功、false=失敗
-	 */
-	function convEmoji($src, &$dest)
-	{
-		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_EMOJI_CODE);		// 「[」を正規表現用に「\[」に変換
-		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「[」を正規表現用に「\[」に変換
-		//$str = '/' . $startTag . ':(\d+?)' . $endTag . '/';
-		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(\d+?)' . $endTag . '/';			// セパレータを「:」または「|」どちらでも使用可にする
-        $dest = preg_replace_callback($str, array($this, "_replace_emoji_callback"), $src);
-		return true;
-	}
-	/**
-	 * Magic3絵文字タグ変換コールバック関数
-	 *
-	 * @param array $matchData		検索マッチデータ
-	 * @return string				変換後データ
-	 */
-    function _replace_emoji_callback($matchData)
-	{
-		global $gEnvManager;
-		global $gInstanceManager;
-		global $EMOJI;		// 絵文字マップ情報
-
-		// 絵文字情報読み込み
-		require_once(M3_SYSTEM_INCLUDE_PATH . '/data/emojiMap.php');// 絵文字マップ情報
-		
-		// 絵文字変換ライブラリ読み込み
-		require_once($gEnvManager->getLibPath() . '/MobilePictogramConverter-1.2.0/MobilePictogramConverter.php');
-		
-		$agent = $gInstanceManager->getMobileAgent();
-		$emojiUrl = $gEnvManager->getEmojiImagesUrl();
-				
-		// 絵文字コードよりMagic3絵文字タグを作成
-		// 配列のインデックスは、「絵文字コード-1」で指定
-        $index = intval($matchData[1]) -1;		// 絵文字コード
-		if ($index < 0 || count($EMOJI) <= $index) return '';// エラーチェック
-		
-		$emojiData = pack('H*', $EMOJI[$index]['i']);		// imodeSJISデータ
-		$mpc = MobilePictogramConverter::factory($emojiData, MPC_FROM_FOMA, MPC_FROM_CHARSET_SJIS);
-
-		if ($agent->isDoCoMo()){	// ドコモ端末のとき
-			$dest = $mpc->Convert(MPC_TO_FOMA, MPC_TO_OPTION_RAW);
-		} else if ($agent->isEZweb()){	// au端末のとき
-			$dest = $mpc->Convert(MPC_TO_EZWEB, MPC_TO_OPTION_RAW);
-		} else if ($agent->isSoftBank()){	// ソフトバンク端末のとき
-			$dest = $mpc->Convert(MPC_TO_SOFTBANK, MPC_TO_OPTION_RAW);
-		} else {		// その他の端末のとき(PC用)
-			$emojiImageUrl = $emojiUrl . '/' . $EMOJI[$index]['filename'] . '.gif?code=' . $index;
-			$dest = '<img src="' . $emojiImageUrl . '" />';
-		}
-		return $dest;
-    }
-	/**
-	 * PC用コンテンツを携帯用コンテンツに自動変換
-	 *
-	 * 以下の自動変換処理を行う
-	 *  ・画像の自動縮小
-	 *  ・tableタグ→divタグ
-	 *
-	 * @param string $src			変換するデータ
-	 * @param string $rootUrl   	リソース用のルートURL
-	 * @param string $contentType	コンテンツタイプ
-	 * @param timestamp $contentDt	コンテンツの作成日時
-	 * @return string				変換後データ
-	 */
-	function autoConvPcContentToMobile($src, $rootUrl, $contentType, $contentDt)
-	{
-		$this->rootUrl = $rootUrl;					// ルートURL
-		$this->contentType = $contentType;
-		$this->contentDt = $contentDt;
-		$dest = $src;
-		
-		// ### タグの削除 ###
-		// 表示しないタグを削除。データ量を減らす。
-		$removeTags = array('script', 'style', 'noframes?');
-		foreach ($removeTags as $value){
-			$dest = preg_replace('/<'.$value.'\b[^>]*?>.*?<\/'.$value.'\b[^>]*?>/si', '', $dest);
-		}
-		
-		// テーブルタグを除く
-		$dest = $this->deleteTag($dest, 'table');
-		$dest = $this->deleteTag($dest, 'tbody');
-		$dest = $this->deleteTag($dest, 'thead');
-		$dest = $this->deleteTag($dest, 'tfoot');
-		$dest = $this->deleteTag($dest, 'tr');
-		
-		// ### 他のタグへの変換 ###
-		// IFRAMEタグをAタグに変換
-		$str = '/<iframe\b(.*?)>(.*?)<\/iframe\b[^>]*?>/si';
-		$dest = preg_replace_callback($str, array($this, "_replace_iframe_callback"), $dest);
-		
-		// TH,TD,CAPTIONタグをDIVに変換
-/*		$dest = preg_replace('/<th\b[^>]*?>/si', '<div>', $dest);
-		$dest = preg_replace('/<\/th\b[^>]*?>/si', '</div>', $dest);
-		$dest = preg_replace('/<td\b[^>]*?>/si', '<div>', $dest);
-		$dest = preg_replace('/<\/td\b[^>]*?>/si', '</div>', $dest);*/
-		$dest = preg_replace('/<(\/?)th\b[^>]*?>/si', '<\\1div>', $dest);
-		$dest = preg_replace('/<(\/?)td\b[^>]*?>/si', '<\\1div>', $dest);
-		$dest = preg_replace('/<(\/?)caption\b[^>]*?>/si', '<\\1div>', $dest);
-		
-		// UL,OL,LIタグをDIVに変換
-		$dest = preg_replace('/<(\/?)(?:ul|ol|li)>/si', '<\\1div>', $dest);
-		
-		// DL,DT,DDタグをDIVに変換
-		$dest = preg_replace('/<(\/?)(?:dl|dt|dd)>/si', '<\\1div>', $dest);
-		
-		// PタグをDIVに変換
-		$dest = preg_replace('/<p\b[^>]*?>/si', '<div>', $dest);
-		$dest = preg_replace('/<\/p\b[^>]*?>/si', '</div>', $dest);
-		$dest = preg_replace('/<div>\s*<\/div>/si', '', $dest);		// 空のDIVタグ削除
-		
-		// BLOCKQUOTEタグの処理
-		$dest = preg_replace('/<\/?blockquote>/si', '<hr />', $dest);
-		
-		// PREタグの処理
-		/*$dest = preg_replace_callback('/<pre\b[^>]*?>(.*?)<\/pre\b[^>]*?>/si', create_function('$matches', 'return "<hr />".nl2br(trim($matches[1]))."<hr />";'), $dest);*/
-		$dest = preg_replace_callback('/<pre\b[^>]*?>(.*?)<\/pre\b[^>]*?>/si', function($matches){ return "<hr />".nl2br(trim($matches[1]))."<hr />"; }, $dest);
-		
-		// 連続したタグをまとめる
-		$search = array(
-			"'(?:<hr\b[^>]*?>\s*){2,}'si",
-			"'(?:<br\b[^>]*?>\s*){3,}'si"
-		);
-		$replace = array(
-			"<hr />",
-			"<br /><br />"
-		);
-		$dest = preg_replace($search, $replace, $dest);
-		
-		// 画像を携帯用に作成
-		$str = '/<img[^<]*?src\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
-		$dest = preg_replace_callback($str, array($this, "_replace_to_mobile_callback"), $dest);
-		return $dest;
-	}
-	/**
-	 * IMGタグ変換コールバック関数(携帯用)
-	 *
-	 * @param array $matchData		検索マッチデータ
-	 * @return string				変換後データ
-	 */
-    function _replace_to_mobile_callback($matchData)
-	{
-		global $gEnvManager;
-		
-		// 画像のパスを取得
-		$relativePath = '';
-		$imageFile = $matchData[1];
-		$imageUrl = $matchData[1];
-		if (strStartsWith($imageUrl, '/')){
-			$relativePath = $gEnvManager->getRelativePathToSystemRootUrl($gEnvManager->getDocumentRootUrl() . $imageUrl);
-		} else {
-			if ($gEnvManager->isSystemUrlAccess($imageUrl)){		// システム内のファイルのとき
-				$relativePath = $gEnvManager->getRelativePathToSystemRootUrl($imageUrl);
-			}
-		}
-		if (empty($relativePath)){		// システム管理外の画像はそのまま出力
-			$destTag = $matchData[0];
-		} else {
-			$resDir = '/' . M3_DIR_NAME_RESOURCE . '/';
-			if (strStartsWith($relativePath, $resDir)){		// リソースディレクトリ以下のリソースのみ変換
-				$imageFile = $gEnvManager->getSystemRootPath() . $relativePath;
-				$destImageFilename = preg_replace('/.[^.]+$/', '', basename($relativePath)) . '.' . self::DEFAULT_MOBILE_IMAGE_FILE_EXT;	// 作成画像のファイル名
-				$destImageRelativePath = dirname(substr($relativePath, strlen($resDir))) . '/' . $destImageFilename;
-				$destImageFile = $gEnvManager->getResourcePath() . '/widgets/' . $this->contentType . '/' . M3_DIR_NAME_MOBILE . '/' . $destImageRelativePath;
-				$destImageUrl = $gEnvManager->getResourceUrl() . '/widgets/' . $this->contentType . '/' . M3_DIR_NAME_MOBILE . '/' . $destImageRelativePath;
-
-				// ファイルと日時をチェック
-				$createImage = true;
-				if (file_exists($destImageFile) && strtotime($this->contentDt) < filemtime($destImageFile)){
-					$createImage = false;
-				}
-				
-				// 画像の作成
-				$isNoErr = true;
-				if ($createImage){
-					$imageSize = getimagesize($imageFile);
-					$imageType = $this->_getImageType($imageSize['mime']);
-					
-					// ファイル拡張子のチェック
-					if (empty($imageType)){
-						$errMsg = 'ファイル形式が不明です';
-						$isNoErr = false;		// エラー発生
-					}
-					
-					if ($isNoErr){
-						// 画像格納用のディレクトリ作成
-						$destDir = dirname($destImageFile);
-						if (!file_exists($destDir)) mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
-						
-						// 画像のサイズを求める
-						$srcWidth = $imageSize[0];
-						$srcHeight = $imageSize[1];
-						$destWidth = $srcWidth;
-						$destHeight = $srcHeight;
-						if ($srcWidth > $srcHeight){
-							if ($srcWidth > self::DEFAULT_MOBILE_IMAGE_WIDTH){
-								$destWidth = self::DEFAULT_MOBILE_IMAGE_WIDTH;
-								$destHeight = $srcHeight * (self::DEFAULT_MOBILE_IMAGE_WIDTH / $srcWidth);
-							}
-						} else {
-							if ($srcHeight > self::DEFAULT_MOBILE_IMAGE_HEIGHT){
-								$destWidth = $srcWidth * (self::DEFAULT_MOBILE_IMAGE_HEIGHT / $srcHeight);
-								$destHeight = self::DEFAULT_MOBILE_IMAGE_HEIGHT;
-							}
-						}
-						
-						// 携帯用のため画像はすべてgifで作成
-						$imageObj = $this->_createImage($imageType, $imageFile, $destWidth, $destHeight);
-						$ret = $this->_outputImage(self::DEFAULT_MOBILE_IMAGE_FILE_EXT, $imageObj, $destImageFile);
-						if (!$ret) $isNoErr = false;		// エラー発生
-					}
-				}
-				if ($isNoErr){
-					// 幅、高さを設定し直す
-					$destTag = $matchData[0];
-					$str = '/width\s*=\s*[\'"]+(.+?)[\'"]/si';
-					$destTag = preg_replace($str, '', $destTag);
-					$str = '/height\s*=\s*[\'"]+(.+?)[\'"]/si';
-					$destTag = preg_replace($str, '', $destTag);
-					$str = '/style\s*=\s*[\'"]+(.+?)[\'"]/si';		// 「style」属性を削除
-					$destTag = preg_replace($str, '', $destTag);
-					//$str = '/<img\s*/si';
-					//$destTag = preg_replace($str, '<img height="' . $destHeight . '" ', $destTag);
-
-					// 画像のURLを変換
-					$destTag = str_replace($matchData[1], $destImageUrl, $destTag);
-				} else {// エラー発生の場合は元のファイルのまま
-					$destTag = $matchData[0];					
-				}
-			} else {
-				$destTag = $matchData[0];
-			}
-		}
-		return $destTag;
-    }
-	/**
 	 * PC用コンテンツをスマートフォン用コンテンツに自動変換
 	 *
 	 * 以下の自動変換処理を行う
@@ -839,7 +593,6 @@ class TextConvManager extends Core
 
 						// 画像フォーマットを維持して画像作成
 						$imageObj = $this->_createImage($imageType, $imageFile, $destWidth, $destHeight);
-						//$ret = $this->_outputImage(self::DEFAULT_MOBILE_IMAGE_FILE_EXT, $imageObj, $destImageFile);
 						$ret = $this->_outputImage($imageType, $imageObj, $destImageFile);
 						if (!$ret) $isNoErr = false;		// エラー発生
 					}
@@ -865,115 +618,6 @@ class TextConvManager extends Core
 		}
 		return $destTag;
     }
-	/**
-	 * 携帯用のHTMLをきれいにする
-	 *
-	 * 以下の自動変換処理を行う
-	 *  ・HTML4仕様のタグをXHTML仕様に変換
-	 *
-	 * @param string $src			変換するデータ
-	 * @return string				変換後データ
-	 */
-	function cleanMobileTag($src)
-	{
-		$dest = $src;
-		$dest = preg_replace('/<blink>(.*?)<\/blink>/si', '<span style="text-decoration:blink;">$1</span>', $dest);
-		$dest = preg_replace('/<center>(.*?)<\/center>/si', '<div style="text-align:center;">$1</div>', $dest);
-		$str = '/<font\b(.*?)>(.*?)<\/font\b[^>]*?>/si';
-		$dest = preg_replace_callback($str, array($this, '_replace_font_callback'), $dest);
-		
-		// MARQUEEタグの変換
-		$str = '/<marquee\b(.*?)>(.*?)<\/marquee\b[^>]*?>/si';
-		$dest = preg_replace_callback($str, array($this, '_replace_markquee_callback'), $dest);
-		return $dest;
-	}
-	/**
-	 * IFRAMEタグ変換コールバック関数
-	 *
-	 * @param array $matchData		検索マッチデータ
-	 * @return string				変換後データ
-	 */
-    function _replace_iframe_callback($matchData)
-	{
-		// URL、タイトルを取得
-		$url = $this->_getAttribute($matchData[1], 'src');
-		$name = $this->_getAttribute($matchData[1], 'name');
-		$destTag = '<a href="' . $url . '">' . $name . '</a>';
-		return $destTag;
-	}
-	/**
-	 * FONTタグ変換コールバック関数
-	 *
-	 * @param array $matchData		検索マッチデータ
-	 * @return string				変換後データ
-	 */
-    function _replace_font_callback($matchData)
-	{
-		// 属性をスタイル属性に直す
-		$style = '';
-		$str = '/color\s*=\s*[\'"]+(.+?)[\'"]/si';		// 文字色
-		if (preg_match($str, $matchData[1], $matches)) $style .= 'color:' . $matches[1] . ';';
-		$str = '/size\s*=\s*[\'"]+(.+?)[\'"]/si';		// 文字サイズ
-		if (preg_match($str, $matchData[1], $matches)){
-			if (strStartsWith($matches[1], '+')){
-				$fontSize = 'larger';
-			} else if (strStartsWith($matches[1], '-')){
-				$fontSize = 'smaller';
-			} else {
-				switch ($matches[1]){
-					case 1:
-						$fontSize = 'xx-small';
-						break;
-					case 2:
-						$fontSize = 'x-small';
-						break;
-					case 3:
-						$fontSize = 'small';
-						break;
-					case 4:
-						$fontSize = 'medium';
-						break;
-					case 5:
-						$fontSize = 'large';
-						break;
-					case 6:
-						$fontSize = 'x-large';
-						break;
-					case 7:
-						$fontSize = 'xx-large';
-						break;
-					default:
-						$fontSize = $matches[1];
-						break;
-				}
-			}
-			$style .= 'font-size:' . $fontSize . ';';
-		}
-		$destTag = '<span style="' . $style . '">' . $matchData[2] . '</span>';
-		return $destTag;
-	}
-	/**
-	 * MARQUEEタグ変換コールバック関数
-	 *
-	 * @param array $matchData		検索マッチデータ
-	 * @return string				変換後データ
-	 */
-    function _replace_markquee_callback($matchData)
-	{
-		// 属性をスタイル属性に直す
-		$style = 'display:-wap-marquee;';
-		$str = '/bgcolor\s*=\s*[\'"]+(.+?)[\'"]/si';		// 背景色
-		if (preg_match($str, $matchData[1], $matches)) $style .= 'background-color:' . $matches[1] . ';';
-		$str = '/behavior\s*=\s*[\'"]+(.+?)[\'"]/si';		// マーキースタイル
-		if (preg_match($str, $matchData[1], $matches)) $style .= '-wap-marquee-style:' . $matches[1] . ';';
-		$str = '/direction\s*=\s*[\'"]+(.+?)[\'"]/si';		// 表示方向
-		if (preg_match($str, $matchData[1], $matches)) $style .= '-wap-marquee-dir:' . $matches[1] . ';';
-		$str = '/loop\s*=\s*[\'"]+(.+?)[\'"]/si';		// 回数
-		if (preg_match($str, $matchData[1], $matches)) $style .= '-wap-marquee-loop:' . $matches[1] . ';';
-		
-		$destTag = '<span style="' . $style . '">' . $matchData[2] . '</span>';
-		return $destTag;
-	}
 	/**
 	 * HTMLをテキストに変換
 	 *
@@ -1211,7 +855,6 @@ class TextConvManager extends Core
 	{
 		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_WIDGET);		// 「[」を正規表現用に「\[」に変換
 		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「]」を正規表現用に「\]」に変換
-	//	$str = '/' . $startTag . ':(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';
 		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+)' . $endTag . '/';				// セパレータを「:」または「|」どちらでも使用可にする
         $dest = preg_replace_callback($str, array($this, '_replace_widget_tag_callback'), $src);
 		return true;
@@ -1277,26 +920,5 @@ class TextConvManager extends Core
 	function _trim_search_keyword($src){
 		return trim($src, "\"'\n\r ");
 	}
-	/**
-	 * 文字列からリンク対象とリンク先URLを取得
-	 *
-	 * @param string $str		解析文字列
-	 * @return array			リンク対象語文字列とリンク先URL
-	 */
-/*	function _parseLinkString($str)
-	{
-		$destStr = '';
-		$url = '';
-		
-		// リンク元文字列を取得
-		$pos = strpos($str, '|');
-		if ($pos === false){
-			$destStr = $str;
-		} else {
-			list($destStr, $url) = explode('|', $str, 2);
-		}
-			
-		return array($destStr, $url);
-	}*/
 }
 ?>

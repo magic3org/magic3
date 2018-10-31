@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath()	. '/blog_category_boxDb.php');
-require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 
 class blog_category_boxWidgetContainer extends BaseWidgetContainer
 {
