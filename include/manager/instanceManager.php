@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -27,7 +27,6 @@ class InstanceManager extends Core
 	private $addonDir;			// 追加クラスインストールディレクトリ
 	private $addonArray;		// ロード済みの追加クラス
 	private $addonInfoArray;	// アドオンクラス情報
-	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
 	
 	/**
 	 * コンストラクタ
@@ -67,22 +66,6 @@ class InstanceManager extends Core
 	public function getUserInfo()
 	{
 		return $this->userInfo;
-	}
-	/**
-	 * 携帯判定オブジェクト取得
-	 *
-	 * @return object			取得したオブジェクト
-	 */
-	static public function getMobileAgent()
-	{
-		global $gEnvManager;
-		static $mobileAgent;// 携帯判定用オブジェクト
-		
-		if (!isset($mobileAgent)){
-			require_once($gEnvManager->getLibPath() . self::USER_AGENT_SCRIPT);
-			$mobileAgent = Net_UserAgent_Mobile::singleton();
-		}
-		return $mobileAgent;
 	}
 	/**
 	 * オブジェクト取得

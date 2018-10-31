@@ -24,7 +24,6 @@ class AnalyzeManager extends Core
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
 	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.54/';		// クローラー解析スクリプトディレクトリ
-	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
 	
@@ -193,47 +192,16 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			if (empty($crawlerIcon)) $crawlerIcon = $this->_getBrowserIconFile('crawler');		// クローラーデフォルトアイコン
 			$resultObj['icon'] = $crawlerIcon;
 		} else {
-			// 携帯かどうかのチェック
-			require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
+			// ブラウザを解析
+			require_once(M3_SYSTEM_LIB_PATH . self::BROWSER_DETECT_SCRIPT);
 			
-			$parser = Net_UserAgent_Mobile::singleton($agent);
-			
-			if ($parser->isNonMobile()){		// 携帯以外のとき
-				// ブラウザを解析
-				require_once(M3_SYSTEM_LIB_PATH . self::BROWSER_DETECT_SCRIPT);
-				
-				$infoObj = parse_user_agent($agent);
-				$resultObj['name'] = strval($infoObj['browser']);
-				$resultObj['platform'] = strtolower($infoObj['platform']);
-				$resultObj['browser'] = strtolower($infoObj['browser']);
-				$resultObj['version'] = strtolower($infoObj['version']);
-				$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
-				if (empty($resultObj['icon'])) $resultObj['icon'] = self::NOT_FOUND_BROWSER_IMAGE;			// ブラウザアイコンが見つからなかった場合
-				/*
-				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
-				$retObj = UserAgentParser::getBrowser($agent);
-//				if ($retObj === false){
-//					return '';
-//				} else {
-//					$version = $retObj['version'];
-//					return $retObj['id'];
-//				}
-*/
-			} else {		// 携帯(ガラケー)のとき
-				if ($parser->isDoCoMo()){	// ドコモ端末のとき
-					$resultObj['name'] = 'DoCoMo';
-					$resultObj['icon'] = $this->_getBrowserIconFile('docomo');
-				} else if ($parser->isEZweb()){	// au端末のとき
-					$resultObj['name'] = 'au';
-					$resultObj['icon'] = $this->_getBrowserIconFile('au');
-				} else if ($parser->isSoftBank()){	// ソフトバンク端末のとき
-					$resultObj['name'] = 'SoftBank';
-					$resultObj['icon'] = $this->_getBrowserIconFile('softbank');
-				} else if ($parser->isWillcom()){	// WILLCOM端末のとき
-					$resultObj['name'] = 'WILLCOM';
-					$resultObj['icon'] = $this->_getBrowserIconFile('willcom');
-				}
-			}
+			$infoObj = parse_user_agent($agent);
+			$resultObj['name'] = strval($infoObj['browser']);
+			$resultObj['platform'] = strtolower($infoObj['platform']);
+			$resultObj['browser'] = strtolower($infoObj['browser']);
+			$resultObj['version'] = strtolower($infoObj['version']);
+			$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
+			if (empty($resultObj['icon'])) $resultObj['icon'] = self::NOT_FOUND_BROWSER_IMAGE;			// ブラウザアイコンが見つからなかった場合
 		}
 		return $resultObj;
 	}
@@ -245,20 +213,6 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 	 */
 	public function getPlatformType($agent)
 	{
-/*		require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
-		$parser = Net_UserAgent_Mobile::singleton($agent);
-		
-		if ($parser->isNonMobile()){		// 携帯以外のとき
-			require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
-			$retObj = UserAgentParser::getOperatingSystem($agent);
-			if ($retObj === false){
-				return '';
-			} else {
-				return $retObj['id'];
-			}
-		} else {		// 携帯のとき
-			return $parser->getModel();		// 機種を取得
-		}*/
 		$resultObj = array();
 		
 		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'DetectorInterface.php');

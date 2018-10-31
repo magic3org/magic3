@@ -2808,55 +2808,6 @@ class EnvManager extends Core
 		return $this->isServerConnector;
 	}
 	/**
-	 * 携帯端末IDを取得
-	 *
-	 * @return string		携帯端末ID
-	 */
-	public function getMobileId()
-	{
-		global $gInstanceManager;
-		global $gRequestManager;
-		
-		$agent = $gInstanceManager->getMobileAgent();
-		if ($agent->isDoCoMo()){	// ドコモ端末のとき
-			$mobileId = $gRequestManager->trimServerValueOf('HTTP_X_DCMGUID');
-			if (!empty($mobileId)) $mobileId = 'DC-' . $mobileId;		// キャリアコードを付加
-		} else if ($agent->isEZweb()){	// au端末のとき
-			$mobileId = $gRequestManager->trimServerValueOf('HTTP_X_UP_SUBNO');
-			// ドメイン名を消去
-			$pos = strpos($mobileId, '.ezweb.ne.jp');
-			if ($pos !== false) $mobileId = substr($mobileId, 0, $pos);
-			if (!empty($mobileId)) $mobileId = 'AU-' . $mobileId;		// キャリアコードを付加
-		} else if ($agent->isSoftBank()){	// ソフトバンク端末のとき
-			$mobileId = $gRequestManager->trimServerValueOf('HTTP_X_JPHONE_UID');
-			if (!empty($mobileId)) $mobileId = 'SB-' . $mobileId;		// キャリアコードを付加
-		} else {		// その他の端末のとき(PC用)
-			$mobileId = '';
-		}
-		return $mobileId;
-	}
-	/**
-	 * 携帯端末でのアクセスかどうか
-	 *
-	 * @return bool		true=携帯端末アクセス、false=携帯端末以外からのアクセス
-	 */
-	public function isMobile()
-	{
-		global $gInstanceManager;
-		static $isMobile;
-		
-		if (!isset($isMobile)){
-			$isMobile = false;
-			$agent = $gInstanceManager->getMobileAgent();
-			if (method_exists($agent, 'isNonMobile')){
-				if (!$agent->isNonMobile()){			// 携帯端末でのアクセスの場合
-					$isMobile = true;
-				}
-			}
-		}
-		return $isMobile;
-	}
-	/**
 	 * スマートフォン端末でのアクセスかどうか
 	 *
 	 * @return bool		true=スマートフォン端末アクセス、false=スマートフォン端末以外からのアクセス
