@@ -461,43 +461,34 @@ function m3SetWysiwygEditor(id, height, toolbarVisible, barType, width)
 	// アクセスポイントの設定
 	_m3SetAccessPoint(M3_CONFIG_WIDGET_DEVICE_TYPE);
 		
-	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
-		var config = {};
-		
-		config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
-		if (height) config['height'] = height;
-		if (width) config['width'] = width;
-		if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
-		
-		if (barType){
-			switch (barType){
-			case 'full':
-			default:
-				config['toolbar'] = 'Full';
-				if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
-				break;
-			case 'layout':
-				config['toolbar'] = 'Layout';
-				if (typeof(M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES;
-				break;
-			case 'small':
-				config['toolbar'] = 'Small';
-				break;
-			}
-		} else {
+
+	var config = {};
+	
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
+	if (height) config['height'] = height;
+	if (width) config['width'] = width;
+	if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
+	
+	if (barType){
+		switch (barType){
+		case 'full':
+		default:
 			config['toolbar'] = 'Full';
 			if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
+			break;
+		case 'layout':
+			config['toolbar'] = 'Layout';
+			if (typeof(M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES;
+			break;
+		case 'small':
+			config['toolbar'] = 'Small';
+			break;
 		}
-		CKEDITOR.replace(id, config);
 	} else {
-		var oFCKeditor		= new FCKeditor(id);
-		oFCKeditor.BasePath	= M3_ROOT_URL + '/scripts/fckeditor2.6.6/';
-		oFCKeditor.Config['CustomConfigurationsPath'] = M3_ROOT_URL + '/scripts/m3/fckconfig.js';
-		oFCKeditor.ToolbarSet	= "M3Default";			// ツールバーリソース名
-		if (height) oFCKeditor.Height = String(height) + 'px';
-		oFCKeditor.Value	= 'This is some <strong>sample text<\/strong>. You are using <a href="http://www.fckeditor.net/">FCKeditor<\/a>.';
-		oFCKeditor.ReplaceTextarea();
+		config['toolbar'] = 'Full';
+		if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
 	}
+	CKEDITOR.replace(id, config);
 }
 /**
  * TextAreaをスクリプト編集エディターに変更

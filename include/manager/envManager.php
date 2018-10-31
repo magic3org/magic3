@@ -667,14 +667,6 @@ class EnvManager extends Core
 		return $this->currentDomainRootUrl . '/images';
 	}
 	/**
-	 * 絵文字画像用ディレクトリへのパスを取得
-	 */
-	public function getEmojiImagesUrl()
-	{
-		//return M3_SYSTEM_ROOT_URL . '/images/system/emoji';
-		return $this->currentDomainRootUrl . '/images/system/emoji';
-	}
-	/**
 	 * scriptsディレクトリ(共通スクリプトディレクトリ)へのURLを取得
 	 *
 	 * 例) http://www.magic3.org/magic3/scripts
