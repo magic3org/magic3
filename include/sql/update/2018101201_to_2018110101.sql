@@ -108,7 +108,7 @@ INSERT INTO _widget_category
 ('wiki',       'Wiki',                 7,             false),
 ('member',     '会員',                 9,             false),
 ('subcontent', '補助コンテンツ',       20,            true),
-('search',     '検索',                 21,            true),
+('search',     '検索・お問い合わせ',   21,            true),
 ('menu',       'メニュー',             22,            true),
 ('image',      '画像',                 23,            true),
 ('design',     'デザイン',             24,            true),
