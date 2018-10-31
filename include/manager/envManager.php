@@ -72,7 +72,6 @@ class EnvManager extends Core
 	private $widgetLog;			// ウィジェット実行ログを残すかどうか
 	private $multiDomain;		// マルチドメイン運用かどうか
 	private $isPcSite;			// PC用URLアクセスかどうか
-	private $isMobileSite;		// 携帯用URLアクセスかどうか
 	private $isSmartphoneSite;	// スマートフォン用URLへのアクセスかどうか
 	private $isSubWidget;		// サブウィジェットの起動かどうか
 	private $isServerConnector;	// サーバ接続かどうか
@@ -2395,42 +2394,6 @@ class EnvManager extends Core
 		return $this->getCurrentScriptUrl() . '?sub=' . $this->getCurrentPageSubId() . '&' . session_name() . '=' . session_id();
 	}*/
 	/**
-	 * 携帯用の現在のページID、サブページIDのURLを作成
-	 *
-	 * 携帯用URLには以下の情報を付加する
-	 * ・セッションID
-	 * ・ドコモ端末の場合はiモードID受信用のパラメータを付加
-	 *
-	 * @param string,array	$addParam		追加パラメータ
-	 * @param bool          $withSessionId	セッションIDを付加するかどうか
-	 * @return string		作成したURL
-	 */
-	public function createCurrentPageUrlForMobile($addParam = '', $withSessionId = true)
-	{
-		// ページサブID付加
-		$param['sub'] = $this->getCurrentPageSubId();
-
-		// 追加パラメータがある場合
-		if (!empty($addParam)){
-			if (is_array($addParam)){		// 配列の場合
-				$newParam = $addParam;
-			} else {		// 文字列の場合
-				$newParam = array();
-				$addParamArray = explode('&', trim($addParam, "?&"));
-				for ($i = 0; $i < count($addParamArray); $i++){
-					list($key, $value) = explode('=', $addParamArray[$i]);
-					$key = trim($key);
-					$value = trim($value);
-					$newParam[$key] = $value;
-				}
-			}
-			$param = array_merge($param, $newParam);
-		}
-		//$url = $this->_createUrl($this->getCurrentScriptUrl(), $param);
-		$url = createUrl($this->createPageUrl(), $param);
-		return $url;
-	}
-	/**
 	 * デフォルト言語取得
 	 */
 	public function getDefaultLanguage()
@@ -2786,31 +2749,6 @@ class EnvManager extends Core
 	public function getIsPcSite()
 	{
 		return $this->isPcSite;
-	}
-	/**
-	 * 携帯用URLへのアクセスかどうかを設定
-	 *
-	 * @param bool $status			true=携帯アクセス、false=通常アクセス
-	 * @return 			なし
-	 */
-	public function setIsMobileSite($status)
-	{
-		$this->isMobileSite = $status;
-		
-		if ($this->isMobile() && $status){
-			// ##### 携帯用の設定 #####
-			// セッションをURLに保存
-			ini_set('session.use_cookies', 0);	// クッキーは使用しない
-		}
-	}
-	/**
-	 * 携帯用URLへのアクセスかどうか
-	 *
-	 * @return bool		true=携帯アクセス、false=通常アクセス
-	 */
-	public function getIsMobileSite()
-	{
-		return $this->isMobileSite;
 	}
 	/**
 	 * スマートフォン用URLへのアクセスかどうかを設定

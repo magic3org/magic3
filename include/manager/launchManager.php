@@ -115,23 +115,55 @@ class LaunchManager extends Core
 		// ウィジェットの種別を設定
 		$gEnvManager->setIsSubWidget(false);			// 通常ウィジェットで起動
 		
-		if ($gEnvManager->getIsMobileSite()){		// 携帯サイトへのアクセスのとき
-			// 管理画面へのアクセスかどうかチェック
-			if ($pathArray[$pathCount -2] == 'admin' && $pathArray[$pathCount -3] == $widgetId){
-				$accessAdmin = true;
-			}
-			// 携帯用ウィジェットのウィジェットIDは、「m/xxxxxx」の形式
-			// ウィジェットIDを変換
-			$widgetId = str_replace('/', '_', $widgetId);
-			
-			// コンテナクラス名作成
-			if ($cmd == M3_REQUEST_CMD_RSS){		// RSS配信のとき
-				$containerClass = self::DEFAULT_RSS_CLASS_PREFIX . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
-				$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
-			} else if ($accessAdmin){
-				$containerClass = 'admin_' . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「admin_ + ウィジェットID + WidgetContainer」
+
+		// インナーウィジェットのチェック
+		$isIWidget = false;
+		if ($pathArray[$pathCount -4] == 'iwidgets' && $pathArray[$pathCount -2] == 'admin'){		// インナーウィジェット管理者画面
+			$isIWidget = true;
+			$widgetId = $pathArray[$pathCount -3];		// インナーウィジェットID
+			$accessAdmin = true;
+		} else if ($pathArray[$pathCount -3] == 'iwidgets'){	// インナーウィジェット通常画面
+			$isIWidget = true;
+			$widgetId = $pathArray[$pathCount -2];// インナーウィジェットID
+		} else if ($pathArray[$pathCount -3] == $widgetId && $pathArray[$pathCount -2] == 'admin'){		// PC用ウィジェット管理画面
+			$accessAdmin = true;
+		} else if ($pathArray[$pathCount -4] . '/' . $pathArray[$pathCount -3] == $widgetId && $pathArray[$pathCount -2] == 'admin'){		// 携帯用ウィジェット管理画面
+			$accessAdmin = true;
+		}
+		// コンテナクラス名作成
+		if ($cmd == M3_REQUEST_CMD_RSS){		// RSS配信のとき
+			$containerClass = self::DEFAULT_RSS_CLASS_PREFIX . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
+		} else if ($accessAdmin){
+			$containerClass = 'admin_' . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「admin_ + ウィジェットID + WidgetContainer」
+		} else {
+			$containerClass = $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
+		}
+		// コンテナクラス名修正
+		$containerClass = str_replace('/', '_', $containerClass);
+				
+		// コンテナクラスが既にロードされているときはエラー
+		// 同じウィジェットが2回以上実行される可能性があるので、ウィジェットIDが同じであればエラーとしない
+		if (class_exists($containerClass)){
+			// 既に起動済みのウィジェットかどうかチェック
+			//if (in_array($filepath, $pathArray)){
+				// 同じウィジェットの場合は起動
+				$widgetContainer = new $containerClass();
+				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+				$widgetContainer->process($gRequestManager);
+				$gEnvManager->setCurrentWidgetObj(null);
+//			} else {
+//				// 同じウィジェットが起動されていないときは、クラス名のバッテイングでエラー
+//				echo 'class redefined error: ' . $containerClass;
+//			}
+		} else {
+			// ウィジェットのコンテナクラスファイルを読み込み
+			if ($isIWidget){		// インナーウィジェットの場合
+				if ($accessAdmin){
+					$containerPath = dirname(dirname($filepath)) . '/include/container/' . $containerClass . '.php';
+				} else {
+					$containerPath = dirname($filepath) . '/include/container/' . $containerClass . '.php';
+				}
 			} else {
-				$containerClass = $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
 				$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
 			}
 			if (file_exists($containerPath)){
@@ -144,71 +176,9 @@ class LaunchManager extends Core
 			$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 			$widgetContainer->process($gRequestManager);
 			$gEnvManager->setCurrentWidgetObj(null);
-		} else {			// PC用の画面からのアクセスまたは管理画面へのアクセス
-			// インナーウィジェットのチェック
-			$isIWidget = false;
-			if ($pathArray[$pathCount -4] == 'iwidgets' && $pathArray[$pathCount -2] == 'admin'){		// インナーウィジェット管理者画面
-				$isIWidget = true;
-				$widgetId = $pathArray[$pathCount -3];		// インナーウィジェットID
-				$accessAdmin = true;
-			} else if ($pathArray[$pathCount -3] == 'iwidgets'){	// インナーウィジェット通常画面
-				$isIWidget = true;
-				$widgetId = $pathArray[$pathCount -2];// インナーウィジェットID
-			} else if ($pathArray[$pathCount -3] == $widgetId && $pathArray[$pathCount -2] == 'admin'){		// PC用ウィジェット管理画面
-				$accessAdmin = true;
-			} else if ($pathArray[$pathCount -4] . '/' . $pathArray[$pathCount -3] == $widgetId && $pathArray[$pathCount -2] == 'admin'){		// 携帯用ウィジェット管理画面
-				$accessAdmin = true;
-			}
-			// コンテナクラス名作成
-			if ($cmd == M3_REQUEST_CMD_RSS){		// RSS配信のとき
-				$containerClass = self::DEFAULT_RSS_CLASS_PREFIX . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
-			} else if ($accessAdmin){
-				$containerClass = 'admin_' . $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「admin_ + ウィジェットID + WidgetContainer」
-			} else {
-				$containerClass = $widgetId . 'WidgetContainer';		// デフォルトで起動するコンテナクラス名「ウィジェットID + WidgetContainer」
-			}
-			// コンテナクラス名修正
-			$containerClass = str_replace('/', '_', $containerClass);
-					
-			// コンテナクラスが既にロードされているときはエラー
-			// 同じウィジェットが2回以上実行される可能性があるので、ウィジェットIDが同じであればエラーとしない
-			if (class_exists($containerClass)){
-				// 既に起動済みのウィジェットかどうかチェック
-				//if (in_array($filepath, $pathArray)){
-					// 同じウィジェットの場合は起動
-					$widgetContainer = new $containerClass();
-					$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
-					$widgetContainer->process($gRequestManager);
-					$gEnvManager->setCurrentWidgetObj(null);
-	//			} else {
-	//				// 同じウィジェットが起動されていないときは、クラス名のバッテイングでエラー
-	//				echo 'class redefined error: ' . $containerClass;
-	//			}
-			} else {
-				// ウィジェットのコンテナクラスファイルを読み込み
-				if ($isIWidget){		// インナーウィジェットの場合
-					if ($accessAdmin){
-						$containerPath = dirname(dirname($filepath)) . '/include/container/' . $containerClass . '.php';
-					} else {
-						$containerPath = dirname($filepath) . '/include/container/' . $containerClass . '.php';
-					}
-				} else {
-					$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
-				}
-				if (file_exists($containerPath)){
-					require_once($containerPath);
-				} else {
-					echo 'file not found error: ' . $containerPath;
-				}
-				// コンテナクラスを起動
-				$widgetContainer = new $containerClass();
-				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
-				$widgetContainer->process($gRequestManager);
-				$gEnvManager->setCurrentWidgetObj(null);
-			}
-			// 呼び出し元ファイルパスの保存
-			$pathArray[] = $filepath;
 		}
+		// 呼び出し元ファイルパスの保存
+		$pathArray[] = $filepath;
 	}
 	/**
 	 * ウィジェットプログラム(サブ)を実行
@@ -381,16 +351,6 @@ class LaunchManager extends Core
 		}
 	}
 	/**
-	 * 携帯用プログラムを実行
-	 *
-	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
-	 * @return 						なし
-	 */
-	function goMobile($filepath = '')
-	{
-		$this->_goDevice(1/*携帯用*/, $filepath);
-	}
-	/**
 	 * スマートフォン用プログラムを実行
 	 *
 	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
@@ -452,10 +412,6 @@ class LaunchManager extends Core
 		global $gRequestManager;
 
 		switch ($type){
-			case 1:
-				// 携帯用URLへのアクセスを設定
-				$gEnvManager->setIsMobileSite(true);
-				break;
 			case 2:
 				// スマートフォン用URLのアクセスを設定
 				$gEnvManager->setIsSmartphoneSite(true);

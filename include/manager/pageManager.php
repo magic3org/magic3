@@ -141,7 +141,6 @@ class PageManager extends Core
 	const POSITION_CLASS_NAME = 'm3position';		// ポジションオブジェクトのタグクラス名
 	const JOOMLA10_DEFAULT_WIDGET_MENU_PARAM = 'class="moduletable"';	// Joomla!1.0用デフォルトメニューパラメータ値
 	const ADMIN_TEMPLATE = '_admin';		// PC管理用テンプレートID
-	const M_ADMIN_TEMPLATE = 'm/_admin';	// 携帯用管理画面テンプレートID
 	const SCRIPT_LIB_SEPARATOR = ';';			// JavaScriptライブラリ読み込み設定のライブラリの区切り
 	const PAGE_ID_SEPARATOR = ',';				// ページIDとページサブID連結用
 	const DEFAULT_ADMIN_FAVICON_FILE = '/images/system/favicon.ico';			// デフォルトの管理画面用faviconファイル
@@ -1586,84 +1585,82 @@ class PageManager extends Core
 		$gDispManager->load();
 		
 		// Magic3管理用のスクリプトを追加
-		if (!$gEnvManager->getIsMobileSite()){		// 携帯用URL以外のとき
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
 //					$this->isEditMode = true;			// フロント画面編集モード
-					$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定(コンテキストメニュー表示)
-						
-					// 管理画面用ライブラリを追加
-					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
-					//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
-						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-						
-						// Googleマップライブラリの読み込み
-						if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
-							$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
-						}
-					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
-						$this->isLayout = true;		// 画面レイアウト中かどうか
-						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
-						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_DROPDOWN);		// 管理パネル用スクリプト追加(ドロップダウンメニュー)
-						//$this->useBootstrap = true;		// Bootstrapを使用
-						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
-					}
-					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
-					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+				$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定(コンテキストメニュー表示)
 					
-					// スクリプトが必要なウィジェットをすべて取得
-					$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
-					for ($i = 0; $i < count($rows); $i++){
-						$this->addAdminScript($task, trim($rows[$i]['wd_add_script_lib']));
+				// 管理画面用ライブラリを追加
+				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+				//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
+					$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
+					
+					// Googleマップライブラリの読み込み
+					if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
+						$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
 					}
-					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
-						// ウィジェット情報取得
-						$widgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
-						$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
-						if ($ret) $this->addAdminScript($task, trim($this->configWidgetInfo['wd_add_script_lib_a']));		// 管理機能用スクリプト
-					}
+				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
+					$this->isLayout = true;		// 画面レイアウト中かどうか
+					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
+					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_DROPDOWN);		// 管理パネル用スクリプト追加(ドロップダウンメニュー)
+					//$this->useBootstrap = true;		// Bootstrapを使用
+					//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
 				}
-			} else {		// フロント画面へのアクセスのとき
-				// フロント画面用スクリプトファイル追加
-				$this->addScriptFile($this->selectedJQueryFilename);// 常にjQueryを使用
-		
-				if ($cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
-					$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
-					if ($gEnvManager->isSystemManageUser()){
-						$this->isEditMode = true;			// フロント画面編集モード
-						$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定
-					
-						// システム運用権限がある場合は管理用スクリプトを追加
-						// フロント画面と管理画面の切り替え用のスライドメニューバーには管理用スクリプト,CSSが必要
-						$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
-						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
-						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_COOKIE);			// 管理パネル用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
-					
-						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
-					} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
-						$this->isEditMode = true;			// フロント画面編集モード
-					}
-				} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
-					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
-						$this->isEditMode = true;			// フロント画面編集モード
-					
+				$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
+				$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+				
+				// スクリプトが必要なウィジェットをすべて取得
+				$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+				for ($i = 0; $i < count($rows); $i++){
+					$this->addAdminScript($task, trim($rows[$i]['wd_add_script_lib']));
+				}
+				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+					// ウィジェット情報取得
+					$widgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
+					$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+					if ($ret) $this->addAdminScript($task, trim($this->configWidgetInfo['wd_add_script_lib_a']));		// 管理機能用スクリプト
+				}
+			}
+		} else {		// フロント画面へのアクセスのとき
+			// フロント画面用スクリプトファイル追加
+			$this->addScriptFile($this->selectedJQueryFilename);// 常にjQueryを使用
+	
+			if ($cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
+				$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
+				if ($gEnvManager->isSystemManageUser()){
+					$this->isEditMode = true;			// フロント画面編集モード
+					$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定
+				
+					// システム運用権限がある場合は管理用スクリプトを追加
+					// フロント画面と管理画面の切り替え用のスライドメニューバーには管理用スクリプト,CSSが必要
+					$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+					$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
+					$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
+					//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_COOKIE);			// 管理パネル用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+				
+					$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
+				} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
+					$this->isEditMode = true;			// フロント画面編集モード
+				}
+			} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
+				if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
+					$this->isEditMode = true;			// フロント画面編集モード
+				
 //						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
-						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
-						$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
-						
-						// Googleマップライブラリの読み込み
-						if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
-							$this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));
-						}
+					$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
+					$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
+					$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+					
+					// Googleマップライブラリの読み込み
+					if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
+						$this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));
 					}
 				}
 			}
@@ -2841,11 +2838,7 @@ class PageManager extends Core
 //		$redirectUrl = '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 		$redirectUrl = $gEnvManager->createPageUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 		if (!empty($todo)) $redirectUrl .= '&' . $todo;
-		if ($gEnvManager->getIsMobileSite()){		// 携帯用アクセスポイントの場合
-			$this->redirect($redirectUrl, true/*遷移時のダイアログ表示を抑止*/);
-		} else {
-			$this->redirect($redirectUrl);
-		}
+		$this->redirect($redirectUrl);
 	}
 	/**
 	 * 最終HTML出力処理
@@ -2871,8 +2864,6 @@ class PageManager extends Core
 		// 処理を行わない場合は終了
 		if ($cmd == M3_REQUEST_CMD_RSS ||						// RSS配信のときは終了
 			$cmd == M3_REQUEST_CMD_DO_WIDGET) return '';		// ウィジェット単体オペレーションのときは出力しない
-		
-		if ($gEnvManager->getIsMobileSite()) return '';		// 携帯用URLのときは終了
 		
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			// ウィジェットレイアウト用カーソル
@@ -3700,101 +3691,77 @@ class PageManager extends Core
 		}
 		
 		// ##### PC用URLと携帯用URLのアクセス別に処理 #####
-		if ($gEnvManager->getIsMobileSite()){		// 携帯用URLのとき
-		} else {			// PC用URLまたはスマートフォン用URLのとき
-			// ##### テンプレート情報に応じた処理 #####
-			// テンプレートクリーンが必要な場合はJQueryを追加
-			if ($cleanType != 0) $this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-			
-			// 検索ロボットへの指示
-			$robots = htmlspecialchars(trim($this->gSystem->getSiteDef(M3_TB_FIELD_SITE_ROBOTS)));
-			if (!empty($robots)){
-				$replaceStr .= '<meta name="robots" content="' . $robots . '" />' . M3_NL;
-			}
+		// ##### テンプレート情報に応じた処理 #####
+		// テンプレートクリーンが必要な場合はJQueryを追加
+		if ($cleanType != 0) $this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
 		
-			// サイト構築エンジン
-			$replaceStr .= '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;		
+		// 検索ロボットへの指示
+		$robots = htmlspecialchars(trim($this->gSystem->getSiteDef(M3_TB_FIELD_SITE_ROBOTS)));
+		if (!empty($robots)){
+			$replaceStr .= '<meta name="robots" content="' . $robots . '" />' . M3_NL;
+		}
+	
+		// サイト構築エンジン
+		$replaceStr .= '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;		
 
-			// カノニカル属性、Faviconの読み込み
-			$templateId = $gEnvManager->getCurrentTemplateId();
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				// テンプレートのFaviconがない場合はシステムのデフォルトのFaviconを使用
-				$faviconPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
-				if (file_exists($faviconPath)){		// ファイルが存在しているとき
-					$faviconFile = $templatesUrl . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
-					$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
-				} else {
-					// 管理画面のアイコンを設定
-					$faviconPath = $gEnvManager->getSystemRootPath() . self::DEFAULT_ADMIN_FAVICON_FILE;
-					if (file_exists($faviconPath)){		// ファイルが存在しているとき
-						$faviconFile = $rootUrl . self::DEFAULT_ADMIN_FAVICON_FILE;
-						$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
-					}
-				}
+		// カノニカル属性、Faviconの読み込み
+		$templateId = $gEnvManager->getCurrentTemplateId();
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			// テンプレートのFaviconがない場合はシステムのデフォルトのFaviconを使用
+			$faviconPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+			if (file_exists($faviconPath)){		// ファイルが存在しているとき
+				$faviconFile = $templatesUrl . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+				$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
 			} else {
-				// カノニカル属性
-				if (!empty($this->headCanonicalUrl)) $replaceStr .= '<link rel="canonical" href="' . convertUrlToHtmlEntity($this->headCanonicalUrl) .'" />' . M3_NL;				// カノニカル属性URL
-				
-				// Favicon
-				$faviconPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+				// 管理画面のアイコンを設定
+				$faviconPath = $gEnvManager->getSystemRootPath() . self::DEFAULT_ADMIN_FAVICON_FILE;
 				if (file_exists($faviconPath)){		// ファイルが存在しているとき
-					$faviconFile = $templatesUrl . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+					$faviconFile = $rootUrl . self::DEFAULT_ADMIN_FAVICON_FILE;
 					$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
 				}
 			}
+		} else {
+			// カノニカル属性
+			if (!empty($this->headCanonicalUrl)) $replaceStr .= '<link rel="canonical" href="' . convertUrlToHtmlEntity($this->headCanonicalUrl) .'" />' . M3_NL;				// カノニカル属性URL
 			
-			// ##### Ajaxライブラリの読み込み #####
-			if (!$gEnvManager->isAdminDirAccess()){		// 通常画面へのアクセスのとき
-				if ($this->db->isExistsWidgetWithAjax($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId())){// Ajaxライブラリを使用しているウィジェットがあるときは追加
-					$this->addScriptFile($this->selectedJQueryFilename);		// デフォルトAjaxライブラリ追加
-					$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
-				}
+			// Favicon
+			$faviconPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+			if (file_exists($faviconPath)){		// ファイルが存在しているとき
+				$faviconFile = $templatesUrl . '/' . $templateId . self::DEFAULT_FAVICON_FILE;
+				$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
 			}
-				
-			// ##### 共通ライブラリの読み込み #####
-			if (!$this->showWidget){// 単体実行以外のとき
-				$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
-				for ($i = 0; $i < count($rows); $i++){
-					$this->addScript($task, trim($rows[$i]['wd_add_script_lib']));
-				}
+		}
+		
+		// ##### Ajaxライブラリの読み込み #####
+		if (!$gEnvManager->isAdminDirAccess()){		// 通常画面へのアクセスのとき
+			if ($this->db->isExistsWidgetWithAjax($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId())){// Ajaxライブラリを使用しているウィジェットがあるときは追加
+				$this->addScriptFile($this->selectedJQueryFilename);		// デフォルトAjaxライブラリ追加
+				$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 			}
+		}
+			
+		// ##### 共通ライブラリの読み込み #####
+		if (!$this->showWidget){// 単体実行以外のとき
+			$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+			for ($i = 0; $i < count($rows); $i++){
+				$this->addScript($task, trim($rows[$i]['wd_add_script_lib']));
+			}
+		}
 
-			// ##### 共通CSS読み込み #####
-			if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) || $this->isEditMode){			// フロント画面編集モード
-				$cssURL = $scriptsUrl . '/' . self::M3_EDIT_CSS_FILE;
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
-			}
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				//if ($gEnvManager->isSystemAdmin()){		// 管理者権限がある場合のみ有効
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-					// 管理機能用共通ライブラリのCSSの読み込み
-					$count = count($this->defaultAdminCssFiles);
-					for ($i = 0; $i < $count; $i++){
-						// CSSへのURLを作成
-						//$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
-						$cssFilename = $this->defaultAdminCssFiles[$i];
-						if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
-							$cssURL = $cssFilename;
-						} else {
-							$cssURL = $scriptsUrl . '/' . $cssFilename;
-						}
-						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
-					}
-				} else {
-					// 管理権限なしで管理ディレクトリアクセスで必要なCSSファイルを読み込む
-					$count = count($this->defaultAdminDirCssFiles);
-					for ($i = 0; $i < $count; $i++){
-						// CSSへのURLを作成
-						$cssURL = $scriptsUrl . '/' . $this->defaultAdminDirCssFiles[$i];
-						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
-					}
-				}
-			} else {
-				// 共通ライブラリのCSSの読み込み
-				$count = count($this->defaultCssFiles);
+		// ##### 共通CSS読み込み #####
+		if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) || $this->isEditMode){			// フロント画面編集モード
+			$cssURL = $scriptsUrl . '/' . self::M3_EDIT_CSS_FILE;
+			$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+		}
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			//if ($gEnvManager->isSystemAdmin()){		// 管理者権限がある場合のみ有効
+			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
+				// 管理機能用共通ライブラリのCSSの読み込み
+				$count = count($this->defaultAdminCssFiles);
 				for ($i = 0; $i < $count; $i++){
 					// CSSへのURLを作成
-					$cssFilename = $this->defaultCssFiles[$i];
+					//$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
+					$cssFilename = $this->defaultAdminCssFiles[$i];
 					if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
 						$cssURL = $cssFilename;
 					} else {
@@ -3802,122 +3769,94 @@ class PageManager extends Core
 					}
 					$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 				}
+			} else {
+				// 管理権限なしで管理ディレクトリアクセスで必要なCSSファイルを読み込む
+				$count = count($this->defaultAdminDirCssFiles);
+				for ($i = 0; $i < $count; $i++){
+					// CSSへのURLを作成
+					$cssURL = $scriptsUrl . '/' . $this->defaultAdminDirCssFiles[$i];
+					$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+				}
 			}
-			
-			// ##### 表示モードによるCSS読み込み #####
-			// ウィジェット付きポジション画面は管理画面のアクセスではない
-			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
-				// ウィジェット操作用CSS
-				$cssURL = $scriptsUrl . self::M3_ADMIN_WIDGET_CSS_FILE;
+		} else {
+			// 共通ライブラリのCSSの読み込み
+			$count = count($this->defaultCssFiles);
+			for ($i = 0; $i < $count; $i++){
+				// CSSへのURLを作成
+				$cssFilename = $this->defaultCssFiles[$i];
+				if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
+					$cssURL = $cssFilename;
+				} else {
+					$cssURL = $scriptsUrl . '/' . $cssFilename;
+				}
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 			}
-			
-			// ##### ウィジェットごとのCSS読み込み #####
-			// CSSがあるウィジェットを取得
-			$this->db->getWidgetsIdWithCss($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
-			for ($i = 0; $i < count($rows); $i++){
-				$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_CSS;
-				// ディレクトリがあるときはディレクトリ内読み込み
-				if (is_dir($searchPath)){
-					$dir = dir($searchPath);
-					while (($file = $dir->read()) !== false){
-						$filePath = $searchPath . '/' . $file;
-						if ($file != '.' && $file != '..' && is_file($filePath)
-							&& strncmp($file, '_', 1) != 0){		// 「_」で始まる名前のファイルは読み込まない
-					
-							// CSSへのURLを作成
-							$cssURL = $widgetsUrl . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_CSS . '/' . $file;
-							$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
-						}
-					}
-					$dir->close();
-				}
-			}
-			// ##### 外部出力用CSS読み込み #####
-			// ウィジェットからの追加のCSS読み込み
-			$count = count($this->headCssFiles);
-			for ($i = 0; $i < $count; $i++){
-				$cssUrl = $this->headCssFiles[$i];
-				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
-			}
-			
-			// 外部出力用CSSデータがある場合はURLを追加
-			if (!empty($this->exportCss)){
-				$cssUrl = $this->createCssCmdUrl($isSslPage, date('YmdHis'));
-				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
-			}
-			
-			// ##### RSS配信情報の読み込み #####
-			$count = count($this->headRssFiles);
-			for ($i = 0; $i < $count; $i++){
-				$rssUrl = $this->headRssFiles[$i]['href'];// リンク先URL
-				$rssTitle = $this->headRssFiles[$i]['title'];// タイトル
-				$replaceStr .=  '<link rel="alternate" type="application/rss+xml" title="' . $rssTitle . '" href="' . convertUrlToHtmlEntity($rssUrl) . '" />' . M3_NL;
-			}
-									
-			// ##### 共通Javascriptの読み込み #####
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-					// 管理画面用の共通スクリプトを読み込む
-					$count = count($this->defaultAdminScriptFiles);
-					for ($i = 0; $i < $count; $i++){
-						$scriptFilename = $this->defaultAdminScriptFiles[$i];
-
-						// スクリプトのURLを修正
-						if (strncasecmp($scriptFilename, 'http://', 7) == 0 || strncasecmp($scriptFilename, 'https://', 8) == 0){
-							$scriptURL = $scriptFilename;
-							
-							// SSLをページの状態に合わせる
-							if ($isSslPage){
-								$scriptURL = str_replace('http://', 'https://', $scriptURL);
-							} else {
-								$scriptURL = str_replace('https://', 'http://', $scriptURL);
-							}
-						} else {
-							$scriptURL = $scriptsUrl . '/' . $scriptFilename;
-						}
-					
-						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						//$scriptURL = $scriptsUrl . '/' . $scriptFilename;
-						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
-					}
-					if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示のときは、ウィジェット操作ライブラリを読み込む
-						// wigetのドラッグドロップ用
-						$scriptURL = $scriptsUrl . '/' . self::M3_ADMIN_WIDGET_SCRIPT_FILENAME;
-						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
-					}
-				} else {		// システム運用権限がない場合
-					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
-					$count = count($this->defaultAdminDirScriptFiles);
-					for ($i = 0; $i < $count; $i++){
-						$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
-
-						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
-						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
-					}
-				}
-			} else {			// 通常画面
-				// Googleマップライブラリの読み込み
-				if ($this->useGooglemaps && $this->isContentGooglemaps) $this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));	// コンテンツにGoogleマップが含むかどうか
-
-				$useExternalJquery = $gSystemManager->getSystemConfig(self::CF_EXTERNAL_JQUERY);		// システム外部のjQueryを使用するかどうか
+		}
+		
+		// ##### 表示モードによるCSS読み込み #####
+		// ウィジェット付きポジション画面は管理画面のアクセスではない
+		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+			// ウィジェット操作用CSS
+			$cssURL = $scriptsUrl . self::M3_ADMIN_WIDGET_CSS_FILE;
+			$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+		}
+		
+		// ##### ウィジェットごとのCSS読み込み #####
+		// CSSがあるウィジェットを取得
+		$this->db->getWidgetsIdWithCss($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+		for ($i = 0; $i < count($rows); $i++){
+			$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_CSS;
+			// ディレクトリがあるときはディレクトリ内読み込み
+			if (is_dir($searchPath)){
+				$dir = dir($searchPath);
+				while (($file = $dir->read()) !== false){
+					$filePath = $searchPath . '/' . $file;
+					if ($file != '.' && $file != '..' && is_file($filePath)
+						&& strncmp($file, '_', 1) != 0){		// 「_」で始まる名前のファイルは読み込まない
 				
-				$count = count($this->defaultScriptFiles);
+						// CSSへのURLを作成
+						$cssURL = $widgetsUrl . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_CSS . '/' . $file;
+						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+					}
+				}
+				$dir->close();
+			}
+		}
+		// ##### 外部出力用CSS読み込み #####
+		// ウィジェットからの追加のCSS読み込み
+		$count = count($this->headCssFiles);
+		for ($i = 0; $i < $count; $i++){
+			$cssUrl = $this->headCssFiles[$i];
+			if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
+			$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
+		}
+		
+		// 外部出力用CSSデータがある場合はURLを追加
+		if (!empty($this->exportCss)){
+			$cssUrl = $this->createCssCmdUrl($isSslPage, date('YmdHis'));
+			if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
+			$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
+		}
+		
+		// ##### RSS配信情報の読み込み #####
+		$count = count($this->headRssFiles);
+		for ($i = 0; $i < $count; $i++){
+			$rssUrl = $this->headRssFiles[$i]['href'];// リンク先URL
+			$rssTitle = $this->headRssFiles[$i]['title'];// タイトル
+			$replaceStr .=  '<link rel="alternate" type="application/rss+xml" title="' . $rssTitle . '" href="' . convertUrlToHtmlEntity($rssUrl) . '" />' . M3_NL;
+		}
+								
+		// ##### 共通Javascriptの読み込み #####
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
+				// 管理画面用の共通スクリプトを読み込む
+				$count = count($this->defaultAdminScriptFiles);
 				for ($i = 0; $i < $count; $i++){
-					$defaultScriptFile = $this->defaultScriptFiles[$i];
+					$scriptFilename = $this->defaultAdminScriptFiles[$i];
 
-					// 外部のjQueryを使用する場合はSCRIPTタグを出力しない
-					if ($defaultScriptFile == $this->selectedJQueryFilename && $useExternalJquery) continue;
-					
 					// スクリプトのURLを修正
-					if (strncasecmp($defaultScriptFile, 'http://', 7) == 0 || strncasecmp($defaultScriptFile, 'https://', 8) == 0){
-						$scriptURL = $defaultScriptFile;
+					if (strncasecmp($scriptFilename, 'http://', 7) == 0 || strncasecmp($scriptFilename, 'https://', 8) == 0){
+						$scriptURL = $scriptFilename;
 						
 						// SSLをページの状態に合わせる
 						if ($isSslPage){
@@ -3926,96 +3865,297 @@ class PageManager extends Core
 							$scriptURL = str_replace('https://', 'http://', $scriptURL);
 						}
 					} else {
-						$scriptURL = $scriptsUrl . '/' . $defaultScriptFile;
+						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 					}
-
+				
 					// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+					//$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 					if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
 					$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 				}
-				
-				// ### フロントからプレビューコマンドでログイン画面を表示させるパターンがあるので注意 ###
-//				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
-				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || ($cmd == M3_REQUEST_CMD_PREVIEW && !$gEnvManager->isCurrentUserLogined())){				// ログイン、ログアウト場合
-					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
-					$count = count($this->defaultAdminDirScriptFiles);
-					for ($i = 0; $i < $count; $i++){
-						$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
-						if (!in_array($scriptFilename, $this->defaultScriptFiles)){		// 既に追加されていない場合のみ追加
-							// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-							$scriptURL = $scriptsUrl . '/' . $scriptFilename;
-							if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-							$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
-						}
-					}
+				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示のときは、ウィジェット操作ライブラリを読み込む
+					// wigetのドラッグドロップ用
+					$scriptURL = $scriptsUrl . '/' . self::M3_ADMIN_WIDGET_SCRIPT_FILENAME;
+					if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+					$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 				}
-				
-				// ***** [WordPressテンプレート] jQueryの読み込み後、ヘッダ部に出力するテンプレート用のJavascriptがあれば読み込む *****
-				$headData = $this->gEnv->getWpHeadScriptsData();
-				if (!empty($headData)) $replaceStr .= $headData;
-			}
-			// ##### ウィジェットごとのJavaScript読み込み #####
-			// スクリプトがあるウィジェットを取得
-			$this->db->getWidgetsIdWithScript($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
-			for ($i = 0; $i < count($rows); $i++){
-				$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS;
-			
-				// ディレクトリがあるときはディレクトリ内読み込み
-				if (is_dir($searchPath)){
-					$dir = dir($searchPath);
-					while (($file = $dir->read()) !== false){
-						$filePath = $searchPath . '/' . $file;
-						if ($file != '.' && $file != '..' && is_file($filePath)
-							&& strncmp($file, '_', 1) != 0){		// 「_」で始まる名前のファイルは読み込まない
-						
-							// スクリプトへのURLを作成
-							$scriptURL = $widgetsUrl . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS . '/' . $file;
-							// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-							if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-							$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
-						}
-					}
-					$dir->close();
-				}
-			}
-			// ウィジェットからの追加のCSS読み込み
-			$count = count($this->headScriptFiles);
-			for ($i = 0; $i < $count; $i++){
-				$scriptUrl = $this->headScriptFiles[$i];
-				if ($isSslPage) $scriptUrl = str_replace('http://', 'https://', $scriptUrl);			// SSL化が必要なときは変換
-		
-				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-				if (!$this->hasScriptCache) $scriptUrl .= $this->getCacheParam();
-				$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptUrl) . '"></script>' . M3_NL;
-			}
-			
-			// ##### ページへJavascriptの埋め込む #####
-			// JavaScriptグローバル変数の設定
-			//$replaceStr .= '<script type="text/javascript">' . M3_NL;
-			//$replaceStr .= '<!--' . M3_NL;
-			$replaceStr .= '<script type="text/javascript">' . M3_NL;
-			$replaceStr .= '//<![CDATA[' . M3_NL;
-			$replaceStr .= '// Magic3 Global values' . M3_NL;
-			$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
+			} else {		// システム運用権限がない場合
+				// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
+				$count = count($this->defaultAdminDirScriptFiles);
+				for ($i = 0; $i < $count; $i++){
+					$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
 
-			if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム運用権限があり
-				$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
-				$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
-					
-				// 管理画面のオープン設定
-				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
+					// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+					$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+					if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+					$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
+				}
+			}
+		} else {			// 通常画面
+			// Googleマップライブラリの読み込み
+			if ($this->useGooglemaps && $this->isContentGooglemaps) $this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));	// コンテンツにGoogleマップが含むかどうか
+
+			$useExternalJquery = $gSystemManager->getSystemConfig(self::CF_EXTERNAL_JQUERY);		// システム外部のjQueryを使用するかどうか
+			
+			$count = count($this->defaultScriptFiles);
+			for ($i = 0; $i < $count; $i++){
+				$defaultScriptFile = $this->defaultScriptFiles[$i];
+
+				// 外部のjQueryを使用する場合はSCRIPTタグを出力しない
+				if ($defaultScriptFile == $this->selectedJQueryFilename && $useExternalJquery) continue;
 				
-				// ページID、ページサブID
-				$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;
-				$replaceStr .= 'var M3_PAGE_SUB_ID = "' . $gEnvManager->getCurrentPageSubId() . '";' . M3_NL;
+				// スクリプトのURLを修正
+				if (strncasecmp($defaultScriptFile, 'http://', 7) == 0 || strncasecmp($defaultScriptFile, 'https://', 8) == 0){
+					$scriptURL = $defaultScriptFile;
+					
+					// SSLをページの状態に合わせる
+					if ($isSslPage){
+						$scriptURL = str_replace('http://', 'https://', $scriptURL);
+					} else {
+						$scriptURL = str_replace('https://', 'http://', $scriptURL);
+					}
+				} else {
+					$scriptURL = $scriptsUrl . '/' . $defaultScriptFile;
+				}
+
+				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+				if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+				$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
+			}
+			
+			// ### フロントからプレビューコマンドでログイン画面を表示させるパターンがあるので注意 ###
+//				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+			if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || ($cmd == M3_REQUEST_CMD_PREVIEW && !$gEnvManager->isCurrentUserLogined())){				// ログイン、ログアウト場合
+				// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
+				$count = count($this->defaultAdminDirScriptFiles);
+				for ($i = 0; $i < $count; $i++){
+					$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
+					if (!in_array($scriptFilename, $this->defaultScriptFiles)){		// 既に追加されていない場合のみ追加
+						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
+					}
+				}
+			}
+			
+			// ***** [WordPressテンプレート] jQueryの読み込み後、ヘッダ部に出力するテンプレート用のJavascriptがあれば読み込む *****
+			$headData = $this->gEnv->getWpHeadScriptsData();
+			if (!empty($headData)) $replaceStr .= $headData;
+		}
+		// ##### ウィジェットごとのJavaScript読み込み #####
+		// スクリプトがあるウィジェットを取得
+		$this->db->getWidgetsIdWithScript($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+		for ($i = 0; $i < count($rows); $i++){
+			$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS;
+		
+			// ディレクトリがあるときはディレクトリ内読み込み
+			if (is_dir($searchPath)){
+				$dir = dir($searchPath);
+				while (($file = $dir->read()) !== false){
+					$filePath = $searchPath . '/' . $file;
+					if ($file != '.' && $file != '..' && is_file($filePath)
+						&& strncmp($file, '_', 1) != 0){		// 「_」で始まる名前のファイルは読み込まない
+					
+						// スクリプトへのURLを作成
+						$scriptURL = $widgetsUrl . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS . '/' . $file;
+						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
+					}
+				}
+				$dir->close();
+			}
+		}
+		// ウィジェットからの追加のCSS読み込み
+		$count = count($this->headScriptFiles);
+		for ($i = 0; $i < $count; $i++){
+			$scriptUrl = $this->headScriptFiles[$i];
+			if ($isSslPage) $scriptUrl = str_replace('http://', 'https://', $scriptUrl);			// SSL化が必要なときは変換
+	
+			// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+			if (!$this->hasScriptCache) $scriptUrl .= $this->getCacheParam();
+			$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptUrl) . '"></script>' . M3_NL;
+		}
+		
+		// ##### ページへJavascriptの埋め込む #####
+		// JavaScriptグローバル変数の設定
+		//$replaceStr .= '<script type="text/javascript">' . M3_NL;
+		//$replaceStr .= '<!--' . M3_NL;
+		$replaceStr .= '<script type="text/javascript">' . M3_NL;
+		$replaceStr .= '//<![CDATA[' . M3_NL;
+		$replaceStr .= '// Magic3 Global values' . M3_NL;
+		$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
+
+		if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム運用権限があり
+			$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
+			$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
+				
+			// 管理画面のオープン設定
+			$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
+			
+			// ページID、ページサブID
+			$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;
+			$replaceStr .= 'var M3_PAGE_SUB_ID = "' . $gEnvManager->getCurrentPageSubId() . '";' . M3_NL;
+			// WYSIWYGエディター
+			$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+			
+			// ファイルブラウザ
+			$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;		// バージョン
+			$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
+			$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
+
+			// Googleマップライブラリの読み込み
+			if ($this->useGooglemaps){
+				$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+				
+				// CKEditor拡張プラグイン用の定義
+				$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
+				if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
+			} else {
+				$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+			}
+
+			// 起動がパーソナルモードかどうか
+			if ($this->isPersonalMode){
+				$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
+			} else {
+				$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
+			}
+			// 管理画面の小画面デバイス最適化を行うかどうか
+			if ($gEnvManager->isSmallDeviceAdmin()){
+				$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
+			} else {
+				$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = false;' . M3_NL;
+			}
+			
+			// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
+			if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
+			//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
+				// ##### CKEditor用の設定 #####
+				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+				
+				// CKEditor用のCSSファイル
+				if (!empty($this->ckeditorCssFiles)){
+					// 編集エリア用のCSSファイルを追加
+					$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+					//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
+					
+					//$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
+				}
+				// CKEditor用(レイアウト)のCSSファイル
+				$cssFiles = array();
+				$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
+				$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+//					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+				$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
+				$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
+				
+				// CKEditor用のテンプレートタイプ
+				if (isset($this->ckeditorTemplateType)){
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
+				}
+			} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION){		// ポジション表示
+				$replaceStr .= 'var M3_POSITION_DATA = "' . implode(',', $this->defPositions) . '";' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
+				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
+			} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+				// その他のポジションデータを取得
+				$positionData = $this->getRestPositionData();
+				
+				// テンプレート上のポジション名
+				if (count($this->viewPosId) > 0){
+					$posArrayStr = '[';
+					for ($i = 0; $i < count($this->viewPosId); $i++){
+						$posArrayStr .= '\'#' . $this->viewPosId[$i] . '\'';
+						if ($i < count($this->viewPosId) - 1) $posArrayStr .= ',';
+					}
+					$posArrayStr .= ']';
+					$replaceStr .= 'var M3_POSITIONS = ' . $posArrayStr . ';' . M3_NL;
+				}
+				// 画面定義のリビジョン番号
+				$replaceStr .= 'var M3_REVISION = ' . $this->pageDefRev . ';' . M3_NL;
+				
+				// その他のポジションデータ
+				$replaceStr .= 'var M3_REST_POSITION_DATA = \'' . $positionData . '\';' . M3_NL;
+			} else if (!empty($pageId)){
+				$accessPoint = $this->gEnv->getAllDefaultPageId();
+				for ($i = 0; $i < count($accessPoint); $i++){
+					if ($pageId == $accessPoint[$i]){
+						$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $i . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+						break;
+					}
+				}
+			} else {		// メインの管理画面の場合
+				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
+			}
+					
+			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+				if (!empty($task)){		// 戻りタスクが設定されているときのみ最大化可能
+					$replaceStr .= 'function gobackPagedef(){' . M3_NL;
+					$replaceStr .= '    window.location.href = "' . $gEnvManager->getDefaultAdminUrl() . '?pageid=' . $pageId . '&pagesubid=' . $pageSubId . '&task=' . $task . '";' . M3_NL;
+					$replaceStr .= '}' . M3_NL;
+					$replaceStr .= '$(function(){' . M3_NL;
+					$replaceStr .= '    $(document).keyup(function(e){' . M3_NL;
+					$replaceStr .= '        if (e.which == 36) gobackPagedef();' . M3_NL;
+					$replaceStr .= '    });' . M3_NL;
+					$replaceStr .= '});' . M3_NL;
+				}
+			} else {
+				// ##### 管理用テンプレートを使用している場合の処理 #####
+				// Bootstrap用のスクリプト処理
+				if ($this->useBootstrap){
+					$replaceStr .= '$(function(){' . M3_NL;
+					$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
+					$replaceStr .= '});' . M3_NL;
+				}
+			}
+		} else if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
+			$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
+			
+			// ページID、ページサブID
+			$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;
+			$replaceStr .= 'var M3_PAGE_SUB_ID = "' . $gEnvManager->getCurrentPageSubId() . '";' . M3_NL;
+			// WYSIWYGエディター
+			$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+			
+			// ファイルブラウザ
+			$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
+			$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
+			$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
+			
+			// Googleマップライブラリの読み込み
+			if ($this->useGooglemaps){
+				$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+				
+				// CKEditor拡張プラグイン用の定義
+				$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
+				if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
+			} else {
+				$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+			}
+
+			// 起動がパーソナルモードかどうか
+			if ($this->isPersonalMode){
+				$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
+			} else {
+				$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
+			}
+			
+			// テンプレートタイプ
+			$templateType = $gEnvManager->getCurrentTemplateType();
+			if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
+		} else if ($this->isEditMode){			// フロント画面編集モード(コンテンツ編集可能ユーザ)
+			if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
-				
+			
 				// ファイルブラウザ
-				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;		// バージョン
+				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
 				$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
 				$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
-	
+			
 				// Googleマップライブラリの読み込み
 				if ($this->useGooglemaps){
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
@@ -4026,522 +4166,370 @@ class PageManager extends Core
 				} else {
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
-
-				// 起動がパーソナルモードかどうか
-				if ($this->isPersonalMode){
-					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
-				} else {
-					$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
-				}
+			
+				// 起動がパーソナルモードかどうか(常にパーソナルモード)
+				$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
+			
 				// 管理画面の小画面デバイス最適化を行うかどうか
 				if ($gEnvManager->isSmallDeviceAdmin()){
 					$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
 				} else {
 					$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = false;' . M3_NL;
 				}
+			
+				// ##### CKEditor用の設定 #####
+				// ウィジェット情報取得
+				$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+			
+				// CKEditor用のCSSファイル
+				if (!empty($this->ckeditorCssFiles)){
+					// 編集エリア用のCSSファイルを追加
+					$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+					//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
 				
-				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
-				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
-				//if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE){						// ウィジェット設定画面またはテンプレート設定画面のとき
-					// ##### CKEditor用の設定 #####
-					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
-					
-					// CKEditor用のCSSファイル
-					if (!empty($this->ckeditorCssFiles)){
-						// 編集エリア用のCSSファイルを追加
-						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
-						
-						//$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
-						$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
-						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
-					}
-					// CKEditor用(レイアウト)のCSSファイル
-					$cssFiles = array();
-					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
-					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-//					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
-					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
-					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
-					
-					// CKEditor用のテンプレートタイプ
-					if (isset($this->ckeditorTemplateType)){
-						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
-					}
-				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION){		// ポジション表示
-					$replaceStr .= 'var M3_POSITION_DATA = "' . implode(',', $this->defPositions) . '";' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
-					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
-				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
-					// その他のポジションデータを取得
-					$positionData = $this->getRestPositionData();
-					
-					// テンプレート上のポジション名
-					if (count($this->viewPosId) > 0){
-						$posArrayStr = '[';
-						for ($i = 0; $i < count($this->viewPosId); $i++){
-							$posArrayStr .= '\'#' . $this->viewPosId[$i] . '\'';
-							if ($i < count($this->viewPosId) - 1) $posArrayStr .= ',';
-						}
-						$posArrayStr .= ']';
-						$replaceStr .= 'var M3_POSITIONS = ' . $posArrayStr . ';' . M3_NL;
-					}
-					// 画面定義のリビジョン番号
-					$replaceStr .= 'var M3_REVISION = ' . $this->pageDefRev . ';' . M3_NL;
-					
-					// その他のポジションデータ
-					$replaceStr .= 'var M3_REST_POSITION_DATA = \'' . $positionData . '\';' . M3_NL;
-				} else if (!empty($pageId)){
-					$accessPoint = $this->gEnv->getAllDefaultPageId();
-					for ($i = 0; $i < count($accessPoint); $i++){
-						if ($pageId == $accessPoint[$i]){
-							$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $i . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
-							break;
-						}
-					}
-				} else {		// メインの管理画面の場合
-					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
+//						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 				}
-						
-				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
-					if (!empty($task)){		// 戻りタスクが設定されているときのみ最大化可能
-						$replaceStr .= 'function gobackPagedef(){' . M3_NL;
-						$replaceStr .= '    window.location.href = "' . $gEnvManager->getDefaultAdminUrl() . '?pageid=' . $pageId . '&pagesubid=' . $pageSubId . '&task=' . $task . '";' . M3_NL;
-						$replaceStr .= '}' . M3_NL;
-						$replaceStr .= '$(function(){' . M3_NL;
-						$replaceStr .= '    $(document).keyup(function(e){' . M3_NL;
-						$replaceStr .= '        if (e.which == 36) gobackPagedef();' . M3_NL;
-						$replaceStr .= '    });' . M3_NL;
-						$replaceStr .= '});' . M3_NL;
-					}
-				} else {
-					// ##### 管理用テンプレートを使用している場合の処理 #####
-					// Bootstrap用のスクリプト処理
-					if ($this->useBootstrap){
-						$replaceStr .= '$(function(){' . M3_NL;
-						$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
-						$replaceStr .= '});' . M3_NL;
-					}
-				}
-			} else if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
-				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
+				// CKEditor用(レイアウト)のCSSファイル
+				$cssFiles = array();
+				$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
+				$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+	//			$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
+				$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
+				$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 				
-				// ページID、ページサブID
-				$replaceStr .= 'var M3_PAGE_ID = "' . $gEnvManager->getCurrentPageId() . '";' . M3_NL;
-				$replaceStr .= 'var M3_PAGE_SUB_ID = "' . $gEnvManager->getCurrentPageSubId() . '";' . M3_NL;
-				// WYSIWYGエディター
-				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
-				
-				// ファイルブラウザ
-				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
-				$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
-				$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
-				
-				// Googleマップライブラリの読み込み
-				if ($this->useGooglemaps){
-					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
-					
-					// CKEditor拡張プラグイン用の定義
-					$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
-					if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
-				} else {
-					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
-				}
-
-				// 起動がパーソナルモードかどうか
-				if ($this->isPersonalMode){
-					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
-				} else {
-					$replaceStr .= 'var M3_PERSONAL_MODE = false;' . M3_NL;
+				// CKEditor用のテンプレートタイプ
+				if (isset($this->ckeditorTemplateType)){
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
 				}
 				
-				// テンプレートタイプ
+				// Bootstrap用のスクリプト処理
+				if ($this->useBootstrap){
+					$replaceStr .= '$(function(){' . M3_NL;
+					$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
+					$replaceStr .= '});' . M3_NL;
+				}
+			} else {
+				// プレビュー画面用にテンプレートタイプを出力
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
-			} else if ($this->isEditMode){			// フロント画面編集モード(コンテンツ編集可能ユーザ)
-				if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
-					// WYSIWYGエディター
-					$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-					// ファイルブラウザ
-					$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
-					$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
-					$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
-				
-					// Googleマップライブラリの読み込み
-					if ($this->useGooglemaps){
-						$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
-						
-						// CKEditor拡張プラグイン用の定義
-						$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
-						if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
-					} else {
-						$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
-					}
-				
-					// 起動がパーソナルモードかどうか(常にパーソナルモード)
-					$replaceStr .= 'var M3_PERSONAL_MODE = true;' . M3_NL;
-				
-					// 管理画面の小画面デバイス最適化を行うかどうか
-					if ($gEnvManager->isSmallDeviceAdmin()){
-						$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
-					} else {
-						$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = false;' . M3_NL;
-					}
-				
-					// ##### CKEditor用の設定 #####
-					// ウィジェット情報取得
-					$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
-					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
-				
-					// CKEditor用のCSSファイル
-					if (!empty($this->ckeditorCssFiles)){
-						// 編集エリア用のCSSファイルを追加
-						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
-					
-//						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
-						$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $this->ckeditorCssFiles));
-						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
-					}
-					// CKEditor用(レイアウト)のCSSファイル
-					$cssFiles = array();
-					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
-					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-		//			$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
-					$fileList = implode(', ', array_map(function($a){ return "'" . $a . "'"; }, $cssFiles));
-					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
-					
-					// CKEditor用のテンプレートタイプ
-					if (isset($this->ckeditorTemplateType)){
-						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
-					}
-					
-					// Bootstrap用のスクリプト処理
-					if ($this->useBootstrap){
-						$replaceStr .= '$(function(){' . M3_NL;
-						$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
-						$replaceStr .= '});' . M3_NL;
-					}
-				} else {
-					// プレビュー画面用にテンプレートタイプを出力
-					$templateType = $gEnvManager->getCurrentTemplateType();
-					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
-					
-					// ##### ヘルプシステムの組み込み #####
-					if ($this->useHelp){			// ヘルプ表示のとき
-						$replaceStr .= '$(function(){' . M3_NL;
-						$replaceStr .= '    if (jQuery().tooltip) $(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;
-						$replaceStr .= '});' . M3_NL;
-					}
-				}
-			} else {			// 権限なしの場合
-				if (!$gEnvManager->isAdminDirAccess()){			// フロント画面のとき
-					// テンプレートタイプを追加(ファイルローダ等で使用)
-					$templateType = $gEnvManager->getCurrentTemplateType();
-					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
+				// ##### ヘルプシステムの組み込み #####
+				if ($this->useHelp){			// ヘルプ表示のとき
+					$replaceStr .= '$(function(){' . M3_NL;
+					$replaceStr .= '    if (jQuery().tooltip) $(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;
+					$replaceStr .= '});' . M3_NL;
 				}
 			}
-			
-			// ##### パネルメニュー(フロント画面と管理画面の切り替え等)の表示 #####
-			// PC用、携帯用、スマートフォン用画面とウィジェット付きポジションの管理画面時に表示
-			if (($gEnvManager->isAdminDirAccess() && $cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET) ||		// 管理画面(ウィジェット付きポジション表示)のとき
-				(!$gEnvManager->isAdminDirAccess() &&							// 一般用画面のとき
-					$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
-					$cmd != M3_REQUEST_CMD_RSS)){								// RSS配信でない
-				//if ($gEnvManager->isSystemAdmin()){				// 管理者権限がある場合のみ有効
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限ありの場合
-					// トップメニュー項目作成
-					$menubarTag = '';	// 管理用メニューバー
-					$adminTag = '';		// 管理画面ボタン
-					$editTag = '';		// 編集ボタン
-					$logoutTag = '';		// ログアウトボタン
-					
-					if ($gEnvManager->isAdminDirAccess()){		// 管理画面(ウィジェット付きポジション表示)の場合
-						// 編集ボタン
+		} else {			// 権限なしの場合
+			if (!$gEnvManager->isAdminDirAccess()){			// フロント画面のとき
+				// テンプレートタイプを追加(ファイルローダ等で使用)
+				$templateType = $gEnvManager->getCurrentTemplateType();
+				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
+			}
+		}
+		
+		// ##### パネルメニュー(フロント画面と管理画面の切り替え等)の表示 #####
+		// PC用、携帯用、スマートフォン用画面とウィジェット付きポジションの管理画面時に表示
+		if (($gEnvManager->isAdminDirAccess() && $cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET) ||		// 管理画面(ウィジェット付きポジション表示)のとき
+			(!$gEnvManager->isAdminDirAccess() &&							// 一般用画面のとき
+				$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
+				$cmd != M3_REQUEST_CMD_RSS)){								// RSS配信でない
+			//if ($gEnvManager->isSystemAdmin()){				// 管理者権限がある場合のみ有効
+			if ($gEnvManager->isSystemManageUser()){		// システム運用権限ありの場合
+				// トップメニュー項目作成
+				$menubarTag = '';	// 管理用メニューバー
+				$adminTag = '';		// 管理画面ボタン
+				$editTag = '';		// 編集ボタン
+				$logoutTag = '';		// ログアウトボタン
+				
+				if ($gEnvManager->isAdminDirAccess()){		// 管理画面(ウィジェット付きポジション表示)の場合
+					// 編集ボタン
 /*						$titleStr = '編集終了';
-						$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
-						if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
-						$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
-						*/
-						$titleStr = '編集終了';
-						$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
-						if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
-						//$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						//$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
-						$editTag = '<div class="m3editend m3topright"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
-						$menubarTag .= $editTag;
-						
-				//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").prepend(\'' . $menubarTag . '\');' . M3_NL;		// appendでうまく表示できないのでprependで表示
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
-					} else if ($this->isAccessPointWithAdminMenu){		// 通常画面は、管理メニューを使用するアクセスポイントの場合のみ表示
-						// 管理画面ボタン
-						$titleStr = '管理画面へ遷移';
-						$linkUrl = $gEnvManager->getDefaultAdminUrl();
-						$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
+					if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
+					$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
+					$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
+					*/
+					$titleStr = '編集終了';
+					$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
+					if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
+					//$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+					//$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
+					$editTag = '<div class="m3editend m3topright"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+					$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
+					$menubarTag .= $editTag;
 					
-						// 編集ボタン
-						$titleStr = '画面を編集';
-						$linkUrl  = $gEnvManager->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' .M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET;
-						$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $gEnvManager->getCurrentPageId();
-						$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
-						$linkUrl .= '&' . M3_REQUEST_PARAM_BACKUP_URL . '=' . urlencode($gEnvManager->getCurrentRequestUri());			// URL退避用
-						$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
-						
-						// ログアウトボタン
-						$titleStr = 'ログアウト';
+			//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").prepend(\'' . $menubarTag . '\');' . M3_NL;		// appendでうまく表示できないのでprependで表示
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
+				} else if ($this->isAccessPointWithAdminMenu){		// 通常画面は、管理メニューを使用するアクセスポイントの場合のみ表示
+					// 管理画面ボタン
+					$titleStr = '管理画面へ遷移';
+					$linkUrl = $gEnvManager->getDefaultAdminUrl();
+					$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+					$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+				
+					// 編集ボタン
+					$titleStr = '画面を編集';
+					$linkUrl  = $gEnvManager->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' .M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET;
+					$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $gEnvManager->getCurrentPageId();
+					$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
+					$linkUrl .= '&' . M3_REQUEST_PARAM_BACKUP_URL . '=' . urlencode($gEnvManager->getCurrentRequestUri());			// URL退避用
+					$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+					$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					
+					// ログアウトボタン
+					$titleStr = 'ログアウト';
 //						if ($gEnvManager->isAdminDirAccess()){		// 管理画面の場合
 //							$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
 //							if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
 //						} else {
-							$linkUrl = $gEnvManager->getCurrentRequestUri();
+						$linkUrl = $gEnvManager->getCurrentRequestUri();
 //						}
-						$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
-						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
+					$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+					$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+				
+					// ウィジェットツール表示制御ボタン
+					$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav" data-toggle="buttons">';
+					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェットツール"><span class="title"> ウィジェットツール</span></button>';
+					$widgetToolTag .= '<input type="checkbox" class="hidden" />';
+					$widgetToolTag .= '</div></li>';
 					
-						// ウィジェットツール表示制御ボタン
-						$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav" data-toggle="buttons">';
-						$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェットツール"><span class="title"> ウィジェットツール</span></button>';
-						$widgetToolTag .= '<input type="checkbox" class="hidden" />';
-						$widgetToolTag .= '</div></li>';
-						
-						//$menubarTag .= '<div id="m3slidepanel">';
-						$menubarTag .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
-						$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';				
-				//		$menubarTag .= '<div tabindex="0" class="m3panel_wrap">';
-						$menubarTag .= '<div>';
-						$menubarTag .= '<ul class="m3-nav m3-navbar-nav">';
-						if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
-							$menubarTag .= $adminTag;
-							$menubarTag .= $editTag;
-						}
-						$menubarTag .= $logoutTag;
-						$menubarTag .= $widgetToolTag;
-						$menubarTag .= '</ul>';
-						$menubarTag .= '</div>';
-						$menubarTag .= '</div>';
-					//	$menubarTag .= '</div>';
-
-					//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $menubarTag . '\');' . M3_NL;
-						//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp($(\'#m3slidepanel\'));' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetupWidgetTool(\'m3widgettoolbutton\');' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
+					//$menubarTag .= '<div id="m3slidepanel">';
+					$menubarTag .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
+					$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';				
+			//		$menubarTag .= '<div tabindex="0" class="m3panel_wrap">';
+					$menubarTag .= '<div>';
+					$menubarTag .= '<ul class="m3-nav m3-navbar-nav">';
+					if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
+						$menubarTag .= $adminTag;
+						$menubarTag .= $editTag;
 					}
+					$menubarTag .= $logoutTag;
+					$menubarTag .= $widgetToolTag;
+					$menubarTag .= '</ul>';
+					$menubarTag .= '</div>';
+					$menubarTag .= '</div>';
+				//	$menubarTag .= '</div>';
+
+				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $menubarTag . '\');' . M3_NL;
+					//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp($(\'#m3slidepanel\'));' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetupWidgetTool(\'m3widgettoolbutton\');' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 				}
 			}
-			// ##### フロント画面からのウィジェット操作用ツールバー #####
-			if (!$gEnvManager->isAdminDirAccess() && 
-				$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
-				$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
-				if ($gEnvManager->isSystemManageUser()){		// 一般用画面で管理者権限がある場合のみ有効
-					// 管理用ツールバー
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').each(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var attrs = m3_splitAttr($(this).attr(\'m3\'));' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var widgetId = attrs[\'widgetid\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var serialNo = attrs[\'serial\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var configId = attrs[\'configid\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var useconfig = attrs[\'useconfig\'];' . M3_NL;
-					
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'\';' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (useconfig == 1){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-										'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" data-container="body" title="ウィジェット設定">' .
-										'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェット設定" width="32" height="32" /></a>\';' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
-					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 
-											'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" rel="m3help" data-container="body" title="タイトル・スタイル調整">' .
-											'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・スタイル調整" width="32" height="32" /></a>\';' . M3_NL;
-					}
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (html != \'\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-											'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);" rel="m3help" data-container="body" title="閉じる">' . 
-											'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
-											
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).append(html);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
-					// クリックイベントの設定
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).click(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (tooltipObj.css(\'display\') == \'none\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (_m3ShowWidgetTool){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'tooltipObj.show();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.hide();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
-					// ウィジェットボーダーハイライト、ツールチップ表示
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).hover(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var pos = $(this).position();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var width = $(this).outerWidth();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipWidth = tooltipObj.outerWidth(true);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var x = pos.left + width - tooltipWidth;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var y = pos.top;' . M3_NL;
-    				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.css({position: "absolute",top: y + "px", left: x + "px"}).show();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}, function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).removeClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'tooltipObj.hide();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
-					// 閉じるボタン処理
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3closebox\').click(function(event){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).children(\'.m3tooltip\').hide();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
-					// コンテンツ編集ボタンの位置修正
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var pos = $(this).position();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var offset = $(this).offset();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).outerWidth();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3edittool\').each(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).offset({left: offset.left});' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).width(width);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
-					
-					// コンテキストメニューを作成
-					$this->initScript .= M3_INDENT_SPACE . 'var widgetWindow = \'<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">\';' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<ul>\';' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
-					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
-						$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・スタイル調整</span></li>\';' . M3_NL;
-					}
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</ul>\';' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</div>\';' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '$("body").append(widgetWindow);' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').contextMenu(\'m3_widgetmenu\', {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'menuStyle: {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// border : "2px solid green",' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'backgroundColor: \'#FFFFFF\',' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'width: "150px",' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'textAlign: \'left\',' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'12px/1.5 Arial, sans-serif\'' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'itemStyle: {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'padding: \'3px 3px\'' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'bindings: {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wconfig\': function(t){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'alert("このウィジェットには設定画面がありません");' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'return;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowConfigWindow(attrs[\'widgetid\'], attrs[\'configid\'], attrs[\'serial\']);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wadjust\': function(t){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowAdjustWindow(attrs[\'configid\'], attrs[\'serial\'], M3_PAGE_ID, M3_PAGE_SUB_ID);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onContextMenu: function(e){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return true;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return false;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onShowMenu: function(e, menu){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// メニュー項目の変更' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var attrs = m3_splitAttr($(e.target).parents(\'dl\').attr(\'m3\'));' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(\'#m3_wconfig\', menu).remove();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return menu;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
-					
-					// コンテンツの「非公開」表示
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3content_private\').each(function(){' . M3_NL;
+		}
+		// ##### フロント画面からのウィジェット操作用ツールバー #####
+		if (!$gEnvManager->isAdminDirAccess() && 
+			$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
+			$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
+			if ($gEnvManager->isSystemManageUser()){		// 一般用画面で管理者権限がある場合のみ有効
+				// 管理用ツールバー
+				$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').each(function(){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var attrs = m3_splitAttr($(this).attr(\'m3\'));' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var widgetId = attrs[\'widgetid\'];' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var serialNo = attrs[\'serial\'];' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var configId = attrs[\'configid\'];' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var useconfig = attrs[\'useconfig\'];' . M3_NL;
+				
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'\';' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (useconfig == 1){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
+									'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" data-container="body" title="ウィジェット設定">' .
+									'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェット設定" width="32" height="32" /></a>\';' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
+				if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 
+										'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" rel="m3help" data-container="body" title="タイトル・スタイル調整">' .
+										'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・スタイル調整" width="32" height="32" /></a>\';' . M3_NL;
+				}
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (html != \'\'){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
+										'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);" rel="m3help" data-container="body" title="閉じる">' . 
+										'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
+										
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).append(html);' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
+				// クリックイベントの設定
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).click(function(){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (tooltipObj.css(\'display\') == \'none\'){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (_m3ShowWidgetTool){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'tooltipObj.show();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.hide();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
+				// ウィジェットボーダーハイライト、ツールチップ表示
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).hover(function(){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var pos = $(this).position();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var width = $(this).outerWidth();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipWidth = tooltipObj.outerWidth(true);' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var x = pos.left + width - tooltipWidth;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var y = pos.top;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.css({position: "absolute",top: y + "px", left: x + "px"}).show();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}, function(){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).removeClass(\'m3_widget_highlight\');' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'tooltipObj.hide();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
+				// 閉じるボタン処理
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3closebox\').click(function(event){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).children(\'.m3tooltip\').hide();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
+				// コンテンツ編集ボタンの位置修正
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var pos = $(this).position();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var offset = $(this).offset();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).outerWidth();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3edittool\').each(function(){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).offset({left: offset.left});' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).width(width);' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
+				
+				// コンテキストメニューを作成
+				$this->initScript .= M3_INDENT_SPACE . 'var widgetWindow = \'<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">\';' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<ul>\';' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
+				if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・スタイル調整</span></li>\';' . M3_NL;
+				}
+				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</ul>\';' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</div>\';' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . '$("body").append(widgetWindow);' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').contextMenu(\'m3_widgetmenu\', {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'menuStyle: {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// border : "2px solid green",' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'backgroundColor: \'#FFFFFF\',' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'width: "150px",' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'textAlign: \'left\',' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'12px/1.5 Arial, sans-serif\'' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'itemStyle: {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'padding: \'3px 3px\'' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'bindings: {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wconfig\': function(t){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'alert("このウィジェットには設定画面がありません");' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'return;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowConfigWindow(attrs[\'widgetid\'], attrs[\'configid\'], attrs[\'serial\']);' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '},' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wadjust\': function(t){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowAdjustWindow(attrs[\'configid\'], attrs[\'serial\'], M3_PAGE_ID, M3_PAGE_SUB_ID);' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onContextMenu: function(e){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return true;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return false;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onShowMenu: function(e, menu){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// メニュー項目の変更' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var attrs = m3_splitAttr($(e.target).parents(\'dl\').attr(\'m3\'));' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(\'#m3_wconfig\', menu).remove();' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return menu;' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
+				
+				// コンテンツの「非公開」表示
+				$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3content_private\').each(function(){' . M3_NL;
 //					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var pos = $(this).position();' . M3_NL;
 //					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var top = pos.top;' . M3_NL;
 //					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var left = pos.left;' . M3_NL;
 //					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).css(\'width\');' . M3_NL;
 //					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var height = $(this).css(\'height\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'<div class="m3content_overlay"><div><h2>非公開</h2></div></div>\';' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).prepend(html);' . M3_NL;
-				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var overlayObj = $(this).children(\'.m3content_overlay div\');' . M3_NL;
-				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'overlayObj.css({ position:"absolute", top:top + "px", left:left + "px" }).show();' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
-				}
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'<div class="m3content_overlay"><div><h2>非公開</h2></div></div>\';' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).prepend(html);' . M3_NL;
+			//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var overlayObj = $(this).children(\'.m3content_overlay div\');' . M3_NL;
+			//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'overlayObj.css({ position:"absolute", top:top + "px", left:left + "px" }).show();' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 			}
-			// ##### フロント画面のデフォルトのJavaスクリプト #####
+		}
+		// ##### フロント画面のデフォルトのJavaスクリプト #####
 //			if (!$gEnvManager->isAdminDirAccess()){
 //				$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (jQuery().tooltip) $(\'[rel=tooltip]\').tooltip();' . M3_NL;		// 標準ツールチップ作成
 //			}
-			// ポップアップメッセージがある場合は表示
-			if (!empty($this->popupMsg)){
-				$replaceStr .=  'alert("' . $this->popupMsg . '");' . M3_NL;
+		// ポップアップメッセージがある場合は表示
+		if (!empty($this->popupMsg)){
+			$replaceStr .=  'alert("' . $this->popupMsg . '");' . M3_NL;
+		}
+		// テンプレートに応じた処理
+		if ($cleanType == 1){
+			// HTMLのクリーン処理が必要なときはコードを埋め込む
+			$this->initScript .= '    $(\'.PostHeaderIcons\').remove();' . M3_NL;// 不要なアイコン表示タグの削除
+			$this->initScript .= '    $(\'.PostMetadataHeader\').each(function(i){' . M3_NL;
+			$this->initScript .= '        if ($(this).text().trim() == \'\') $(this).remove();' . M3_NL;
+			$this->initScript .= '    });' . M3_NL;
+		}
+		
+		// 管理画面用スクリプト追加
+		$replaceStr .= $this->getLastContents();
+		
+		// 初期処理用スクリプト埋め込み
+		if (!empty($this->initScript)){
+			$replaceStr .= '$(function(){' . M3_NL;
+			$replaceStr .= $this->initScript;
+			$replaceStr .= '});' . M3_NL;
+		}
+		
+		//$replaceStr .= '// -->' . M3_NL;
+		//$replaceStr .= '</script>' . M3_NL;
+		$replaceStr .= '//]]>' . M3_NL;
+		$replaceStr .= '</script>' . M3_NL;
+
+		// HEADタグに埋め込むCSS,JavaScript,任意文字列
+		if (count($this->headCss) > 0){
+			// CSSの場合は全体をstyleタグで囲む
+			$replaceStr .= '<style type="text/css">' . M3_NL;
+			$replaceStr .= '<!--' . M3_NL;
+			for ($i = 0; $i < count($this->headCss); $i++){
+				$replaceStr .= $this->headCss[$i];
 			}
-			// テンプレートに応じた処理
-			if ($cleanType == 1){
-				// HTMLのクリーン処理が必要なときはコードを埋め込む
-				$this->initScript .= '    $(\'.PostHeaderIcons\').remove();' . M3_NL;// 不要なアイコン表示タグの削除
-				$this->initScript .= '    $(\'.PostMetadataHeader\').each(function(i){' . M3_NL;
-				$this->initScript .= '        if ($(this).text().trim() == \'\') $(this).remove();' . M3_NL;
-				$this->initScript .= '    });' . M3_NL;
+			$replaceStr .= M3_NL . '//-->' . M3_NL;
+			$replaceStr .= '</style>' . M3_NL;
+		}
+		if (count($this->headScript) > 0){
+			// JavaScriptの場合は全体をscriptタグで囲む
+			//$replaceStr .= '<script type="text/javascript">' . M3_NL;
+			//$replaceStr .= '<!--' . M3_NL;
+			$replaceStr .= '<script type="text/javascript">' . M3_NL;
+			$replaceStr .= '//<![CDATA[' . M3_NL;
+			for ($i = 0; $i < count($this->headScript); $i++){
+				$replaceStr .= $this->headScript[$i];
 			}
-			
-			// 管理画面用スクリプト追加
-			$replaceStr .= $this->getLastContents();
-			
-			// 初期処理用スクリプト埋め込み
-			if (!empty($this->initScript)){
-				$replaceStr .= '$(function(){' . M3_NL;
-				$replaceStr .= $this->initScript;
-				$replaceStr .= '});' . M3_NL;
-			}
-			
-			//$replaceStr .= '// -->' . M3_NL;
+			//$replaceStr .= M3_NL . '//-->' . M3_NL;
 			//$replaceStr .= '</script>' . M3_NL;
+			$replaceStr .= M3_NL;
 			$replaceStr .= '//]]>' . M3_NL;
 			$replaceStr .= '</script>' . M3_NL;
-
-			// HEADタグに埋め込むCSS,JavaScript,任意文字列
-			if (count($this->headCss) > 0){
-				// CSSの場合は全体をstyleタグで囲む
-				$replaceStr .= '<style type="text/css">' . M3_NL;
-				$replaceStr .= '<!--' . M3_NL;
-				for ($i = 0; $i < count($this->headCss); $i++){
-					$replaceStr .= $this->headCss[$i];
-				}
-				$replaceStr .= M3_NL . '//-->' . M3_NL;
-				$replaceStr .= '</style>' . M3_NL;
-			}
-			if (count($this->headScript) > 0){
-				// JavaScriptの場合は全体をscriptタグで囲む
-				//$replaceStr .= '<script type="text/javascript">' . M3_NL;
-				//$replaceStr .= '<!--' . M3_NL;
-				$replaceStr .= '<script type="text/javascript">' . M3_NL;
-				$replaceStr .= '//<![CDATA[' . M3_NL;
-				for ($i = 0; $i < count($this->headScript); $i++){
-					$replaceStr .= $this->headScript[$i];
-				}
-				//$replaceStr .= M3_NL . '//-->' . M3_NL;
-				//$replaceStr .= '</script>' . M3_NL;
-				$replaceStr .= M3_NL;
-				$replaceStr .= '//]]>' . M3_NL;
-				$replaceStr .= '</script>' . M3_NL;
-			}
-			if (count($this->headString) > 0){
-				// 任意文字列の場合はそのまま追加
-				for ($i = 0; $i < count($this->headString); $i++){
-					$replaceStr .= $this->headString[$i];
-				}
+		}
+		if (count($this->headString) > 0){
+			// 任意文字列の場合はそのまま追加
+			for ($i = 0; $i < count($this->headString); $i++){
+				$replaceStr .= $this->headString[$i];
 			}
 		}
 		return $replaceStr;
@@ -6923,8 +6911,7 @@ class PageManager extends Core
 		global $gEnvManager;
 		
 		$templateId = $gEnvManager->getCurrentTemplateId();
-		if ($templateId == self::ADMIN_TEMPLATE ||		// PC管理用テンプレート
-			$templateId == self::M_ADMIN_TEMPLATE){		// 携帯管理用テンプレート
+		if ($templateId == self::ADMIN_TEMPLATE){		// PC管理用テンプレート
 			return 0;
 		} else if(strncmp($templateId, 'm/', 2) == 0){		// 携帯用テンプレート
 			return 2;		// 携帯テンプレート用出力

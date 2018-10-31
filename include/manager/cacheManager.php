@@ -328,9 +328,6 @@ class CacheManager extends Core
 		// 管理画面はキャッシュ機能は使用できない
 		if ($gEnvManager->isAdminDirAccess()) return false;
 		
-		// 携帯はSJIS出力なので非対応
-		if ($gEnvManager->getIsMobileSite()) return false;
-		
 		// GET以外はキャッシュしない
 		$method = strtoupper($request->trimServerValueOf('REQUEST_METHOD'));	// アクセスメソッド
 		if ($method != 'GET') return false;

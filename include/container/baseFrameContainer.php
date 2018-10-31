@@ -22,7 +22,6 @@ class BaseFrameContainer extends Core
 	private $joomlaBufArray = array();			// Joomla!データ受け渡し用
 	private $templateCustomObj;				// テンプレートカスタマイズパラメータオブジェクト
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
-	const M_ADMIN_TEMPLATE = 'm/_admin';	// 携帯用管理画面テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
@@ -663,14 +662,8 @@ class BaseFrameContainer extends Core
 		// カレントのテンプレートIDを設定
 		$this->gEnv->setCurrentTemplateId($curTemplate, $subTemplateId);
 
-		// テンプレート情報を取得
-//		$convType = 0;		// 変換処理タイプ(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
-//		if ($this->gEnv->getIsMobileSite()){
-//			$convType = -1;		// 携帯サイト用変換
-//		} else {
-			// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
-			$convType = $this->gEnv->getCurrentTemplateType();
-//		}
+		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
+		$convType = $this->gEnv->getCurrentTemplateType();
 
 		// バッファリングの準備
 		if (method_exists($this, '_prepareBuffer')) $this->_prepareBuffer($request);
@@ -1282,20 +1275,16 @@ class BaseFrameContainer extends Core
 		
 		// テンプレートの設定
 		// DBで設定されている値を取得し、なければ管理用デフォルトテンプレートを使用
-		if ($this->gEnv->getIsMobileSite()){		// 携帯用サイトのアクセスの場合
-			$curTemplateId = self::M_ADMIN_TEMPLATE;	// 携帯管理画面用テンプレート
-		} else {			// 携帯以外のサイトへのアクセスの場合
-			if ($type == 1){			// ログインはデフォルトの管理画面テンプレートに固定
-				$curTemplateId = $this->gSystem->defaultAdminTemplateId();
+		if ($type == 1){			// ログインはデフォルトの管理画面テンプレートに固定
+			$curTemplateId = $this->gSystem->defaultAdminTemplateId();
+		} else {
+			$curTemplateId = $this->gSystem->getSystemConfig(self::CONFIG_KEY_MSG_TEMPLATE);
+			if (empty($curTemplateId)){
+				$curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
 			} else {
-				$curTemplateId = $this->gSystem->getSystemConfig(self::CONFIG_KEY_MSG_TEMPLATE);
-				if (empty($curTemplateId)){
-					$curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
-				} else {
-					// テンプレートの存在チェック
-					$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplateId . '/' . M3_FILENAME_INDEX;
-					if (!file_exists($templateIndexFile)) $curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
-				}
+				// テンプレートの存在チェック
+				$templateIndexFile = $this->gEnv->getTemplatesPath() . '/' . $curTemplateId . '/' . M3_FILENAME_INDEX;
+				if (!file_exists($templateIndexFile)) $curTemplateId = self::SYSTEM_TEMPLATE;// システム画面用テンプレート
 			}
 		}
 

@@ -212,7 +212,6 @@ define('M3_TEMPLATE_JOOMLA_10',			0);		// Joomla!v1.0テンプレート
 define('M3_TEMPLATE_JOOMLA_15',			1);		// Joomla!v1.5テンプレート
 define('M3_TEMPLATE_JOOMLA_25',			2);		// Joomla!v2.5テンプレート
 define('M3_TEMPLATE_BOOTSTRAP_30',		10);		// Bootstrap v3.0テンプレート
-define('M3_TEMPLATE_JQUERY_MOBILE_10',	20);		// jQuery Mobile v1.0テンプレート
 // テンプレート作成アプリケーションタイプ
 define('M3_TEMPLATE_GENERATOR_ARTISTEER',	'artisteer');	// Artisteer
 define('M3_TEMPLATE_GENERATOR_THEMLER',		'themler');		// Themler
@@ -222,7 +221,6 @@ define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート
 define('M3_RENDER_JOOMLA_NEW',		'joomla_new');		// Joomla! 1.5以上のテンプレート
 define('M3_RENDER_BOOTSTRAP',		'bootstrap');		// Bootstrap 3.0テンプレート
 define('M3_RENDER_WORDPRESS',		'wordpress');		// WordPressテンプレート
-define('M3_RENDER_JQUERY_MOBILE',	'jquery mobile');	// jQuery Mobileテンプレート
 	
 // ファイル拡張子
 define('M3_TEMPLATE_FILE_EXTENSION', '.tmpl.html');		// テンプレートファイルの拡張子(suffix)

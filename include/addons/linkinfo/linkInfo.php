@@ -782,16 +782,6 @@ class linkInfo
 					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_SMARTPHONE, '', $destPath);
 					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
 				}
-			} else if ($gEnvManager->getIsMobileSite()){		// 携帯サイトの場合
-				$domainUrl = $gEnvManager->getDefaultMobileUrl(false, false/*ファイル名なし*/);
-				$relativePath = str_replace($domainUrl . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
-				if (strStartsWith($relativePath, '/')){
-					$destPath = $domainUrl . $relativePath;
-				} else {
-					// メインのドメインの場合はアクセスポイント用ドメインに変換
-					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
-					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
-				}
 			}
 		}
 		return $destPath;

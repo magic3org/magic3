@@ -564,9 +564,6 @@ class BaseWidgetContainer extends Core
 			case 11:			// Bootstrap 4.0テンプレート
 				$renderType = M3_RENDER_BOOTSTRAP;		// Bootstrapテンプレート
 				break;
-			case 20:
-				$renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート
-				break;
 			case 100:
 				$renderType = M3_RENDER_WORDPRESS;		// WordPressテンプレート
 				break;
@@ -896,7 +893,6 @@ class BaseWidgetContainer extends Core
 		switch ($this->_renderType){
 			case M3_RENDER_JOOMLA_OLD:		// Joomla! 1.0テンプレート
 			case M3_RENDER_BOOTSTRAP:		// Bootstrap 3.0テンプレート
-			case M3_RENDER_JQUERY_MOBILE:	// jQuery Mobileテンプレート
 			default:
 				break;
 			case M3_RENDER_JOOMLA_NEW:		// Joomla! 1.5以上のテンプレート(デフォルト)
@@ -3501,16 +3497,6 @@ class BaseWidgetContainer extends Core
 				} else {
 					// メインのドメインの場合はアクセスポイント用ドメインに変換
 					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_SMARTPHONE, '', $destPath);
-					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
-				}
-			} else if ($this->gEnv->getIsMobileSite()){		// 携帯サイトの場合
-				$domainUrl = $this->gEnv->getDefaultMobileUrl(false, false/*ファイル名なし*/);
-				$relativePath = str_replace($domainUrl . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
-				if (strStartsWith($relativePath, '/')){
-					$destPath = $domainUrl . $relativePath;
-				} else {
-					// メインのドメインの場合はアクセスポイント用ドメインに変換
-					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
 					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
 				}
 			}

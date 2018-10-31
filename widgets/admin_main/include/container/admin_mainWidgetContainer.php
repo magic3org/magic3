@@ -507,8 +507,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		// PC用サイト、携帯用サイト、スマートフォン用サイトを判断
 		if ($this->gEnv->getIsPcSite()){
 			return '';
-		} else if ($this->gEnv->getIsMobileSite()){
-			return 'mobile';
 		} else if ($this->gEnv->getIsSmartphoneSite()){
 			return 'smartphone';
 		} else {
