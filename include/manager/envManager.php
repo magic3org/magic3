@@ -13,13 +13,11 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(M3_SYSTEM_INCLUDE_PATH . '/common/version.php');	// システムバージョンクラス
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/userInfo.php');		// ユーザ情報クラス
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class EnvManager extends Core
 {
-	public  $sysVersion;		// システムバージョンオブジェクト
 	private $currentTemplateId;	// 現在のテンプレートID(ディレクトリ名)
 	private $currentSubTemplateId;	// 現在のサブテンプレートID
 	private $currentTemplateType;	// 現在のテンプレートのタイプ
@@ -155,9 +153,6 @@ class EnvManager extends Core
 		}
 		$this->workDir = rtrim($this->workDir, DIRECTORY_SEPARATOR);		// 最後の「/」「\」を除く
 		if (!file_exists($this->workDir)) $this->workDir = M3_SYSTEM_WORK_DIR_PATH;// 作業用ディレクトリデフォルト値
-		
-		// システムバージョンオブジェクト作成
-		$this->sysVersion = new m3Version();
 		
 		// システムDBオブジェクト取得
 		$this->db = $this->gInstance->getSytemDbObject();
