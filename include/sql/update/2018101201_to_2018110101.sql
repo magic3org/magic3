@@ -135,3 +135,11 @@ DROP TABLE IF EXISTS mblog_member;  -- マイクロブログ会員情報マス�
 
 DROP TABLE IF EXISTS event_comment;  -- イベントコメントトラン
 
+-- ユーザ作成コンテンツウィジェット用
+DROP TABLE IF EXISTS user_content_tab;  -- ユーザコンテンツ表示タブマスター
+DROP TABLE IF EXISTS user_content_item;  -- ユーザ作成コンテンツ項目マスター
+DROP TABLE IF EXISTS user_content;  -- ユーザ作成コンテンツマスター
+DROP TABLE IF EXISTS user_content_room;  -- ユーザ作成コンテンツルームマスター
+DROP TABLE IF EXISTS user_content_category;  -- ユーザ作成コンテンツカテゴリマスター
+DROP TABLE IF EXISTS user_content_room_category;  -- ユーザ作成コンテンツカテゴリとルームの対応付けマスター
+

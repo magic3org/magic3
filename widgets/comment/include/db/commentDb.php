@@ -659,56 +659,6 @@ class commentDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * ルーム情報一覧を取得(管理用)
-	 *
-	 * @param string	$langId				言語
-	 * @param int		$limit				取得する項目数
-	 * @param int		$page				取得するページ(1～)
-	 * @param function	$callback			コールバック関数
-	 * @return 			なし
-	 */
-	function getRoom($langId, $limit, $page, $callback)
-	{
-		$offset = $limit * ($page -1);
-		if ($offset < 0) $offset = 0;
-		
-		$params = array();
-		$queryStr  = 'SELECT *, ur_id AS contents_id, ur_name AS content_title, ur_create_dt AS update_dt FROM user_content_room LEFT JOIN _login_user ON ur_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE ur_deleted = false ';		// 削除されていない
-		$queryStr .=   'ORDER BY ur_create_dt DESC ';
-		$queryStr .=   'LIMIT ' . $limit . ' OFFSET ' . $offset;
-		$this->selectLoop($queryStr, $params, $callback);
-	}
-	/**
-	 * ルーム情報数を取得(管理用)
-	 *
-	 * @param string	$langId				言語
-	 * @return int							項目数
-	 */
-	function getRoomCount($langId)
-	{
-		$params = array();
-		$queryStr  = 'SELECT * FROM user_content_room LEFT JOIN _login_user ON ur_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE ur_deleted = false ';		// 削除されていない
-		return $this->selectRecordCount($queryStr, $params);
-	}
-	/**
-	 * ルーム情報を識別IDで取得
-	 *
-	 * @param string	$id					識別ID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getRoomById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM user_content_room ';
-		$queryStr .=   'WHERE ur_deleted = false ';
-		$queryStr .=   'AND ur_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id), $row);
-		return $ret;
-	}
-	/**
 	 * Wiki情報一覧を取得(管理用)
 	 *
 	 * @param string	$langId				言語

@@ -341,22 +341,6 @@ class news_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * ルーム情報を識別IDで取得
-	 *
-	 * @param string	$id					識別ID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getRoomById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM user_content_room ';
-		$queryStr .=   'WHERE ur_deleted = false ';
-		$queryStr .=   'AND ur_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id), $row);
-		return $ret;
-	}
-	/**
 	 * イベント情報を取得
 	 *
 	 * @param int		$id					イベントID

@@ -1187,22 +1187,6 @@ class SystemDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * 指定のルーム用のウィジェット定義ID(所属グループID)を取得
-	 *
-	 * @param string	$roomId				ルームID
-	 * @return int							定義ID
-	 */
-	function getWidgetConfigIdForRoom($roomId)
-	{
-		$retValue = 0;
-		$queryStr = 'SELECT * FROM user_content_room ';
-		$queryStr .=  'WHERE ur_deleted = false ';
-		$queryStr .=  'AND ur_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($roomId), $row);
-		if ($ret) $retValue = $row['ur_group_id'];
-		return $retValue;
-	}
-	/**
 	 * メニュー項目のURLからサブページIDを取得
 	 *
 	 * @param string $url			URL

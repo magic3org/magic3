@@ -128,11 +128,6 @@ VALUES                 ('auto_email_sender',       '',          '自動送信メ
 INSERT INTO `bbs_group` (`sg_id`, `sg_language_id`, `sg_name`, `sg_sort_order`, `sg_editable`, `sg_create_dt`) VALUES
 (1,    'ja',           'ゲスト',        1,   false,   now());
 
--- ユーザコンテンツ項目マスター
-INSERT INTO user_content_item
-(ui_id,          ui_name,      ui_description,                   ui_type,  ui_key,        ui_create_dt) VALUES
-('DEFAULT_LIST', '検索一覧用', '検索結果の一覧に表示するデータ', 0,        'SEARCH_LIST', now());
-
 -- 予約リソースマスター
 INSERT INTO reserve_resource (rr_id, rr_type, rr_config_id, rr_name, rr_sort_order)
 VALUES                       (1,     0,       0,            'デフォルト', 1);
