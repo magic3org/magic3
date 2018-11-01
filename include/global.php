@@ -291,7 +291,6 @@ define('M3_CONTENT_KEY_PAGE_NOT_FOUND',	'PAGE_NOT_FOUND');				// ページが見
 
 // ウィジェットタイプ
 define('M3_WIDGET_TYPE_MENU',	'menu');				// メニュー
-define('M3_WIDGET_TYPE_USER',	'user');				// ユーザ作成コンテンツ
 
 // 作業用
 define('M3_SYSTEM_WORK_DIR_PATH', 				'/tmp');			// 作業用ディレクトリ

@@ -198,7 +198,6 @@ INSERT INTO _page_id
 ('member',       1,            '会員',                             '会員画面用',                         20,          false,      true,      true,        ''),
 ('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          false,      true,      true,        ''),
 ('search',       1,            '検索',                             '検索画面用',                         22,          false,      true,      true,        ''),
-('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,      true,        ''),
 ('deploy',       1,            '[ウィジェット有効化用]',           'ウィジェット有効化用',               100,         false,      false,     true,        'activate');
 
 -- ページ情報マスター
@@ -210,7 +209,6 @@ INSERT INTO _page_info
 ('index',     'bbs',       'bbs',           false),
 ('index',     'blog',      'blog',          false),
 ('index',     'wiki',      'wiki',          false),
-('index',     'user',      'user',          false),
 ('index',     'calendar',  'calendar',      false),
 ('index',     'event',     'event',         false),
 ('index',     'photo',     'photo',         false),
@@ -226,7 +224,6 @@ INSERT INTO _page_info
 ('s_index',   'bbs',       'bbs',           false),
 ('s_index',   'blog',      'blog',          false),
 ('s_index',   'wiki',      'wiki',          false),
-('s_index',   'user',      'user',          false),
 ('s_index',   'calendar',  'calendar',      false),
 ('s_index',   'event',     'event',         false),
 ('s_index',   'photo',     'photo',         false),
@@ -289,7 +286,6 @@ INSERT INTO _language_string
 (2,       'bbs',         'ja',           'BBS',                  'BBS'),
 (2,       'blog',        'ja',           'ブログ',               'ブログ'),
 (2,       'wiki',        'ja',           'Wiki',                 'Wiki'),
-(2,       'user',        'ja',           'ユーザ作成コンテンツ', 'ユーザ作成コンテンツ'),
 (2,       'event',       'ja',           'イベント情報',         'イベント情報'),
 (2,       'photo',       'ja',           'フォトギャラリー',     'フォトギャラリー'),
 (10,      'COM_CONTENT_CREATED_DATE_ON',   'ja',           '作成日：%s',         ''),

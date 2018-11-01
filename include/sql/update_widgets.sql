@@ -353,10 +353,6 @@ DELETE FROM _widgets WHERE wd_id = 'pdf_list';
 INSERT INTO _widgets
 (wd_id,      wd_name,   wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                  wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('pdf_list', 'PDF名簿', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'PDF出力も可能な簡易名簿です。', '',                'jquery.tablednd',   false,        true,  true,              true, 3,          1, now(),         now());
-DELETE FROM _widgets WHERE wd_id = 'user_content';
-INSERT INTO _widgets
-(wd_id,          wd_name,            wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,         wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('user_content', 'ユーザコンテンツ', 'user',  'user', true,         '1.2.1',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'ユーザが定義可能なコンテンツを表示', 'jquery-ui.tabs;content_detail=ckeditor_m3toolbar;', 'category_detail=jquery.tablednd;content_detail=ckeditor_m3toolbar;other=ckeditor_m3toolbar;tab_detail=ckeditor_m3toolbar;', true, true, true,           2, 2, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'jquery_plugin';
 INSERT INTO _widgets
 (wd_id,           wd_name,            wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

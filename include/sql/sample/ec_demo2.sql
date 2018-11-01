@@ -72,8 +72,7 @@ INSERT INTO _page_id
 ('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          false,      true,       true),
 ('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,       true),
 ('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true),
-('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true),
-('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,       true);
+('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true);
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
