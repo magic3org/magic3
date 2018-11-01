@@ -86,6 +86,9 @@ INSERT INTO _nav_item
 (10302, 10300,        1,        'admin_menu.en', 'configsys',          0,               true,       '',       '',               'System Information',         'System Information',         'Configure sytem information.'),
 (10303, 10300,        2,        'admin_menu.en', 'mainte',             0,               true,       '',       '',               'System Maintenance', 'System Maintenance', 'Maintenance about file system and database.');
 
+-- ウィジェットカテゴリマスター(ウィジェットメニュー)
+UPDATE _widget_category SET wt_visible = true WHERE wt_id = 'wiki';
+
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def

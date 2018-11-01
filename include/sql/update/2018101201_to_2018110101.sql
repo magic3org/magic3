@@ -98,24 +98,24 @@ CREATE TABLE _widget_category (
     PRIMARY KEY          (wt_id)
 ) ENGINE=innodb;
 INSERT INTO _widget_category
-(wt_id,        wt_parent_id, wt_name,                wt_sort_order, wt_visible) VALUES
-('',           '',           'その他',               100,           true),
-('content',    'content',    '汎用コンテンツ',       1,             true),
-('blog',       'blog',       'ブログ',               2,             true),
-('bbs',        'bbs',        'BBS',                  3,             false),
-('commerce',   'commerce',   'Eコマース',            4,             false),
-('photo',      'photo',      'フォトギャラリー',     5,             false),
-('event',      'event',      'イベント情報',         6,             false),
-('wiki',       'wiki',       'Wiki',                 7,             false),
-('member',     'member',     '会員',                 9,             false),
-('subcontent', 'subcontent', '補助コンテンツ',       20,            true),
-('searchform', 'searchform', '検索・お問い合わせ',   21,            true),
-('search',     'searchform', '検索',                 22,            true),
-('form',       'searchform', 'お問い合わせ',         23,            true),
-('menu',       'menu',       'メニュー',             24,            true),
-('image',      'image',      '画像',                 25,            true),
-('design',     'design',     'デザイン',             26,            true),
-('admin',      'admin',      '管理画面用',           50,            true);
+(wt_id,         wt_parent_id,  wt_name,                wt_sort_order, wt_visible) VALUES
+('',            '',            'その他',               100,           true),
+('content',     'content',     '汎用コンテンツ',       1,             true),
+('blog',        'blog',        'ブログ',               2,             true),
+('bbs',         'bbs',         'BBS',                  3,             false),
+('commerce',    'commerce',    'Eコマース',            4,             false),
+('photo',       'photo',       'フォトギャラリー',     5,             false),
+('event',       'event',       'イベント情報',         6,             false),
+('wiki',        'wiki',        'Wiki',                 7,             false),
+('member',      'member',      '会員',                 9,             false),
+('subcontent',  'subcontent',  '補助コンテンツ',       20,            true),
+('searchform/', 'searchform/', '検索・お問い合わせ',   21,            true),
+('search',      'searchform/', '検索',                 22,            true),
+('form',        'searchform/', 'お問い合わせ',         23,            true),
+('menu',        'menu',        'メニュー',             24,            true),
+('image',       'image',       '画像',                 25,            true),
+('design',      'design',      'デザイン',             26,            true),
+('admin',       'admin',       '管理画面用',           50,            true);
 
 -- 未使用テーブル削除
 DROP TABLE IF EXISTS _admin_key;  -- 管理者一時キートラン
