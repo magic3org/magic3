@@ -163,14 +163,12 @@ class admin_mainDb extends BaseDb
 	/**
 	 * ウィジェットリスト取得
 	 *
-	 * @param int      $type		ウィジェットのタイプ(-1=管理用、0=PC用、1=携帯用、2=スマートフォン)
+	 * @param int      $type		ウィジェットのタイプ(-1=管理用、0=PC用、2=スマートフォン)
 	 * @param function $callback	コールバック関数
 	 * @return						なし
 	 */
 	function getAllWidgetList($type, $callback)
 	{
-		// wd_device_typeは後で追加したため、wd_mobileを残しておく
-//		$queryStr  = 'SELECT * FROM _widgets ';
 		$queryStr  = 'SELECT DISTINCT wd_serial,wd_id,wd_name,wd_description,wd_license_type,wd_release_dt,wd_available,wd_active,wd_editable,wd_has_admin,wd_version,wd_latest_version,wd_required_version,pd_widget_id ';
 		$queryStr .=   'FROM _widgets LEFT JOIN _page_def ON wd_id = pd_widget_id ';
 		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
@@ -184,12 +182,7 @@ class admin_mainDb extends BaseDb
 			case 2:		// スマートフォン用
 			default:
 				$queryStr .=    'AND wd_admin = false ';		// 管理用以外
-				$queryStr .=    'AND wd_mobile = false ';		// 携帯用以外
 				$queryStr .=    'AND wd_device_type = ? '; $params[] = $type;
-				break;
-			case 1:		// 携帯用のとき
-				$queryStr .=    'AND wd_admin = false ';		// 管理用以外
-				$queryStr .=    'AND wd_mobile = true ';		// 携帯用
 				break;
 		}
 		$queryStr .=  'ORDER BY wd_id';
@@ -273,8 +266,6 @@ class admin_mainDb extends BaseDb
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$historyIndex = 0;
-		$mobile = 0;				// 携帯端末かどうか
-		if ($deviceType == 1) $mobile = 1;
 		
 		// トランザクション開始
 		$this->startTransaction();
@@ -298,10 +289,10 @@ class admin_mainDb extends BaseDb
 		}
 
 		$queryStr = 'INSERT INTO _widgets ';
-		$queryStr .=  '(wd_id, wd_history_index, wd_name, wd_device_type, wd_mobile, wd_read_scripts, wd_read_css, wd_has_admin, wd_create_user_id, wd_create_dt) ';
+		$queryStr .=  '(wd_id, wd_history_index, wd_name, wd_device_type, wd_read_scripts, wd_read_css, wd_has_admin, wd_create_user_id, wd_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, now())';
-		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($deviceType), intval($mobile), intval($readScripts), intval($readCss), intval($hasAdmin), $userId));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, now())';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($deviceType), intval($readScripts), intval($readCss), intval($hasAdmin), $userId));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();
@@ -350,7 +341,6 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_add_scripts_a';		// (管理機能用)追加スクリプトファイル(相対パス表記、「,」区切りで複数指定可)
 		$updateFields[] = 'wd_add_css_a';			// (管理機能用)追加CSSファイル(相対パス表記、「,」区切りで複数指定可)
 		$updateFields[] = 'wd_admin'; $boolFields[] = 'wd_admin';			// 管理用ウィジェットかどうか
-		$updateFields[] = 'wd_mobile'; $boolFields[] = 'wd_mobile'; 	// 携帯対応かどうか
 		$updateFields[] = 'wd_show_name'; $boolFields[] = 'wd_show_name';			// ウィジェット名称を表示するかどうか
 		$updateFields[] = 'wd_read_scripts'; $boolFields[] = 'wd_read_scripts';		// スクリプトディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_read_css'; $boolFields[] = 'wd_read_css';			// cssディレクトリを自動読み込みするかどうか

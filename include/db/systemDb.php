@@ -641,30 +641,21 @@ class SystemDb extends BaseDb
 	/**
 	 * ウィジェットリスト(メニューから選択可能なもの)取得
 	 *
-	 * @param int   $type			端末タイプ(0=PC、1=携帯、2=スマートフォン)
+	 * @param int   $type			端末タイプ(0=PC、2=スマートフォン)
 	 * @param array $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
 	function getAvailableWidgetList($type, &$rows)
 	{
-		$queryStr  = 'SELECT * FROM _widgets LEFT JOIN _widget_category ON wd_category_id = wt_id ';
+		$queryStr  = 'SELECT *,pcategory.wt_id AS pid,pcategory.wt_name AS pname,category.wt_name AS name FROM _widgets LEFT JOIN _widget_category AS category ON wd_category_id = category.wt_id ';
+		$queryStr .=   'LEFT JOIN _widget_category AS pcategory ON category.wt_parent_id = pcategory.wt_id ';
 		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
 		$queryStr .=     'AND wd_available = true ';		// メニューから選択可能なもの
-		$queryStr .=     'AND wt_visible = true ';		// カテゴリー表示可能
+		$queryStr .=     'AND category.wt_visible = true ';		// カテゴリー表示可能
 		
 		$params = array();
-		switch ($type){
-			case 0:		// PC用
-			case 2:		// スマートフォン用
-			default:
-				$queryStr .=    'AND wd_mobile = false ';		// 携帯用以外
-				$queryStr .=    'AND wd_device_type = ? '; $params[] = $type;
-				break;
-			case 1:		// 携帯用
-				$queryStr .=    'AND wd_mobile = true ';		// 携帯用
-				break;
-		}
-		$queryStr .=   'ORDER BY wt_sort_order, wd_sort_order, wd_id';
+		$queryStr .=    'AND wd_device_type = ? '; $params[] = $type;
+		$queryStr .=   'ORDER BY category.wt_sort_order, wd_sort_order, wd_id';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
 	}

@@ -5258,7 +5258,8 @@ class PageManager extends Core
 					$widgetId = $rows[$i]['wd_id'];
 					$desc = $rows[$i]['wd_description'];
 					$widgetTag = self::WIDGET_TYPE_TAG_HEAD . $widgetId;
-					$categoryId = $rows[$i]['wd_category_id'];
+			//		$categoryId = $rows[$i]['wd_category_id'];
+					$categoryId = $rows[$i]['pid'];		// 親カテゴリーID
 					
 					// カテゴリーの開始タグを追加
 					if ($categoryId != $currentCategoryId){
@@ -5267,7 +5268,8 @@ class PageManager extends Core
 							echo '</dl>' . M3_NL;
 						}
 						echo '<dl class="m3accordion">' . M3_NL;
-						echo '<dt>' . $rows[$i]['wt_name'] . '</dt>' . M3_NL;
+				//		echo '<dt>' . $rows[$i]['wt_name'] . '</dt>' . M3_NL;
+						echo '<dt>' . $rows[$i]['pname'] . '</dt>' . M3_NL;			// 親カテゴリー名
 						echo '<dd>' . M3_NL;
 						
 						// 現在のカテゴリー更新
