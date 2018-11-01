@@ -115,9 +115,6 @@ class commentCommonDef
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$param = $contentsId;
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentsId;
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentsId;
 				break;

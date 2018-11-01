@@ -123,8 +123,6 @@ class ContentApi extends BaseApi
 			break;
 		case M3_VIEW_TYPE_WIKI:	// Wiki
 			break;
-		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
-			break;
 		case M3_VIEW_TYPE_EVENT:	// イベント
 			break;
 		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
@@ -205,8 +203,6 @@ class ContentApi extends BaseApi
 			case M3_VIEW_TYPE_BLOG:	// ブログ
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki
-				break;
-			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 				break;
 			case M3_VIEW_TYPE_EVENT:	// イベント
 				break;
@@ -696,7 +692,6 @@ class ContentApi extends BaseApi
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 		case M3_VIEW_TYPE_PRODUCT:	// 製品
 		case M3_VIEW_TYPE_BBS:	// BBS
-		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 		case M3_VIEW_TYPE_EVENT:	// イベント
 		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 			$this->prevNextBaseValue = $wpPostObj->ID;		// 前後のコンテンツ取得用のベース値(ID)
@@ -997,7 +992,6 @@ class ContentApi extends BaseApi
 		case M3_VIEW_TYPE_PRODUCT:	// 製品
 		case M3_VIEW_TYPE_BBS:	// BBS
 		case M3_VIEW_TYPE_BLOG:	// ブログ
-		case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 		case M3_VIEW_TYPE_EVENT:	// イベント
 		case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 			// 数値型、複数可

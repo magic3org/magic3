@@ -919,8 +919,6 @@ class BaseFrameContainer extends Core
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki
 				break;
-			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
-				break;
 			case M3_VIEW_TYPE_EVENT:	// イベント
 				break;
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー

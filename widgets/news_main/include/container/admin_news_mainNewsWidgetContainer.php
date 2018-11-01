@@ -493,10 +493,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$contentName = $contentId;
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ee_name'];

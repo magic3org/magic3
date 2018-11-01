@@ -12,7 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    Release 2.40.x SVN: $Id$
+ * @version    Release 3.0.x SVN: $Id$
  * @link       http://www.magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
@@ -257,7 +257,6 @@ define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報
 define('M3_VIEW_TYPE_BBS',			'bbs');					// BBS
 define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
 define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
-define('M3_VIEW_TYPE_USER',			'user');				// ユーザ作成コンテンツ
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
 // 補助コンテンツ
@@ -281,7 +280,6 @@ $M3_ALL_CONTENT_TYPE	= array(	M3_VIEW_TYPE_NEWS,				// 新着情報
 									M3_VIEW_TYPE_BBS,				// BBS
 									M3_VIEW_TYPE_BLOG,				// ブログ
 									M3_VIEW_TYPE_WIKI,				// Wiki
-									M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 									M3_VIEW_TYPE_EVENT,				// イベント情報
 									M3_VIEW_TYPE_EVENTENTRY,		// イベント予約
 									M3_VIEW_TYPE_PHOTO);			// フォトギャラリー
@@ -368,6 +366,7 @@ define('M3_REQUEST_PARAM_TOKEN',					'_token');			// POSTデータトークン�
 define('M3_REQUEST_PARAM_BACK_URL',					'_backurl');		// 戻り先URL
 define('M3_REQUEST_PARAM_BACKUP_URL',				'_backupurl');		// URL退避用(画面編集時)
 define('M3_REQUEST_PARAM_SERVER',					'_server');			// サーバ指定
+define('M3_REQUEST_PARAM_USER_ID',      			'userid');			// ユーザID
 define('M3_REQUEST_PARAM_FILE_ID',      			'fileid');			// ファイルID
 define('M3_REQUEST_PARAM_CATEGORY_ID',      		'categoryid');		// カテゴリID
 define('M3_REQUEST_PARAM_YEAR',      				'year');			// 年
@@ -389,10 +388,6 @@ define('M3_REQUEST_PARAM_BBS_ID',      				'bbsid');			// 掲示板投稿記事I
 define('M3_REQUEST_PARAM_BBS_ID_SHORT',      		'sid');				// 掲示板投稿記事ID(略式)
 define('M3_REQUEST_PARAM_BBS_THREAD_ID',      		'threadid');		// 掲示板投稿スレッドID
 define('M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT',      'tid');				// 掲示板投稿スレッドID(略式)
-define('M3_REQUEST_PARAM_USER_ID',      			'userid');			// ユーザ作成コンテンツID
-define('M3_REQUEST_PARAM_USER_ID_SHORT',      		'uid');				// ユーザ作成コンテンツID(略式)
-define('M3_REQUEST_PARAM_ROOM_ID',      			'roomid');			// ユーザ作成コンテンツ区画ID
-define('M3_REQUEST_PARAM_ROOM_ID_SHORT',      		'rid');				// ユーザ作成コンテンツ区画ID(略式)
 define('M3_REQUEST_PARAM_EVENT_ID',      			'eventid');			// イベントID
 define('M3_REQUEST_PARAM_EVENT_ID_SHORT',      		'vid');				// イベントID(略式)
 define('M3_REQUEST_PARAM_PHOTO_ID',      			'photoid');			// 画像ID

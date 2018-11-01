@@ -361,9 +361,6 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$totalCount = self::$_mainDb->getWikiCount($this->langId);
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$totalCount = self::$_mainDb->getRoomCount($this->langId);
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$totalCount = self::$_mainDb->getEventCount($this->langId);
 				break;
@@ -407,9 +404,6 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				break;
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				self::$_mainDb->getWiki($this->langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				self::$_mainDb->getRoom($this->langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				self::$_mainDb->getEvent($this->langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
@@ -487,9 +481,6 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				break;
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$visible = true;
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				if ($fetchedRow['ur_visible']) $visible = true;
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				if ($fetchedRow['ee_status'] == 2) $visible = true;

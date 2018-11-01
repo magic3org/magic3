@@ -79,10 +79,6 @@ class news_headlineCommonDef
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$contentName = $contentId;
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = $db->getRoomById($contentId, $langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$ret = $db->getEventById($contentId, $langId, $row);
 				if ($ret) $contentName = $row['ee_name'];

@@ -43,14 +43,6 @@ class linkInfo
 		// DBオブジェクト作成
 		$this->db = new linkInfoDb();
 		
-/*		$this->contentTypeArray = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
-								M3_VIEW_TYPE_PRODUCT,				// 製品
-								M3_VIEW_TYPE_BBS,					// BBS
-								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// wiki
-								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
-								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
 		$this->contentTypeArray = $gPageManager->getMainContentTypes();
 		$this->langId = $gEnvManager->getDefaultLanguage();
 		$this->accessPointType = array(	array('', 'PC用「/」'),
@@ -139,8 +131,6 @@ class linkInfo
 					break;
 				case M3_VIEW_TYPE_WIKI:	// Wiki
 					$this->db->getWikiList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
-					break;
-				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 					break;
 				case M3_VIEW_TYPE_EVENT:	// イベント
 					$this->db->getEventList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
@@ -373,10 +363,6 @@ class linkInfo
 		case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツの場合
 			$url .= '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
 			break;
-		case M3_VIEW_TYPE_USER:		// ユーザ作成コンテンツの場合
-			// コンテンツへのリンクを作成
-			$url .= '?' . M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
-			break;
 		case M3_VIEW_TYPE_BLOG:			// ブログコンテンツの場合
 			$url .= '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentId;
 			break;
@@ -458,8 +444,6 @@ class linkInfo
 			case M3_VIEW_TYPE_WIKI:	// Wiki
 				$contentTitle = $contentId;			// コンテンツIDを返す
 				break;
-			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
-				break;
 			case M3_VIEW_TYPE_EVENT:	// イベント
 				$ret = $this->db->getEvent($contentId, $langId, $row);
 				if ($ret){
@@ -519,8 +503,6 @@ class linkInfo
 				break;
 			case M3_VIEW_TYPE_WIKI:	// Wiki
 				$status = 1;
-				break;
-			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 				break;
 			case M3_VIEW_TYPE_EVENT:	// イベント
 				$ret = $this->db->getEvent($contentId, $langId, $row);

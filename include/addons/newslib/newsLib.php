@@ -162,9 +162,6 @@ class newsLib
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$param = $contentId;
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 			case M3_VIEW_TYPE_EVENTENTRY:			// イベント予約
 				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentId;

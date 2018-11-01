@@ -156,10 +156,6 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 				case M3_VIEW_TYPE_WIKI:				// wiki
 					$contentsId = $request->getWikiPageFromQuery();		// 「=」なしのパラメータはwikiパラメータとする
 					break;
-				case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-					$contentsId = $request->trimValueOf(M3_REQUEST_PARAM_ROOM_ID);
-					if (empty($contentsId)) $contentsId = $request->trimValueOf(M3_REQUEST_PARAM_ROOM_ID_SHORT);
-					break;
 				case M3_VIEW_TYPE_EVENT:				// イベント情報
 					$contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 					if (empty($contentsId)) $contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID_SHORT);
@@ -806,10 +802,6 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 				break;
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$contentName = $contentsId;
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentsId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$ret = self::$_mainDb->getEventById($contentsId, $this->_langId, $row);

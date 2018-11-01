@@ -464,10 +464,6 @@ class admin_commentCommentWidgetContainer extends admin_commentBaseWidgetContain
 			case M3_VIEW_TYPE_WIKI:				// wiki
 				$contentName = $contentsId;
 				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentsId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
-				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
 				$ret = self::$_mainDb->getEventById($contentsId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ee_name'];

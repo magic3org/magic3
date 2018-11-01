@@ -337,7 +337,6 @@ class PageManager extends Core
 												array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
 												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
 												array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
-												array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
 												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
 												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
 											);
@@ -371,10 +370,6 @@ class PageManager extends Core
 			M3_REQUEST_PARAM_BBS_ID_SHORT			=> -11,		// 掲示板投稿記事ID(略式)
 			M3_REQUEST_PARAM_BBS_THREAD_ID			=> -10,		// 掲示板投稿スレッドID
 			M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT	=> -9,		// 掲示板投稿スレッドID(略式)
-			M3_REQUEST_PARAM_USER_ID				=> -8,		// ユーザ作成コンテンツID
-			M3_REQUEST_PARAM_USER_ID_SHORT			=> -7,		// ユーザ作成コンテンツID(略式)
-			M3_REQUEST_PARAM_ROOM_ID				=> -6,		// ユーザ作成コンテンツ区画ID
-			M3_REQUEST_PARAM_ROOM_ID_SHORT			=> -5,		// ユーザ作成コンテンツ区画ID(略式)
 			M3_REQUEST_PARAM_EVENT_ID				=> -4,		// イベントID
 			M3_REQUEST_PARAM_EVENT_ID_SHORT			=> -3,		// イベントID(略式)
 			M3_REQUEST_PARAM_PHOTO_ID				=> -2,		// 画像ID
@@ -426,15 +421,6 @@ class PageManager extends Core
 	{
 		global $M3_ALL_CONTENT_TYPE;
 		
-/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
-								M3_VIEW_TYPE_PRODUCT,				// 製品
-								M3_VIEW_TYPE_BBS,					// BBS
-								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// wiki
-								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
-								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
-		return $contentType;*/
 		return $M3_ALL_CONTENT_TYPE;
 	}
 	/**
@@ -1491,31 +1477,6 @@ class PageManager extends Core
 								
 								// コンテンツ詳細ページかどうかを設定
 								if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT) $this->isContentDetailPage = true;
-								break;
-							case M3_REQUEST_PARAM_ROOM_ID:		// ユーザ作成コンテンツのとき
-							case M3_REQUEST_PARAM_ROOM_ID_SHORT:
-								// ### 値をチェックし不正文字がある場合はエラー画面へ遷移 ###
-								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
-								if (!$checkStatus) return;			// エラーの場合は終了
-								
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_USER, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-								$this->contentType = M3_VIEW_TYPE_USER;		// ページのコンテンツタイプ
-						
-								// コンテンツ詳細ページかどうかを設定
-								$this->isContentDetailPage = true;
-								
-								// コンテンツを表示するウィジェットを取得
-								//$widgetId = $this->db->getWidgetIdByType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);
-								$widgetId = $this->db->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);// コンテンツタイプでの取得に変更(2012/6/20)
-								if (!empty($widgetId)){
-									// ルーム用の定義ID(所属グループID)を取得
-									$roomId = isset($params[M3_REQUEST_PARAM_ROOM_ID]) ? $params[M3_REQUEST_PARAM_ROOM_ID] : $params[M3_REQUEST_PARAM_ROOM_ID_SHORT];
-									$configId = $this->db->getWidgetConfigIdForRoom($roomId);
-
-									// グループIDを定義IDとするページのページサブIDを取得
-									$subPageId = $this->getPageSubIdByWidget($gEnvManager->getCurrentPageId(), $widgetId, $configId);
-									if (!empty($subPageId)) $subId = $subPageId;
-								}
 								break;
 							default:		// オプションのURLコンテンツパラメータからサブページIDを取得
 								$ret = $this->db->getSubPageIdByUrlContentParam($gEnvManager->getCurrentPageId(), $firstKey, $row);
@@ -6730,11 +6691,6 @@ class PageManager extends Core
 				case M3_VIEW_TYPE_WIKI:	// Wiki
 					$contentsId = $gRequestManager->getWikiPageFromQuery();		// 「=」なしのパラメータはwikiパラメータとする
 					if (!empty($contentsId)) $url .= $contentsId . '&';
-					break;
-				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
-					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ROOM_ID);
-					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ROOM_ID_SHORT);
-					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_ROOM_ID . '=' . $contentsId . '&';
 					break;
 				case M3_VIEW_TYPE_EVENT:	// イベント
 					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
