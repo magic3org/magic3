@@ -481,19 +481,20 @@ INSERT INTO _operation_type
 
 -- ウィジェットカテゴリマスター
 INSERT INTO _widget_category
-(wt_id,        wt_name,                wt_sort_order, wt_visible) VALUES
-('',           'その他',               100,           true),
-('content',    '汎用コンテンツ',       1,             true),
-('blog',       'ブログ',               2,             true),
-('bbs',        'BBS',                  3,             false),
-('commerce',   'Eコマース',            4,             false),
-('photo',      'フォトギャラリー',     5,             false),
-('event',      'イベント情報',         6,             false),
-('wiki',       'Wiki',                 7,             false),
-('member',     '会員',                 9,             false),
-('subcontent', '補助コンテンツ',       20,            true),
-('search',     '検索・お問い合わせ',   21,            true),
-('menu',       'メニュー',             22,            true),
-('image',      '画像',                 23,            true),
-('design',     'デザイン',             24,            true),
-('admin',      '管理画面用',           50,            true);
+(wt_id,        wt_parent_id, wt_name,                wt_sort_order, wt_visible) VALUES
+('',           '',           'その他',               100,           true),
+('content',    '',           '汎用コンテンツ',       1,             true),
+('blog',       '',           'ブログ',               2,             true),
+('bbs',        '',           'BBS',                  3,             false),
+('commerce',   '',           'Eコマース',            4,             false),
+('photo',      '',           'フォトギャラリー',     5,             false),
+('event',      '',           'イベント情報',         6,             false),
+('wiki',       '',           'Wiki',                 7,             false),
+('member',     '',           '会員',                 9,             false),
+('subcontent', '',           '補助コンテンツ',       20,            true),
+('search',     '',           '検索・お問い合わせ',   21,            true),
+('form',       'search',     'お問い合わせ',         21,            true),
+('menu',       '',           'メニュー',             22,            true),
+('image',      '',           '画像',                 23,            true),
+('design',     '',           'デザイン',             24,            true),
+('admin',      '',           '管理画面用',           50,            true);

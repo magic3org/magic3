@@ -670,6 +670,7 @@ CREATE TABLE _widgets (
 DROP TABLE IF EXISTS _widget_category;
 CREATE TABLE _widget_category (
     wt_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
+    wt_parent_id         VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 親カテゴリID
     wt_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
     wt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     wt_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか

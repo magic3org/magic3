@@ -296,7 +296,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'contactus';
 INSERT INTO _widgets
 (wd_id,       wd_name,            wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('contactus', '簡易お問い合わせ', 'search',       'bootstrap',      '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'お問い合わせの入力データをメールで送る。', '', 'ckeditor_m3toolbar',         true,         true,        true,        false,               false,true,               0, 0, 0, '2017-11-20', now(),    now());
+('contactus', '簡易お問い合わせ', 'form',       'bootstrap',      '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'お問い合わせの入力データをメールで送る。', '', 'ckeditor_m3toolbar',         true,         true,        true,        false,               false,true,               0, 0, 0, '2017-11-20', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'qrcode';
 INSERT INTO _widgets
 (wd_id,    wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,         wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -368,11 +368,11 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'contactus_freelayout3';
 INSERT INTO _widgets
 (wd_id,                   wd_name,  wd_category_id,                                 wd_status, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,       wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('contactus_freelayout3', 'フリーレイアウトお問い合わせ3(廃止予定)', 'search', -1,       '2.3.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトで作成可能なお問い合わせフォーム機能。「フリーレイアウトお問い合わせ」のバージョンアップ版。', 'jquery.formtips,jquery.format,jquery.calculation,jquery.uploadfile', 'jquery.tablednd,ckeditor_m3toolbar', false, true,         true,               true,                true, 0,          0, '2018-05-31', now(),         now());
+('contactus_freelayout3', 'フリーレイアウトお問い合わせ3(廃止予定)', 'form', -1,       '2.3.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトで作成可能なお問い合わせフォーム機能。「フリーレイアウトお問い合わせ」のバージョンアップ版。', 'jquery.formtips,jquery.format,jquery.calculation,jquery.uploadfile', 'jquery.tablednd,ckeditor_m3toolbar', false, true,         true,               true,                true, 0,          0, '2018-05-31', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'freeform';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_category_id, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,    wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('freeform', 'フリーフォーム', 'search',       '1.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトで作成可能なお問い合わせフォーム機能。「フリーレイアウトお問い合わせ」から名称変更。', 'jquery.formtips,jquery.format,jquery.calculation,jquery.uploadfile', 'jquery.tablednd,ckeditor_m3toolbar', true,         true,               true,                true, 0,          0, '2018-10-25', now(),         now());
+('freeform', 'フリーフォーム', 'form',       '1.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトで作成可能なお問い合わせフォーム機能。「フリーレイアウトお問い合わせ」から名称変更。', 'jquery.formtips,jquery.format,jquery.calculation,jquery.uploadfile', 'jquery.tablednd,ckeditor_m3toolbar', true,         true,               true,                true, 0,          0, '2018-10-25', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'bbs_2ch_search_box';
 INSERT INTO _widgets
 (wd_id,                wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
@@ -476,7 +476,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/contactus';
 INSERT INTO _widgets
 (wd_id,         wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/contactus', '簡易お問い合わせ', 'search',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'お問い合わせの入力データをメールで送る。', 2,              '',       'ckeditor_m3toolbar',            true, false,                      false,true,           0, 0, now(), now());
+('s/contactus', '簡易お問い合わせ', 'form',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'お問い合わせの入力データをメールで送る。', 2,              '',       'ckeditor_m3toolbar',            true, false,                      false,true,           0, 0, now(), now());
 DELETE FROM _widgets WHERE wd_id = 's/bbs_2ch';
 INSERT INTO _widgets
 (wd_id,       wd_name,                   wd_type, wd_content_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_read_css, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
