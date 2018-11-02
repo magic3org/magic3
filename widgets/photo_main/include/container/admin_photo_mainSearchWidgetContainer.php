@@ -172,7 +172,7 @@ class admin_photo_mainSearchWidgetContainer extends admin_photo_mainBaseWidgetCo
 		// メッセージ設定
 		if (empty($this->categoryArray)){			// 絞り込みカテゴリが登録されていないとき
 			$messageStr = '<b><font color="red">' . self::MESSAGE_NO_USER_CATEGORY . '</font></b>';
-			$this->tmpl->addVar("_widget", "user_content_message",	$messageStr);		// ユーザ作成コンテンツ用メッセージ
+			$this->tmpl->addVar("_widget", "category_message",	$messageStr);
 		}
 		
 		// 画面にデータを埋め込む
