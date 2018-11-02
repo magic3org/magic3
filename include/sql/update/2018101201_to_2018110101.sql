@@ -40,6 +40,7 @@ DELETE FROM _widgets WHERE wd_mobile = true;
 DELETE FROM _widgets WHERE wd_id = 'accordion_menu'; -- アコーディオンメニュー
 DELETE FROM _widgets WHERE wd_id = 'dropdown_menu'; -- ドロップダウンメニュー
 DELETE FROM _widgets WHERE wd_id = 'ec_category_menu'; -- Eコマース-カテゴリーメニュー
+DELETE FROM _widgets WHERE wd_id = 'ec_product_carousel'; -- Eコマース - 商品カルーセル表示
 DELETE FROM _widgets WHERE wd_id = 'default_footer'; -- デフォルトフッタ
 DELETE FROM _widgets WHERE wd_id = 'separator'; -- セパレータ
 DELETE FROM _widgets WHERE wd_id = 'templateChanger'; -- テンプレートチェンジャー
