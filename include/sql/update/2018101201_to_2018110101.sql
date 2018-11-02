@@ -37,12 +37,41 @@ UPDATE _system_config SET sc_value = 'ckeditor' WHERE sc_id = 'wysiwyg_editor';
 
 -- ウィジェット情報
 DELETE FROM _widgets WHERE wd_mobile = true;
+DELETE FROM _widgets WHERE wd_id = 'accordion_menu'; -- アコーディオンメニュー
+DELETE FROM _widgets WHERE wd_id = 'dropdown_menu'; -- ドロップダウンメニュー
+DELETE FROM _widgets WHERE wd_id = 'ec_category_menu'; -- Eコマース-カテゴリーメニュー
+DELETE FROM _widgets WHERE wd_id = 'default_footer'; -- デフォルトフッタ
+DELETE FROM _widgets WHERE wd_id = 'separator'; -- セパレータ
+DELETE FROM _widgets WHERE wd_id = 'templateChanger'; -- テンプレートチェンジャー
+DELETE FROM _widgets WHERE wd_id = 'news'; -- お知らせ
+DELETE FROM _widgets WHERE wd_id = 'blogparts_box'; -- ブログパーツ
+DELETE FROM _widgets WHERE wd_id = 'youtube2'; -- YouTube2
+DELETE FROM _widgets WHERE wd_id = 'flash'; -- Flash
+DELETE FROM _widgets WHERE wd_id = 'release_info'; -- Magic3リリース情報
+DELETE FROM _widgets WHERE wd_id = 'g_qrcode'; -- Google QRコード
+DELETE FROM _widgets WHERE wd_id = 'contactus_modal'; -- モーダル型お問い合わせ
+DELETE FROM _widgets WHERE wd_id = 'contactus_custom'; -- カスタムお問い合わせ
+DELETE FROM _widgets WHERE wd_id = 'user_content'; -- ユーザコンテンツ
+DELETE FROM _widgets WHERE wd_id = 'chacha_main'; -- マイクロブログメイン
+DELETE FROM _widgets WHERE wd_id = 's/slide_menu'; -- スライドメニュー
+DELETE FROM _widgets WHERE wd_id = 's/jquery_menu'; -- jQueryページ-メニュー
+DELETE FROM _widgets WHERE wd_id = 's/jquery_content_menu'; -- jQueryページ-コンテンツメニュー
+DELETE FROM _widgets WHERE wd_id = 's/jquery_header'; -- jQueryページ-ヘッダ
+DELETE FROM _widgets WHERE wd_id = 's/jquery_localize'; -- jQueryページ-日本語化
+DELETE FROM _widgets WHERE wd_id = 's/jquery_footer'; -- jQueryページ-フッタ
+DELETE FROM _widgets WHERE wd_id = 's/jquery_init'; -- jQueryページ-初期化
+DELETE FROM _widgets WHERE wd_id = 'picasa'; -- Picasaアルバム
+DELETE FROM _widgets WHERE wd_id = 'slide_menu'; -- スライドメニュー
+DELETE FROM _widgets WHERE wd_id = 's/slide_menu'; -- スライドメニュー
+DELETE FROM _widgets WHERE wd_id = 'youtube_player'; -- YouTubeプレーヤー
 
 -- ページIDマスター
 DELETE FROM _page_id WHERE pg_id = 'm_index' AND pg_type = 0;
+DELETE FROM _page_id WHERE pg_id = 'user' AND pg_type = 1;
 
 -- ページ情報マスター
 DELETE FROM _page_info WHERE pn_id = 'm_index';
+DELETE FROM _page_info WHERE pn_sub_id = 'user';
 
 -- テンプレート情報
 DELETE FROM _templates WHERE tm_mobile = true;
