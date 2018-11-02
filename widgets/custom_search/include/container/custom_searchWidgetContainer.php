@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/custom_searchDb.php');
 class custom_searchWidgetContainer extends BaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $categoryInfoArray = array();		// カテゴリ種別メニュー
 	private $resultCount;				// 結果表示件数
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	private $resultLength;		// 検索結果コンテンツの文字列最大長
@@ -130,7 +129,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$this->searchButtonId = $targetObj->searchButtonId;		// 検索用ボタンのタグID
 		$this->searchResetId = $targetObj->searchResetId;		// 検索エリアリセットボタンのタグID
 		$isTargetContent = $targetObj->isTargetContent;		// 汎用コンテンツを検索対象とするかどうか
-		$isTargetUser = $targetObj->isTargetUser;			// ユーザ作成コンテンツを検索対象とするかどうか
 		$isTargetBlog = $targetObj->isTargetBlog;			// ブログ記事を検索対象とするかどうか
 		$isTargetProduct = $targetObj->isTargetProduct;			// 商品情報を検索対象とするかどうか
 		$isTargetEvent = $targetObj->isTargetEvent;			// イベント情報を検索対象とするかどうか
@@ -138,23 +136,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$isTargetPhoto = $targetObj->isTargetPhoto;			// フォトギャラリーを検索対象とするかどうか
 		$isTargetWiki = $targetObj->isTargetWiki;			// Wikiを検索対象とするかどうか
 		$searchTemplate = $targetObj->searchTemplate;		// 検索用テンプレート
-		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// 項目定義
 		$searchFormId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_form';		// フォームのID
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 入力値を取得
-		$this->valueArray = array();
-		$categoryArray = array();
-		$fieldCount = count($this->fieldInfoArray);
-		for ($i = 0; $i < $fieldCount; $i++){
-			$itemName = self::FIELD_HEAD . ($i + 1);
-			$itemValue = $request->trimValueOf($itemName);
-			$this->valueArray[] = $itemValue;
-			
-			// 表示するカテゴリIDを取得
-			$categoryType = $this->fieldInfoArray[$i]->categoryType;
-			if (!in_array($categoryType, $categoryArray)) $categoryArray[] = $categoryType;	// カテゴリ種別メニュー
-		}
 		$keyword = $request->trimValueOf('keyword');		// 検索キーワード
 		$act = $request->trimValueOf('act');
 		// ##### joomla!検索インターフェイス #####
@@ -182,18 +167,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				}
 			}
 			
-			// カテゴリの設定値を取得
-			$selectCategory = array();
-			$fieldCount = count($this->fieldInfoArray);
-			for ($i = 0; $i < $fieldCount; $i++){
-				$infoObj = $this->fieldInfoArray[$i];
-				$categoryType = $infoObj->categoryType;			// カテゴリ種別
-				
-				// 設定値がある場合のみ取得
-				$inputValue = $this->valueArray[$i];		// 入力値
-				if (!empty($inputValue)) $selectCategory[$categoryType] = $inputValue;		// 入力値
-			}
-			
 			// 入力条件が検索キーワードのみの場合、キーワードが入力されていなければエラーメッセージを表示
 			if ($fieldCount == 0 && empty($parsedKeywords)){
 				$message = self::MESSAGE_NO_KEYWORD;
@@ -204,7 +177,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$contentUsePassword = $configArray[self::CF_USE_PASSWORD];			// パスワードによるコンテンツ閲覧制限
 		
 				// 総数を取得
-				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->_langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
+				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $this->_langId, $isAll, $isTargetContent, $isTargetBlog,
 								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword);
 				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
 				
@@ -219,7 +192,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$pageLinkInfo = $this->getPageLinkInfo();
 
 				// 検出項目を表示
-				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->_langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
+				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $this->_langId, $isAll, $isTargetContent, $isTargetBlog, 
 								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword, array($this, 'searchItemsLoop'));
 				
 				if ($this->isExistsViewData){
@@ -239,21 +212,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				}
 			}
 		}
-		// カテゴリ情報を取得
-		$ret = $this->db->getAllCategoryForMenu($this->_langId, $categoryArray, $rows);
-		if ($ret){
-			$line = array();
-			$rowCount = count($rows);
-			for ($i = 0; $i < $rowCount; $i++){
-				$line[] = $rows[$i];
-				$itemId = $rows[$i]['ua_item_id'];
-				if (empty($itemId)){		// カテゴリ種別のとき
-					$categoryId = $rows[$i]['ua_id'];
-					$this->categoryInfoArray[$categoryId] = $line;
-					$line = array();
-				}
-			}
-		}
 		// メッセージを表示
 		if (!empty($message)){
 //			if ($this->_renderType == M3_RENDER_JOOMLA_NEW){
@@ -265,12 +223,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 //			}
 		}
 		
-		// 検索画面作成
-		$fieldOutput = $this->createFieldOutput($searchTemplate);
-		
 		// 表示データ埋め込み
 		$this->tmpl->addVar("_widget", "page_sub",	$this->gEnv->getCurrentPageSubId());		// ページサブID
-		$this->tmpl->addVar("_widget", "html",	$fieldOutput);
+		$this->tmpl->addVar("_widget", "html",	$searchTemplate);
 		$this->tmpl->addVar("_widget", "search_text_id",	$this->searchTextId);		// 検索用テキストフィールドのタグID
 		$this->tmpl->addVar("_widget", "search_button_id",	$this->searchButtonId);		// 検索用ボタンのタグID
 		$this->tmpl->addVar("_widget", "search_reset_id",	$this->searchResetId);		// 検索エリアリセットボタンのタグID
@@ -292,80 +247,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
-	}
-	/**
-	 * 検索条件フィールド作成
-	 *
-	 * @param string $templateData	テンプレートデータ
-	 * @return string				フィールドデータ
-	 */
-	function createFieldOutput($templateData)
-	{
-		$fieldOutput = $templateData;
-		
-		$fieldCount = count($this->fieldInfoArray);
-		for ($i = 0; $i < $fieldCount; $i++){
-			$infoObj = $this->fieldInfoArray[$i];
-			$categoryType = $infoObj->categoryType;			// カテゴリ種別
-			$selectType = $infoObj->selectType;				// 選択タイプ
-			$titleVisible = $infoObj->titleVisible;		// タイトル表示制御
-			$initValue = $infoObj->initValue;		// 初期値
-			$categoryItems = $this->categoryInfoArray[$categoryType];		// カテゴリ項目
-			$categoryItemCount = count($categoryItems) -1;
-			$categoryName = $categoryItems[$categoryItemCount]['ua_name'];		// カテゴリ種別名
-			
-			// 入力フィールドの作成
-			$inputTag = '';
-			$fieldName = self::FIELD_HEAD . ($i + 1);
-			$inputValue = $this->valueArray[$i];		// 入力値
-			$inputTag = '';
-			switch ($selectType){
-				case 'single':	// 単一選択
-					// タイトルの設定
-					if (!empty($titleVisible)) $inputTag .= $this->convertToDispString($categoryName);
-					
-					$inputTag .= '<select id="' . $fieldName . '" name="' . $fieldName . '" >' . M3_NL;
-					$name = '&nbsp;';
-					if (!empty($initValue)) $name = $this->convertToDispString($initValue);
-					$inputTag .= '<option value="">' . $name . '</option>' . M3_NL;
-					for ($j = 0; $j < $categoryItemCount; $j++){
-						$param = array();
-						$paramStr = '';
-						$value = $categoryItems[$j]['ua_item_id'];
-						$name = $categoryItems[$j]['ua_name'];
-						if (!empty($inputValue) && strcmp($inputValue, $value) == 0) $param[] = 'selected';
-						if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
-						$inputTag .= '<option value="' . $this->convertToDispString($value) . '"' . $paramStr . '>' . $this->convertToDispString($name) . '</option>' . M3_NL;
-					}
-					$inputTag .= '</select>' . M3_NL;
-					break;
-				case 'multi':	// 複数選択
-					$fieldName .= '[]';
-					
-					// タイトルの設定
-					if (!empty($titleVisible)) $inputTag .= $this->convertToDispString($categoryName);
-
-					for ($j = 0; $j < $categoryItemCount; $j++){
-						$param = array();
-						$paramStr = '';
-						$value = $categoryItems[$j]['ua_item_id'];
-						$name = $categoryItems[$j]['ua_name'];
-						for ($k = 0; $k < count($inputValue); $k++){
-							if (!empty($inputValue[$k]) && strcmp($inputValue[$k], $value) == 0) $param[] = 'checked';
-						}
-						if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
-						$inputTag .= '<label><input type="checkbox" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"'
-										. $paramStr . ' />' . $this->convertToDispString($name) . '</label>';
-					}
-					$inputTag .= M3_NL;
-					break;
-			}
-			
-			// テンプレートに埋め込む
-			$keyTag = M3_TAG_START . M3_TAG_MACRO_ITEM_KEY . ($i + 1) . M3_TAG_END;
-			$fieldOutput = str_replace($keyTag, $inputTag, $fieldOutput);
-		}
-		return $fieldOutput;
 	}
 	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
@@ -610,31 +491,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			$content = substr($content, 0, $this->resultLength) . '...';
 		}
 		return $content;
-	}
-	/**
-	 * すべてのコンテンツ項目を取得
-	 *
-	 * @param string $roomId		ルームID
-	 * @param string $langId		言語ID
-	 * @param string $listItemId	検索一覧に表示するコンテンツのID
-	 * @return array				コンテンツ項目IDをキーにしたコンテンツ項目レコードの連想配列
-	 */
-	function getAllContent($roomId, $langId, &$listItemId)
-	{
-		$destArray = array();
-		
-		$ret = $this->db->getAllContentsByRoomId($roomId, $langId, $rows);
-		if ($ret){
-			$count = count($rows);
-			for ($i = 0; $i < $count; $i++){
-				$key = $rows[$i]['uc_id'];
-				$destArray[$key] = $rows[$i];
-		
-				// 検索一覧に表示するコンテンツのID
-				if ($rows[$i]['ui_key'] == self::SEARCH_LIST_CONTENT_ID) $listItemId = $key;
-			}
-		}
-		return $destArray;
 	}
 	/**
 	 * URLに検索条件のパラメータを付加

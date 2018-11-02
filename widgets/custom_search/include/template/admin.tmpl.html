@@ -15,18 +15,6 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
-	
-	// タイトルを表示するかどうか
-	var titleVisibleArray = new Array();
-	$("#field_list input:checkbox.titlevisible").each(function(index){
-		if (this.checked){
-			titleVisibleArray.push('1');
-		} else {
-			titleVisibleArray.push('0');
-		}
-	});
-	document.main.titlevisible.value = titleVisibleArray.join(',');
 	
 	document.main.act.value = 'add';
 	document.main.submit();
@@ -34,18 +22,6 @@ function addItem(){
 }
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
-	
-	// タイトルを表示するかどうか
-	var titleVisibleArray = new Array();
-	$("#field_list input:checkbox.titlevisible").each(function(index){
-		if (this.checked){
-			titleVisibleArray.push('1');
-		} else {
-			titleVisibleArray.push('0');
-		}
-	});
-	document.main.titlevisible.value = titleVisibleArray.join(',');
 	
 	document.main.act.value='update';
 	document.main.submit();
@@ -62,61 +38,6 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-// カテゴリ項目を追加
-function addLine()
-{
-	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td style="text-align:center;"><span class="m3drag_rowno"></span></td>';
-	lineText += '<td><select name="item_type[]" class="form-control"><patTemplate:tmpl name="type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
-	lineText += '<div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />タイトル表示</label></div></td>';
-	lineText += '<td><select name="item_sel_type[]" class="form-control"><patTemplate:tmpl name="sel_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><input type="text" name="item_init_value[]" class="form-control" style="margin-top:5px;" /></td>';
-	lineText += '<td style="vertical-align:top;"><input type="text" class="replaceTag form-control" readonly /></td>';
-	lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-	$('#field_list').append(lineText);
-		
-	// 項目一覧を再設定
-	//setupList();
-	m3SetDragDropTable('field_list', reorder_callback);
-}
-/*function setupList()
-{
-	$("#field_list").tableDnD({
-		onDrop: function(table, row){
-			setupNo();
-		},
-		dragHandle: ".m3drag_handle"
-	});
-	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('m3drag_current');
-	}, function() {
-		$(this.cells[0]).removeClass('m3drag_current');
-	});
-	// 項目削除処理
-	$("#field_list tr .m3drag_delrow").click(function(){
-		$(this).parents('.m3drag_row').remove();
-		setupNo();
-	});
-	// インデックスNo再設定
-	setupNo();
-}*/
-/*function setupNo()
-{
-	// インデックスNo再設定
-	$("#field_list tr .m3drag_rowno").each(function(index){
-		$(this).text(index + 1);
-	});
-	$("#field_list tr .replaceTag").each(function(index){
-		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
-		$(this).val(replaceTag);
-	});
-}*/
-// 項目順変更時処理
-function reorder_callback()
-{
-	$("#field_list tr .replaceTag").each(function(index){
-		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
-		$(this).val(replaceTag);
-	});
-}
 function uploader_entryimage_onSuccess(files, data)
 {
 	// 画像を読み込む
@@ -132,12 +53,7 @@ $(function(){
 	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
-	//m3SetWysiwygEditor('item_html', 150/* 高さ */);
 	m3SetWysiwygEditor('item_html', 150/* 高さ */, false, 'layout');
-	
-	// カテゴリ項目作成
-	//setupList();
-	m3SetDragDropTable('field_list', reorder_callback);
 	
 	// 画像アップローダー作成
 	m3CreateDragDropUploadFile('uploader_entryimage', '{UPLOAD_URL_ENTRYIMAGE}', uploader_entryimage_onSuccess);
@@ -150,8 +66,6 @@ $(function(){
 <input type="hidden" name="task" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="fieldcount" />
-<input type="hidden" name="titlevisible" />
 <input type="hidden" name="updated_entryimage" value="{UPDATED_ENTRYIMAGE}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h">基本設定</h3>
@@ -181,7 +95,6 @@ $(function(){
 	    <th>検索対象</th>
 	    <td>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_content" {TARGET_CONTENT_CHECKED} />汎用コンテンツ</label></div>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_user" {TARGET_USER_CHECKED} />ユーザ作成コンテンツ</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_blog" {TARGET_BLOG_CHECKED} />ブログ</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_product" {TARGET_PRODUCT_CHECKED} />商品情報</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_event" {TARGET_EVENT_CHECKED} />イベント情報</label></div>
@@ -212,37 +125,6 @@ $(function(){
 		<!--<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像幅：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_width" class="form-control" value="{IMAGE_WIDTH}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像高さ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_height" class="form-control" value="{IMAGE_HEIGHT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>-->
 		</td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIG_IMAGE_FILE}>ユーザ作成コンテンツ<br />絞り込みカテゴリ項目</span></th>
-	    <td>
-	    <table id="field_list" class="table table-condensed table-bordered table-striped">
-	    <thead>
-	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">種別</th><th style="width:200px;">選択方法/初期値</th><th>埋め込みタグ</th><th style="width:35px;">操作</th></tr>
-	    </thead><tbody>
-	    <patTemplate:tmpl name="field_list">
-        <tr class="m3drag_row">
-	    <td class="m3drag_handle"></td>
-	    <td style="text-align:center;"><span class="m3drag_rowno"></span></td>
-	    <td><select name="item_type[]" class="form-control">
-	       <patTemplate:tmpl name="type_list2">
-               <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	       </patTemplate:tmpl>
-            </select>
-			<div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE_CHECKED} />タイトル表示</label></div></td>
-	    <td><select name="item_sel_type[]" class="form-control">
-	       <patTemplate:tmpl name="sel_type_list2">
-               <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	       </patTemplate:tmpl>
-            </select><input type="text" name="item_init_value[]" class="form-control" value="{INIT_VALUE}" style="margin-top:5px;" />
-			</td>
-	    <td style="vertical-align:top;"><input type="text" class="replaceTag form-control" readonly /></td>
-	    <td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
-	    </tr>
-	    </patTemplate:tmpl>
-	    </tbody></table>
-	    <div><input type="button" class="button" onclick="addLine();" value="追加" />&nbsp;&nbsp;{USER_CONTENT_MESSAGE}</div>
-	    </td>
 	</tr>
     <tr>
 	    <th>規定タグID</th>

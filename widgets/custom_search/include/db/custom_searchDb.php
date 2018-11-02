@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2016 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -33,72 +33,16 @@ class custom_searchDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * すべてのカテゴリ種別を取得
-	 *
-	 * @param string  $langId		言語ID
-	 * @param array  $rows			取得レコード
-	 * @return						true=取得、false=取得せず
-	 */
-	function getAllCategory($langId, &$rows)
-	{
-		// カテゴリ情報を取得
-		$queryStr  = 'SELECT * FROM user_content_category ';
-		$queryStr .=   'WHERE ua_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ua_item_id = ? ';
-		$queryStr .=     'AND ua_language_id = ? ';
-		$queryStr .=   'ORDER BY ua_index';
-		$retValue = $this->selectRecords($queryStr, array(''/*カテゴリ情報のみ*/, $langId), $rows);
-		return $retValue;
-	}
-	/**
-	 * メニュー作成用のカテゴリ一覧を取得
-	 *
-	 * @param string  $langId			言語ID
-	 * @param array   $categoryArray	取得するカテゴリID
-	 * @param array  $rows				取得レコード
-	 * @return							true=取得、false=取得せず
-	 */
-	function getAllCategoryForMenu($langId, $categoryArray, &$rows)
-	{
-		if (count($categoryArray) <= 0) return false;
-		
-		// CASE文作成
-		$categoryId = '';
-		$caseStr = 'CASE ua_id ';
-		for ($i = 0; $i < count($categoryArray); $i++){
-			$id = '\'' . addslashes($categoryArray[$i]) . '\'';
-			$caseStr .= 'WHEN ' . $id . ' THEN ' . $i . ' ';
-			$categoryId .= $id . ',';
-		}
-		$caseStr .= 'END AS no,';
-		$categoryId = rtrim($categoryId, ',');
-		// タイトルを最後にする
-		$caseStr .=   'CASE ua_item_id ';
-		$caseStr .=     'WHEN \'\' THEN 1 ';
-		$caseStr .=     'ELSE 0 ';
-		$caseStr .=   'END AS type ';
-		
-		$queryStr  = 'SELECT *, ' . $caseStr . ' FROM user_content_category ';
-		$queryStr .=   'WHERE ua_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ua_language_id = ? ';
-		$queryStr .=     'AND ua_id in (' . $categoryId . ') ';
-		$queryStr .=   'ORDER BY no, type, ua_index';
-		$retValue = $this->selectRecords($queryStr, array($langId), $rows);
-		return $retValue;
-	}
-	/**
 	 * コンテンツの項目数またはコンテンツを取得(表示用)
 	 *
 	 * @param int		$limit				取得する項目数(0=項目数取得、0以外=レコードを取得)
 	 * @param int		$page				取得するページ(1～)
 	 * @param array		$keywords			検索キーワード
-	 * @param array     $categoryInfo		絞り込み用カテゴリ
 	 * @param string	$langId				言語
 	 * @param bool		$isAll				すべてのデータを取得するか、ユーザ制限のないデータを取得するかを指定
 	 * @param bool		$isTargetContent	汎用コンテンツを検索対象とするかどうか
-	 * @param bool		$isTargetUser		ユーザ作成コンテンツを検索対象とするかどうか
 	 * @param bool		$isTargetBlog		ブログ記事を検索対象とするかどうか
-	 * @param bool		$isTargetProduct		商品情報を検索対象とするかどうか
+	 * @param bool		$isTargetProduct	商品情報を検索対象とするかどうか
 	 * @param bool		$isTargetEvent		イベント情報を検索対象とするかどうか
 	 * @param bool		$isTargetBbs		BBSを検索対象とするかどうか
 	 * @param bool		$isTargetPhoto		フォトギャラリーを検索対象とするかどうか
@@ -107,7 +51,7 @@ class custom_searchDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return int,bool						$limitが0のときintで項目数、$limitが0以外のときはbool(true=1行以上レコード取得、false=レコードなし)
 	 */
-	function searchContentsByKeyword($limit, $page, $keywords, $categoryInfo, $langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
+	function searchContentsByKeyword($limit, $page, $keywords, $langId, $isAll, $isTargetContent, $isTargetBlog, 
 									$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword, $callback = NULL)
 	{
 		$offset = $limit * ($page -1);
@@ -144,95 +88,6 @@ class custom_searchDb extends BaseDb
 			// 公開期間を指定
 			$queryStr .=    'AND (cn_active_start_dt = ? OR (cn_active_start_dt != ? AND cn_active_start_dt <= ?)) ';
 			$queryStr .=    'AND (cn_active_end_dt = ? OR (cn_active_end_dt != ? AND cn_active_end_dt > ?)) ';
-			$params[] = $initDt;
-			$params[] = $initDt;
-			$params[] = $now;
-			$params[] = $initDt;
-			$params[] = $initDt;
-			$params[] = $now;
-		}
-		// ##### ユーザ作成コンテンツの検索条件 #####
-		if (!empty($isTargetUser)){
-			// カテゴリ条件から検索対象のルームを取得
-			$roomArray = array();
-			if (!empty($categoryInfo)){
-				$allParams = array();
-				$allQueryStr = '';
-				$keys = array_keys($categoryInfo);
-				$categoryCount = count($keys);
-				for ($i = 0; $i < $categoryCount; $i++){
-					$qStr  = 'SELECT um_room_id FROM user_content_room_category ';
-					$pms = array();
-				
-					$key = $keys[$i];
-					$item = $categoryInfo[$key];
-					if (is_array($item)){		// 複数項目の場合
-						$qStr .=    'WHERE um_category_id = ? AND (';
-						$pms[] = $key;
-						$itemCount = count($item);
-						for ($j = 0; $j < $itemCount; $j++){
-							$qStr .=    'um_category_item_id = ?';
-							if ($j < $itemCount -1) $qStr .=    ' OR ';
-							$pms[] = $item[$j];
-						}
-						$qStr .=    ') ';
-					} else {
-						$qStr .=    'WHERE um_category_id = ? AND um_category_item_id = ? ';
-						$pms[] = $key;
-						$pms[] = $item;
-					}
-				
-					$allParams = array_merge($pms, $allParams);
-					if ($i == 0){
-						$allQueryStr = $qStr;
-					} else {
-						$allQueryStr = $qStr . ' AND um_room_id IN (' . $allQueryStr . ')';
-					}
-				}
-				$retValue = $this->selectRecords($allQueryStr, $allParams, $rows);
-				if ($retValue){
-					$rowCount = count($rows);
-					for ($i = 0; $i < $rowCount; $i++){
-						$roomArray[] = $rows[$i]['um_room_id'];
-					}
-				}
-			}
-
-			if (!empty($queryStr)) $queryStr .= ' UNION ';
-			$queryStr .= 'SELECT DISTINCT \'user\' AS type, uc_room_id AS id, ur_name AS name, ur_content_update_dt AS dt, ur_group_id AS group_id ';
-			$queryStr .= 'FROM user_content LEFT JOIN user_content_room ON uc_room_id = ur_id AND ur_deleted = false ';
-			$queryStr .= 'WHERE uc_language_id = ? ';	$params[] = $langId;
-			$queryStr .=   'AND uc_deleted = false ';		// 削除されていない
-			$queryStr .=   'AND uc_visible = true ';		// 公開中
-			$queryStr .=   'AND ur_visible = true ';		// ルーム公開中
-
-			// 検索対象のルームを制限
-			if (!empty($categoryInfo)){		// カテゴリ制限のとき
-				if (count($roomArray) == 0){
-					$idStr = '\'/dummy/\'';				// ダミーデータを設定
-				} else {
-					$idStr = '';
-					for ($i = 0; $i < count($roomArray); $i++){
-						$idStr .= '\'' . addslashes($roomArray[$i]) . '\',';
-					}
-					$idStr = rtrim($idStr, ',');
-				}
-				$queryStr .=  'AND uc_room_id in (' . $idStr . ') ';
-			}
-
-			// コンテンツを検索
-			if (!empty($keywords)){
-				for ($i = 0; $i < count($keywords); $i++){
-					$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
-					$queryStr .=    'AND (uc_data LIKE \'%' . $keyword . '%\' ';		// コンテンツ実データ
-					$queryStr .=    'OR uc_room_id LIKE \'%' . $keyword . '%\' ';			// ルームID
-					$queryStr .=    'OR ur_name LIKE \'%' . $keyword . '%\') ';			// ルーム名
-				}
-			}
-		
-			// 公開期間を指定
-			$queryStr .=    'AND (uc_active_start_dt = ? OR (uc_active_start_dt != ? AND uc_active_start_dt <= ?)) ';
-			$queryStr .=    'AND (uc_active_end_dt = ? OR (uc_active_end_dt != ? AND uc_active_end_dt > ?)) ';
 			$params[] = $initDt;
 			$params[] = $initDt;
 			$params[] = $now;
@@ -394,44 +249,6 @@ class custom_searchDb extends BaseDb
 			$ret = $this->selectLoop($queryStr, $params, $callback);
 		}
 		return $ret;
-	}
-	/**
-	 * デフォルトのタブ定義を取得
-	 *
-	 * @param string	$lang				言語
-	 * @param int	    $groupId			グループID
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getDefaultTab($lang, $groupId, &$row)
-	{
-		$queryStr = 'SELECT * FROM user_content_tab ';
-		$queryStr .=  'WHERE ub_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND ub_visible = true ';		// 表示中
-		$queryStr .=    'AND ub_language_id = ? ';
-		$queryStr .=    'AND ub_group_id = ? ';
-		$queryStr .=  'ORDER BY ub_index';
-		$ret = $this->selectRecord($queryStr, array($lang, $groupId), $row);
-		return $ret;
-	}
-	/**
-	 * ルームIDですべてのコンテンツを取得
-	 *
-	 * @param string  $roomId		ルームID
-	 * @param string  $langId		言語ID
-	 * @param array   $rows			取得レコード
-	 * @return bool					取得 = true, 取得なし= false
-	 */
-	function getAllContentsByRoomId($roomId, $langId, &$rows)
-	{
-		if (empty($roomId) || empty($langId)) return false;
-		
-		$queryStr  = 'SELECT * FROM user_content LEFT JOIN user_content_item ON uc_id = ui_id AND ui_deleted = false ';
-		$queryStr .=   'WHERE uc_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND uc_room_id = ? ';
-		$queryStr .=     'AND uc_language_id = ? ';
-		$retValue = $this->selectRecords($queryStr, array($roomId, $langId), $rows);
-		return $retValue;
 	}
 	/**
 	 * コンテンツ項目をコンテンツIDで取得
