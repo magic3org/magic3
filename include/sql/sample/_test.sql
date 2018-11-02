@@ -17,7 +17,8 @@
 
 -- ウィジェット情報
 DELETE FROM _widgets WHERE wd_id = 'date';
-INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_install_dt, wd_create_dt) VALUES
+INSERT INTO _widgets
+(wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_install_dt, wd_create_dt) VALUES
 ('date',               '現在日時',                   'DTST', '1.0.0',  '',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, '現在の日付時刻を表示。',      false,           false,       true,         true,        false,        false,               false,true,           0, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ajax_sample1';
 INSERT INTO _widgets 
@@ -43,3 +44,7 @@ DELETE FROM _widgets WHERE wd_id = 'test_uploadfile';
 INSERT INTO _widgets
 (wd_id,             wd_name,                        wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_install_dt, wd_create_dt) VALUES
 ('test_uploadfile', 'ファイルアップロードテスト用', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'ドラッグ&ドロップファイルアップロードテスト用のプログラム',  'jquery.uploadfile4', 'jquery.uploadfile4', true,         true,        true,        false,               false,true,           now(), now());
+DELETE FROM _widgets WHERE wd_id = 'luis_chat';
+INSERT INTO _widgets
+(wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                            wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('luis_chat', 'LUISチャットボット', 1,         '',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'LUISサービスと連携したチャットボット', false,        true,        true,         true,                true,          true,                true,           '2018-10-27',  now(),         now());
