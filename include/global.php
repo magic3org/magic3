@@ -251,14 +251,14 @@ define('M3_VIEW_TYPE_SEARCH',		'search');				// 検索結果
 define('M3_VIEW_TYPE_COMMERCE',		'commerce');			// Eコマース
 define('M3_VIEW_TYPE_CALENDAR',		'calendar');			// カレンダー
 // コンテンツタイプ
-define('M3_VIEW_TYPE_MEMBER',		'member');				// 会員情報
 define('M3_VIEW_TYPE_CONTENT',		'content');				// 汎用コンテンツ
+define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
 define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報
 define('M3_VIEW_TYPE_BBS',			'bbs');					// BBS
-define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
 define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
+define('M3_VIEW_TYPE_MEMBER',		'member');				// 会員情報
 // 補助コンテンツ
 define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_COMMENT',		'comment');				// コメント

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -81,6 +81,21 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 					$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
 					$contentType = $listedItem[$i];
 					
+					// ウィジェットカテゴリーメニューの表示制御。一旦非表示にする。
+					switch ($contentType){
+					case M3_VIEW_TYPE_BBS:			// BBS
+					case M3_VIEW_TYPE_WIKI:			// Wiki
+					case M3_VIEW_TYPE_EVENT:			// イベント情報
+					case M3_VIEW_TYPE_PHOTO:			// フォトギャラリー
+					case M3_VIEW_TYPE_MEMBER:			// 会員情報
+						$this->_mainDb->updateWidgetCategoryVisible($contentType, false);
+						break;
+					case M3_VIEW_TYPE_PRODUCT:		// 製品
+					case M3_VIEW_TYPE_COMMERCE:			// Eコマース
+						$this->_mainDb->updateWidgetCategoryVisible(M3_VIEW_TYPE_COMMERCE, false);
+						break;
+					}
+					
 					// コンテンツの表示可否によってウィジェットを配置
 					if ($itemValue){
 						// 表示に変更された場合のみウィジェットを配置
@@ -108,6 +123,21 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 								// ページの有効状態を更新
 								$this->updatePageActive($pageSubId, true);	// ページ有効
 							}
+						}
+						
+						// ウィジェットカテゴリーメニューの表示制御。チェックが入ったカテゴリーのみ表示させる。
+						switch ($contentType){
+						case M3_VIEW_TYPE_BBS:			// BBS
+						case M3_VIEW_TYPE_WIKI:			// Wiki
+						case M3_VIEW_TYPE_EVENT:			// イベント情報
+						case M3_VIEW_TYPE_PHOTO:			// フォトギャラリー
+						case M3_VIEW_TYPE_MEMBER:			// 会員情報
+							$this->_mainDb->updateWidgetCategoryVisible($contentType, true);
+							break;
+						case M3_VIEW_TYPE_PRODUCT:		// 製品
+						case M3_VIEW_TYPE_COMMERCE:			// Eコマース
+							$this->_mainDb->updateWidgetCategoryVisible(M3_VIEW_TYPE_COMMERCE, true);
+							break;
 						}
 					} else {
 						// 変更状況に関わらず処理を行う

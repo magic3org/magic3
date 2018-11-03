@@ -355,6 +355,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 												'task'		=> self::TASK_EDITMENU,
 												'url'		=> '',
 												'tagid'		=> '',
+												'visible'	=> false,					// 暫定非表示
 												'active'	=> (
 																	$task == self::TASK_EDITMENU		// 管理メニュー編集
 																)

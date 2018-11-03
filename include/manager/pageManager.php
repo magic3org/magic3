@@ -331,14 +331,14 @@ class PageManager extends Core
 		
 		// フロント画面で使用する主要コンテンツタイプ
 		$this->mainContentTypeInfo	 = array(
-												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
 												array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
+												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
 												array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
 												array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
-												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
 												array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
 												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
-												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
+												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO),
+												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER)
 											);
 		// フロント画面で使用する補助コンテンツタイプ(ページ属性に対応しない)
 		$this->subContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),

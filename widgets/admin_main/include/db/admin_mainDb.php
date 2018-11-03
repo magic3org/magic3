@@ -586,6 +586,27 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * ウィジェットカテゴリーの表示状態を更新
+	 *
+	 * @param string $id		ウィジェットID
+	 * @param bool	 $vislble	表示状態
+	 * @return					true = 正常、false=異常
+	 */
+	function updateWidgetCategoryVisible($id, $vislble)
+	{
+		// トランザクションスタート
+		$this->startTransaction();
+
+		$queryStr  = 'UPDATE _widget_category ';
+		$queryStr .=   'SET wt_visible = ? ';
+		$queryStr .=   'WHERE wt_id = ?';
+		$ret = $this->execStatement($queryStr, array(intval($vislble), $id));
+		
+		// トランザクション終了
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * フロント画面のアクセスポイントのリストを取得
 	 *
 	 * @param function $callback			コールバック関数
