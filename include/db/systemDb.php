@@ -655,7 +655,7 @@ class SystemDb extends BaseDb
 		
 		$params = array();
 		$queryStr .=    'AND wd_device_type = ? '; $params[] = $type;
-		$queryStr .=   'ORDER BY category.wt_sort_order, wd_sort_order, wd_id';
+		$queryStr .=   'ORDER BY pcategory.wt_sort_order, category.wt_sort_order, wd_sort_order, wd_id';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
 	}

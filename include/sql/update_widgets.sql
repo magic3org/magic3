@@ -311,20 +311,20 @@ INSERT INTO _widgets
 ('phpcode', 'PHPコード実行', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'PHPのプログラムコードを実行。', 'jquery.codepress',   false,        true,        true,        false,               true,true,           0, '2016-07-10', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'g_analytics';
 INSERT INTO _widgets
-(wd_id,         wd_name,            wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                   wd_available, wd_has_admin, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('g_analytics', 'Google Analytics', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Google Analyticsトラッキングコードを出力する。', false,        true,         true,           '2015-04-20',  now(),         now());
+(wd_id,         wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                   wd_available, wd_has_admin, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('g_analytics', 'Google Analytics', 'analytics',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Google Analyticsトラッキングコードを出力する。', false,        true,         true,           '2015-04-20',  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'g_analytics2';
 INSERT INTO _widgets
-(wd_id,          wd_name,             wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                    wd_has_admin, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('g_analytics2', 'Google Analytics2', '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'グローバルサイトタグ(gtag.js)タイプのGoogle Analyticsトラッキングコードを出力する。', true,         true,           '2018-10-19', now(),         now());
+(wd_id,          wd_name,             wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                    wd_has_admin, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('g_analytics2', 'Google Analytics2', 'analytics',         '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'グローバルサイトタグ(gtag.js)タイプのGoogle Analyticsトラッキングコードを出力する。', true,         true,           '2018-10-19', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'image2';
 INSERT INTO _widgets
 (wd_id,    wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('image2', '画像2', '2.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '様々な画像を単一で表示。', 'elfinder',          true,         true,        true,         false,               true,                true,           '2018-04-19', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'css_add';
 INSERT INTO _widgets
-(wd_id,   wd_name, wd_template_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('css_add', 'CSS追加',  'bootstrap,wordpress', '3.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'テンプレートのCSSに加えてCSS定義やCSSファイルを追加するウィジェットです。',    true,         true,        true,         false,                                true,                true,              0,  3,             1, '2018-09-13', now(),         now());
+(wd_id,     wd_name,   wd_category_id, wd_template_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('css_add', 'CSS追加', 'meta',         'bootstrap,wordpress', '3.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'テンプレートのCSSに加えてCSS定義やCSSファイルを追加するウィジェットです。',    true,         true,        true,         false,                                true,                true,              0,  3,             1, '2018-09-13', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'print';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_install_dt, wd_create_dt) VALUES
@@ -359,8 +359,8 @@ INSERT INTO _widgets
 ('jquery_plugin', 'jQueryプラグイン', '1.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQueryプラグインを追加するためのウィジェットです。画面上には何も表示されません。',  '', 'codemirror.javascript', false,             true,         true,                true,              '2016-07-10', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'head_add';
 INSERT INTO _widgets
-(wd_id,      wd_name,    wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('head_add', 'HEAD追加', 'bootstrap,wordpress', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'HTMLのHEADタグ内に文字列を追加する', true,        true,           3, 1, '2017-07-25',  now(), now());
+(wd_id,      wd_name,    wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('head_add', 'HEAD追加', 'meta',           'bootstrap,wordpress', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'HTMLのHEADタグ内に文字列を追加する', true,        true,           3, 1, '2017-07-25',  now(), now());
 DELETE FROM _widgets WHERE wd_id = 'contactus_freelayout3';
 INSERT INTO _widgets
 (wd_id,                   wd_name,  wd_category_id,                                 wd_status, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,       wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -463,8 +463,8 @@ INSERT INTO _widgets
 ('s/simple_html', '汎用HTML', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'コンテンツとして管理しない部分表示用の汎用HTML', 2, 'ckeditor_m3toolbar',             true,         true, true,             1, -1,  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 's/css_add';
 INSERT INTO _widgets
-(wd_id,             wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                             wd_device_type, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('s/css_add', 'CSS追加', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'テンプレートのCSSに加えてCSS定義を追加するためのウィジェットです。', 2,              true,         true,             3, 1,  now(),         now());
+(wd_id,       wd_name,   wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                             wd_device_type, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('s/css_add', 'CSS追加', 'meta',         '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'テンプレートのCSSに加えてCSS定義を追加するためのウィジェットです。', 2,              true,         true,             3, 1,  now(),         now());
 DELETE FROM _widgets WHERE wd_id = 's/contactus';
 INSERT INTO _widgets
 (wd_id,         wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
