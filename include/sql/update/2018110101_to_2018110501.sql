@@ -39,7 +39,8 @@ INSERT INTO _widget_category
 ('design',      'design',      'デザイン',             26,            true),
 ('meta',        '',            'メタ機能',             27,            true),
 ('analytics',   '',            'サイト解析',           28,            true),
-('admin',       'admin',       '管理画面用',           50,            true);
+('admin',       'admin',       '管理画面用',           50,            true),
+('test',        'test',        'テスト用',             200,           true);
 
 
 -- *** システム標準テーブル ***
