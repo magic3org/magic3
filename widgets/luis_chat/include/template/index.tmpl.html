@@ -14,39 +14,30 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	// FontAwesomeのクラスが未定義の場合は動的にCSSを読み込む
-	var faSpan = $('<span class="fa" style="display:none"></span>').appendTo('body');
-	var fontFamily = faSpan .css('font-family');
-	if (fontFamily.indexOf('Font Awesome') == -1){
-		var style = '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">';
-		$('head link:last').after(style);
-	}
-	faSpan.remove();
-
 	var initCompleted = false;		// 初期化状態
 	var html = '';
-	html += '<div id="repl_chat">';
-	html += '<div class="row border-chat">';
-	html += '<div class="col-md-12 col-sm-12 col-xs-12 first-section">';
-	html += '<div class="row">';
-	html += '<div class="col-md-8 col-sm-6 col-xs-6 left-first-section">';
+/*	html += '<div id="repl_chat">';
+	html += '<div class="border-chat">';
+	html += '<div class="first-section">';
+	html += '<div class="">';
+	html += '<div class="left-first-section">';
 	html += '<p>Chat</p>';
 	html += '</div>';
-	html += '<div class="col-md-4 col-sm-6 col-xs-6 right-first-section">';
+	html += '<div class="right-first-section">';
 	html += '<a href="javascript:void(0);" id="chat_open_panel"><i class="fa fa-minus" aria-hidden="true"></i></a>';
 	html += '</div>';
 	html += '</div>';
 	html += '</div>';
 	html += '</div>';
-	html += '<div class="row border-chat">';
-	html += '<div class="col-md-12 col-sm-12 col-xs-12 second-section">';
+	html += '<div class="border-chat">';
+	html += '<div class="second-section">';
 	html += '<div id="chat-section" class="chat-section">';
 	html += '<ul id="chat_body">';
 	html += '</ul>';
 	html += '</div>';
 	html += '</div>';
 	html += '</div>';
-	html += '<div class="row border-chat">';
+	html += '<div class="border-chat">';
 	html += '<div class="third-section text-bar">';
 	html += '<form action="#" method="post" id="chat_form">';
 	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
@@ -54,6 +45,29 @@ $(function(){
 	html += '</form>';
 	html += '</div>';
 	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
+	html += '</div>';
+	html += '</div>';*/
+	
+	html += '<div id="m3chatbox" class="chatbox-tray">';
+	html += '<div class="panel panel-primary">';
+	html += '<div class="panel-heading chatbox-title">';
+	html += '<h1 class="panel-title">チャットサービス</h1>';
+	html += '<span class="pull-right clickable chatbox-close"><i class="glyphicon glyphicon glyphicon-remove"></i></span>';
+	html += '<span class="pull-right clickable chatbox-min"><i class="glyphicon glyphicon-minus"></i></span>';
+	html += '</div>';
+	html += '<div id="chat-section" class="panel-body">';
+	html += '</div>';
+	html += '<div class="panel-footer">';
+	html += '<form action="#" method="post">';
+	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
+	html += '<div class="input-group">';
+	html += '<input type="text" name="message" placeholder="メッセージを入力してください" class="form-control">';
+	html += '<span class="input-group-btn">';
+	html += '<button type="submit" class="btn btn-primary btn-flat">送信</button>';
+	html += '</span>';
+	html += '</div>';
+	html += '</form>';
+	html += '</div>';
 	html += '</div>';
 	html += '</div>';
 	$("body").append(html);
@@ -64,7 +78,7 @@ $(function(){
 		if (initCompleted) return;		// 初期化状態
 
 		// チャット初期化
-		m3_ajax_request('repl_chat', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('{WIDGET_ID}', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
 			if (jsondata.message){
 				if (jsondata.message != ''){
@@ -76,7 +90,8 @@ $(function(){
 					//messageHtml += '<span>2 min</span>
 					messageHtml += '</div>';
 					messageHtml += '</li>';
-					$("#chat_body").append(messageHtml);
+					//$("#chat_body").append(messageHtml);
+					$("#chat-section").append(messageHtml);
 					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
 				}
 			}
@@ -103,7 +118,7 @@ $(function(){
 		$("#chat_body").append(messageHtml);
 		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
 					
-		m3_ajax_request('repl_chat', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('{WIDGET_ID}', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
 			if (jsondata.message){
 				if (jsondata.message != ''){
@@ -125,13 +140,17 @@ $(function(){
 		});
 	}
 		
-	$(".left-first-section").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
+	var $chatbox = $('#m3chatbox');
+	var $chatboxTitle = $('.chatbox-title');
+	var $chatboxTitleClose = $('.chatbox-close');
+	$chatboxTitle.on('click', function() {
+		$chatbox.toggleClass('chatbox-tray');
 	});
-	$("#chat_open_panel").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
+	$chatboxTitleClose.on('click', function(e) {
+		$chatbox.addClass('chatbox-closed');
+	});
+	$chatbox.on('transitionend', function() {
+		if ($chatbox.hasClass('chatbox-closed')) $chatbox.remove();
 	});
 	
 	// メッセージ送信処理
@@ -144,11 +163,13 @@ $(function(){
 	});
 	
 <patTemplate:tmpl name="show_panel_open" visibility="hidden">
-	// パネルオープンでの初期化
-	$('#repl_chat').toggleClass("open-chat");
-	
 	// チャット開始
 	init();
+	
+	// パネルオープンで起動
+	setTimeout(function(){
+		$chatbox.toggleClass('chatbox-tray');
+	}, 500);
 </patTemplate:tmpl>
 });
 //]]>
