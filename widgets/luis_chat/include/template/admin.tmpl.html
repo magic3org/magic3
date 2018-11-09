@@ -73,11 +73,11 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_UNTITLEDTASK_APIKEY}>開発者向け<br />APIキー</span></th>
+	    <th><span {_HELP_UNTITLEDTASK_APIKEY}>Authoring Key</span></th>
 	    <td><input type="text" name="item_apikey" value="{API_KEY}" maxlength="100" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_UNTITLEDTASK_BOTID}>ボットID</span></th>
+	    <th><span {_HELP_UNTITLEDTASK_BOTID}>Application ID</span></th>
 	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_botid" value="{BOT_ID}" maxlength="20" /></div></td>
 	</tr>
     <tr>
@@ -90,8 +90,8 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons">
-<div class="pull-left text-left" style="width:80%;"><i class="glyphicon glyphicon-info-sign"></i> チャットロボットRepl-AI(<a href="https://repl-ai.jp/">https://repl-ai.jp/</a>)を使用するには登録が必要です。設定値(APIキー,ボットID,シナリオID)はRepl-AIの管理画面から取得してください。</div>
+<div class="well m3config_update_buttons" style="height:120px;">
+<div class="pull-left text-left" style="width:80%;"><i class="glyphicon glyphicon-info-sign"></i> LUISチャットボットを動作させるにはMicrosoft Azure LUISサービス(<a href="https://www.luis.ai/">https://www.luis.ai/</a>)の登録が必要です。登録後、LUISの管理画面から設定値(Authoring Key,Application ID)を取得してください。<br />テスト時は「User Settings」のAuthoring Keyを使用します。本稼働ではAzureの管理画面から作成した「Cognitive Services」リソースのRESOURCE MANAGEMENTキーを使用します。</div>
 <patTemplate:tmpl name="del_button" visibility="hidden">
 		<input type="button" class="button" onclick="deleteItem();" value="削除" />
 </patTemplate:tmpl>
