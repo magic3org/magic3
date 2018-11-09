@@ -460,7 +460,6 @@ function m3SetWysiwygEditor(id, height, toolbarVisible, barType, width)
 	
 	// アクセスポイントの設定
 	_m3SetAccessPoint(M3_CONFIG_WIDGET_DEVICE_TYPE);
-		
 
 	var config = {};
 	
@@ -978,11 +977,17 @@ function m3SetupWidgetTool(switchButtonClass)
 		{
 			var isChecked = $checkbox.is(':checked');
 			if (isChecked){
+				// コンテンツ編集ボタン表示制御
+				$('.m3edittool img.m3icon').show();
+				
 				_m3ShowWidgetTool = true;		// ウィジェットツールを表示するかどうか
 				
 				// クッキーに状態を保存
 				$.cookie('M3WIDGETTOOL', 'on', { expires: 30 });
 			} else {
+				// コンテンツ編集ボタン表示制御
+				$('.m3edittool img.m3icon').hide();
+				
 				_m3ShowWidgetTool = false;		// ウィジェットツールを表示するかどうか
 				
 				// クッキーに状態を保存
