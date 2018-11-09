@@ -14,46 +14,28 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	// FontAwesomeのクラスが未定義の場合は動的にCSSを読み込む
-	var faSpan = $('<span class="fa" style="display:none"></span>').appendTo('body');
-	var fontFamily = faSpan .css('font-family');
-	if (fontFamily.indexOf('Font Awesome') == -1){
-		var style = '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">';
-		$('head link:last').after(style);
-	}
-	faSpan.remove();
-
 	var initCompleted = false;		// 初期化状態
 	var html = '';
-	html += '<div id="repl_chat">';
-	html += '<div class="row border-chat">';
-	html += '<div class="col-md-12 col-sm-12 col-xs-12 first-section">';
-	html += '<div class="row">';
-	html += '<div class="col-md-8 col-sm-6 col-xs-6 left-first-section">';
-	html += '<p>Chat</p>';
+	html += '<div id="m3chatbox" class="chatbox-tray">';
+	html += '<div class="panel panel-primary">';
+	html += '<div class="panel-heading chatbox-title">';
+	html += '<h1 class="panel-title">チャットサービス</h1>';
+	html += '<span class="pull-right clickable chatbox-close"><i class="glyphicon glyphicon glyphicon-remove"></i></span>';
+	html += '<span class="pull-right clickable chatbox-min"><i class="glyphicon glyphicon-minus"></i></span>';
 	html += '</div>';
-	html += '<div class="col-md-4 col-sm-6 col-xs-6 right-first-section">';
-	html += '<a href="javascript:void(0);" id="chat_open_panel"><i class="fa fa-minus" aria-hidden="true"></i></a>';
+	html += '<div id="chat-section" class="panel-body">';
 	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-	html += '<div class="row border-chat">';
-	html += '<div class="col-md-12 col-sm-12 col-xs-12 second-section">';
-	html += '<div id="chat-section" class="chat-section">';
-	html += '<ul id="chat_body">';
-	html += '</ul>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-	html += '<div class="row border-chat">';
-	html += '<div class="third-section text-bar">';
+	html += '<div class="panel-footer">';
 	html += '<form action="#" method="post" id="chat_form">';
 	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
-	html += '<input type="text" id="chat_message" placeholder="メッセージをどうぞ">';
+	html += '<div class="input-group">';
+	html += '<input type="text" id="chat_message" name="message" placeholder="メッセージを入力してください" class="form-control">';
+	html += '<span class="input-group-btn">';
+	html += '<button type="submit" class="btn btn-primary btn-flat">送信</button>';
+	html += '</span>';
+	html += '</div>';
 	html += '</form>';
 	html += '</div>';
-	html += '<div class="text-right text-bar-icon"><a href="javascript:void(0);" id="chat_sendmessage"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>';
 	html += '</div>';
 	html += '</div>';
 	$("body").append(html);
@@ -64,22 +46,10 @@ $(function(){
 		if (initCompleted) return;		// 初期化状態
 
 		// チャット初期化
-		m3_ajax_request('repl_chat', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('{WIDGET_ID}', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
-			if (jsondata.message){
-				if (jsondata.message != ''){
-					var messageHtml = '';
-					messageHtml += '<li>';
-					messageHtml += '<div class="left-chat">';
-					messageHtml += '<img src="{BOT_AVATAR}">';
-					messageHtml += '<p>' + jsondata.message + '</p>';
-					//messageHtml += '<span>2 min</span>
-					messageHtml += '</div>';
-					messageHtml += '</li>';
-					$("#chat_body").append(messageHtml);
-					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
-				}
-			}
+			if (jsondata.message && jsondata.message != '') _addSupportMessage(jsondata);
+
 			initCompleted = true;			// 初期化終了
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
@@ -93,45 +63,74 @@ $(function(){
 		if (message == '') return;
 		
 		var messageHtml = '';
-		messageHtml += '<li>';
-		messageHtml += '<div class="right-chat">';
-		messageHtml += '<img src="{GUEST_AVATAR}">';
-		messageHtml += '<p>' + message + '</p>';
-		//messageHtml += '<span>2 min</span>';
+		messageHtml += '<div class="chat-msg right">';
+		messageHtml += '<div class="chat-info clearfix">';
+		messageHtml += '<span class="chat-name pull-right">私</span>';
+		messageHtml += '<span class="chat-timestamp pull-left">' + _dateFormat() + '</span>';
 		messageHtml += '</div>';
-		messageHtml += '</li>';
-		$("#chat_body").append(messageHtml);
+		messageHtml += '<img class="chat-img" src="{GUEST_AVATAR}" alt="Guest User Image">';
+		messageHtml += '<div class="chat-text">';
+		messageHtml += message;
+		messageHtml += '</div>';
+		messageHtml += '</div>';
+		$("#chat-section").append(messageHtml);
 		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
 					
-		m3_ajax_request('repl_chat', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('{WIDGET_ID}', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
-			if (jsondata.message){
-				if (jsondata.message != ''){
-					messageHtml = '';
-					messageHtml += '<li>';
-					messageHtml += '<div class="left-chat">';
-					messageHtml += '<img src="{BOT_AVATAR}">';
-					messageHtml += '<p>' + jsondata.message + '</p>';
-					//messageHtml += '<span>2 min</span>
-					messageHtml += '</div>';
-					messageHtml += '</li>';
-					$("#chat_body").append(messageHtml);
-					$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'slow');
-				}
-			}
+			if (jsondata.message && jsondata.message != '') _addSupportMessage(jsondata);
+			
 			$('#chat_message').val('');
 		}, function(request){		// 異常終了
 			alert('通信に失敗しました。');
 		});
 	}
+
+	// メッセージ追加
+	function _addSupportMessage(jsondata)
+	{
+		var messageHtml = '';
+		var userName = '';
+		var time = '';
+		if (jsondata.name) userName = jsondata.name;
+		if (jsondata.time) time = jsondata.time;
+		messageHtml += '<div class="chat-msg">';
+		messageHtml += '<div class="chat-info clearfix">';
+		messageHtml += '<span class="chat-name pull-left">' + userName + '</span>';
+		messageHtml += '<span class="chat-timestamp pull-right">' + time + '</span>';
+		messageHtml += '</div>';
+		messageHtml += '<img class="chat-img" src="{BOT_AVATAR}" alt="Support User Image">';
+		messageHtml += '<div class="chat-text">';
+		messageHtml += jsondata.message;
+		messageHtml += '</div>';
+		messageHtml += '</div>';
+		$("#chat-section").append(messageHtml);
+		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
+	}
+	// 日付時間フォーマット
+	function _dateFormat(time)
+	{
+		var date;
 		
-	$(".left-first-section").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
+		if (time){
+			date = moment(time);
+		} else {
+			date = moment();
+		}
+		return date.format("MM月DD日 H時mm分ss秒");
+	}
+	
+	var $chatbox = $('#m3chatbox');
+	var $chatboxTitle = $('.chatbox-title');
+	var $chatboxTitleClose = $('.chatbox-close');
+	$chatboxTitle.on('click', function() {
+		$chatbox.toggleClass('chatbox-tray');
 	});
-	$("#chat_open_panel").click(function(){
-		init();
-		$('#repl_chat').toggleClass("open-chat");
+	$chatboxTitleClose.on('click', function(e) {
+		$chatbox.addClass('chatbox-closed');
+	});
+	$chatbox.on('transitionend', function() {
+		if ($chatbox.hasClass('chatbox-closed')) $chatbox.remove();
 	});
 	
 	// メッセージ送信処理
@@ -144,11 +143,13 @@ $(function(){
 	});
 	
 <patTemplate:tmpl name="show_panel_open" visibility="hidden">
-	// パネルオープンでの初期化
-	$('#repl_chat').toggleClass("open-chat");
-	
 	// チャット開始
 	init();
+	
+	// パネルオープンで起動
+	setTimeout(function(){
+		$chatbox.toggleClass('chatbox-tray');
+	}, 500);
 </patTemplate:tmpl>
 });
 //]]>
