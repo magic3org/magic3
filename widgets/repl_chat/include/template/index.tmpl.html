@@ -46,7 +46,7 @@ $(function(){
 		if (initCompleted) return;		// 初期化状態
 
 		// チャット初期化
-		m3_ajax_request('{WIDGET_ID}', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('', 'act=chatinit&token=' + $('#chat_token').val(), function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
 			if (jsondata.message && jsondata.message != '') _addSupportMessage(jsondata);
 
@@ -76,7 +76,7 @@ $(function(){
 		$("#chat-section").append(messageHtml);
 		$('#chat-section').animate({scrollTop: $('#chat-section')[0].scrollHeight}, 'fast');
 					
-		m3_ajax_request('{WIDGET_ID}', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
+		m3_ajax_request('', 'act=chatmsg&token=' + $('#chat_token').val() + '&message=' + message, function(request, retcode, jsondata){		// 正常終了
 			// 返答メッセージを表示
 			if (jsondata.message && jsondata.message != '') _addSupportMessage(jsondata);
 			

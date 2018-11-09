@@ -190,7 +190,6 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 		
 		// 画面埋め込みデータ
 		$this->tmpl->addVar("_widget", "token", $this->generateToken());// 画面識別用トークン
-		$this->tmpl->addVar("_widget", "widget_id", $this->gEnv->getCurrentWidgetId());
 	}
 	/**
 	 * ウィジェットのタイトルを設定

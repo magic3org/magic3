@@ -39,8 +39,8 @@
 
 #m3chatbox .panel-body {
 /*	height:400px;*/
-    min-height: 300px; /* パネルの高さを固定 */
-    max-height: 300px; /* パネルの高さを固定 */
+    min-height: 400px; /* パネルの高さを固定 */
+    max-height: 400px; /* パネルの高さを固定 */
     overflow: auto;
 }
 
