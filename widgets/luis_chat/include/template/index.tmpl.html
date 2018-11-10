@@ -14,15 +14,41 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
+	// FontAwesomeのクラスが未定義の場合は動的にCSSを読み込む
+	var faSpan = $('<span class="fa" style="display:none"></span>').appendTo('body');
+	var fontFamily = faSpan.css('font-family');
+	if (fontFamily.indexOf('Font Awesome') == -1){
+		var style = '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">';
+		$('head link:last').after(style);
+	}
+	faSpan.remove();
+	
+	// Bootstrapのバージョンを取得
+	var panelSpan = $('<span class="card" style="display:none"></span>').appendTo('body');
+	var bootVer = 3;
+	if (panelSpan.css('flex-direction') == 'column') bootVer = 4;
+		
 	var initCompleted = false;		// 初期化状態
 	var html = '';
 	html += '<div id="m3chatbox" class="chatbox-tray">';
-	html += '<div class="panel panel-primary">';
-	html += '<div class="panel-heading chatbox-title">';
-	html += '<h1 class="panel-title">チャットサービス</h1>';
-	html += '<span class="pull-right clickable chatbox-close"><i class="glyphicon glyphicon glyphicon-remove"></i></span>';
-	html += '<span class="pull-right clickable chatbox-min"><i class="glyphicon glyphicon-minus"></i></span>';
-	html += '</div>';
+	if (bootVer == 3){			// Bootstrap3の場合
+		html += '<div class="panel panel-primary">';
+		html += '<div class="panel-heading chatbox-title">';
+		html += '<h5 class="panel-title">チャットサービス</h5>';
+		html += '<span class="pull-right clickable chatbox-close"><i class="fa fa-times"></i></span>';
+		html += '<span class="pull-right clickable chatbox-min"><i class="fa fa-minus"></i></span>';
+		html += '</div>';
+	} else {		// Bootstrap4の場合
+		html += '<div class="card border-primary">';
+		html += '<div class="card-header text-white bg-primary">';
+		html += '<h5 class="chatbox-title"><div style="display:inline-block;width:50%;">チャットサービス</div>';
+		html += '<div class="text-right" style="display:inline-block;width:50%;">';
+		html += '<span class="clickable chatbox-min"><i class="fa fa-minus"></i></span> ';
+		html += '<span class="clickable chatbox-close"><i class="fa fa-times"></i></span>';
+		html += '</div>';
+		html += '</h5>';
+		html += '</div>';
+	}
 	html += '<div id="chat-section" class="panel-body">';
 	html += '</div>';
 	html += '<div class="panel-footer">';
