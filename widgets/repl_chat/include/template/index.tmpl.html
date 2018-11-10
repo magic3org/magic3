@@ -14,18 +14,47 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
+	// FontAwesomeのクラスが未定義の場合は動的にCSSを読み込む
+	var faSpan = $('<span class="fa" style="display:none"></span>').appendTo('body');
+	var fontFamily = faSpan.css('font-family');
+	if (fontFamily.indexOf('Font Awesome') == -1){
+		var style = '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">';
+		$('head link:last').after(style);
+	}
+	faSpan.remove();
+	
+	// Bootstrapのバージョンを取得
+	var panelSpan = $('<span class="card" style="display:none"></span>').appendTo('body');
+	var bootVer = 3;
+	if (panelSpan.css('flex-direction') == 'column') bootVer = 4;
+		
 	var initCompleted = false;		// 初期化状態
 	var html = '';
 	html += '<div id="m3chatbox" class="chatbox-tray">';
-	html += '<div class="panel panel-primary">';
-	html += '<div class="panel-heading chatbox-title">';
-	html += '<h1 class="panel-title">チャットサービス</h1>';
-	html += '<span class="pull-right clickable chatbox-close"><i class="glyphicon glyphicon glyphicon-remove"></i></span>';
-	html += '<span class="pull-right clickable chatbox-min"><i class="glyphicon glyphicon-minus"></i></span>';
-	html += '</div>';
-	html += '<div id="chat-section" class="panel-body">';
-	html += '</div>';
-	html += '<div class="panel-footer">';
+	if (bootVer == 3){			// Bootstrap3の場合
+		html += '<div class="panel panel-primary">';
+		html += '<div class="panel-heading chatbox-title">';
+		html += '<h5 class="panel-title">チャットサービス';
+		html += '<span class="pull-right clickable chatbox-close"><i class="fa fa-times"></i></span>';
+		html += '<span class="pull-right clickable chatbox-min"><i class="fa fa-minus"></i></span>';
+		html += '</h5>';
+		html += '</div>';
+		html += '<div id="chat-section" class="panel-body"></div>';
+		//html += '<div class="panel-footer">';
+		html += '<div>';
+	} else {		// Bootstrap4の場合
+		html += '<div class="card border-primary">';
+		html += '<div class="card-header text-white bg-primary chatbox-title">';
+		html += '<h5>チャットサービス';
+		html += '<span class="float-right clickable chatbox-close"><i class="fa fa-times"></i></span>';
+		html += '<span class="float-right clickable chatbox-min"><i class="fa fa-minus"></i></span>';
+		html += '</h5>';
+		html += '</div>';
+		html += '<div id="chat-section" class="card-body"></div>';
+		//html += '<div class="card-footer">';
+		html += '<div>';
+	}
+
 	html += '<form action="#" method="post" id="chat_form">';
 	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
 	html += '<div class="input-group">';
@@ -65,8 +94,12 @@ $(function(){
 		var messageHtml = '';
 		messageHtml += '<div class="chat-msg right">';
 		messageHtml += '<div class="chat-info clearfix">';
-		messageHtml += '<span class="chat-name pull-right">私</span>';
-		messageHtml += '<span class="chat-timestamp pull-left">' + _dateFormat() + '</span>';
+		if (bootVer == 3){			// Bootstrap3の場合
+			messageHtml += '<span class="chat-name pull-right">私</span>';
+		} else {		// Bootstrap4の場合
+			messageHtml += '<span class="chat-name float-right">私</span>';
+		}
+		messageHtml += '<span class="chat-timestamp">' + _dateFormat() + '</span>';
 		messageHtml += '</div>';
 		messageHtml += '<img class="chat-img" src="{GUEST_AVATAR}" alt="Guest User Image">';
 		messageHtml += '<div class="chat-text">';
@@ -96,8 +129,12 @@ $(function(){
 		if (jsondata.time) time = jsondata.time;
 		messageHtml += '<div class="chat-msg">';
 		messageHtml += '<div class="chat-info clearfix">';
-		messageHtml += '<span class="chat-name pull-left">' + userName + '</span>';
-		messageHtml += '<span class="chat-timestamp pull-right">' + time + '</span>';
+		messageHtml += '<span class="chat-name">' + userName + '</span>';
+		if (bootVer == 3){			// Bootstrap3の場合
+			messageHtml += '<span class="chat-timestamp pull-right">' + time + '</span>';
+		} else {		// Bootstrap4の場合
+			messageHtml += '<span class="chat-timestamp float-right">' + time + '</span>';
+		}
 		messageHtml += '</div>';
 		messageHtml += '<img class="chat-img" src="{BOT_AVATAR}" alt="Support User Image">';
 		messageHtml += '<div class="chat-text">';

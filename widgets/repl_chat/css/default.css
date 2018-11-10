@@ -1,117 +1,112 @@
 #m3chatbox {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 400px;
-    height: 600px; /* chatbox-tray,chatbox-closedと合わせてパネルのトップ位置を制御 */
+	position: fixed;
+	bottom: 100px;
+	right: 30px;
+	width: 400px;
+	height: 600px; /* chatbox-tray,chatbox-closedと合わせてパネルのトップ位置を制御 */
 
-    -webkit-transition: all 600ms cubic-bezier(0.19, 1, 0.22, 1);
-    transition: all 600ms cubic-bezier(0.19, 1, 0.22, 1);
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+	-webkit-transition: all 600ms cubic-bezier(0.19, 1, 0.22, 1);
+	transition: all 600ms cubic-bezier(0.19, 1, 0.22, 1);
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
 }
-
 #m3chatbox.chatbox-tray {
-    bottom: -550px; /* パネルのトップ位置制御用 */
+	bottom: -550px; /* パネルのトップ位置制御用 */
 }
 
 #m3chatbox.chatbox-closed {
-    bottom: -600px; /* パネルのトップ位置制御用 */
+	bottom: -600px; /* パネルのトップ位置制御用 */
 }
 #m3chatbox .clickable{
-    cursor: pointer;   
+	cursor: pointer;
 }
 #m3chatbox .panel-heading {
 	height:50px;
 }
-#m3chatbox .panel-heading h1{
+#m3chatbox .panel-heading .panel-title {
 	margin-top: 5px;
 }
-#m3chatbox .panel-heading span {
-	margin-top: -15px;
-	font-size: 15px;
-}
-#m3chatbox .panel-heading span.chatbox-min {
+#m3chatbox .chatbox-title span.chatbox-min {
 	margin-right:10px;
 }
 
-#m3chatbox .panel-body {
-/*	height:400px;*/
-    min-height: 400px; /* パネルの高さを固定 */
-    max-height: 400px; /* パネルの高さを固定 */
-    overflow: auto;
+/*#m3chatbox .panel-body {*/
+#m3chatbox #chat-section {
+	min-height: 400px; /* パネルの高さを固定 */
+	max-height: 400px; /* パネルの高さを固定 */
+	overflow: auto;
 }
 
 #m3chatbox .chat-msg {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 	display: block;
 }
 
 #m3chatbox .chat-text {
-    border-radius: 5px;
-    position: relative;
-    padding: 5px 10px;
-    background: #d2d6de;
-    border: 1px solid #d2d6de;
-    margin: 5px 0 0 50px;
-    color: #444;
+	border-radius: 5px;
+	position: relative;
+	padding: 5px 10px;
+	background: #d2d6de;
+	border: 1px solid #d2d6de;
+	margin: 5px 0 0 50px;
+	color: #444;
 	font-size: 15px;
 	display: block;
 }
 #m3chatbox .chat-text:after, #m3chatbox .chat-text:before {
-    position: absolute;
-    right: 100%;
-    top: 15px;
-    border: solid transparent;
-    border-right-color: #d2d6de;
-    content: ' ';
-    height: 0;
-    width: 0;
-    pointer-events: none;
+	position: absolute;
+	right: 100%;
+	top: 15px;
+	border: solid transparent;
+	border-right-color: #d2d6de;
+	content: ' ';
+	height: 0;
+	width: 0;
+	pointer-events: none;
 }
 #m3chatbox .chat-text:after {
-    border-width: 5px;
-    margin-top: -5px;
+	border-width: 5px;
+	margin-top: -5px;
 }
 #m3chatbox .chat-text:before {
-    border-width: 6px;
-    margin-top: -6px;
+	border-width: 6px;
+	margin-top: -6px;
 }
 #m3chatbox .chat-msg.right .chat-text {
-    margin-right: 50px;
-    margin-left: 0;
+	margin-right: 50px;
+	margin-left: 0;
 }
 #m3chatbox .chat-msg.right .chat-text {
-    background: #00c0ef;
-    border-color: #00c0ef;
-    color: #fff;
+	background: #00c0ef;
+	border-color: #00c0ef;
+	color: #fff;
 }
 #m3chatbox .chat-msg.right .chat-text:after, #m3chatbox .chat-msg.right .chat-text:before {
-    right: auto;
-    left: 100%;
-    border-right-color: transparent;
+	right: auto;
+	left: 100%;
+	border-right-color: transparent;
 	border-left-color: #00c0ef;
 }
 
 #m3chatbox .chat-img {
-    border-radius: 50%;
-    float: left;
-    width: 40px;
-    height: 40px;
+	border-radius: 50%;
+	float: left;
+	width: 40px;
+	height: 40px;
 }
 #m3chatbox .chat-msg.right .chat-img {
-    float: right;
+	float: right;
 }
 #m3chatbox .chat-info {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 12px;
+	display: block;
+	margin-bottom: 4px;
+	font-size: 12px;
 }
 #m3chatbox .chat-name {
-    font-weight: 600;
+	font-weight: 600;
 }
 #m3chatbox .chat-timestamp {
-    color: #999;
+	color: #999;
 }

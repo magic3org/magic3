@@ -28,16 +28,12 @@
 #m3chatbox .panel-heading .panel-title {
 	margin-top: 5px;
 }
-#m3chatbox .panel-heading span {
-	margin-top: -15px;
-	font-size: 15px;
-}
-#m3chatbox .panel-heading span.chatbox-min {
+#m3chatbox .chatbox-title span.chatbox-min {
 	margin-right:10px;
 }
 
-#m3chatbox .panel-body {
-/*	height:400px;*/
+/*#m3chatbox .panel-body {*/
+#m3chatbox #chat-section {
 	min-height: 400px; /* パネルの高さを固定 */
 	max-height: 400px; /* パネルの高さを固定 */
 	overflow: auto;
