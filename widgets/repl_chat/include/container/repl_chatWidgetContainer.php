@@ -21,6 +21,7 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 	
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'Repl-AIチャットボット';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_BOT_NAME = 'サポート';			// 対話するボットのデフォルト名
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const REPLAI_INIT_URL = 'https://api.repl-ai.jp/v1/registration';			// チャット初期化用API
 	const REPLAI_MESSAGE_URL = 'https://api.repl-ai.jp/v1/dialogue';		// チャットメッセージ送受信用API
@@ -140,6 +141,8 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 			}
 			// フロントへ返す値を設定
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
+			$this->gInstance->getAjaxManager()->addData('name', self::DEFAULT_BOT_NAME);	// 対話するボットの名前
+			$this->gInstance->getAjaxManager()->addData('time', time());	// 応対日時
 			return;
 		} else if ($act == 'chatmsg'){	// フロントからのメッセージを受信
 			// ##### ウィジェット出力処理中断 ######
@@ -176,6 +179,8 @@ class repl_chatWidgetContainer extends BaseWidgetContainer
 			}
 			// フロントへ返す値を設定
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
+			$this->gInstance->getAjaxManager()->addData('name', self::DEFAULT_BOT_NAME);	// 対話するボットの名前
+			$this->gInstance->getAjaxManager()->addData('time', time());	// 応対日時
 			return;
 		}
 		// アバター画像URL設定

@@ -135,9 +135,9 @@ $(function(){
 		messageHtml += '<div class="chat-info clearfix">';
 		messageHtml += '<span class="chat-name">' + userName + '</span>';
 		if (bootVer == 3){			// Bootstrap3の場合
-			messageHtml += '<span class="chat-timestamp pull-right">' + time + '</span>';
+			messageHtml += '<span class="chat-timestamp pull-right">' + _dateFormat(time) + '</span>';
 		} else {		// Bootstrap4の場合
-			messageHtml += '<span class="chat-timestamp float-right">' + time + '</span>';
+			messageHtml += '<span class="chat-timestamp float-right">' + _dateFormat(time) + '</span>';
 		}
 		messageHtml += '</div>';
 		messageHtml += '<img class="chat-img" src="{BOT_AVATAR}" alt="Support User Image">';
@@ -154,7 +154,7 @@ $(function(){
 		var date;
 		
 		if (time){
-			date = moment(time);
+			date = moment.unix(time);
 		} else {
 			date = moment();
 		}
