@@ -59,7 +59,11 @@ $(function(){
 	html += '<input type="hidden" id="chat_token" value="{TOKEN}">';
 	html += '<div class="input-group">';
 	html += '<input type="text" id="chat_message" name="message" placeholder="メッセージを入力してください" class="form-control">';
+	if (bootVer == 3){			// Bootstrap3の場合
 	html += '<span class="input-group-btn">';
+	} else {		// Bootstrap4の場合
+	html += '<span class="input-group-append">';
+	}
 	html += '<button type="submit" class="btn btn-primary btn-flat">送信</button>';
 	html += '</span>';
 	html += '</div>';
