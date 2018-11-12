@@ -18,7 +18,8 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 class luis_chatWidgetContainer extends BaseWidgetContainer
 {
 	private $cssFilePath;				// CSSファイル
-	
+	const CHATBOT_LIB_OBJ_ID = 'chatbotlib';			// チャットボットアドオンオブジェクト
+	const CHATBOT_TYPE = 'luis';						// チャットボットタイプ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'Repl-AIチャットボット';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_BOT_NAME = 'サポート';			// 対話するボットのデフォルト名
@@ -140,9 +141,13 @@ class luis_chatWidgetContainer extends BaseWidgetContainer
 				//$res->serverSendTime		// レスポンス時刻
 			}
 			// フロントへ返す値を設定
+			$nowTime = time();
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			$this->gInstance->getAjaxManager()->addData('name', self::DEFAULT_BOT_NAME);	// 対話するボットの名前
-			$this->gInstance->getAjaxManager()->addData('time', time());	// 応対日時
+			$this->gInstance->getAjaxManager()->addData('time', $nowTime);	// 応対日時
+			
+			// チャット会話をログに残す
+			$this->gInstance->getObject(self::CHATBOT_LIB_OBJ_ID)->writeChatLog(self::CHATBOT_TYPE, '', $retMessage, $retMessage, date("Y/m/d H:i:s", $nowTime));
 			return;
 		} else if ($act == 'chatmsg'){	// フロントからのメッセージを受信
 			// ##### ウィジェット出力処理中断 ######
@@ -178,9 +183,13 @@ class luis_chatWidgetContainer extends BaseWidgetContainer
 				$retMessage = $res->systemText->expression;
 			}
 			// フロントへ返す値を設定
+			$nowTime = time();
 			$this->gInstance->getAjaxManager()->addData('message', $retMessage);
 			$this->gInstance->getAjaxManager()->addData('name', self::DEFAULT_BOT_NAME);	// 対話するボットの名前
-			$this->gInstance->getAjaxManager()->addData('time', time());	// 応対日時
+			$this->gInstance->getAjaxManager()->addData('time', $nowTime);	// 応対日時
+			
+			// チャット会話をログに残す
+			$this->gInstance->getObject(self::CHATBOT_LIB_OBJ_ID)->writeChatLog(self::CHATBOT_TYPE, $message, $retMessage, $retMessage, date("Y/m/d H:i:s", $nowTime));
 			return;
 		}
 

@@ -400,7 +400,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'repl_chat';
 INSERT INTO _widgets
 (wd_id,       wd_name,                 wd_status, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                            wd_add_script_lib, wd_available, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_hide_title, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('repl_chat', 'Repl-AIチャットボット', 1,         'bootstrap',      '0.9.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', 'moment',          false,        true,        true,         true,                true,          true,                true,           '2018-09-08',  now(),         now());
+('repl_chat', 'Repl-AIチャットボット', 0,         'bootstrap',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Repl-AIサービスと連携したチャットボット', 'moment',          false,        true,        true,         true,                true,          true,                true,           '2018-11-12',  now(),         now());
 
 -- ウィジェット情報(スマートフォン用/汎用コンテンツ)
 DELETE FROM _widgets WHERE wd_id = 's/content';
