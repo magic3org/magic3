@@ -3350,16 +3350,21 @@ class PageManager extends Core
 		}
 		
 		// 基準ディレクトリの指定
-/*		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
-			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
-		*/
-			if ($gEnvManager->getUseSslAdmin()){
-				$rootUrl = $gEnvManager->getSslRootUrl();
-			} else {
-				$rootUrl = $gEnvManager->getRootUrl();
+//		if (defined('M3_STATE_IN_INSTALL')){		// インストール時
+			$baseUrl = dirname($gEnvManager->getCurrentScriptUrl());
+			$headStr .= '<base href="' . $baseUrl . '/" />' . M3_NL;
+/*		} else {
+			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
+				$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
+		
+				if ($gEnvManager->getUseSslAdmin()){
+					$rootUrl = $gEnvManager->getSslRootUrl();
+				} else {
+					$rootUrl = $gEnvManager->getRootUrl();
+				}
+				$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
 			}
-			$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
-//		}
+		}*/
 		return $headStr;
 	}
 	/**
