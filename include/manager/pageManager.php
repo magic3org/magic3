@@ -3350,16 +3350,16 @@ class PageManager extends Core
 		}
 		
 		// 基準ディレクトリの指定
-		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
+/*		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
 			$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
-		
+		*/
 			if ($gEnvManager->getUseSslAdmin()){
 				$rootUrl = $gEnvManager->getSslRootUrl();
 			} else {
 				$rootUrl = $gEnvManager->getRootUrl();
 			}
 			$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
-		}
+//		}
 		return $headStr;
 	}
 	/**
