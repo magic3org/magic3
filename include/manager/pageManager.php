@@ -3350,10 +3350,11 @@ class PageManager extends Core
 		}
 		
 		// 基準ディレクトリの指定
-//		if (defined('M3_STATE_IN_INSTALL')){		// インストール時
+		if (defined('M3_STATE_IN_INSTALL')){		// インストール時
+			// インストール時は相対パスを使用するのでベースURLを設定する
 			$baseUrl = dirname($gEnvManager->getCurrentScriptUrl());
 			$headStr .= '<base href="' . $baseUrl . '/" />' . M3_NL;
-/*		} else {
+		} else {
 			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
 				$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
 		
@@ -3364,7 +3365,7 @@ class PageManager extends Core
 				}
 				$headStr .= '<base href="' . $rootUrl . '/" />' . M3_NL;
 			}
-		}*/
+		}
 		return $headStr;
 	}
 	/**
