@@ -19,41 +19,18 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function uploader_sitelogo_onSuccess(files, data)
+function uploader_onSuccess(files, data)
 {
 	// 画像を読み込む
-	$('#sitelogo_preview').attr('src', data.url).load(function(){
+	$('#image_preview').attr('src', data.url).load(function(){
 		m3AdjustParentWindow();// 親ウィンドウリサイズ
 	});
-
-	// 編集フラグを更新
-	document.main.sitelogo_updated.value = '1';
-}
-function uploader_useravatar_onSuccess(files, data)
-{
-	// 画像を読み込む
-	$('#useravatar_preview').attr('src', data.url).load(function(){
-		m3AdjustParentWindow();// 親ウィンドウリサイズ
-	});
-	
-	// 編集フラグを更新
-	document.main.useravatar_updated.value = '1';
-}
-function cancelItem(){
-	if (document.main._backurl.value){
-		location.href = document.main._backurl.value;
-		return false;
-	} else {
-		history.back();
-		return false;
-	}
 }
 $(function() {
 	m3SetConfigTable('config_area');
 	
 	// 画像アップローダー作成
-	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', uploader_sitelogo_onSuccess);
-	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', uploader_useravatar_onSuccess);
+	m3CreateDragDropUploadFile('uploader', '{UPLOAD_URL}', uploader_onSuccess, 'mp4,mpg,mpeg,wmv,avi,mov,webm,mts,ts,m2t,m2ts,ogg,ogv');
 });
 //]]>
 </script>
@@ -62,28 +39,16 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="configimage" />
 <input type="hidden" name="act" />
-<input type="hidden" name="sitelogo_updated" value="{SITELOGO_UPDATED}" />
-<input type="hidden" name="useravatar_updated" value="{USERAVATAR_UPDATED}" />
 <!-- m3:PostParam -->
-<h3 class="m3config_h"><span {_HELP_CONFIGIMAGE_IMAGE}>画像</span></h3>
-<patTemplate:tmpl name="cancel_button" visibility="hidden">
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONFIGIMAGE_BUTTONS}><div class="btn-group">
-    <input type="button" class="button" onclick="cancelItem();" value="戻る" />
-</div></div></div>
-</patTemplate:tmpl>
+<h3 class="m3config_h">画像</h3>
 <table id="config_area">
     <tbody>
     <tr>
-	    <th><span {_HELP_CONFIGIMAGE_SITE_LOGO}>サイトロゴ<br />{SITELOGO_SIZE}</span></th>
-	    <td><img id="sitelogo_preview" class="pull-left" src="{SITELOGO_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)<br />{USERAVATAR_SIZE}</span></th>
-	    <td><img id="useravatar_preview" class="pull-left" src="{USERAVATAR_URL}" /><div class="pull-right"><div id="uploader_useravatar">{UPLOAD_AREA}</div></div></td>
+	    <th>画像<br />{SITELOGO_SIZE}</th>
+	    <td><img id="image_preview" class="pull-left" src="{SITELOGO_URL}" /><div class="pull-right"><div id="uploader">{UPLOAD_AREA}</div></div></td>
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
