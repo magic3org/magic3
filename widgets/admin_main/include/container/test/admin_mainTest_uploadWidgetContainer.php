@@ -19,6 +19,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainTest_uploadWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const TASK_TESTUPLOAD = "test_upload";
+	const VIDEO_FILENAME = 'tmpvideo';			// 出力ビデオファイル名
+	const VIDEO_DIR = '/usr/share/nginx/html/vod/';		// ビデオ出力ディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -59,7 +61,7 @@ class admin_mainTest_uploadWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($act == 'uploadimage'){		// 画像アップロード
 			// 作業ディレクトリを作成
 			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-			
+
 			// Ajaxでのファイルアップロード処理
 			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
 		} else if ($act == 'getimage'){			// 画像取得
@@ -128,7 +130,7 @@ class admin_mainTest_uploadWidgetContainer extends admin_mainBaseWidgetContainer
 	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
 	{
 		if ($isSuccess){		// ファイルアップロード成功のとき
-			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+/*			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
 			if ($ret){			// 画像作成成功の場合
 				// 画像参照用URL
 				$imageUrl = $this->gEnv->getDefaultAdminUrl();
@@ -137,7 +139,12 @@ class admin_mainTest_uploadWidgetContainer extends admin_mainBaseWidgetContainer
 				$resultObj['url'] = $imageUrl;
 			} else {// エラーの場合
 				$resultObj = array('error' => 'Could not create resized images.');
-			}
+			}*/
+			$srcFile = self::VIDEO_DIR . self::VIDEO_FILENAME;
+			copy($filePath, $srcFile);
+			$cmd = '/usr/local/bin/ffmpeg -re -i ' . $srcFile . ' -vcodec libx264 -vprofile baseline -acodec copy -ar 44100 -ac 1 -f segment -segment_format mpegts -segment_time 10 -segment_list '
+						. self::VIDEO_DIR . self::VIDEO_FILENAME .'.m3u8 ' . self::VIDEO_DIR . self::VIDEO_FILENAME .'-%03d.ts';
+			exec($cmd, $out);
 		}
 	}
 	/**
