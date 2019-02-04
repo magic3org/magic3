@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-23 11:49+0900\n"
-"PO-Revision-Date: 2018-01-23 11:49+0900\n"
+"POT-Creation-Date: 2019-02-04 10:49+0900\n"
+"PO-Revision-Date: 2019-02-04 10:50+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -85,108 +85,112 @@ msgstr "バージョン不明"
 msgid "not available(pdo_pgsql not installed)"
 msgstr "利用不可(pdo_pgsqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:107
+#: container/_installCheckenvWidgetContainer.php:106
 msgid "supported version"
-msgstr "対応済バージョン"
+msgstr "サポートバージョン"
 
-#: container/_installCheckenvWidgetContainer.php:108
+#: container/_installCheckenvWidgetContainer.php:107
 msgid "my.cnf required"
 msgstr "my.cnf 要設定"
 
-#: container/_installCheckenvWidgetContainer.php:112
+#: container/_installCheckenvWidgetContainer.php:108
+msgid "remove NO_ZERO_DATE,STRICT_TRANS_TABLES values from sql_mode"
+msgstr "sql_modeからNO_ZERO_DATEとSTRICT_TRANS_TABLESの値を削除します"
+
+#: container/_installCheckenvWidgetContainer.php:111
 msgid "not available(pdo_mysql not installed)"
 msgstr "利用不可(pdo_mysqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:118
+#: container/_installCheckenvWidgetContainer.php:117
 msgid "5.3.0 more"
 msgstr "5.3.0 以上"
 
-#: container/_installCheckenvWidgetContainer.php:130
+#: container/_installCheckenvWidgetContainer.php:129
 msgid "bytes(encouraged)"
 msgstr "バイト以上を奨励"
 
-#: container/_installCheckenvWidgetContainer.php:187
+#: container/_installCheckenvWidgetContainer.php:157
 msgid "PDO not installed"
 msgstr "PDOがインストールされていません"
 
-#: container/_installCheckenvWidgetContainer.php:262
-#: container/_installCheckenvWidgetContainer.php:267
-#: container/_installCheckenvWidgetContainer.php:316
-#: container/_installCheckenvWidgetContainer.php:338
-#: container/_installCheckenvWidgetContainer.php:342
-#: container/_installCheckenvWidgetContainer.php:352
-#: container/_installCheckenvWidgetContainer.php:356
+#: container/_installCheckenvWidgetContainer.php:223
+#: container/_installCheckenvWidgetContainer.php:228
+#: container/_installCheckenvWidgetContainer.php:277
+#: container/_installCheckenvWidgetContainer.php:299
+#: container/_installCheckenvWidgetContainer.php:303
+#: container/_installCheckenvWidgetContainer.php:313
+#: container/_installCheckenvWidgetContainer.php:317
 msgid "writable"
 msgstr "書き込み可能"
 
-#: container/_installCheckenvWidgetContainer.php:269
-#: container/_installCheckenvWidgetContainer.php:318
-#: container/_installCheckenvWidgetContainer.php:344
-#: container/_installCheckenvWidgetContainer.php:358
+#: container/_installCheckenvWidgetContainer.php:230
+#: container/_installCheckenvWidgetContainer.php:279
+#: container/_installCheckenvWidgetContainer.php:305
+#: container/_installCheckenvWidgetContainer.php:319
 msgid "not writable"
 msgstr "書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:272
+#: container/_installCheckenvWidgetContainer.php:233
 msgid "directory not writable"
 msgstr "ディレクトリ書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:323
+#: container/_installCheckenvWidgetContainer.php:284
 msgid "enable"
 msgstr "取得可"
 
-#: container/_installCheckenvWidgetContainer.php:327
+#: container/_installCheckenvWidgetContainer.php:288
 msgid "disable"
 msgstr "取得不可"
 
-#: container/_installCheckenvWidgetContainer.php:364
+#: container/_installCheckenvWidgetContainer.php:359
 msgid "Check Install Environment"
 msgstr "インストール環境チェック"
 
-#: container/_installCheckenvWidgetContainer.php:365
+#: container/_installCheckenvWidgetContainer.php:360
 msgid "Check Item"
 msgstr "チェック項目"
 
-#: container/_installCheckenvWidgetContainer.php:366
+#: container/_installCheckenvWidgetContainer.php:361
 msgid "Required Value"
 msgstr "必要な値"
 
-#: container/_installCheckenvWidgetContainer.php:367
+#: container/_installCheckenvWidgetContainer.php:362
 msgid "Current Value"
 msgstr "現在の値"
 
-#: container/_installCheckenvWidgetContainer.php:368
+#: container/_installCheckenvWidgetContainer.php:363
 msgid "PHP Version"
 msgstr "PHPバージョン"
 
-#: container/_installCheckenvWidgetContainer.php:369
+#: container/_installCheckenvWidgetContainer.php:364
 msgid "Memory Limit(bytes)"
 msgstr "最大メモリ量(バイト)"
 
-#: container/_installCheckenvWidgetContainer.php:370
+#: container/_installCheckenvWidgetContainer.php:365
 msgid "Permit file uploading"
 msgstr "ファイルアップロード許可"
 
-#: container/_installCheckenvWidgetContainer.php:371
+#: container/_installCheckenvWidgetContainer.php:366
 msgid "Session Path"
 msgstr "セッション保存パス"
 
-#: container/_installCheckenvWidgetContainer.php:372
+#: container/_installCheckenvWidgetContainer.php:367
 msgid "Session Path Permission"
 msgstr "セッション保存パスのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:373
+#: container/_installCheckenvWidgetContainer.php:368
 msgid "Session ID"
 msgstr "セッションID"
 
-#: container/_installCheckenvWidgetContainer.php:374
+#: container/_installCheckenvWidgetContainer.php:369
 msgid "Temporary Directory(Install Use)"
 msgstr "一時ディレクトリ(インストール時に使用する一時ディレクトリ)"
 
-#: container/_installCheckenvWidgetContainer.php:375
+#: container/_installCheckenvWidgetContainer.php:370
 msgid "Temporary Directory Permission"
 msgstr "一時ディレクトリのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:376
+#: container/_installCheckenvWidgetContainer.php:371
 msgid ""
 "If directory is not writable, change permission to write or chenge directory "
 "to be writable."
@@ -194,21 +198,25 @@ msgstr ""
 "書き込み不可の場合は書き込み可能なディレクトリあるいはアクセス権に設定する必"
 "要あり"
 
-#: container/_installCheckenvWidgetContainer.php:377
+#: container/_installCheckenvWidgetContainer.php:372
 msgid "Magic3 Config File"
 msgstr "Magic3設定ファイルのパス"
 
-#: container/_installCheckenvWidgetContainer.php:378
+#: container/_installCheckenvWidgetContainer.php:373
 msgid "Magic3 Config File Permission"
 msgstr "Magic3設定ファイルのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:379
+#: container/_installCheckenvWidgetContainer.php:374
 msgid "Resource Directory(for Image files etc)"
 msgstr "リソース(画像等)格納ディレクトリ"
 
-#: container/_installCheckenvWidgetContainer.php:380
+#: container/_installCheckenvWidgetContainer.php:375
 msgid "Resource Directory Permission"
 msgstr "リソース(画像等)格納ディレクトリのアクセス権"
+
+#: container/_installCheckenvWidgetContainer.php:376
+msgid "if used"
+msgstr "使用する場合"
 
 #: container/_installCompleteWidgetContainer.php:86
 msgid "You can login by existing user."
@@ -482,12 +490,12 @@ msgid "Can't use database."
 msgstr "DBが使用できません"
 
 #: container/_installInputparamWidgetContainer.php:133
-#: container/_installInputparamWidgetContainer.php:321
+#: container/_installInputparamWidgetContainer.php:325
 msgid "User"
 msgstr "DBユーザ"
 
 #: container/_installInputparamWidgetContainer.php:136
-#: container/_installInputparamWidgetContainer.php:320
+#: container/_installInputparamWidgetContainer.php:324
 msgid "Database Name"
 msgstr "DB名"
 
@@ -531,55 +539,55 @@ msgstr "テーブル作成正常"
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:228
+#: container/_installInputparamWidgetContainer.php:229
 msgid "Failed in connecting database. Confirm the db connection information."
 msgstr "DB接続に失敗しました。DB接続情報を確認してください。"
 
-#: container/_installInputparamWidgetContainer.php:232
+#: container/_installInputparamWidgetContainer.php:236
 msgid "Failed in connecting."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:309
+#: container/_installInputparamWidgetContainer.php:313
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:310
+#: container/_installInputparamWidgetContainer.php:314
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:311
+#: container/_installInputparamWidgetContainer.php:315
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:312
+#: container/_installInputparamWidgetContainer.php:316
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:313
+#: container/_installInputparamWidgetContainer.php:317
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:315
+#: container/_installInputparamWidgetContainer.php:319
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:316
+#: container/_installInputparamWidgetContainer.php:320
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:317
+#: container/_installInputparamWidgetContainer.php:321
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:318
+#: container/_installInputparamWidgetContainer.php:322
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:319
+#: container/_installInputparamWidgetContainer.php:323
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:322
+#: container/_installInputparamWidgetContainer.php:326
 msgid "Password"
 msgstr "パスワード"
 

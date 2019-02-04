@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -103,10 +103,9 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 				$status .= '(' . $version . ')';
 				$data = '<b><font color="green">' . $status . '</font></b>';
 			} else {
-				//$status = $this->_('version not match') . '(' . $version . ')';
 				$status = $this->_('supported version') . '(' . $version . ')';
 				$detail = $this->_('my.cnf required');
-				$data = '<b><font color="red">' . $status . '<br />' . $detail . ':<br />sql_mode=\'\'</font></b>';
+				$data = '<b><font color="red">' . $status . '<br />' . $detail . ':<br />' . $this->_('remove NO_ZERO_DATE,STRICT_TRANS_TABLES values from sql_mode') . '</font></b>';
 			}
 		} else {
 			$status = $this->_('not available(pdo_mysql not installed)');			// 利用不可(pdo_mysqlがインストールされていません)
@@ -138,36 +137,7 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		}
 		$this->tmpl->addVar("_widget","current_memory_limit", $data);
 		
-		// セーフモード
-		//$data = '<b><font color="green">' . $this->_('off(encouraged)') . '</font></b>';
-		$data = '<b><font color="green">off</font></b>';
-		$this->tmpl->addVar("_widget","config_safe_mode", $data);
-		if (ini_get('safe_mode')){
-			$data = '<b><font color="red">on</font></b>';
-			//$data = '<b><font color="green">on</font></b>';
-		} else {
-			$data = '<b><font color="green">off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_safe_mode", $data);
-	
-		// Magic Quote
-		$data = '<b><font color="green">off</font></b>';
-		$this->tmpl->addVar("_widget","config_magic_quotes_gpc", $data);
-		if (get_magic_quotes_gpc()){
-			$data = '<b><font color="red">on</font></b>';
-		} else {
-			$data = '<b><font color="green">off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_magic_quotes_gpc", $data);
-		
-		$data = '<b><font color="green">off</font></b>';
-		$this->tmpl->addVar("_widget","config_magic_quotes_runtime", $data);
-		if (get_magic_quotes_runtime()){
-			$data = '<b><font color="red">on</font></b>';
-		} else {
-			$data = '<b><font color="green">off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_magic_quotes_runtime", $data);
+		// ファイルアップロード
 		$data = '<b><font color="green">on</font></b>';
 		$this->tmpl->addVar("_widget","config_file_uploads", $data);
 		if (ini_get('file_uploads')){
@@ -225,15 +195,6 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 			$data = '<b><font color="red">off</font></b>';
 		}
 		$this->tmpl->addVar("_widget","current_gd", $data);
-		// dom
-		$data = '<b><font color="green">on</font></b>';
-		$this->tmpl->addVar("_widget","config_dom", $data);
-		if (extension_loaded('dom')){
-			$data = '<b><font color="green">on</font></b>';
-		} else {
-			$data = '<b><font color="red">off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_dom", $data);
 		// xml
 		//$data = '<b><font color="green">offでも動作可</font></b>';
 		$data = '';
@@ -359,6 +320,40 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		}
 		$this->tmpl->addVar("_widget","current_resource_dir_access", $data);
 		
+		// ##### 古いPHPの場合の環境チェック #####
+		if (version_compare(PHP_VERSION, '5.4.0') < 0){				// PHP v5.4未満の場合
+			$this->tmpl->setAttribute("old_php_env_check", "visibility", "visible");
+				
+			// Magic Quote
+			$data = '<b><font color="green">off</font></b>';
+			$this->tmpl->addVar("old_php_env_check","config_magic_quotes_gpc", $data);
+			if (get_magic_quotes_gpc()){
+				$data = '<b><font color="red">on</font></b>';
+			} else {
+				$data = '<b><font color="green">off</font></b>';
+			}
+			$this->tmpl->addVar("old_php_env_check","current_magic_quotes_gpc", $data);
+		
+			$data = '<b><font color="green">off</font></b>';
+			$this->tmpl->addVar("old_php_env_check","config_magic_quotes_runtime", $data);
+			if (get_magic_quotes_runtime()){
+				$data = '<b><font color="red">on</font></b>';
+			} else {
+				$data = '<b><font color="green">off</font></b>';
+			}
+			$this->tmpl->addVar("old_php_env_check","current_magic_quotes_runtime", $data);
+			
+			// セーフモード
+			$data = '<b><font color="green">off</font></b>';
+			$this->tmpl->addVar("old_php_env_check","config_safe_mode", $data);
+			if (ini_get('safe_mode')){
+				$data = '<b><font color="red">on</font></b>';
+			} else {
+				$data = '<b><font color="green">off</font></b>';
+			}
+			$this->tmpl->addVar("old_php_env_check","current_safe_mode", $data);
+		}
+		
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['title_check_env'] = $this->_('Check Install Environment');
@@ -378,6 +373,7 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		$localeText['label_magic3_config_file_permission'] = $this->_('Magic3 Config File Permission');// Magic3設定ファイルのアクセス権
 		$localeText['label_resource_dir'] = $this->_('Resource Directory(for Image files etc)');// リソース(画像等)格納ディレクトリ
 		$localeText['label_resource_dir_permission'] = $this->_('Resource Directory Permission');// リソース(画像等)格納ディレクトリのアクセス権
+		$localeText['label_if_used'] = $this->_('if used');		// 使用する場合
 		$this->setLocaleText($localeText);
 	}
 }

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -52,17 +52,18 @@ function gofore(){
       <td>{CONFIG_PHP_VERSION}</td>
       <td>{CURRENT_PHP_VERSION}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_MEMORY_LIMIT}</td>
       <td>{CONFIG_MEMORY_LIMIT}</td>
       <td>{CURRENT_MEMORY_LIMIT}</td>
     </tr>
+	<patTemplate:tmpl name="old_php_env_check" visibility="hidden">
     <tr>
       <td>Safe Mode</td>
       <td>{CONFIG_SAFE_MODE}</td>
       <td>{CURRENT_SAFE_MODE}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>magic_quotes_gpc</td>
       <td>{CONFIG_MAGIC_QUOTES_GPC}</td>
       <td>{CURRENT_MAGIC_QUOTES_GPC}</td>
@@ -72,7 +73,8 @@ function gofore(){
       <td>{CONFIG_MAGIC_QUOTES_RUNTIME}</td>
       <td>{CURRENT_MAGIC_QUOTES_RUNTIME}</td>
     </tr>
-    <tr class="even">
+	</patTemplate:tmpl>
+    <tr>
       <td>file_uploads({_LC_LABEL_PERMIT_UPLOAD})</td>
       <td>{CONFIG_FILE_UPLOADS}</td>
       <td>{CURRENT_FILE_UPLOADS}</td>
@@ -82,7 +84,7 @@ function gofore(){
       <td>{CONFIG_PDO}</td>
       <td>{CURRENT_PDO}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>mbstring</td>
       <td>{CONFIG_MBSTRING}</td>
       <td>{CURRENT_MBSTRING}</td>
@@ -92,7 +94,7 @@ function gofore(){
       <td>{CONFIG_MBSTRING_TRAN}</td>
       <td>{CURRENT_MBSTRING_TRAN}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>zlib</td>
       <td>{CONFIG_ZLIB}</td>
       <td>{CURRENT_ZLIB}</td>
@@ -102,32 +104,27 @@ function gofore(){
       <td>{CONFIG_GD}</td>
       <td>{CURRENT_GD}</td>
     </tr>
-    <!--<tr class="even">
-      <td>dom</td>
-      <td>{CONFIG_DOM}</td>
-      <td>{CURRENT_DOM}</td>
-    </tr>-->
-    <tr class="even">
+    <tr>
       <td>xml</td>
       <td>{CONFIG_XML}</td>
       <td>{CURRENT_XML}</td>
     </tr>
-    <tr>
-      <td>PostgreSQL</td>
-      <td><br /></td>
-      <td>{CURRENT_POSTGRESQL_STATUS}</td>
-    </tr>
-    <tr class="even">
-      <td>MySQL</td>
+	<tr>
+      <td>MySQL({_LC_LABEL_IF_USED})</td>
       <td><br /></td>
       <td>{CURRENT_MYSQL_STATUS}</td>
+    </tr>
+    <tr>
+      <td>PostgreSQL({_LC_LABEL_IF_USED})</td>
+      <td><br /></td>
+      <td>{CURRENT_POSTGRESQL_STATUS}</td>
     </tr>
     <tr>
       <td>session.use_cookies</td>
       <td>{CONFIG_SESS_USE_COOKIES}</td>
       <td>{CURRENT_SESS_USE_COOKIES}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>session.use_trans_sid</td>
       <td>{CONFIG_SESS_USE_TRANS_SID}</td>
       <td>{CURRENT_SESS_USE_TRANS_SID}</td>
@@ -137,7 +134,7 @@ function gofore(){
       <td>{CONFIG_SESS_AUTO_START}</td>
       <td>{CURRENT_SESS_AUTO_START}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_SESSION_PATH}</td>
       <td><br /></td>
       <td>{CURRENT_SESSION_PATH}</td>
@@ -147,7 +144,7 @@ function gofore(){
       <td>{CONFIG_SESSION_ACCESS}</td>
       <td>{CURRENT_SESSION_ACCESS}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_SESSION_ID}</td>
       <td>{CONFIG_SESSION_ID}</td>
       <td>{CURRENT_SESSION_ID}</td>
@@ -157,7 +154,7 @@ function gofore(){
       <td><br /></td>
       <td>{CURRENT_TMP_DIR}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_TMP_DIR_PERMISSION}<br />{_LC_MSG_TMP_DIR_PERMISSION}</td>
       <td>{CONFIG_TMP_DIR_ACCESS}</td>
       <td>{CURRENT_TMP_DIR_ACCESS}</td>
@@ -167,7 +164,7 @@ function gofore(){
       <td><br /></td>
       <td>{CURRENT_CONFIG_PATH}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_MAGIC3_CONFIG_FILE_PERMISSION}</td>
       <td>{CONFIG_ACCESS}</td>
       <td>{CURRENT_ACCESS}</td>
@@ -177,7 +174,7 @@ function gofore(){
       <td><br /></td>
       <td>{CURRENT_RESOURCE_DIR}</td>
     </tr>
-    <tr class="even">
+    <tr>
       <td>{_LC_LABEL_RESOURCE_DIR_PERMISSION}</td>
       <td>{CONFIG_RESOURCE_DIR_ACCESS}</td>
       <td>{CURRENT_RESOURCE_DIR_ACCESS}</td>
