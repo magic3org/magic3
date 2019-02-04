@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -41,6 +41,8 @@ class SystemManager extends Core
 	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
 	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	// DB定義
+	const CF_SERVER_URL = 'server_url';		// サーバURL
+	const CF_SERVER_DIR = 'server_dir';		// サーバディレクトリ
 	const CF_DEFAULT_LANG = 'default_lang';			// デフォルト言語
 	const CF_PERMIT_INIT_SYSTEM = 'permit_init_system';					// システム初期化可能かどうか
 	const CF_PERMIT_CHANGE_LANG = 'permit_change_lang';					// 言語変更可能かどうか
@@ -157,6 +159,23 @@ class SystemManager extends Core
 				$value = $rows[$i]['sc_value'];
 				$this->_systemConfigArray[$key] = $value;
 			}
+			
+			// システムURL,ディレクトリのチェック。変更されている場合はログを出力してDBを更新。
+			if (!defined('M3_STATE_IN_INSTALL')){		// インストールモード以外の場合
+				$serverUrl = $this->getSystemConfig(self::CF_SERVER_URL);
+				$serverDir = $this->getSystemConfig(self::CF_SERVER_DIR);
+				if ($serverUrl != M3_SYSTEM_ROOT_URL || $serverDir != M3_SYSTEM_ROOT_PATH){
+					
+					$ret = $this->db->updateSystemConfig(self::CF_SERVER_URL, M3_SYSTEM_ROOT_URL);
+					if ($ret) $this->_systemConfigArray[self::CF_SERVER_URL] = M3_SYSTEM_ROOT_URL;
+					$ret = $this->db->updateSystemConfig(self::CF_SERVER_DIR, M3_SYSTEM_ROOT_PATH);
+					if ($ret) $this->_systemConfigArray[self::CF_SERVER_DIR] = M3_SYSTEM_ROOT_PATH;
+					
+					$errMsg = 'DBの自動修正: システム設定マスター(_system_config)のサーバURL(server_url)またはサーバディレクトリ(server_dir)が変更されているので自動修正しました。URL: ' . $serverUrl . '=>' . M3_SYSTEM_ROOT_URL . ', ディレクトリ: ' . $serverDir . '=>' . M3_SYSTEM_ROOT_PATH;
+ 					$this->gLog->error(__METHOD__, $errMsg);
+				}
+			}
+			
 			// メンバー変数に再設定
 			$this->defaultAdminTemplateId	= $this->getSystemConfig(self::CF_ADMIN_DEFAULT_TEMPLATE);				// 管理画面用テンプレートID
 			$this->defaultTemplateId		= $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE);	// PC用テンプレートID
