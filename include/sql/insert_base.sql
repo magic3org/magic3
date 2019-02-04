@@ -28,6 +28,7 @@ INSERT INTO _system_config
 ('server_admin_max_server_no',  '0',                        '最大サーバ管理番号(サイト管理用)'),
 ('realtime_server_port',        '',                         'リアルタイムサーバポート番号'),
 ('server_url',                  '',                         'サーバURL'),
+('server_dir',                  '',                         'サーバディレクトリ'),
 ('system_type',                 '',                         'システム運用タイプ'),  -- serveradmin=サーバ運用
 ('default_lang',                'ja',                       'デフォルト言語'),
 ('multi_language',               '0',                       '多言語対応'),

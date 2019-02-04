@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,6 +24,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	private $updateTableScripts;			// テーブル更新スクリプト
 	const CF_SERVER_ID = 'server_id';
 	const CF_SERVER_URL = 'server_url';		// サーバURL
+	const CF_SERVER_DIR = 'server_dir';		// サーバディレクトリ
 	const CF_SERVER_TOOL_USER = 'server_tool_user';			// 管理ツールアカウント
 	const CF_SERVER_TOOL_PASSWORD = 'server_tool_password';		// 管理ツールパスワード
 	const INSTALL_DT = 'install_dt';		// システムインストール日時
@@ -176,6 +177,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				$serverId = md5($this->gEnv->getRootUrl() . time());		// サーバID
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_ID, $serverId);
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_URL, $this->gEnv->getRootUrl());
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_DIR, $this->gEnv->getSystemRootPath());
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::INSTALL_DT, $now);
 				if ($ret) $ret = $this->_db->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
 				//if ($ret) $ret = $this->_db->updateSystemConfig(self::WORK_DIR, M3_SYSTEM_WORK_DIR_PATH);// 一時ディレクトリ
