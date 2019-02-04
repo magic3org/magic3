@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-04 10:49+0900\n"
-"PO-Revision-Date: 2019-02-04 10:50+0900\n"
+"POT-Creation-Date: 2019-02-04 12:51+0900\n"
+"PO-Revision-Date: 2019-02-04 12:51+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -516,8 +516,9 @@ msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
 #: container/_installInputparamWidgetContainer.php:183
-msgid "Invalid sql_mode. It requires blank value."
-msgstr "sql_modeが不正です。空文字列に設定して下さい。"
+msgid "Invalid sql_mode. Remove NO_ZERO_DATE, STRICT_TRANS_TABLES values."
+msgstr ""
+"不正なsql_modeです。NO_ZERO_DATEとSTRICT_TRANS_TABLESの値を削除してください。"
 
 #: container/_installInputparamWidgetContainer.php:184
 msgid "Invalid sql_mode."
@@ -598,6 +599,9 @@ msgstr "言語"
 #: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"
+
+#~ msgid "Invalid sql_mode. It requires blank value."
+#~ msgstr "sql_modeが不正です。空文字列に設定して下さい。"
 
 #~ msgid "version not match"
 #~ msgstr "未対応バージョン"

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -180,10 +180,12 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 							// 「sql_mode」をチェック
 							$ret = $db->testDBSqlMode($dsn, $dbuser, $password, $mode);
 							if ($ret && !empty($mode)){			// 取得可能な場合のみチェック
-								$this->setMsg(self::MSG_APP_ERR, $this->_('Invalid sql_mode. It requires blank value.') . '<br />sql_mode=' . $mode);		// sql_modeが不正です。空文字列に設定して下さい。
-								$errMsgSub = $this->_('Invalid sql_mode.');// sql_mode不正
+								if (strpos($mode,'NO_ZERO_DATE') !== false || strpos($mode,'STRICT_TRANS_TABLES') !== false){
+									$this->setMsg(self::MSG_APP_ERR, $this->_('Invalid sql_mode. Remove NO_ZERO_DATE, STRICT_TRANS_TABLES values.') . '<br />sql_mode=' . $mode);		// sql_modeが不正です。空文字列に設定して下さい。
+									$errMsgSub = $this->_('Invalid sql_mode.');// sql_mode不正
 								
-								$isErr = true;
+									$isErr = true;
+								}
 							}
 							
 							// 日本語の場合は日本語エンコーディングをチェック
