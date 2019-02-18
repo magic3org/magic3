@@ -430,6 +430,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					}
 				}
 				
+				// 画像のパスをマクロ表現に変換
+				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
+				
 				// 追加パラメータ
 				$otherParams =	array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'cn_related_content'	=> $relatedContent,		// 関連コンテンツ
@@ -538,6 +541,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					}
 				}
 
+				// 画像のパスをマクロ表現に変換
+				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
+				
 				// 追加パラメータ
 				$otherParams =	array(	'cn_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'cn_related_content'	=> $relatedContent,		// 関連コンテンツ
