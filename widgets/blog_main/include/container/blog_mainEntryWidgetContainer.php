@@ -486,6 +486,10 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					}
 				}
 				
+				// 画像のパスをマクロ表現に変換
+				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
+				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
+				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
@@ -615,6 +619,10 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					}
 				}
 
+				// 画像のパスをマクロ表現に変換
+				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
+				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
+				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
