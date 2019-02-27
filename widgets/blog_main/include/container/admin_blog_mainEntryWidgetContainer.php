@@ -489,9 +489,14 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
 				
 				// 記事に含まれるすべての画像のパスを取得
-				$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
-				$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
-				$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				if ((($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang) &&		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					$status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+					$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
+					$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
+					$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				} else {
+					$imagePathArray = array();
+				}
 				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
@@ -627,9 +632,14 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
 				
 				// 記事に含まれるすべての画像のパスを取得
-				$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
-				$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
-				$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				if ((($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang) &&		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					$status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+					$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
+					$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
+					$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				} else {
+					$imagePathArray = array();
+				}
 				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
