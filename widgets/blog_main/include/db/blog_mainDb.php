@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -251,6 +251,7 @@ class blog_mainDb extends BaseDb
 	 * @param string  $html2		HTML(続き)
 	 * @param int     $status		エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 	 * @param array   $category		カテゴリーID
+	 * @param array   $images		記事画像
 	 * @param string  $blogId		ブログID
 	 * @param int     $regUserId	投稿者ユーザID
 	 * @param timestamp $regDt		投稿日時
@@ -262,7 +263,7 @@ class blog_mainDb extends BaseDb
 	 * @param array   $otherParams	その他のフィールド値
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEntryItem($id, $langId, $name, $html, $html2, $status, $category, $blogId, $regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, &$newSerial, $otherParams = null)
+	function addEntryItem($id, $langId, $name, $html, $html2, $status, $category, $images, $blogId, $regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, &$newSerial, $otherParams = null)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -359,7 +360,16 @@ class blog_mainDb extends BaseDb
 				return false;
 			}
 		}
-			
+
+		// 記事画像の更新
+		for ($i = 0; $i < count($images); $i++){
+			$ret = $this->updateEntryImage($newSerial, $i, $images[$i]);
+			if (!$ret){
+				$this->endTransaction();
+				return false;
+			}
+		}
+		
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
@@ -373,6 +383,7 @@ class blog_mainDb extends BaseDb
 	 * @param string  $html2		HTML(続き)
 	 * @param int     $status		エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 	 * @param array   $category		カテゴリーID
+	 * @param array   $images		記事画像
 	 * @param string  $blogId		ブログID
 	 * @param int     $regUserId	投稿者ユーザID(0のときは更新しない)
 	 * @param timestamp $regDt		投稿日時(空のときは更新しない)
@@ -385,7 +396,7 @@ class blog_mainDb extends BaseDb
 	 * @param array   $otherParams	その他のフィールド値
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntryItem($serial, $name, $html, $html2, $status, $category, $blogId, $regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, &$newSerial, 
+	function updateEntryItem($serial, $name, $html, $html2, $status, $category, $images, $blogId, $regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, &$newSerial, 
 								&$oldRecord, $otherParams = null)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -481,6 +492,15 @@ class blog_mainDb extends BaseDb
 		// 記事カテゴリーの更新
 		for ($i = 0; $i < count($category); $i++){
 			$ret = $this->updateEntryCategory($newSerial, $i, $category[$i]);
+			if (!$ret){
+				$this->endTransaction();
+				return false;
+			}
+		}
+
+		// 記事画像の更新
+		for ($i = 0; $i < count($images); $i++){
+			$ret = $this->updateEntryImage($newSerial, $i, $images[$i]);
 			if (!$ret){
 				$this->endTransaction();
 				return false;
@@ -599,6 +619,27 @@ class blog_mainDb extends BaseDb
 		$queryStr .=  'VALUES ';
 		$queryStr .=  '(?, ?, ?)';
 		$ret =$this->execStatement($queryStr, array(intval($serial), $index, $categoryId));
+		return $ret;
+	}
+	/**
+	 * 記事画像の更新
+	 *
+	 * @param int        $serial		記事シリアル番号
+	 * @param int        $index			インデックス番号
+	 * @param string     $path			画像パス
+	 * @return bool		 true = 成功、false = 失敗
+	 */
+	function updateEntryImage($serial, $index, $path)
+	{
+		// 新規レコード追加
+		$queryStr = 'INSERT INTO blog_image ';
+		$queryStr .=  '(';
+		$queryStr .=  'bm_entry_serial, ';
+		$queryStr .=  'bm_index, ';
+		$queryStr .=  'bm_image_src) ';
+		$queryStr .=  'VALUES ';
+		$queryStr .=  '(?, ?, ?)';
+		$ret =$this->execStatement($queryStr, array(intval($serial), $index, $path));
 		return $ret;
 	}
 	/**

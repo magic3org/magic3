@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,6 +33,8 @@ class ImageManager extends Core
 	const PARSE_IMAGE_FORMAT = '/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマット解析用
 //	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
 	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
+	const PARSE_IMAGE_TAG = '/<img[^<]*?src\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';			// HTMLからIMGタグ取得用
+	
 	// DB定義値
 //	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
 	const CF_SITE_LOGO_FORMAT	= 'site_logo_format';		// サイトロゴフォーマット
@@ -98,7 +100,6 @@ class ImageManager extends Core
 		
 		for ($i = 0; $i < count($formatArray); $i++){
 			$format = trim($formatArray[$i]);
-//			$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
 			$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 			if ($ret){
 				$thumbSize = $imageWidthHeight;
@@ -791,14 +792,32 @@ class ImageManager extends Core
 	{
 		global $gEnvManager;
 		
-		$exp = '/<img[^<]*?src\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
-		$ret = preg_match($exp, $html, $matches);
+		$ret = preg_match(self::PARSE_IMAGE_TAG, $html, $matches);
 		if ($ret){
 			$path = $gEnvManager->getMacroPath($matches[1]);		// 画像URL
 			$path = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $gEnvManager->getSystemRootPath(), $path);// マクロ変換
 			if (is_readable($path)) return $path;
 		}
 		return '';
+	}
+	/**
+	 * コンテンツからサイト内のすべての画像のパスを取得
+	 *
+	 * @param string $html		検索コンテンツ(画像パスはマクロ変換済み)
+	 * @return array			画像パス(リソースディレクトリからの相対パス)
+	 */
+	function getSiteImagePath($html)
+	{
+		$imagePaths = array();
+		preg_match_all(self::PARSE_IMAGE_TAG, $html, $matches, PREG_SET_ORDER);
+		for ($i = 0; $i < count($matches); $i++){
+			$path = $matches[$i][1];
+			if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_RESOURCE)){
+				$path = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_RESOURCE, '', $path);
+				if (!in_array($path, $imagePaths)) $imagePaths[] = $path;
+			}
+		}
+		return $imagePaths;
 	}
 	/**
 	 * サイトロゴ画像のURLを取得
@@ -1214,7 +1233,6 @@ class ImageManager extends Core
 	function parseImageFormat($format, &$imageType, &$imageAttr, &$imageSize, &$imageWidthHeight = null)
 	{
 		$format = trim($format);
-		//$ret = preg_match('/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);	// 「MMxNNc.jpg」タイプのフォーマットを解析
 		$ret = preg_match(self::PARSE_IMAGE_FORMAT, $format, $matches);		// 「MMxNNc.jpg」タイプのフォーマットを解析
 		if ($ret){
 			$imageSize = $matches[1];
@@ -1262,8 +1280,6 @@ class ImageManager extends Core
 		for ($i = 0; $i < count($lines); $i++){
 			$line = trim($lines[$i]);
 			if (!empty($line)){
-				//$ret = preg_match(, $line, $matches);
-				//'/(.*?)\s*=\s*(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
 				$ret = preg_match(self::PARSE_IMAGE_FORMAT_TYPE, $line, $matches);
 				if ($ret){
 					$imageType = $matches[1];

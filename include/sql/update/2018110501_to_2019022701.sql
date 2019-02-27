@@ -20,8 +20,8 @@
 
 -- *** システム標準テーブル ***
 -- ブログ記事画像マスター
-DROP TABLE IF EXISTS blog_entry_image;
-CREATE TABLE blog_entry_image (
+DROP TABLE IF EXISTS blog_image;
+CREATE TABLE blog_image (
     bm_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     bm_entry_serial      INT            DEFAULT 0                     NOT NULL,      -- ブログ記事シリアル番号
     bm_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号

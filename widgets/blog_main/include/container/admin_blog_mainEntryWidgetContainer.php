@@ -488,6 +488,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
 				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
 				
+				// 記事に含まれるすべての画像のパスを取得
+				$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
+				$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
+				$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
@@ -499,10 +504,10 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 
 				// 記事データを追加
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
-					$ret = self::$_mainDb->addEntryItem($nextEntryId * (-1)/*次のコンテンツIDのチェック*/, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
+					$ret = self::$_mainDb->addEntryItem($nextEntryId * (-1)/*次のコンテンツIDのチェック*/, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $imagePathArray, $this->blogId, 
 													$this->_userId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
 				} else {
-					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
+					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $imagePathArray, $this->blogId, 
 													$this->_userId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
 				}
 				if ($ret){
@@ -621,6 +626,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html = $this->gInstance->getTextConvManager()->convToContentMacro($html);
 				$html2 = $this->gInstance->getTextConvManager()->convToContentMacro($html2);
 				
+				// 記事に含まれるすべての画像のパスを取得
+				$imagePathArray = $this->gInstance->getImageManager()->getSiteImagePath($html);
+				$imagePathArray2 = $this->gInstance->getImageManager()->getSiteImagePath($html2);
+				$imagePathArray = array_unique(array_merge($imagePathArray, $imagePathArray2));
+				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
 										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
@@ -639,7 +649,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				}
 			
 				// 記事データを更新
-				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
+				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $imagePathArray, $this->blogId, 
 													''/*投稿者そのまま*/, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $oldRecord, $otherParams);
 /*				if ($ret){
 					// コンテンツに画像がなくなった場合は、サムネールを削除
