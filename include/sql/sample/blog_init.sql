@@ -146,6 +146,9 @@ TRUNCATE TABLE blog_entry;
 TRUNCATE TABLE blog_category;
 TRUNCATE TABLE blog_entry_with_category;
 
+-- ブログ記事画像マスター
+TRUNCATE TABLE blog_image;
+
 -- 新着情報
 TRUNCATE TABLE news;
 

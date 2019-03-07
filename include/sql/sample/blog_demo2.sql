@@ -183,6 +183,18 @@ INSERT INTO blog_entry_with_category (bw_entry_serial, bw_index, bw_category_id)
 (7,  1, 3),
 (8,  0, 1);
 
+-- ブログ記事画像マスター
+TRUNCATE TABLE blog_image;
+INSERT INTO blog_image (bm_entry_serial, bm_index, bm_image_src) VALUES 
+(1,  0, '/image/sample/animal/top01.jpg'),
+(2,  0, '/image/sample/animal/top02.jpg'),
+(3,  0, '/image/sample/animal/top03.jpg'),
+(4,  0, '/image/sample/animal/top04.jpg'),
+(5,  0, '/image/sample/animal/top05.jpg'),
+(6,  0, '/image/sample/animal/top06.jpg'),
+(7,  0, '/image/sample/animal/top07.jpg'),
+(8,  0, '/image/sample/animal/top08.jpg');
+
 -- 新着情報
 TRUNCATE TABLE news;
 INSERT INTO news 
