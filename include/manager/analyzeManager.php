@@ -548,6 +548,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'yandex'					=> 'ya.png',
 			'u-tokyo'					=> 'tokyo_univ.png',	// 東京大学 喜連川研究室
 			'facebookexternalhit'		=> 'facebook.png',
+			'samsungbrowser'			=> 'samsung.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
