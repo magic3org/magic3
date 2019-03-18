@@ -550,6 +550,7 @@ $agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// 
 			'yandex'					=> 'ya.png',
 			'u-tokyo'					=> 'tokyo_univ.png',	// 東京大学 喜連川研究室
 			'facebookexternalhit'		=> 'facebook.png',
+			'samsungbrowser'			=> 'samsung.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
