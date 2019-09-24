@@ -951,7 +951,9 @@ div.elfinder {
     display: block;
     visibility: visible;
     font-size: 18px;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+/*    font-family: Verdana, Arial, Helvetica, sans-serif;*/
+    /* modified for Magic3 */
+    font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 }
 
 /* prevent auto zoom on iOS */
@@ -1769,9 +1771,13 @@ div.elfinder {
     -o-text-overflow: ellipsis;
     margin: 3px 1px 0 1px;
     padding: 1px;
-    -moz-border-radius: 8px;
+    /* modified by magic3 */
+/*    -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
-    border-radius: 8px;
+    border-radius: 8px;*/
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
     /* for webkit CSS3 */
     word-break: break-word;
     overflow-wrap: break-word;
@@ -3326,13 +3332,16 @@ button.elfinder-info-button {
     font-family: "Ricty Diminished", "Myrica M", Consolas, "Courier New", Courier, Monaco, monospace;
     font-size: 1.1em;
 }
-
+/***** Font size changed for Magic3 *****/
+/* コンテキストメニュー */
 .elfinder-contextmenu .elfinder-contextmenu-item span {
-    font-size: .72em;
+/*    font-size: .72em;*/
+    font-size: .84em;
 }
-
+/* ファイル名 */
 .elfinder-cwd-view-icons .elfinder-cwd-filename {
-    font-size: .7em;
+/*    font-size: .7em;*/
+    font-size: .84em;
 }
 
 .elfinder-cwd-view-list td {
@@ -3366,9 +3375,10 @@ button.elfinder-info-button {
 .dialogelfinder .dialogelfinder-drag {
     font-size: .9em;
 }
-
+/* 左ツリー */
 .elfinder .elfinder-navbar {
-    font-size: .72em;
+/*    font-size: .72em;*/
+    font-size: .84em;
 }
 
 .elfinder-place-drag .elfinder-navbar-dir {
@@ -4492,7 +4502,7 @@ embed.elfinder-quicklook-preview-audio {
 /*
  * CSS for Toastr
  * Copyright 2012-2015
- * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * Authors: John Papa, Hans Fj辰llemark, and Tim Ferrell.
  * All Rights Reserved.
  * Use, reproduction, distribution, and modification of this code is subject to the terms and
  * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
@@ -5197,4 +5207,34 @@ embed.elfinder-quicklook-preview-audio {
     rgba(0, 0, 0, 0.1) 95%,
     rgba(0, 0, 0, 0) 100%);
 }
+/******************************************************************/
+/*                  Magic3用のカスタマイズ                        */
+/******************************************************************/
+.ui-dialog { z-index: 99999 !important ;}
+.ui-widget {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+/*	font-size: 1em;*/
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+/*	font-size: 1em;*/
+}
+.ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
 
+/* thumbnail hover background image off */
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	background-image: none;
+}
+/******************************************************************/
