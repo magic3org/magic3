@@ -5234,4 +5234,9 @@ embed.elfinder-quicklook-preview-audio {
 .ui-widget-header .ui-state-focus {
     background-image: none;
 }
+/* ダイアログ表示の場合のファイル表示エリアサイズを調整。不必要にスクロールバーを表示させない。 */
+.ui-dialog .elfinder-cwd {
+    min-width: calc(100% - 24px);
+    min-height: calc(100% - 24px);
+}
 /******************************************************************/
