@@ -5239,4 +5239,13 @@ embed.elfinder-quicklook-preview-audio {
     min-width: calc(100% - 24px);
     min-height: calc(100% - 24px);
 }
+/** 画像プレビューダイアログの設定 **/
+/* タイトルバー右上ボタンの位置 */
+.ui-dialog-titlebar .ui-icon {
+    display: inline-block;
+}
+/* タイトル位置修正 */
+.ui-dialog-titlebar .elfinder-dialog-title {
+    margin-top:3px;
+}
 /******************************************************************/
