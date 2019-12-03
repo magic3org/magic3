@@ -19,7 +19,7 @@ class RequestManager extends Core
 {
 	private $db;						// DBオブジェクト
 	private $tmpCookie;		// クッキー送信前のクッキー格納データ
-	private $magicQuote;	// バックスラッシュでの文字エスケープ処理
+//	private $magicQuote;	// バックスラッシュでの文字エスケープ処理
 	private $sessionNoUpdate;		// セッションの更新を停止するかどうか(参照は可能)
 	private $sessionOpenEventCallbacks;		// セッション開始イベントコールバック関数
 	private $sessionCloseEventCallbacks;		// セッション終了イベントコールバック関数
@@ -61,7 +61,7 @@ class RequestManager extends Core
 		$this->sessionCloseEventCallbacks = array();	// セッション終了イベントコールバック関数
 		
 		// magic quoteが有効の場合は回避手段を取る
-		if (get_magic_quotes_gpc() == 1) $this->magicQuote = true;
+		//if (get_magic_quotes_gpc() == 1) $this->magicQuote = true;
 	}
 	/**
 	 * POST値が設定されているか判断
@@ -118,9 +118,8 @@ class RequestManager extends Core
 	 */
 	public function valueOf($name, $default = '')
 	{
-		//return isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default);
-		//return self::gpc_stripslashes(isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default));
-		return $this->gpc_stripslashes(isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default));
+		//return $this->gpc_stripslashes(isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default));
+		return isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default);
 	}
 	/**
 	 * POST,GETから値を取得(トリミング(前後の空白削除)あり)
@@ -187,8 +186,9 @@ class RequestManager extends Core
 			$trimValue = array_map('trim', $value);
 			$destValue = array();
 			foreach (array_keys($trimValue) as $key){
-				$stripValue = $this->gpc_stripslashes($trimValue[$key]);
-				$stripValue = strip_tags($stripValue);
+				//$stripValue = $this->gpc_stripslashes($trimValue[$key]);
+				//$stripValue = strip_tags($stripValue);
+				$stripValue = strip_tags($trimValue[$key]);
 
 				// 危険性の高いその他変換。問題がある場合は文字列をクリアする
 				$saveValue = $stripValue;
@@ -228,8 +228,9 @@ class RequestManager extends Core
 			$trimValue = trim($value);
 			
 			// HTMLタグが含まれていた場合は、ログを残す
-			$destValue = $this->gpc_stripslashes($trimValue);
-			$destValue = strip_tags($destValue);
+			//$destValue = $this->gpc_stripslashes($trimValue);
+			//$destValue = strip_tags($destValue);
+			$destValue = strip_tags($trimValue);
 			
 			// 危険性の高いその他変換。問題がある場合は文字列をクリアする
 			$saveValue = $destValue;
@@ -516,21 +517,6 @@ class RequestManager extends Core
 		return $wikiPage;
 	}
 	/**
-	 * 文字のエスケープ処理
-	 *
-	 * '(シングルクオート)、" (ダブルクオート)、\(バックスラッシュ) 、NULLにバックスラッシュでエスケープ処理を行う
-	 *
-	 * @param string $str		変換元文字列
-	 * @return string			変換後文字列
-	 */
-/*	function gpc_addslashes($str){
-		if ($this->magicQuote){
-			return $str;
-		} else {
-			return addslashes($str);
-		}
-	}*/
-	/**
 	 * 文字のエスケープ処理をはずす
 	 *
 	 * '(シングルクオート)、" (ダブルクオート)、\(バックスラッシュ) 、NULLのバックスラッシュでのエスケープ処理を削除
@@ -538,13 +524,13 @@ class RequestManager extends Core
 	 * @param string $str		変換元文字列
 	 * @return string			変換後文字列
 	 */
-	function gpc_stripslashes($str){
-		if ($this->magicQuote){  
-			return stripslashes($str);
-		} else {  
+	/*function gpc_stripslashes($str){
+		//if ($this->magicQuote){  
+		//	return stripslashes($str);
+		//} else {  
 			return $str;  
-		}  
-	}
+		//}  
+	}*/
 	//******************************************************
 	// patTemplateのテンプレートに値を埋め込む。値を省略した場合は、POST,GETデータから取得したデータを再設定する。
 	// $name: patTemplateのテンプレート名

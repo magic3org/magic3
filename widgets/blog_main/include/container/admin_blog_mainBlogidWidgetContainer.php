@@ -121,7 +121,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->mainDb->getAllBlogInfo(array($this, 'itemLoop'));
 		
 		if (count($this->serialArray) > 0){
-			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+			$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		} else {
 			// 項目がないときは、一覧を表示しない
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');

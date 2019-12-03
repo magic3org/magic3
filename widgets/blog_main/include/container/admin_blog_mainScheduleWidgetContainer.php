@@ -189,7 +189,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// 記事タイトル
 		$this->tmpl->addVar("_widget", "page", $this->convertToDispString($pageNo));
 		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

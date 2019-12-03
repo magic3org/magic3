@@ -99,7 +99,7 @@ class blog_mainHistoryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "page", $pageNo);
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
