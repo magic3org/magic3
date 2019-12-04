@@ -4147,7 +4147,7 @@ class SystemDb extends BaseDb
 		
 		// データを削除
 		$queryStr = 'DELETE FROM _cache ';
-		$queryStr .=  'WHERE ca_serial in (' . implode($serialArray, ',') . ') ';
+		$queryStr .=  'WHERE ca_serial in (' . implode(',', $serialArray) . ') ';
 		$this->execStatement($queryStr, array());
 		
 		// トランザクション確定

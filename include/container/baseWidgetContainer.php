@@ -4034,7 +4034,7 @@ class BaseWidgetContainer extends Core
 		// 定義一覧作成
 		$this->assignTemplate_createItemList();
 		
-		if (!empty($this->_localSerialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->_localSerialArray, ','));// 表示項目のシリアル番号を設定
+		if (!empty($this->_localSerialArray)) $this->tmpl->addVar("_widget", "serial_list", implode(',', $this->_localSerialArray));// 表示項目のシリアル番号を設定
 		
 		// ##### フック処理(ACT後処理) #####
 		if (!empty($this->_assignTemplate_hookArray)){

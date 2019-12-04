@@ -1056,7 +1056,7 @@ function the_meta() {
 			if ( is_protected_meta( $keyt, 'post' ) )
 				continue;
 			$values = array_map('trim', get_post_custom_values($key));
-			$value = implode($values,', ');
+			$value = implode(', ', $values);
 
 			/**
 			 * Filters the HTML output of the li element in the post custom fields list.
