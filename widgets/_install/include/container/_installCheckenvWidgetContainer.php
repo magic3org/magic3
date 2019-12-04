@@ -320,40 +320,6 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		}
 		$this->tmpl->addVar("_widget","current_resource_dir_access", $data);
 		
-		// ##### 古いPHPの場合の環境チェック #####
-		if (version_compare(PHP_VERSION, '5.4.0') < 0){				// PHP v5.4未満の場合
-			$this->tmpl->setAttribute("old_php_env_check", "visibility", "visible");
-				
-			// Magic Quote
-			$data = '<b><font color="green">off</font></b>';
-			$this->tmpl->addVar("old_php_env_check","config_magic_quotes_gpc", $data);
-			if (get_magic_quotes_gpc()){
-				$data = '<b><font color="red">on</font></b>';
-			} else {
-				$data = '<b><font color="green">off</font></b>';
-			}
-			$this->tmpl->addVar("old_php_env_check","current_magic_quotes_gpc", $data);
-		
-			$data = '<b><font color="green">off</font></b>';
-			$this->tmpl->addVar("old_php_env_check","config_magic_quotes_runtime", $data);
-			if (get_magic_quotes_runtime()){
-				$data = '<b><font color="red">on</font></b>';
-			} else {
-				$data = '<b><font color="green">off</font></b>';
-			}
-			$this->tmpl->addVar("old_php_env_check","current_magic_quotes_runtime", $data);
-			
-			// セーフモード
-			$data = '<b><font color="green">off</font></b>';
-			$this->tmpl->addVar("old_php_env_check","config_safe_mode", $data);
-			if (ini_get('safe_mode')){
-				$data = '<b><font color="red">on</font></b>';
-			} else {
-				$data = '<b><font color="green">off</font></b>';
-			}
-			$this->tmpl->addVar("old_php_env_check","current_safe_mode", $data);
-		}
-		
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['title_check_env'] = $this->_('Check Install Environment');

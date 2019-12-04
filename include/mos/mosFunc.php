@@ -122,9 +122,9 @@ function mosGetParam( &$arr, $name, $def=null, $mask=0 ) {
 			}
 			
 			// account for magic quotes setting
-			if (!get_magic_quotes_gpc()) {
+			//if (!get_magic_quotes_gpc()) {
 				$return = addslashes( $return );
-			}
+			//}
 		}
 		
 		return $return;

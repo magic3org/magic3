@@ -94,15 +94,15 @@ class WikiParam
 	 */
 	public static function _input_filter($param)
 	{
-		static $magic_quotes_gpc = NULL;
-		if ($magic_quotes_gpc === NULL)
-		    $magic_quotes_gpc = get_magic_quotes_gpc();
+//		static $magic_quotes_gpc = NULL;
+//		if ($magic_quotes_gpc === NULL)
+//		    $magic_quotes_gpc = get_magic_quotes_gpc();
 
 		if (is_array($param)) {
 			return array_map('input_filter', $param);
 		} else {
 			$result = str_replace("\0", '', $param);
-			if ($magic_quotes_gpc) $result = stripslashes($result);
+//			if ($magic_quotes_gpc) $result = stripslashes($result);
 			return $result;
 		}
 	}
