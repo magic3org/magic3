@@ -558,7 +558,7 @@ class default_contentDb extends BaseDb
 		$queryStr .=   'SET cn_deleted = true, ';	// 削除
 		$queryStr .=     'cn_update_user_id = ?, ';
 		$queryStr .=     'cn_update_dt = ? ';
-		$queryStr .=   'WHERE cn_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE cn_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定

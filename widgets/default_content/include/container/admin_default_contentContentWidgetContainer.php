@@ -268,7 +268,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "search_keyword", $searchKeyword);	// 検索キーワード
 				
 		// その他
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用
 		$this->tmpl->addVar("_widget", "device_type", default_contentCommonDef::$_deviceType);		// デバイスタイプ
 	}
@@ -1611,7 +1611,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		if (!$this->isExistsContent) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧項目がないときは、一覧を表示しない
 
 		$tmpl->addVar("_tmpl", "content_id", $param);// コンテンツID
-		$tmpl->addVar("_tmpl", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$tmpl->addVar("_tmpl", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * デフォルトのサブテンプレートIDを取得
