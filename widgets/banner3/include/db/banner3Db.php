@@ -161,7 +161,7 @@ class banner3Db extends BaseDb
 		$queryStr .=   'SET bi_deleted = true, ';	// 削除
 		$queryStr .=     'bi_update_user_id = ?, ';
 		$queryStr .=     'bi_update_dt = ? ';
-		$queryStr .=   'WHERE bi_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE bi_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
@@ -217,7 +217,7 @@ class banner3Db extends BaseDb
 		
 		$queryStr  = 'SELECT * FROM bn_item ';
 		$queryStr .=   'WHERE bi_deleted = false ';
-		$queryStr .=     'AND bi_id in (' . implode($idArray, ',') . ') ';
+		$queryStr .=     'AND bi_id in (' . implode(',', $idArray) . ') ';
 		$queryStr .=   'ORDER BY bi_id';
 		$this->selectLoop($queryStr, array(), $callback, null);
 	}
@@ -430,7 +430,7 @@ class banner3Db extends BaseDb
 		
 		// レコード削除
 		$queryStr = "DELETE FROM bn_def ";
-		$queryStr .=   'WHERE bd_id in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE bd_id in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array());
 		
 		// トランザクション確定

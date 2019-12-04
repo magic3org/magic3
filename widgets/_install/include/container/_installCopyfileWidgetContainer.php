@@ -147,7 +147,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 					if (count($this->templateIdArray) > 0){
 						// 運用ログを残す
 						$msg = $this->_('Template in old system copied. Template: %s');		// 旧システムのテンプレートをコピーしました。テンプレート: %s
-						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode($this->templateIdArray, ',')), 1000);
+						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode(',', $this->templateIdArray)), 1000);
 					}
 				}
 				// ウィジェットディレクトリのコピー
@@ -166,7 +166,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 					if (count($this->widgetIdArray) > 0){
 						// 運用ログを残す
 						$msg = $this->_('Widget in old system copied. Widget: %s');		// 旧システムのウィジェットをコピーしました。ウィジェット: %s
-						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode($this->widgetIdArray, ',')), 1000);
+						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode(',', $this->widgetIdArray)), 1000);
 					}
 				}
 				if ($isCompleted){

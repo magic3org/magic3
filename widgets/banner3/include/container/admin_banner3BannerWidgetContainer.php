@@ -352,7 +352,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		self::$_mainDb->getBannerList(array($this, 'itemListLoop'));
 		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'admin_url', $this->gEnv->getDefaultAdminUrl());// 管理者URL
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
@@ -594,14 +594,14 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		}
 		
 		// 表示項目
-		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
+		$itemsStr = $this->convertToDispString(implode(',', $this->selectedItems));
 		$tmpl->addVar("_tmpl", "items_label", $itemsStr);	// 画像選択項目
 		$tmpl->addVar("_tmpl", "msg", $this->convertToDispString($msg));	// 画像選択項目
 		
 		// 非表示項目
 		$tmpl->addVar("_tmpl", "page_link", $pageLink);
 		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
-		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示画像のID
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode(',', $this->idArray)));		// 表示画像のID
 		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
 	}
 	/**

@@ -153,8 +153,8 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
 		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "id_list", implode(',', $this->idArray));// 表示項目のIDを設定
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "task", $this->task);	// 処理タスク
