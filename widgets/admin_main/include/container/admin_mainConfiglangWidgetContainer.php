@@ -95,7 +95,7 @@ class admin_mainConfiglangWidgetContainer extends admin_mainConfigsystemBaseWidg
 					if (!$ret) break;
 				}
 				$langStr = '';
-				if (!empty($selItems)) $langStr = implode($selItems, ',');
+				if (!empty($selItems)) $langStr = implode(',', $selItems);
 				
 				// アクセス可能言語を更新
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_ACCEPT_LANGUAGE, $langStr);
@@ -113,7 +113,7 @@ class admin_mainConfiglangWidgetContainer extends admin_mainConfigsystemBaseWidg
 		// 言語一覧を取得
 		$this->db->getAllLang(array($this, 'langListLoop'));
 
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 言語データをテンプレートに設定する

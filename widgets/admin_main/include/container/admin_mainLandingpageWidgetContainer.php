@@ -124,7 +124,7 @@ class admin_mainLandingpageWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$this->db->getLandingPageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'itemListLoop'));
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

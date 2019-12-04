@@ -96,7 +96,7 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		// ページサブID一覧を作成
 		$this->db->getPageSubIdList($this->pageId, $this->langId, array($this, 'pageSubIdLoop'), true/*メニューから選択可項目のみ*/);
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

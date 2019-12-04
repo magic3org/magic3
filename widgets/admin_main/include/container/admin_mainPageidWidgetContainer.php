@@ -118,7 +118,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		//$this->tmpl->setAttribute('pagesubid_list', 'visibility', 'visible');		// ページサブID一覧表示
 		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1);
 			
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

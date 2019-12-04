@@ -194,7 +194,7 @@ class admin_mainEdittableWidgetContainer extends admin_mainTableBaseWidgetContai
 		
 		// 値を戻す
 		$this->tmpl->addVar("_widget", "table_id", $this->tableId);
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

@@ -283,7 +283,7 @@ class admin_mainCreatetableWidgetContainer extends admin_mainTableBaseWidgetCont
 		$this->tmpl->addVar("table_def", "field_id", $fieldName);// フィールド名
 		$this->tmpl->addVar("table_def", "field_name", $dispName);	// 項目表示名
 		$this->tmpl->addVar("table_def", "field_default", $defaultValue);// デフォルト値
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

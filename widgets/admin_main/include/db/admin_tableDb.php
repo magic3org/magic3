@@ -361,7 +361,7 @@ class admin_tableDb extends BaseDb
 		
 		// データ削除
 		$queryStr = 'DELETE FROM ' . $tableName . ' ';
-		$queryStr .=  'WHERE _serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=  'WHERE _serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array());
 		
 		// トランザクション確定

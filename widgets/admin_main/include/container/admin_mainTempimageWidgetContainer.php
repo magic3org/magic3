@@ -260,7 +260,7 @@ class admin_mainTempimageWidgetContainer extends admin_mainTempBaseWidgetContain
 		$this->tmpl->addVar('_widget', 'template', $this->convertToDispString($this->templateId));		// テンプレート名
 		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->imageBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
-		$this->tmpl->addVar("_widget", "file_list", implode($this->fileArray, ','));// ファイル名のリストを設定
+		$this->tmpl->addVar("_widget", "file_list", implode(',', $this->fileArray));// ファイル名のリストを設定
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL

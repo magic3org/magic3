@@ -252,7 +252,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		
 		// 運用ログを取得
 		$this->db->getOpeLogList($viewLevel, $this->logStatus, $maxListCount, $pageNo, array($this, 'logListLoop'));
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
 	/**

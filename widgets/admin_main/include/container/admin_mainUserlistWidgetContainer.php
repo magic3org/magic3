@@ -287,7 +287,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		
 		// ユーザリストを取得
 		$this->_mainDb->getAllUserList($viewCount, $pageNo, array($this, 'userListLoop'));
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

@@ -112,7 +112,7 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		}
 		
 		$this->db->getMenuIdList(-1/*すべてのデバイス*/, array($this, 'itemLoop'), true/*すべてのメニューIDを取得*/);
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

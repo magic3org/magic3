@@ -186,7 +186,7 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		$this->itemIndex = 0;					// 項目番号
 		$this->createContentTypeList();
 		$this->createFeatureTypeList();
-		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
+		$this->tmpl->addVar("_widget", "id_list", implode(',', $this->idArray));// 表示項目のIDを設定
 	}
 	/**
 	 * コンテンツタイプ一覧作成

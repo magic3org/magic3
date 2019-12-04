@@ -105,7 +105,7 @@ class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBase
 
 		$this->_mainDb->getPageIdList(array($this, 'pageLoop'), 1/*ページサブIDを指定*/);
 					
-		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
+		$this->tmpl->addVar("_widget", "id_list", implode(',', $this->idArray));// 表示項目のIDを設定
 	}
 	/**
 	 * ページサブID、取得したデータをテンプレートに設定する

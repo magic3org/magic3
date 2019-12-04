@@ -506,7 +506,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
 		$this->tmpl->addVar("_widget", "reload_image", $imageTag);
 		// その他
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		
 		// テキストをローカライズ
 		$localeText = array();

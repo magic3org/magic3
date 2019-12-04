@@ -142,7 +142,7 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 			$this->tmpl->parseTemplate('file_list', 'a');
 		}
 		if (count($files) <= 0) $this->tmpl->setAttribute('file_list', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
-		$this->tmpl->addVar("_widget", "filelist", implode($files, ','));// ファイル名を設定
+		$this->tmpl->addVar("_widget", "filelist", implode(',', $files));// ファイル名を設定
 	}
 	/**
 	 * ファイル一覧を作成

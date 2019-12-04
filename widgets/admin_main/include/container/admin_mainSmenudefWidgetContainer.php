@@ -265,7 +265,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->db->delMenuItems(implode($delItems, ','));
+				$ret = $this->db->delMenuItems(implode(',', $delItems));
 				if ($ret){		// データ削除成功のとき
 					//$this->setGuidanceMsg('データを削除しました');
 					$this->setGuidanceMsg($this->_('Menu item deleted.'));		// データを削除しました
@@ -309,7 +309,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				break;
 		}
 	
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'content_widget_id', $contentEditWidget);// コンテンツ表示ウィジェット
 		$this->tmpl->addVar('_widget', 'admin_url', $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理者URL
 		$this->tmpl->addVar("_widget", "fixed_mode", $fixedMode);		// メニュー定義IDが固定かどうか

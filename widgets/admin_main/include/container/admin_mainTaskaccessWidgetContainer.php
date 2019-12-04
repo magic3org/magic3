@@ -123,7 +123,7 @@ class admin_mainTaskaccessWidgetContainer extends admin_mainUserBaseWidgetContai
 		$this->allTasks = array();
 		$this->createTaskList();
 		
-		$this->tmpl->addVar("_widget", "task_list", implode($this->allTasks, ','));		// 表示中のタスク
+		$this->tmpl->addVar("_widget", "task_list", implode(',', $this->allTasks));		// 表示中のタスク
 	}
 	/**
 	 * タスク一覧作成

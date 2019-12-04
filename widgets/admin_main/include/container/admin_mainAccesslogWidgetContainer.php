@@ -233,7 +233,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		
 		// アクセスログを取得
 		$this->db->getAccessLogList($maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'), $this->startDt, $endNextDt, $ip);
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
 	/**

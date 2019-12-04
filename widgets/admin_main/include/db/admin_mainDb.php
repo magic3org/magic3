@@ -1641,7 +1641,7 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'SET lu_deleted = true, ';	// 削除
 		$queryStr .=     'lu_update_user_id = ?, ';
 		$queryStr .=     'lu_update_dt = ? ';
-		$queryStr .=   'WHERE lu_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE lu_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
@@ -3217,7 +3217,7 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'SET ug_deleted = true, ';	// 削除
 		$queryStr .=     'ug_update_user_id = ?, ';
 		$queryStr .=     'ug_update_dt = ? ';
-		$queryStr .=   'WHERE ug_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE ug_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
@@ -3644,7 +3644,7 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'SET lp_deleted = true, ';	// 削除
 		$queryStr .=     'lp_update_user_id = ?, ';
 		$queryStr .=     'lp_update_dt = ? ';
-		$queryStr .=   'WHERE lp_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE lp_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定

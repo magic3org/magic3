@@ -209,7 +209,7 @@ class admin_serverDb extends BaseDb
 		$queryStr .=   'SET ts_deleted = true, ';	// 削除
 		$queryStr .=     'ts_update_user_id = ?, ';
 		$queryStr .=     'ts_update_dt = ? ';
-		$queryStr .=   'WHERE ts_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE ts_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

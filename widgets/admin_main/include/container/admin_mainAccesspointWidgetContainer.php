@@ -118,7 +118,7 @@ class admin_mainAccesspointWidgetContainer extends admin_mainMainteBaseWidgetCon
 //		$this->tmpl->setAttribute('pageid_list', 'visibility', 'visible');		// ページID一覧表示
 		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0);
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

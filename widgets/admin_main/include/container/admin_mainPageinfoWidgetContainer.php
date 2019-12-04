@@ -142,7 +142,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// ページサブID一覧を作成
 		$this->db->getPageSubIdList($this->pageId, ''/*言語なし*/, array($this, 'pageSubIdLoop'));
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

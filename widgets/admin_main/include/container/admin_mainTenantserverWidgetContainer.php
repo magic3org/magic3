@@ -139,7 +139,7 @@ class admin_mainTenantserverWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// サーバリストを取得
 		$this->serverDb->getAllServerList($maxListCount, $pageNo, array($this, 'serverListLoop'));
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		
 		// サーバ項目がないときは、一覧を表示しない
 		if (!$this->isExistsServer) $this->tmpl->setAttribute('serverlist', 'visibility', 'hidden');
