@@ -309,7 +309,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		
-		if (!empty($this->serialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		if (!empty($this->serialArray)) $this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);

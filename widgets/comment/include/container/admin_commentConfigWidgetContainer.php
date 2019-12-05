@@ -419,7 +419,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($this->_contentType));		// コンテンツタイプ
 		
 		// その他
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "content_type_name", $this->convertToDispString($contentTypeName));		// コンテンツタイプ名
 		$this->tmpl->addVar('_widget', 'config_admin_url', $this->getUrl($this->_baseUrl));
 	}

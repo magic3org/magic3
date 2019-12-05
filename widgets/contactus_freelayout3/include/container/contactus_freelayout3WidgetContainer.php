@@ -746,7 +746,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						$param[] = 'disabled';		// 使用不可
 					}
 					//if (!$enabled) $param[] = 'disabled';		// 使用不可
-					if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+					if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 					
 					if ($enabled){		// 入力状態のとき
 						$inputTag = '<input type="text" id="' . $fieldId . '" name="' . $fieldName . '"' . $paramStr . ' />' . M3_NL;
@@ -785,7 +785,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						$param[] = 'disabled';		// 使用不可
 					}
 					//if (!$enabled) $param[] = 'disabled';		// 使用不可
-					if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+					if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 					
 					if ($enabled){		// 入力状態のとき
 						$inputTag = '<textarea id="' . $fieldId . '" name="' . $fieldName . '"' . $paramStr . '>' . $this->convertToDispString($inputValue) . '</textarea>' . M3_NL;
@@ -802,7 +802,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					if (!empty($default)) $param[] = 'title="' . $this->convertToDispString($default) . '"';
 					
 					if (!$enabled) $param[] = 'disabled';		// 使用不可
-					if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+					if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 					
 					if ($enabled){		// 入力状態のとき
 						$inputTag = '<select id="' . $fieldId . '" name="' . $fieldName . '"'. $paramStr . '>' . M3_NL;
@@ -824,7 +824,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						if ($key != ''){
 							//if (!empty($inputValue) && strcmp($inputValue, $value) == 0) $param[] = 'selected';
 							if ($inputValue != '' && strcmp($inputValue, $value) == 0) $param[] = 'selected';
-							if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+							if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 							$inputTag .= '<option value="' . $this->convertToDispString($value) . '"' . $paramStr . '>' . $this->convertToDispString($key) . '</option>' . M3_NL;
 						}
 					}
@@ -860,7 +860,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 								}
 							}
 							if (!$enabled) $param[] = 'disabled';		// 使用不可
-							if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+							if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 							
 							if ($enabled){		// 入力状態のとき
 								if (empty($this->useArtisteer)){				
@@ -977,7 +977,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					if (empty($alphabet) || empty($number)){
 						if (!empty($alphabet)) $inputType[] = 'alphabet';			// 入力制限半角英字
 						if (!empty($number)) $inputType[] = 'decimal';				// 入力制限半角数値
-						if (!empty($inputType)) $inputTypeStr = implode($inputType, ',');
+						if (!empty($inputType)) $inputTypeStr = implode(',', $inputType);
 						if (!empty($inputTypeStr)) $script .= M3_TB . '$("#' . $fieldId . '").format({type:"' . $inputTypeStr . '", autofix:true});' . M3_NL;
 					}
 					$this->addScript .= $script;
@@ -993,7 +993,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					$inputType = array();
 					$inputTypeStr = '';
 					$inputType[] = 'decimal';				// 入力制限半角数値
-					$inputTypeStr = implode($inputType, ',');
+					$inputTypeStr = implode(',', $inputType);
 					$script .= M3_TB . '$("#' . $fieldId . '").format({type:"' . $inputTypeStr . '", autofix:true});' . M3_NL;
 					$this->addScript .= $script;
 					

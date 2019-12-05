@@ -413,7 +413,7 @@ class bbs_2ch_mainDb extends BaseDb
 		$queryStr .=   'SET te_deleted = true, ';	// 削除
 		$queryStr .=     'te_update_user_id = ?, ';
 		$queryStr .=     'te_update_dt = ? ';
-		$queryStr .=   'WHERE te_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE te_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// スレッド削除

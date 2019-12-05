@@ -117,7 +117,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		self::$_mainDb->getCalendarDefList(array($this, 'calendarDefLoop'));
 		if (empty($this->serialArray)) $this->tmpl->setAttribute('calendar_def_list', 'visibility', 'hidden');// 一覧非表示
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

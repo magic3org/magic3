@@ -141,7 +141,7 @@ class calendarDb extends BaseDb
 		$queryStr .=   'SET dt_deleted = true, ';	// 削除
 		$queryStr .=     'dt_update_user_id = ?, ';
 		$queryStr .=     'dt_update_dt = ? ';
-		$queryStr .=   'WHERE dt_id in (' . implode($idArray, ',') . ') ';
+		$queryStr .=   'WHERE dt_id in (' . implode(',', $idArray) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
@@ -351,7 +351,7 @@ class calendarDb extends BaseDb
 		$queryStr .=   'SET cd_deleted = true, ';	// 削除
 		$queryStr .=     'cd_update_user_id = ?, ';
 		$queryStr .=     'cd_update_dt = ? ';
-		$queryStr .=   'WHERE cd_id in (' . implode($idArray, ',') . ') ';
+		$queryStr .=   'WHERE cd_id in (' . implode(',', $idArray) . ') ';
 		$queryStr .=     'AND cd_deleted = false ';	// 削除されていない
 		$this->execStatement($queryStr, array($userId, $now));
 		
@@ -480,7 +480,7 @@ class calendarDb extends BaseDb
 			
 				// 時間枠データ削除
 				$queryStr  = 'DELETE FROM time_period ';
-				$queryStr .=   'WHERE to_date_type_id in (' . implode($dateTypeArray, ',') . ') ';
+				$queryStr .=   'WHERE to_date_type_id in (' . implode(',', $dateTypeArray) . ') ';
 				$this->execStatement($queryStr, array());
 			}
 		
