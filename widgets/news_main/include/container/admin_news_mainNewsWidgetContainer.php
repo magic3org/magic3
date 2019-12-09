@@ -204,7 +204,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$this->tmpl->addVar("_widget", "search_keyword", $keyword);	// 検索キーワード
 
 		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "list_count", $maxListCount);	// 一覧表示項目数
 	}

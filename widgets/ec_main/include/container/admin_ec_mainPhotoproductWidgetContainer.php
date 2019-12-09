@@ -190,7 +190,7 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		// その他
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));
 		$this->tmpl->addVar('_widget', 'widget_id', $this->gEnv->getCurrentWidgetId());
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

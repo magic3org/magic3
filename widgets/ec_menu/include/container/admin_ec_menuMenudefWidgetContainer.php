@@ -318,7 +318,7 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 		
 		$this->tmpl->addVar("_widget", "tree", $treeMenu);		// メニューツリー
 		$this->tmpl->addVar("_widget", "parent_id", $this->parentId);		// メニュー項目親ID
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'admin_url', $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理者URL
 		$this->tmpl->addVar("_widget", "fixed_mode", $fixedMode);		// メニュー定義IDが固定かどうか
 		$this->tmpl->addVar("_widget", "path", $path);		// メニュー階層パス

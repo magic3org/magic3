@@ -165,7 +165,7 @@ class ec_mainDb extends BaseDb
 		$queryStr .=   'SET lu_deleted = true, ';	// 削除
 		$queryStr .=     'lu_update_user_id = ?, ';
 		$queryStr .=     'lu_update_dt = ? ';
-		$queryStr .=   'WHERE lu_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE lu_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

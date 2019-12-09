@@ -258,7 +258,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->tmpl->addVar("_widget", "search_keyword", $keyword);	// 検索キーワード
 
 		// その他の項目
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 画像選択ダイアログ用
 	}
@@ -724,14 +724,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		
 		// 表示項目
-		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
+		$itemsStr = $this->convertToDispString(implode(',', $this->selectedItems));
 		$tmpl->addVar("_tmpl", "items_label", $itemsStr);	// 画像選択項目
 		$tmpl->addVar("_tmpl", "msg", $this->convertToDispString($msg));	// 画像選択項目
 		
 		// 非表示項目
 		$tmpl->addVar("_tmpl", "page_link", $pageLink);
 		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
-		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示イベントのID
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode(',', $this->idArray)));		// 表示イベントのID
 //		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
 	}
 	/**

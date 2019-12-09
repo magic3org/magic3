@@ -71,7 +71,7 @@ class ec_mainDelivMethodDb extends BaseDb
 		$queryStr .=   'SET do_deleted = true, ';	// 削除
 		$queryStr .=     'do_update_user_id = ?, ';
 		$queryStr .=     'do_update_dt = ? ';
-		$queryStr .=   'WHERE do_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE do_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

@@ -389,7 +389,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->tmpl->addVar("_widget", "search_keyword", $this->convertToDispString($search_keyword));
 			
 		// その他
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

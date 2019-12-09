@@ -348,7 +348,7 @@ class ec_mainProductCategoryDb extends BaseDb
 		$queryStr .=   'SET pc_deleted = true, ';	// 削除
 		$queryStr .=     'pc_update_user_id = ?, ';
 		$queryStr .=     'pc_update_dt = ? ';
-		$queryStr .=   'WHERE pc_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE pc_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

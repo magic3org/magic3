@@ -109,7 +109,7 @@ class admin_ec_mainProductcategoryWidgetContainer extends admin_ec_mainBaseWidge
 		$this->db->getAllCategory($this->langId, array($this, 'categoryListLoop'));// デフォルト言語で取得
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 設定がないときは、一覧を表示しない
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

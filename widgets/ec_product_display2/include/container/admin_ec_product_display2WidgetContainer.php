@@ -399,7 +399,7 @@ class admin_ec_product_display2WidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);

@@ -399,7 +399,7 @@ class evententry_mainDb extends BaseDb
 		$queryStr .=   'SET et_deleted = true, ';	// 削除
 		$queryStr .=     'et_update_user_id = ?, ';
 		$queryStr .=     'et_update_dt = ? ';
-		$queryStr .=   'WHERE et_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE et_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定

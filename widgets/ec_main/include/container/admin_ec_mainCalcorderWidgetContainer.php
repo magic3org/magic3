@@ -110,7 +110,7 @@ class admin_ec_mainCalcorderWidgetContainer extends admin_ec_mainBaseWidgetConta
 		$this->db->getAllMethod(self::METHOD_TYPE, $this->langId, 0/*デフォルトのセットID*/, array($this, 'methodLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('calcorder_list', 'visibility', 'hidden');// 設定がないときは、一覧を表示しない
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

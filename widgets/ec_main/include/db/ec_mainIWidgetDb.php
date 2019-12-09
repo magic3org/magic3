@@ -69,7 +69,7 @@ class ec_mainIWidgetDb extends BaseDb
 		$queryStr .=   'SET id_deleted = true, ';	// 削除
 		$queryStr .=     'id_update_user_id = ?, ';
 		$queryStr .=     'id_update_dt = ? ';
-		$queryStr .=   'WHERE id_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE id_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

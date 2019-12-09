@@ -200,7 +200,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		}
 		
 		// 埋め込みパラメータの設定
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示中の項目のシリアル番号設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示中の項目のシリアル番号設定
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));
 		$this->tmpl->addVar('_widget', 'widget_id', $this->gEnv->getCurrentWidgetId());
 	}

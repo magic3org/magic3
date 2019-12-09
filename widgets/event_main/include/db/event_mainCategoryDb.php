@@ -351,7 +351,7 @@ class event_mainCategoryDb extends BaseDb
 		$queryStr .=   'SET ec_deleted = true, ';	// 削除
 		$queryStr .=     'ec_update_user_id = ?, ';
 		$queryStr .=     'ec_update_dt = ? ';
-		$queryStr .=   'WHERE ec_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE ec_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

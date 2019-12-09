@@ -69,7 +69,7 @@ class ec_mainPayMethodDb extends BaseDb
 		$queryStr .=   'SET po_deleted = true, ';	// 削除
 		$queryStr .=     'po_update_user_id = ?, ';
 		$queryStr .=     'po_update_dt = ? ';
-		$queryStr .=   'WHERE po_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE po_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
