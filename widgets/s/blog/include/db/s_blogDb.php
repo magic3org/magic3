@@ -1217,7 +1217,7 @@ class s_blogDb extends BaseDb
 		$queryStr .=   'SET bl_deleted = true, ';	// 削除
 		$queryStr .=     'bl_update_user_id = ?, ';
 		$queryStr .=     'bl_update_dt = ? ';
-		$queryStr .=   'WHERE bl_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE bl_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定

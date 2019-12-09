@@ -121,7 +121,7 @@ class admin_portal_updateinfoNewsWidgetContainer extends admin_portal_updateinfo
 		$this->db->getUpdateInfoList(self::CONTENT_TYPE, intval($this->itemCount), array($this, 'itemsLoop'));
 
 		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		
 		// 一覧項目がないときは、一覧を表示しない
 		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');

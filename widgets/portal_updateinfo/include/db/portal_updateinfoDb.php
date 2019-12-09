@@ -67,7 +67,7 @@ class portal_updateinfoDb extends BaseDb
 		$queryStr .=   'SET nw_deleted = true, ';	// 削除
 		$queryStr .=     'nw_update_user_id = ?, ';
 		$queryStr .=     'nw_update_dt = ? ';
-		$queryStr .=   'WHERE nw_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE nw_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定

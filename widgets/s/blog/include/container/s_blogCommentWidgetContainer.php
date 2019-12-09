@@ -212,8 +212,8 @@ class s_blogCommentWidgetContainer extends s_blogBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "search_keyword", $search_keyword);	// 検索キーワード
 
 		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		$this->tmpl->addVar("_widget", "entry_list", implode($this->entryArray, ','));// 表示項目の記事IDを設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "entry_list", implode(',', $this->entryArray));// 表示項目の記事IDを設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "list_count", $maxListCount);	// 一覧表示項目数
 	}

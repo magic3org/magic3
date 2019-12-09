@@ -199,7 +199,7 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 		// ユーザリストを取得
 		self::$_mainDb->getAllUserList(photo_mainCommonDef::USER_OPTION, $viewCount, $pageNo, array($this, 'userListLoop'));
 		if (count($this->serialArray) > 0){
-			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+			$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		} else {
 			// 項目がないときは、一覧を表示しない
 			$this->tmpl->setAttribute('authorlist', 'visibility', 'hidden');

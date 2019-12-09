@@ -238,7 +238,7 @@ class reserve_mainDb extends BaseDb
 		$queryStr .=   'SET rr_deleted = true, ';	// 削除
 		$queryStr .=     'rr_update_user_id = ?, ';
 		$queryStr .=     'rr_update_dt = ? ';
-		$queryStr .=   'WHERE rr_id in (' . implode($id, ',') . ') ';
+		$queryStr .=   'WHERE rr_id in (' . implode(',', $id) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

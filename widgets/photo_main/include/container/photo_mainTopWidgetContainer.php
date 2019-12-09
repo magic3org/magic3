@@ -1218,7 +1218,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 						} else {
 							if (in_array($value, $inputValues)) $param[] = 'selected';
 						}
-						if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+						if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 						$inputTag .= '<option value="' . $this->convertToDispString($value) . '"' . $paramStr . '>' . $this->convertToDispString($name) . '</option>' . M3_NL;
 					}
 					$inputTag .= '</select>' . M3_NL;
@@ -1242,7 +1242,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 							if (in_array($value, $inputValues)) $param[] = 'checked';
 						}
 						$param[] = 'class="' . self::SEARCH_FIELD_CLASS_HEAD . $itemType . '"';		// クラス名追加
-						if (count($param) > 0) $paramStr = ' ' . implode($param, ' ');
+						if (count($param) > 0) $paramStr = ' ' . implode(' ', $param);
 						$inputTag .= '<label><input type="checkbox" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"'
 										. $paramStr . ' />' . $this->convertToDispString($name) . '</label>';
 					}

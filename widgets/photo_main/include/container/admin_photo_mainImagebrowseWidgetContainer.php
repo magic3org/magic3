@@ -355,7 +355,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		
 		$this->tmpl->addVar('_widget', 'path', substr($path, strlen($this->photoBasePath)));// 現在のディレクトリ
 		$this->tmpl->addVar('_widget', 'path_link', $pathLink);// 現在のディレクトリ
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL

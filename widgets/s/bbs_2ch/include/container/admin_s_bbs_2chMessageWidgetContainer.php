@@ -152,7 +152,7 @@ class admin_s_bbs_2chMessageWidgetContainer extends admin_s_bbs_2chBaseWidgetCon
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * コンテンツ詳細画面作成

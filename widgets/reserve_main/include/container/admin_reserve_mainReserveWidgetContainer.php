@@ -257,7 +257,7 @@ class admin_reserve_mainReserveWidgetContainer extends admin_reserve_mainBaseWid
 		$this->db->getAllUserListForMenu(self::ACCESS_TYPE, array($this, 'userListLoop'));
 		
 		$this->tmpl->addVar("_widget", "reserve_date", $reserveDate);			// 予約月日登録用
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "script_url", $gEnvManager->getScriptsUrl());
 	}
 	/**

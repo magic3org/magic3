@@ -406,7 +406,7 @@ class s_photo_categoryDb extends BaseDb
 		$queryStr .=   'SET hc_deleted = true, ';	// 削除
 		$queryStr .=     'hc_update_user_id = ?, ';
 		$queryStr .=     'hc_update_dt = ? ';
-		$queryStr .=   'WHERE hc_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE hc_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

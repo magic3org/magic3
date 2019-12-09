@@ -351,7 +351,7 @@ class s_blog_categoryDb extends BaseDb
 		$queryStr .=   'SET bc_deleted = true, ';	// 削除
 		$queryStr .=     'bc_update_user_id = ?, ';
 		$queryStr .=     'bc_update_dt = ? ';
-		$queryStr .=   'WHERE bc_serial in (' . implode($serial, ',') . ') ';
+		$queryStr .=   'WHERE bc_serial in (' . implode(',', $serial) . ') ';
 		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定

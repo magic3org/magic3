@@ -143,7 +143,7 @@ class admin_reserve_mainUserWidgetContainer extends admin_reserve_mainBaseWidget
 		
 		// ユーザリストを取得
 		$this->db->getAllUserList(self::ACCESS_TYPE, $maxListCount, $pageNo, array($this, 'userListLoop'));
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
 	 * 詳細画面作成

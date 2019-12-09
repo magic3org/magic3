@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2019 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -691,18 +691,5 @@ function csv_explode($separator, $string)
 		$retval[] = trim($str);				// 前後空白削除 for Magic3
 	}
 	return $retval;
-}
-
-// Implode an array with CSV data format (escape double quotes)
-function csv_implode($glue, $pieces)
-{
-	$_glue = ($glue != '') ? '\\' . $glue{0} : '';
-	$arr = array();
-	foreach ($pieces as $str) {
-		if (ereg('[' . $_glue . '"' . "\n\r" . ']', $str))
-			$str = '"' . str_replace('"', '""', $str) . '"';
-		$arr[] = $str;
-	}
-	return join($glue, $arr);
 }
 ?>
