@@ -24,8 +24,10 @@ class AnalyzeManager extends Core
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
 //	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.54/';		// クローラー解析スクリプトディレクトリ
-	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.79/';		// クローラー解析スクリプトディレクトリ
-	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
+//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.79/';		// クローラー解析スクリプトディレクトリ
+	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.90/';		// クローラー解析スクリプトディレクトリ
+//	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
+	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.14.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
 	
 	/**
@@ -544,16 +546,17 @@ $agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// 
 			'yacybot'					=> 'yacy.png',	// YaCy
 			'mj12bot'					=> 'mj12bot.png',
 			'ahrefsbot'					=> 'ahrefs.png',
-			'semrushbot'				=> 'semrush.png',
+			'semrush'					=> 'semrush.png',
 			'scrapy'					=> 'scrapy.png',
 			'deusu'						=> 'deusu.png',
 			'yandex'					=> 'ya.png',
-			'u-tokyo'					=> 'tokyo_univ.png',	// 東京大学 喜連川研究室
+			'steeler'					=> 'tokyo_univ.png',	// 東京大学 喜連川研究室
 			'facebookexternalhit'		=> 'facebook.png',
 			'samsungbrowser'			=> 'samsung.png',
 			'ccbot'						=> 'ccbot.png',
 			'linespider'				=> 'linespider.png',
 			'nimbostratus-bot'			=> 'nimbostratus.png',
+			'seokicks'					=> 'seokicks.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
