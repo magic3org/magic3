@@ -553,6 +553,7 @@ $agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// 
 			'samsungbrowser'			=> 'samsung.png',
 			'ccbot'						=> 'ccbot.png',
 			'linespider'				=> 'linespider.png',
+			'nimbostratus-bot'			=> 'nimbostratus.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
