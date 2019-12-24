@@ -1428,14 +1428,16 @@ div.elfinder {
     position: absolute;
     top: 0;
     cursor: default;
-    /* modified for Magic3 */
-    /*padding: 0;*/
-    padding: 10px;
+    padding: 0;
     margin: 0;
     -ms-touch-action: auto;
     touch-action: auto;
     min-width: 100%;
-    min-height: 100%; /* added for Magic3 */
+}
+/* added for Magic3 */
+.elfinder-cwd.elfinder-cwd-view-icons {
+    padding: 10px;
+    min-height: 100%;
 }
 
 .elfinder-ltr .elfinder-cwd {
