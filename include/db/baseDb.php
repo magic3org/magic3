@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,9 +31,7 @@ class BaseDb extends Core
 	private $_statement;				// クエリー文字列
 	private $_params;					// クエリーに埋め込むパラメータ
 	private $_errorMsg = array();		// エラーメッセージ
-	//private $_dbType;					// DBのタイプ
 	private static $_dbType;					// DBのタイプ
-	//private $_dbVersion;				// DBバージョン
 	private static $_dbVersion;				// DBバージョン
 	
 	// エラーステータス
@@ -102,10 +100,8 @@ class BaseDb extends Core
 	function _getConnection()
 	{
 		// ローカルDBが接続されている場合はローカルDBを使用
-		//if ($this->_localCon != null) return $this->_localCon;
 		if (!is_null($this->_localCon)) return $this->_localCon;
 		
-		//if (self::$_con == null){
 		if (is_null(self::$_con)){
 			try {
 				$isCharset = false;
@@ -115,14 +111,9 @@ class BaseDb extends Core
 				}
 				self::$_con = new PDO($this->_connect_dsn, $this->_connect_user, $this->_connect_password);
 				self::$_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				
-				//$this->_dbType = self::$_con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
 				self::$_dbType = self::$_con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
-
-				//$this->_dbVersion = self::$_con->getAttribute(PDO::ATTR_SERVER_VERSION);		// DBバージョン
 				self::$_dbVersion = self::$_con->getAttribute(PDO::ATTR_SERVER_VERSION);		// DBバージョン
 
-				//if ($this->_dbType == 'mysql') {	// MySQLの場合
 				if (self::$_dbType == 'mysql') {	// MySQLの場合
 					self::$_con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 					
@@ -174,7 +165,6 @@ class BaseDb extends Core
 	 */
 	function getDbType()
 	{
-		//return $this->_dbType;
 		return self::$_dbType;
 	}
 	/**
@@ -184,7 +174,6 @@ class BaseDb extends Core
 	 */
 	function getDbVersion()
 	{
-		//return $this->_dbVersion;
 		return self::$_dbVersion;
 	}
 	/**
@@ -217,10 +206,8 @@ class BaseDb extends Core
 	 */
 	function getTimestampNullValue()
 	{
-		//if ($this->_dbType == M3_DB_TYPE_MYSQL){		// MySQLの場合
 		if (self::$_dbType == M3_DB_TYPE_MYSQL){		// MySQLの場合
 			return '0000-00-00 00:00:00';
-		//} else if ($this->_dbType == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
 		} else if (self::$_dbType == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
 			return '0001-01-01 00:00:00';
 		} else {
@@ -540,95 +527,6 @@ class BaseDb extends Core
 	 * @param  array  $ret		クエリー行の配列
 	 * @return bool				true=正常終了、false=異常終了
 	 */
-/*	function _splitSql($sql, &$ret)
-	{
-		$sql               = trim($sql);
-		$sql_len           = strlen($sql);
-		$char              = '';
-		$string_start      = '';
-		$in_string         = false;
-		$ret = array();		// 戻り値初期化
-
-		for ($i = 0; $i < $sql_len; $i++){
-			$char = $sql[$i];
-
-			// 文字列のまとまりで切り取る
-			if ($in_string){
-				for (;;){
-					$i = strpos($sql, $string_start, $i);
-					if (!$i){		// // 見つからないときは終了
-						$ret[] = $sql;
-						//$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
-						return true;
-					} else if ($string_start == '`' || $sql[$i-1] != '\\'){
-						$string_start      = '';
-						$in_string         = false;
-						break;
-					} else {
-						// バックスラッシュのエスケープ文字をチェック
-						$j                     = 2;
-						$escaped_backslash     = false;
-						while ($i - $j > 0 && $sql[$i - $j] == '\\'){
-							$escaped_backslash = !$escaped_backslash;
-							$j++;
-						}
-						if ($escaped_backslash){
-							$string_start  = '';
-							$in_string     = false;
-							break;
-						} else {
-							$i++;
-						}
-					}
-				}
-			} else if ($char == ';'){
-				// if delimiter found, add the parsed part to the returned array
-				$ret[]    = substr($sql, 0, $i);
-				//$ret[] = str_replace(array("\r", "\n"), '', substr($sql, 0, $i));			// 改行コード削除
-				$sql      = ltrim(substr($sql, min($i + 1, $sql_len)));
-				$sql_len  = strlen($sql);
-				if ($sql_len){
-					$i      = -1;
-				} else {
-					// The submited statement(s) end(s) here
-					return true;
-				}
-			} else if (($char == '"') || ($char == '\'') || ($char == '`')){
-				$in_string    = true;
-				$string_start = $char;
-			} else if ($char == '#' || ($char == ' ' && $i > 1 && $sql[$i-2] . $sql[$i-1] == '--')){		// 「#」「-- 」形式のコメント行の場合
-				// starting position of the comment depends on the comment type
-				$start_of_comment = (($sql[$i] == '#') ? $i : $i - 2);
-				// if no "\n" exits in the remaining string, checks for "\r"
-				// (Mac eol style)
-				$end_of_comment   = (strpos(' ' . $sql, "\012", $i+2))
-										? strpos(' ' . $sql, "\012", $i+2)
-										: strpos(' ' . $sql, "\015", $i+2);
-				//$end_of_comment   = (strpos(' ' . $sql, "\012", $i + 1));
-				if (!$end_of_comment){
-					$last = trim(substr($sql, 0, $i-1));
-					//$last = trim(substr($sql, 0, $start_of_comment));
-					if (!empty($last) && ($last[0] != '#' && $last[0] != '-')){		// コメント行でなければ追加
-						$ret[] = $last;
-						//$ret[] = str_replace(array("\r", "\n"), '', $last);			// 改行コード削除
-					}
-					return true;
-				} else {
-					$sql     = substr($sql, 0, $start_of_comment) . ltrim(substr($sql, $end_of_comment));
-					$sql_len = strlen($sql);
-					$i--;
-					//$i = $end_of_comment - 1;
-				}
-			}
-		}
-
-		// add any rest to the returned array
-		if (!empty($sql) && trim($sql) != ''){
-			$ret[] = $sql;
-			//$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
-		}
-		return true;
-	}*/
 	function _splitSql($sql, &$ret)
 	{
 		$sql               = trim($sql);
