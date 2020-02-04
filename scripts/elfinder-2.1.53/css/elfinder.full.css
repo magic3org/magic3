@@ -985,7 +985,9 @@ div.elfinder {
     display: block;
     visibility: visible;
     font-size: 18px;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+/*    font-family: Verdana, Arial, Helvetica, sans-serif;*/
+    /* modified for Magic3 */
+    font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 }
 
 /* prevent auto zoom on iOS */
@@ -1466,6 +1468,11 @@ div.elfinder {
     touch-action: auto;
     min-width: 100%;
 }
+/* added for Magic3 */
+/*.elfinder-cwd.elfinder-cwd-view-icons {
+    padding: 10px;
+    min-height: 100%;
+}*/
 
 .elfinder-ltr .elfinder-cwd {
     left: 0;
@@ -1803,9 +1810,13 @@ div.elfinder {
     -o-text-overflow: ellipsis;
     margin: 3px 1px 0 1px;
     padding: 1px;
-    -moz-border-radius: 8px;
+    /* modified by magic3 */
+/*    -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
-    border-radius: 8px;
+    border-radius: 8px;*/
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
     /* for webkit CSS3 */
     word-break: break-word;
     overflow-wrap: break-word;
@@ -3365,13 +3376,16 @@ button.elfinder-info-button {
     font-family: "Ricty Diminished", "Myrica M", Consolas, "Courier New", Courier, Monaco, monospace;
     font-size: 1.1em;
 }
-
+/***** Font size changed for Magic3 *****/
+/* コンテキストメニュー */
 .elfinder-contextmenu .elfinder-contextmenu-item span {
-    font-size: .72em;
+/*    font-size: .72em;*/
+    font-size: .84em;
 }
-
+/* ファイル名 */
 .elfinder-cwd-view-icons .elfinder-cwd-filename {
-    font-size: .7em;
+/*    font-size: .7em;*/
+    font-size: .84em;
 }
 
 .elfinder-cwd-view-list td {
@@ -3405,9 +3419,10 @@ button.elfinder-info-button {
 .dialogelfinder .dialogelfinder-drag {
     font-size: .9em;
 }
-
+/* 左ツリー */
 .elfinder .elfinder-navbar {
-    font-size: .72em;
+/*    font-size: .72em;*/
+    font-size: .84em;
 }
 
 .elfinder-place-drag .elfinder-navbar-dir {
@@ -3885,7 +3900,9 @@ button.elfinder-info-button {
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
     border-radius: 7px;
-    padding: 20px 0 40px 0;
+    /*padding: 20px 0 40px 0;*/
+    /* modified by Magic3 */
+    padding: 30px 0 40px 0;/* 画像プレビュー画面のタイトルの位置を修正 */
 }
 
 .elfinder-navdock .elfinder-quicklook {
@@ -4561,7 +4578,7 @@ embed.elfinder-quicklook-preview-audio {
 /*
  * CSS for Toastr
  * Copyright 2012-2015
- * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * Authors: John Papa, Hans Fj辰llemark, and Tim Ferrell.
  * All Rights Reserved.
  * Use, reproduction, distribution, and modification of this code is subject to the terms and
  * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
@@ -5266,4 +5283,47 @@ embed.elfinder-quicklook-preview-audio {
     rgba(0, 0, 0, 0.1) 95%,
     rgba(0, 0, 0, 0) 100%);
 }
+/******************************************************************/
+/*                  Magic3用のカスタマイズ                        */
+/******************************************************************/
+.ui-dialog { z-index: 99999 !important ;}    /* elFinderを最前面に出す */
+.ui-widget {
+    font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+}
+.ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
 
+/* thumbnail hover background image off */
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    background-image: none;
+}
+/* ダイアログ表示の場合のファイル表示エリアサイズを調整。不必要にスクロールバーを表示させない。 */
+/*.ui-dialog .elfinder-cwd {
+    min-width: calc(100% - 24px);
+    min-height: calc(100% - 24px);
+}*/
+/** 画像プレビューダイアログの設定 **/
+/* タイトルバー右上ボタンの位置 */
+.ui-dialog-titlebar .ui-icon {
+    display: inline-block;
+}
+/* タイトル位置修正 */
+.ui-dialog-titlebar .elfinder-dialog-title {
+    margin-top:3px;
+}
+/* jQueryテーマの修正 */
+.ui-draggable .ui-dialog-titlebar {
+    padding: .1em 0;
+    position: absolute;
+}
+/******************************************************************/
