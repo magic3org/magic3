@@ -5286,7 +5286,7 @@ embed.elfinder-quicklook-preview-audio {
 /******************************************************************/
 /*                  Magic3用のカスタマイズ                        */
 /******************************************************************/
-.ui-dialog { z-index: 99999 !important ;}    /* elFinderを最前面に出す */
+.ui-dialog { z-index: 99999 !important;}    /* elFinderを最前面に出す */
 .ui-widget {
     font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 }
@@ -5321,9 +5321,13 @@ embed.elfinder-quicklook-preview-audio {
 .ui-dialog-titlebar .elfinder-dialog-title {
     margin-top:3px;
 }
-/* jQueryテーマの修正 */
-.ui-draggable .ui-dialog-titlebar {
+/* プレビュー画面修正 */
+.ui-dialog .elfinder-quicklook-titlebar {
     padding: .1em 0;
     position: absolute;
 }
+
+/*.ui-dialog .ui-dialog-titlebar .ui-icon {
+    display: inline-block;
+}*/
 /******************************************************************/
