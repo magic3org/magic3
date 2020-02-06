@@ -5312,8 +5312,9 @@ embed.elfinder-quicklook-preview-audio {
     min-width: calc(100% - 24px);
     min-height: calc(100% - 24px);
 }*/
+
 /** 画像プレビューダイアログの設定 **/
-/* タイトルバー右上ボタンの位置 */
+/* タイトルバー右上ボタンの位置修正 */
 .ui-dialog-titlebar .ui-icon {
     display: inline-block;
 }
@@ -5321,14 +5322,22 @@ embed.elfinder-quicklook-preview-audio {
 .ui-dialog-titlebar .elfinder-dialog-title {
     margin-top:3px;
 }
-/* プレビュー画面タイトル修正 */
+/* タイトル修正 */
 .ui-dialog .elfinder-quicklook-titlebar {
     padding: .1em 0;
     position: absolute;
 }
-/* プレビュー画面タイトル右上ボタンの並び修正 */
+/* タイトルバー右上ボタンの位置修正 */
 .ui-dialog .elfinder-quicklook-titlebar-icon.elfinder-titlebar-button-right {
-    margin-top:-6px;
-    width:43px;
+    margin-top: -8px;
+    width: 43px;
+}
+
+/** デフォルトのフォントサイズ変更 **/
+.ui-dialog .ui-widget { /* ダイアログ表示型ファイル一覧を含むすべてのダイアログ */
+    font-size: 18px;
+}
+div.elfinder .ui-dialog .ui-widget { /* ファイルブラウザ型ファイル一覧の操作ダイアログ */
+    font-size: 15px;
 }
 /******************************************************************/
