@@ -1468,11 +1468,6 @@ div.elfinder {
     touch-action: auto;
     min-width: 100%;
 }
-/* added for Magic3 */
-/*.elfinder-cwd.elfinder-cwd-view-icons {
-    padding: 10px;
-    min-height: 100%;
-}*/
 
 .elfinder-ltr .elfinder-cwd {
     left: 0;
@@ -5307,11 +5302,14 @@ embed.elfinder-quicklook-preview-audio {
 .ui-widget-header .ui-state-focus {
     background-image: none;
 }
-/* ダイアログ表示の場合のファイル表示エリアサイズを調整。不必要にスクロールバーを表示させない。 */
-/*.ui-dialog .elfinder-cwd {
+
+/* ファイル表示エリアサイズを調整。不必要にスクロールバーを表示させない。 */
+.elfinder-cwd.elfinder-cwd-view-icons {
+    padding: 10px;
+    min-height: 100%;
     min-width: calc(100% - 24px);
     min-height: calc(100% - 24px);
-}*/
+}
 
 /** 画像プレビューダイアログの設定 **/
 /* タイトルバー右上ボタンの位置修正 */
