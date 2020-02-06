@@ -7,22 +7,22 @@
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
  * @package    Magic3 Framework
- * @author     •½“c’¼‹B(Naoki Hirata) <naoki@aplo.co.jp>
+ * @author     å¹³ç”°ç›´æ¯…(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2018 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-// ########## Magic3ƒAƒNƒZƒX§Œä(ŠJŽn) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(é–‹å§‹) ##########
 require_once('../../../include/global.php');
 
-if (!$gAccessManager->loginedByUser()){		// ƒƒOƒCƒ“’†‚Ìƒ†[ƒU‚ÍƒAƒNƒZƒX‚ð‹–‰Â
+if (!$gAccessManager->loginedByUser()){		// ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã®ãƒ¦ãƒ¼ã‚¶ã¯ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯
 	echo 'Access error: access denied.';
 
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚ÈƒAƒNƒZƒX‚ðŒŸo‚µ‚Ü‚µ‚½BƒƒOƒCƒ“‚È‚µ', 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªã‚¢ã‚¯ã‚»ã‚¹ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚ãƒ­ã‚°ã‚¤ãƒ³ãªã—', 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
-// ########## Magic3ƒAƒNƒZƒX§Œä(I—¹) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(çµ‚äº†) ##########
 //error_reporting(0); // Set E_ALL for debuging
 
 // // To Enable(true) handling of PostScript files by ImageMagick
@@ -136,11 +136,11 @@ function access($attr, $path, $data, $volume, $isDir, $relpath) {
 		:  null;                                 // else elFinder decide it itself
 }
 
-// ########## Magic3ƒAƒNƒZƒX§Œä(ŠJŽn) ##########
-// ƒfƒBƒŒƒNƒgƒŠŽQÆ”ÍˆÍ‚ð§ŒÀ
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(é–‹å§‹) ##########
+// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‚ç…§ç¯„å›²ã‚’åˆ¶é™
 $dirType = $gRequestManager->trimValueOf('dirtype');
 if (!empty($dirType) && !in_array($dirType, array('image', 'file'))){
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚Èƒpƒ‰ƒ[ƒ^‚ðŒŸo‚µ‚Ü‚µ‚½Bdirtype=' . $dirType , 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚dirtype=' . $dirType , 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
 $path = $gEnvManager->getResourcePathForUser();
@@ -150,21 +150,21 @@ if (!empty($dirType)){
 	$url .= '/' . $dirType;
 }
 
-// ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¢ê‡‚Íì¬
-if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*Ä‹A“I*/);
+// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã„å ´åˆã¯ä½œæˆ
+if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*å†å¸°çš„*/);
 
-// ƒAƒbƒvƒ[ƒh‰Â”\‚Èƒtƒ@ƒCƒ‹‚ð§ŒÀ
+// ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ•ã‚¡ã‚¤ãƒ«ã‚’åˆ¶é™
 if ($dirType == 'image'){
 	$uploadAllow = array('image');
 } else {
-	$uploadAllow = array('image', 'application/pdf');		// ‰æ‘œAPDF‚ð‹–‰Â
+	$uploadAllow = array('image', 'application/pdf');		// ç”»åƒã€PDFã‚’è¨±å¯
 }
-// ########## Magic3ƒAƒNƒZƒX§Œä(I—¹) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(çµ‚äº†) ##########
 
-// ‰æ‘œ‚ÌŽ©“®¶¬‚ÌÝ’è
-$autoResizeEnable	= (bool)$gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// ‰æ‘œƒŠƒTƒCƒY‹@”\‚ðŽg—p‚·‚é‚©‚Ç‚¤‚©
-$maxWidth			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);		// ‰æ‘œƒŠƒTƒCƒY‹@”\Å‘å‰æ‘œ•
-$maxHeight			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);		// ‰æ‘œƒŠƒTƒCƒY‹@”\Å‘å‰æ‘œ‚‚³
+// ç”»åƒã®è‡ªå‹•ç”Ÿæˆã®è¨­å®š
+$autoResizeEnable	= (bool)$gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// ç”»åƒãƒªã‚µã‚¤ã‚ºæ©Ÿèƒ½ã‚’ä½¿ç”¨ã™ã‚‹ã‹ã©ã†ã‹
+$maxWidth			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);		// ç”»åƒãƒªã‚µã‚¤ã‚ºæ©Ÿèƒ½æœ€å¤§ç”»åƒå¹…
+$maxHeight			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);		// ç”»åƒãƒªã‚µã‚¤ã‚ºæ©Ÿèƒ½æœ€å¤§ç”»åƒé«˜ã•
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
@@ -207,9 +207,9 @@ $opts = array(
 	),
 	'plugin' => array(
 		'AutoResize' => array(
-			'enable'		=> $autoResizeEnable,		// ‰æ‘œƒTƒCƒY‚ð§ŒÀ
-			'maxWidth'		=> $maxWidth,		// Å‘å‰æ‘œ•
-			'maxHeight'		=> $maxHeight,		// Å‘å‰æ‘œ‚‚³
+			'enable'		=> $autoResizeEnable,		// ç”»åƒã‚µã‚¤ã‚ºã‚’åˆ¶é™
+			'maxWidth'		=> $maxWidth,		// æœ€å¤§ç”»åƒå¹…
+			'maxHeight'		=> $maxHeight,		// æœ€å¤§ç”»åƒé«˜ã•
 			'quality'		=> 100			// JPEG image save quality
 		)
 	)
