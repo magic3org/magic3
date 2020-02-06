@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,8 +31,9 @@ class ScriptLibInfo
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = 'elfinder141';		// 選択中のelFinder、「elfinder141」が設定可能。
-	const SELECTED_LIB_ELFINDER = 'elfinder150';		// 選択中のelFinder、「elfinder141」が設定可能。
+//	const SELECTED_LIB_ELFINDER = 'elfinder141';		// 選択中のelFinder、「elfinder141,elfinder150」が設定可能。
+//	const SELECTED_LIB_ELFINDER = 'elfinder150';		// 選択中のelFinder、「elfinder141,elfinder150」が設定可能。
+	const SELECTED_LIB_ELFINDER = 'elfinder153';		// 選択中のelFinder、「elfinder141,elfinder150」が設定可能。
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -46,6 +47,7 @@ class ScriptLibInfo
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_ELFINDER141			= 'elfinder141';			// v2.1.41
 	const LIB_ELFINDER150			= 'elfinder150';			// v2.1.50
+	const LIB_ELFINDER153			= 'elfinder153';			// v2.1.53
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_JSCALENDAR			= 'jscalendar';			// カレンダーライブラリ
@@ -264,6 +266,15 @@ class ScriptLibInfo
 	const ELFINDER150_CSS			= 'elfinder-2.1.50/css/elfinder.full.css';		// elFinder CSS
 //	const ELFINDER150_CSS			= 'elfinder-2.1.50/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER150_OPTION_CSS	= 'elfinder-2.1.50/css/theme.css';				// elFinder CSS
+	
+	// elFinder v2.1.53版
+	const ELFINDER153_VER			= '2.1.53';									// elFinderバージョン
+//	const ELFINDER153_FILENAME		= 'elfinder-2.1.53/js/elfinder.full.js';		// elFinder
+	const ELFINDER153_FILENAME		= 'elfinder-2.1.53/js/elfinder.min.js';		// elFinder
+	const ELFINDER153_LANG_FILENAME	= 'elfinder-2.1.53/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER153_CSS			= 'elfinder-2.1.53/css/elfinder.full.css';		// elFinder CSS
+//	const ELFINDER153_CSS			= 'elfinder-2.1.53/css/elfinder.min.css';		// elFinder CSS
+	const ELFINDER153_OPTION_CSS	= 'elfinder-2.1.53/css/theme.css';				// elFinder CSS
 	
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
@@ -532,6 +543,11 @@ class ScriptLibInfo
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER150_FILENAME, self::ELFINDER150_LANG_FILENAME),		// elFinder v2.1.50
 															'css'		=> array(self::ELFINDER150_CSS, self::ELFINDER150_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER150_VER					// elFinderバージョン
+														);
+			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER153){
+				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER153_FILENAME, self::ELFINDER153_LANG_FILENAME),		// elFinder v2.1.53
+															'css'		=> array(self::ELFINDER153_CSS, self::ELFINDER153_OPTION_CSS),	// テーマは最初に読み込む
+															'version'	=> self::ELFINDER153_VER					// elFinderバージョン
 														);
 			}
 
