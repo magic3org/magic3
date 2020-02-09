@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -123,34 +123,16 @@ class AjaxManager
 	 */
 	function header()
 	{
-		static $json;		// JSONデータ作成オブジェクト
-
 		// 送信不可であれば何もしないで終了
 		if (!$this->_sendJsonToClient) return;
 		
-		if (!isset($json)){
-			require_once(M3_SYSTEM_LIB_PATH . '/JSON.php');
-			$json = new Services_JSON();
-		}
-		$retData = $json->encode($this->jsonData);
+		$retData = json_encode($this->jsonData);
 		if (!empty($retData)) header('X-JSON: ' . '(' . $retData . ')');
-		
+
 		// レスポンスボディ用データがある場合は出力
 		if (!empty($this->bodyData)){
 			echo $this->bodyData;
 		}
-	}
-	/**
-	 * JSONデータを作成
-	 *
-	 * @param object $obj			JSONデータに変換するデータ
-	 * @return string				JSON型文字列
-	 */
-	function createJsonString($obj)
-	{
-		require_once(M3_SYSTEM_LIB_PATH . '/JSON.php');
-		$json = new Services_JSON();
-		return $json->encode($obj);
 	}
 }
 ?>

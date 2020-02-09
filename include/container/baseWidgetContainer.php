@@ -841,11 +841,8 @@ class BaseWidgetContainer extends Core
 		$this->gPage->abortPage();
 		
 		// 添付ファイルの登録データを返す
-		if (function_exists('json_encode')){
-			$destStr = json_encode($resultObj);
-		} else {
-			$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
-		}
+		$destStr = json_encode($resultObj);
+
 		//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
 		//header('Content-type: application/json; charset=utf-8');
 		header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
@@ -869,11 +866,7 @@ class BaseWidgetContainer extends Core
 		$this->gPage->abortPage();
 		
 		// 添付ファイルの登録データを返す
-		if (function_exists('json_encode')){
-			$destStr = json_encode($resultObj);
-		} else {
-			$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
-		}
+		$destStr = json_encode($resultObj);
 
 		header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
 		echo $destStr;
