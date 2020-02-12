@@ -557,6 +557,7 @@ $agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// 
 			'linespider'				=> 'linespider.png',
 			'nimbostratus-bot'			=> 'nimbostratus.png',
 			'seokicks'					=> 'seokicks.png',
+			'duckduckgo-favicons-bot'	=> 'duckduckgo.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
