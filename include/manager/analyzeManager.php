@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -557,6 +557,7 @@ $agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// 
 			'linespider'				=> 'linespider.png',
 			'nimbostratus-bot'			=> 'nimbostratus.png',
 			'seokicks'					=> 'seokicks.png',
+			'duckduckbot'				=> 'duckduckgo.png',
 			'duckduckgo-favicons-bot'	=> 'duckduckgo.png',
 			'discordbot'				=> 'discordbot.png',
 			'obot'						=> 'ibm.png',
