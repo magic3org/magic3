@@ -139,7 +139,7 @@ CREATE TABLE _key_value (
     UNIQUE               (kv_id,        kv_history_index)
 ) ENGINE=innodb;
 
--- ウィジェットパラメータ更新マスター
+-- ウィジェットパラメータ更新マスター(廃止予定)
 DROP TABLE IF EXISTS _widget_param_update;
 CREATE TABLE _widget_param_update (
     wu_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)
