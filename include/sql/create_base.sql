@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2018 Magic3 Project.
+-- * @copyright  Copyright 2006-2020 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -90,7 +90,7 @@ CREATE TABLE _operation_log (
     ol_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 実行ウィジェットID(ファイル名)
     ol_method            TEXT                                         NOT NULL,      -- 実行メソッド
     ol_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
-	ol_user_id           INT            DEFAULT 0                     NOT NULL,      -- 記録ユーザID(0=不明)
+    ol_user_id           INT            DEFAULT 0                     NOT NULL,      -- 記録ユーザID(0=不明)
     ol_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (ol_serial)
 ) ENGINE=innodb;
@@ -356,7 +356,7 @@ CREATE TABLE _access_log (
     al_user_agent        TEXT                                         NOT NULL,      -- アクセスプログラム
     al_accept_language   VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- クライアントの認識可能言語
     al_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
-	al_landing_page_id   VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ランディングページID
+    al_landing_page_id   VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ランディングページID
     al_is_cmd            BOOLEAN        DEFAULT false                 NOT NULL,      -- コマンド実行かどうか
     al_cookie            BOOLEAN        DEFAULT false                 NOT NULL,      -- クッキーがあるかどうか
     al_crawler           BOOLEAN        DEFAULT false                 NOT NULL,      -- クローラかどうか
@@ -427,7 +427,7 @@ CREATE TABLE _session_access_key (
     sk_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     sk_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- アクセスキー
     sk_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID
-	sk_content_id        VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID。コンテンツがない場合はウィジェット定義ID。
+    sk_content_id        VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツ識別用のID。コンテンツがない場合はウィジェット定義ID。
 
     sk_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- アクセスキータイプ(0=参照,1=発行)
     sk_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
@@ -564,7 +564,7 @@ CREATE TABLE _templates (
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
     tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
-	tm_has_admin         BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理画面があるかどうか
+    tm_has_admin         BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理画面があるかどうか
     tm_clean_type        INT            DEFAULT 0                     NOT NULL,      -- 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)
     
     tm_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
@@ -624,7 +624,7 @@ CREATE TABLE _widgets (
     wd_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用ウィジェットかどうか
     wd_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(廃止予定)
     wd_show_name         BOOLEAN        DEFAULT false                 NOT NULL,      -- ウィジェット名称を表示するかどうか(wd_hide_titleと統合?)
-	wd_hide_title        BOOLEAN        DEFAULT false                 NOT NULL,      -- 実稼働時に強制的にタイトルを非表示にするかどうか(廃止予定?)
+    wd_hide_title        BOOLEAN        DEFAULT false                 NOT NULL,      -- 実稼働時に強制的にタイトルを非表示にするかどうか(廃止予定?)
     wd_enable_content    BOOLEAN        DEFAULT false                 NOT NULL,      -- コンテンツ組み込み可能かどうか
     wd_read_scripts      BOOLEAN        DEFAULT false                 NOT NULL,      -- スクリプトディレクトリを自動読み込みするかどうか(廃止予定)
     wd_read_css          BOOLEAN        DEFAULT false                 NOT NULL,      -- cssディレクトリを自動読み込みするかどうか(廃止予定)
@@ -640,7 +640,7 @@ CREATE TABLE _widgets (
     wd_initialized       BOOLEAN        DEFAULT false                 NOT NULL,      -- 初期化完了かどうか
     wd_use_cache         BOOLEAN        DEFAULT false                 NOT NULL,      -- キャッシュ機能を使用するかどうか
     wd_has_rss           BOOLEAN        DEFAULT false                 NOT NULL,      -- RSS機能があるかどうか
-	wd_personal_mode     BOOLEAN        DEFAULT false                 NOT NULL,      -- パーソナルモード対応かどうか
+    wd_personal_mode     BOOLEAN        DEFAULT false                 NOT NULL,      -- パーソナルモード対応かどうか
     wd_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
     wd_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
 --    wd_cache_interval    INT            DEFAULT 0                     NOT NULL,      -- キャッシュの更新時間(分)
@@ -904,9 +904,9 @@ CREATE TABLE _landing_page (
     
     lp_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名
     lp_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 公開可否
-	lp_owner_id          INT            DEFAULT 0                     NOT NULL,      -- ページの所有者ID
-	lp_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ページ作成日時
-	
+    lp_owner_id          INT            DEFAULT 0                     NOT NULL,      -- ページの所有者ID
+    lp_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ページ作成日時
+
     lp_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     lp_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     lp_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者

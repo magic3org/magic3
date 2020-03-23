@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2015 Magic3 Project.
+-- * @copyright  Copyright 2006-2020 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -70,7 +70,7 @@ CREATE TABLE content (
     cn_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル
     cn_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約
     cn_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
-	cn_head_others       TEXT                                         NOT NULL,      -- HEADタグその他
+    cn_head_others       TEXT                                         NOT NULL,      -- HEADタグその他
     cn_disp_type         SMALLINT       DEFAULT 0                     NOT NULL,      -- 表示タイプ(0=プレーン、1=インナーフレーム)
     cn_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否
     cn_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
