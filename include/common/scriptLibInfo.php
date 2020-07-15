@@ -248,6 +248,7 @@ class ScriptLibInfo
 	// ファイル名
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
+	const CKEDITOR4141_FILENAME		= 'ckeditor4.14.1/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 
 	// elFinder v2.1.41版
 	const ELFINDER141_VER			= '2.1.41';									// elFinderバージョン
@@ -388,7 +389,8 @@ class ScriptLibInfo
 			if (!empty($param)) $googleMapsParams = '?key=' . $param;
 			
 			// CKEditorのスクリプトファイルを取得
-			$ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
+			//$ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
+			$ckeditorFile = self::CKEDITOR4141_FILENAME;		// CKEditor(最新スマートフォン対応)
 			
 			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(

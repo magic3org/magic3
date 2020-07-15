@@ -10,7 +10,6 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-
 body
 {
 	/* for default screen size */
@@ -18,4 +17,11 @@ body
 	
 	/* add by Magic3 */
 	padding:0;
+}
+@media (max-width: 768px) {
+body
+{
+	/* for default screen size */
+	margin: 10px;
+}
 }
