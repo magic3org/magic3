@@ -25,7 +25,8 @@ class AnalyzeManager extends Core
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
 //	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.54/';		// クローラー解析スクリプトディレクトリ
 //	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.79/';		// クローラー解析スクリプトディレクトリ
-	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.90/';		// クローラー解析スクリプトディレクトリ
+//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.90/';		// クローラー解析スクリプトディレクトリ
+	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.96/';		// クローラー解析スクリプトディレクトリ
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.14.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.0.0/UserAgentParser.php';		// ブラウザ判定スクリプト
