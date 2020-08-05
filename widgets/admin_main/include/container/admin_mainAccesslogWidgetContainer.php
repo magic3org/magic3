@@ -317,6 +317,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 						}
 					}
 				}
+
 				// ブラウザ、プラットフォームの情報を取得
 				$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 				$browserImg = '';
@@ -425,7 +426,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		}
 		$ipLinkUrl = '?task=accesslog&ip=' . $ip;
 		$ipLink = '<a href="' . $this->convertUrlToHtmlEntity($ipLinkUrl) . '">' . $ipStr . '</a>';
-		
+
 		// ブラウザ、プラットフォームの情報を取得
 		if ($agent != $savedAgent) $this->browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 		$browserImg = '';

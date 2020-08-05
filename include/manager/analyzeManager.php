@@ -151,34 +151,6 @@ class AnalyzeManager extends Core
 	 */
 	public function getBrowserType($agent)
 	{
-/*
-//$agent = 'DoCoMo/2.0 N905i(c100;TB;W24H16) (compatible; Googlebot-Mobile/2.1; +http://www.google.com/bot.html)';		// google 携帯シュミレート
-$agent = 'Mozilla/5.0 (compatible; Steeler/3.5; http://www.tkl.iis.u-tokyo.ac.jp/~crawler/)';		// クローラー
-//
-//$agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
-$agent = 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko';
-$agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393';		// edge
-$agent = 'Mozilla/5.0 (iPad; CPU OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A403 Safari/602.1';		// ipad
-$agent = 'Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; Docomo HT-03A Build/DRD08) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1';	// android
-$agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1';	// SoftBank携帯
-
-$agent = 'Mozilla/5.0 (PlayStation Vita 3.01) AppleWebKit/536.26 (KHTML, like Gecko) Silk/3.2';
-$agent = 'SAMSUNG-GT-C3303/C3303DDJG4 NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1';
-//$agent = 'Mozilla/5.0 (Linux; U; Android 4.0.3; ja-jp; SC-02C Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';		// Android標準
-//$agent = 'Mozilla/5.0 (Linux; Android 4.0.3; SC-02C Build/IML74K) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31';		// Android Chrome
-$agent = 'Mozilla/4.0 (PS2; PlayStation BB Navigator 1.0) NetFront/3.0';
-$agent = 'Opera/9.80 (Android; Opera Mini/6.5.27452/27.1324; U; ja) Presto/2.8.119 Version/11.10';
-$agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.122 Safari/537.36 Vivaldi/1.4.589.29';		// Vivaldi
-$agent = 'Mozilla/5.0 (PlayStation 4 1.70) AppleWebKit/536.26 (KHTML, like Gecko)';			// Playstation4
-$agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
-$agent = 'Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 1320) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537';	// Windows Phone(new) -> NG
-$agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; FujitsuToshibaMobileCommun; IS12T; KDDI)';	// Windows Phone(old)
-$agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94';		// Opera Next
-// ***** 検出失敗(2016/10/19) *****
-$agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 10.0; WOW64; Trident/7.0; Sleipnir6/6.2.1; SleipnirSiteUpdates/6.2.1)';		// Sleipnir RSS取得用
-$agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 Sleipnir/6.2.1';		// Sleipnir
-$agent = 'Mozilla/5.0 (compatible; Mappy/1.0; +http://mappydata.net/bot/)';		// Mappy→未検出(2019/3/18)
-*/
 		$resultObj = array();
 
 		// クローラーかどうかのチェック
