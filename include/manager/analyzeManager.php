@@ -515,9 +515,11 @@ class AnalyzeManager extends Core
 			'dotbot'					=> 'dotbot.gif',	// Dotbot
 			'speedy spider'				=> 'entireweb.png',	// Entireweb
 			'turnitinbot'				=> 'turnitinbot.png',	// TurnitinBot
+			'turnitin'					=> 'turnitinbot.png',	// TurnitinBot
 			'bingbot'					=> 'bing.png',	// Bing
 			'bingpreview'				=> 'bing.png',	// Bing
 			'yacybot'					=> 'yacy.png',	// YaCy
+			'petalbot'					=> 'huawei.png',
 			'mj12bot'					=> 'mj12bot.png',
 			'ahrefsbot'					=> 'ahrefs.png',
 			'semrush'					=> 'semrush.png',
