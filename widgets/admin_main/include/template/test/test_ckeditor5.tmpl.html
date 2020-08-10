@@ -1,0 +1,59 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+//let editorinstance;
+function updateItem(){
+const editor = document.querySelector( '#editor' );
+const editorData = CKEditor5.getData();
+	alert(editorData);
+	
+	// CKEditorの入力内容を確定
+	//if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+	//	for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	//}
+	CKEditor5.updateSourceElement();
+	
+	alert( CKEditor5.getData());
+}
+$(function(){
+	ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+	.then(editor => {
+		window.CKEditor5 = editor; /*editorinstance =editor;*/
+	})
+        .catch( error => {
+            console.error( error );
+        } );
+});
+//]]>
+</script>
+
+<style>
+/*** エリア高さの設定 ***/
+.ck-editor__editable { 
+    min-height: 400px; 
+} 
+</style> 
+<div align="center">
+<form method="post" name="main">
+<!-- m3:ErrorMessage -->
+<textarea id="editor" name="editor">{ITEM_HTML}</textarea>
+<div class="well">
+<input type="button" id="update" class="button btn" onClick="updateItem()" value="更新" />
+</div>
+</form>
+</div>
+</patTemplate:tmpl>
