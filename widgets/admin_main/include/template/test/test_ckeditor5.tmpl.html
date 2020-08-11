@@ -12,6 +12,7 @@
  */
 <patTemplate:tmpl name="_widget">
 <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
+<script src="http://cdn.ckeditor.com/ckeditor5/21.0.0/classic/translations/ja.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 window.CKEditor5 = [];
@@ -37,18 +38,33 @@ const editorData = CKEditor5['editor'].getData();
 	
 	alert( CKEditor5['editor'].getData());
 }
+function showPlugin(){
+alert(Array.from( window.CKEditor5[ 'editor' ].ui.componentFactory.names() ) );
+}
 $(function(){
 	
-	/*
 	ClassicEditor
-        .create( document.querySelector( '#editor' ) )
+        .create( document.querySelector( '#editor' ), {
+		language: 'ja',
+		heading: {
+			options: [
+		                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+		                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+		                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+				{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+				{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+				{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+				{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+			]
+	        }
+  	})
 	.then(editor => {
-		window.CKEditor5 = editor;
+		 window.CKEditor5[ 'editor' ] = editor;
 	})
         .catch( error => {
             console.error( error );
-        } );*/
-	createEditor( 'editor', 'test1....' );		// コンテンツは更新
+        } );
+	//createEditor( 'editor', 'test1....' );		// コンテンツは更新
 	createEditor( 'editor2', 'test2....' );// コンテンツは更新
 	createEditor( 'editor3', 'test3....' );// コンテンツは更新
 	
@@ -62,7 +78,11 @@ $(function(){
 .ck-editor__editable { 
     min-height: 400px;
     max-height:800px;
-} 
+}
+/* paragraphプラグイン幅(デフォルト8em) */
+.ck.ck-dropdown.ck-heading-dropdown .ck-dropdown__button .ck-button__label {
+    width: 6em;
+}
 </style> 
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
@@ -75,12 +95,13 @@ $(function(){
 	<tr>
 	    <th><span {_HELP_EVENT_URL}>説明2</span>
 		</th>
-	    <td class="ckeditor" colspan="3"><textarea id="editor3" name="editor3">CKEditor5サンプル</textarea></td>
+	    <td class="ckeditor" colspan="3"><textarea id="editor" name="editor">CKEditor5サンプル</textarea></td>
 	</tr>
 </table>
-<textarea id="editor" name="editor">sample1....</textarea>
-<textarea id="editor2" name="editor2">sample2.....</textarea>
+<textarea id="editor2" name="editor2">sample1....</textarea>
+<textarea id="editor3" name="editor3">sample2.....</textarea>
 <div class="well">
+<input type="button" class="button btn" onClick="showPlugin()" value="プラグライン" />
 <input type="button" id="update" class="button btn" onClick="updateItem()" value="更新" />
 </div>
 </form>
