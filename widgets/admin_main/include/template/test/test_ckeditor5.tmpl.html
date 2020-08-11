@@ -14,43 +14,72 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-//let editorinstance;
+window.CKEditor5 = [];
+function createEditor( elementId, data ) {
+    return ClassicEditor
+        .create( document.querySelector( '#' + elementId ) )
+        .then( editor => {
+        window.CKEditor5[ elementId ] = editor;
+        window.CKEditor5[ elementId ].setData( data ); // You should set editor data here
+    } )
+        .catch( err => console.error( err ) );
+}
+
 function updateItem(){
-const editor = document.querySelector( '#editor' );
-const editorData = CKEditor5.getData();
+const editorData = CKEditor5['editor'].getData();
 	alert(editorData);
 	
 	// CKEditorの入力内容を確定
 	//if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
 	//	for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	//}
-	CKEditor5.updateSourceElement();
+	CKEditor5['editor'].updateSourceElement();	// CKEditor5では特に必要なし
 	
-	alert( CKEditor5.getData());
+	alert( CKEditor5['editor'].getData());
 }
 $(function(){
+	
+	/*
 	ClassicEditor
         .create( document.querySelector( '#editor' ) )
 	.then(editor => {
-		window.CKEditor5 = editor; /*editorinstance =editor;*/
+		window.CKEditor5 = editor;
 	})
         .catch( error => {
             console.error( error );
-        } );
+        } );*/
+	createEditor( 'editor', 'test1....' );		// コンテンツは更新
+	createEditor( 'editor2', 'test2....' );// コンテンツは更新
+	createEditor( 'editor3', 'test3....' );// コンテンツは更新
+	
+	m3SetConfigTable('config_table');
 });
 //]]>
 </script>
 
 <style>
-/*** エリア高さの設定 ***/
+/*** エリア高さ範囲を指定 ***/
 .ck-editor__editable { 
-    min-height: 400px; 
+    min-height: 400px;
+    max-height:800px;
 } 
 </style> 
-<div align="center">
-<form method="post" name="main">
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
-<textarea id="editor" name="editor">{ITEM_HTML}</textarea>
+<form method="post" name="main">
+
+<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>ヘッダタイトル</span></h3>
+<!-- m3:ErrorMessage -->
+<table id="config_table">
+    <tbody>
+	<tr>
+	    <th><span {_HELP_EVENT_URL}>説明2</span>
+		</th>
+	    <td class="ckeditor" colspan="3"><textarea id="editor3" name="editor3">CKEditor5サンプル</textarea></td>
+	</tr>
+</table>
+<textarea id="editor" name="editor">sample1....</textarea>
+<textarea id="editor2" name="editor2">sample2.....</textarea>
 <div class="well">
 <input type="button" id="update" class="button btn" onClick="updateItem()" value="更新" />
 </div>

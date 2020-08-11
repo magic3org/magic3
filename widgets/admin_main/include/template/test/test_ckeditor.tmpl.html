@@ -19,7 +19,7 @@
 function updateItem(){
 	alert(document.main.editor.value);
 	
-	// CKEditorの入力内容を確定
+	// CKEditorの入力内容を確定(CKEditor4では必須)
 	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
