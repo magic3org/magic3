@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -43,7 +43,9 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SMARTPHONE_CLOSED_ICON_FILE = '/images/system/device/smartphone_closed.png';		// スマートフォンアイコン(非公開)
 	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
 	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
+	const USER_INFO_ICON_FILE = '/images/system/info24.png';		// ユーザ情報アイコン
 	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
+	const PREVIEW_ICON_FILE = '/images/system/preview24.png';		// プレビューアイコン
 	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
 	const MENU_ICON_FILE = '/images/system/menu24.png';		// メニュー定義画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
@@ -415,6 +417,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "avatar_img", $iconTag);
 		
 			// ユーザメニュー
+			$iconTitle = 'ユーザ情報';
+			$iconUrl = $this->gEnv->getRootUrl() . self::USER_INFO_ICON_FILE;		// ユーザ情報
+			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			$this->tmpl->addVar("menu", "user_info_img", $iconTag);
 			$loginStatusUrl = '?task=userlist_detail&userid=' . $userId;// ユーザ情報画面URL
 			$this->tmpl->addVar("menu", "user_info_url", $this->convertUrlToHtmlEntity($loginStatusUrl));
 			$iconTitle = 'ログアウト';
@@ -675,16 +681,22 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		// プレビュー用リンク
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-		
-//		$title = '<i class="glyphicon glyphicon-eye-open btn-lg"></i> ' . self::MENU_TITLE_PREVIEW;		// アイコン付加
+		// アイコン
+		if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
+			$iconTag = '<i class="glyphicon glyphicon-picture"></i> ';
+		} else {
+			$iconTitle = 'プレビュー';
+			$iconUrl = $this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE;		// プレビューアイコン
+			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+		}
 		$title = self::MENU_TITLE_PREVIEW;		// アイコン付加
 		switch ($deviceType){
 			case 0:			// PC用画面のとき
 			default:
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(0, \'' . $this->gEnv->getDefaultUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
+				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(0, \'' . $this->gEnv->getDefaultUrl() . '\');return false;">' . $iconTag . $title . '</a></li>' . M3_NL;
 				break;
 			case 2:			// スマートフォン用画面のとき
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(2, \'' . $this->gEnv->getDefaultSmartphoneUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
+				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(2, \'' . $this->gEnv->getDefaultSmartphoneUrl() . '\');return false;">' . $iconTag . $title . '</a></li>' . M3_NL;
 				break;
 		}
 		
