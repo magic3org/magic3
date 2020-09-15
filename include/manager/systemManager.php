@@ -10,14 +10,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアクラス
 
-class SystemManager extends Core
+class SystemManager extends _Core
 {
 	private $_systemConfigArray = array();			// システム定義値
 	private $_siteDefArray = array();			// サイト定義値

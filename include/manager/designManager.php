@@ -10,14 +10,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアクラス
 
-class DesignManager extends Core
+class DesignManager extends _Core
 {
 	private $_getUrlCallback;		// URL変換(getUrl())用コールバック関数
 	private $db;						// DBオブジェクト

@@ -8,14 +8,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: connectManager.php 5114 2012-08-16 01:04:11Z fishbone $
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
-class ConnectManager extends Core
+class ConnectManager extends _Core
 {
 	private $db;						// DBオブジェクト
 	const CF_CONNECT_SERVER_URL = 'default_connect_server_url';			// ポータル接続先URL

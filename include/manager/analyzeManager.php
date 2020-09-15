@@ -16,7 +16,7 @@
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/analyticsDb.php');
 
-class AnalyzeManager extends Core
+class AnalyzeManager extends _Core
 {
 	private $db;						// DBオブジェクト
 	private $analyticsDb;

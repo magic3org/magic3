@@ -15,7 +15,7 @@
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
-class BaseDb extends Core
+class BaseDb extends _Core
 {
 	private static $_con = null;		// DBコネクション
 	private $_localCon = null;			// 一時利用DBコネクション

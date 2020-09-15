@@ -10,14 +10,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: dispManager.php 3008 2010-04-07 11:06:15Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアクラス
 
-class DispManager extends Core
+class DispManager extends _Core
 {
 	private $adminParam;		// 管理者用パラメータ
 	
