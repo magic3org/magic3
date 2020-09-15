@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -66,7 +66,7 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => '1年',	'value' => '1year'),
 										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
 		// Y軸の最大値
-		$this->yTickValueArray = array(1000000, 500000, 100000, 50000, 10000, 5000, 1000, 500, 100, 0);
+		$this->yTickValueArray = array(1000000, 750000, 500000, 250000, 100000, 75000, 50000, 25000, 10000, 7500, 5000, 2500, 1000, 500, 100, 0);
 		
 		// パーソナルモードの場合は集計処理不可
 		if (!$this->gPage->isPersonalMode()) $this->enableCalc = true;			// 集計処理の可否制御
