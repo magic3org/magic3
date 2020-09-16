@@ -749,6 +749,11 @@ class JApplication extends JObject
 	 */
 	static public function getRouter($name = null, array $options = array())
 	{
+		global $gEnvManager;
+		
+		// JRouterオブジェクトはJoomlaDocument(BaseFrameContainerクラス)オブジェクトで代替する
+		return $gEnvManager->getJoomlaDocument();
+	/*
 		if (!isset($name)) {
 			$app = JFactory::getApplication();
 			$name = $app->getName();
@@ -761,7 +766,7 @@ class JApplication extends JObject
 			return null;
 		}
 
-		return $router;
+		return $router;*/
 	}
 
 	/**

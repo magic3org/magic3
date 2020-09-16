@@ -124,8 +124,11 @@ class BaseFrameContainer extends _Core
 					$request->setCookieValue(M3_COOKIE_LANG, '', -1);
 				}
 				// 言語に依存する情報を取り込む
-				$this->gPage->loadLang();
+				//$this->gPage->loadLang();
 			}
+			// 言語に依存する情報を取り込む。### プレビュー画面で参照するために管理画面でも読み込む(2020/9/16 変更) ###
+			$this->gPage->loadLang();
+				
 			// ################### URLアクセス制御 ######################
 			// 非公開URLへは管理権限がないとアクセスできない
 			$canAccess = true;		// アクセス可能かどうか
@@ -1390,6 +1393,75 @@ class BaseFrameContainer extends _Core
 			}
 		}
 		return $this->templateCustomObj['head_css_data'];
+	}
+	/***********************************************************************************
+	 * 以下、Nicepage(Joomla!v3.1)テンプレート専用
+	 ***********************************************************************************/
+	/**
+	 * サイト説明取得
+	 *
+	 * @return string				サイト説明
+	 */
+	function getDescription()
+	{
+		return $this->gPage->getHeadDescription();		// サイトの説明
+	}
+	/**
+	 * サイトタイトル取得
+	 *
+	 * @return string				タイトル
+	 */
+	function getTitle()
+	{
+		// ページタイトルを取得できない場合はサイト名を返す?
+		// ページタイトルを取得
+		$title = '';
+		$titleArray = $this->gPage->getHeadSubTitle();
+		if (count($titleArray) > 0){
+			$title = $titleArray[count($titleArray) -1]['title'];			// 最後に追加されたタイトルを取得
+		}
+		return $title;
+	}
+	/**
+	 * URL変換モード取得
+	 *
+	 * @return int				モード値
+	 */
+	function getMode()
+	{
+		return null;
+	}
+	function setMetaData($name, $content, $http_equiv = false)
+	{
+		$name = strtolower($name);
+		if($name == 'generator') { 
+			//$this->setGenerator($content);
+			$this->_generator = $content;
+		} elseif($name == 'description') {
+			//$this->setDescription($content);
+			$this->description = $content;
+		} else {
+		/*
+			if ($http_equiv == true) {
+				$this->_metaTags['http-equiv'][$name] = $content;
+			} else {
+				$this->_metaTags['standard'][$name] = $content;
+			}*/
+		}
+	}
+	function addStyleDeclaration($content, $type = 'text/css')
+	{
+		if (!isset($this->_style[strtolower($type)])) {
+			$this->_style[strtolower($type)] = $content;
+		} else {
+			$this->_style[strtolower($type)] .= chr(13).$content;
+		}
+	}
+	public function addCustomTag($html)
+	{
+		$this->_custom[] = trim($html);
+
+		return $this;
 	}
 	/***********************************************************************************
 	 * 以下、Joomla!v1.5テンプレート専用
