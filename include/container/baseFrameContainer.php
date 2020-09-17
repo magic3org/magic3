@@ -1395,7 +1395,7 @@ class BaseFrameContainer extends _Core
 		return $this->templateCustomObj['head_css_data'];
 	}
 	/***********************************************************************************
-	 * 以下、Nicepage(Joomla!v3.1)テンプレート専用
+	 * 以下、Nicepage(Joomla!v3.1)テンプレート対応追加分
 	 ***********************************************************************************/
 	/**
 	 * サイト説明取得
@@ -1407,7 +1407,7 @@ class BaseFrameContainer extends _Core
 		return $this->gPage->getHeadDescription();		// サイトの説明
 	}
 	/**
-	 * サイトタイトル取得
+	 * ページタイトル取得
 	 *
 	 * @return string				タイトル
 	 */
