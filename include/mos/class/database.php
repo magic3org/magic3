@@ -506,7 +506,7 @@ class JDatabase extends JObject
 			if (strlen( $q ) == 1) {
 				return $q . $s . $q;
 			} else {
-				return $q{0} . $s . $q{1};
+				return $q[0] . $s . $q[1];
 			}
 		}
 		else {
@@ -609,7 +609,7 @@ class JDatabase extends JObject
 					break;
 				}
 				$l = $k - 1;
-				while ($l >= 0 && $sql{$l} == '\\') {
+				while ($l >= 0 && $sql[$l] == '\\') {
 					$l--;
 					$escaped = !$escaped;
 				}
