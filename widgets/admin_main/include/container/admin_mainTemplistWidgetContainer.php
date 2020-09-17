@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -541,7 +541,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 	 */
 	function tempListLoop($index, $fetchedRow, $param)
 	{
-		$genarator = $fetchedRow['tm_generator'];			// テンプレート作成アプリケーション
+		$generator = $fetchedRow['tm_generator'];			// テンプレート作成アプリケーション
 		$version = $fetchedRow['tm_version'];				// テンプレートバージョン
 		$infoUrl = $fetchedRow['tm_info_url'];				// テンプレート情報リンク
 
@@ -630,7 +630,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$formatType .= ' /<br />';
 		
 		// テンプレートを作成したアプリケーション、バージョンを取得
-		if (empty($genarator)){
+		if (empty($generator)){
 			if (file_exists($templateIndexFile)){
 				$content = file_get_contents($templateIndexFile);
 				$version = $this->getArtVersion($content);
@@ -641,7 +641,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				}
 			}
 		} else {
-			$formatType .= $genarator . ' - ' . $version;
+			$formatType .= $generator . ' - ' . $version;
 		}
 
 		// ダウンロードボタン
@@ -717,7 +717,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$ret = false;
 		$templType = 0;			// テンプレートのタイプデフォルト値(Joomla!1.0)
 		$cleanType = 0;			// HTMLの出力のクリーニングタイプ
-		$genarator = '';		// テンプレート作成アプリケーション
+		$generator = '';		// テンプレート作成アプリケーション
 		$version = '';			// テンプレートバージョン
 		$infoUrl = '';			// テンプレート情報リンク
 		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $id;			// テンプレートディレクトリ
@@ -769,27 +769,36 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 					$ret = $this->isWordpressTemplate($content);
 					if ($ret) $templType = 100;		// WordPress型
 				}
+				
 				// ##### テンプレート作成アプリケーションを取得 #####
 				// Artisteerテンプレートかどうか確認
 				$content = file_get_contents($templateDir . '/index.php');
 				$version = $this->getArtVersion($content);
-				if (!empty($version)){
-					$genarator = 'artisteer';		// テンプレート作成アプリケーション
-				} else {
-					// Themlerテンプレートかどうか確認
+				if (!empty($version)) $generator = 'artisteer';		// テンプレート作成アプリケーション
+				
+				// Themlerテンプレートかどうか確認
+				if (empty($version)){
 					$ret = $this->isTemlerTemplate($templateDir, $version);
 					if ($ret){
-						$genarator = 'themler';
+						$generator = 'themler';
 						
 						// Themlerテンプレートの修正処理を行う
 						$this->fixThemlerTemplate($templateDir);
+					}
+				}
+				
+				// Nicepageテンプレートかどうか確認
+				if (empty($version)){
+					$ret = $this->isNicepageTemplate($templateDir, $version);
+					if ($ret){
+						$generator = 'nicepage';
 					}
 				}
 				break;
 		}
 			
 		// テンプレートを登録
-		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version, $infoUrl);
+		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $generator, $version, $infoUrl);
 		if ($ret){
 			// テンプレート登録後、テンプレートを解析してCSSファイルを取得
 			$templateInfoObj = $this->gPage->parseTemplate($id);
@@ -813,10 +822,10 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		
 		// テンプレートの情報を取得
 		if ($this->_db->getTemplate($id, $row)){
-			$genarator = $row['tm_generator'];			// テンプレート作成アプリケーション
+			$generator = $row['tm_generator'];			// テンプレート作成アプリケーション
 			
 			// Themlerテンプレートの修正処理を行う
-			switch ($genarator){
+			switch ($generator){
 			case 'themler':
 				$this->fixThemlerTemplate($templateDir);
 				break;
@@ -964,6 +973,21 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		return $version;
 	}
 	/**
+	 * テンプレートのindex.phpファイルからNicepageバージョンを取得
+	 *
+	 * @param string $src		検索するデータ
+	 * @return string			検出の場合はバージョン文字列、未検出の場合は空文字列。
+	 */
+	function getNicepageVersion($src)
+	{
+		$version = '';
+		// Nicepage 2.25.0, nicepage.com
+		$pattern = '/\'Nicepage ([.\d]+), nicepage\.com\'/i';
+        $ret = preg_match($pattern, $src, $matches);
+		if ($ret) $version = $matches[1];
+		return $version;
+	}
+	/**
 	 * WordPressテンプレートかどうかチェック
 	 *
 	 * @param string $src		検索するデータ
@@ -997,6 +1021,41 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			list($tmp, $version) = explode('=', $verSrc);
 		}
 		return $ret;
+	}
+	/**
+	 * Nicepageテンプレートかどうかを判断
+	 *
+	 * @param string $dir		テンプレートのディレクトリ
+	 * @param string $version	Nicepageテンプレートの場合、テンプレートのバージョンが返る
+	 * @return bool				true=Nicepageテンプレート、false=Nicepageテンプレート以外
+	 */
+	function isNicepageTemplate($dir, &$version)
+	{
+		// Nicepageテンプレートを判断するファイル
+		$configFile = $dir . '/' . self::JOOMLA_CONFIG_FILENAME;
+		if (!file_exists($configFile)) return false;
+		
+		// テンプレート作成ツールを検出
+		$generatorDetected = false;
+		$xml = simplexml_load_file($configFile);
+		if ($xml !== false){
+			$fieldset = $xml->config->fields[0]->fieldset[0];
+			if ($fieldset->attributes()->name == 'basic'){
+				foreach ($fieldset as $item){
+					if ($item->attributes()->name == 'nicepagetheme'){
+						$generatorDetected = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!$generatorDetected) return false;
+		
+		// Nicepageバージョン取得
+		$templateIndexFile = $dir . '/index.php';						// テンプレートindex.phpファイル
+		$content = file_get_contents($templateIndexFile);
+		$version = $this->getNicepageVersion($content);
+		return true;
 	}
 	/**
 	 * Themlerテンプレートの修正
