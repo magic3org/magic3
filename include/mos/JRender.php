@@ -42,7 +42,6 @@ class JRender extends JParameter
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
 //	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
-	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
 
 	/**
 	 * コンストラクタ
@@ -431,7 +430,7 @@ debug($contentItem->published);*/
 		if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $defaultReadMoreTitle);		// 「もっと読む」デフォルトのタイトルを変更
 			
 		// テンプレート固有の追加処理
-		if ($gEnvManager->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
+		if ($gEnvManager->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
 			// サブテンプレートIDを取得。取得できない場合はテンプレートのデフォルト値を取得。
 			$subTemplateId = $gEnvManager->getCurrentSubTemplateId();
 			if (empty($subTemplateId)) $subTemplateId = getCurrentTemplateByType('');		// トップ用テンプレート

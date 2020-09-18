@@ -214,6 +214,7 @@ define('M3_TEMPLATE_BOOTSTRAP_30',		10);		// Bootstrap v3.0テンプレート
 // テンプレート作成アプリケーションタイプ
 define('M3_TEMPLATE_GENERATOR_ARTISTEER',	'artisteer');	// Artisteer
 define('M3_TEMPLATE_GENERATOR_THEMLER',		'themler');		// Themler
+define('M3_TEMPLATE_GENERATOR_NICEPAGE',	'nicepage');	// Nicepage
 
 // 描画出力タイプ
 define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート

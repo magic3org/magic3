@@ -2398,7 +2398,7 @@ class PageManager extends _Core
 								
 								if ($templateType != 99){
 									// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
-									if ($templateGenerator == 'themler'){
+									if ($templateGenerator == M3_TEMPLATE_GENERATOR_THEMLER){
 										if (strcasecmp($name, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 											$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 										}
@@ -5432,7 +5432,7 @@ class PageManager extends _Core
 				if ($task == 'wmove' && $posName == $position2){
 					// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
 					$style = '';
-					if ($templateGenerator == 'themler'){
+					if ($templateGenerator == M3_TEMPLATE_GENERATOR_THEMLER){
 						if (strcasecmp($position2, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 						}
@@ -5459,7 +5459,7 @@ class PageManager extends _Core
 				} else {
 					// Themlerテンプレート場合は配置ポジション名が「hmenu」をナビゲーション型とする
 					$style = '';
-					if ($templateGenerator == 'themler'){
+					if ($templateGenerator == M3_TEMPLATE_GENERATOR_THEMLER){
 						if (strcasecmp($position, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 						}

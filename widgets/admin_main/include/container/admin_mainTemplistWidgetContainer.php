@@ -780,7 +780,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				if (empty($version)){
 					$ret = $this->isTemlerTemplate($templateDir, $version);
 					if ($ret){
-						$generator = 'themler';
+						$generator = M3_TEMPLATE_GENERATOR_THEMLER;
 						
 						// Themlerテンプレートの修正処理を行う
 						$this->fixThemlerTemplate($templateDir);
@@ -791,7 +791,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 				if (empty($version)){
 					$ret = $this->isNicepageTemplate($templateDir, $version);
 					if ($ret){
-						$generator = 'nicepage';
+						$generator = M3_TEMPLATE_GENERATOR_NICEPAGE;
 					}
 				}
 				break;
@@ -826,7 +826,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			
 			// Themlerテンプレートの修正処理を行う
 			switch ($generator){
-			case 'themler':
+			case M3_TEMPLATE_GENERATOR_THEMLER:
 				$this->fixThemlerTemplate($templateDir);
 				break;
 			}

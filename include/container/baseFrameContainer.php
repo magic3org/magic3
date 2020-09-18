@@ -25,7 +25,6 @@ class BaseFrameContainer extends _Core
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
-	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
 		
 	/**
 	 * コンストラクタ
@@ -1041,7 +1040,7 @@ class BaseFrameContainer extends _Core
 			$this->params   = $params;
 			
 			// サブテンプレート用の設定
-			if ($this->gEnv->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){		// Themlerテンプレートの場合はサブテンプレート用のパラメータを設定
+			if ($this->gEnv->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_THEMLER){		// Themlerテンプレートの場合はサブテンプレート用のパラメータを設定
 				// JRequest経由でレンダー側にサブテンプレートIDを渡す
 				if (!empty($subTemplateId)) JRequest::injectSetVar('file_template_name', $subTemplateId);
 
