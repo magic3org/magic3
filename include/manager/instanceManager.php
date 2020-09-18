@@ -434,5 +434,20 @@ class InstanceManager extends _Core
 		}
 		return $manager;
 	}
+	/**
+	 * コンテンツマネージャー取得
+	 *
+	 * @return object			取得したオブジェクト
+	 */
+	static public function getContentManager()
+	{
+		static $manager;// マネージャーオブジェクト
+		
+		if (!isset($manager)){
+			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/contentManager.php');
+			$manager 		= new ContentManager();
+		}
+		return $manager;
+	}
 }
 ?>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -53,6 +53,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const HELP_SELECT_BUTTON = 'rel="m3help" title="ページに固定"';			// テンプレート一覧付加用ボタンのヘルプ(ページ専用テンプレート)
 	const TEMPLATE_TYPE_LABEL_BOOTSTRAP = ' <span class="label label-info" rel="m3help" title="Bootstrap型">B</span>';			// Boostrap型テンプレートラベル
 	const TEMPLATE_TYPE_LABEL_THEMLER = ' <span class="label label-info" rel="m3help" title="Themler製">T</span>';			// Themler製テンプレートラベル
+	const TEMPLATE_TYPE_LABEL_NICEPAGE = ' <span class="label label-info" rel="m3help" title="Nicepage製">N</span>';			// Nicepage製テンプレートラベル
 	const TEMPLATE_TYPE_LABEL_WORDPRESS = ' <span class="label label-info" rel="m3help" title="WordPress型">W</span>';			// WordPress型テンプレートラベル
 	
 	/**
@@ -311,14 +312,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'changesubtemplate'){		// サブテンプレート選択
 			$subTemplateId = $request->trimValueOf('subtemplateid');		// サブテンプレートID
-//			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
-//			if ($ret){
-//				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
-//					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $row['pn_template_id'], $subTemplateId);
-//				} else {
-//					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
-//				}
-//			}
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 			if ($ret){		// ページ情報レコードがある場合
 				if (is_null($row['pn_template_id'])){		// ページ情報部がない場合
@@ -336,6 +329,24 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
 					}
 				}
+			}
+		} else if ($act == 'importcontent'){		// テンプレートのページコンテンツをインポート(Nicepageテンプレートのみ)
+			// パラメータエラーチェック
+			// 個別のテンプレート取得
+			$pageTemplateId = '';
+			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+			if ($ret) $pageTemplateId = $row['pn_template_id'];
+					
+			if (!empty($pageTemplateId)){	// ページに個別のテンプレートが設定されている必要がある
+				// テンプレート情報取得
+				$ret = $this->db->getTemplate($pageTemplateId, $row);
+				if ($ret && $row['tm_generator'] == M3_TEMPLATE_GENERATOR_NICEPAGE){
+					$ret = $this->gInstance->getContentManager()->importPageContentFromTemplate($this->pageId, $this->pageSubId, $pageTemplateId);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データインポート可能なテンプレートではありません');
+				}
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'パラメータエラー');
 			}
 		}
 		// ページIDでページ情報を取得
@@ -727,6 +738,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_WORDPRESS;
 				} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
 					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
+				} else if ($generator == M3_TEMPLATE_GENERATOR_NICEPAGE){		// Nicepage製テンプレートの場合
+					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_NICEPAGE;
 				}
 			}
 		}
@@ -760,6 +773,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_WORDPRESS;
 			} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
 				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
+			} else if ($generator == M3_TEMPLATE_GENERATOR_NICEPAGE){		// Nicepage製テンプレートの場合
+				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_NICEPAGE;
 			}
 		} else {
 			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_UNCHECKED;
@@ -822,7 +837,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$generator	= $row['tm_generator'];
 		$version	= $row['tm_version'];		// テンプレートバージョン
 		switch ($generator){
-		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
+		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler製テンプレート
 			// テンプレート選択メニューを表示
 			$this->tmpl->setAttribute('select_subtemplate', 'visibility', 'visible');
 			
@@ -862,6 +877,13 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 					$this->tmpl->addVars('subtemplate_list', $row);
 					$this->tmpl->parseTemplate('subtemplate_list', 'a');
 				}
+			}
+			break;
+		case M3_TEMPLATE_GENERATOR_NICEPAGE:		// Nicepage製テンプレート
+			// ##### ページに個別のテンプレートが設定されている場合のみページコンテンツデータのインポート機能が使用可能 #####
+			if (!empty($this->pageTemplateId)){
+				// ページコンテンツインポートボタン表示
+				$this->tmpl->setAttribute('show_import_content', 'visibility', 'visible');
 			}
 			break;
 		}

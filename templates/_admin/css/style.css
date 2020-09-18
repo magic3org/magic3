@@ -307,11 +307,11 @@ background-color: #0081c2;
 }
 /****** 画面編集 ******/
 #layout_preview_title {
-	margin-top:10px;
+	/*margin-top:10px;*/
 }
-#subtemplate_select {
+/*#subtemplate_select {
 	margin-top:-18px;
-}
+}*/
 #layout_preview
 {
 /*	border-top:2px solid #2C3E50;*/
@@ -354,9 +354,9 @@ background-color: #0081c2;
 #mode_template_toggle_outer .toggle-group label {
 	padding:5px 10px;
 }
-#mode_template_toggle_outer {
+/*#mode_template_toggle_outer {
 	margin-top:-18px;
-}
+}*/
 #mode_template_normal img {
 	margin-top:-7px;
 	margin-bottom:-7px;
@@ -371,9 +371,9 @@ background-color: #0081c2;
 #mode_template_plain {
 	margin-top:-18px;
 }
-#previewother {
+/*#previewother {
 	margin-top:-18px;
-}
+}*/
 /****** menu preview ******/
 #menu_preview {
 	font-weight: bold;
