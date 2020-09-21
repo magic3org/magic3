@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: contentLibDb.php 5895 2013-04-01 23:57:46Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -34,6 +34,20 @@ class contentLibDb extends BaseDb
 		$queryStr .=   'AND cn_id = ? ';
 		$queryStr .=   'AND cn_language_id = ? ';
 		$ret = $this->selectRecord($queryStr, array($contentType, $contentId, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * コンテンツ項目をシリアル番号で取得
+	 *
+	 * @param string	$serial				シリアル番号
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getContentBySerial($serial, &$row)
+	{
+		$queryStr  = 'SELECT * FROM content LEFT JOIN _login_user ON cn_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cn_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
 	}
 	/**
@@ -200,6 +214,116 @@ class contentLibDb extends BaseDb
 		}
 		
 		return array($queryStr, $params);
+	}
+	/**
+	 * コンテンツ項目の新規追加
+	 *
+	 * @param string  $contentType	コンテンツタイプ
+	 * @param string  $lang			言語ID
+	 * @param string  $name			コンテンツ名
+	 * @param string  $desc			説明
+	 * @param string  $html			HTML
+	 * @param bool    $visible		表示状態
+	 * @param bool    $default		デフォルトで使用するかどうか(未使用)
+	 * @param bool    $limited		ユーザ制限するかどうか
+	 * @param string  $key			外部参照用キー
+	 * @param string  $password		パスワード
+	 * @param string  $metaTitle	METAタグ、タイトル
+	 * @param string  $metaDesc		METAタグ、ページ要約
+	 * @param string  $metaKeyword	METAタグ、検索用キーワード
+	 * @param string  $headOthers	ヘッダ部その他
+	 * @param timestamp	$startDt	期間(開始日)
+	 * @param timestamp	$endDt		期間(終了日)
+	 * @param int     $newSerial	新規シリアル番号
+	 * @param array   $otherParams	その他のフィールド値
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addContentItem($contentType, $lang, $name, $desc, $html, $visible, $default, $limited, $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, &$newSerial,
+								$otherParams = null)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// コンテンツIDを決定する
+		$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
+		$queryStr .=   'WHERE cn_type = ? ';
+		$ret = $this->selectRecord($queryStr, array($contentType), $row);
+		if ($ret){
+			$contId = $row['mid'] + 1;
+		} else {
+			$contId = 1;
+		}
+		
+		// 前レコードの削除状態チェック
+		$historyIndex = 0;
+		$queryStr = 'SELECT * FROM content ';
+		$queryStr .=  'WHERE cn_type = ? ';
+		$queryStr .=    'AND cn_id = ? ';
+		$queryStr .=    'AND cn_language_id = ? ';
+		$queryStr .=  'ORDER BY cn_history_index DESC ';
+		$ret = $this->selectRecord($queryStr, array($contentType, $contId, $lang), $row);
+		if ($ret){
+			if (!$row['cn_deleted']){		// レコード存在していれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$historyIndex = $row['cn_history_index'] + 1;
+		}
+		
+		// データを追加
+		$params = array($contentType, $contId, $lang, $historyIndex, $name, $desc, $html,
+								intval($visible), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $user, $now);
+								
+		$queryStr  = 'INSERT INTO content ';
+		$queryStr .=   '(';
+		$queryStr .=   'cn_type, ';
+		$queryStr .=   'cn_id, ';
+		$queryStr .=   'cn_language_id, ';
+		$queryStr .=   'cn_history_index, ';
+		$queryStr .=   'cn_name, ';
+		$queryStr .=   'cn_description, ';
+		$queryStr .=   'cn_html, ';
+		$queryStr .=   'cn_visible, ';
+		$queryStr .=   'cn_user_limited, ';
+		$queryStr .=   'cn_key, ';
+		$queryStr .=   'cn_password, ';
+		$queryStr .=   'cn_meta_title, ';
+		$queryStr .=   'cn_meta_description, ';
+		$queryStr .=   'cn_meta_keywords, ';
+		$queryStr .=   'cn_head_others, ';
+		$queryStr .=   'cn_active_start_dt, ';
+		$queryStr .=   'cn_active_end_dt, ';
+		$queryStr .=   'cn_create_user_id, ';
+		$queryStr .=   'cn_create_dt ';
+		
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .=  ') VALUES ';
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$this->execStatement($queryStr, $params);
+		
+		// 新規のシリアル番号取得
+		$queryStr = 'select max(cn_serial) as ns from content ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
 	}
 }
 ?>

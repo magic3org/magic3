@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -183,6 +183,36 @@ class contentLib
 		
 		$userId = $gEnvManager->getCurrentUserId();
 		$this->db->getPublicContentItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId);
+	}
+
+	/**
+	 * 汎用コンテンツを新規追加
+	 *
+	 * @param string  $name			コンテンツ名
+	 * @param string  $html			HTML
+	 * @param string  $metaTitle	METAタグ、タイトル
+	 * @param string  $metaDesc		METAタグ、ページ要約
+	 * @param string  $metaKeyword	METAタグ、検索用キーワード
+	 * @param int     $newID		新規コンテンツID
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addContent($name, $html, $metaTitle, $metaDesc, $metaKeyword, &$newID)
+	{
+		global $gEnvManager;
+		
+		$langId = $gEnvManager->getDefaultLanguage();
+		$contentType = '';
+		$startDt = $endDt = $gEnvManager->getInitValueOfTimestamp();
+		
+		$ret = $this->db->addContentItem($contentType, 
+											$langId, $name, ''/*説明*/, $html, 1/*表示*/, 0/*未使用(デフォルトかどうか)*/, 0/*ユーザ制限なし*/, ''/*外部参照キー*/, ''/*パスワードなし*/, 
+											$metaTitle, $metaDesc, $metaKeyword, ''/*ヘッダ部その他*/, $startDt, $endDt, $newSerial);
+		if (!$ret) return false;
+		
+		// コンテンツID取得
+		$ret = $this->db->getContentBySerial($newSerial, $row);
+		if ($ret) $newID = $row['cn_id'];		// コンテンツID
+		return $ret;
 	}
 }
 ?>
