@@ -234,11 +234,12 @@ class contentLibDb extends BaseDb
 	 * @param string  $headOthers	ヘッダ部その他
 	 * @param timestamp	$startDt	期間(開始日)
 	 * @param timestamp	$endDt		期間(終了日)
+	 * @param bool    $reuseContentId コンテンツIDを再利用して取得するかどうか
 	 * @param int     $newSerial	新規シリアル番号
 	 * @param array   $otherParams	その他のフィールド値
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addContentItem($contentType, $lang, $name, $desc, $html, $visible, $default, $limited, $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, &$newSerial,
+	function addContentItem($contentType, $lang, $name, $desc, $html, $visible, $default, $limited, $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $reuseContentId, &$newSerial,
 								$otherParams = null)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -248,13 +249,24 @@ class contentLibDb extends BaseDb
 		$this->startTransaction();
 		
 		// コンテンツIDを決定する
-		$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
-		$queryStr .=   'WHERE cn_type = ? ';
-		$ret = $this->selectRecord($queryStr, array($contentType), $row);
-		if ($ret){
-			$contId = $row['mid'] + 1;
+		if ($reuseContentId){	// コンテンツIDを再利用して取得する場合
+			$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
+			$queryStr .=   'WHERE cn_type = ? AND cn_deleted = false';
+			$ret = $this->selectRecord($queryStr, array($contentType), $row);
+			if ($ret){
+				$contId = $row['mid'] + 1;
+			} else {
+				$contId = 1;
+			}
 		} else {
-			$contId = 1;
+			$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
+			$queryStr .=   'WHERE cn_type = ? ';
+			$ret = $this->selectRecord($queryStr, array($contentType), $row);
+			if ($ret){
+				$contId = $row['mid'] + 1;
+			} else {
+				$contId = 1;
+			}
 		}
 		
 		// 前レコードの削除状態チェック

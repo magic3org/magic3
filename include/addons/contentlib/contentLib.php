@@ -206,7 +206,7 @@ class contentLib
 		
 		$ret = $this->db->addContentItem($contentType, 
 											$langId, $name, ''/*説明*/, $html, 1/*表示*/, 0/*未使用(デフォルトかどうか)*/, 0/*ユーザ制限なし*/, ''/*外部参照キー*/, ''/*パスワードなし*/, 
-											$metaTitle, $metaDesc, $metaKeyword, ''/*ヘッダ部その他*/, $startDt, $endDt, $newSerial);
+											$metaTitle, $metaDesc, $metaKeyword, ''/*ヘッダ部その他*/, $startDt, $endDt, true/*コンテンツIDは再利用で取得*/, $newSerial);
 		if (!$ret) return false;
 		
 		// コンテンツID取得
