@@ -204,9 +204,10 @@ class contentLib
 	 * @param string  $metaDesc		METAタグ、ページ要約
 	 * @param string  $metaKeyword	METAタグ、検索用キーワード
 	 * @param int     $newID		新規コンテンツID
+	 * @param array   $otherParams	その他のフィールド値
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addContent($name, $html, $metaTitle, $metaDesc, $metaKeyword, &$newID)
+	function addContent($name, $html, $metaTitle, $metaDesc, $metaKeyword, &$newID, $otherParams = null)
 	{
 		global $gEnvManager;
 		
@@ -216,7 +217,7 @@ class contentLib
 		
 		$ret = $this->db->addContentItem($contentType, 
 											$langId, $name, ''/*説明*/, $html, 1/*表示*/, 0/*未使用(デフォルトかどうか)*/, 0/*ユーザ制限なし*/, ''/*外部参照キー*/, ''/*パスワードなし*/, 
-											$metaTitle, $metaDesc, $metaKeyword, ''/*ヘッダ部その他*/, $startDt, $endDt, true/*コンテンツIDは再利用で取得*/, $newSerial);
+											$metaTitle, $metaDesc, $metaKeyword, ''/*ヘッダ部その他*/, $startDt, $endDt, true/*コンテンツIDは再利用で取得*/, $newSerial, $otherParams);
 		if (!$ret) return false;
 		
 		// コンテンツID取得

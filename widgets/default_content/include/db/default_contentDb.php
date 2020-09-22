@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -474,7 +474,7 @@ class default_contentDb extends BaseDb
 		
 		// 新規レコード追加
 		$params = array($row['cn_type'], $row['cn_id'], $row['cn_language_id'], $historyIndex, $name, $desc, $html,
-							intval($visible), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $startDt, $endDt, $user, $now);
+							intval($visible), intval($limited), $key, $password, $metaTitle, $metaDesc, $metaKeyword, $headOthers, $row['cn_generator'], $startDt, $endDt, $user, $now);
 							
 		$queryStr  = 'INSERT INTO content ';
 		$queryStr .=   '(cn_type, ';
@@ -492,6 +492,7 @@ class default_contentDb extends BaseDb
 		$queryStr .=   'cn_meta_description, ';
 		$queryStr .=   'cn_meta_keywords, ';
 		$queryStr .=   'cn_head_others, ';
+		$queryStr .=   'cn_generator, ';
 		$queryStr .=   'cn_active_start_dt, ';
 		$queryStr .=   'cn_active_end_dt, ';
 		$queryStr .=   'cn_create_user_id, ';
@@ -511,7 +512,7 @@ class default_contentDb extends BaseDb
 			}
 		}
 		$queryStr .=   ') VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
 		$this->execStatement($queryStr, $params);
 
 		// 新規のシリアル番号取得

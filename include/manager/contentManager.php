@@ -83,6 +83,9 @@ class ContentManager extends _Core
 			$metaKeyword = isset($articleData['keywords']) ? $articleData['keywords'] : '';	// METAキーワード
 			$html = $articleData['properties']['publishHtml'];	// 本文
 			
+			// 追加パラメータ
+			$otherParams =	array('cn_generator'		=> M3_TEMPLATE_GENERATOR_NICEPAGE);		// コンテンツ作成アプリケーション
+				
 			// コンテンツIDを仮取得
 			$this->_contentId = $contentLibObj->reserveNextId();
 			
@@ -90,7 +93,7 @@ class ContentManager extends _Core
 			$html = $this->_replacePlaceholdersForImages($html);
 			
 			// DBにコンテンツを登録
-			$ret = $contentLibObj->addContent($title, $html, $metaTitle, $metaDesc, $metaKeyword, $newId);
+			$ret = $contentLibObj->addContent($title, $html, $metaTitle, $metaDesc, $metaKeyword, $newId, $otherParams);
 			if (!$ret) return false;
 		
 			// テンプレート情報更新
