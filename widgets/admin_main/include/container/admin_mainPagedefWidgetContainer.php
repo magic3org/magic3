@@ -342,6 +342,11 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$ret = $this->db->getTemplate($pageTemplateId, $row);
 				if ($ret && $row['tm_generator'] == M3_TEMPLATE_GENERATOR_NICEPAGE){
 					$ret = $this->gInstance->getContentManager()->importPageContentFromTemplate($this->pageId, $this->pageSubId, $pageTemplateId);
+					if ($ret){		// データインポート成功のとき
+						$this->setMsg(self::MSG_GUIDANCE, 'データインポート完了しました');
+					} else {
+						$this->setMsg(self::MSG_APP_ERR, 'データインポートに失敗しました');
+					}
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データインポート可能なテンプレートではありません');
 				}
