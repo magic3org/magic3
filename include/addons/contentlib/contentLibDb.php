@@ -17,6 +17,8 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
 class contentLibDb extends BaseDb
 {
+	private $reservedId;			// 仮取得中のコンテンツID
+	
 	/**
 	 * コンテンツ項目をコンテンツIDで取得
 	 *
@@ -216,6 +218,38 @@ class contentLibDb extends BaseDb
 		return array($queryStr, $params);
 	}
 	/**
+	 * 次のコンテンツIDを仮取得
+	 *
+	 * @param string   $contentType		コンテンツタイプ
+	 * @param bool     $reuseContentId	コンテンツIDを再利用して取得するかどうか
+	 * @return int						コンテンツID
+	 */
+	function reserveNextId($contentType, $reuseContentId)
+	{
+		// コンテンツIDを決定する
+		if ($reuseContentId){	// コンテンツIDを再利用して取得する場合
+			$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
+			$queryStr .=   'WHERE cn_type = ? AND cn_deleted = false';
+			$ret = $this->selectRecord($queryStr, array($contentType), $row);
+			if ($ret){
+				$contId = $row['mid'] + 1;
+			} else {
+				$contId = 1;
+			}
+		} else {
+			$queryStr  = 'SELECT MAX(cn_id) AS mid FROM content ';
+			$queryStr .=   'WHERE cn_type = ? ';
+			$ret = $this->selectRecord($queryStr, array($contentType), $row);
+			if ($ret){
+				$contId = $row['mid'] + 1;
+			} else {
+				$contId = 1;
+			}
+		}
+		$this->reservedId = $contId;
+		return $this->reservedId;
+	}
+	/**
 	 * コンテンツ項目の新規追加
 	 *
 	 * @param string  $contentType	コンテンツタイプ
@@ -267,6 +301,12 @@ class contentLibDb extends BaseDb
 			} else {
 				$contId = 1;
 			}
+		}
+		
+		// 仮取得したコンテンツIDのチェック
+		if ($this->reservedId != $contId){
+			$this->endTransaction();
+			return false;
 		}
 		
 		// 前レコードの削除状態チェック

@@ -184,7 +184,17 @@ class contentLib
 		$userId = $gEnvManager->getCurrentUserId();
 		$this->db->getPublicContentItems($limit, $page, $contentId, $now, $startDt, $endDt, $keywords, $langId, $order, $userId, $callback, $categoryId);
 	}
-
+	/**
+	 * 次のコンテンツIDを仮取得
+	 *
+	 * @return int						コンテンツID
+	 */
+	function reserveNextId()
+	{
+		$contentType = '';
+		$id = $this->db->reserveNextId($contentType, true/*コンテンツIDは再利用で取得*/);
+		return $id;
+	}
 	/**
 	 * 汎用コンテンツを新規追加
 	 *
