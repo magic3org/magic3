@@ -1107,6 +1107,11 @@ class BaseFrameContainer extends _Core
 		// Joomla!タグの変換処理(ウィジェット実行)
 		if ($convType >= 1 && $convType < 100){		// Joomla!v1.5,v2.5テンプレートのとき
 			$srcContents = $this->gPage->launchWidgetByJoomlaTag($srcContents, $convType);		// launchWidgetByJoomlaTag()は携帯変換(-1)は実行されない
+			
+			// Nicapageテンプレートの場合は画面を作り直す
+			if ($this->gEnv->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_NICEPAGE){
+				$srcContents = $this->gInstance->getContentManager()->createNicepagePage($srcContents);
+			}
 		}
 	
 		// 遅延実行ウィジェットの出力を埋め込む。HTMLヘッダ出力する。
@@ -1120,7 +1125,6 @@ class BaseFrameContainer extends _Core
 		if ($this->gPage->isRedirect()) return '';// リダイレクトの場合ob_end_clean()を実行すると、ログインできないことがあるのでここで終了(2011/11/11)
 		
 		// バッファを破棄
-		//ob_end_flush();
 		ob_end_clean();
 		
 		// 送信データを返す

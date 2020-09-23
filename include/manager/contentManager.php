@@ -125,6 +125,19 @@ class ContentManager extends _Core
         }
 		return true;
 	}
+	/**
+	 * Nicepageの画面を作成
+	 *
+	 * @param string $content		画面データ
+	 * @return 		string			ページ
+	 */
+	function createNicepagePage($content)
+	{
+		require_once($this->gEnv->getJoomlaRootPath() . '/NpPage.php');
+		
+		$npPage = new NpPage();
+		return '';
+	}
     /**
      * Replace image placeholders in page content
      *
