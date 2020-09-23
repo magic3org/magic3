@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,6 +23,7 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $editIconPos;			// 編集アイコンの位置
 	private $title;			// ウィジェットタイトル
+	private $isNicepageTemplate;		// ページがNicepageテンプレートかどうか
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTENT_TYPE = '';			// コンテンツタイプ
 	const VIEW_CONTENT_TYPE = 'ct';		// 参照数カウント用
@@ -44,6 +45,7 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 		parent::__construct();
 		
 		$this->editIconPos = self::EDIT_ICON_MIN_POS;			// 編集アイコンの位置
+		if ($this->gEnv->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_NICEPAGE) $this->isNicepageTemplate = true;	// ページがNicepageテンプレートかどうか
 		
 		// DBオブジェクト作成
 		$this->db = new static_contentDb();
@@ -60,7 +62,11 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'main.tmpl.html';
+		if ($this->isNicepageTemplate){		// Nicepageテンプレートの場合
+			return 'main_np.tmpl.html';
+		} else {
+			return 'main.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -119,6 +125,11 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 
 				// コンテンツを設定
 				$this->tmpl->addVar("_widget", "content", $contentText);
+				
+				// ### Nicepageテンプレートの場合はコンテンツIDを埋め込む ###
+				if ($this->isNicepageTemplate){		// Nicepageテンプレートの場合
+					$this->tmpl->addVar("_widget", "id", $contentId);
+				}
 			
 				// ログインユーザに表示が制限されている場合は非表示
 				if ($this->gEnv->isCurrentUserLogined() || !$row['cn_user_limited']) $showWidget = true;

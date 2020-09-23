@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2018 Magic3 Project.
+-- * @copyright  Copyright 2006-2020 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -70,7 +70,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'static_content';
 INSERT INTO _widgets
 (wd_id,            wd_name,                           wd_type, wd_category_id, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('static_content', '汎用コンテンツ-固定コンテンツ', '',      'content',      '2.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, '固定的にコンテンツを表示。', '', '', true,         true,        true,         false,               true,true,           0, 2, 1, '2014-08-13',now(), now());
+('static_content', '汎用コンテンツ-固定コンテンツ', '',      'content',      '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, '固定的にコンテンツを表示。', '', '', true,         true,        true,         false,               true,true,           0, 2, 1, '2020-09-23',now(), now());
 DELETE FROM _widgets WHERE wd_id = 'content_search_box';
 INSERT INTO _widgets
 (wd_id,                wd_name,                 wd_category_id, wd_template_type, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

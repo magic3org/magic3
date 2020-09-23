@@ -71,6 +71,7 @@ class ContentManager extends _Core
 		if (count($contentPageIds) == 0) return false;
 		
 		$this->_data['Images'] = $importData['Images'];	// 画像データ
+		$parameters = $importData['Parameters'];
 		
 		$contentLibObj = $this->gInstance->getObject(self::CONTENT_OBJ_ID);
         foreach ($importData['Pages'] as &$articleData) {
@@ -95,11 +96,17 @@ class ContentManager extends _Core
 			// DBにコンテンツを登録
 			$ret = $contentLibObj->addContent($title, $html, $metaTitle, $metaDesc, $metaKeyword, $newId, $otherParams);
 			if (!$ret) return false;
-		
+			
 			// テンプレート情報更新
 			$templateCustomObj = array();
 			$templateCustomObj['fonts'] = $articleData['properties']['fonts'];
 			$templateCustomObj['bodyClass'] = $articleData['properties']['bodyClass'];
+			$templateCustomObj['header'] = array();
+			$templateCustomObj['header']['styles'] = $parameters['header']['styles'];
+			$templateCustomObj['header']['php'] = $parameters['header']['php'];
+			$templateCustomObj['footer'] = array();
+			$templateCustomObj['footer']['styles'] = $parameters['footer']['styles'];
+			$templateCustomObj['footer']['php'] = $parameters['footer']['php'];
 			$updateParam = array();
 			$updateParam['tm_custom_params'] = serialize($templateCustomObj);
 			$ret = $this->db->updateTemplate($templateId, $updateParam);
@@ -114,50 +121,7 @@ class ContentManager extends _Core
 				$imageFile = $this->_foundImages[$i];
 				copy($templateDir . self::NICEPAGE_IMAGE_SRC_DIR . $imageFile, $imageDir . $imageFile);
 			}
-		
-			break;
-            /*$key++;
-            $article = $content->create();
-            $article->catid = $defaultCategoryId;
-            list($title, $alias) = $this->_generateNewTitle($defaultCategoryId, $articleData['caption'], $key);
-            $article->title = $title;
-            $article->alias = $alias;
-            $article->introtext = isset($articleData['introHtml']) ? $articleData['introHtml'] : '';
-            $article->attribs = $this->_paramsToString(
-                array (
-                    'show_title' => '',
-                    'link_titles' => '',
-                    'show_intro' => '',
-                    'show_category' => '',
-                    'link_category' => '',
-                    'show_parent_category' => '',
-                    'link_parent_category' => '',
-                    'show_author' => '',
-                    'link_author' => '',
-                    'show_create_date' => '',
-                    'show_modify_date' => '',
-                    'show_publish_date' => '',
-                    'show_item_navigation' => '',
-                    'show_icons' => '',
-                    'show_print_icon' => '',
-                    'show_email_icon' => '',
-                    'show_vote' => '',
-                    'show_hits' => '',
-                    'show_noauth' => '',
-                    'alternative_readmore' => '',
-                    'article_layout' => ''
-                )
-            );
-            $article->metadata = $this->_paramsToString(array('robots' => '', 'author' => '', 'rights' => '', 'xreference' => '', 'tags' => ''));
-            $article->metakey = ''; //support postgresql
-            $article->metadesc = ''; //support postgresql
-            $status = $content->save($article);
-            if (is_string($status)) {
-                return $this->_error($status, 1);
-            }
-            $articleData['joomla_id'] = $article->id;
-            $this->_dataIds[$contentPageId] = $article->id;
-			*/
+			break;		// 1コンテンツで処理終了
         }
 		return true;
 	}
