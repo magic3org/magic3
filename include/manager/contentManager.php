@@ -128,15 +128,24 @@ class ContentManager extends _Core
 	/**
 	 * Nicepageの画面を作成
 	 *
-	 * @param string $content		画面データ
-	 * @return 		string			ページ
+	 * @param string $pageContent	画面データ
+	 * @return 		string			変換後画面データ
 	 */
-	function createNicepagePage($content)
+	function createNicepagePage($pageContent)
 	{
 		require_once($this->gEnv->getJoomlaRootPath() . '/NpPage.php');
 		
-		$npPage = new NpPage();
-		return '';
+		// 画面データからコンテンツだけを抜き出し、Nicepage専用のデータを作成する
+		if (strpos($pageContent, '<!--np_content-->') !== false && preg_match('/<\!--np\_page_id-->([\s\S]+?)<\!--\/np\_page_id-->/', $pageContent, $matches)) {
+            $pageId = $matches[1];
+            $pageContent = str_replace($matches[0], '', $pageContent);
+            //$page = NpFactory::getPage($pageId);
+			$page = new NpPage();
+            if ($page) {
+                $pageContent = $page->get($pageContent);
+            }
+        }
+		return $pageContent;
 	}
     /**
      * Replace image placeholders in page content
