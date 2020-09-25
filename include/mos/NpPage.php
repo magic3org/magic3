@@ -8,8 +8,8 @@
 
 defined('_JEXEC') or die;
 
-JLoader::register('Nicepage_Theme_Nicepage', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/theme.php');
-require JPATH_ADMINISTRATOR . '/components/com_nicepage/helpers/modules.php';
+//JLoader::register('Nicepage_Theme_Nicepage', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/theme.php');
+//require JPATH_ADMINISTRATOR . '/components/com_nicepage/helpers/modules.php';
 
 /**
  * Class NpPage
@@ -52,7 +52,27 @@ class NpPage
      * @param null   $row       Component row
      * @param null   $params    Component params
      */
-    public function __construct($pageTable, $context, &$row, &$params) {
+    //public function __construct($pageTable, $context, &$row, &$params) {
+	public function __construct() {
+		global $gEnvManager;
+		
+		// テンプレートからページ作成用のパラメータ取得
+		$optionParams = $gEnvManager->getCurrentTemplateCustomParam();
+		if (empty($optionParams)){
+			$props = array();
+		} else {
+			$props = unserialize($optionParams);		// 連想配列に変換
+		}
+
+		$this->_config = $props;
+		$this->_props = $this->prepareProps(
+            $props,
+            null,
+            '',
+            null,
+            null
+        );
+	/*
         $this->_pageTable = $pageTable;
         $this->_context = $context;
         $this->_row = $row;
@@ -79,6 +99,7 @@ class NpPage
         }
 
         $this->_isNicepageTheme = JFactory::getApplication()->getTemplate(true)->params->get($originalName . 'theme', '0');
+		*/
     }
 
     /**
@@ -280,7 +301,8 @@ class NpPage
     public function setScripts()
     {
         if ($this->_isNicepageTheme !== '1' || $this->_pageView == 'landing') {
-            $assets = JURI::root(true) . '/components/com_nicepage/assets';
+            //$assets = JURI::root(true) . '/components/com_nicepage/assets';
+			$assets = JURI::root(true) . '/resource/np/assets';
             if (isset($this->_config['jquery']) && $this->_config['jquery'] == '1') {
                 $this->_scripts .= '<script src="' . $assets . '/js/jquery.js"></script>';
             }
@@ -303,9 +325,11 @@ class NpPage
      */
     public function setStyles()
     {
-        $assets = JURI::root(true) . '/components/com_nicepage/assets';
+        //$assets = JURI::root(true) . '/components/com_nicepage/assets';
+		$assets = JURI::root(true) . '/resource/np/assets';
 
-        $siteStyleCss = NicepageHelpersNicepage::buildSiteStyleCss(
+        //$siteStyleCss = NicepageHelpersNicepage::buildSiteStyleCss(
+		$siteStyleCss = $this->_buildSiteStyleCss(
             $this->_config,
             $this->_props['pageCssUsedIds'],
             $this->_props['publishHtml'],
@@ -415,12 +439,13 @@ class NpPage
      */
     public function setSectionsHtml()
     {
-        $this->_sectionsHtml = NicepageHelpersNicepage::processSectionsHtml($this->_props['publishHtml'], true, $this->_props['pageId']);
+        //$this->_sectionsHtml = NicepageHelpersNicepage::processSectionsHtml($this->_props['publishHtml'], true, $this->_props['pageId']);
+		$this->_sectionsHtml = $this->_props['publishHtml'];
 
         if ($this->_pageView == 'landing') {
             return;
         }
-
+/*
         $autoResponsive = isset($this->_config['autoResponsive']) ? !!$this->_config['autoResponsive'] : true;
         if ($autoResponsive && $this->_isNicepageTheme == '0') {
             $responsiveScript = <<<SCRIPT
@@ -453,7 +478,7 @@ var body = document.body;
 </script>
 SCRIPT;
             $this->_sectionsHtml = $bodyScript . $this->_sectionsHtml;
-        }
+        }*/
     }
 
     /**
@@ -639,15 +664,16 @@ HTML;
         $props['fonts']       = $this->fixImagePaths($props['fonts']);
 
         // Process backlink
-        if ($comConfig) {
+		// バックリンクは表示しない
+        /*if ($comConfig) {
             $hideBacklink = isset($comConfig['hideBacklink']) ? (bool)$comConfig['hideBacklink'] : false;
             $backlink = $props['backlink'];
             $props['backlink'] = $hideBacklink ? str_replace('u-backlink', 'u-backlink u-hidden', $backlink) : $backlink;
-        }
+        }*/
 
         // Process content
         if ($article) {
-            $article->doubleСall = true;
+            $article->doubleCall = true;
             $currentText = $article->text;
             $currentPostId = $article->id;
             $article->text = $props['publishHtml'];
@@ -712,5 +738,42 @@ HTML;
         }
 
         return self::$_instance;
+    }
+	/***************************************************************************
+	以下NicepageHelpersNicepageクラスからの移植
+	****************************************************************************/
+	
+    /**
+     * Build site style css
+     *
+     * @param array  $params         plugin config parameters
+     * @param string $pageCssUsedIds used css ids
+     * @param string $html           public html of page
+     * @param string $pageId         id of page
+     *
+     * @return string
+     */
+    public static function _buildSiteStyleCss($params, $pageCssUsedIds, $html, $pageId)
+    {
+        $result = isset($params['siteStyleCss']) ? $params['siteStyleCss'] : '';
+        $partsJson = isset($params['siteStyleCssParts']) ? $params['siteStyleCssParts'] : '';
+        if ($partsJson) {
+            $cssParts = json_decode($partsJson, true);
+            if (!$pageCssUsedIds) {
+                $usedIds = self::processUsedColors($cssParts, $html);
+                self::updateUsedColor($usedIds, $pageId);
+            } else {
+                $usedIds = json_decode($pageCssUsedIds, true);
+            }
+            $headerFooterCssUsedIds = isset($params['headerFooterCssUsedIds']) ? json_decode($params['headerFooterCssUsedIds'], true) : [];
+            $cookiesCssUsedIds = isset($params['cookiesCssUsedIds']) ? json_decode($params['cookiesCssUsedIds'], true) : [];
+            $result   = '';
+            foreach ($cssParts as $part) {
+                if ($part['type'] !== 'color' || !empty($usedIds[$part['id']]) || !empty($headerFooterCssUsedIds[$part['id']]) || !empty($cookiesCssUsedIds[$part['id']])) {
+                    $result .= $part['css'];
+                }
+            }
+        }
+        return $result;
     }
 }

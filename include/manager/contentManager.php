@@ -101,6 +101,13 @@ class ContentManager extends _Core
 			$templateCustomObj = array();
 			$templateCustomObj['fonts'] = $articleData['properties']['fonts'];
 			$templateCustomObj['bodyClass'] = $articleData['properties']['bodyClass'];
+			
+			$publishNicepageCss = $parameters['publishNicePageCss'];
+            //list($siteStyleCssParts, $pageCssUsedIds) = NicepageHelpersNicepage::processAllColors($publishNicepageCss, $properties['publishHtml']);
+			list($siteStyleCssParts, $pageCssUsedIds) = self::processAllColors($publishNicepageCss, $html);
+			$templateCustomObj['siteStyleCssParts'] = $siteStyleCssParts;
+            $templateCustomObj['pageCssUsedIds'] = $pageCssUsedIds;
+						
 			$templateCustomObj['header'] = array();
 			$templateCustomObj['header']['styles'] = $parameters['header']['styles'];
 			$templateCustomObj['header']['php'] = $parameters['header']['php'];
@@ -178,6 +185,62 @@ class ContentManager extends _Core
             return M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . self::NICEPAGE_CONTENT_DIR . $this->_contentId . self::NICEPAGE_IMAGE_DIR . $imageName;
         }
         return $full;
+    }
+    /**
+     * @param string $styles                common styles
+     * @param string $publishHtml           publish html of page
+     * @param string $publishHeaderFooter   publish html of page
+     * @param string $publishCookiesSection publish cookies section
+     *
+     * @return array
+     */
+    public static function processAllColors($styles, $publishHtml, $publishHeaderFooter = '', $publishCookiesSection = '') {
+        $split = preg_split('#(\/\*begin-color [^*]+\*\/[\s\S]*?\/\*end-color [^*]+\*\/)#', $styles, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $parts = array();
+        foreach ($split as $part) {
+            $part = trim($part);
+            if (!$part) {
+                continue;
+            }
+
+            if (preg_match('#\/\*begin-color ([^*]+)\*\/#', $part, $m)) {
+                $id = 'color_' . $m[1];
+                $parts[] = array(
+                    'type' => 'color',
+                    'id' => $id,
+                    'css' => $part,
+                );
+                if (strpos($publishHtml, $m[1]) !== false) {
+                    $usedIds[$id] = true;
+                }
+            } else {
+                $parts[] = array(
+                    'type' => '',
+                    'css' => $part,
+                );
+            }
+        }
+        $headerFooterUsedIds = $publishHeaderFooter ? self::processUsedColors($parts, $publishHeaderFooter) : [];
+        $cookiesCssUsedIds = $publishCookiesSection ? self::processUsedColors($parts, $publishCookiesSection) : [];
+        $usedIds = self::processUsedColors($parts, $publishHtml);
+        return array(json_encode($parts), json_encode($usedIds), json_encode($headerFooterUsedIds), json_encode($cookiesCssUsedIds));
+    }
+
+    /**
+     * @param array  $parts       All styles array
+     * @param string $publishHtml Html of page
+     *
+     * @return array
+     */
+    public static function processUsedColors($parts, $publishHtml)
+    {
+        $usedIds = array();
+        foreach ($parts as &$part) {
+            if (isset($part['id']) && strpos($publishHtml, preg_replace('#^color_#', '', $part['id'])) !== false) {
+                $usedIds[$part['id']] = true;
+            }
+        }
+        return $usedIds;
     }
 }
 ?>
