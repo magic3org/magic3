@@ -8,13 +8,13 @@
 defined('_JEXEC') or die;
 
 if (isset($controlProps) && isset($controlTemplate)) {
-    $siteTitle = Nicepage_Theme_Nicepage::getThemeParams('siteTitle');
-    $content = '';
-    if ($siteTitle) {
-        $content = $siteTitle;
-    } else {
+    //$siteTitle = Nicepage_Theme_Nicepage::getThemeParams('siteTitle');
+    //$content = '';
+    //if ($siteTitle) {
+    //    $content = $siteTitle;
+    //} else {
         $content = $controlProps['content'];
-    }
+    //}
     $controlTemplate = str_replace('[[content]]', $content, $controlTemplate);
     $controlTemplate = str_replace('[[url]]', JFactory::getDocument()->baseurl, $controlTemplate);
     echo $controlTemplate;
