@@ -714,7 +714,10 @@ HTML;
      * @return mixed
      */
     public function fixImagePaths($content) {
-        return str_replace('[[site_path_live]]', JURI::root(), $content);
+		global $gEnvManager;
+		
+        //return str_replace('[[site_path_live]]', JURI::root(), $content);
+		return str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $gEnvManager->getRootUrl(), $content);
     }
 
     /**
