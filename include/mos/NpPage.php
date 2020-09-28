@@ -223,8 +223,9 @@ class NpPage
         if ($this->_pageView === 'landing') {
             $pageContent = '<!DOCTYPE html>' .
                 '<html>' .
-                '<head>' .
-                JFactory::getDocument()->getBuffer('head') .
+//                '<head>' .
+//                JFactory::getDocument()->getBuffer('head') .
+				'<head>{{HEAD_TAGS}}' .		// ### Magic3ヘッダタグ埋め込み ###
                 '</head>' .
                 '<body class="' . $this->getBodyClass() .'" style="' . $this->getBodyStyle() . '">' .
                 $this->getHeader() .
