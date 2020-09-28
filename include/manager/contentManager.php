@@ -101,7 +101,9 @@ class ContentManager extends _Core
 			$templateCustomObj = array();
 			$templateCustomObj['fonts'] = $articleData['properties']['fonts'];
 			$templateCustomObj['bodyClass'] = $articleData['properties']['bodyClass'];
-			$templateCustomObj['head'] = $articleData['properties']['head'];
+			//$templateCustomObj['head'] = $articleData['properties']['head'];
+			//$templateCustomObj['head'] = $this->_processingContent($articleData['properties']['head'], 'publish');
+			$templateCustomObj['head'] = $this->_replacePlaceholdersForImages($articleData['properties']['head']);// コンテンツ内の画像パス変換
 			$templateCustomObj['hideHeader'] = $articleData['properties']['hideHeader'];
 			$templateCustomObj['hideFooter'] = $articleData['properties']['hideFooter'];
 			$templateCustomObj['hideBackToTop'] = $articleData['properties']['hideBackToTop'];
@@ -154,6 +156,40 @@ class ContentManager extends _Core
         }
 		return $pageContent;
 	}
+    /**
+     * Method to proccess page content
+     *
+     * @param string $content Page sample content
+     * @param string $state   Type path
+     *
+     * @return mixed
+     */
+/*    private function _processingContent($content, $state = 'full')
+    {
+        if ($content == '') {
+            return $content;
+        }
+
+        $old = $this->_rootUrl;
+
+        switch ($state) {
+        case 'full':
+            $this->_rootUrl .= '/';
+            break;
+        case 'publish':
+            $this->_rootUrl = '[[site_path_live]]';
+            break;
+        case 'editor':
+            $this->_rootUrl = '[[site_path_editor]]/';
+            break;
+        }
+        $content = $this->_replacePlaceholdersForImages($content);
+        $this->_rootUrl =  $old;
+
+//        $content = preg_replace_callback('/\[page_(\d+)\]/', array( &$this, '_parseHref'), $content);
+
+        return $content;
+    }*/
     /**
      * Replace image placeholders in page content
      *
