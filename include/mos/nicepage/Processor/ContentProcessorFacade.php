@@ -8,12 +8,20 @@
 
 defined('_JEXEC') or die;
 
+/*
 JLoader::register('CommonProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/CommonProcessor.php');
 JLoader::register('ControlsProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/ControlsProcessor.php');
 JLoader::register('PositionsProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/PositionsProcessor.php');
 JLoader::register('BlogProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/BlogProcessor.php');
 JLoader::register('ProductsProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/ProductsProcessor.php');
 JLoader::register('ShoppingCartProcessor', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/ShoppingCartProcessor.php');
+*/
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/CommonProcessor.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/ControlsProcessor.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/PositionsProcessor.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/BlogProcessor.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/ProductsProcessor.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/ShoppingCartProcessor.php');
 
 class ContentProcessorFacade
 {

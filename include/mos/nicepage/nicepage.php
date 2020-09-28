@@ -7,7 +7,9 @@
  */
 defined('_JEXEC') or die;
 
-JLoader::register('ContentProcessorFacade', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/ContentProcessorFacade.php');
+//JLoader::register('ContentProcessorFacade', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Processor/ContentProcessorFacade.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/Processor/ContentProcessorFacade.php');
+
 /**
  * Class NicepageHelpersNicepage
  */
