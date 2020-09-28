@@ -101,19 +101,19 @@ class ContentManager extends _Core
 			$templateCustomObj = array();
 			$templateCustomObj['fonts'] = $articleData['properties']['fonts'];
 			$templateCustomObj['bodyClass'] = $articleData['properties']['bodyClass'];
+			$templateCustomObj['head'] = $articleData['properties']['head'];
+			$templateCustomObj['hideHeader'] = $articleData['properties']['hideHeader'];
+			$templateCustomObj['hideFooter'] = $articleData['properties']['hideFooter'];
+			$templateCustomObj['hideBackToTop'] = $articleData['properties']['hideBackToTop'];
 			
 			$publishNicepageCss = $parameters['publishNicePageCss'];
             //list($siteStyleCssParts, $pageCssUsedIds) = NicepageHelpersNicepage::processAllColors($publishNicepageCss, $properties['publishHtml']);
 			list($siteStyleCssParts, $pageCssUsedIds) = self::processAllColors($publishNicepageCss, $html);
 			$templateCustomObj['siteStyleCssParts'] = $siteStyleCssParts;
             $templateCustomObj['pageCssUsedIds'] = $pageCssUsedIds;
-						
-			$templateCustomObj['header'] = array();
-			$templateCustomObj['header']['styles'] = $parameters['header']['styles'];
-			$templateCustomObj['header']['php'] = $parameters['header']['php'];
-			$templateCustomObj['footer'] = array();
-			$templateCustomObj['footer']['styles'] = $parameters['footer']['styles'];
-			$templateCustomObj['footer']['php'] = $parameters['footer']['php'];
+			$templateCustomObj['header'] = json_encode($parameters['header']);
+			$templateCustomObj['footer'] = json_encode($parameters['footer']);
+			
 			$updateParam = array();
 			$updateParam['tm_custom_params'] = serialize($templateCustomObj);
 			$ret = $this->db->updateTemplate($templateId, $updateParam);
