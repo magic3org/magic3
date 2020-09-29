@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "https://www.joomla.org/xml/dtd/2.5/template-install.dtd">
+<extension version="3.1" type="template" client="site" method="upgrade">
+    <name>nicepage_sample4</name>
+    <version></version>
+    <creationDate/>
+    <author></author>
+    <authorEmail/>
+    <copyright/>
+    <description></description>
+    <files>
+        <folder>content</folder>
+        <folder>css</folder>
+        <folder>extensions</folder>
+        <folder>fields</folder>
+        <folder>html</folder>
+        <folder>images</folder>
+        <folder>language</folder>
+        <folder>library</folder>
+        <folder>scripts</folder>
+        <folder>views</folder>
+        <file>component.php</file>
+        <file>footer.php</file>
+        <file>functions.php</file>
+        <file>header.php</file>
+        <file>index.php</file>
+        <file>styles.php</file>
+        <file>template.json</file>
+        <file>templateDetails.xml</file>
+        <file>template_preview.png</file>
+        <file>template_thumbnail.png</file>
+        <file>template_preview.png</file>
+        <file>template_thumbnail.png</file>
+    </files>
+    <positions>
+        <position>hmenu</position>
+        <position>position-sidebar</position>
+    </positions>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.tpl_nicepage_sample4.ini</language>
+    </languages>
+    <config>
+        <fields name="params" addfieldpath="/templates/nicepage_sample4/fields">
+            <fieldset name="basic">
+                <field name="siteTitle" type="text" default="" label="TPL_SITE_TITLE" description="TPL_SITE_TITLE_DESCRIPTION" filter="string"/>
+                <field name="logoFile" type="media" default="" label="TPL_LOGO_LABEL" description="TPL_LOGO_DESC"/>
+                <field name="logoLink" default="" type="text" label="TPL_LOGOLINK_LABEL" description="TPL_LOGOLINK_DESC"/>
+                <field name="logoWidth" type="number" label="TPL_LOGO_WIDTH_LABEL" description="TPL_LOGO_WIDTH_DESC" filter="integer"/>
+                <field name="logoHeight" type="number" label="TPL_LOGO_HEIGHT_LABEL" description="TPL_LOGO_HEIGHT_DESC" filter="integer"/>
+                <field name="nicepagetheme" type="hidden" default="1"/>
+                <field name="jquery" type="checkbox" label="TPL_JQUERY_LABEL" text="TPL_JQUERY_TEXT" default="0"/>
+                <field name="content" type="import" label="TPL_CONTENT" text="TPL_INSTALL"/>
+                <field name="dataIds" type="hidden" default=""/>
+            </fieldset>
+            <fieldset name="seo">
+                <field name="metatags" type="checkbox" label="TPL_METATAGS_LABEL" text="TPL_METATAGS_TEXT" default="1"/>
+                <field name="jsonld" type="checkbox" label="TPL_JSONLD_LABEL" text="TPL_JSONLD_TEXT" default="1"/>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

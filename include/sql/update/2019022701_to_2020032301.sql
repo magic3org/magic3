@@ -27,3 +27,9 @@ DROP TABLE IF EXISTS _widget_param_update;
 -- 汎用コンテンツマスター
 -- ALTER TABLE content ADD cn_option_attr       TEXT                                         NOT NULL;      -- オプション属性--使用するか未定
 ALTER TABLE content ADD cn_generator         VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- コンテンツ作成アプリケーション(値=artisteer,themler,nicepage)
+
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'nicepage_sample4';
+INSERT INTO _templates
+(tm_id,              tm_name,             tm_type, tm_generator, tm_version) VALUES
+('nicepage_sample4', 'nicepage_sample4',  2,       'nicepage',   '2.25.0');

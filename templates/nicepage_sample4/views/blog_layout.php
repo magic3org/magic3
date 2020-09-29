@@ -1,0 +1,1 @@
+<div class="u-page-root"><?php $this->renderComponent(); ?></div>

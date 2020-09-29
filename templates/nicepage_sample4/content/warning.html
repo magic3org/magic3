@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Warning</title>
+    <style type="text/css">
+        .core-content-msgbox { font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 20px; }
+        .core-content-msgbox h3 { font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0 0 10px 0; }
+        .core-content-msgbox p { margin: 25px 0 0 0; text-align: justify; }
+        .core-content-msgbox .buttons { text-align: right; }
+        .core-content-msgbox button { width: 60px; height: 25px; font-size: 12px; margin-left: 5px; }
+        .core-content-msgbox #replace { width: 200px; height: 25px; font-size: 12px; margin-left: 5px; }
+        .core-content-msgbox .options { margin-left: 10px; margin-top: 15px;}
+    </style>
+</head>
+<body>
+<div class="core-content-msgbox">
+    <h3>Import Content From Template</h3>
+    <p class="item">
+        This option will import articles, extensions and menus, and will create a new homepage.
+    </p>
+    <p class="options">
+        <input type="checkbox" id="importMenus" name="importMenus" checked="checked">
+        <label for="importMenus">
+            Import menus.<br />
+        </label>
+    </p>
+    <p class="options">
+        <input type="checkbox" id="updatePluginSettings" name="updatePluginSettings">
+        <label for="updatePluginSettings">
+            Import content coloring and typography settings.<br />
+            This may affect the appearance of existing <b>nicepage</b> Pages.
+        </label>
+    </p>
+    <p class="buttons">
+        <button id="replace">Replace imported Content</button>
+        <button id="load" data-new="New Import" data-width="80">Import</button>
+        <button id="cancel">Cancel</button>
+    </p>
+</div>
+</body>
+</html>
