@@ -8,8 +8,8 @@
 
 defined('_JEXEC') or die;
 
-JLoader::register('Nicepage_Data_Mappers', JPATH_ADMINISTRATOR . '/components/com_nicepage/tables/mappers.php');
-JLoader::register('ContentModelCustomArticles', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Models/ContentModelCustomArticles.php');
+//JLoader::register('Nicepage_Data_Mappers', JPATH_ADMINISTRATOR . '/components/com_nicepage/tables/mappers.php');
+//JLoader::register('ContentModelCustomArticles', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Models/ContentModelCustomArticles.php');
 
 class BlogProcessor
 {

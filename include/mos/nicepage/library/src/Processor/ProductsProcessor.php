@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die;
 
-JLoader::register('ContentModelCustomProducts', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Models/ContentModelCustomProducts.php');
+//JLoader::register('ContentModelCustomProducts', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/src/Models/ContentModelCustomProducts.php');
 
 class ProductsProcessor
 {
