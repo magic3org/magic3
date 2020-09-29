@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1896,6 +1896,28 @@ class SystemDb extends BaseDb
 			$this->endTransaction();
 			return false;
 		}
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * ページ定義項目をすべて削除(共通項目含む)
+	 *
+	 * @param string  $pageId			ページID
+	 * @param string  $pageSubId		ページサブID
+	 * @return						true=成功、false=失敗
+	 */
+	function delPageDefAll($pageId, $pageSubId)
+	{
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'DELETE FROM _page_def ';
+		$queryStr .= 'WHERE pd_id = ? ';
+		$queryStr .=   'AND (pd_sub_id = ? OR pd_sub_id = \'\') ';	// 空の場合は共通項目
+		$queryStr .=   'AND pd_set_id = ? ';
+		$this->execStatement($queryStr, array($pageId, $pageSubId, 0/*定義セットID*/));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();

@@ -30,6 +30,8 @@ class ContentManager extends _Core
 	const NICEPAGE_CONTENT_DIR = '/resource/np/';	// Nicepageコンテンツリソース格納ディレクトリ(このディレクトリ以下にコンテンツIDのディレクトリを作成する)
 	const NICEPAGE_IMAGE_DIR = '/image/';		// 画像ディレクトリ
 	const NICEPAGE_IMAGE_SRC_DIR = '/content/images/';	// テンプレート内の画像ディレクトリ
+	const NICEPAGE_CONTENT_VIEW_WIDGET = 'static_content';	// Nicepageコンテンツ表示用のウィジェット
+	const NICEPAGE_CONTENT_CONFIG_TITLE = 'の表示用';	// Nicepageコンテンツ表示用のウィジェットの設定名
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
 	
 	/**
@@ -130,6 +132,39 @@ class ContentManager extends _Core
 				$imageFile = $this->_foundImages[$i];
 				copy($templateDir . self::NICEPAGE_IMAGE_SRC_DIR . $imageFile, $imageDir . $imageFile);
 			}
+			
+			// ##### ウィジェットを配置し、コンテンツを表示させる #####
+			$ret = $this->db->delPageDefAll($pageId, $pageSubId);
+			if (!$ret) return false;
+			
+			$now = date("Y/m/d H:i:s");	// 現在日時
+			$configTitle = $title . ' ' . self::NICEPAGE_CONTENT_CONFIG_TITLE;// 設定名
+
+			// ウィジェットのパラメータオブジェクト作成
+			$newObj = new stdClass;
+			$newObj->name	= $configTitle;		// 設定名
+			$newObj->contentId = $this->_contentId;		// 参照するコンテンツのID
+			$newObj->showReadMore	= '';		// 「続きを読む」ボタンを表示
+			$newObj->readMoreTitle	= '';		// 「続きを読む」ボタンタイトル
+			
+			// ウィジェットの設定追加
+			$configId = -1;		// 新規追加
+			$ret = $this->db->updateWidgetParam(self::NICEPAGE_CONTENT_VIEW_WIDGET, serialize($newObj), $gEnvManager->getCurrentUserId(), $now, $configId);
+			if (!$ret) return false;
+			
+			// ウィジェットを配置
+			$ret = $this->db->addWidget($pageId, $pageSubId, 'main', self::NICEPAGE_CONTENT_VIEW_WIDGET, 0/*インデックス*/);
+			if (!$ret) return false;
+			
+			// 配置したウィジェットのページ定義シリアル番号を取得
+			$ret = $this->db->getPageDefOnPageByWidgetId($pageId, $pageSubId, self::NICEPAGE_CONTENT_VIEW_WIDGET, $row);
+			if (!$ret) return false;
+			
+			// ウィジェットに設定を結びつける
+			$serial = $row['pd_serial'];		// シリアル番号
+			$ret = $this->db->updateWidgetConfigId(self::NICEPAGE_CONTENT_VIEW_WIDGET, $serial, $configId, $configTitle);
+			if (!$ret) return false;
+			
 			break;		// 1コンテンツで処理終了
         }
 		return true;
