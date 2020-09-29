@@ -39,17 +39,10 @@ class ControlsProcessor
      * @return false|string
      */
     public static function processControl($matches) {
-		global $gEnvManager;
-		
         $controlProps = json_decode(trim($matches[1]), true);
         $controlTemplate = $matches[2];
         ob_start();
-		
-        //include JPATH_ADMINISTRATOR . '/components/com_nicepage/views/controls/'. self::$controlName . '/' . self::$controlName . '.php';
-		$viewPath = $gEnvManager->getJoomlaRootPath() . '/nicepage/views/controls/'. self::$controlName . '/' . self::$controlName . '.php';
-		if (!file_exists($viewPath)) debug('#processControl()-Not found view class file. path=' . $viewPath);
-		include $viewPath;
-		
+        include JPATH_ADMINISTRATOR . '/components/com_nicepage/views/controls/'. self::$controlName . '/' . self::$controlName . '.php';
         return ob_get_clean();
     }
 }
