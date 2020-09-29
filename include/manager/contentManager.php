@@ -118,6 +118,10 @@ class ContentManager extends _Core
 			$templateCustomObj['header'] = json_encode($parameters['header']);
 			$templateCustomObj['footer'] = json_encode($parameters['footer']);
 			
+			// ヘッダ部、フッタ部で使用している画像を取得
+			$this->_replacePlaceholdersForImages($parameters['header']['html']);
+			$this->_replacePlaceholdersForImages($parameters['footer']['html']);
+			
 			$updateParam = array();
 			$updateParam['tm_custom_params'] = serialize($templateCustomObj);
 			$ret = $this->db->updateTemplate($templateId, $updateParam);
