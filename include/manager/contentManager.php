@@ -110,6 +110,10 @@ class ContentManager extends _Core
 			$templateCustomObj['hideFooter'] = $articleData['properties']['hideFooter'];
 			$templateCustomObj['hideBackToTop'] = $articleData['properties']['hideBackToTop'];
 			
+			// ヘッダ部、フッタ部のコンテンツ内の画像パス変換
+			$parameters['header']['php'] = $this->_replacePlaceholdersForImages($parameters['header']['php']);
+			$parameters['footer']['php'] = $this->_replacePlaceholdersForImages($parameters['footer']['php']);
+			
 			$publishNicepageCss = $parameters['publishNicePageCss'];
             //list($siteStyleCssParts, $pageCssUsedIds) = NicepageHelpersNicepage::processAllColors($publishNicepageCss, $properties['publishHtml']);
 			list($siteStyleCssParts, $pageCssUsedIds) = self::processAllColors($publishNicepageCss, $html);
@@ -117,10 +121,6 @@ class ContentManager extends _Core
             $templateCustomObj['pageCssUsedIds'] = $pageCssUsedIds;
 			$templateCustomObj['header'] = json_encode($parameters['header']);
 			$templateCustomObj['footer'] = json_encode($parameters['footer']);
-			
-			// ヘッダ部、フッタ部で使用している画像を取得
-			$this->_replacePlaceholdersForImages($parameters['header']['html']);
-			$this->_replacePlaceholdersForImages($parameters['footer']['html']);
 			
 			$updateParam = array();
 			$updateParam['tm_custom_params'] = serialize($templateCustomObj);

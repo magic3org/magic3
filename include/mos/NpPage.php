@@ -10,6 +10,8 @@ defined('_JEXEC') or die;
 
 //JLoader::register('Nicepage_Theme_Nicepage', JPATH_ADMINISTRATOR . '/components/com_nicepage/library/theme.php');
 //require JPATH_ADMINISTRATOR . '/components/com_nicepage/helpers/modules.php';
+
+require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/library/theme.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/nicepage/nicepage.php');
 
 /**
