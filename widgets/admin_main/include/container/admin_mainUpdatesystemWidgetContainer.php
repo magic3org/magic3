@@ -53,35 +53,46 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	function _assign($request, &$param)
 	{
 		if ($act == 'getinfo'){		// 最新情報取得
-			/*$type = $request->trimValueOf('type');			// 実行コマンドタイプ
-			if ($type == 'create_site'){
-				$cmdFile = $this->cmdFile_create_site;		// サイト作成、コマンドファイル
-			} else if ($type == 'remove_site'){
-				$cmdFile = $this->cmdFile_remove_site;		// サイト削除、コマンドファイル
+			// アップデート可能なバージョンを取得
+			$findUpdate = false;
+			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+			if ($infoSrc !== false){
+				$versionInfo = json_decode($infoSrc, true);
+			
+				// バージョン番号を表示
+				$versionStr = $versionInfo['version_disp'];
+				if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
+					$findUpdate = false;
+				}
 			}
-			if (file_exists($cmdFile)){
-				$this->gInstance->getAjaxManager()->addData('code', '0');
-			} else {			// インストールパッケージ更新完了のとき
+			
+			if ($findUpdate){	// バージョンアップが可能な場合
+				$info = array();
+				$info['version'] = $versionInfo['version'];
+				$info['version_disp'] = $versionInfo['version_disp'];
+				$this->gInstance->getAjaxManager()->addData('info', $info);
 				$this->gInstance->getAjaxManager()->addData('code', '1');
-			}*/
-			debug('find....');
+			} else {
+				$this->gInstance->getAjaxManager()->addData('code', '0');
+			}
 		} else {
+			$versionStr = '<span class="error">取得不可</span>';
+			$disabled = 'disabled';
+			
 			// アップデート可能なバージョンを取得
 			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
 			if ($infoSrc !== false){
 				$versionInfo = json_decode($infoSrc, true);
 			
 				// バージョン番号を表示
-				//$verStr = '<b><font color="green">' . $versionInfo['version_disp'] . '</font></b>';
 				$versionStr = $versionInfo['version_disp'];
-				$disabled = 'disabled';
 				if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
 					$versionStr = '<span class="available">' . $versionStr . '</span>';
 					$disabled = '';
 				}
-				$this->tmpl->addVar('_widget', 'ver_str', $versionStr);
-				$this->tmpl->addVar('_widget', 'button_disabled', $disabled);
 			}
+			$this->tmpl->addVar('_widget', 'ver_str', $versionStr);
+			$this->tmpl->addVar('_widget', 'button_disabled', $disabled);
 		}
 	}
 }
