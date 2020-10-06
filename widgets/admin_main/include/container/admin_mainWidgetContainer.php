@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -257,6 +257,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					} else if ($task == 'pagehead' ||				// ページヘッダ情報
 								$task == 'pagehead_detail'){		// ページヘッダ情報
 						$task = 'pagehead';
+					} else if ($task == 'updateserver'){		// システムバージョンアップ
+						$task = 'updateserver';
 					} else if ($task == 'portal'){		// Magic3ポータル
 						$task = 'portal';
 					} else if ($task == 'tenantserver_detail'){		// テナントサーバ管理詳細
@@ -321,6 +323,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'menudef':				// 多階層メニュー定義
 						case 'smenudef':			// 単階層メニュー定義
 						case 'linkinfo':			// 内部リンク情報取得
+						case 'updateserver':		// システムバージョンアップ
 						case 'configsite':			// サイト情報
 						case 'pagehead':			// ページヘッダ情報
 						case 'portal':				// Magic3ポータル
