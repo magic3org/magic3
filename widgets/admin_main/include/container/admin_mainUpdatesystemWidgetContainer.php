@@ -52,6 +52,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	 */
 	function _assign($request, &$param)
 	{
+		$act = $request->trimValueOf('act');
 		if ($act == 'getinfo'){		// 最新情報取得
 			// アップデート可能なバージョンを取得
 			$findUpdate = false;
@@ -65,6 +66,8 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					$findUpdate = false;
 				}
 			}
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
 			
 			if ($findUpdate){	// バージョンアップが可能な場合
 				$info = array();
