@@ -1906,16 +1906,21 @@ class SystemDb extends BaseDb
 	 *
 	 * @param string  $pageId			ページID
 	 * @param string  $pageSubId		ページサブID
+	 * @param bool $withCommon			共通項目も削除するかどうか
 	 * @return						true=成功、false=失敗
 	 */
-	function delPageDefAll($pageId, $pageSubId)
+	function delPageDefAll($pageId, $pageSubId, $withCommon = false)
 	{
 		// トランザクション開始
 		$this->startTransaction();
 		
 		$queryStr  = 'DELETE FROM _page_def ';
 		$queryStr .= 'WHERE pd_id = ? ';
-		$queryStr .=   'AND (pd_sub_id = ? OR pd_sub_id = \'\') ';	// 空の場合は共通項目
+		if ($withCommon){	// 共通項目も削除の場合
+			$queryStr .=   'AND (pd_sub_id = ? OR pd_sub_id = \'\') ';	// 空の場合は共通項目
+		} else {
+			$queryStr .=   'AND pd_sub_id = ? ';
+		}
 		$queryStr .=   'AND pd_set_id = ? ';
 		$this->execStatement($queryStr, array($pageId, $pageSubId, 0/*定義セットID*/));
 		

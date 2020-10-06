@@ -138,7 +138,7 @@ class ContentManager extends _Core
 			}
 			
 			// ##### ウィジェットを配置し、コンテンツを表示させる #####
-			$ret = $this->db->delPageDefAll($pageId, $pageSubId);
+			$ret = $this->db->delPageDefAll($pageId, $pageSubId);	// 透過ウィジェットを除くすべて削除
 			if (!$ret) return false;
 			
 			$now = date("Y/m/d H:i:s");	// 現在日時
