@@ -435,6 +435,13 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			// サイトメニュー
 			$siteMenuTag = $this->createSiteMenuTag();
 			$this->tmpl->addVar("menu", "site_menu", $siteMenuTag);
+			
+			// システムバージョンアップ情報
+			// ダッシュボード画面の場合のみアップデート情報を取得
+			if ($this->gPage->getContentType() == M3_VIEW_TYPE_DASHBOARD){
+				$this->tmpl->setAttribute('system_update', 'visibility', 'visible');	// アップデート表示タグ
+				$this->tmpl->setAttribute('checkupdate', 'visibility', 'visible');		// アップデート取得スクリプト
+			}
 		}
 		// ##### サブメニューバーとパンくずリストを作成 #####
 		$topPos = 0;		// コンテンツの開始位置

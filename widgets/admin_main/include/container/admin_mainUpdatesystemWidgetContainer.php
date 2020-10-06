@@ -63,7 +63,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// バージョン番号を表示
 				$versionStr = $versionInfo['version_disp'];
 				if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
-					$findUpdate = false;
+					$findUpdate = true;
 				}
 			}
 			// ##### ウィジェット出力処理中断 ######

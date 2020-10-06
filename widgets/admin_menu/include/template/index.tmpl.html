@@ -62,6 +62,17 @@ $(function(){
 	$(document).keyup(function(e){
 		if (e.which == 36) location.href = '{TOP_URL}';	// HOMEキー
 	});
+	
+<patTemplate:tmpl name="checkupdate" visibility="hidden">
+	// バージョンアップ情報取得
+	m3_ajax_request('', 'task=updatesystem&act=getinfo', function(request, retcode, jsondata){		// 正常終了
+		if (jsondata.code === '1'){	// バージョンアップ可能な場合
+			$('#system_update').show();
+		}
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
+</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -95,7 +106,7 @@ $(function(){
         </li>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="system_update" visibility="hidden">
-        <li><div style="margin-top:18px;"><a href="?task=analyzegraph" class="btn btn-xs btn-danger">アップデート</a></div></li>
+        <li id="system_update" style="display: none;"><div style="margin-top:18px;"><a href="?task=updatesystem" class="btn btn-xs btn-danger">アップデート</a></div></li>
 </patTemplate:tmpl>
     </ul>
     <ul class="nav navbar-nav pos-right">
