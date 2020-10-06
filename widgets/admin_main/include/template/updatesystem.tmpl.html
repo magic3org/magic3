@@ -13,9 +13,9 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function installSystem(){
+function updateSystem(){
 	if (!window.confirm('システムを最新にアップデートしますか?')) return false;
-	document.main.act.value='initsys';
+	document.main.act.value='updatesystem';
 	document.main.submit();
 	return true;
 }
@@ -29,9 +29,9 @@ function installSystem(){
 <div class="panel panel-info" style="width:500px;margin:20px auto;" >
     <div class="panel-heading">システム</div>
     <ul class="list-group">
-        <li class="list-group-item">アップデート</li>
+        <li class="list-group-item">アップデート可能なバージョン：{VER_STR}</li>
     </ul>
-    <div class="panel-footer"><input type="button" class="button" onclick="installSystem();" value="実行" /></div>
+    <div class="panel-footer"><input type="button" class="button" onclick="updateSystem();" value="実行" {BUTTON_DISABLED} /></div>
 </div>
 </form>
 </div>

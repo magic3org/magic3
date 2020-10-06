@@ -17,6 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -63,6 +65,23 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			}*/
 			debug('find....');
+		} else {
+			// アップデート可能なバージョンを取得
+			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+			if ($infoSrc !== false){
+				$versionInfo = json_decode($infoSrc, true);
+			
+				// バージョン番号を表示
+				//$verStr = '<b><font color="green">' . $versionInfo['version_disp'] . '</font></b>';
+				$versionStr = $versionInfo['version_disp'];
+				$disabled = 'disabled';
+				if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
+					$versionStr = '<span class="available">' . $versionStr . '</span>';
+					$disabled = '';
+				}
+				$this->tmpl->addVar('_widget', 'ver_str', $versionStr);
+				$this->tmpl->addVar('_widget', 'button_disabled', $disabled);
+			}
 		}
 	}
 }
