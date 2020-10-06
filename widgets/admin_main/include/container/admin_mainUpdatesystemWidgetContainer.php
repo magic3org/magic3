@@ -37,7 +37,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return '';
+		return 'updatesystem.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
