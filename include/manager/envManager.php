@@ -828,6 +828,18 @@ class EnvManager extends _Core
 		return $this->workDir . DIRECTORY_SEPARATOR . 'users';
 	}
 	/**
+	 * システムバージョンアップ用ワークディレクトリを取得
+	 *
+	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
+	 * @return string			パス
+	 */
+	public function getSystemUpdateWorkPath($createDir = true)
+	{
+		$path = M3_SYSTEM_ROOT_PATH . DIRECTORY_SEPARATOR . M3_DIR_NAME_SYSTEM_UPDATE;
+		if (!file_exists($path) && $createDir) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+		return $path;
+	}
+	/**
 	 * セッション単位の一時ディレクトリを取得
 	 *
 	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
