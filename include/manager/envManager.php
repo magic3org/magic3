@@ -833,7 +833,7 @@ class EnvManager extends _Core
 	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
 	 * @return string			パス
 	 */
-	public function getSystemUpdateWorkPath($createDir = true)
+	public function getSystemUpdateWorkPath($createDir = false)
 	{
 		$path = M3_SYSTEM_ROOT_PATH . DIRECTORY_SEPARATOR . M3_DIR_NAME_SYSTEM_UPDATE;
 		if (!file_exists($path) && $createDir) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
