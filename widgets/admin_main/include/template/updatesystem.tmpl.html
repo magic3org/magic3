@@ -15,9 +15,54 @@
 //<![CDATA[
 function updateSystem(){
 	if (!window.confirm('システムを最新にアップデートしますか?')) return false;
-	document.main.act.value='updatesystem';
-	document.main.submit();
-	return true;
+	
+	// ボタン使用不可
+	$("#update_button").prop('disabled', true);
+	
+	// メッセージを初期化
+	$('#step_message').empty();
+	
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
+	$('#step_message').append('<li>アップデート開始</li>');
+	
+	// バージョンアップ情報取得
+	m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=1', function(request, retcode, jsondata){		// 正常終了
+		if (jsondata.code == '0'){	// エラーの場合
+			// 処理中ダイアログ停止
+			m3HideProcessModal();
+		
+			alert('アップデートに失敗しました。');
+			return;
+		}
+		
+		// 正常に終了の場合はメッセージを追加
+		$('#step_message').append('<li>' + jsondata.message + '</li>');
+	
+		m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=2', function(request, retcode, jsondata){		// 正常終了
+			if (jsondata.code == '0'){	// エラーの場合
+				// 処理中ダイアログ停止
+				m3HideProcessModal();
+			
+				alert('アップデートに失敗しました。');
+				return;
+			}
+			
+			// 処理中ダイアログ停止
+			m3HideProcessModal();
+		}, function(request){		// 異常終了
+			// 処理中ダイアログ停止
+			m3HideProcessModal();
+		
+			alert('通信に失敗しました。');
+		});
+	}, function(request){		// 異常終了
+		// 処理中ダイアログ停止
+		m3HideProcessModal();
+		
+		alert('通信に失敗しました。');
+	});
 }
 //]]>
 </script>
@@ -31,8 +76,10 @@ function updateSystem(){
     <ul class="list-group">
         <li class="list-group-item">アップデート可能なバージョン：{VER_STR}</li>
     </ul>
-    <div class="panel-footer"><input type="button" class="button" onclick="updateSystem();" value="実行" {BUTTON_DISABLED} /></div>
+    <div class="panel-footer"><input type="button" id="update_button" class="button" onclick="updateSystem();" value="実行" {BUTTON_DISABLED} /></div>
 </div>
 </form>
+<ol id="step_message">
+</ol>
 </div>
 </patTemplate:tmpl>
