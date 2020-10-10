@@ -90,6 +90,7 @@ define('M3_DIR_NAME_MOBILE',		'm');									// 携帯用ディレクトリ名
 define('M3_DIR_NAME_SMARTPHONE',	's');									// スマートフォン用ディレクトリ名
 define('M3_DIR_NAME_HOME',			'home');								// 一般ユーザ用ディレクトリ格納ディレクトリ
 define('M3_DIR_NAME_SYSTEM_UPDATE',	'.update');								// システムバージョンアップ用一時ディレクトリ名
+define('M3_DIR_NAME_SYSTEM_LOG',	'.log');								// システムメンテナンス時ログディレクトリ名
 define('M3_FILENAME_INDEX',			'index.php');							// デフォルトのアクセスポイントファイル名
 define('M3_FILENAME_SERVER_CONNECTOR',		'connector.php');				// デフォルトのサーバ接続用アクセスポイントファイル名
 // Magic3専用タグ

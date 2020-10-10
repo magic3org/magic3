@@ -22,8 +22,13 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $version;			// アップデート中のバージョン
 	private $isCompleted;		// 実行処理の完了状態
 	private $updateId;			// アップデートID
+	private $packageDir;		// ソースパッケージディレクトリ名
+	private $backupDir;			// バックアップディレクトリ名
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
 	const UPDATE_STATUS_FILE = 'update_status.json';	// バージョンアップ状態ファイル
+	const BACKUP_DIR = 'backup-';		// バックアップディレクトリ名
+	const PACKAGE_DIR = 'magic3org-magic3-';			// パッケージディレクトリ名
+	const UPDATE_LOG_FILE = 'update.log';		// アップデートログファイル
 	
 	/**
 	 * コンストラクタ
@@ -32,6 +37,11 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// 変数初期化
+		$this->updateId = '';		// アップデートID
+		$this->packageDir = '';		// ソースパッケージディレクトリ名
+		$this->backupDir = '';		// バックアップディレクトリ名
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -124,9 +134,11 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$savedStatus = json_decode($updateStatusStr, true);
 			}
 			
-			// バージョンが古い場合はソースパッケージを削除
+			// バージョンが古い場合はソースパッケージディレクトリ、バックアップディレクトリを削除
 			if (!empty($savedStatus) && version_compare($this->version, $savedStatus['version']) > 0){
-				rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_name']);
+				if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
+				if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
+				
 				unlink($updateStatusFile);
 				$savedStatus = array();
 			}
@@ -141,25 +153,29 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$ret = $repo->downloadZipFileByTag($versionTag, $updateWorkDir, $destPath);
 				if ($ret){
 					// パッケージ名からアップデートIDを作成
-					$filenameParts = explode('-', basename($destPath));
-					$updateId = $filenameParts[count($filenameParts) -1];
-				
-					 $start = (float) array_sum(explode(' ',microtime()));
- 
+					$this->packageDir = basename($destPath);		// ソースパッケージディレクトリ名
+					$filenameParts = explode('-', $this->packageDir);
+					$this->updateId = $filenameParts[count($filenameParts) -1];
+
 					// パッケージ内の不要なファイル削除
 					$this->_cleanupPackage($destPath);
+					
+					// バックアップディレクトリ作成
+					$this->backupDir = self::BACKUP_DIR . $this->updateId;
+					$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir;		// バックアップディレクトリ名
+					if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
+					
 				} else {	// パッケージダウンロード失敗の場合
 					$this->gInstance->getAjaxManager()->addData('message', 'パッケージ取得失敗');
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 					return;
 				}
-			
 				$this->_saveUpdateStep($this->step, true/*終了*/);
 				
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースパッケージダウンロード - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else if ($this->step == 2){
-				$this->gInstance->getAjaxManager()->addData('message', 'ファイルコピー - 終了');
+				$this->gInstance->getAjaxManager()->addData('message', 'ソースファイル更新 - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			}
 
@@ -218,11 +234,14 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 		$status['version'] = $this->version;	// アップデート中のバージョン
 		$status['step'] = $step;
 		$status['completed'] = intval($isCompleted);
+		$status['package_dir'] = $this->packageDir;						// ソースパッケージディレクトリ名
+		$status['backup_dir'] = $this->backupDir;		// バックアップディレクトリ名
+		$status['updateid'] = $this->updateId;							// アップデートID
 		$status['date'] = date("Y/m/d H:i:s");
 		
 		$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
 		$updateStatusFile = $updateWorkDir . DIRECTORY_SEPARATOR . self::UPDATE_STATUS_FILE;
-debug($updateStatusFile);
+
 		file_put_contents($updateStatusFile, json_encode($status));
 	}
 	/**
@@ -242,6 +261,17 @@ debug($updateStatusFile);
 				unlink($path);
 			}
 		}
+	}
+	/**
+	 * アップデート状況のログ出力
+	 *
+	 * @param string $message	ログメッセージ
+	 * @return					なし
+	 */
+	function _log($message)
+	{
+		$logPath = $this->gEnv->getSystemLogPath(true/*ディレクトリ作成*/);
+		error_log(date("Y/m/d H:i:s") . ' ' . $message . "\n", 3, $logPath . DIRECTORY_SEPARATOR . self::UPDATE_LOG_FILE);
 	}
 }
 ?>

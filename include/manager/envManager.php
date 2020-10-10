@@ -840,6 +840,18 @@ class EnvManager extends _Core
 		return $path;
 	}
 	/**
+	 * システムメンテナンス時ログディレクトリを取得
+	 *
+	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
+	 * @return string			パス
+	 */
+	public function getSystemLogPath($createDir = false)
+	{
+		$path = M3_SYSTEM_ROOT_PATH . DIRECTORY_SEPARATOR . M3_DIR_NAME_SYSTEM_LOG;
+		if (!file_exists($path) && $createDir) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+		return $path;
+	}
+	/**
 	 * セッション単位の一時ディレクトリを取得
 	 *
 	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
