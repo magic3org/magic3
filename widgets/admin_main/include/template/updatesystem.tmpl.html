@@ -49,6 +49,9 @@ function updateSystem(){
 				return;
 			}
 			
+			// 正常に終了の場合はメッセージを追加
+			$('#step_message').append('<li>' + jsondata.message + '</li>');
+			
 			// 処理中ダイアログ停止
 			m3HideProcessModal();
 		}, function(request){		// 異常終了

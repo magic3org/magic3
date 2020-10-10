@@ -24,6 +24,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $updateId;			// アップデートID
 	private $packageDir;		// ソースパッケージディレクトリ名
 	private $backupDir;			// バックアップディレクトリ名
+	private $coreDirList = array('include');
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
 	const UPDATE_STATUS_FILE = 'update_status.json';	// バージョンアップ状態ファイル
 	const BACKUP_DIR = 'backup-';		// バックアップディレクトリ名
@@ -134,21 +135,42 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$savedStatus = json_decode($updateStatusStr, true);
 			}
 			
-			// バージョンが古い場合はソースパッケージディレクトリ、バックアップディレクトリを削除
-			if (!empty($savedStatus) && version_compare($this->version, $savedStatus['version']) > 0){
+			// ### インストールパッケージのバージョンチェック ###
+			// バージョンが異なる場合はソースパッケージディレクトリ、バックアップディレクトリを削除
+			if (!empty($savedStatus) && version_compare($this->version, $savedStatus['version']) != 0){
 				if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
 				if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
 				
 				unlink($updateStatusFile);
 				$savedStatus = array();
+				
+				// ログを残す
+				$this->_log('古いバージョンを削除しました。バージョン=' . $savedStatus['version']);
+			}
+			
+			if (!empty($savedStatus)){
+				if (!empty($savedStatus['updateid'])) $this->updateId = $savedStatus['updateid'];
+				if (!empty($savedStatus['package_dir'])) $this->packageDir = $savedStatus['package_dir'];
+				if (!empty($savedStatus['backup_dir'])) $this->backupDir = $savedStatus['backup_dir'];
 			}
 			
 			// ### 段階ごとの処理 ###
 			// 処理が途中で中断している場合は再度実行して上書きするようにする
 			if ($this->step == 1){
+				// *** ステップ1 *************************************
+				// 1.ソースパッケージをダウンロードしてファイルを解凍
+				// 2.空のbakaupディレクトリを作成しステップ2の準備
+				// ***************************************************
+				
+				// ディレクトリが作成されている場合は一旦削除
+				if (!empty($savedStatus)){
+					if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
+					if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
+				}
+				
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
-				// タグでZip圧縮ファイルを取得し、指定ディレクトリに解凍。ディレクトリが存在する場合は上書きされる。
+				// タグでZip圧縮ファイルを取得し、指定ディレクトリに解凍。(ディレクトリは上書きされるが不要なファイルは残るので注意)
 				$repo = new GitRepo('magic3org', 'magic3');
 				$ret = $repo->downloadZipFileByTag($versionTag, $updateWorkDir, $destPath);
 				if ($ret){
@@ -175,6 +197,23 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースパッケージダウンロード - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else if ($this->step == 2){
+				// *** ステップ2 *************************************
+				// 1.コアディレクトリからディレクトリを入れ替え
+				// ***************************************************
+				
+				$this->_saveUpdateStep($this->step, false/*開始*/);
+				
+				// 現在のソースをバックアップディレクトリに移動し、ダウンロードしたパッケージのソースを配置する。
+				for ($i = 0; $i < count($this->coreDirList); $i++){
+					$moveDir = $this->coreDirList[$i];
+					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
+					$newDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->packageDir . DIRECTORY_SEPARATOR . $moveDir;
+					$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . $moveDir;
+					
+					mvDirectory($oldDir, $backupDir);
+					mvDirectory($newDir, $oldDir);
+				}
+				
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースファイル更新 - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			}
