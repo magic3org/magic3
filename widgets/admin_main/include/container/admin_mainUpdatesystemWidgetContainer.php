@@ -30,6 +30,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const BACKUP_DIR = 'backup-';		// バックアップディレクトリ名
 	const PACKAGE_DIR = 'magic3org-magic3-';			// パッケージディレクトリ名
 	const UPDATE_LOG_FILE = 'update.log';		// アップデートログファイル
+	const SITE_DEF_FILE = 'siteDef.php';		// サイト定義ファイル
 	
 	/**
 	 * コンストラクタ
@@ -203,6 +204,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
+				// 一般ユーザのアクセスを停止
+				$this->_closeSite(false);
+				
 				// 現在のソースをバックアップディレクトリに移動し、ダウンロードしたパッケージのソースを配置する。
 				for ($i = 0; $i < count($this->coreDirList); $i++){
 					$moveDir = $this->coreDirList[$i];
@@ -214,8 +218,18 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					mvDirectory($newDir, $oldDir);
 				}
 				
+				// ### URLとDB接続情報は旧ファイルを再生 ###
+				$backupSiteDefFile = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . self::SITE_DEF_FILE;
+				$siteDefFile = $this->gEnv->getIncludePath() . DIRECTORY_SEPARATOR . self::SITE_DEF_FILE;
+				copy($backupSiteDefFile, $siteDefFile);
+
+				$this->_saveUpdateStep($this->step, true/*終了*/);
+				
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースファイル更新 - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
+			} else if ($this->step == 3){
+				// 一般ユーザのアクセスを再開
+				$this->_closeSite(true);
 			}
 
 		
@@ -299,6 +313,22 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			if (is_file($path) && substr($path, -9) == '/.gitkeep'){ 
 				unlink($path);
 			}
+		}
+	}
+	/**
+	 * 一般ユーザ向けサイトクローズ制御
+	 *
+	 * @param bool $siteState	サイト状態(true=オープン、false=クローズ)
+	 * @return 					なし
+	 */
+	function _closeSite($siteState)
+	{
+		$src = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . M3_FILENAME_INDEX;
+		$saveSrc = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . '_' . M3_FILENAME_INDEX;		// 退避用パス
+		if ($siteState){	// サイトオープンの場合
+			renameFile($saveSrc, $src);
+		} else {
+			renameFile($src, $saveSrc);
 		}
 	}
 	/**
