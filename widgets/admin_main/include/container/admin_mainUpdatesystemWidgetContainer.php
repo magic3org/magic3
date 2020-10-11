@@ -24,7 +24,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $updateId;			// アップデートID
 	private $packageDir;		// ソースパッケージディレクトリ名
 	private $backupDir;			// バックアップディレクトリ名
-	private $coreDirList = array('include');
+	private $coreDirList = array('include', 'widgets', 'scripts', 'images');
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
 	const UPDATE_STATUS_FILE = 'update_status.json';	// バージョンアップ状態ファイル
 	const BACKUP_DIR = 'backup-';		// バックアップディレクトリ名
@@ -116,7 +116,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 				return;
 			}
-			
+
 			// ##### アップデート開始 #####
 			$this->step = $step;
 			
@@ -124,10 +124,10 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$versionInfo = $this->_getVersionInfo();
 			$this->version = $versionInfo['version'];	// バージョン
 			$versionTag = $versionInfo['version_tag'];	// バージョンタグ
-		
+
 			// システムバージョンアップワークディレクトリ作成
 			$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath(true/*ディレクトリ作成*/);
-			
+
 			// アップデートのステップ状態を取得
 			$savedStatus = array();
 			$updateStatusFile = $updateWorkDir . DIRECTORY_SEPARATOR . self::UPDATE_STATUS_FILE;
@@ -135,7 +135,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			if ($updateStatusStr !== false){
 				$savedStatus = json_decode($updateStatusStr, true);
 			}
-			
+
 			// ### インストールパッケージのバージョンチェック ###
 			// バージョンが異なる場合はソースパッケージディレクトリ、バックアップディレクトリを削除
 			if (!empty($savedStatus) && version_compare($this->version, $savedStatus['version']) != 0){
@@ -168,7 +168,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
 					if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
 				}
-				
+
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
 				// タグでZip圧縮ファイルを取得し、指定ディレクトリに解凍。(ディレクトリは上書きされるが不要なファイルは残るので注意)
@@ -194,7 +194,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					return;
 				}
 				$this->_saveUpdateStep($this->step, true/*終了*/);
-				
+
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースパッケージダウンロード - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else if ($this->step == 2){
@@ -208,6 +208,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->_closeSite(false);
 				
 				// 現在のソースをバックアップディレクトリに移動し、ダウンロードしたパッケージのソースを配置する。
+				// resource,templatesディレクトリは移動しない。
 				for ($i = 0; $i < count($this->coreDirList); $i++){
 					$moveDir = $this->coreDirList[$i];
 					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
@@ -228,6 +229,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('message', 'ソースファイル更新 - 終了');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else if ($this->step == 3){
+				// *** ステップ3 *************************************
+				// 1.DBのバージョンアップ
+				// ***************************************************
 				// 一般ユーザのアクセスを再開
 				$this->_closeSite(true);
 			}
