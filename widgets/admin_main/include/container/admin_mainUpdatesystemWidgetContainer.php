@@ -143,7 +143,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
 				if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
 				
-				unlink($updateStatusFile);
+				//unlink($updateStatusFile);
 				$savedStatus = array();
 				
 				// ログを残す
