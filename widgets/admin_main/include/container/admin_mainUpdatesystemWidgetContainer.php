@@ -143,11 +143,12 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($savedStatus['package_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['package_dir']);
 				if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
 				
+				// ログを残す
+				$this->_log('古いバージョンを削除しました。削除バージョン=' . $savedStatus['version'] . ', 最新バージョン=' . $this->version);
+				
+				// バージョン情報を初期化
 				//unlink($updateStatusFile);
 				$savedStatus = array();
-				
-				// ログを残す
-				$this->_log('古いバージョンを削除しました。バージョン=' . $savedStatus['version']);
 			}
 			
 			if (!empty($savedStatus)){
