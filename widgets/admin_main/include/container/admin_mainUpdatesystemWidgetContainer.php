@@ -240,7 +240,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// 1.DBのバージョンアップ
 				// ***************************************************
 				// Step2が完了していることを確認
-				if (!empty($savedStatus)  && $savedStatus['step'] == 2 && $savedStatus['completed']){
+				if (empty($savedStatus) || !($savedStatus['step'] == 2 && $savedStatus['completed'])){
 					$this->gInstance->getAjaxManager()->addData('message', 'Step2が完了していません');
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 					return;
