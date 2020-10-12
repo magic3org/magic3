@@ -31,6 +31,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const PACKAGE_DIR = 'magic3org-magic3-';			// パッケージディレクトリ名
 	const UPDATE_LOG_FILE = 'update.log';		// アップデートログファイル
 	const SITE_DEF_FILE = 'siteDef.php';		// サイト定義ファイル
+	const DB_UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	
 	/**
 	 * コンストラクタ
@@ -201,11 +202,17 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// *** ステップ2 *************************************
 				// 1.コアディレクトリからディレクトリを入れ替え
 				// ***************************************************
-				
-				$this->_saveUpdateStep($this->step, false/*開始*/);
+				// Step1が完了していることを確認
+				if (!empty($savedStatus)  && $savedStatus['step'] == 1 && $savedStatus['completed']){
+					$this->gInstance->getAjaxManager()->addData('message', 'Step1が完了していません');
+					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
+					return;
+				}
 				
 				// 一般ユーザのアクセスを停止
 				$this->_closeSite(false);
+				
+				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
 				// 現在のソースをバックアップディレクトリに移動し、ダウンロードしたパッケージのソースを配置する。
 				// resource,templatesディレクトリは移動しない。
@@ -232,10 +239,42 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// *** ステップ3 *************************************
 				// 1.DBのバージョンアップ
 				// ***************************************************
+				// Step2が完了していることを確認
+				if (!empty($savedStatus)  && $savedStatus['step'] == 2 && $savedStatus['completed']){
+					$this->gInstance->getAjaxManager()->addData('message', 'Step2が完了していません');
+					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
+					return;
+				}
+				
+				$this->_saveUpdateStep($this->step, false/*開始*/);
+				
+				// DBバージョンアップ
+				$ret = $this->_updateDb($filename, $updateErrors);
+				if (!$ret){
+					$this->gInstance->getAjaxManager()->addData('message', 'DBバージョンアップ失敗');
+					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
+					return;
+				}
+/*
+			// ウィジェット情報を更新(共通処理)
+			if ($ret){
+				for ($i = 0; $i < count($this->updateTableScripts); $i++){
+					$ret = $this->gInstance->getDbManager()->execInitScriptFile($this->updateTableScripts[$i]['filename'], $errors);
+					if (!$ret){
+						$filename = $this->updateTableScripts[$i]['filename'];
+						break;// 異常終了の場合
+					}
+				}
+			}
+			*/
+				$this->_saveUpdateStep($this->step, true/*終了*/);
+				
+				$this->gInstance->getAjaxManager()->addData('message', 'DB更新 - 終了');
+				$this->gInstance->getAjaxManager()->addData('code', '1');
+				
 				// 一般ユーザのアクセスを再開
 				$this->_closeSite(true);
 			}
-
 		
 		} else {
 			$versionStr = '<span class="error">取得不可</span>';
@@ -345,6 +384,86 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	{
 		$logPath = $this->gEnv->getSystemLogPath(true/*ディレクトリ作成*/);
 		error_log(date("Y/m/d H:i:s") . ' ' . $message . "\n", 3, $logPath . DIRECTORY_SEPARATOR . self::UPDATE_LOG_FILE);
+	}
+	/**
+	 * DBをバージョンアップ
+	 *
+	 * @param string $filename		エラーがあったファイル名
+	 * @param array $errors			エラーメッセージ
+	 * @return bool					true=成功、false=失敗
+	 */
+	function _updateDb(&$filename, &$errors)
+	{
+		$ret = true;
+		
+		// SQLスクリプトディレクトリのチェック
+		$dir = $this->gEnv->getSqlPath() . '/' . self::DB_UPDATE_DIR;
+		$files = $this->_getUpdateScriptFiles($dir);
+		for ($i = 0; $i < count($files); $i++){
+			// ファイル名のエラーチェック
+			$fileCheck = true;
+			list($foreVer, $to, $nextVer, $tmp) = explode('_', basename($files[$i], '.sql'));
+			
+			if (!is_numeric($foreVer)) $fileCheck = false;
+			if (!is_numeric($nextVer)) $fileCheck = false;
+			if ($fileCheck && intval($foreVer) >= intval($nextVer)) $fileCheck = false;
+
+			// DBのバージョンをチェックして問題なければ実行
+			if ($fileCheck){
+				// 現在のバージョンを取得
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				if ($foreVer != $currentVer) continue;	// バージョンが異なるときは読みとばす
+			
+				$ret = $this->gInstance->getDbManager()->execInitScriptFile(self::DB_UPDATE_DIR . '/' . $files[$i], $errors);
+				if ($ret){
+					// 成功の場合はDBのバージョンを更新
+					$this->_db->updateSystemConfig(M3_TB_FIELD_DB_VERSION, $nextVer);
+					
+					// 更新情報をログに残す
+					$msg = $this->_('Database updated. Database Version: from %s to %s');// DBをバージョンアップしました。 DBバージョン: %sから%s
+					//$this->gOpeLog->writeInfo(__METHOD__, 'DBをバージョンアップしました。 DBバージョン: ' . $foreVer . 'から'. $nextVer, 1002);
+					$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $foreVer, $nextVer), 1002);
+				} else {
+					$filename = $files[$i];
+					break;// 異常終了の場合
+				}
+			} else {
+				// ファイル名のエラーメッセージを出力
+				$msg = $this->_('Bad script file found in files for update. Filename: %s');// DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファイル名: %s
+				//$this->gOpeLog->writeWarn(__METHOD__, 'DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファイル名: ' . $files[$i], 1101);
+				$this->gOpeLog->writeWarn(__METHOD__, sprintf($msg, $files[$i]), 1101);
+			}
+		}
+		return $ret;
+	}
+	/**
+	 * 追加用スクリプトファイルを取得
+	 *
+	 * @param string $path		読み込みパス
+	 * @return array			スクリプトファイル名
+	 */
+	function _getUpdateScriptFiles($path)
+	{
+		$files = array();
+		if (is_dir($path)){
+			$dir = dir($path);
+			while (($file = $dir->read()) !== false){
+				$filePath = $path . '/' . $file;
+				$pathParts = pathinfo($file);
+				$ext = $pathParts['extension'];		// 拡張子
+					
+				// ファイルかどうかチェック
+				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)
+					&& strncmp($file, '_', 1) != 0 &&	// 「_」で始まる名前のファイルは読み込まない
+					$ext == 'sql'){		// 拡張子が「.sql」のファイルだけを読み込む
+					$files[] = $file;
+				}
+			}
+			$dir->close();
+		}
+		// 取得したファイルは番号順にソートする
+		sort($files);
+		return $files;
 	}
 }
 ?>
