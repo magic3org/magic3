@@ -203,7 +203,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// 1.コアディレクトリからディレクトリを入れ替え
 				// ***************************************************
 				// Step1が完了していることを確認
-				if (!empty($savedStatus)  && $savedStatus['step'] == 1 && $savedStatus['completed']){
+				if (empty($savedStatus) || !($savedStatus['step'] == 1 && $savedStatus['completed'])){
 					$this->gInstance->getAjaxManager()->addData('message', 'Step1が完了していません');
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 					return;
