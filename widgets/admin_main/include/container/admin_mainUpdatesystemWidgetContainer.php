@@ -311,10 +311,10 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$versionInfo = json_decode($infoSrc, true);
 		
 			// バージョンアップ可能な場合のみバージョン番号取得
-			if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
+			//if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
 				$info['version'] = $versionInfo['version'];
 				$info['version_tag'] = $versionInfo['version_tag'];
-			}
+			//}
 		}
 		return $info;
 	}
