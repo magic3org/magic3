@@ -20,6 +20,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 {
 	private $step;		// 現在のアップデート段階
 	private $version;			// アップデート中のバージョン
+	private $preVersion;		// アップデート前の旧バージョン
 	private $isCompleted;		// 実行処理の完了状態
 	private $updateId;			// アップデートID
 	private $packageDir;		// ソースパッケージディレクトリ名
@@ -154,6 +155,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			
 			// 処理対象ディレクトリを取得
 			if (!empty($savedStatus)){
+				if (!empty($savedStatus['pre_version'])) $this->preVersion = $savedStatus['pre_version'];	// アップデート前の旧バージョン
 				if (!empty($savedStatus['updateid'])) $this->updateId = $savedStatus['updateid'];
 				if (!empty($savedStatus['package_dir'])) $this->packageDir = $savedStatus['package_dir'];
 				if (!empty($savedStatus['backup_dir'])) $this->backupDir = $savedStatus['backup_dir'];
@@ -185,6 +187,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					if (!empty($savedStatus['backup_dir'])) rmDirectory($updateWorkDir . DIRECTORY_SEPARATOR . $savedStatus['backup_dir']);
 				}
 
+				// バージョンアップ前のバージョンを保存
+				$this->preVersion = M3_SYSTEM_VERSION;
+				
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
 				// タグでZip圧縮ファイルを取得し、指定ディレクトリに解凍。(ディレクトリは上書きされるが不要なファイルは残るので注意)
@@ -236,7 +241,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				for ($i = 0; $i < count($this->coreDirList); $i++){
 					$moveDir = $this->coreDirList[$i];
 					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
-					$newDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->packageDir . DIRECTORY_SEPARATOR . $moveDir;
+					$newDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->packageDir . DIRECTORY_SEPARATOR . $moveDir;	// 新しいソースディレクトリ
 					$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . $moveDir;
 					
 					mvDirectory($oldDir, $backupDir);
@@ -305,10 +310,12 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('message', 'アップデート完了(新規システムバージョン=' . $versionTag . ')');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 				
+				$msg = $this->_('System updated. System Version: from %s to %s');// システムをバージョンアップしました。 システムバージョン: %sから%s
+				$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $this->preVersion, $this->version), 1002);
+					
 				// 一般ユーザのアクセスを再開
 				$this->_closeSite(true);
 			}
-		
 		} else {
 			$versionStr = '<span class="error">取得不可</span>';
 			$disabled = 'disabled';
@@ -359,6 +366,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	{
 		$status = array();
 		$status['version'] = $this->version;	// アップデート中のバージョン
+		$status['pre_version'] = $this->preVersion;	// アップデート前の旧バージョン
 		$status['step'] = $step;
 		$status['completed'] = intval($isCompleted);
 		$status['package_dir'] = $this->packageDir;						// ソースパッケージディレクトリ名
@@ -452,7 +460,6 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					
 					// 更新情報をログに残す
 					$msg = $this->_('Database updated. Database Version: from %s to %s');// DBをバージョンアップしました。 DBバージョン: %sから%s
-					//$this->gOpeLog->writeInfo(__METHOD__, 'DBをバージョンアップしました。 DBバージョン: ' . $foreVer . 'から'. $nextVer, 1002);
 					$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $foreVer, $nextVer), 1002);
 				} else {
 					$filename = $files[$i];
@@ -461,7 +468,6 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			} else {
 				// ファイル名のエラーメッセージを出力
 				$msg = $this->_('Bad script file found in files for update. Filename: %s');// DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファイル名: %s
-				//$this->gOpeLog->writeWarn(__METHOD__, 'DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファイル名: ' . $files[$i], 1101);
 				$this->gOpeLog->writeWarn(__METHOD__, sprintf($msg, $files[$i]), 1101);
 			}
 		}
