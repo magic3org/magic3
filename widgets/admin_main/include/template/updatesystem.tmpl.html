@@ -64,8 +64,26 @@ function updateSystem(){
 				// 正常に終了の場合はメッセージを追加
 				$('#step_message').append('<li>' + jsondata.message + '</li>');
 			
-				// 処理中ダイアログ停止
-				m3HideProcessModal();
+				m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=4', function(request, retcode, jsondata){		// 正常終了
+					if (jsondata.code == '0'){	// エラーの場合
+						// 処理中ダイアログ停止
+						m3HideProcessModal();
+			
+						alert('アップデートに失敗しました。');
+						return;
+					}
+			
+					// 正常に終了の場合はメッセージを追加
+					$('#step_message').append('<li>' + jsondata.message + '</li>');
+			
+					// 処理中ダイアログ停止
+					m3HideProcessModal();
+				}, function(request){		// 異常終了
+					// 処理中ダイアログ停止
+					m3HideProcessModal();
+		
+					alert('通信に失敗しました。');
+				});
 			}, function(request){		// 異常終了
 				// 処理中ダイアログ停止
 				m3HideProcessModal();

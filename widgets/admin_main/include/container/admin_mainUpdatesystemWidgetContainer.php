@@ -32,6 +32,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const UPDATE_LOG_FILE = 'update.log';		// アップデートログファイル
 	const SITE_DEF_FILE = 'siteDef.php';		// サイト定義ファイル
 	const DB_UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
+	const INSTALL_INFO_CLASS = 'InstallInfo';			// インストール情報クラス
 	
 	/**
 	 * コンストラクタ
@@ -108,7 +109,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$step = intval($request->trimValueOf('step'));
 
 			// アップデート段階のエラーチェック
-			if ($step < 1 || 3 < $step){
+			if ($step < 1 || 4 < $step){
 				// システムバージョンアップ用ワークディレクトリを削除
 				$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
 				rmDirectory($updateWorkDir);
@@ -147,14 +148,27 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->_log('古いバージョンを削除しました。削除バージョン=' . $savedStatus['version'] . ', 最新バージョン=' . $this->version);
 				
 				// バージョン情報を初期化
-				//unlink($updateStatusFile);
+				unlink($updateStatusFile);
 				$savedStatus = array();
 			}
 			
+			// 処理対象ディレクトリを取得
 			if (!empty($savedStatus)){
 				if (!empty($savedStatus['updateid'])) $this->updateId = $savedStatus['updateid'];
 				if (!empty($savedStatus['package_dir'])) $this->packageDir = $savedStatus['package_dir'];
 				if (!empty($savedStatus['backup_dir'])) $this->backupDir = $savedStatus['backup_dir'];
+			}
+			
+			// ソース更新後の場合はインストール情報を読み込む
+			if ($this->step > 2){
+				// インストール情報オブジェクト取得
+				$installInfo = $this->_getInstallInfo();
+				if (isset($installInfo)){
+					// テーブル作成、初期化スクリプト情報取得
+					$this->createTableScripts = $installInfo->getCreateTableScripts();
+					$this->insertTableScripts = $installInfo->getInsertTableScripts();
+					$this->updateTableScripts = $installInfo->getUpdateTableScripts();			// テーブル更新スクリプト
+				}
 			}
 			
 			// ### 段階ごとの処理 ###
@@ -202,6 +216,8 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			} else if ($this->step == 2){
 				// *** ステップ2 *************************************
 				// 1.コアディレクトリからディレクトリを入れ替え
+				//
+				// この段階以降は新しく配置された新規のソースでプログラムが動くので注意!
 				// ***************************************************
 				// Step1が完了していることを確認
 				if (empty($savedStatus) || !($savedStatus['step'] == 1 && $savedStatus['completed'])){
@@ -256,9 +272,8 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 					return;
 				}
-/*
-			// ウィジェット情報を更新(共通処理)
-			if ($ret){
+				
+				// ウィジェット情報を更新
 				for ($i = 0; $i < count($this->updateTableScripts); $i++){
 					$ret = $this->gInstance->getDbManager()->execInitScriptFile($this->updateTableScripts[$i]['filename'], $errors);
 					if (!$ret){
@@ -266,11 +281,28 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 						break;// 異常終了の場合
 					}
 				}
-			}
-			*/
+
 				$this->_saveUpdateStep($this->step, true/*終了*/);
 				
 				$this->gInstance->getAjaxManager()->addData('message', 'DB更新 - 終了');
+				$this->gInstance->getAjaxManager()->addData('code', '1');
+			} else if ($this->step == 4){
+				// *** ステップ4 *************************************
+				// 1.テンプレートの更新処理
+				// ***************************************************
+				// Step3が完了していることを確認
+				if (empty($savedStatus) || !($savedStatus['step'] == 3 && $savedStatus['completed'])){
+					$this->gInstance->getAjaxManager()->addData('message', 'Step3が完了していません');
+					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
+					return;
+				}
+				
+				$this->_saveUpdateStep($this->step, false/*開始*/);
+				
+				
+				$this->_saveUpdateStep($this->step, true/*終了*/);
+				
+				$this->gInstance->getAjaxManager()->addData('message', 'アップデート完了(新規システムバージョン=' . $versionTag . ')');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 				
 				// 一般ユーザのアクセスを再開
@@ -310,11 +342,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 		if ($infoSrc !== false){
 			$versionInfo = json_decode($infoSrc, true);
 		
-			// バージョンアップ可能な場合のみバージョン番号取得
-			//if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
-				$info['version'] = $versionInfo['version'];
-				$info['version_tag'] = $versionInfo['version_tag'];
-			//}
+			// バージョン番号取得
+			$info['version'] = $versionInfo['version'];
+			$info['version_tag'] = $versionInfo['version_tag'];
 		}
 		return $info;
 	}
@@ -465,6 +495,32 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 		// 取得したファイルは番号順にソートする
 		sort($files);
 		return $files;
+	}
+	/**
+	 * インストール情報オブジェクト取得
+	 *
+	 * @return object		インストール情報オブジェクト
+	 */
+	function _getInstallInfo()
+	{
+		$infoObj = null;
+		
+		// 初期化情報読み込み
+		$installInfoFile = M3_SYSTEM_INCLUDE_PATH . '/install/installInfo.php';
+		if (file_exists($installInfoFile)){
+			require_once($installInfoFile);
+			$infoClass = self::INSTALL_INFO_CLASS;
+			$infoObj = new $infoClass;
+		} else {
+			// デフォルトを検索
+			$installInfoFile = M3_SYSTEM_INCLUDE_PATH . '/install/installInfo_default.php';
+			if (file_exists($installInfoFile)){
+				require_once($installInfoFile);
+				$infoClass = self::INSTALL_INFO_CLASS;
+				$infoObj = new $infoClass;
+			}
+		}
+		return $infoObj;
 	}
 }
 ?>
