@@ -1,9 +1,9 @@
 <?php
 defined('_JEXEC') or die('Restricted access'); // no direct access
 
-ob_start();
-require_once realpath(dirname(__FILE__) . str_replace('/', DIRECTORY_SEPARATOR, '/../../../../modules/mod_mainmenu/tmpl/default.php'));
-ob_clean();
+//ob_start();
+//require_once realpath(dirname(__FILE__) . str_replace('/', DIRECTORY_SEPARATOR, '/../../../../modules/mod_mainmenu/tmpl/default.php'));
+//ob_clean();
 
 if (!defined('modMainMenuArtxExtensions'))
 {
