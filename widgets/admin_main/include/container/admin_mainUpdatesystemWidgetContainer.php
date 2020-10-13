@@ -111,7 +111,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 
 			// アップデート段階のエラーチェック
 			if ($step < 1 || 4 < $step){
-				// システムバージョンアップ用ワークディレクトリを削除
+				// システムアップデート用ワークディレクトリを削除
 				$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
 				rmDirectory($updateWorkDir);
 				
@@ -128,7 +128,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$this->version = $versionInfo['version'];	// バージョン
 			$versionTag = $versionInfo['version_tag'];	// バージョンタグ
 
-			// システムバージョンアップワークディレクトリ作成
+			// システムアップデート用ワークディレクトリ作成
 			$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath(true/*ディレクトリ作成*/);
 
 			// アップデートのステップ状態を取得
@@ -311,8 +311,14 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 				
 				$msg = $this->_('System updated. System Version: from %s to %s');// システムをバージョンアップしました。 システムバージョン: %sから%s
-				$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $this->preVersion, $this->version), 1002);
-					
+				$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, 'v' . $this->preVersion, 'v' . $this->version), 1002);
+				
+				// ログを残す
+				$this->_log('システムバージョンアップ完了しました。新バージョン=' . $this->version . ', 旧バージョン=' . $this->preVersion);
+				
+				// システムアップデート用ワークディレクトリ削除
+				rmDirectory($updateWorkDir);
+				
 				// 一般ユーザのアクセスを再開
 				$this->_closeSite(true);
 			}
