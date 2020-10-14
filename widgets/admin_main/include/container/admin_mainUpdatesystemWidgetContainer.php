@@ -14,10 +14,12 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
 class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $db;	// DB接続オブジェクト
 	private $step;		// 現在のアップデート段階
 	private $version;			// アップデート中のバージョン
 	private $preVersion;		// アップデート前の旧バージョン
@@ -42,6 +44,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// DB接続オブジェクト作成
+		$this->db = new admin_mainDb();
 		
 		// 変数初期化
 		$this->updateId = '';		// アップデートID
@@ -305,7 +310,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
 				// テンプレートの存在チェック
-				if ($this->_db->getAllTemplateIdList($rows)){
+				if ($this->db->getAllTemplateIdList($rows)){
 					for ($i = 0; $i < count($rows); $i++){
 						$templateId = $rows[$i]['tm_id'];
 						$templateDir = $this->gEnv->getTemplatesPath() . DIRECTORY_SEPARATOR . $templateId;			// テンプレートのディレクトリ
