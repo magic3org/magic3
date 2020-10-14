@@ -157,7 +157,8 @@ if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*
 if ($dirType == 'image'){
 	$uploadAllow = array('image');
 } else {
-	$uploadAllow = array('image', 'application/pdf');		// 画像、PDFを許可
+	//$uploadAllow = array('image', 'application/pdf');		// 画像、PDFを許可
+	$uploadAllow = array('image', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');		// 画像,PDF,Excel,Wordドキュメントを許可
 }
 // ########## Magic3アクセス制御(終了) ##########
 
