@@ -304,7 +304,27 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				
 				$this->_saveUpdateStep($this->step, false/*開始*/);
 				
-				
+				// テンプレートの存在チェック
+				if ($this->_db->getAllTemplateIdList($rows)){
+					for ($i = 0; $i < count($rows); $i++){
+						$templateId = $rows[$i]['tm_id'];
+						$templateDir = $this->gEnv->getTemplatesPath() . DIRECTORY_SEPARATOR . $templateId;			// テンプレートのディレクトリ
+						
+						// テンプレートの最新ソース
+						$newTemplateDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->packageDir . DIRECTORY_SEPARATOR . M3_DIR_NAME_TEMPLATES . DIRECTORY_SEPARATOR . $templateId;
+						
+						if (file_exists($templateDir)){	// テンプレートが存在している場合は最新のソースに更新
+							if (file_exists($newTemplateDir)){	// テンプレートの最新ソースがある場合
+								$backupTemplateDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . M3_DIR_NAME_TEMPLATES . DIRECTORY_SEPARATOR . $templateId;
+								mvDirectory($templateDir, $backupTemplateDir);
+								mvDirectory($newTemplateDir, $templateDir);
+							}
+						} else {	// テンプレートが存在していない場合は最新ソースから取得
+							if (file_exists($newTemplateDir)) mvDirectory($newTemplateDir, $templateDir);
+						}
+					}
+				}
+							
 				$this->_saveUpdateStep($this->step, true/*終了*/);
 				
 				$this->gInstance->getAjaxManager()->addData('message', 'アップデート完了(新規システムバージョン=' . $versionTag . ')');
