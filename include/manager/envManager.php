@@ -56,7 +56,6 @@ class EnvManager extends _Core
 	private $accessPath;		// アクセスポイントパス
 	private $accessDir;			// アクセスポイントディレクトリ(空文字列=PC用、s=スマートフォン用、m=携帯用)
  	private $db;				// DBオブジェクト
-	private $canUseDbSession;	// DBセッションが使用できるかどうか
 	private $canUseDb;			// DBが使用可能状態にあるかどうか
 	private $canUseCookie;		// クッキーが使用可能かどうか
 	private $canChangeLang;		// 言語変更可能かどうか
@@ -164,28 +163,14 @@ class EnvManager extends _Core
 			// システム名称、バージョンを取得
 			$status = $this->db->getDisplayErrMessage();	// 出力状態を取得
 			$this->db->displayErrMessage(false);		// 画面へのエラー出力を抑止
-			//$value = $this->db->getSystemConfig(M3_TB_FIELD_SYSTEM_NAME);
 			$ret = $this->gSystem->_loadSystemConfig();
 			$this->db->displayErrMessage($status);		// 抑止解除
-			// 値が取得できたときは、セッションDBテーブルも作成されているとする
-			/*if ($value == ''){
-				$this->canUseDbSession = false;
-				$this->canUseDb = false;			// DBは使用できない
-			} else {
-				$this->canUseDbSession = true;
-				$this->canUseDb = true;			// DBは使用可能
-				
-				// システム関係のパラメータを取得
-				$this->loadSystemParams();
-			}*/
 			if ($ret){
-				$this->canUseDbSession = true;
 				$this->canUseDb = true;			// DBは使用可能
 				
 				// システム関係のパラメータを取得
 				$this->loadSystemParams(false);		// DBから再取得しない
 			} else {
-				$this->canUseDbSession = false;
 				$this->canUseDb = false;			// DBは使用できない
 			}
 		}
@@ -2500,13 +2485,6 @@ class EnvManager extends _Core
 	public function getUseSslAdmin()
 	{
 		return $this->useSslAdmin;
-	}
-	/**
-	 * DBセッションが使用できるかどうか
-	 */
-	public function canUseDbSession()
-	{
-		return $this->canUseDbSession;
 	}
 	/**
 	 * DBが使用可能かどうか

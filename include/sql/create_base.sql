@@ -160,7 +160,7 @@ CREATE TABLE _design (
     PRIMARY KEY          (dn_id)
 ) ENGINE=innodb;
 
--- セッション管理トラン
+-- セッション管理トラン(廃止予定)
 DROP TABLE IF EXISTS _session;
 CREATE TABLE _session (
     ss_id                CHAR(32)       DEFAULT ''                    NOT NULL,      -- ID

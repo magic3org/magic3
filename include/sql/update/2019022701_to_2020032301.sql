@@ -25,7 +25,6 @@ ALTER TABLE _templates MODIFY tm_custom_params     MEDIUMTEXT                   
 DROP TABLE IF EXISTS _widget_param_update;
 
 -- 汎用コンテンツマスター
--- ALTER TABLE content ADD cn_option_attr       TEXT                                         NOT NULL;      -- オプション属性--使用するか未定
 ALTER TABLE content ADD cn_generator         VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- コンテンツ作成アプリケーション(値=artisteer,themler,nicepage)
 
 -- テンプレート情報

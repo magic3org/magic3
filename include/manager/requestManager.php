@@ -19,7 +19,6 @@ class RequestManager extends _Core
 {
 	private $db;						// DBオブジェクト
 	private $tmpCookie;		// クッキー送信前のクッキー格納データ
-//	private $magicQuote;	// バックスラッシュでの文字エスケープ処理
 	private $sessionNoUpdate;		// セッションの更新を停止するかどうか(参照は可能)
 	private $sessionOpenEventCallbacks;		// セッション開始イベントコールバック関数
 	private $sessionCloseEventCallbacks;		// セッション終了イベントコールバック関数
@@ -35,33 +34,10 @@ class RequestManager extends _Core
 		// システムDBオブジェクト取得
 		$this->db = $this->gInstance->getSytemDbObject();
 		
-		// セッションハンドラ設定
-		// セッションDBが使用可能な場合は、ハンドラを設定し、
-		// 使用不可の場合は、デフォルトのセッション管理を使用する
-		if (M3_SESSION_DB && $this->gEnv->canUseDbSession()){
-			ini_set('session.save_handler', 'user');		// 追加(2008/7/7)
-			session_set_save_handler(	array($this, '_sessionOpen'),
-										array($this, '_sessionClose'),
-										array($this, '_sessionRead'),
-										array($this, '_sessionWrite'),
-										array($this, '_sessionDestroy'),
-										array($this, '_sessionGc'));
-										
-			// シャットダウン時の処理(2015/12/21 追加)
-			if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-				session_register_shutdown();
-			} else {
-				register_shutdown_function('session_write_close');
-			}
-		}
-		
 		// その他パラメータ初期化
 		$this->tmpCookie = array();		// クッキー送信前のクッキー格納データ
 		$this->sessionOpenEventCallbacks = array();		// セッション開始イベントコールバック関数
 		$this->sessionCloseEventCallbacks = array();	// セッション終了イベントコールバック関数
-		
-		// magic quoteが有効の場合は回避手段を取る
-		//if (get_magic_quotes_gpc() == 1) $this->magicQuote = true;
 	}
 	/**
 	 * POST値が設定されているか判断
@@ -516,21 +492,6 @@ class RequestManager extends _Core
 		}
 		return $wikiPage;
 	}
-	/**
-	 * 文字のエスケープ処理をはずす
-	 *
-	 * '(シングルクオート)、" (ダブルクオート)、\(バックスラッシュ) 、NULLのバックスラッシュでのエスケープ処理を削除
-	 *
-	 * @param string $str		変換元文字列
-	 * @return string			変換後文字列
-	 */
-	/*function gpc_stripslashes($str){
-		//if ($this->magicQuote){  
-		//	return stripslashes($str);
-		//} else {  
-			return $str;  
-		//}  
-	}*/
 	//******************************************************
 	// patTemplateのテンプレートに値を埋め込む。値を省略した場合は、POST,GETデータから取得したデータを再設定する。
 	// $name: patTemplateのテンプレート名
@@ -544,57 +505,6 @@ class RequestManager extends _Core
 			$this->tmpl->addVar($name, $valueName, $default);
 		}
 	}
-	/**
-	 * セッションを開く
-	 */
-	function _sessionOpen($save_path, $session_name)
-	{
-		return true;
-	}
-	/**
-	 * セッションを閉じる
-	 */
-	function _sessionClose()
-	{
-		return true;
-	}
-	/**
-	 * セッションデータを読み込む
-	 */
-	function _sessionRead($id)
-	{
-		return $this->db->readSession($id);
-	}
-	/**
-	 * セッションデータを書き込む
-	 *
-	 * @param string $id  			セッションID
-	 * @param string $sessData  	セッションデータ
-	 */
-	function _sessionWrite($id, $sessData)
-	{
-		return $this->db->writeSession($id, $sessData);
-	}
-	/**
-	 * セッションを破棄する
-	 *
-	 * @param string $id  			セッションID
-	 */
-	function _sessionDestroy($id)
-	{
-		return $this->db->destroySession($id);
-	}
-	/**
-	 * 時間経過したセッションを破棄する
-	 *
-	 * @param int $maxlifetime  	セッションの生存時間(秒)
-	 */
-	function _sessionGc($maxlifetime)
-	{
-		return $this->db->gcSession($maxlifetime);
-	}
-	
-	
 	/**
 	 * セッション開始イベント時のコールバック関数追加
 	 *
