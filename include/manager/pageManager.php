@@ -445,7 +445,9 @@ class PageManager extends _Core
 	 */
 	function setNoTimeout()
 	{
-		if (ini_get('safe_mode') == '0') set_time_limit(0);
+		// スクリプトの処理の中断を禁止する
+		ignore_user_abort(true);
+		set_time_limit(0);
 	}
 	/**
 	 * ポップアップメッセージを設定
