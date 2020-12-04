@@ -51,7 +51,7 @@ class patTemplate_Reader_File extends patTemplate_Reader
 	* @param	string	file to parse
 	* @return	array	templates
 	*/
-	function readTemplates( $input )
+	function readTemplates($input, $options = array())
 	{
 		if (isset($this->_rootAtts['relative'])) {
 			$relative = $this->_rootAtts['relative'];
@@ -89,7 +89,7 @@ class patTemplate_Reader_File extends patTemplate_Reader
 	*					This can be a string, a filename, a resource or whatever the derived class needs to read from
 	* @return	string  template content
 	*/
-	function loadTemplate( $input )
+	function loadTemplate($input, $options = array())
 	{
 		if (isset($this->_rootAtts['relative'])) {
 			$relative = $this->_rootAtts['relative'];
