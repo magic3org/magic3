@@ -1008,6 +1008,7 @@ class BaseFrameContainer extends _Core
 			define('_JEXEC', 1);
 			define('JPATH_PLATFORM', $this->gEnv->getJoomlaRootPath());
 			define('JPATH_BASE', dirname(__FILE__));
+			define('JPATH_COMPONENT', JPATH_BASE . '/components/com_templates');
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
 			define('JPATH_PLUGINS', $this->gEnv->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
 //			define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
