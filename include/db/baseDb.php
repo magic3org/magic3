@@ -1165,20 +1165,29 @@ class BaseDb extends _Core
 			$dbType = $con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
 			if ($dbType == 'mysql') {	// MySQLの場合
 				$con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-			}			
-			// トランザクションスタート
-			$con->beginTransaction();
+			}
 			
-			// テーブル作成
-			$stmt = $con->prepare('create table m3_test_table(param1 int, param2 varchar(10), param3 text)');			
-			$stmt->execute(array());
-			
-			// テーブル破棄
-			$stmt = $con->prepare('drop table m3_test_table');
-			$stmt->execute(array());
-			
-			// コミット
-			$con->commit();
+			if ($dbType == 'mysql' && version_compare(PHP_VERSION, '8.0.0') >= 0){		// PHP8のPDOではトランザクション内でCREATE TABLEやDROP TABLEができない
+				// テーブル作成
+				$stmt = $con->exec('create table m3_test_table(param1 int, param2 varchar(10), param3 text)');
+				
+				// テーブル破棄
+				$stmt = $con->exec('drop table m3_test_table');
+			} else {
+				// トランザクションスタート
+				$con->beginTransaction();
+
+				// テーブル作成
+				$stmt = $con->prepare('create table m3_test_table(param1 int, param2 varchar(10), param3 text)');			
+				$stmt->execute(array());
+
+				// テーブル破棄
+				$stmt = $con->prepare('drop table m3_test_table');
+				$stmt->execute(array());
+
+				// コミット
+				$con->commit();
+			}
 			
 			// ステートメントを開放
 			$stmt = null;

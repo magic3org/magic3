@@ -26,7 +26,7 @@ class InstanceManager extends _Core
 	private $userInfo;			// ユーザ情報オブジェクト
 	private $addonDir;			// 追加クラスインストールディレクトリ
 	private $addonArray;		// ロード済みの追加クラス
-	private $addonInfoArray;	// アドオンクラス情報
+	private $addonInfoArray = array();	// アドオンクラス情報
 	
 	/**
 	 * コンストラクタ

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2020 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,6 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_messageDb.php');
 class admin_messageWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
+	private $serialArray = array();		// ログシリアル番号
 	const DEFAULT_LOG_LEVEL = -1;		// デフォルトのログレベル
 	const DEFAULT_LIST_COUNT = 5;			// 最大メッセージ表示数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
@@ -170,7 +171,7 @@ class admin_messageWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVars('loglist', $row);
 		$this->tmpl->parseTemplate('loglist', 'a');
 		
-		// 表示中のコンテンツIDを保存
+		// 表示中のログシリアル番号を保存
 		$this->serialArray[] = $serial;
 		return true;
 	}
