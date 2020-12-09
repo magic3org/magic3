@@ -5817,6 +5817,11 @@ abstract class elFinderVolumeDriver
                     $bgNum = false;
                     if ($s[2] === IMAGETYPE_GIF && (!$destformat || $destformat === 'gif')) {
                         $bgIdx = imagecolortransparent($img);
+
+                        // fix out of range index problem by magic3
+                        $palletsize = imagecolorstotal($img);
+                        if ($bgIdx >= $palletsize) $bgIdx = -1;
+
                         if ($bgIdx !== -1) {
                             $c = imagecolorsforindex($img, $bgIdx);
                             $bgNum = imagecolorallocate($tmp, $c['red'], $c['green'], $c['blue']);
@@ -5939,6 +5944,11 @@ abstract class elFinderVolumeDriver
                     $bgNum = false;
                     if ($s[2] === IMAGETYPE_GIF && (!$destformat || $destformat === 'gif')) {
                         $bgIdx = imagecolortransparent($img);
+
+                        // fix out of range index problem by magic3
+                        $palletsize = imagecolorstotal($img);
+                        if ($bgIdx >= $palletsize) $bgIdx = -1;
+
                         if ($bgIdx !== -1) {
                             $c = imagecolorsforindex($img, $bgIdx);
                             $bgNum = imagecolorallocate($tmp, $c['red'], $c['green'], $c['blue']);
@@ -6232,6 +6242,11 @@ abstract class elFinderVolumeDriver
                 $bgIdx = false;
                 if ($s[2] === IMAGETYPE_GIF) {
                     $bgIdx = imagecolortransparent($img);
+
+                    // fix out of range index problem by magic3
+                    $palletsize = imagecolorstotal($img);
+                    if ($bgIdx >= $palletsize) $bgIdx = -1;
+
                     if ($bgIdx !== -1) {
                         $c = imagecolorsforindex($img, $bgIdx);
                         $w = imagesx($img);
