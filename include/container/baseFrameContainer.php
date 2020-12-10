@@ -1011,7 +1011,8 @@ class BaseFrameContainer extends _Core
 			define('JPATH_COMPONENT', JPATH_BASE . '/components/com_templates');
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
 			define('JPATH_PLUGINS', $this->gEnv->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
-//			define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
+			//define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
+			define('JPATH_THEMES', '');	// 空で定義(PHP8エラー対応)(2020/12/10)
 			define('DS', DIRECTORY_SEPARATOR);
 			
 			global $mainframe;

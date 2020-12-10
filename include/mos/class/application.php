@@ -908,7 +908,8 @@ class JApplication extends JObject
 	 */
 	public function isAdmin()
 	{
-		return ($this->_clientId == 1);
+		//return ($this->_clientId == 1);
+		return false;
 	}
 
 	/**
