@@ -220,12 +220,13 @@ abstract class JHtmlBootstrap
 		JHtml::_('jquery.framework');
 
 		// If no debugging value is set, use the configuration setting
-		if ($debug === null)
+		/*if ($debug === null)
 		{
 			$debug = JDEBUG;
-		}
+		}*/
 
-		JHtml::_('script', 'jui/bootstrap.min.js', array('version' => 'auto', 'relative' => true, 'detectDebug' => $debug));
+		//JHtml::_('script', 'jui/bootstrap.min.js', array('version' => 'auto', 'relative' => true, 'detectDebug' => $debug));
+		JHtml::_('script', 'jui/bootstrap.min.js', array('version' => 'auto', 'relative' => true, 'detectDebug' => false));
 		static::$loaded[__METHOD__] = true;
 
 		return;

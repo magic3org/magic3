@@ -158,7 +158,7 @@ class JHTML
 	 *
 	 * @access	public
 	 * @param	string 	The name of the script file
-	 * * @param	string 	The relative or absolute path of the script file
+	 * @param	string 	The relative or absolute path of the script file
 	 * @param	boolean If true, the mootools library will be loaded
 	 * @since	1.5
 	 */
@@ -169,13 +169,14 @@ class JHTML
 			JHTML::_('behavior.mootools');
 		}
 
-		if(strpos($path, 'http') !== 0) {
-			$path =  JURI::root(true).'/'.$path;
-		};
-
-		$document = JFactory::getDocument();
-		$document->addScript( $path.$filename );
-		return;
+		if (!is_array($path)){
+			if(strpos($path, 'http') !== 0) {
+				$path =  JURI::root(true).'/'.$path;
+			};
+	
+			$document = JFactory::getDocument();
+			$document->addScript( $path.$filename );
+		}
 	}
 
 	/**

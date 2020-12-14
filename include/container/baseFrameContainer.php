@@ -1007,6 +1007,7 @@ class BaseFrameContainer extends _Core
 			// Joomla!テンプレート共通の設定
 			define('_JEXEC', 1);
 			define('JPATH_PLATFORM', $this->gEnv->getJoomlaRootPath());
+			define('JPATH_ROOT', $this->gEnv->getSystemRootPath());
 			define('JPATH_BASE', dirname(__FILE__));
 			define('JPATH_COMPONENT', JPATH_BASE . '/components/com_templates');
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
@@ -1014,6 +1015,7 @@ class BaseFrameContainer extends _Core
 			//define('JPATH_THEMES', $this->gEnv->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
 			define('JPATH_THEMES', '');	// 空で定義(PHP8エラー対応)(2020/12/10)
 			define('DS', DIRECTORY_SEPARATOR);
+			define('JROUTER_MODE_SEF', 1);
 			
 			global $mainframe;
 			require_once($this->gEnv->getJoomlaRootPath() . '/mosDef.php');// Joomla定義読み込み

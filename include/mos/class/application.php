@@ -732,6 +732,13 @@ class JApplication extends JObject
 			$template->template = $gEnvManager->getCurrentTemplateId();
 			//$template->params = new JRegistry;
 			$template->params = new JParameter();
+			
+			// Nicepageテンプレートのバグ対応(ロゴファイルのパスが空文字列の場合に例外が発生する問題) 2020/12/14
+			$generator = $gEnvManager->getCurrentTemplateGenerator();
+			if ($generator === M3_TEMPLATE_GENERATOR_NICEPAGE){
+				$template->params->set('logoFile', '_dummy');	// 任意の値を設定
+			}
+			
 			return $template;
 		}
 		return $gEnvManager->getCurrentTemplateId();
