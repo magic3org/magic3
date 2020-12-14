@@ -92,12 +92,13 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 				$version = $this->_('version unknown');
 			} else {
 				// バージョンチェック
-				$isOK = false;
+				/*$isOK = false;
 				if ($isMariaDb){	// MariaDbの場合
 					$isOK = true;
 				} else {
 					if (version_compare($version, '5.0') >= 0 && version_compare($version, '5.6') < 0) $isOK = true;
-				}
+				}*/
+				$isOK = true;
 			}
 			if ($isOK){
 				$status .= '(' . $version . ')';
