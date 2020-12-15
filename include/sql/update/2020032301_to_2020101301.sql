@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS _session;
 
 -- 自動ログインマスター
 ALTER TABLE _auto_login MODIFY ag_id     CHAR(128)       DEFAULT ''                    NOT NULL;      -- 自動ログインキー
-ALTER TABLE _auto_login DROP INDEX ag_user_id
+ALTER TABLE _auto_login DROP INDEX ag_user_id;
 
 -- テンプレート情報
 DELETE FROM _templates WHERE tm_id = 'themler_old';
