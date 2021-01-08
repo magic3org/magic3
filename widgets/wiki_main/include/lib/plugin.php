@@ -80,19 +80,19 @@ function exist_plugin($name)
 // プラグイン処理のための関数名は、「_action」,「_convert」,「_inline」,「_init」
 // Check if plugin API 'action' exists
 function exist_plugin_action($name) {
-	return	function_exists('plugin_' . $name . '_action') ? TRUE : exist_plugin($name) ?
+	return	(function_exists('plugin_' . $name . '_action') ? TRUE : exist_plugin($name)) ?
 		function_exists('plugin_' . $name . '_action') : FALSE;
 }
 
 // Check if plugin API 'convert' exists
 function exist_plugin_convert($name) {
-	return	function_exists('plugin_' . $name . '_convert') ? TRUE : exist_plugin($name) ?
+	return	(function_exists('plugin_' . $name . '_convert') ? TRUE : exist_plugin($name)) ?
 		function_exists('plugin_' . $name . '_convert') : FALSE;
 }
 
 // Check if plugin API 'inline' exists
 function exist_plugin_inline($name) {
-	return	function_exists('plugin_' . $name . '_inline') ? TRUE : exist_plugin($name) ?
+	return	(function_exists('plugin_' . $name . '_inline') ? TRUE : exist_plugin($name)) ?
 		function_exists('plugin_' . $name . '_inline') : FALSE;
 }
 
