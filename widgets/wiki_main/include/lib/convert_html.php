@@ -565,7 +565,7 @@ class TableCell extends Element
 			$text      = substr($text, 1);
 		}
 
-		if ($text != '' && $text{0} == '#') {
+		if ($text != '' && $text[0] == '#') {
 			// Try using Div class for this $text
 			$obj = Factory_Div($this, $text);
 			if (is_a($obj, 'Paragraph'))
@@ -835,7 +835,7 @@ class Pre extends Element
 		//parent::Element();
 		parent::__construct();
 		$this->elements[] = htmlspecialchars(
-			(! $preformat_ltrim || $text == '' || $text{0} != ' ') ? $text : substr($text, 1));
+			(! $preformat_ltrim || $text == '' || $text[0] != ' ') ? $text : substr($text, 1));
 	}
 
 	function canContain($obj)
@@ -992,7 +992,7 @@ class Body extends Element
 			}
 
 			// The first character
-			$head = $line{0};
+			$head = $line[0];
 
 			// Heading
 			if ($head == '*') {
