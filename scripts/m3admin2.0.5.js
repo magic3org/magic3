@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -100,6 +100,7 @@ function m3ShowAdjustWindow(configId, serial, pageId, pageSubId)
 function m3ShowPreviewWindow(type, url)
 {
 	var width, height;
+	var screenAvileWidth = window.screen.availWidth;
 	
 	switch (type){
 		case 0:		// PC用
@@ -110,8 +111,16 @@ function m3ShowPreviewWindow(type, url)
 				return;
 			}
 		
-			width = 1000;
-			height = 800;
+			if (screenAvileWidth <= 1200){
+				width = 1000;
+				height = 800;
+			} else if (screenAvileWidth <= 1400){
+				width = 1200;
+				height = 960;
+			} else {
+				width = 1400;
+				height = 1120;
+			}
 			break;
 		case 1:		// 携帯用
 			width = 240;
@@ -122,7 +131,11 @@ function m3ShowPreviewWindow(type, url)
 			height = 480;
 			break;
 	}
-	window.open(url, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=" + width + ",height=" + height);
+	
+	// 起動したウィンドウの中央にプレビューウィンドウを表示
+	var wTop = window.screenTop + (window.innerHeight / 2) - (height / 2);
+	var wLeft = window.screenLeft + (window.innerWidth / 2) - (width / 2);
+	window.open(url, "", "toolbar=no, menubar=no, location=no, status=no, scrollbars=yes, resizable=yes, width=" + width + ", height=" + height + ", top=" + wTop + ", left=" + wLeft);
 }
 /**
  * 管理画面用部品
