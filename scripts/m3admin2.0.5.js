@@ -111,10 +111,10 @@ function m3ShowPreviewWindow(type, url)
 				return;
 			}
 		
-			if (screenAvileWidth <= 1200){
+			if (screenAvileWidth < 1200){
 				width = 1000;
 				height = 800;
-			} else if (screenAvileWidth <= 1400){
+			} else if (screenAvileWidth < 1400){
 				width = 1200;
 				height = 960;
 			} else {
