@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,10 +22,11 @@ class ScriptLibInfo
 											'1.10'	=> 'jquery-1.10.2.min.js',
 											'1.11'	=> 'jquery-1.11.3.min.js',
 											'1.12'	=> 'jquery-1.12.4.min.js',
-											'2.0'	=> 'jquery-2.0.3.min.js',
-											'2.1'	=> 'jquery-2.1.4.min.js',
+											//'2.0'	=> 'jquery-2.0.3.min.js',
+											//'2.1'	=> 'jquery-2.1.4.min.js',
 											'2.2'	=> 'jquery-2.2.4.min.js',
-											'3.1'	=> 'jquery-3.1.0.min.js'
+											//'3.1'	=> 'jquery-3.1.0.min.js'
+											'3.5'	=> 'jquery-3.5.1.min.js'
 										);
 	private static $wysiwygEditorType = 'ckeditor';		// WYSIWYGエディタータイプ
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)

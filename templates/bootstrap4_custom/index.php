@@ -19,18 +19,21 @@ if (empty($customCssData)){
 	}
 }
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<?php echo $cssTag; ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/fontawesome-all.min.css" media="screen">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_layout.css" media="screen">
 	<?php endif; ?>
-	<script src="<?php echo $templateUrl; ?>/popper.min.js"></script>
-	<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>
+	<!--<script src="<?php echo $templateUrl; ?>/popper.min.js"></script>-->
+	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+	<!--<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
 <?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">
