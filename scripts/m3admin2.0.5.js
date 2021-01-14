@@ -182,7 +182,7 @@ function m3HideProcessModal()
 function m3PrepareProcessModal()
 {
 	// ダイアログ作成
-	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
+	if (!$('#processing-modal').length){		// ダイアログが存在しない場合
 		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true" style="display:none;">';
 			modal += '<div class="modal-dialog">';
 			modal += '<div class="modal-content">';
@@ -1155,5 +1155,5 @@ $(function(){
 	m3LoadOptionUI();
 	
 	// 最後にヘルプ作成
-	$(window).load( function(){ m3SetHelp(); });
+	$(window).on('load', function(){ m3SetHelp(); });
 });
