@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -576,7 +576,7 @@ debug($contentItem->published);*/
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		switch ($templateVer){
 			case 2:		// Joomla!v2.5テンプレート
-				if ($gEnvManager->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
+				if ($gEnvManager->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
 					$helper = $gEnvManager->getJoomlaRootPath() . '/render/breadcrumbHelper.php';
 					$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_breadcrumbs/default.php';		// パンくずリスト出力用スクリプト
 				} else {			// Artisteerで作成の場合は、ウィジェットの標準のパンくずリスト出力を使用する
