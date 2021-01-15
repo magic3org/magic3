@@ -41,5 +41,5 @@ $(function(){
 	$(window).resize(function(){ resizeImage(); });
 	
 	// ツールチップ作成
-	$('[rel=tooltip]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip();
 });
