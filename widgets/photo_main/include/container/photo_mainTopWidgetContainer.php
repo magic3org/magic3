@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -573,7 +573,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		// パーマリンク
 		$permaUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_PHOTO_ID . '=' . $this->photoId);
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型出力の場合
-			$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '" class="btn btn-xs btn-primary" role="button" rel="tooltip" title="' .
+			$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '" class="btn btn-xs btn-primary" role="button" data-toggle="tooltip" title="' .
 						self::PERMALINK_BUTTON_TITLE . '"><i class="glyphicon glyphicon-link"></i></a>';
 		} else {
 			$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '"><img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::PERMALINK_ICON_FILE) . 

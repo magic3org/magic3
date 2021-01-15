@@ -199,7 +199,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			$pageTitle  = str_replace('$1', make_pagelink($base),  $retvars['msg']);// バックリンクではなくて通常のリンクに変更 by magic3
 		} else {
 			// ページが編集不可の場合はロック中マークを付加
-			if (WikiConfig::isUserWithEditAuth() && !is_editable($base)) $pageTitle .= '<span class="locked"><i class="glyphicon glyphicon-lock" title="ページロック状態" rel="tooltip" data-toggle="tooltip"></i></span>';
+			if (WikiConfig::isUserWithEditAuth() && !is_editable($base)) $pageTitle .= '<span class="locked"><i class="glyphicon glyphicon-lock" title="ページロック状態" data-toggle="tooltip"></i></span>';
 		}
 		
 		if (isset($retvars['body']) && $retvars['body'] != ''){
@@ -544,7 +544,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$button = '<a href="' . $link[$key] . '">' .
-				'<img src="' . IMAGE_DIR . $image[$key] . '" class="no-lightbox" width="' . $width . '" height="' . $height . '" alt="' . $lang[$key] . '" title="' . $lang[$key] . '" rel="tooltip" data-toggle="tooltip" />' .
+				'<img src="' . IMAGE_DIR . $image[$key] . '" class="no-lightbox" width="' . $width . '" height="' . $height . '" alt="' . $lang[$key] . '" title="' . $lang[$key] . '" data-toggle="tooltip" />' .
 				'</a>';
 		} else {
 			$button = '<a href="' . $link[$key] . '">' .
