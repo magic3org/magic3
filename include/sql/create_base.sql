@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2020 Magic3 Project.
+-- * @copyright  Copyright 2006-2021 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -548,7 +548,7 @@ CREATE TABLE _templates (
     tm_id                VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
     tm_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    tm_type              INT            DEFAULT 0                     NOT NULL,      -- テンプレート種別(99=レイアウト用テンプレート,0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,11=Bootstrap v4.0,100=WordPress)
+    tm_type              INT            DEFAULT 0                     NOT NULL,      -- テンプレート種別(99=レイアウト用テンプレート,0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,11=Bootstrap v4.0,12=Bootstrap v5.0,100=WordPress)
     tm_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     tm_language          TEXT                                         NOT NULL,      -- 対応言語ID(「,」区切りで複数指定可)
     tm_generator         VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- テンプレート作成アプリケーション(値=artisteer,themler,nicepage)
