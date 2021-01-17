@@ -213,6 +213,8 @@ define('M3_TEMPLATE_JOOMLA_10',			0);		// Joomla!v1.0テンプレート
 define('M3_TEMPLATE_JOOMLA_15',			1);		// Joomla!v1.5テンプレート
 define('M3_TEMPLATE_JOOMLA_25',			2);		// Joomla!v2.5テンプレート
 define('M3_TEMPLATE_BOOTSTRAP_30',		10);		// Bootstrap v3.0テンプレート
+define('M3_TEMPLATE_BOOTSTRAP_40',		11);		// Bootstrap v4.0テンプレート
+define('M3_TEMPLATE_BOOTSTRAP_50',		12);		// Bootstrap v5.0テンプレート
 // テンプレート作成アプリケーションタイプ
 define('M3_TEMPLATE_GENERATOR_ARTISTEER',	'artisteer');	// Artisteer
 define('M3_TEMPLATE_GENERATOR_THEMLER',		'themler');		// Themler
