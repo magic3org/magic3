@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    v1.0
  * @link       http://www.magic3.org
@@ -33,7 +33,7 @@ function resizeImage(){
  * @return なし
  */
 $(function(){
-    $('.button').addClass('btn btn-default');
+	$('.button').addClass('btn btn-secondary');// ボタンにデフォルトカラーを設定
 	$('input[type=text]').addClass('form-control');
 	
 	// 画像リサイズ

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -556,6 +556,7 @@ class BaseWidgetContainer extends _Core
 	 */
 	function _getRenderType($templateType)
 	{
+	/*
 		switch ($templateType){
 			case 0:
 				$renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
@@ -570,6 +571,14 @@ class BaseWidgetContainer extends _Core
 			default:
 				$renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
 				break;
+		}*/
+		$renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
+		if ($templateType == 0){
+			$renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
+		} else if ($templateType >= 10 && $templateType < 20){	// 10台はBootstrapテンプレート
+			$renderType = M3_RENDER_BOOTSTRAP;		// Bootstrapテンプレート
+		} else if ($templateType == 100){
+			$renderType = M3_RENDER_WORDPRESS;		// WordPressテンプレート
 		}
 		return $renderType;
 	}
