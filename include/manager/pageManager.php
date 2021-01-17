@@ -4202,7 +4202,7 @@ class PageManager extends _Core
 					$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 				
 					// ウィジェットツール表示制御ボタン
-					$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav" data-toggle="buttons">';
+					$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav">';
 					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェットツール"><span class="title"> ウィジェットツール</span></button>';
 					$widgetToolTag .= '<input type="checkbox" class="hidden" />';
 					$widgetToolTag .= '</div></li>';
