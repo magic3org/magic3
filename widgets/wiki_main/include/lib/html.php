@@ -142,13 +142,20 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 
 		$checked_time = (WikiParam::getVar('notimestamp') != '') ? ' checked="checked"' : '';
 		
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 			// Only for administrator
 			if ($notimeupdate == 2) {
 				$add_notimestamp = '<input type="password" class="form-control" name="pass" size="12" />';
 			}
 			$add_notimestamp = '<div class="checkbox-inline"><input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"' . $checked_time . ' />' .
 								'<label for="_edit_form_notimestamp">' . $_btn_notchangetimestamp . '</label></div>' . $add_notimestamp . '&nbsp;';
+		} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+			// Only for administrator
+			if ($notimeupdate == 2) {
+				$add_notimestamp = '<input type="password" class="form-control" name="pass" size="12" style="width:auto; float:right;" />';
+			}
+			$add_notimestamp = '<div class="form-check form-check-inline"><input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" class="form-check-input" value="true"' . $checked_time . ' />' .
+								'<label for="_edit_form_notimestamp" class="form-check-label">' . $_btn_notchangetimestamp . '</label></div>' . $add_notimestamp . '&nbsp;';
 		} else {
 			// Only for administrator
 			if ($notimeupdate == 2) {
@@ -166,7 +173,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 
 	$postScript = $script . WikiParam::convQuery("?");
 	
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 		$cols = EDIT_COLS_BOOTSTRAP;
 		$body = <<<EOD
 <div class="edit_form">
@@ -199,7 +206,7 @@ $template
   <input type="hidden" name="wcmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
-  <textarea id="wiki_edit" name="msg" class="wiki_edit form-control" rows="$rows" cols="$cols">$s_postdata</textarea>
+  <textarea id="wiki_edit" name="msg" class="wiki_edit form-control mb-2" rows="$rows" cols="$cols">$s_postdata</textarea>
   <div class="float-left">
    <input type="submit" name="preview" class="button btn" value="$btn_preview" accesskey="p" />
    <input type="submit" name="write"   class="button btn btn-success" value="$_btn_update" accesskey="s" />

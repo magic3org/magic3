@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,40 +33,46 @@ function plugin_newpage_convert()
 	++$id;
 
 	$postScript = $script . WikiParam::convQuery("?");
-//	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 
-//	if ($editAuth){				// 認証されている場合
-		// テンプレートタイプに合わせて出力を変更
-		$body = '';
-		$templateType = $gEnvManager->getCurrentTemplateType();
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
-			$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
-			$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
-			$body .= '<div class="form-group"><label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
-			$body .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
-			
-			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-			$body .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
-			$body .= '</form>' . M3_NL;
-		} else {
-			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
-			$body .= '<div>' . M3_NL;
-			$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
-			$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
-			$body .= '<label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
-			$body .= '<input type="text"   name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" />' . M3_NL;
-			
-			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-			$body .= '<input type="submit" class="button" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
-			$body .= '</div>' . M3_NL;
-			$body .= '</form>' . M3_NL;
-		}
-//	} else {		// 認証されていない場合
-//		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
-//	}
+	// テンプレートタイプに合わせて出力を変更
+	$body = '';
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
+		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<div class="form-group"><label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+		$body .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
+		
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<div class="form-group mx-2"><label for="_p_newpage_' . $id . '" class="mr-2">' . $_msg_newpage . ':</label>' . M3_NL;
+		$body .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
+		
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
+	} else {
+		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<div>' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+		$body .= '<input type="text"   name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" />' . M3_NL;
+		
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
+	}
 	return $body;
 }
 
