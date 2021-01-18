@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -68,7 +68,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 		ksort($pages);
 		$s_pages  = join("\n", $pages);
 		
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 			$template  = '<select class="form-control" name="template_page">' . M3_NL;
 			$template .= '<option value="">-- ' . $_btn_template . ' --</option>' . M3_NL;
 			$template .= $s_pages;
@@ -82,6 +82,22 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 				$template .= '<a id="selfile" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="ファイルを挿入" ><i class="glyphicon glyphicon-file"></i></a>';
 		  		$template .= '<a id="selimage" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a>';
 				$template .= '</div>';
+				$template .= '</div>';
+			}
+		} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+			$template  = '<div class="form-group"><div class="input-group">';
+			$template .= '<select class="form-control" name="template_page" style="width: auto;">' . M3_NL;
+			$template .= '<option value="">-- ' . $_btn_template . ' --</option>' . M3_NL;
+			$template .= $s_pages;
+			$template .= '</select>' . M3_NL;
+			$template .= '<input type="submit" name="template" class="button btn form-control" value="' . $_btn_load . '" accesskey="r" />' . M3_NL;
+			$template .= '</div></div>';
+			
+			// 編集用ツールバー追加。システム運用権限がある場合のみ有効。
+			if ($gEnvManager->isSystemManageUser()){
+				$template .= '<div class="btn-group btn-group-sm" role="group" aria-label="edit toolbar">';
+				$template .= '<a id="selfile" href="javascript:void(0);" class="button btn" role="button" data-container="body" rel="m3help" title="ファイルを挿入" ><i class="glyphicon glyphicon-file"></i></a>';
+		  		$template .= '<a id="selimage" href="javascript:void(0);" class="button btn" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a>';
 				$template .= '</div>';
 			}
 		} else {
@@ -152,8 +168,6 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 	
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 		$cols = EDIT_COLS_BOOTSTRAP;
-// <form action="$postScript" method="post" class="form form-inline" role="form">
-// <form action="$postScript" method="post" class="form form-inline" role="form">
 		$body = <<<EOD
 <div class="edit_form">
  <form method="post" class="form form-inline" role="form">
@@ -176,9 +190,32 @@ $template
  </form>
 </div>
 EOD;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$body = <<<EOD
+<div class="edit_form form-group clearfix">
+ <form method="post" class="form">
+$template
+  $addtag
+  <input type="hidden" name="wcmd"    value="edit" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="hidden" name="digest" value="$s_digest" />
+  <textarea id="wiki_edit" name="msg" class="wiki_edit form-control" rows="$rows" cols="$cols">$s_postdata</textarea>
+  <div class="float-left">
+   <input type="submit" name="preview" class="button btn" value="$btn_preview" accesskey="p" />
+   <input type="submit" name="write"   class="button btn btn-success" value="$_btn_update" accesskey="s" />
+   $add_top
+   $add_notimestamp
+  </div>
+  <textarea name="original" style="display:none">$s_original</textarea>
+ </form>
+ <form method="post" class="form">
+  <input type="hidden" name="wcmd"    value="edit" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="submit" name="cancel" class="button btn float-right" value="$_btn_cancel" accesskey="c" />
+ </form>
+</div>
+EOD;
 	} else {
-// <form action="$postScript" method="post" style="margin-bottom:0px;" class="form">
-// <form action="$postScript" method="post" style="margin-top:0px;" class="form">
 		$body = <<<EOD
 <div class="edit_form">
  <form method="post" style="margin-bottom:0px;" class="form">
