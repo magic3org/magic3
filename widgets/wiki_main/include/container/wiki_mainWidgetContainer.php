@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -542,7 +542,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// テンプレートタイプに合わせて出力を変更
 		// Lightbox回避用のクラス付加
 		$templateType = $gEnvManager->getCurrentTemplateType();
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		//if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型(v3.0以降すべて)テンプレートの場合
 			$button = '<a href="' . $link[$key] . '">' .
 				'<img src="' . IMAGE_DIR . $image[$key] . '" class="no-lightbox" width="' . $width . '" height="' . $height . '" alt="' . $lang[$key] . '" title="' . $lang[$key] . '" data-toggle="tooltip" />' .
 				'</a>';
