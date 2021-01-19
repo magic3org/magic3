@@ -33,8 +33,10 @@ function resizeImage(){
  * @return なし
  */
 $(function(){
+	// CSSクラス追加
 	$('.button').addClass('btn btn-secondary');// ボタンにデフォルトカラーを設定
 	$('input[type=text]').addClass('form-control');
+	$('pre').removeClass('wiki_pre').addClass('card card-body bg-light');
 	
 	// 画像リサイズ
 	resizeImage();

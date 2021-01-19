@@ -39,18 +39,6 @@ img.facemark {
 .edit_form {
 	width:100%;
 }
-/*pre.wiki_pre {
-	border-top:#DDDDEE 1px solid;
-	border-bottom:#888899 1px solid;
-	border-left:#DDDDEE 1px solid;
-	border-right:#888899 1px solid;
-	padding:.5em;
-	margin-left:.5em;
-	margin-right:.5em;
-	white-space: pre-wrap;
-	color:black;
-	background-color:#F0F8FF;
-}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;
