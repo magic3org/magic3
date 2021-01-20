@@ -371,10 +371,20 @@ function m3Confirm(type, message, callback, title)
  */
 function m3OpenFileBrowser(seturl_callback)
 {
+	// ダイアログの表示幅を決める
+	var width;
+	var parentWindowWidth = $(window).width();
+	
+	if (parentWindowWidth < 1400){
+		width = parentWindowWidth * 0.99;
+	} else {
+		width = parentWindowWidth * M3_FILEBROWSER_WIDTH_RATIO;
+	}
+	
 	$('<div />').dialog({
 		title: "ファイルを選択",
 		modal: true,
-		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
+		width: width,
 		open: function(){
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
@@ -402,10 +412,20 @@ function m3OpenFileBrowser(seturl_callback)
  */
 function m3OpenImageFileBrowser(seturl_callback)
 {
+	// ダイアログの表示幅を決める
+	var width;
+	var parentWindowWidth = $(window).width();
+	
+	if (parentWindowWidth < 1400){
+		width = parentWindowWidth * 0.99;
+	} else {
+		width = parentWindowWidth * M3_FILEBROWSER_WIDTH_RATIO;
+	}
+	
 	$('<div />').dialog({
 		title: "画像を選択",
 		modal: true,
-		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
+		width: width,
 		open: function(){
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
@@ -413,37 +433,6 @@ function m3OpenImageFileBrowser(seturl_callback)
 		create: function(event, ui){
 			$(this).elfinder({
 				url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php?dirtype=image',
-				height: '500px',
-				lang: 'ja',
-				resizable: false,
-				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
-				getFileCallback: function(url){
-					seturl_callback(url.url);
-					$('.ui-dialog-titlebar-close[role="button"]').click();
-				}
-			}).elfinder('instance');
-		}
-	});
-}
-/**
- * Flashファイルブラウザを表示
- *
- * @param function	seturl_callback	コールバック関数
- * @return なし
- */
-function m3OpenFlashFileBrowser(seturl_callback)
-{
-	$('<div />').dialog({
-		title: "Flashを選択",
-		modal: true,
-		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
-		open: function(){
-			$(this).parent().css("padding", "0px");
-			$(this).css("padding", "0px");
-		},
-		create: function(event, ui){
-			$(this).elfinder({
-				url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php?dirtype=flash',
 				height: '500px',
 				lang: 'ja',
 				resizable: false,

@@ -16,11 +16,12 @@
 class ScriptLibInfo
 {
 	private static $libs;						// ライブラリ情報
-	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
+//	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
+	private static $jQueryVer = '1.12';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(
 											'1.9'	=> 'jquery-1.9.1.min.js',
-											'1.10'	=> 'jquery-1.10.2.min.js',
-											'1.11'	=> 'jquery-1.11.3.min.js',
+											//'1.10'	=> 'jquery-1.10.2.min.js',
+											//'1.11'	=> 'jquery-1.11.3.min.js',
 											'1.12'	=> 'jquery-1.12.4.min.js',
 											//'2.0'	=> 'jquery-2.0.3.min.js',
 											//'2.1'	=> 'jquery-2.1.4.min.js',

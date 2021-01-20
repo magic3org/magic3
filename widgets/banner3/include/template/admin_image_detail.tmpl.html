@@ -99,12 +99,7 @@ function selectType()
 // ファイルブラウザ起動
 function selectImage()
 {
-	var type = $('#item_type').val();
-	if (type == 0){
-		m3OpenImageFileBrowser(SetUrl);
-	} else if (type == 1){
-		m3OpenFlashFileBrowser(SetUrl);
-	}
+	m3OpenImageFileBrowser(SetUrl);
 }
 // ファイルブラウザからの設定用
 function SetUrl(url)
