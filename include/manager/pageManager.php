@@ -3405,7 +3405,7 @@ class PageManager extends _Core
 					} else {
 						// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
 						$templateType = $gEnvManager->getCurrentTemplateType();
-						if ($templateType != 10) $this->addAdminScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
+						if ($templateType != M3_TEMPLATE_BOOTSTRAP_30) $this->addAdminScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 					}
 				} else {		// ログインしていない場合(ログイン画面等)
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
@@ -3424,7 +3424,7 @@ class PageManager extends _Core
 						$gEnvManager->isContentEditableUser()){		// 投稿ユーザの場合
 						// テンプレートタイプが管理画面のBootstrapバージョン(v3.0)と異なる場合はBootstrapを使用しない場合の管理機能用スクリプトを読み込む
 						$templateType = $gEnvManager->getCurrentTemplateType();
-						if ($templateType != 10) $this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
+						if ($templateType != M3_TEMPLATE_BOOTSTRAP_30) $this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 					}
 				}
 			}
