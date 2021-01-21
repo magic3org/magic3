@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,35 +32,35 @@ function plugin_search_convert()
 
 function plugin_search_action()
 {
-	//global $post, $vars, $_title_result, $_title_search, $_msg_searching;
 	global $_title_result, $_title_search, $_msg_searching;
 	global $gRequestManager;
+	global $gEnvManager;
 
-	//$s_word = isset($post['word']) ? htmlspecialchars($post['word']) : '';
-	//$word = WikiParam::getPostVar('word');
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	$word = $gRequestManager->valueOf('word');			// HTMLタグの検索も可能とする
 	$s_word = htmlspecialchars($word);
 	
 	if (strlen($s_word) > PLUGIN_SEARCH_MAX_LENGTH) {
-		//unset($vars['word']); // Stop using $_msg_word at lib/html.php
 		die_message('Search words too long');
 	}
 
-	/*$type = isset($vars['type']) ? $vars['type'] : '';
-	$base = isset($vars['base']) ? $vars['base'] : '';*/
 	$type = WikiParam::getVar('type');
 	$base = WikiParam::getVar('base');
 
 	if ($s_word != '') {
 		// Search
 		$msg  = str_replace('$1', $s_word, $_title_result);
-		//$body = do_search($vars['word'], $type, FALSE, $base);
 		$body = do_search($word, $type, false, $base);
 	} else {
 		// Init
-		//unset($vars['word']); // Stop using $_msg_word at lib/html.php
 		$msg  = $_title_search;
-		$body = '<br />' . "\n" . $_msg_searching . "\n";
+		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body = "\n<p>" . $_msg_searching . "</p>\n";
+		} else {
+			$body = '<br />' . "\n" . $_msg_searching . "\n";
+		}
 	}
 
 	// Show search form
@@ -100,10 +100,15 @@ function plugin_search_search_form($s_word = '', $type = '', $bases = array())
 			$base_label = str_replace('$1', $base_str, $_search_pages);
 			
 			// テンプレートタイプに合わせて出力を変更
-			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 				$base_msg  .=<<<EOD
 <div class="radio-inline"><input type="radio" name="base" id="$label_id" value="$s_base" $check />
   <label for="$label_id">$base_label</label></div>
+EOD;
+			} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+				$base_msg  .=<<<EOD
+<div class="form-check form-check-inline"><input type="radio" name="base" id="$label_id" class="form-check-input" value="$s_base" $check />
+  <label for="$label_id" class="form-check-label">$base_label</label></div>
 EOD;
 			} else {
 				$base_msg  .=<<<EOD
@@ -121,6 +126,12 @@ EOD;
 			$base_msg .=<<<EOD
 <div class="radio-inline"><input type="radio" name="base" id="_p_search_base_id_all" value="" />
 <label for="_p_search_base_id_all">$_search_all</label></div>
+EOD;
+			$base_option = '<div>' . $base_msg . '</div>';
+		} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+			$base_msg .=<<<EOD
+<div class="form-check form-check-inline"><input type="radio" name="base" id="_p_search_base_id_all" class="form-check-input" value="" />
+<label for="_p_search_base_id_all" class="form-check-label">$_search_all</label></div>
 EOD;
 			$base_option = '<div>' . $base_msg . '</div>';
 		} else {
@@ -143,6 +154,18 @@ EOD;
   <div class="radio-inline"><label for="_p_search_OR"><input type="radio" name="type" id="_p_search_OR"  value="OR"  $or_check  />
   $_btn_or</label></div>
   <input type="submit" class="button btn" value="$_btn_search" />
+$base_option
+</form>
+EOD;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$retValue = <<<EOD
+<form action="$postScript" method="post" class="form form-inline">
+  <div class="form-group mr-2"><input type="text" class="form-control" name="word" value="$s_word" size="20" /></div>
+  <div class="form-check form-check-inline"><label for="_p_search_AND" class="form-check-label"><input type="radio" name="type" id="_p_search_AND" class="form-check-input" value="AND" $and_check />
+  $_btn_and</label></div>
+  <div class="form-check form-check-inline"><label for="_p_search_OR" class="form-check-label"><input type="radio" name="type" id="_p_search_OR" class="form-check-input" value="OR"  $or_check  />
+  $_btn_or</label></div>
+  <input type="submit" class="button btn btn-success" value="$_btn_search" />
 $base_option
 </form>
 EOD;

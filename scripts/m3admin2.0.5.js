@@ -376,7 +376,7 @@ function m3OpenFileBrowser(seturl_callback)
 	var parentWindowWidth = $(window).width();
 	
 	if (parentWindowWidth < 1400){
-		width = parentWindowWidth * 0.99;
+		width = parentWindowWidth - 5;
 	} else {
 		width = parentWindowWidth * M3_FILEBROWSER_WIDTH_RATIO;
 	}
@@ -417,7 +417,7 @@ function m3OpenImageFileBrowser(seturl_callback)
 	var parentWindowWidth = $(window).width();
 	
 	if (parentWindowWidth < 1400){
-		width = parentWindowWidth * 0.99;
+		width = parentWindowWidth - 5;
 	} else {
 		width = parentWindowWidth * M3_FILEBROWSER_WIDTH_RATIO;
 	}
