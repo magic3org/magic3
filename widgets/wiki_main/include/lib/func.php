@@ -221,7 +221,11 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	global $script, $whatsnew, $non_list, $search_non_list;
 	global $_msg_andresult, $_msg_orresult, $_msg_notfoundresult;
 	global $search_auth, $show_passage;
+	global $gEnvManager;
 
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	$retval = array();
 
 	$b_type = ($type == 'AND'); // AND:TRUE OR:FALSE
@@ -290,8 +294,11 @@ function do_search($word, $type = 'AND', $non_format = FALSE, $base = '')
 	}
 	$retval .= '</ul>' . "\n";
 
-	$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages),
-		str_replace('$3', $count, $b_type ? $_msg_andresult : $_msg_orresult)));
+	if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$retval .= '<p>' . str_replace('$1', $s_word, str_replace('$2', count($pages), str_replace('$3', $count, $b_type ? $_msg_andresult : $_msg_orresult))) . '</p>';
+	} else {
+		$retval .= str_replace('$1', $s_word, str_replace('$2', count($pages), str_replace('$3', $count, $b_type ? $_msg_andresult : $_msg_orresult)));
+	}
 
 	return $retval;
 }

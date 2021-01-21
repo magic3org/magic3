@@ -413,10 +413,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$notes = ! empty($footNote) ? $note_hr . join("\n", $footNote) : '';
 
 		// Search words
-//		if ($search_word_color && isset($vars['word'])){
 		if ($search_word_color && $word != ''){
-			//$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) . '</div>' . $hr . "\n" . $body;
-			$body = '<div>' . $_msg_word . htmlspecialchars($word) . '</div>' . $hr . "\n" . $body;
+			$body = '<p>' . $_msg_word . htmlspecialchars($word) . '</p>' . $hr . "\n" . $body;
 
 			// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 			// with array_splice(), array_flip()

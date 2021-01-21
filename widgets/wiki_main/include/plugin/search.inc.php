@@ -34,10 +34,6 @@ function plugin_search_action()
 {
 	global $_title_result, $_title_search, $_msg_searching;
 	global $gRequestManager;
-	global $gEnvManager;
-
-	// テンプレートタイプに合わせて出力を変更
-	$templateType = $gEnvManager->getCurrentTemplateType();
 	
 	$word = $gRequestManager->valueOf('word');			// HTMLタグの検索も可能とする
 	$s_word = htmlspecialchars($word);
@@ -56,11 +52,7 @@ function plugin_search_action()
 	} else {
 		// Init
 		$msg  = $_title_search;
-		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$body = "\n<p>" . $_msg_searching . "</p>\n";
-		} else {
-			$body = '<br />' . "\n" . $_msg_searching . "\n";
-		}
+		$body = "\n<p>" . $_msg_searching . "</p>\n";
 	}
 
 	// Show search form
