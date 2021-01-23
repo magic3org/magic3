@@ -157,7 +157,7 @@ EOD;
   $_btn_and</label></div>
   <div class="form-check form-check-inline"><label for="_p_search_OR" class="form-check-label"><input type="radio" name="type" id="_p_search_OR" class="form-check-input" value="OR"  $or_check  />
   $_btn_or</label></div>
-  <input type="submit" class="button btn btn-success" value="$_btn_search" />
+  <input type="submit" class="button btn" value="$_btn_search" />
 $base_option
 </form>
 EOD;

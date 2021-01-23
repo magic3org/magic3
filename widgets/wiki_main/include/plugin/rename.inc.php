@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -194,8 +194,7 @@ function plugin_rename_phase2($err = '', $page = '')
 
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-//<form action="$postScript" method="post" class="form form-inline" role="form">
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 		$ret['body'] = <<<EOD
 $msg
 <form method="post" class="form form-inline" role="form">
@@ -208,8 +207,20 @@ $msg
   <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
 </form>
 EOD;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$ret['body'] = <<<EOD
+$msg
+<p>$msg_rename</p>
+<form method="post" class="form form-inline">
+  <input type="hidden" name="plugin" value="rename" />
+  <input type="hidden" name="refer"  value="$s_refer" />
+  <div class="form-group mx-2"><label for="_p_rename_newname" class="mr-2">{$_rename_messages['msg_newname']}:</label>
+  <input type="text" class="form-control" name="page" id="_p_rename_newname" maxlength="80" value="$s_page" /></div>
+  $msg_related
+  <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
+</form>
+EOD;
 	} else {
-//<form action="$postScript" method="post" class="form">
 		$ret['body'] = <<<EOD
 $msg
 <form method="post" class="form">
@@ -356,10 +367,19 @@ function plugin_rename_phase3($pages)
 	// テンプレートタイプに合わせて出力を変更
 	$body = '';
 	$templateType = $gEnvManager->getCurrentTemplateType();
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 		$body .= '<p>' . $msg . '</p>' . M3_NL;
-//		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
 		$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= $input;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button btn" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
+		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$body .= '<p>' . $msg . '</p>' . M3_NL;
+		$body .= '<form method="post" class="form form-inline mb-3">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= $input;
@@ -369,7 +389,6 @@ function plugin_rename_phase3($pages)
 		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
 	} else {
 		$body .= '<p>' . $msg . '</p>' . M3_NL;
-//		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
 		$body .= '<form method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
@@ -583,7 +602,7 @@ function plugin_rename_getselecttag($page)
 
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+	if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 		return <<<EOD
 <select name="refer" class="form-control">
  <option value=""></option>
