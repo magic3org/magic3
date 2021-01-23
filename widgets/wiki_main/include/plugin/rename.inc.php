@@ -202,7 +202,7 @@ $msg
   <input type="hidden" name="refer"  value="$s_refer" />
   $msg_rename<br />
   <div class="form-group"><label for="_p_rename_newname">{$_rename_messages['msg_newname']}:</label>
-  <input type="text" class="form-control" name="page" id="_p_rename_newname" maxlength="80" value="$s_page" /></div>
+  <input type="text" class="form-control" name="page" id="_p_rename_newname" size="30" value="$s_page" /></div>
   $msg_related
   <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
 </form>
@@ -214,8 +214,8 @@ $msg
 <form method="post" class="form form-inline">
   <input type="hidden" name="plugin" value="rename" />
   <input type="hidden" name="refer"  value="$s_refer" />
-  <div class="form-group mx-2"><label for="_p_rename_newname" class="mr-2">{$_rename_messages['msg_newname']}:</label>
-  <input type="text" class="form-control" name="page" id="_p_rename_newname" maxlength="80" value="$s_page" /></div>
+  <div class="form-group mr-2"><label for="_p_rename_newname" class="mr-2">{$_rename_messages['msg_newname']}:</label>
+  <input type="text" class="form-control" name="page" id="_p_rename_newname" size="30" value="$s_page" /></div>
   $msg_related
   <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
 </form>
