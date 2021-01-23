@@ -566,8 +566,8 @@ $_source_messages = array(
 
 ///////////////////////////////////////
 // template.inc.php
-$_msg_template_start   = '開始行:<br />';
-$_msg_template_end     = '終了行:<br />';
+$_msg_template_start   = '開始行:';
+$_msg_template_end     = '終了行:';
 $_msg_template_page    = '$1/複製';
 $_msg_template_refer   = 'ページ名:';
 $_msg_template_force   = '既存のページ名で編集する';

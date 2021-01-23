@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -89,9 +89,8 @@ function plugin_template_action()
 	$postScript = $script . WikiParam::convQuery('?');
 	
 	// テンプレートタイプに合わせて出力を変更
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 		$body .= '<form action="' . $postScript . '" method="post" class="form" role="form">' . M3_NL;
-//		$body .= '<form method="post" class="form" role="form">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="template" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_refer . '" />' . M3_NL;
 		$body .= '<div class="form-group"><label for="_p_template_begin">' . $_msg_template_start . '</label><select class="form-control" name="begin" id="_p_template_begin" size="10">' . $begin_select . '</select></div>' . M3_NL;
@@ -99,14 +98,22 @@ function plugin_template_action()
 		$body .= '<div class="form-group"><label for="_p_template_refer">' . $_msg_template_refer . ' <input type="text" class="form-control" name="page" id="_p_template_refer" value="' . $s_page . '" size="15" /></label></div>' . M3_NL;
 		$body .= '<input type="submit" name="submit" class="button btn" value="' . $_btn_template_create . '" /> ' . $tag . M3_NL;
 		$body .= '</form>' . M3_NL;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="template" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_refer . '" />' . M3_NL;
+		$body .= '<div class="form-group"><label for="_p_template_begin">' . $_msg_template_start . '</label><select class="form-control" name="begin" id="_p_template_begin" size="10">' . $begin_select . '</select></div>' . M3_NL;
+		$body .= '<div class="form-group"><label for="_p_template_end">' . $_msg_template_end . '</label><select class="form-control" name="end" id="_p_template_end" size="10">' . $end_select . '</select></div>' . M3_NL;
+		$body .= '<div class="form-inline"><div class="form-group mr-2"><label for="_p_template_refer" class="mr-2">' . $_msg_template_refer . '</label><input type="text" class="form-control" name="page" id="_p_template_refer" value="' . $s_page . '" size="30" /></div>' . M3_NL;
+		$body .= '<input type="submit" name="submit" class="button btn" value="' . $_btn_template_create . '" /></div> ' . $tag . M3_NL;
+		$body .= '</form>' . M3_NL;
 	} else {
 		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
-//		$body .= '<form method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="template" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_refer . '" />' . M3_NL;
-		$body .= $_msg_template_start . ' <select name="begin" size="10">' . $begin_select . '</select><br /><br />' . M3_NL;
-		$body .= $_msg_template_end . ' <select name="end"   size="10">' . $end_select . '</select><br /><br />' . M3_NL;
+		$body .= $_msg_template_start . '<br /><select name="begin" size="10">' . $begin_select . '</select><br /><br />' . M3_NL;
+		$body .= $_msg_template_end . '<br /><select name="end"   size="10">' . $end_select . '</select><br /><br />' . M3_NL;
 		$body .= '<label for="_p_template_refer">' . $_msg_template_refer . '</label>' . M3_NL;
 		$body .= '<input type="text" name="page" id="_p_template_refer" value="' . $s_page . '" />' . M3_NL;
 		$body .= '<input type="submit" name="submit" class="button" value="' . $_btn_template_create . '" /> ' . $tag . M3_NL;

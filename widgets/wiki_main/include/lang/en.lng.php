@@ -563,8 +563,8 @@ $_source_messages = array(
 
 ///////////////////////////////////////
 // template.inc.php
-$_msg_template_start   = 'Start:<br />';
-$_msg_template_end     = 'End:<br />';
+$_msg_template_start   = 'Start:';
+$_msg_template_end     = 'End:';
 $_msg_template_page    = '$1/copy';
 $_msg_template_refer   = 'Page:';
 $_msg_template_force   = 'Edit with a page name which already exists';

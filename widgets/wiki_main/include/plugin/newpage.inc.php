@@ -52,7 +52,7 @@ function plugin_newpage_convert()
 		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
-		$body .= '<div class="form-group mx-2"><label for="_p_newpage_' . $id . '" class="mr-2">' . $_msg_newpage . ':</label>' . M3_NL;
+		$body .= '<div class="form-group mr-2"><label for="_p_newpage_' . $id . '" class="mr-2">' . $_msg_newpage . ':</label>' . M3_NL;
 		$body .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
 		
 		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
