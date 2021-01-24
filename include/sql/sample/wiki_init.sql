@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2021 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -18,7 +18,7 @@
 -- 初期インストールデータは必要最小限のみ。
 
 -- システム設定
-UPDATE _system_config SET sc_value = 'bootstrap_cerulean' WHERE sc_id = 'default_template';
+UPDATE _system_config SET sc_value = 'bootstrap4_custom' WHERE sc_id = 'default_template';
 UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_menu_hier';
 
 -- 管理画面ページデータ(デフォルトを変更)
