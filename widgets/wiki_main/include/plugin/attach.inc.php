@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -462,32 +462,16 @@ EOD;*/
 	$maxsize = WikiConfig::getUploadFilesize();				// アップロードファイル最大サイズ
 	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], WikiConfig::getUploadFilesize(true/*文字列表記*/));
 
-	//$pass = '';
-	$hiddenPath = '';
-	//if (PLUGIN_ATTACH_PASSWORD_REQUIRE || PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
-	if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
-		$title = $_attach_messages[PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
-		
-		// テンプレートタイプに合わせて出力を変更
-/*		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$pass = '<div class="form-group"><label for="_p_attach_password">' . $title . ':' . '</label> <input type="password" class="form-control" id="_p_attach_password" name="password" size="12" /></div>';
-		} else {
-			$pass = '<br />' . $title . ': <input type="password" name="password" size="12" />';
-		}*/
-		$hiddenPath = '<input type="hidden" name="pass" />';
-	}
 	$postScript = $script . WikiParam::convQuery("?");
 	
 	// テンプレートタイプに合わせて出力を変更
 	$body = '';
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-//		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 		$body .= '<form name="wiki_main" enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
 		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
 		$body .= '<input type="hidden" name="max_file_size" value="' . $maxsize . '" />' . M3_NL;
-		//$body .= $hiddenPath;
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
 		$body .= $navi;
@@ -503,20 +487,38 @@ EOD;*/
 		$body .= '</div>' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '<div>' . M3_NL;
-//		$body .= $pass;
-//		$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
 		$body .= '<input type="submit" id="wiki_main_submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;
+	} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		$body .= $navi;
+		$body .= '<p>' . M3_NL;
+		$body .= $msg_maxsize;
+		$body .= '</p>' . M3_NL;
+		$body .= '<form name="wiki_main" enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden" name="max_file_size" value="' . $maxsize . '" />' . M3_NL;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<div class="form-group">' . M3_NL;
+		$body .= '<div class="input-group mr-2">' . M3_NL;
+		$body .= '<div class="input-group-prepend">' . M3_NL;
+		$body .= '<button class="button btn btn-file">' . $_attach_messages['msg_select_file'] . '<input type="file" name="attach_file"></button>' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '<input type="text" class="form-control" readonly>' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '<input type="submit" id="wiki_main_submit" class="button btn btn-success" value="' . $_attach_messages['btn_upload'] . '" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	} else {
-//		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
 		$body .= '<form name="wiki_main" enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
 		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
 		$body .= '<input type="hidden" name="max_file_size" value="' . $maxsize . '" />' . M3_NL;
-	//	$body .= $hiddenPath;
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
 		$body .= $navi;
@@ -524,8 +526,6 @@ EOD;*/
 		$body .= $msg_maxsize;
 		$body .= '</span><br />' . M3_NL;
 		$body .= '<label for="_p_attach_file">' . $_attach_messages['msg_file'] . ':</label> <input type="file" name="attach_file" id="_p_attach_file" />' . M3_NL;
-//		$body .= $pass;
-//		$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
 		$body .= '<input type="submit" id="wiki_main_submit" class="button" value="' . $_attach_messages['btn_upload'] . '" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;

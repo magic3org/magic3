@@ -119,19 +119,6 @@ span.diff_removed {
 	color:red;
 	background-color:inherit;
 }
-/* new.inc.php */
-/*
-span.comment_date { font-size:x-small; }
-span.new1 {
-	color:red;
-	background-color:transparent;
-	font-size:x-small;
-}
-span.new5 {
-	color:green;
-	background-color:transparent;
-	font-size:xx-small;
-}*/
 /* テーブル */
 .table_wrap {
 	margin: 10px;
@@ -150,90 +137,13 @@ span.new5 {
 .style_table.right {
 	margin:0 0 0 auto;
 }
-/*thead td.style_td,
-tfoot td.style_td {
-	color:inherit;
-	background-color:#D0D8E0;
-}
-thead th.style_th,
-tfoot th.style_th {
-	color:inherit;
-	background-color:#E0E8F0;
-}
-.style_table {
-	padding:0px;
-	border:0px;
-	margin:auto;
-	text-align:left;
-	color:inherit;
-	background-color:#ccd5dd;
-}*/
-.style_th {
-/*	padding:5px;
-	margin:1px;*/
-/*	text-align:center;
-	color:inherit;
-	background-color:#EEEEEE;*/
-}
-.style_td {
-/*	padding:5px;
-	margin:1px;*/
-/*	color:inherit;
-	background-color:#EEF5FF;*/
-}
 a.note_super {
 	font-weight:bold;
 	font-size:75%;
 	vertical-align:super;
 }
-/*
-.super_index {
-	color:#DD3333;
-	background-color:inherit;
-	font-weight:bold;
-	font-size:60%;
-	vertical-align:super;
-}*/
-/*.anchor_super {
-	font-size:xx-small;
-	vertical-align:super;
-}*/
-
-/* html.php/edit_form() */
-/*.small { font-size:80%; }*/
 
 /***** plugin *****/
-/* hr plugin */
-/*hr.wiki_hr_short {
-	text-align:center;
-	width:80%;
-	margin:1em auto 1em auto;
-	border-style:solid;
-	border-color:#333333;
-	border-width:1px 0px;
-}*/
-/* vote plugin */
-/*
-td.vote_label {
-	color:inherit;
-	background-color:#FFCCCC;
-}
-td.vote_td1 {
-	color:inherit;
-	background-color:#DDE5FF;
-}
-td.vote_td2 {
-	color:inherit;
-	background-color:#EEF5FF;
-}*/
-/* br plugin */
-/*.wiki_spacer {
-}*/
-/* clear plugin */
-/*.wiki_clear {
-	margin:0px;
-	clear:both;
-}*/
 /* calendar plugin */
 .style_calendar {
 	padding:0px;

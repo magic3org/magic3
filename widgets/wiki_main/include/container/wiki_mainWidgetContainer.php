@@ -107,7 +107,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		
 		// CSSファイルの設定
 		$templateType = $gEnvManager->getCurrentTemplateType();
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
 		} else {
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
@@ -563,7 +563,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		global $gEnvManager;
 		
 		$templateType = $gEnvManager->getCurrentTemplateType();
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			if (WikiConfig::isUserWithEditAuth()){		// 編集権限ありのとき
 				$tmpl->setAttribute('fileselect', 'visibility', 'visible');// ファイル選択UI作成
 			}
