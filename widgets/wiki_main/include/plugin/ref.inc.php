@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,9 +32,6 @@ if (! defined('FILE_ICON'))
 
 // Horizontal alignment
 define('PLUGIN_REF_DEFAULT_ALIGN', 'left'); // 'left', 'center', 'right'
-
-// Text wrapping
-define('PLUGIN_REF_WRAP_TABLE', FALSE); // TRUE, FALSE
 
 // URL指定時に画像サイズを取得するか
 define('PLUGIN_REF_URL_GET_IMAGE_SIZE', FALSE); // FALSE, TRUE
@@ -72,7 +69,9 @@ function plugin_ref_inline()
 		return $params['_body'];
 	}
 }
-
+/**
+ * ブロック型出力処理
+ */
 function plugin_ref_convert()
 {
 	if (! func_num_args())
@@ -82,29 +81,6 @@ function plugin_ref_convert()
 
 	if (isset($params['_error']) && $params['_error'] != '') {
 		return "<p>#ref(): {$params['_error']}</p>\n";
-	}
-
-	if ((PLUGIN_REF_WRAP_TABLE && ! $params['nowrap']) || $params['wrap']) {
-		// 枠で包む
-		// margin:auto
-		//	Mozilla 1.x  = x (wrap,aroundが効かない)
-		//	Opera 6      = o
-		//	Netscape 6   = x (wrap,aroundが効かない)
-		//	IE 6         = x (wrap,aroundが効かない)
-		// margin:0px
-		//	Mozilla 1.x  = x (wrapで寄せが効かない)
-		//	Opera 6      = x (wrapで寄せが効かない)
-		//	Netscape 6   = x (wrapで寄せが効かない)
-		//	IE6          = o
-		$margin = ($params['around'] ? '0px' : 'auto');
-		$margin_align = ($params['_align'] == 'center') ? '' : ";margin-{$params['_align']}:0px";
-		$params['_body'] = <<<EOD
-<table class="style_table" style="margin:$margin$margin_align">
- <tr>
-  <td class="style_td">{$params['_body']}</td>
- </tr>
-</table>
-EOD;
 	}
 
 	if ($params['around']) {
