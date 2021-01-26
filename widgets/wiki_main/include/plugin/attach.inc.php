@@ -26,9 +26,6 @@
 // Max file size for upload on PHP (PHP default: 2MB)
 //ini_set('upload_max_filesize', '2M');
 
-// Max file size for upload on script of PukiWikiX_FILESIZE
-//define('PLUGIN_ATTACH_MAX_FILESIZE', (1024 * 1024)); // default: 1MB
-
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', TRUE); // FALSE or TRUE
 
@@ -161,7 +158,8 @@ function attach_filelist()
 function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages, $notify, $notify_subject;
-
+	global $gOpeLogManager;
+	
 	// Check query-string
 	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . '&amp;file=' . rawurlencode($file['name']);
 
@@ -172,9 +170,23 @@ function attach_upload($file, $page, $pass = NULL)
 	} else if (! WikiPage::isPage($page)) {
 		die_message('No such page');
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
-		return array('result'=>FALSE);
-//	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
+		// アップロードしたファイルがクライアントにセットした「max_file_size」を超えた場合は「error」コード2で返る
+		if ($file['error'] == 2){	// 添付ファイルの最大サイズを超えた場合
+			// 運用ログを残す
+			$gOpeLogManager->writeUserError(__METHOD__, '[Wikiコンテンツ] 添付ファイルのサイズが最大値を超えたためアップロードできません。(ファイル名=' . $file['name'] . ')', 1100);
+			
+			return array(
+				'result'=>FALSE,
+				'msg'=>$_attach_messages['err_exceed']);
+		} else {	// その他のエラーの場合
+			return array(
+				'result'=>FALSE,
+				'msg'=>$_attach_messages['err_noparm']);
+		}
 	} else if ($file['size'] > WikiConfig::getUploadFilesize()){			// アップロードファイルのサイズチェック
+		// 運用ログを残す
+		$gOpeLogManager->writeUserError(__METHOD__, '[Wikiコンテンツ] 添付ファイルのサイズが最大値を超えたためアップロードできません。(ファイル名=' . $file['name'] . ')', 1100);
+			
 		return array(
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_exceed']);
@@ -457,7 +469,6 @@ EOD;*/
 	if (! ini_get('file_uploads')) return '#attach(): file_uploads disabled<br />' . $navi;
 	if (! WikiPage::isPage($page))          return '#attach(): No such page<br />'          . $navi;
 
-//	$maxsize = PLUGIN_ATTACH_MAX_FILESIZE;
 //	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], number_format($maxsize/1024) . 'KB');
 	$maxsize = WikiConfig::getUploadFilesize();				// アップロードファイル最大サイズ
 	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], WikiConfig::getUploadFilesize(true/*文字列表記*/));
@@ -800,7 +811,7 @@ class AttachFile
 		$filename		= basename($this->filename);
 		
 		// テンプレートタイプに合わせて出力を変更
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$body .= '<p>' . M3_NL;
 			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
 			$body .= '[<a href="' . $linkListAll . '">' . $_attach_messages['msg_listall'] . '</a>]' . M3_NL;
