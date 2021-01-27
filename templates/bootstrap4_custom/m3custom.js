@@ -39,8 +39,8 @@ $(function(){
 	$('pre').removeClass('wiki_pre').addClass('card card-body bg-light');
 	
 	// 画像リサイズ
-	resizeImage();
-	$(window).resize(function(){ resizeImage(); });
+//	resizeImage();
+//	$(window).resize(function(){ resizeImage(); });
 	
 	// ツールチップ作成
 	$('[data-toggle="tooltip"]').tooltip();

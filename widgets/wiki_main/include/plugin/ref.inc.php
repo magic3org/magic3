@@ -37,7 +37,7 @@ define('PLUGIN_REF_DEFAULT_ALIGN', 'left'); // 'left', 'center', 'right'
 //define('PLUGIN_REF_URL_GET_IMAGE_SIZE', FALSE); // FALSE, TRUE
 
 // UPLOAD_DIR のデータ(画像ファイルのみ)に直接アクセスさせる
-define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
+//define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
 // - これは従来のインラインイメージ処理を互換のために残すもので
 //   あり、高速化のためのオプションではありません
 // - UPLOAD_DIR をWebサーバー上に露出させており、かつ直接アクセス
@@ -191,7 +191,7 @@ function plugin_ref_body($args)
 				}
 				return $params;
 			}
-		} else {
+		} else {	// 添付ファイル名のみの指定の場合
 			// Simple single argument
 			$file = UPLOAD_DIR . encode($page) . '_' . encode($name);
 			$is_file = is_file($file);
@@ -220,6 +220,8 @@ function plugin_ref_body($args)
 	$title = $url = $url2 = $info = '';
 	$width = $height = 0;
 	$matches = array();
+	
+	$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));	// 画像かどうか
 
 	if ($is_url) {	// URL
 		if (PKWK_DISABLE_INLINE_IMAGE_FROM_URI) {
@@ -233,27 +235,26 @@ function plugin_ref_body($args)
 		$url = $url2 = htmlspecialchars($name);
 		$title = htmlspecialchars(preg_match('/([^\/]+)$/', $name, $matches) ? $matches[1] : $url);
 
-		$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));
+//		$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));
 
 		// ### 相対URLの場合のみ画像の情報を取得(Magic3仕様) ###
 //		if ($is_image && PLUGIN_REF_URL_GET_IMAGE_SIZE && (bool)ini_get('allow_url_fopen')) {
 		if ($is_image && strncmp($name, '/', 1) == 0){
 			$imagePath = $gEnvManager->getAbsolutePath($gEnvManager->getDocumentRootUrl() . $name);
 
-			//$size = @getimagesize($name);
-			$size = @getimagesize($imagePath);
+/*			$size = @getimagesize($imagePath);
 			if (is_array($size)) {
 				$width  = $size[0];
 				$height = $size[1];
 				$info   = $size[3];
-			}
+			}*/
 		}
 
 	} else { // 添付ファイル
 
 		$title = htmlspecialchars($name);
 
-		$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));
+//		$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));
 
 		// Count downloads with attach plugin
 		//$url = $script . '?plugin=attach' . '&amp;refer=' . rawurlencode($page) .
@@ -264,22 +265,26 @@ function plugin_ref_body($args)
 			// Swap $url
 			$url2 = $url;
 
+			// 画像参照用のURLはプラグイン経由のみとする
 			// URI for in-line image output
-			if (! PLUGIN_REF_DIRECT_ACCESS) {
+			//if (! PLUGIN_REF_DIRECT_ACCESS) {
 				// With ref plugin (faster than attach)
 				//$url = $script . '?plugin=ref' . '&amp;page=' . rawurlencode($page) . '&amp;src=' . rawurlencode($name); // Show its filename at the last
 				$url = $script . WikiParam::convQuery('?plugin=ref' . '&amp;page=' . rawurlencode($page) . '&amp;src=' . rawurlencode($name)); // Show its filename at the last
-			} else {
-				// Try direct-access, if possible
-				$url = $file;
-			}
-
+			//} else {
+			//	// Try direct-access, if possible
+			//	$url = $file;
+			//}
+			
+			// 画像パス取得
+			$imagePath = $file;
+/*
 			$width = $height = 0;
 			$size = @getimagesize($file);
 			if (is_array($size)) {
 				$width  = $size[0];
 				$height = $size[1];
-			}
+			}*/
 		} else {
 			$info = get_date('Y/m/d H:i:s', filemtime($file) - LOCALZONE) .
 				' ' . sprintf('%01.1f', round(filesize($file)/1024, 1)) . 'KB';
@@ -311,6 +316,16 @@ function plugin_ref_body($args)
 
 	// 画像サイズ調整
 	if ($is_image) {
+		// 幅、高さの計算が必要な場合は画像の情報を取得
+		if (!empty($imagePath) && ($params['_size'] || $params['_%'])){
+			$size = @getimagesize($imagePath);
+			if (is_array($size)) {
+				$width  = $size[0];
+				$height = $size[1];
+				$info   = $size[3];
+			}
+		}
+		
 		// 指定されたサイズを使用する
 		if ($params['_size']) {
 			if ($width == 0 && $height == 0) {
