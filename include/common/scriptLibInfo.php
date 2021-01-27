@@ -16,6 +16,7 @@
 class ScriptLibInfo
 {
 	private static $libs;						// ライブラリ情報
+	private static $jQueryMinVer = '1.12';		// システムで利用できるjQueryの最小のバージョン。バージョン回復時に使用。
 //	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVer = '1.12';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(
@@ -344,11 +345,26 @@ class ScriptLibInfo
 	/**
 	 * jQueryのバージョンを設定
 	 *
-	 * @param int			$version	jQueryのバージョン(0=v2.6、1=最新)
+	 * @param int		$version	jQueryのバージョン
+	 * @return bool		true=更新、false=更新失敗
 	 */
 	static function setJQueryVer($version)
 	{
-		if (!empty($version)) self::$jQueryVer = $version;
+		global $gSystemManager;
+		
+		if (empty($version)) return false;
+		
+		// 設定するjQueryのバージョンをチェック。システムの最小バージョンよりも古い場合は更新しない。
+		$result = version_compare($version, self::$jQueryMinVer);
+		if ($result == 0){
+			return false;
+		} else if ($result < 0){	// システムの最小バージョンよりも古い場合
+			$gSystemManager->recoverJQueryVersion(self::$jQueryMinVer);	// 最小バージョンでDBの値を回復させる
+			return false;
+		}
+		
+		self::$jQueryVer = $version;
+		return true;
 	}
 	/**
 	 * jQueryファイル名取得
@@ -358,9 +374,24 @@ class ScriptLibInfo
 	 */
 	static function getJQueryFilename($type = 0)
 	{
+		global $gSystemManager;
+		
 		$filename = '';
 		if ($type == 0){	// jQuery
 			$filename = self::$jQueryVersionArray[(string)self::$jQueryVer];
+			
+			// jQueryファイルが見つからない場合はjQueryの最小バージョンでDBの値を回復させる
+			if (empty($filename)){
+				$ret = $gSystemManager->recoverJQueryVersion(self::$jQueryMinVer);	// 最小バージョンでDBの値を回復させる
+				if ($ret){
+				
+					// jQueryバージョン更新
+					self::$jQueryVer = self::$jQueryMinVer;
+					
+					// ファイル名再取得
+					$filename = self::$jQueryVersionArray[(string)self::$jQueryVer];
+				}
+			}
 		} else if ($type == 1){	// Core
 			$filename = self::JQUERY_UI_CORE_FILENAME;	// jquery UI
 		}
