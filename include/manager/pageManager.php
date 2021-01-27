@@ -254,7 +254,7 @@ class PageManager extends _Core
 		// jQueryバージョン設定
 		// アクセスする画面に応じてjQueryのバージョンを設定
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-			$value = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
+			$version = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
 			
 			// 管理画面にBOOTSTRAPを使用するかどうか(初期値)
 			$this->useBootstrap = self::USE_BOOTSTRAP_ADMIN;
@@ -263,9 +263,9 @@ class PageManager extends _Core
 			// 小画面デバイス最適化の場合は最新バージョンを使用
 			if ($gEnvManager->isSmallDeviceAdmin()) ScriptLibInfo::setCkeditorVer(1/*最新*/);
 		} else {
-			$value = $gSystemManager->getSystemConfig(self::CF_JQUERY_VERSION);// jQueryバージョン
+			$version = $gSystemManager->getSystemConfig(self::CF_JQUERY_VERSION);// jQueryバージョン
 		}
-		ScriptLibInfo::setJQueryVer($value);
+		ScriptLibInfo::setJQueryVer($version);
 		
 		// WYSISIGエディターのタイプを設定。ScriptLibInfo::getLib()を実行する前に設定。
 		ScriptLibInfo::setWysiwygEditorType($this->wysiwygEditor);

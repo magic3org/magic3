@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -67,6 +67,7 @@ class SystemManager extends _Core
 	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT = 'upload_image_autoresize_max_height';		// 画像リサイズ機能最大画像高さ
 	const CF_SITE_MENU_HIER = 'site_menu_hier';		// サイトのメニューを階層化するかどうか
 	const CF_SYSTEM_MANAGER_ENABLE_TASK	= 'system_manager_enable_task';	// システム運用者が実行可能な管理画面タスク
+	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
 	
 	/**
 	 * コンストラクタ
@@ -690,6 +691,23 @@ class SystemManager extends _Core
 			if (!empty($enableTask)) $enableTaskArray = explode(',', $enableTask);
 		}
 		return $enableTaskArray;
+	}
+	/**
+	 * jQueryバージョンを回復修正
+	 *
+	 * @param string $version	使用可能なjQueryバージョン
+	 * @return bool				true=正常終了、false=異常終了
+	 */
+	function recoverJQueryVersion($version)
+	{
+		$ret = $this->db->updateSystemConfig(self::CF_JQUERY_VERSION, $version);
+		if ($ret){
+			$this->_systemConfigArray[self::CF_JQUERY_VERSION] = $version;
+		
+			$errMsg = 'DBの自動修正: システム設定マスター(_system_config)のjQueryのバージョン(jquery_version)を自動修正しました。バージョン: ' . $version;
+			$this->gLog->error(__METHOD__, $errMsg);
+		}
+		return $ret;
 	}
 }
 ?>
