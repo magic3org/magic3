@@ -34,7 +34,7 @@ if (! defined('FILE_ICON'))
 define('PLUGIN_REF_DEFAULT_ALIGN', 'left'); // 'left', 'center', 'right'
 
 // URL指定時に画像サイズを取得するか
-define('PLUGIN_REF_URL_GET_IMAGE_SIZE', FALSE); // FALSE, TRUE
+//define('PLUGIN_REF_URL_GET_IMAGE_SIZE', FALSE); // FALSE, TRUE
 
 // UPLOAD_DIR のデータ(画像ファイルのみ)に直接アクセスさせる
 define('PLUGIN_REF_DIRECT_ACCESS', FALSE); // FALSE or TRUE
@@ -98,6 +98,7 @@ function plugin_ref_body($args)
 	//global $script, $vars;
 	global $script;
 	global $WikiName, $BracketName; // compat
+	global $gEnvManager;
 
 	// 戻り値
 	$params = array(
@@ -234,8 +235,13 @@ function plugin_ref_body($args)
 
 		$is_image = (! $params['noimg'] && preg_match(PLUGIN_REF_IMAGE, $name));
 
-		if ($is_image && PLUGIN_REF_URL_GET_IMAGE_SIZE && (bool)ini_get('allow_url_fopen')) {
-			$size = @getimagesize($name);
+		// ### 相対URLの場合のみ画像の情報を取得(Magic3仕様) ###
+//		if ($is_image && PLUGIN_REF_URL_GET_IMAGE_SIZE && (bool)ini_get('allow_url_fopen')) {
+		if ($is_image && strncmp($name, '/', 1) == 0){
+			$imagePath = $gEnvManager->getAbsolutePath($gEnvManager->getDocumentRootUrl() . $name);
+
+			//$size = @getimagesize($name);
+			$size = @getimagesize($imagePath);
 			if (is_array($size)) {
 				$width  = $size[0];
 				$height = $size[1];
