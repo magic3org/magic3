@@ -8,12 +8,11 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 
 class WikiParam
 {
@@ -29,6 +28,7 @@ class WikiParam
 	private static $arg;			// URLパラメータ
 	private static $ignoreParams = array(M3_REQUEST_PARAM_PAGE_SUB_ID, M3_REQUEST_PARAM_OPERATION_COMMAND);		// 受け付けないパラメータ
 	private static $subId = '';			// Magic3のページサブID指定
+	private static $isInline;		// ブロック型,インライン型処理の区別
 	
 	/**
 	 * コンストラクタ
@@ -262,6 +262,25 @@ class WikiParam
 	public static function setDigest($value)
 	{
 		self::$digest = $value;
+	}
+	/**
+	 * 処理の区別(ブロック型,インライン型)を取得
+	 *
+	 * @return bool		true=インライン型、false=ブロック型
+	 */
+	public static function getIsInline()
+	{
+		return self::$isInline;
+	}
+	/**
+	 * 処理の区別(ブロック型,インライン型)を設定
+	 *
+	 * @param bool $value		true=インライン型、false=ブロック型
+	 * @return なし
+	 */
+	public static function setIsInline($value)
+	{
+		self::$isInline = $value;
 	}
 	/**
 	 * 全パラメータを取得

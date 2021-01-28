@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -156,6 +156,9 @@ function do_plugin_convert($name, $args = '')
 		if (isset($body)) $aryargs[] = $body;     // #plugin(){{body}}
 	}
 
+	// 処理の区別をブロック型に設定
+	WikiParam::setIsInline(false);
+	
 	$_digest = $digest;
 	$retvar  = call_user_func_array('plugin_' . $name . '_convert', $aryargs);
 	$digest  = $_digest; // Revert
@@ -188,6 +191,9 @@ function do_plugin_inline($name, $args, & $body)
 	// NOTE: A reference of $body is always the last argument
 	$aryargs[] = $body; // func_num_args() != 0
 
+	// 処理の区別をインライン型に設定
+	WikiParam::setIsInline(true);
+	
 	$_digest = $digest;
 	$retvar  = call_user_func_array('plugin_' . $name . '_inline', $aryargs);
 	$digest  = $_digest; // Revert
