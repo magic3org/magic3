@@ -411,6 +411,7 @@ function plugin_ref_body($args)
 					$classArray[] = 'mx-' . intval($marginClass);
 					$classArray[] = 'my-' . intval($marginClass);
 				} else {
+					$classArray = array_merge($classArray, explode(' ', $marginClass));
 				}
 			}
 			

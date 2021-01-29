@@ -13,21 +13,6 @@
  * @link       http://www.magic3.org
  */
 /**
- * 画像を画面サイズに収まるようにリサイズ
- *
- * @return なし
- */
-function resizeImage(){
-	$('img').each(function(){
-		var max = $(window).width();
-		var w = $(this).width();
-		var h = $(this).height();
-		if (w > max) {
-			$(this).width(max).height(Math.round((max / w) * h));
-		}
-	});
-}
-/**
  * 初期処理
  *
  * @return なし
@@ -37,10 +22,6 @@ $(function(){
 	$('.button').addClass('btn btn-secondary');// ボタンにデフォルトカラーを設定
 	$('input[type=text]').addClass('form-control');
 	$('pre').removeClass('wiki_pre').addClass('card card-body bg-light');
-	
-	// 画像リサイズ
-//	resizeImage();
-//	$(window).resize(function(){ resizeImage(); });
 	
 	// ツールチップ作成
 	$('[data-toggle="tooltip"]').tooltip();
