@@ -74,32 +74,51 @@ function plugin_ref_inline()
  */
 function plugin_ref_convert()
 {
+	global $gEnvManager;
+
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	if (! func_num_args())
 		return '<p>#ref(): Usage:' . PLUGIN_REF_USAGE . "</p>\n";
 
+	// パラメータ解析
 	$params = plugin_ref_body(func_get_args());
 
 	if (isset($params['_error']) && $params['_error'] != '') {
 		return "<p>#ref(): {$params['_error']}</p>\n";
 	}
 
-	if ($params['around']) {
-		$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
-	} else {
-		$style = "text-align:{$params['_align']}";
-	}
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+		if ($params['around']) {
+			$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
+		} else {
+			$style = "text-align:{$params['_align']}";
+		}
 
-	// divで包む
-	return "<div class=\"image_wrap\" style=\"$style\">{$params['_body']}</div>\n";
+		// divで包む
+		return "<div style=\"$style\">{$params['_body']}</div>\n";
+	} else {
+		if ($params['around']) {
+			$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
+		} else {
+			$style = "text-align:{$params['_align']}";
+		}
+
+		// divで包む
+		return "<div class=\"image_wrap\" style=\"$style\">{$params['_body']}</div>\n";
+	}
 }
 
 function plugin_ref_body($args)
 {
-	//global $script, $vars;
 	global $script;
 	global $WikiName, $BracketName; // compat
 	global $gEnvManager;
-
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	// 戻り値
 	$params = array(
 		'left'   => FALSE, // 左寄せ
@@ -112,6 +131,12 @@ function plugin_ref_body($args)
 		'nolink' => FALSE, // 元ファイルへのリンクを張らない
 		'noimg'  => FALSE, // 画像を展開しない
 		'zoom'   => FALSE, // 縦横比を保持する
+		
+		// Magic3追加分
+		'rounded'   => FALSE, // 角丸
+		'circle'   	=> FALSE, // 円形
+		'thumbnail' => FALSE, // サムネール
+		
 		'_size'  => FALSE, // サイズ指定あり
 		'_w'     => 0,       // 幅
 		'_h'     => 0,       // 高さ
@@ -137,6 +162,7 @@ function plugin_ref_body($args)
 	// 「/」で始まる名前はドキュメントルートからの相対URLとする
 	if (strncmp($name, '/', 1) == 0) $is_url = true;
 	
+	// ##### 添付ファイルの場合のパラメータチェック #####
 	if (!$is_url){
 		// 添付ファイル
 		if (! is_dir(UPLOAD_DIR)) {
@@ -156,6 +182,7 @@ function plugin_ref_body($args)
 			$file = UPLOAD_DIR . encode($page) . '_' . encode($name);
 			$is_file = is_file($file);
 
+/*		// ########## 旧バージョンの書式は削除する ##########
 		// 第二引数以降が存在し、それはrefのオプション名称などと一致しない
 		} else if (isset($args[0]) && $args[0] != '' && ! isset($params[$args[0]])) {
 			$e_name = encode($name);
@@ -190,7 +217,7 @@ function plugin_ref_body($args)
 						'Please try ref(pagename/filename)';
 				}
 				return $params;
-			}
+			}*/
 		} else {	// 添付ファイル名のみの指定の場合
 			// Simple single argument
 			$file = UPLOAD_DIR . encode($page) . '_' . encode($name);
@@ -361,8 +388,27 @@ function plugin_ref_body($args)
 	}
 
 	if ($is_image) { // 画像
-		$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $info/>";
-		if (! $params['nolink'] && $url2)
+		$class = '';
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+			$classArray = array();
+			
+			//if (WikiParam::getIsInline()){		// インライン型表示のとき
+			//	//$class = 'class="float-left"';
+			//} else {	// ブロック型表示のとき
+				// 画像の幅がコンテナに内に収まるように調整する
+				$classArray[] = 'img-fluid';
+			//}
+			
+			// 画像表現を追加
+			if ($params['rounded']) $classArray[] = 'rounded';	// 角丸
+			if ($params['circle']) $classArray[] = 'rounded-circle';	// 円形
+			if ($params['thumbnail']) $classArray[] = 'img-thumbnail';	// 枠線
+			
+			if (count($classArray) > 0) $class = 'class="' . implode(' ', $classArray) . '"';
+		}
+		
+		$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $class $info/>";
+		if (!$params['nolink'] && $url2)
 			$params['_body'] = "<a href=\"$url2\" title=\"$title\">{$params['_body']}</a>";
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
