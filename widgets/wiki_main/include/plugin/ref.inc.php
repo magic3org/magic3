@@ -96,8 +96,8 @@ function plugin_ref_convert()
 			$style = "text-align:{$params['_align']}";
 		}
 
-		// divで包む
-		return "<div style=\"$style\">{$params['_body']}</div>\n";
+		// Pタグで包む(Pタグはデフォルトで下マージンが付加される)
+		return "<p style=\"$style\">{$params['_body']}</p>\n";
 	} else {
 		if ($params['around']) {
 			$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
@@ -124,8 +124,8 @@ function plugin_ref_body($args)
 		'left'   => FALSE, // 左寄せ
 		'center' => FALSE, // 中央寄せ
 		'right'  => FALSE, // 右寄せ
-		'wrap'   => FALSE, // TABLEで囲む
-		'nowrap' => FALSE, // TABLEで囲まない
+		'wrap'   => FALSE, // TABLEで囲む(廃止)
+		'nowrap' => FALSE, // TABLEで囲まない(廃止)
 		'around' => FALSE, // 回り込み
 		'noicon' => FALSE, // アイコンを表示しない
 		'nolink' => FALSE, // 元ファイルへのリンクを張らない
@@ -136,7 +136,9 @@ function plugin_ref_body($args)
 		'rounded'   => FALSE, // 角丸
 		'circle'   	=> FALSE, // 円形
 		'thumbnail' => FALSE, // サムネール
+		'margin' 	=> FALSE, // マージン
 		
+		// 解析値
 		'_size'  => FALSE, // サイズ指定あり
 		'_w'     => 0,       // 幅
 		'_h'     => 0,       // 高さ
@@ -322,14 +324,12 @@ function plugin_ref_body($args)
 	if (! empty($params['_args'])) {
 		$_title = array();
 		foreach ($params['_args'] as $arg) {
-			if (preg_match('/^([0-9]+)x([0-9]+)$/', $arg, $matches)) {
+			if (preg_match('/^([0-9]+)x([0-9]+)$/', $arg, $matches)) {	// 「nnnxnnn」フォーマットで画像サイズ指定の場合
 				$params['_size'] = TRUE;
 				$params['_w'] = $matches[1];
 				$params['_h'] = $matches[2];
-
-			} else if (preg_match('/^([0-9.]+)%$/', $arg, $matches) && $matches[1] > 0) {
+			} else if (preg_match('/^([0-9.]+)%$/', $arg, $matches) && $matches[1] > 0) {	// 「nnn%」フォーマットで画像サイズ指定の場合
 				$params['_%'] = $matches[1];
-
 			} else {
 				$_title[] = $arg;
 			}
@@ -387,6 +387,11 @@ function plugin_ref_body($args)
 		}
 	}
 
+	$optionAttr = '';	// 追加属性
+	if (intval($templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30){	// Bootstrap型テンプレートの場合
+		$optionAttr = 'data-toggle="tooltip"';	// ツールチップを付加
+	}
+	
 	if ($is_image) { // 画像
 		$class = '';
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
@@ -399,6 +404,16 @@ function plugin_ref_body($args)
 				$classArray[] = 'img-fluid';
 			//}
 			
+			// 画像マージンクラスの追加
+			$marginClass = $params['margin'];
+			if (!empty($marginClass)){
+				if (is_numeric($marginClass)){
+					$classArray[] = 'mx-' . intval($marginClass);
+					$classArray[] = 'my-' . intval($marginClass);
+				} else {
+				}
+			}
+			
 			// 画像表現を追加
 			if ($params['rounded']) $classArray[] = 'rounded';	// 角丸
 			if ($params['circle']) $classArray[] = 'rounded-circle';	// 円形
@@ -407,18 +422,19 @@ function plugin_ref_body($args)
 			if (count($classArray) > 0) $class = 'class="' . implode(' ', $classArray) . '"';
 		}
 		
-		$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $class $info/>";
-		if (!$params['nolink'] && $url2)
-			$params['_body'] = "<a href=\"$url2\" title=\"$title\">{$params['_body']}</a>";
+		$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $class $info $optionAttr />";
+		if (!$params['nolink'] && $url2) $params['_body'] = "<a href=\"$url2\" title=\"$title\">{$params['_body']}</a>";
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
-		$params['_body'] = "<a href=\"$url\" title=\"$info\">$icon$title</a>";
+		$params['_body'] = "<a href=\"$url\" title=\"$info\" $optionAttr>$icon$title</a>";
 	}
 
 	return $params;
 }
 
 // オプションを解析する
+// オプションの先頭から規定のオプションパラメータを取得する。
+// 直接値が設定されるnnnxnnnやnnn%やタイトルが検出された時点で規定のオプションパラメータの取得は終了し、残りは$params['_args']に格納する。
 function ref_check_arg($val, & $params)
 {
 	if ($val == '') {
@@ -426,16 +442,28 @@ function ref_check_arg($val, & $params)
 		return;
 	}
 
+	// 「=」が含まれている場合はオプションキーを解析
+	list($optionKey, $optionValue) = explode('=', $val);
+	$optionKey = strtolower($optionKey);
+			
 	if (! $params['_done']) {
 		foreach (array_keys($params) as $key) {
-			if (strpos($key, strtolower($val)) === 0) {
-				$params[$key] = TRUE;
+//			if (strpos($key, strtolower($val)) === 0) {
+//				$params[$key] = TRUE;
+			if (strpos($key, $optionKey) === 0) {
+				if (empty($optionValue)){
+					$params[$key] = TRUE;
+				} else {
+					$params[$key] = $optionValue;	// 「=」の右側の値を取得
+				}
 				return;
 			}
 		}
+		// 既定のオプションパラメータ以外を検出した場合はそこで解析を終了する
 		$params['_done'] = TRUE;
 	}
 
+	// 処理できなかったオプションパラメータはそのまま保存
 	$params['_args'][] = $val;
 }
 
