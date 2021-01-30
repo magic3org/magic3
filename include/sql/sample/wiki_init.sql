@@ -26,6 +26,7 @@ UPDATE _page_id SET pg_default_sub_id = 'wiki' WHERE pg_id = 'index' AND pg_type
 -- スマートフォン,携帯のアクセスポイントを隠す
 UPDATE _page_id SET pg_active = false WHERE pg_id = 's_index' AND pg_type = 0;
 UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
+
 -- 必要なページのみ表示
 DELETE FROM _page_id WHERE pg_type = 1 AND pg_priority < 100;
 INSERT INTO _page_id 
@@ -46,6 +47,9 @@ INSERT INTO _page_id
 ('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,       true),
 ('member',       1,            '会員',                             '会員画面用',                         20,          false,      true,       true),
 ('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true);
+
+-- ページの固定テンプレートをリセット
+UPDATE _page_info SET pn_template_id = '' WHERE pn_id = 'index' AND pn_deleted = false;
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';

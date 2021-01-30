@@ -63,6 +63,9 @@ INSERT INTO _page_id
 ('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true),
 ('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true);
 
+-- ページの固定テンプレートをリセット
+UPDATE _page_info SET pn_template_id = '' WHERE pn_id = 'index' AND pn_deleted = false;
+
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu.en';
