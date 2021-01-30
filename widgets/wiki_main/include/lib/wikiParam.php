@@ -329,7 +329,8 @@ class WikiParam
 		$destStr = $srcStr;
 		
 		// cmdをMagic3のWikiコマンド「wcmd」に変換
-		$destStr = preg_replace_callback('/[a-z]*cmd=/', array(self, "_replace_query_callback"), $destStr);
+		//$destStr = preg_replace_callback('/[a-z]*cmd=/', array(self, "_replace_query_callback"), $destStr);
+		$destStr = preg_replace_callback('/[a-z]*cmd=/', array(WikiParam::class, "_replace_query_callback"), $destStr);	// PHP7,PHP8では問題なし
 
 		// Wikiページ名のみの場合はページサブIDを付加しない
 		$pos = strpos($destStr, '=');
