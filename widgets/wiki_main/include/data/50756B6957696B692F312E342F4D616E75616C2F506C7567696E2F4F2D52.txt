@@ -212,6 +212,8 @@
 [&color(blue){noimg};],
 [&color(blue){nolink};],
 [&color(blue){zoom};],
+[&color(blue){caption};],
+[&color(blue){captionpos};],
 [&color(blue){margin};],
 [&color(blue){rounded};],
 [&color(blue){circle};],
@@ -231,6 +233,8 @@
 [&color(blue){noimg};],
 [&color(blue){nolink};],
 [&color(blue){zoom};],
+[&color(blue){caption};],
+[&color(blue){captionpos};],
 [&color(blue){margin};],
 [&color(blue){rounded};],
 [&color(blue){circle};],
@@ -253,6 +257,8 @@
 --noimg - ファイルが画像の場合に画像を展開しないようにします。省略時は展開します。
 --nolink - 元ファイルへのリンクを張らないようにします。省略時はリンクします。
 --zoom - 縦横比を保持します。省略時はサイズ指定に従います。
+--caption - 画像にキャプションを付けます。(例: #ref(hoge.png,caption=画像の説明))(Magic3版拡張)
+--captionpos - 画像キャプションの位置を指定します。(top-left,top-center,top-right,bottom-left,bottom-center,bottm-right)(Magic3版拡張)
 --margin - 画像のマージンを1-5値で指定します。(例: #ref(hoge.png,margin=1))(Magic3版拡張)
 --rounded - 角丸で画像を表示します。(Magic3版拡張)
 --circle - 円形で画像を表示します。(Magic3版拡張)

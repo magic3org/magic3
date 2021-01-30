@@ -96,8 +96,13 @@ function plugin_ref_convert()
 			$style = "text-align:{$params['_align']}";
 		}
 
-		// Pタグで包む(Pタグはデフォルトで下マージンが付加される)
-		return "<p style=\"$style\">{$params['_body']}</p>\n";
+		if (empty($params['caption'])){
+			// Pタグで囲む(Pタグはデフォルトで下マージンが付加される)
+			return "<p style=\"$style\">{$params['_body']}</p>\n";
+		} else {
+			// FIGUREタグはPタグに入らないのでDIVタグで囲む。FIGUREタグの下マージンあり。
+			return "<div style=\"$style\">{$params['_body']}</div>\n";
+		}
 	} else {
 		if ($params['around']) {
 			$style = ($params['_align'] == 'right') ? 'float:right' : 'float:left';
@@ -133,10 +138,12 @@ function plugin_ref_body($args)
 		'zoom'   => FALSE, // 縦横比を保持する
 		
 		// Magic3追加分
+		'caption'   => FALSE, // キャプション
+		'captionpos'   => FALSE, // キャプションの表示位置
+		'margin' 	=> FALSE, // マージン
 		'rounded'   => FALSE, // 角丸
 		'circle'   	=> FALSE, // 円形
 		'thumbnail' => FALSE, // サムネール
-		'margin' 	=> FALSE, // マージン
 		
 		// 解析値
 		'_size'  => FALSE, // サイズ指定あり
@@ -397,6 +404,9 @@ function plugin_ref_body($args)
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
 			$classArray = array();
 			
+			// キャプション付きの場合
+			if (!empty($params['caption'])) $classArray[] = 'figure-img';
+			
 			//if (WikiParam::getIsInline()){		// インライン型表示のとき
 			//	//$class = 'class="float-left"';
 			//} else {	// ブロック型表示のとき
@@ -425,6 +435,36 @@ function plugin_ref_body($args)
 		
 		$params['_body'] = "<img src=\"$url\" alt=\"$title\" title=\"$title\" $class $info $optionAttr />";
 		if (!$params['nolink'] && $url2) $params['_body'] = "<a href=\"$url2\" title=\"$title\">{$params['_body']}</a>";
+		
+		// ### キャプション付きの場合はFIGUREタグで囲む ###
+		if (!empty($params['caption'])){
+			$captionClass = '';
+			$captionClassArray = array();
+			$captionClassArray[] = 'figure-caption';
+			
+			switch ($params['captionpos']){
+				case 'top-left':
+				case 'bottom-left':
+				default:
+					$captionClassArray[] = 'text-left';
+					break;
+				case 'top-center':
+				case 'bottom-center':
+					$captionClassArray[] = 'text-center';
+					break;
+				case 'top-right':
+				case 'bottom-right':
+					$captionClassArray[] = 'text-right';
+					break;
+			}
+			if (count($captionClassArray) > 0) $captionClass = 'class="' . implode(' ', $captionClassArray) . '"';
+			
+			if ($params['captionpos'] == 'top-left' || $params['captionpos'] == 'top-center' || $params['captionpos'] == 'top-right'){
+				$params['_body'] = '<figure class="figure"><figcaption ' . $captionClass . '>' . htmlspecialchars($params['caption']) . '</figcaption>' . $params['_body'] . '</figure>';
+			} else {
+				$params['_body'] = '<figure class="figure">' . $params['_body'] . '<figcaption ' . $captionClass . '>' . htmlspecialchars($params['caption']) . '</figcaption></figure>';
+			}
+		}
 	} else {
 		$icon = $params['noicon'] ? '' : FILE_ICON;
 		$params['_body'] = "<a href=\"$url\" title=\"$info\" $optionAttr>$icon$title</a>";
