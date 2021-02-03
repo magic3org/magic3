@@ -74,7 +74,7 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 
 		// DB接続可能なときはDBのバージョンを取得
 		$status = $this->_db->getDisplayErrMessage();	// 出力状態を取得
-		$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+		$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);	// 接続先が不明でここで落ちている(調査中)
 		$this->_db->displayErrMessage($status);		// 抑止解除
 		if (empty($currentVer)) $currentVer = 0;
 		if ($currentVer >= self::FIRST_VER) $canVerUp = true;
@@ -93,7 +93,7 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 			if (empty($currentVer)){		// 新規インストールのとき
 				// DB構築画面へ遷移
 //				$this->gPage->redirect('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
-				$this->gPage->redirectInInstall('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				$this->gPage->redirectInInstall('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());	// ここで遷移している(調査中)
 			} else {
 				$msg = 'このDBのバージョン(' . $currentVer . ')はバージョンアップ対象外です<br />バージョンアップ機能はシステムバージョン1.7.0以降のDBが対象です';
 				$this->tmpl->addVar("_widget", "message", $msg);
