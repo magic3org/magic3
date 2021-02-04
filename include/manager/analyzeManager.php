@@ -27,8 +27,10 @@ class AnalyzeManager extends _Core
 	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.104/';		// クローラー解析スクリプトディレクトリ
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.14.0/UserAgentParser.php';		// ブラウザ判定スクリプト
-	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.0.0/UserAgentParser.php';		// ブラウザ判定スクリプト
-	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
+//	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.0.0/UserAgentParser.php';		// ブラウザ判定スクリプト
+	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.2.0/UserAgentParser.php';		// ブラウザ判定スクリプト
+//	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
+	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.3/';		// プラットフォーム判定スクリプト
 	
 	/**
 	 * コンストラクタ
