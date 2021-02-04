@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,10 +23,8 @@ class AnalyzeManager extends _Core
 	const NOT_FOUND_BROWSER_IMAGE = 'noimage.png';			// ブラウザアイコンが見つからなかった場合のアイコン
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
-//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.54/';		// クローラー解析スクリプトディレクトリ
-//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.79/';		// クローラー解析スクリプトディレクトリ
-//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.90/';		// クローラー解析スクリプトディレクトリ
-	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.96/';		// クローラー解析スクリプトディレクトリ
+//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.96/';		// クローラー解析スクリプトディレクトリ
+	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.104/';		// クローラー解析スクリプトディレクトリ
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.14.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.0.0/UserAgentParser.php';		// ブラウザ判定スクリプト
