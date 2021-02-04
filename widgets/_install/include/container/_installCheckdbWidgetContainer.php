@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installCheckdbWidgetContainer.php 3795 2010-11-09 07:12:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -19,14 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-//	private $sysDb;	// DB接続オブジェクト
-	private $createTableScripts;			// テーブル作成スクリプト
-	private $insertTableScripts;			// データインストールスクリプト
-	const SERVER_ID = 'server_id';
-	const INSTALL_DT = 'install_dt';		// システムインストール日時
-	const WORK_DIR = 'work_dir';			// 一時ディレクトリ
-	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
-	const FIRST_VER = 2008111301;			// バージョンアップ可能なDBのバージョン
+	const FIRST_VER = 2016073101;			// バージョンアップ可能なDBのバージョン
 
 	/**
 	 * コンストラクタ
@@ -38,7 +31,6 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
-//		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -92,7 +84,6 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 		} else {
 			if (empty($currentVer)){		// 新規インストールのとき
 				// DB構築画面へ遷移
-//				$this->gPage->redirect('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 				$this->gPage->redirectInInstall('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());	// ここで遷移している(調査中)
 			} else {
 				$msg = 'このDBのバージョン(' . $currentVer . ')はバージョンアップ対象外です<br />バージョンアップ機能はシステムバージョン1.7.0以降のDBが対象です';
