@@ -492,6 +492,7 @@ class AnalyzeManager extends _Core
 			'mediapartners-google'		=> 'google.gif',	// Google
 			'google favicon'			=> 'google.gif',	// Google
 			'google web preview'		=> 'google.gif',	// Google
+			'adsbot'					=> 'google_adsense.png',	// Google Adsense
 			'msnbot'					=> 'msn.gif',	// MSN
 			'msnbot-media'				=> 'msn.gif',	// MSN
 			'yahooseeker'				=> 'yahoo.gif',	// YahooSeeker
