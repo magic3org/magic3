@@ -23,10 +23,7 @@ class AnalyzeManager extends _Core
 	const NOT_FOUND_BROWSER_IMAGE = 'noimage.png';			// ブラウザアイコンが見つからなかった場合のアイコン
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
-//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.96/';		// クローラー解析スクリプトディレクトリ
 	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.104/';		// クローラー解析スクリプトディレクトリ
-//	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.7.0/UserAgentParser.php';		// ブラウザ判定スクリプト
-//	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.14.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 //	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.0.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.2.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 //	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.2/';		// プラットフォーム判定スクリプト
