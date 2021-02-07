@@ -26,7 +26,6 @@ function m3UpdateParentWindow()
 {
 	var href = 	window.opener.location.href.split('#');
 	window.opener.location.href = href[0];
-	//window.opener.location.href = window.opener.location.href;
 }
 // 設定ウィンドウから親ウィンドウを更新
 function m3UpdateParentWindowByConfig(serial)
@@ -398,7 +397,8 @@ function m3OpenFileBrowser(seturl_callback)
 				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 				getFileCallback: function(url){
 					seturl_callback(url.url);
-					$('.ui-dialog-titlebar-close[role="button"]').click();
+					//$('.ui-dialog-titlebar-close[role="button"]').click();
+					$('.ui-dialog-titlebar-close').click();		// Fixed 2021/2/8
 				}
 			}).elfinder('instance');
 		}
@@ -439,7 +439,8 @@ function m3OpenImageFileBrowser(seturl_callback)
 				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 				getFileCallback: function(url){
 					seturl_callback(url.url);
-					$('.ui-dialog-titlebar-close[role="button"]').click();
+					//$('.ui-dialog-titlebar-close[role="button"]').click();
+					$('.ui-dialog-titlebar-close').click();		// Fixed 2021/2/8
 				}
 			}).elfinder('instance');
 		}
@@ -1145,4 +1146,10 @@ $(function(){
 	
 	// 最後にヘルプ作成
 	$(window).on('load', function(){ m3SetHelp(); });
+	
+	/**
+	 * Bootstrap+jQuery UIの競合防止
+	 */
+	// ダイアログの閉じるボタンが消えるのを防ぐ
+	$.fn.bootstrapBtn = $.fn.button.noConflict();
 });
