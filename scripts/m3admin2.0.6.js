@@ -385,6 +385,12 @@ function m3OpenFileBrowser(seturl_callback)
 		modal: true,
 		width: width,
 		open: function(){
+			/**
+			 * Bootstrap+jQuery UIの競合防止
+			 */
+			// ダイアログの閉じるボタンが消えるのを防ぐ
+			$.fn.bootstrapBtn = $.fn.button.noConflict();
+			
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
 		},
@@ -427,6 +433,12 @@ function m3OpenImageFileBrowser(seturl_callback)
 		modal: true,
 		width: width,
 		open: function(){
+			/**
+			 * Bootstrap+jQuery UIの競合防止
+			 */
+			// ダイアログの閉じるボタンが消えるのを防ぐ
+			$.fn.bootstrapBtn = $.fn.button.noConflict();
+			
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
 		},
@@ -1146,10 +1158,4 @@ $(function(){
 	
 	// 最後にヘルプ作成
 	$(window).on('load', function(){ m3SetHelp(); });
-	
-	/**
-	 * Bootstrap+jQuery UIの競合防止
-	 */
-	// ダイアログの閉じるボタンが消えるのを防ぐ
-	$.fn.bootstrapBtn = $.fn.button.noConflict();
 });
