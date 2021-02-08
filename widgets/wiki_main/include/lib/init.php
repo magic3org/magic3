@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -124,11 +124,11 @@ $weeklabels = $_msg_week;
 
 /////////////////////////////////////////////////
 // INI_FILE: Init $script
-if (isset($script)) {
-	get_script_uri($script); // Init manually
-} else {
+//if (isset($script)) {
+//	get_script_uri($script); // Init manually
+//} else {
 	$script = get_script_uri(); // Init automatically
-}
+//}
 
 /////////////////////////////////////////////////
 // INI_FILE: $agents:  UserAgentの識別

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -596,11 +596,19 @@ function get_autolink_pattern_sub(& $pages, $start, $end, $pos)
 }
 
 // Get absolute-URI of this script
-function get_script_uri($init_uri = '')
+//function get_script_uri($init_uri = '')
+function get_script_uri()
 {
-	global $script_directory_index;
+//	global $script_directory_index;
 	static $script;
-
+	global $gEnvManager;
+	
+	if (isset($script)) return $script;
+	
+	$script = $gEnvManager->getDocumentRootUrl() . $_SERVER["SCRIPT_NAME"];
+	
+	return $script;
+/*
 	if ($init_uri == '') {
 		// Get
 		if (isset($script)) return $script;
@@ -649,6 +657,7 @@ function get_script_uri($init_uri = '')
 	}
 
 	return $script;
+	*/
 }
 
 // Remove null(\0) bytes from variables
