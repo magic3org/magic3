@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,6 +28,7 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 	const UNTITLED_TITLE = 'タイトル未設定:';		// タイトルが取得できない場合のタイトル
+	const CF_TEST_MODE = 'test_mode';
 		
 	/**
 	 * コンストラクタ
@@ -114,6 +115,8 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 			//$this->sampleId = $request->trimValueOf('sample_sql');
 		} else if ($act == 'updatedb'){		// DBをバージョンアップ
 			$this->execUpdate($request);
+		} else if ($act == 'testmode'){		// システムをテストモードに切り替え
+			$this->switchTestMode();
 		} else if ($act == 'develop'){		// 開発用モード
 			$this->showDetail = '1';
 		}
@@ -461,6 +464,20 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 		// 取得したファイルは番号順にソートする
 		sort($files);
 		return $files;
+	}
+	/**
+	 * システムをテストモードに切り替え
+	 *
+	 * @return		なし
+	 */
+	function switchTestMode()
+	{
+		$ret = $this->_db->updateSystemConfig(self::CF_TEST_MODE, '1');
+		if ($ret){
+			$this->setMsg(self::MSG_GUIDANCE, 'テストモードに切り替えました');
+		} else {
+			$this->setMsg(self::MSG_APP_ERR, 'テストモード切り替えに失敗しました');
+		}
 	}
 }
 ?>
