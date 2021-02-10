@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,7 +28,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $packageDir;		// ソースパッケージディレクトリ名
 	private $backupDir;			// バックアップディレクトリ名
 	private $coreDirList = array('include', 'widgets', 'scripts', 'images');
+	private $testMode;			// テストモード
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
+	const UPDATE_INFO_URL_FOR_TEST = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/_test_update_system.json';		// バージョンアップ可能なバージョン情報取得用(テスト用)
 	const UPDATE_STATUS_FILE = 'update_status.json';	// バージョンアップ状態ファイル
 	const BACKUP_DIR = 'backup-';		// バックアップディレクトリ名
 	const PACKAGE_DIR = 'magic3org-magic3-';			// パッケージディレクトリ名
@@ -36,6 +38,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const SITE_DEF_FILE = 'siteDef.php';		// サイト定義ファイル
 	const DB_UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const INSTALL_INFO_CLASS = 'InstallInfo';			// インストール情報クラス
+	const CF_TEST_MODE = 'test_mode';	// テストモード
 	
 	/**
 	 * コンストラクタ
@@ -47,6 +50,9 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
+		
+		// テストモードの状態を取得
+		$this->testMode = $this->gSystem->getSystemConfig(self::CF_TEST_MODE);
 		
 		// 変数初期化
 		$this->updateId = '';		// アップデートID
@@ -79,10 +85,10 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		if ($act == 'getinfo'){		// 最新情報取得
+		if ($act == 'getinfo'){		// 最新情報取得(管理画面メニューウィジェットから参照)
 			// アップデート可能なバージョンを取得
 			$findUpdate = false;
-			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+			$infoSrc = $this->_readUpdateInfoFile();
 			if ($infoSrc !== false){
 				$versionInfo = json_decode($infoSrc, true);
 			
@@ -352,7 +358,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$disabled = 'disabled';
 			
 			// アップデート可能なバージョンを取得
-			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+			$infoSrc = $this->_readUpdateInfoFile();
 			if ($infoSrc !== false){
 				$versionInfo = json_decode($infoSrc, true);
 			
@@ -376,7 +382,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	function _getVersionInfo()
 	{
 		$info = array();
-		$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+		$infoSrc = $this->_readUpdateInfoFile();
 		if ($infoSrc !== false){
 			$versionInfo = json_decode($infoSrc, true);
 		
@@ -558,6 +564,21 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			}
 		}
 		return $infoObj;
+	}
+	
+	/**
+	 * バージョンアップ情報ファイルを読み込む
+	 *
+	 * @return string		情報ファイル内容
+	 */
+	function _readUpdateInfoFile()
+	{
+		if ($this->testMode){	// テストモードの場合
+			$infoSrc = file_get_contents(self::UPDATE_INFO_URL_FOR_TEST);
+		} else {
+			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
+		}
+		return $infoSrc;
 	}
 }
 ?>
