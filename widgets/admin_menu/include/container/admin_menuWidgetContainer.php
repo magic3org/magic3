@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,6 +30,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
 	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
+	const SITE_TEST_ICON_FILE = '/images/system/site_test32.png';		// サイトテスト中アイコン
 	const TOP_MENU_ICON_FILE = '/images/system/home32_menu.png';		// トップ遷移アイコン(サイト運用モード)
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
 	const TOP_SERVER_ADMIN_ICON_FILE = '/images/system/globe32.png';		// トップ遷移アイコン(サーバ管理運用の場合)
@@ -74,6 +75,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const CF_SITE_PC_IN_PUBLIC		= 'site_pc_in_public';				// PC用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	const CF_SITE_OPERATION_MODE = 'site_operation_mode';			// サイト運用モード
+	const CF_TEST_MODE				= 'test_mode';				// テストモードかどうか
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	const CF_SYSTEM_TYPE			= 'system_type';		// システム運用タイプ
 	const SYSTEM_TYPE_SERVER_ADMIN	= 'serveradmin';		// システム運用タイプ(サーバ管理)
@@ -365,9 +367,13 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			
 			// トップアイコンを設定
 			$this->systemType = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
+			$testMode = $this->gSystem->getSystemConfig(self::CF_TEST_MODE);	// テストモードかどうか
 			$developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
 			$preTitle = '';
-			if ($developMode){		// 開発モードの場合
+			if ($testMode){		// テストモードかどうか
+				$iconUrl = $this->gEnv->getRootUrl() . self::SITE_TEST_ICON_FILE;		// サイトテスト中アイコン
+				$preTitle = '[テスト中]';			// 開発モード
+			} else if ($developMode){		// 開発モードの場合
 				$iconUrl = $this->gEnv->getRootUrl() . self::DEVELOP_ICON_FILE;		// 開発モードアイコン
 				$preTitle = '[' . $this->_('Develop Mode') . ']';			// 開発モード
 			} else {
