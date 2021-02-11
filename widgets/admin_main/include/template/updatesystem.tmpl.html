@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -14,7 +14,7 @@
 <script type="text/javascript">
 //<![CDATA[
 function updateSystem(){
-	if (!window.confirm('システムを最新バージョンにアップデートしますか?\n処理時間は数分要します。実行後はバージョンアップ完了までお待ちください。')) return false;
+	if (!window.confirm('システムを最新バージョンにアップデートしますか?\n処理時間は数分要します。実行後はアップデート完了までお待ちください。')) return false;
 	
 	// ボタン使用不可
 	$("#update_button").prop('disabled', true);
@@ -25,34 +25,50 @@ function updateSystem(){
 	// 処理中ダイアログ表示
 	m3ShowProcessModal();
 	
-	$('#step_message').append('<li>アップデート開始</li>');
+	$('#step_message').append('<li>環境チェック開始</li>');
 	
-	// バージョンアップ情報取得
-	m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=1', function(request, retcode, jsondata){		// 正常終了
-		if (jsondata.code == '0'){	// エラーの場合
+	// 環境チェック
+	m3_ajax_request('', 'task=updatesystem&act=checkenv', function(request, retcode, jsondata){		// 正常終了
+		if (!jsondata){		// 通信エラーの場合
 			// 処理中ダイアログ停止
 			m3HideProcessModal();
 		
+			// エラーメッセージ出力
+			$('#step_message').append('<ul><li>システム環境に問題があります</li></ul>');
+			
+			alert('アップデートに失敗しました。');
+			return;
+		} else if (jsondata.code == '0'){	// 処理エラーの場合
+			// 処理中ダイアログ停止
+			m3HideProcessModal();
+		
+			// エラーメッセージ出力
+			$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+			
 			alert('アップデートに失敗しました。');
 			return;
 		}
 		
 		// 正常に終了の場合はメッセージを追加
-		$('#step_message').append('<li>' + jsondata.message + '</li>');
+		$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+		
+		// ##### アップデート処理開始 #####
+		$('#step_message').append('<li>アップデート開始</li>');
 	
-		m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=2', function(request, retcode, jsondata){		// 正常終了
+		// バージョンアップ情報取得
+		m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=1', function(request, retcode, jsondata){		// 正常終了
 			if (jsondata.code == '0'){	// エラーの場合
 				// 処理中ダイアログ停止
 				m3HideProcessModal();
-			
+		
 				alert('アップデートに失敗しました。');
 				return;
 			}
-			
+		
 			// 正常に終了の場合はメッセージを追加
 			$('#step_message').append('<li>' + jsondata.message + '</li>');
-			
-			m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=3', function(request, retcode, jsondata){		// 正常終了
+	
+			m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=2', function(request, retcode, jsondata){		// 正常終了
 				if (jsondata.code == '0'){	// エラーの場合
 					// 処理中ダイアログ停止
 					m3HideProcessModal();
@@ -64,7 +80,7 @@ function updateSystem(){
 				// 正常に終了の場合はメッセージを追加
 				$('#step_message').append('<li>' + jsondata.message + '</li>');
 			
-				m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=4', function(request, retcode, jsondata){		// 正常終了
+				m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=3', function(request, retcode, jsondata){		// 正常終了
 					if (jsondata.code == '0'){	// エラーの場合
 						// 処理中ダイアログ停止
 						m3HideProcessModal();
@@ -76,8 +92,26 @@ function updateSystem(){
 					// 正常に終了の場合はメッセージを追加
 					$('#step_message').append('<li>' + jsondata.message + '</li>');
 			
-					// 処理中ダイアログ停止
-					m3HideProcessModal();
+					m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=4', function(request, retcode, jsondata){		// 正常終了
+						if (jsondata.code == '0'){	// エラーの場合
+							// 処理中ダイアログ停止
+							m3HideProcessModal();
+			
+							alert('アップデートに失敗しました。');
+							return;
+						}
+			
+						// 正常に終了の場合はメッセージを追加
+						$('#step_message').append('<li>' + jsondata.message + '</li>');
+			
+						// 処理中ダイアログ停止
+						m3HideProcessModal();
+					}, function(request){		// 異常終了
+						// 処理中ダイアログ停止
+						m3HideProcessModal();
+		
+						alert('通信に失敗しました。');
+					});
 				}, function(request){		// 異常終了
 					// 処理中ダイアログ停止
 					m3HideProcessModal();

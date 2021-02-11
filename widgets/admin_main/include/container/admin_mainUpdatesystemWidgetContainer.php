@@ -29,6 +29,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $backupDir;			// バックアップディレクトリ名
 	private $coreDirList = array('include', 'widgets', 'scripts', 'images');
 	private $testMode;			// テストモード
+	private $errFileList;			// エラーファイルリスト
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
 	const UPDATE_INFO_URL_FOR_TEST = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/_test_update_system.json';		// バージョンアップ可能なバージョン情報取得用(テスト用)
 	const UPDATE_STATUS_FILE = 'update_status.json';	// バージョンアップ状態ファイル
@@ -39,6 +40,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const DB_UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const INSTALL_INFO_CLASS = 'InstallInfo';			// インストール情報クラス
 	const CF_TEST_MODE = 'test_mode';	// テストモード
+	const MAX_ERR_FILE_COUNT = 10;		// エラーファイルの最大検出数
 	
 	/**
 	 * コンストラクタ
@@ -108,6 +110,24 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('info', $info);
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else {
+				$this->gInstance->getAjaxManager()->addData('code', '0');
+			}
+		} else if ($act == 'checkenv'){		// アップデート環境チェック
+			// タイムアウトを停止
+			$this->gPage->setNoTimeout();
+			
+			// ウィジェット出力処理中断
+			$this->gPage->abortWidget();
+			
+			// ファイル、ディレクトリのパーミッションチェック
+			$this->errFileList = array();			// エラーファイルリスト
+			$ret = $this->_checkPermission($this->gEnv->getSystemRootPath());
+			if ($ret && count($this->errFileList) === 0){		// エラーファイルがない場合
+				$this->gInstance->getAjaxManager()->addData('message', 'アクセス権チェック - OK');
+				$this->gInstance->getAjaxManager()->addData('code', '1');
+			} else {
+				$message = 'ファイル,ディレクトリのアクセス権を確認してください<br />' . implode('<br />', $this->errFileList);
+				$this->gInstance->getAjaxManager()->addData('message', $message);
 				$this->gInstance->getAjaxManager()->addData('code', '0');
 			}
 		} else if ($act == 'updatebystep'){
@@ -579,6 +599,53 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			$infoSrc = file_get_contents(self::UPDATE_INFO_URL);
 		}
 		return $infoSrc;
+	}
+	
+	/**
+	 * ファイル、ディレクトリのアクセス権のチェック
+	 *
+	 * @param string $dir			ディレクトリパス
+	 * @return bool					true=処理終了、false=処理失敗
+	 */
+	function _checkPermission($dir)
+	{
+		// ディレクトリの書き込み権限ない場合は終了
+		if (!is_writable($dir)){
+			// 最大数までパスを保存
+			if (count($this->errFileList) < self::MAX_ERR_FILE_COUNT) $this->errFileList[] = $dir;
+			
+			return false;
+		}
+		
+		if ($dirHandle = opendir($dir)){
+			$ret = true;	// エラー検出したかどうか
+			while ($file = readdir($dirHandle)) {
+				if ($file == '.' || $file == '..') continue;
+			
+				$filePath = $dir . '/' . $file;
+				if (is_dir($filePath)){
+					$ret = $this->_checkPermission($filePath);
+					
+					// 最大数まで達していない場合は検索を続行する
+					if (count($this->errFileList) < self::MAX_ERR_FILE_COUNT) $ret = true;
+				} else {		// ファイルの場合
+					// 書き込み権限がない場合はファイル名を保存
+					if (!is_writable($filePath)){
+						// 最大数までパスを保存
+						if (count($this->errFileList) < self::MAX_ERR_FILE_COUNT){
+							$this->errFileList[] = $filePath;
+						} else {	// エラーファイルが最大数を超えた場合は終了
+							$ret = false;
+						}
+					}
+				}
+				if (!$ret) break;
+			}
+			closedir($dirHandle);
+			return $ret;
+		} else {		// オープン失敗のとき
+			return false;
+		}
 	}
 }
 ?>
