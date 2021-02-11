@@ -61,6 +61,9 @@ function updateSystem(){
 				// 処理中ダイアログ停止
 				m3HideProcessModal();
 		
+				// エラーメッセージ出力
+				$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+			
 				alert('アップデートに失敗しました。');
 				return;
 			}
@@ -73,6 +76,9 @@ function updateSystem(){
 					// 処理中ダイアログ停止
 					m3HideProcessModal();
 			
+					// エラーメッセージ出力
+					$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+				
 					alert('アップデートに失敗しました。');
 					return;
 				}
@@ -85,6 +91,9 @@ function updateSystem(){
 						// 処理中ダイアログ停止
 						m3HideProcessModal();
 			
+						// エラーメッセージ出力
+						$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+				
 						alert('アップデートに失敗しました。');
 						return;
 					}
@@ -97,6 +106,9 @@ function updateSystem(){
 							// 処理中ダイアログ停止
 							m3HideProcessModal();
 			
+							// エラーメッセージ出力
+							$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
+				
 							alert('アップデートに失敗しました。');
 							return;
 						}
