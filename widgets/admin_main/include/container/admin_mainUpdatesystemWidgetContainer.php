@@ -241,7 +241,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 					
 				} else {	// パッケージダウンロード失敗の場合
-					$this->gInstance->getAjaxManager()->addData('message', 'パッケージ取得失敗');
+					$this->gInstance->getAjaxManager()->addData('message', 'パッケージ取得失敗(タグ=' . $versionTag . ')');
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
 					return;
 				}
