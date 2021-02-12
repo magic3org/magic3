@@ -275,8 +275,36 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					$newDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->packageDir . DIRECTORY_SEPARATOR . $moveDir;	// 新しいソースディレクトリ
 					$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . $moveDir;
 					
-					mvDirectory($oldDir, $backupDir);
-					mvDirectory($newDir, $oldDir);
+					// 旧ソースをバックアップディレクトリへ移動できた場合のみ新規ソースを配置する
+					$ret = mvDirectory($oldDir, $backupDir);
+					if ($ret) $ret = mvDirectory($newDir, $oldDir);
+					
+					// エラー発生の場合は終了
+					if (!$ret) break;
+				}
+				
+				// ソースの配置が完了しなかった場合は終了
+				if ($i < count($this->coreDirList)){
+					// 入れ替えに成功したディレクトリを元に戻す
+					for ($j = $i; $j >= 0; $j--){
+						$moveDir = $this->coreDirList[$j];
+						$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
+						$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . $moveDir;
+						
+						if (file_exists($backupDir)) mvDirectory($backupDir, $oldDir);
+					}
+					
+					// 問題のあったディレクトリ取得
+					$moveDir = $this->coreDirList[$i];
+					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
+					
+					$message = 'ディレクトリ入れ替え失敗(ディレクトリ=' . $oldDir . ')';
+					$this->gInstance->getAjaxManager()->addData('message', $message);
+					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
+					
+					// システムログにも出力
+					debug($message);
+					return;
 				}
 				
 				// ### URLとDB接続情報は旧ファイルを再生 ###
