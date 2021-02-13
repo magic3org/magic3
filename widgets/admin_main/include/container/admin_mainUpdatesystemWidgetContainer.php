@@ -297,13 +297,14 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					// 問題のあったディレクトリ取得
 					$moveDir = $this->coreDirList[$i];
 					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . $moveDir;
-					
 					$message = 'ディレクトリ入れ替え失敗(ディレクトリ=' . $oldDir . ')';
+					
+					// ログを残す
+					$this->_log('システムアップデートエラー: ' . $message);
+					
+					// ソースの入れ替えに失敗した場合は以下のコードは実行されないことがある
 					$this->gInstance->getAjaxManager()->addData('message', $message);
 					$this->gInstance->getAjaxManager()->addData('code', '0');	// 異常終了
-					
-					// システムログにも出力
-					debug($message);
 					return;
 				}
 				
@@ -393,7 +394,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, 'v' . $this->preVersion, 'v' . $this->version), 1002);
 				
 				// ログを残す
-				$this->_log('システムバージョンアップ完了しました。新バージョン=' . $this->version . ', 旧バージョン=' . $this->preVersion);
+				$this->_log('システムアップデート完了しました。新バージョン=' . $this->version . ', 旧バージョン=' . $this->preVersion);
 				
 				// システムアップデート用ワークディレクトリ削除
 				rmDirectory($updateWorkDir);
