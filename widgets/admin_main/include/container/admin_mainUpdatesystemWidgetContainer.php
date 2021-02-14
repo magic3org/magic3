@@ -110,7 +110,26 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->gInstance->getAjaxManager()->addData('info', $info);
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			} else {
-				$this->gInstance->getAjaxManager()->addData('code', '0');
+				// アップデートが途中で中断している場合をチェック
+				$savedStatus = array();
+				$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
+				$updateStatusFile = $updateWorkDir . DIRECTORY_SEPARATOR . self::UPDATE_STATUS_FILE;
+				$updateStatusStr = file_get_contents($updateStatusFile);
+				if ($updateStatusStr !== false){
+					$savedStatus = json_decode($updateStatusStr, true);
+				}
+				
+				if (empty($savedStatus)){
+					$this->gInstance->getAjaxManager()->addData('code', '0');
+				} else {	// アップデート中のバージョン情報を返す
+					$info = array();
+					$info['version'] = $savedStatus['version'];
+					$info['pre_version'] = $savedStatus['pre_version'];
+					$info['step'] = $savedStatus['step'];
+					$info['completed'] = $savedStatus['completed'];
+					$this->gInstance->getAjaxManager()->addData('info', $info);
+					$this->gInstance->getAjaxManager()->addData('code', '2');		// バージョンアップ中
+				}
 			}
 		} else if ($act == 'checkenv'){		// アップデート環境チェック
 			// タイムアウトを停止
