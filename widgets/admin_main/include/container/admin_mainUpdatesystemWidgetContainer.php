@@ -422,23 +422,57 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->_closeSite(true);
 			}
 		} else {
-			$versionStr = '<span class="error">取得不可</span>';
-			$disabled = 'disabled';
-			
-			// アップデート可能なバージョンを取得
-			$infoSrc = $this->_readUpdateInfoFile();
-			if ($infoSrc !== false){
-				$versionInfo = json_decode($infoSrc, true);
-			
-				// バージョン番号を表示
-				$versionStr = $versionInfo['version_tag'];
-				if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
-					$versionStr = '<span class="available">' . $versionStr . '</span>';
-					$disabled = '';
-				}
+			// アップデートが途中で中断している場合をチェック
+			$savedStatus = array();
+			$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
+			$updateStatusFile = $updateWorkDir . DIRECTORY_SEPARATOR . self::UPDATE_STATUS_FILE;
+			$updateStatusStr = file_get_contents($updateStatusFile);
+			if ($updateStatusStr !== false){
+				$savedStatus = json_decode($updateStatusStr, true);
 			}
-			$this->tmpl->addVar('_widget', 'ver_str', $versionStr);
-			$this->tmpl->addVar('_widget', 'button_disabled', $disabled);
+			
+			if (empty($savedStatus)){	// アップデートが正常に終了している場合
+				// アップデート情報を表示
+				$this->tmpl->setAttribute('start_panel', 'visibility', 'visible');
+				
+				$versionStr = '<span class="error">取得不可</span>';
+				$disabled = 'disabled';
+			
+				// アップデート可能なバージョンを取得
+				$infoSrc = $this->_readUpdateInfoFile();
+				if ($infoSrc !== false){
+					$versionInfo = json_decode($infoSrc, true);
+			
+					// バージョン番号を表示
+					$versionStr = $versionInfo['version_tag'];
+					if (version_compare($versionInfo['version'], M3_SYSTEM_VERSION) > 0){	// バージョンアップ可能な場合
+						$versionStr = '<span class="available">' . $versionStr . '</span>';
+						$disabled = '';
+					}
+				}
+			
+				$this->tmpl->addVar('start_panel', 'ver_str', $versionStr);
+				$this->tmpl->addVar('start_panel', 'button_disabled', $disabled);
+			} else {	// アップデートが中断している場合
+				// アップデート再開メッセージを表示
+				$this->tmpl->setAttribute('resume_panel', 'visibility', 'visible');
+				
+				$resumeStep = '10';	// 再開ステップ
+				$disabled = 'disabled';
+					
+				// 中断を再開できるかチェック
+				if ((version_compare($savedStatus['version'], M3_SYSTEM_VERSION) == 0 && $savedStatus['step'] >= 2) ||	// 既にバージョン番号のみ変わった場合(ソースの入れ替え(Step2以降))
+					(version_compare($savedStatus['pre_version'], M3_SYSTEM_VERSION) == 0 && $savedStatus['step'] < 2)){
+					
+					// 再開可能な場合
+					$disabled = '';
+					$resumeStep = intval($savedStatus['step']);
+					if ($savedStatus['completed']) $resumeStep++;
+				}
+				
+				$this->tmpl->addVar('_widget', 'step', $resumeStep);
+				$this->tmpl->addVar('resume_panel', 'button_disabled', $disabled);
+			}
 		}
 	}
 	

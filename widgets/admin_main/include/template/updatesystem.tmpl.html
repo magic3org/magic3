@@ -149,6 +149,34 @@ function updateSystem(){
 		alert('通信に失敗しました。');
 	});
 }
+async function resumeSystem(){
+	// ボタン使用不可
+	$("#update_button").prop('disabled', true);
+	
+	// メッセージを初期化
+	$('#step_message').empty();
+	
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
+	for (let i = {STEP}; i <= 4; i++){
+		const params = 'task=updatesystem&act=updatebystep&step=' + i;
+		const result = await m3Ajax('', params).catch(() => alert('通信に失敗しました'));
+		if (result && result.data.code !== '0'){
+			// 正常に終了の場合はメッセージを追加
+			$('#step_message').append('<li>' + result.data.message + '</li>');
+		} else {	// エラーの場合
+			// エラーメッセージ出力
+			$('#step_message').append('<ul><li>' + result.data.message + '</li></ul>');
+
+			alert('アップデートに失敗しました。');
+			break;
+		}
+	}
+	
+	// 処理中ダイアログ停止
+	m3HideProcessModal();
+}
 //]]>
 </script>
 <div class="m3config_container">
@@ -156,13 +184,24 @@ function updateSystem(){
 <form method="post" name="main" class="form form-inline">
 <input type="hidden" name="act" />
 <input type="hidden" name="develop" value="{DEVELOP}" />
+<patTemplate:tmpl name="start_panel" visibility="hidden">
 <div class="panel panel-info" style="width:500px;margin:20px auto;" >
     <div class="panel-heading">システム</div>
-    <ul class="list-group">
-        <li class="list-group-item">アップデート可能なバージョン：{VER_STR}</li>
-    </ul>
+    <div class="panel-body">
+    アップデート可能なバージョン：{VER_STR}
+    </div>
     <div class="panel-footer"><input type="button" id="update_button" class="button" onclick="updateSystem();" value="実行" {BUTTON_DISABLED} /></div>
 </div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="resume_panel" visibility="hidden">
+<div class="panel panel-danger" style="width:500px;margin:20px auto;" >
+    <div class="panel-heading">アップデート</div>
+    <div class="panel-body">
+    バージョン<strong>{VER_STR}</strong>へのアップデート処理が中断しています。<br />残りの処理を実行して、アップデート処理を終了させてください。
+    </div>
+    <div class="panel-footer"><input type="button" id="update_button" class="button" onclick="resumeSystem();" value="実行" {BUTTON_DISABLED} /></div>
+</div>
+</patTemplate:tmpl>
 </form>
 <ol id="step_message">
 </ol>

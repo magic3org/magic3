@@ -168,7 +168,10 @@ function m3Ajax(request_widget, request_params, request_url)
 			dataType: 'text',	// テキストで受信
 		}).then(
 			function (data, textStatus, jqXHR) {	// 正常終了
-				resolve(jqXHR.getResponseHeader("X-JSON"));
+				var resultValue = jqXHR.getResponseHeader("X-JSON");
+				resultValue = resultValue.substr(1, resultValue.length -2);	// 前後「()」除く
+				resultValue = resultValue ? JSON.parse(resultValue) : null;
+				resolve(resultValue);
 			},
 			function () {	// 通信エラー
 				reject();
