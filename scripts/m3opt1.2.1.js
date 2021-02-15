@@ -146,6 +146,37 @@ function m3_ajax_failure(request, json, failure_func)
 	}
 }
 /**
+ * PromiseによるAjax非同期通信
+ * @param string request_widget		指定ウィジェット
+ * @param string request_params		リクエストパラメータ
+ * @param string request_url		リクエスト先URL
+ */
+function m3Ajax(request_widget, request_params, request_url)
+{
+	if (request_url == null || request_url == "") request_url = document.location.pathname;
+	
+	var params = "";
+	if (request_widget != null && request_widget != "") params += "cmd=dowidget&widget=" + request_widget;
+	if (request_params != null && request_params != "") params += "&" + request_params;
+	
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url:		request_url,
+			type:		'post',
+			async: 	true,
+			data:		params,
+			dataType: 'text',	// テキストで受信
+		}).then(
+			function (data, textStatus, jqXHR) {	// 正常終了
+				resolve(jqXHR.getResponseHeader("X-JSON"));
+			},
+			function () {	// 通信エラー
+				reject();
+			}
+		);
+	});
+}
+/**
  * テーブルに縦のスクロールバー付加
  *
  *  テーブルの表示領域を指定行数に制限し、テーブルに縦のスクロールバー付加する
