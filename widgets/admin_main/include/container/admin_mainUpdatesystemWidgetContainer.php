@@ -422,6 +422,10 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->_closeSite(true);
 			}
 		} else {
+			// ########## 画面表示用 ##########
+			// スクリプト用の設定
+			$resumeStep = '10';	// 再開ステップ
+			
 			// アップデートが途中で中断している場合をチェック
 			$savedStatus = array();
 			$updateWorkDir = $this->gEnv->getSystemUpdateWorkPath();
@@ -457,7 +461,6 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// アップデート再開メッセージを表示
 				$this->tmpl->setAttribute('resume_panel', 'visibility', 'visible');
 				
-				$resumeStep = '10';	// 再開ステップ
 				$disabled = 'disabled';
 					
 				// 中断を再開できるかチェック
@@ -470,9 +473,10 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 					if ($savedStatus['completed']) $resumeStep++;
 				}
 				
-				$this->tmpl->addVar('_widget', 'step', $resumeStep);
 				$this->tmpl->addVar('resume_panel', 'button_disabled', $disabled);
 			}
+			
+			$this->tmpl->addVar('_widget', 'step', $resumeStep);
 		}
 	}
 	

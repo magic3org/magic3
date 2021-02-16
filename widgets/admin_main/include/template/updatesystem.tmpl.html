@@ -159,6 +159,8 @@ async function resumeSystem(){
 	// 処理中ダイアログ表示
 	m3ShowProcessModal();
 	
+	$('#step_message').append('<li>アップデート再開</li>');
+	
 	for (let i = {STEP}; i <= 4; i++){
 		const params = 'task=updatesystem&act=updatebystep&step=' + i;
 		const result = await m3Ajax('', params).catch(() => alert('通信に失敗しました'));
