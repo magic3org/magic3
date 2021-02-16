@@ -69,7 +69,7 @@ function updateSystem(){
 			}
 		
 			// 正常に終了の場合はメッセージを追加
-			$('#step_message').append('<li>' + jsondata.message + '</li>');
+			$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
 	
 			m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=2', function(request, retcode, jsondata){		// 正常終了
 				if (jsondata.code == '0'){	// エラーの場合
@@ -84,7 +84,7 @@ function updateSystem(){
 				}
 			
 				// 正常に終了の場合はメッセージを追加
-				$('#step_message').append('<li>' + jsondata.message + '</li>');
+				$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
 			
 				m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=3', function(request, retcode, jsondata){		// 正常終了
 					if (jsondata.code == '0'){	// エラーの場合
@@ -99,7 +99,7 @@ function updateSystem(){
 					}
 			
 					// 正常に終了の場合はメッセージを追加
-					$('#step_message').append('<li>' + jsondata.message + '</li>');
+					$('#step_message').append('<ul><li>' + jsondata.message + '</li></ul>');
 			
 					m3_ajax_request('', 'task=updatesystem&act=updatebystep&step=4', function(request, retcode, jsondata){		// 正常終了
 						if (jsondata.code == '0'){	// エラーの場合
@@ -118,6 +118,8 @@ function updateSystem(){
 			
 						// 処理中ダイアログ停止
 						m3HideProcessModal();
+						
+						alert('アップデート完了しました。');
 					}, function(request){		// 異常終了
 						// 処理中ダイアログ停止
 						m3HideProcessModal();
@@ -167,6 +169,8 @@ async function resumeSystem(){
 		if (result && result.data.code !== '0'){
 			// 正常に終了の場合はメッセージを追加
 			$('#step_message').append('<li>' + result.data.message + '</li>');
+			
+			if (i == 4) alert('アップデート完了しました。');
 		} else {	// エラーの場合
 			// エラーメッセージ出力
 			$('#step_message').append('<ul><li>' + result.data.message + '</li></ul>');

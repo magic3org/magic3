@@ -406,7 +406,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 							
 				$this->_saveUpdateStep($this->step, true/*終了*/);
 				
-				$this->gInstance->getAjaxManager()->addData('message', 'アップデート完了(新規システムバージョン=' . $versionTag . ')');
+				$this->gInstance->getAjaxManager()->addData('message', 'アップデート終了(新規システムバージョン=' . $versionTag . ')');
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 				
 				$msg = $this->_('System updated. System Version: from %s to %s');// システムをバージョンアップしました。 システムバージョン: %sから%s
