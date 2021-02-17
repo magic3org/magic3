@@ -166,11 +166,14 @@ async function resumeSystem(){
 	for (let i = {STEP}; i <= 4; i++){
 		const params = 'task=updatesystem&act=updatebystep&step=' + i;
 		const result = await m3Ajax('', params).catch(() => alert('通信に失敗しました'));
-		if (result && result.data.code !== '0'){
-			// 正常に終了の場合はメッセージを追加
-			$('#step_message').append('<li>' + result.data.message + '</li>');
-			
-			if (i == 4) alert('アップデート完了しました。');
+		if (result && result.data.code !== '0'){	// 正常に終了の場合
+			if (i < 4){	// 完了以外の処理の場合
+				$('#step_message').append('<ul><li>' + result.data.message + '</li></ul>');
+			} else {
+				$('#step_message').append('<li>' + result.data.message + '</li>');
+				
+				alert('アップデート完了しました。');
+			}
 		} else {	// エラーの場合
 			// エラーメッセージ出力
 			$('#step_message').append('<ul><li>' + result.data.message + '</li></ul>');
