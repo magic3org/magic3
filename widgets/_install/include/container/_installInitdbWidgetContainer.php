@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -44,25 +44,6 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
-		
-		// 実行SQLスクリプトファイルの定義
-/*		$this->createTableScripts = array(	array(	'filename' 		=> 'create_base.sql',					// ファイル名
-													'name'			=> 'システム基本テーブル作成',				// 表示名
-													'description'	=> 'システムで最小限必要なテーブルの作成'),	// 説明
-											array(	'filename' 		=> 'create_std.sql',					// ファイル名
-													'name'			=> 'システム標準テーブル作成',				// 表示名
-													'description'	=> 'システムを通常使用するのに必要なテーブルの作成'),	// 説明
-											array(	'filename' 		=> 'create_ec.sql',					// ファイル名
-													'name'			=> 'Eコマース用テーブル',				// 表示名
-													'description'	=> 'Eコマース用テーブルの作成'));	// 説明
-
-		$this->insertTableScripts = array(	array(	'filename' 		=> 'insert_base.sql',					// ファイル名
-													'name'			=> 'システム基本データ登録',				// 表示名
-													'description'	=> 'システムで最小限必要なデータの登録'),	// 説明
-											array(	'filename' 		=> 'insert_std.sql',					// ファイル名
-													'name'			=> 'システム標準データ登録',				// 表示名
-													'description'	=> 'システムを通常使用するのに必要なデータの登録'));	// 説明
-													*/
 													
 		// デバッグモードで起動している場合はテスト用スクリプト追加
 		if (M3_SYSTEM_DEBUG){
@@ -275,7 +256,6 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 //				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 3000, '', '', 'task=initwizard', true/*トップ表示*/);
 				
 				// 次の画面へ遷移
-//				$this->gPage->redirect('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 				$this->gPage->redirectInInstall('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				//$msg = 'ＤＢ初期化に失敗しました';
@@ -378,8 +358,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				}
 			
 				$type = 'all';
-//				$this->gPage->redirect('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
-				$this->gPage->redirectInInstall('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				//$this->gPage->redirectInInstall('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				$this->gPage->redirectInInstall('?task=complete&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				// エラーメッセージ追加
 				if (!$ret){

@@ -91,6 +91,9 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 			$this->tmpl->setAttribute('show_login_user', 'visibility', 'visible');
 			$this->tmpl->addVar('show_login_user', 'user',		'admin');		// 初期管理ユーザ
 			$this->tmpl->addVar('show_login_user', 'password',	'admin');		// 初期管理ユーザのパスワード
+			
+			// 戻るボタン表示
+			$this->tmpl->setAttribute('back_button', 'visibility', 'visible');
 		}
 		
 		// テキストをローカライズ
