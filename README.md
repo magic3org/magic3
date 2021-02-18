@@ -1,3 +1,7 @@
+# ドキュメント
+
+http://doc.magic3.org/
+
 # 動作環境
 
 * OS: Linux(制約なし)
@@ -9,6 +13,3 @@
 
 https://ja.osdn.net/projects/magic3/
 
-# ドキュメント
-
-http://doc.magic3.org/
