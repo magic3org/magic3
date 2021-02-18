@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-04 12:51+0900\n"
-"PO-Revision-Date: 2019-02-04 12:51+0900\n"
+"POT-Creation-Date: 2021-02-19 06:42+0900\n"
+"PO-Revision-Date: 2021-02-19 06:43+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-SearchPath-0: container\n"
 
 #: container/_installBaseWidgetContainer.php:55
@@ -33,41 +33,41 @@ msgstr "Magic3 インストール"
 msgid "Version:"
 msgstr "バージョン："
 
-#: container/_installCheckdbWidgetContainer.php:85
+#: container/_installCheckdbWidgetContainer.php:77
 msgid "NOTICE&nbsp;&nbsp;All the existing data cleared."
 msgstr "注意&nbsp;&nbsp;データはすべて消去されます"
 
-#: container/_installCheckdbWidgetContainer.php:86
+#: container/_installCheckdbWidgetContainer.php:78
 msgid "Clear all the data, and update system and database."
 msgstr "DBの内容をすべてクリアしてから、システムをバージョンアップします"
 
-#: container/_installCheckdbWidgetContainer.php:89
-#: container/_installInitdbWidgetContainer.php:407
+#: container/_installCheckdbWidgetContainer.php:81
+#: container/_installInitdbWidgetContainer.php:389
 msgid "Keep existing data, and update system and database."
 msgstr "DBの内容を保持したまま、システムをバージョンアップします"
 
-#: container/_installCheckdbWidgetContainer.php:107
+#: container/_installCheckdbWidgetContainer.php:98
 msgid "Select Versionup Type"
 msgstr "バージョンアップ方法の選択"
 
-#: container/_installCheckdbWidgetContainer.php:108
+#: container/_installCheckdbWidgetContainer.php:99
 msgid "Select Versionup Type for Database."
 msgstr "DBのバージョンアップ方法を選択してください"
 
-#: container/_installCheckdbWidgetContainer.php:109
+#: container/_installCheckdbWidgetContainer.php:100
 msgid "Versionup Type"
 msgstr "バージョンアップ方法"
 
-#: container/_installCheckdbWidgetContainer.php:110
+#: container/_installCheckdbWidgetContainer.php:101
 #: container/_installInitotherWidgetContainer.php:243
 msgid "Details"
 msgstr "説明"
 
-#: container/_installCheckdbWidgetContainer.php:111
+#: container/_installCheckdbWidgetContainer.php:102
 msgid "Clean All Data, and Rebuild Database"
 msgstr "既存データをすべて消去して、DBを再構築"
 
-#: container/_installCheckdbWidgetContainer.php:112
+#: container/_installCheckdbWidgetContainer.php:103
 msgid "Keep Existing Data, and Update Database"
 msgstr "既存データを残して、DBをバージョンアップ"
 
@@ -85,112 +85,112 @@ msgstr "バージョン不明"
 msgid "not available(pdo_pgsql not installed)"
 msgstr "利用不可(pdo_pgsqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:106
+#: container/_installCheckenvWidgetContainer.php:107
 msgid "supported version"
 msgstr "サポートバージョン"
 
-#: container/_installCheckenvWidgetContainer.php:107
+#: container/_installCheckenvWidgetContainer.php:108
 msgid "my.cnf required"
 msgstr "my.cnf 要設定"
 
-#: container/_installCheckenvWidgetContainer.php:108
+#: container/_installCheckenvWidgetContainer.php:109
 msgid "remove NO_ZERO_DATE,STRICT_TRANS_TABLES values from sql_mode"
 msgstr "sql_modeからNO_ZERO_DATEとSTRICT_TRANS_TABLESの値を削除します"
 
-#: container/_installCheckenvWidgetContainer.php:111
+#: container/_installCheckenvWidgetContainer.php:112
 msgid "not available(pdo_mysql not installed)"
 msgstr "利用不可(pdo_mysqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:117
+#: container/_installCheckenvWidgetContainer.php:118
 msgid "5.3.0 more"
 msgstr "5.3.0 以上"
 
-#: container/_installCheckenvWidgetContainer.php:129
+#: container/_installCheckenvWidgetContainer.php:130
 msgid "bytes(encouraged)"
 msgstr "バイト以上を奨励"
 
-#: container/_installCheckenvWidgetContainer.php:157
+#: container/_installCheckenvWidgetContainer.php:158
 msgid "PDO not installed"
 msgstr "PDOがインストールされていません"
 
-#: container/_installCheckenvWidgetContainer.php:223
-#: container/_installCheckenvWidgetContainer.php:228
-#: container/_installCheckenvWidgetContainer.php:277
-#: container/_installCheckenvWidgetContainer.php:299
-#: container/_installCheckenvWidgetContainer.php:303
-#: container/_installCheckenvWidgetContainer.php:313
-#: container/_installCheckenvWidgetContainer.php:317
+#: container/_installCheckenvWidgetContainer.php:224
+#: container/_installCheckenvWidgetContainer.php:229
+#: container/_installCheckenvWidgetContainer.php:278
+#: container/_installCheckenvWidgetContainer.php:300
+#: container/_installCheckenvWidgetContainer.php:304
+#: container/_installCheckenvWidgetContainer.php:314
+#: container/_installCheckenvWidgetContainer.php:318
 msgid "writable"
 msgstr "書き込み可能"
 
-#: container/_installCheckenvWidgetContainer.php:230
-#: container/_installCheckenvWidgetContainer.php:279
-#: container/_installCheckenvWidgetContainer.php:305
-#: container/_installCheckenvWidgetContainer.php:319
+#: container/_installCheckenvWidgetContainer.php:231
+#: container/_installCheckenvWidgetContainer.php:280
+#: container/_installCheckenvWidgetContainer.php:306
+#: container/_installCheckenvWidgetContainer.php:320
 msgid "not writable"
 msgstr "書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:233
+#: container/_installCheckenvWidgetContainer.php:234
 msgid "directory not writable"
 msgstr "ディレクトリ書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:284
+#: container/_installCheckenvWidgetContainer.php:285
 msgid "enable"
 msgstr "取得可"
 
-#: container/_installCheckenvWidgetContainer.php:288
+#: container/_installCheckenvWidgetContainer.php:289
 msgid "disable"
 msgstr "取得不可"
 
-#: container/_installCheckenvWidgetContainer.php:359
+#: container/_installCheckenvWidgetContainer.php:326
 msgid "Check Install Environment"
 msgstr "インストール環境チェック"
 
-#: container/_installCheckenvWidgetContainer.php:360
+#: container/_installCheckenvWidgetContainer.php:327
 msgid "Check Item"
 msgstr "チェック項目"
 
-#: container/_installCheckenvWidgetContainer.php:361
+#: container/_installCheckenvWidgetContainer.php:328
 msgid "Required Value"
 msgstr "必要な値"
 
-#: container/_installCheckenvWidgetContainer.php:362
+#: container/_installCheckenvWidgetContainer.php:329
 msgid "Current Value"
 msgstr "現在の値"
 
-#: container/_installCheckenvWidgetContainer.php:363
+#: container/_installCheckenvWidgetContainer.php:330
 msgid "PHP Version"
 msgstr "PHPバージョン"
 
-#: container/_installCheckenvWidgetContainer.php:364
+#: container/_installCheckenvWidgetContainer.php:331
 msgid "Memory Limit(bytes)"
 msgstr "最大メモリ量(バイト)"
 
-#: container/_installCheckenvWidgetContainer.php:365
+#: container/_installCheckenvWidgetContainer.php:332
 msgid "Permit file uploading"
 msgstr "ファイルアップロード許可"
 
-#: container/_installCheckenvWidgetContainer.php:366
+#: container/_installCheckenvWidgetContainer.php:333
 msgid "Session Path"
 msgstr "セッション保存パス"
 
-#: container/_installCheckenvWidgetContainer.php:367
+#: container/_installCheckenvWidgetContainer.php:334
 msgid "Session Path Permission"
 msgstr "セッション保存パスのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:368
+#: container/_installCheckenvWidgetContainer.php:335
 msgid "Session ID"
 msgstr "セッションID"
 
-#: container/_installCheckenvWidgetContainer.php:369
+#: container/_installCheckenvWidgetContainer.php:336
 msgid "Temporary Directory(Install Use)"
 msgstr "一時ディレクトリ(インストール時に使用する一時ディレクトリ)"
 
-#: container/_installCheckenvWidgetContainer.php:370
+#: container/_installCheckenvWidgetContainer.php:337
 msgid "Temporary Directory Permission"
 msgstr "一時ディレクトリのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:371
+#: container/_installCheckenvWidgetContainer.php:338
 msgid ""
 "If directory is not writable, change permission to write or chenge directory "
 "to be writable."
@@ -198,194 +198,88 @@ msgstr ""
 "書き込み不可の場合は書き込み可能なディレクトリあるいはアクセス権に設定する必"
 "要あり"
 
-#: container/_installCheckenvWidgetContainer.php:372
+#: container/_installCheckenvWidgetContainer.php:339
 msgid "Magic3 Config File"
 msgstr "Magic3設定ファイルのパス"
 
-#: container/_installCheckenvWidgetContainer.php:373
+#: container/_installCheckenvWidgetContainer.php:340
 msgid "Magic3 Config File Permission"
 msgstr "Magic3設定ファイルのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:374
+#: container/_installCheckenvWidgetContainer.php:341
 msgid "Resource Directory(for Image files etc)"
 msgstr "リソース(画像等)格納ディレクトリ"
 
-#: container/_installCheckenvWidgetContainer.php:375
+#: container/_installCheckenvWidgetContainer.php:342
 msgid "Resource Directory Permission"
 msgstr "リソース(画像等)格納ディレクトリのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:376
+#: container/_installCheckenvWidgetContainer.php:343
 msgid "if used"
 msgstr "使用する場合"
 
-#: container/_installCompleteWidgetContainer.php:86
+#: container/_installCompleteWidgetContainer.php:88
 msgid "You can login by existing user."
 msgstr "既存のユーザでログインできます"
 
-#: container/_installCompleteWidgetContainer.php:98
+#: container/_installCompleteWidgetContainer.php:103
 msgid "Install Completed"
 msgstr "インストール完了"
 
-#: container/_installCompleteWidgetContainer.php:99
+#: container/_installCompleteWidgetContainer.php:104
 msgid "Succeeded in installing Magic3 system."
 msgstr "Magic3のインストール完了しました"
 
-#: container/_installCompleteWidgetContainer.php:100
+#: container/_installCompleteWidgetContainer.php:105
 msgid "Main URL is"
 msgstr "メインのURLは"
 
-#: container/_installCompleteWidgetContainer.php:101
+#: container/_installCompleteWidgetContainer.php:106
 msgid "Administration URL is"
 msgstr "管理機能のURLは"
 
-#: container/_installCompleteWidgetContainer.php:102
+#: container/_installCompleteWidgetContainer.php:107
 msgid "User:"
 msgstr "ユーザ："
 
-#: container/_installCompleteWidgetContainer.php:103
+#: container/_installCompleteWidgetContainer.php:108
 msgid "Password:"
 msgstr "パスワード："
 
-#: container/_installCompleteWidgetContainer.php:104
+#: container/_installCompleteWidgetContainer.php:109
 msgid "Delete Installer and Close"
 msgstr "インストーラを削除して終了"
 
-#: container/_installCopyfileWidgetContainer.php:93
-msgid "Resource directory not found."
-msgstr "リソースディレクトリが見つかりません"
-
-#: container/_installCopyfileWidgetContainer.php:96
-msgid "Template directory not found."
-msgstr "テンプレートディレクトリが見つかりません"
-
-#: container/_installCopyfileWidgetContainer.php:99
-msgid "Widget directory not found."
-msgstr "ウィジェットディレクトリが見つかりません"
-
-#: container/_installCopyfileWidgetContainer.php:125
-#, php-format
-msgid "Resource directory in old system copied. Directory: %s"
-msgstr "旧システムのリソースディレクトリをコピーしました。ディレクトリ: %s"
-
-#: container/_installCopyfileWidgetContainer.php:149
-#, php-format
-msgid "Template in old system copied. Template: %s"
-msgstr "旧システムのテンプレートをコピーしました。テンプレート: %s"
-
-#: container/_installCopyfileWidgetContainer.php:168
-#, php-format
-msgid "Widget in old system copied. Widget: %s"
-msgstr "旧システムのウィジェットをコピーしました。ウィジェット: %s"
-
-#: container/_installCopyfileWidgetContainer.php:173
-msgid "Files copied."
-msgstr "ファイルをコピーしました"
-
-#: container/_installCopyfileWidgetContainer.php:175
-msgid "Failed in copying files."
-msgstr "ファイルコピーに失敗しました"
-
-#: container/_installCopyfileWidgetContainer.php:184
-#: container/_installCopyfileWidgetContainer.php:233
-msgid "Check directory"
-msgstr "ディレクトリチェック"
-
-#: container/_installCopyfileWidgetContainer.php:186
-msgid "Existing"
-msgstr "正常"
-
-#: container/_installCopyfileWidgetContainer.php:195
-#: container/_installInitotherWidgetContainer.php:118
-msgid "Updating database completed."
-msgstr "ＤＢバージョンアップが完了しました"
-
-#: container/_installCopyfileWidgetContainer.php:213
-#: container/_installInitotherWidgetContainer.php:223
-msgid "Database Updated"
-msgstr "ＤＢバージョンアップ完了"
-
-#: container/_installCopyfileWidgetContainer.php:229
-msgid "Copy files?"
-msgstr "ファイルをコピーしますか?"
-
-#: container/_installCopyfileWidgetContainer.php:230
-msgid ""
-"If you copy files form old system to this system, use this operation field "
-"below.<br />If you don't, go next."
-msgstr ""
-"旧システムのファイルをこのシステムへコピーする場合は以下の処理を実行してくだ"
-"さい<br />何も行わない場合は「次へ」進みます。"
-
-#: container/_installCopyfileWidgetContainer.php:231
-msgid "Copy files in old system"
-msgstr "旧システムからファイルをコピー"
-
-#: container/_installCopyfileWidgetContainer.php:232
-msgid "Old System Directory"
-msgstr "旧システムディレクトリ"
-
-#: container/_installCopyfileWidgetContainer.php:234
-msgid "Copy Target"
-msgstr "コピー対象"
-
-#: container/_installCopyfileWidgetContainer.php:235
-msgid "Replace resource directory"
-msgstr "リソースディレクトリ(/resource) 置き換え"
-
-#: container/_installCopyfileWidgetContainer.php:236
-msgid "Copy template (difference only)"
-msgstr "テンプレート 差分のみ取得"
-
-#: container/_installCopyfileWidgetContainer.php:237
-msgid "Copy widget (difference only)"
-msgstr "ウィジェット 差分のみ取得"
-
-#: container/_installCopyfileWidgetContainer.php:238
-msgid "Copy files"
-msgstr "ファイルをコピー"
-
-#: container/_installCopyfileWidgetContainer.php:250
-msgid "The root directory in old system not selected."
-msgstr "旧システムのルートディレクトリが設定されていません"
-
-#: container/_installCopyfileWidgetContainer.php:253
-msgid "This system selected."
-msgstr "このシステム自体を指定しています"
-
-#: container/_installCopyfileWidgetContainer.php:255
-msgid "Magic3 system not selected."
-msgstr "Magic3システムを指定していません"
-
-#: container/_installInitdbWidgetContainer.php:103
+#: container/_installInitdbWidgetContainer.php:85
 msgid "Create Database"
 msgstr "ＤＢ構築"
 
-#: container/_installInitdbWidgetContainer.php:107
+#: container/_installInitdbWidgetContainer.php:89
 msgid "Update Database"
 msgstr "ＤＢバージョンアップ"
 
-#: container/_installInitdbWidgetContainer.php:110
+#: container/_installInitdbWidgetContainer.php:92
 msgid "Wait for complete of creating database after the do action."
 msgstr "実行後は処理が完了するまでしばらくお待ちください"
 
-#: container/_installInitdbWidgetContainer.php:111
+#: container/_installInitdbWidgetContainer.php:93
 msgid "Do"
 msgstr "実行"
 
-#: container/_installInitdbWidgetContainer.php:112
+#: container/_installInitdbWidgetContainer.php:94
 msgid "Target"
 msgstr "処理対象"
 
-#: container/_installInitdbWidgetContainer.php:113
+#: container/_installInitdbWidgetContainer.php:95
 msgid "All Tables"
 msgstr "全テーブル"
 
-#: container/_installInitdbWidgetContainer.php:194
+#: container/_installInitdbWidgetContainer.php:177
 #, php-format
 msgid "Database created. Database Version: %s"
 msgstr "DBを作成しました。 DBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:259
+#: container/_installInitdbWidgetContainer.php:242
 #, php-format
 msgid ""
 "Succeeded in creating database by custom install. Current Database Version: "
@@ -394,48 +288,48 @@ msgstr ""
 "カスタムインストールによるDB構築処理が正常に終了しました。現在のDBバージョ"
 "ン: %s"
 
-#: container/_installInitdbWidgetContainer.php:264
+#: container/_installInitdbWidgetContainer.php:247
 #, php-format
 msgid "Succeeded in creating database. Current Database Version: %s"
 msgstr "DB構築処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:281
+#: container/_installInitdbWidgetContainer.php:263
 msgid "Failed in initializing database."
 msgstr "ＤＢ初期化に失敗しました"
 
-#: container/_installInitdbWidgetContainer.php:282
-#: container/_installInitdbWidgetContainer.php:391
+#: container/_installInitdbWidgetContainer.php:264
+#: container/_installInitdbWidgetContainer.php:373
 msgid "Script filename"
 msgstr "スクリプト名"
 
-#: container/_installInitdbWidgetContainer.php:297
+#: container/_installInitdbWidgetContainer.php:279
 msgid "Create database."
 msgstr "DBを構築します"
 
-#: container/_installInitdbWidgetContainer.php:301
+#: container/_installInitdbWidgetContainer.php:283
 msgid "Create database.<br />Clear all the existing data."
 msgstr "DBを構築します<br />既存のデータはすべて削除されます"
 
-#: container/_installInitdbWidgetContainer.php:369
+#: container/_installInitdbWidgetContainer.php:351
 #, php-format
 msgid "Database updated. Database Version: %s"
 msgstr "DB更新処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:373
+#: container/_installInitdbWidgetContainer.php:355
 #, php-format
 msgid "Widget information updated. Database Version: %s"
 msgstr "ウィジェット情報を更新しました。DBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:390
+#: container/_installInitdbWidgetContainer.php:372
 msgid "Failed in updating database"
 msgstr "DB更新に失敗しました"
 
-#: container/_installInitdbWidgetContainer.php:446
+#: container/_installInitdbWidgetContainer.php:428
 #, php-format
 msgid "Database updated. Database Version: from %s to %s"
 msgstr "DBをバージョンアップしました。 DBバージョン: %sから%s"
 
-#: container/_installInitdbWidgetContainer.php:455
+#: container/_installInitdbWidgetContainer.php:437
 #, php-format
 msgid "Bad script file found in files for update. Filename: %s"
 msgstr ""
@@ -450,9 +344,17 @@ msgstr "データインストール完了しました"
 msgid "Failed in installing data."
 msgstr "データインストールに失敗しました"
 
+#: container/_installInitotherWidgetContainer.php:118
+msgid "Updating database completed."
+msgstr "ＤＢバージョンアップが完了しました"
+
 #: container/_installInitotherWidgetContainer.php:120
 msgid "Creating database completed."
 msgstr "ＤＢの構築が完了しました"
+
+#: container/_installInitotherWidgetContainer.php:223
+msgid "Database Updated"
+msgstr "ＤＢバージョンアップ完了"
 
 #: container/_installInitotherWidgetContainer.php:225
 msgid "Database Created"
@@ -490,12 +392,12 @@ msgid "Can't use database."
 msgstr "DBが使用できません"
 
 #: container/_installInputparamWidgetContainer.php:133
-#: container/_installInputparamWidgetContainer.php:325
+#: container/_installInputparamWidgetContainer.php:327
 msgid "User"
 msgstr "DBユーザ"
 
 #: container/_installInputparamWidgetContainer.php:136
-#: container/_installInputparamWidgetContainer.php:324
+#: container/_installInputparamWidgetContainer.php:326
 msgid "Database Name"
 msgstr "DB名"
 
@@ -515,80 +417,80 @@ msgstr "設定値の更新に失敗しました"
 msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
-#: container/_installInputparamWidgetContainer.php:183
+#: container/_installInputparamWidgetContainer.php:184
 msgid "Invalid sql_mode. Remove NO_ZERO_DATE, STRICT_TRANS_TABLES values."
 msgstr ""
 "不正なsql_modeです。NO_ZERO_DATEとSTRICT_TRANS_TABLESの値を削除してください。"
 
-#: container/_installInputparamWidgetContainer.php:184
+#: container/_installInputparamWidgetContainer.php:185
 msgid "Invalid sql_mode."
 msgstr "sql_mode不正"
 
-#: container/_installInputparamWidgetContainer.php:209
+#: container/_installInputparamWidgetContainer.php:211
 msgid "Invalid encoding for Japanese."
 msgstr "日本語を使用するためのエンコード設定が不正です。"
 
-#: container/_installInputparamWidgetContainer.php:210
+#: container/_installInputparamWidgetContainer.php:212
 msgid "Incollect encoding."
 msgstr "エンコーディングエラー"
 
-#: container/_installInputparamWidgetContainer.php:221
+#: container/_installInputparamWidgetContainer.php:223
 msgid "Succeeded in creating table."
 msgstr "テーブル作成正常"
 
-#: container/_installInputparamWidgetContainer.php:223
+#: container/_installInputparamWidgetContainer.php:225
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:229
+#: container/_installInputparamWidgetContainer.php:231
 msgid "Failed in connecting database. Confirm the db connection information."
 msgstr "DB接続に失敗しました。DB接続情報を確認してください。"
 
-#: container/_installInputparamWidgetContainer.php:236
+#: container/_installInputparamWidgetContainer.php:238
 msgid "Failed in connecting."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:313
+#: container/_installInputparamWidgetContainer.php:315
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:314
+#: container/_installInputparamWidgetContainer.php:316
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:315
+#: container/_installInputparamWidgetContainer.php:317
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:316
+#: container/_installInputparamWidgetContainer.php:318
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:317
+#: container/_installInputparamWidgetContainer.php:319
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:319
+#: container/_installInputparamWidgetContainer.php:321
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:320
+#: container/_installInputparamWidgetContainer.php:322
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:321
+#: container/_installInputparamWidgetContainer.php:323
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:322
+#: container/_installInputparamWidgetContainer.php:324
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:323
+#: container/_installInputparamWidgetContainer.php:325
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:326
+#: container/_installInputparamWidgetContainer.php:328
 msgid "Password"
 msgstr "パスワード"
 
@@ -599,6 +501,79 @@ msgstr "言語"
 #: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"
+
+#~ msgid "Resource directory not found."
+#~ msgstr "リソースディレクトリが見つかりません"
+
+#~ msgid "Template directory not found."
+#~ msgstr "テンプレートディレクトリが見つかりません"
+
+#~ msgid "Widget directory not found."
+#~ msgstr "ウィジェットディレクトリが見つかりません"
+
+#, php-format
+#~ msgid "Resource directory in old system copied. Directory: %s"
+#~ msgstr "旧システムのリソースディレクトリをコピーしました。ディレクトリ: %s"
+
+#, php-format
+#~ msgid "Template in old system copied. Template: %s"
+#~ msgstr "旧システムのテンプレートをコピーしました。テンプレート: %s"
+
+#, php-format
+#~ msgid "Widget in old system copied. Widget: %s"
+#~ msgstr "旧システムのウィジェットをコピーしました。ウィジェット: %s"
+
+#~ msgid "Files copied."
+#~ msgstr "ファイルをコピーしました"
+
+#~ msgid "Failed in copying files."
+#~ msgstr "ファイルコピーに失敗しました"
+
+#~ msgid "Check directory"
+#~ msgstr "ディレクトリチェック"
+
+#~ msgid "Existing"
+#~ msgstr "正常"
+
+#~ msgid "Copy files?"
+#~ msgstr "ファイルをコピーしますか?"
+
+#~ msgid ""
+#~ "If you copy files form old system to this system, use this operation "
+#~ "field below.<br />If you don't, go next."
+#~ msgstr ""
+#~ "旧システムのファイルをこのシステムへコピーする場合は以下の処理を実行してく"
+#~ "ださい<br />何も行わない場合は「次へ」進みます。"
+
+#~ msgid "Copy files in old system"
+#~ msgstr "旧システムからファイルをコピー"
+
+#~ msgid "Old System Directory"
+#~ msgstr "旧システムディレクトリ"
+
+#~ msgid "Copy Target"
+#~ msgstr "コピー対象"
+
+#~ msgid "Replace resource directory"
+#~ msgstr "リソースディレクトリ(/resource) 置き換え"
+
+#~ msgid "Copy template (difference only)"
+#~ msgstr "テンプレート 差分のみ取得"
+
+#~ msgid "Copy widget (difference only)"
+#~ msgstr "ウィジェット 差分のみ取得"
+
+#~ msgid "Copy files"
+#~ msgstr "ファイルをコピー"
+
+#~ msgid "The root directory in old system not selected."
+#~ msgstr "旧システムのルートディレクトリが設定されていません"
+
+#~ msgid "This system selected."
+#~ msgstr "このシステム自体を指定しています"
+
+#~ msgid "Magic3 system not selected."
+#~ msgstr "Magic3システムを指定していません"
 
 #~ msgid "Invalid sql_mode. It requires blank value."
 #~ msgstr "sql_modeが不正です。空文字列に設定して下さい。"

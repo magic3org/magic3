@@ -8,17 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2019 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 
 class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	const PHP_MIN_VERSION = '5.3.0';				// インストールに必要なPHP最小バージョン
 	
 	/**
@@ -28,9 +26,6 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new _installDB();
 	}
 	/**
 	 * テンプレートファイルを設定

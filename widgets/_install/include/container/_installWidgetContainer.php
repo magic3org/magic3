@@ -50,7 +50,6 @@ class _installWidgetContainer extends _installBaseWidgetContainer
 			case 'initdb';		// データベース初期化画面
 			case 'initother';		// その他初期化画面
 			case 'inputoption';		// 追加データ入力
-			case 'copyfile';		// 旧システムのファイルをコピー
 			case 'complete';		// インストール完了
 				break;
 			case 'updatedb';		// データベースの更新

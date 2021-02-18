@@ -81,8 +81,6 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "db_status", $dbStatus);
 		$this->tmpl->addVar("_widget", "install_type", $type);			// インストールタイプ
 		if ($dbStatus == 'update'){			// DB更新の場合
-			$this->tmpl->addVar("_widget", "fore_task", "copyfile");			// 旧システムのファイルをコピー
-			
 			// ユーザ、パスワード
 			$this->tmpl->setAttribute('show_login_info', 'visibility', 'visible');
 			$this->tmpl->addVar('show_login_info', 'message',	$this->_('You can login by existing user.'));		// 既存のユーザでログインできます

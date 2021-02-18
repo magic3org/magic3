@@ -14,11 +14,9 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 
 class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $createTableScripts;			// テーブル作成スクリプト
 	private $insertTableScripts;			// データインストールスクリプト
 	private $updateTableScripts;			// テーブル更新スクリプト
@@ -41,9 +39,6 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new _installDB();
 													
 		// デバッグモードで起動している場合はテスト用スクリプト追加
 		if (M3_SYSTEM_DEBUG){
@@ -358,7 +353,6 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				}
 			
 				$type = 'all';
-				//$this->gPage->redirectInInstall('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 				$this->gPage->redirectInInstall('?task=complete&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				// エラーメッセージ追加

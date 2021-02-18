@@ -14,11 +14,9 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 
 class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	const FIRST_VER = 2016073101;			// バージョンアップ可能なDBのバージョン
 
 	/**
@@ -28,9 +26,6 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new _installDB();
 	}
 	/**
 	 * テンプレートファイルを設定
