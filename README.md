@@ -11,5 +11,5 @@ http://doc.magic3.org/
 
 # ダウンロード
 
-https://ja.osdn.net/projects/magic3/
+https://github.com/magic3org/magic3/tags
 
