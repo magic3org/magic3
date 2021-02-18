@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,8 +17,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidge
 
 class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
-
 	/**
 	 * コンストラクタ
 	 */
@@ -26,9 +24,6 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-//		$this->db = new _installDB();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -57,8 +52,16 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 	{
 		$dbStatus = $request->trimValueOf('dbstatus');		// DBの状態
 		$type = $request->trimValueOf('install_type');
-		$dbStatus = $request->trimValueOf('dbstatus');		// DBの状態
 		$act = $request->trimValueOf('act');
+		$from = $request->trimValueOf('from');
+		if (empty($dbStatus)){
+			if ($from == 'updatedb'){
+				$dbStatus = 'update';
+			} else {
+				$dbStatus = 'init';
+			}
+		}
+		
 		if ($act == 'delinstaller'){		// インストーラを削除の場合
 			if (M3_PERMIT_REINSTALL){		// 再インストール実行可能な場合
 				// ファイルを退避する
@@ -70,7 +73,6 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 			
 			// 管理者画面へ遷移
 			$this->gPage->redirectToDirectory();
-			//$this->gPage->redirect($this->gEnv->getDefaultAdminUrl());			// Firefox5でadmin/install.phpにリダイレクトされるバグ(URLがキャッシュされる?)回避　2011/7/1
 		}
 		
 		// アクセス用URLを表示
