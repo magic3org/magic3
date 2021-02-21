@@ -711,15 +711,9 @@ class AttachFile
 					// ダウンロード数は制限する?
 					$count = ($showicon && ! empty($this->status['count'][$this->age])) ? sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
 				}
-/*			} else {
-				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
-				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
-				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
-					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
-			}*/
 		}
-//		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
-		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\">$label</a> $count $info";
+		//return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\">$label</a> $count $info";
+		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\" style=\"white-space: nowrap\">$label</a> $count $info";
 	}
 
 	// 情報表示
