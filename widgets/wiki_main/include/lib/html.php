@@ -483,16 +483,22 @@ function password_form()
 			// パスワード認証の場合は入力フィールドを表示
 			if (WikiConfig::isPasswordAuth()){
 				$templateType = $gEnvManager->getCurrentTemplateType();
-				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
 					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
 					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<div class="form-group"><label>' . $_msg_password . ': <input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
 					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" /></div>' . M3_NL;
+					$body .= '</form>' . M3_NL;
+				} else if ($templateType == M3_TEMPLATE_BOOTSTRAP_40){		// Bootstrap v4.0型テンプレートの場合
+					$body .= '<form method="post" class="form form-inline">' . M3_NL;
+					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+					$body .= '<div class="form-group mr-2"><label class="mr-2" for="_p_password">' . $_msg_password . ': </label><input type="password" id="_p_password" class="form-control" name="password" size="12" /></div>' . M3_NL;
+					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				} else {
 					$body .= '<form method="post" class="form">' . M3_NL;
 					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<label>' . $_msg_password . ': <input type="password" name="password" size="12" /></label>' . M3_NL;
 					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value); this.form.password.value = \'\';" />' . M3_NL;
 					$body .= '</form>' . M3_NL;
 				}
