@@ -478,7 +478,7 @@ function password_form()
 		} else {
 			// パスワード入力画面を作成
 			$msg = $_title_authorization_required;
-			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
+			$body = "<p>$_msg_authorization_required</p>\n";
 
 			// パスワード認証の場合は入力フィールドを表示
 			if (WikiConfig::isPasswordAuth()){

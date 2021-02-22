@@ -20,31 +20,18 @@
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 
-// NOTE (PHP > 4.2.3):
-//    This feature is disabled at newer version of PHP.
-//    Set this at php.ini if you want.
-// Max file size for upload on PHP (PHP default: 2MB)
-//ini_set('upload_max_filesize', '2M');
-
 // 管理者だけが添付ファイルをアップロードできるようにする
-define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', TRUE); // FALSE or TRUE
+//define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', TRUE); // FALSE or TRUE
 
 // 管理者だけが添付ファイルを削除できるようにする
-define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', TRUE); // FALSE or TRUE
+//define('PLUGIN_ATTACH_DELETE_ADMIN_ONLY', TRUE); // FALSE or TRUE
 
 // 管理者が添付ファイルを削除するときは、バックアップを作らない
 // PLUGIN_ATTACH_DELETE_ADMIN_ONLY=TRUEのとき有効
-define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', TRUE); // FALSE or TRUE
-
-// アップロード/削除時にパスワードを要求する(ADMIN_ONLYが優先)
-//define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
-
-// 添付ファイル名を変更できるようにする
-//define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
+//define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', TRUE); // FALSE or TRUE
 
 // ファイルのアクセス権
 define('PLUGIN_ATTACH_FILE_MODE', 0644);
-//define('PLUGIN_ATTACH_FILE_MODE', 0604); // for XREA.COM
 
 // File icon image
 define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_DIR .  'file.png"' .
@@ -194,10 +181,10 @@ function attach_upload($file, $page, $pass = NULL)
 		return array(
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_noparm']);
-	} else if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY && $pass !== TRUE && ($pass === NULL || ! pkwk_login($pass))) {
+/*	} else if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY && $pass !== TRUE && ($pass === NULL || ! pkwk_login($pass))) {
 		return array(
 			'result'=>FALSE,
-			'msg'=>$_attach_messages['err_adminpass']);
+			'msg'=>$_attach_messages['err_adminpass']);*/
 	}
 
 	$obj = new AttachFile($page, $file['name']);
@@ -576,7 +563,6 @@ class AttachFile
 	var $size_str = '';
 	var $status = array('count'=>array(0), 'age'=>'', 'pass'=>'', 'freeze'=>FALSE);
 
-//	function AttachFile($page, $file, $age = 0)
 	function __construct($page, $file, $age = 0)
 	{
 		$this->page = $page;
@@ -747,19 +733,15 @@ class AttachFile
 				} else {
 //					$msg_freezed = '';
 					$msg_delete = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' . '<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
-//					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-//						$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label></div></div>';
 //					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' . '<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label></div></div>';
 
-//					if (PLUGIN_ATTACH_RENAME_ENABLE) {
-						$msg_rename  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label></div></div>' .
-							'<div class="form-group"><label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
-							':</label> ' .
-							'<input type="text" name="newname" id="_p_attach_newname" class="form-control" size="40" value="' .
-							$this->file . '" /></div>';
-//					}
+					$msg_rename  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label></div></div>' .
+						'<div class="form-group"><label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+						':</label> ' .
+						'<input type="text" name="newname" id="_p_attach_newname" class="form-control" size="40" value="' .
+						$this->file . '" /></div>';
 				}
 			}
 		} else {
@@ -778,20 +760,16 @@ class AttachFile
 //					$msg_freezed = '';
 					$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
-				//	if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-				//		$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label><br />';
 //					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
 						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label><br />';
 
-//					if (PLUGIN_ATTACH_RENAME_ENABLE) {
-						$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
-							'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
-							':</label> ' .
-							'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
-							$this->file . '" /><br />';
-//					}
+					$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+						'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+						':</label> ' .
+						'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
+						$this->file . '" /><br />';
 				}
 			}
 		}
@@ -889,17 +867,16 @@ class AttachFile
 
 		if ($this->status['freeze']) return attach_info('msg_isfreeze');
 
-		if (! pkwk_login($pass)) {
+/*		if (! pkwk_login($pass)) {
 			if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
 				return attach_info('err_adminpass');
-//			} else if (PLUGIN_ATTACH_PASSWORD_REQUIRE && md5($pass) != $this->status['pass']) {
-//				return attach_info('err_password');
 			}
-		}
+		}*/
 
+		/*
 		// バックアップ
-		if ($this->age ||
-			(PLUGIN_ATTACH_DELETE_ADMIN_ONLY && PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP)) {
+		if ($this->age || (PLUGIN_ATTACH_DELETE_ADMIN_ONLY && PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP)) {
+			// 添付ファイル削除
 			@unlink($this->filename);
 		} else {
 			do {
@@ -914,9 +891,12 @@ class AttachFile
 			$this->status['count'][$age] = $this->status['count'][0];
 			$this->status['count'][0] = 0;
 			$this->putstatus();
-		}
+		}*/
+		
+		// ##### 添付ファイルの削除の場合、バックアップはどうする? #####
+		// 添付ファイル削除
+		@unlink($this->filename);
 
-		//if (WikiPage::isPage($this->page)) touch(get_filename($this->page));
 		// ページの更新日時を更新
 		if (WikiPage::isPage($this->page)) WikiPage::updatePageTime($this->page);
 
@@ -941,20 +921,15 @@ class AttachFile
 
 		if ($this->status['freeze']) return attach_info('msg_isfreeze');
 
-		if (! pkwk_login($pass)) {
+/*		if (! pkwk_login($pass)) {
 			if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
 				return attach_info('err_adminpass');
-//			} else if (PLUGIN_ATTACH_PASSWORD_REQUIRE && md5($pass) != $this->status['pass']) {
-//				return attach_info('err_password');
 			}
-		}
+		}*/
 		$newbase = UPLOAD_DIR . encode($this->page) . '_' . encode($newname);
 		if (file_exists($newbase)) {
 			return array('msg'=>$_attach_messages['err_exists']);
 		}
-/*		if (! PLUGIN_ATTACH_RENAME_ENABLE || ! rename($this->basename, $newbase)) {
-			return array('msg'=>$_attach_messages['err_rename']);
-		}*/
 
 		return array('msg'=>$_attach_messages['msg_renamed']);
 	}
@@ -1019,7 +994,6 @@ class AttachFiles
 	var $page;
 	var $files = array();
 
-//	function AttachFiles($page)
 	function __construct($page)
 	{
 		$this->page = $page;
@@ -1089,7 +1063,6 @@ class AttachPages
 {
 	var $pages = array();
 
-//	function AttachPages($page = '', $age = NULL)
 	function __construct($page = '', $age = NULL)
 	{
 		// アップロード用のディレクトリ内のファイルリストを取得
