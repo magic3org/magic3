@@ -192,7 +192,7 @@
 --PLUGIN_RECENT_EXEC_LIMIT　１ページ中で実行可能な上限回数
 
 
-**ref [#h9e797dc]
+**ref(Magic3版拡張) [#h9e797dc]
 :種別|
 ~ブロック型プラグイン
 ~インライン型プラグイン
