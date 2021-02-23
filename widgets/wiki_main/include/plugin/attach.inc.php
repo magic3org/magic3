@@ -31,7 +31,7 @@
 //define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', TRUE); // FALSE or TRUE
 
 // ファイルのアクセス権
-define('PLUGIN_ATTACH_FILE_MODE', 0644);
+//define('PLUGIN_ATTACH_FILE_MODE', 0644);
 
 // File icon image
 define('PLUGIN_ATTACH_FILE_ICON', '<img src="' . IMAGE_DIR .  'file.png"' .
@@ -189,8 +189,9 @@ function attach_upload($file, $page, $pass = NULL)
 		return array('result'=>FALSE,
 			'msg'=>$_attach_messages['err_exists']);
 
-	if (move_uploaded_file($file['tmp_name'], $obj->filename))
-		chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
+	// ファイルのパーミッション設定
+	if (move_uploaded_file($file['tmp_name'], $obj->filename)) chmod($obj->filename, M3_SYSTEM_FILE_PERMISSION);
+		//chmod($obj->filename, PLUGIN_ATTACH_FILE_MODE);
 
 	//if (WikiPage::isPage($page)) touch(get_filename($page));
 	// ページの更新日時を更新
