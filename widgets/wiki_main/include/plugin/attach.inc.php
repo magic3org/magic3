@@ -69,24 +69,27 @@ function plugin_attach_convert()
 //-------- action
 function plugin_attach_action()
 {
-	global $_attach_messages;
-
-	// ### パスワード認証フォーム表示 ###
-	// 認証されている場合はスルーして関数以降を実行
-	$retStatus = password_form();
-	if (!empty($retStatus)) return $retStatus;
-	
 	$pcmd = WikiParam::getVar('pcmd');
 	$refer = WikiParam::getRefer();
 	$pass = WikiParam::getVar('pass');
 	$page = WikiParam::getPage();
 
+/*
 	if ($refer != '' && is_pagename($refer)) {
 		if(in_array($pcmd, array('info', 'open', 'list'))) {
 			check_readable($refer);
 		} else {
 			check_editable($refer);
 		}
+	}*/
+	
+	// ### パスワード認証フォーム表示 ###
+	// info,open,listはノーチェックで通す
+	if(!((in_array($pcmd, array('info', 'open')) && is_pagename($refer)) ||		// info,openの場合はリファラーが必要
+		$pcmd == 'list')){
+		// 認証されている場合はスルーして関数以降を実行
+		$retStatus = password_form();
+		if (!empty($retStatus)) return $retStatus;
 	}
 
 	// Dispatch
@@ -94,21 +97,15 @@ function plugin_attach_action()
 		// Upload
 		return attach_upload($_FILES['attach_file'], $refer, $pass);
 	} else {
-/*		switch ($pcmd) {
-		case 'delete':
-		case 'freeze':
-		case 'unfreeze':
-			if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-		}*/
 		switch ($pcmd) {
-		case 'info'     : return attach_info();
-		case 'delete'   : return attach_delete();
-		case 'open'     : return attach_open();
-		case 'list'     : return attach_list();
-		case 'freeze'   : return attach_freeze(TRUE);
-		case 'unfreeze' : return attach_freeze(FALSE);
-		case 'rename'   : return attach_rename();
-		case 'upload'   : return attach_showform();
+			case 'info'     : return attach_info();
+			case 'delete'   : return attach_delete();
+			case 'open'     : return attach_open();
+			case 'list'     : return attach_list();
+			case 'freeze'   : return attach_freeze(TRUE);
+			case 'unfreeze' : return attach_freeze(FALSE);
+			case 'rename'   : return attach_rename();
+			case 'upload'   : return attach_showform();
 		}
 		if ($page == '' || ! WikiPage::isPage($page)) {
 			return attach_list();
@@ -690,13 +687,13 @@ class AttachFile
 //			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
 				
-				// 添付ファイルの詳細情報はページ編集権限がある場合のみ表示
-				if ($editAuth){
+				// 添付ファイルの詳細情報はページ編集権限がある場合のみ表示→詳細情報は常に表示(仕様変更 2021/2/23)
+				//if ($editAuth){
 					$info = "\n[<a href=\"$infoUrl\" title=\"$_title\" rel=\"tooltip\" data-toggle=\"tooltip\">{$_attach_messages['btn_info']}</a>]\n";
 				
 					// ダウンロード数は制限する?
 					$count = ($showicon && ! empty($this->status['count'][$this->age])) ? sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
-				}
+				//}
 		}
 		//return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\">$label</a> $count $info";
 		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\" style=\"white-space: nowrap\">$label</a> $count $info";
@@ -806,7 +803,7 @@ class AttachFile
 			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
 			$body .= '</dl>' . M3_NL;
-			if (is_editable($this->page)){		// ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
+			if (WikiConfig::isUserWithEditAuth() && is_editable($this->page)){		// ユーザに編集権限があり、ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
 				$body .= '<hr />' . M3_NL;
 				$body .= $s_err;
 				$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
@@ -838,7 +835,7 @@ class AttachFile
 			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
 			$body .= '</dl>' . M3_NL;
-			if (is_editable($this->page)){		// ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
+			if (WikiConfig::isUserWithEditAuth() && is_editable($this->page)){		// ユーザに編集権限があり、ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
 				$body .= '<hr />' . M3_NL;
 				$body .= $s_err;
 				$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
@@ -870,7 +867,7 @@ class AttachFile
 			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
 //			$body .= $msg_freezed;
 			$body .= '</dl>' . M3_NL;
-			if (is_editable($this->page)){		// ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
+			if (WikiConfig::isUserWithEditAuth() && is_editable($this->page)){		// ユーザに編集権限があり、ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
 				$body .= '<hr />' . M3_NL;
 				$body .= $s_err;
 				$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
