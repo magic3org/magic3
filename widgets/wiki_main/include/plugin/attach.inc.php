@@ -657,7 +657,8 @@ class AttachFile
 
 	// 日付の比較関数
 	static function datecomp($a, $b) {
-		return ($a->time == $b->time) ? 0 : (($a->time > $b->time) ? -1 : 1);
+		//return ($a->time == $b->time) ? 0 : (($a->time > $b->time) ? -1 : 1);
+		return ($a->time == $b->time) ? 0 : (($a->time < $b->time) ? -1 : 1);		// 添付ファイルはアップロード日時昇順に並べる(Magic3仕様)
 	}
 
 	function toString($showicon, $showinfo)
@@ -1080,7 +1081,10 @@ class AttachFiles
 				$files[$file] = $this->files[$file][0];
 			}
 		}
+		
+		// ファイル一覧はアップロード日時昇順で並べる(Magic3仕様)
 		uasort($files, array('AttachFile', 'datecomp'));
+
 		foreach (array_keys($files) as $file) {
 			$ret .= $files[$file]->toString(TRUE, TRUE) . ' ';
 		}
@@ -1132,6 +1136,7 @@ class AttachPages
 		}
 		$ret = '';
 
+		// ページ名ソート
 		$pages = array_keys($this->pages);
 		//sort($pages);
 		sort($pages, SORT_STRING);
