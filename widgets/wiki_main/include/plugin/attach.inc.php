@@ -697,7 +697,8 @@ class AttachFile
 				//}
 		}
 		//return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\">$label</a> $count $info";
-		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\" style=\"white-space: nowrap\">$label</a> $count $info";
+//		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\" style=\"white-space: nowrap\">$label</a> $count $info";
+		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\" style=\"word-break: break-all;\">$label</a> $count $info";
 	}
 
 	// 情報表示
