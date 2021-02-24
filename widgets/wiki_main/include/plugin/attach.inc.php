@@ -12,6 +12,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
+ *
+ * 変更履歴    2021/2/24 Pukiwiki v1.5.3の変更を反映
  */
 // Copyright (C)
 //   2003-2006 PukiWiki Developers Team
@@ -374,41 +376,35 @@ function attach_showform()
 
 //-------- サービス
 // mime-typeの決定
-function attach_mime_content_type($filename)
+function attach_mime_content_type($filename, $displayname)
 {
 	$type = 'application/octet-stream'; // default
 
 	if (! file_exists($filename)) return $type;
-
-	$size = @getimagesize($filename);
-	if (is_array($size)) {
-		switch ($size[2]) {
-			case 1: return 'image/gif';
-			case 2: return 'image/jpeg';
-			case 3: return 'image/png';
-			case 4: return 'application/x-shockwave-flash';
+	$pathinfo = pathinfo($displayname);
+	$ext0 = $pathinfo['extension'];
+	if (preg_match('/^(gif|jpg|jpeg|png|swf)$/i', $ext0)) {
+		$size = @getimagesize($filename);
+		if (is_array($size)) {
+			switch ($size[2]) {
+				case 1: return 'image/gif';
+				case 2: return 'image/jpeg';
+				case 3: return 'image/png';
+				case 4: return 'application/x-shockwave-flash';
+			}
 		}
 	}
-
-	$matches = array();
-	if (! preg_match('/_((?:[0-9A-F]{2})+)(?:\.\d+)?$/', $filename, $matches))
-		return $type;
-
-	$filename = decode($matches[1]);
-
 	// mime-type一覧表を取得
 	$config = new Config(PLUGIN_ATTACH_CONFIG_PAGE_MIME);
 	$table = $config->read() ? $config->get('mime-type') : array();
 	unset($config); // メモリ節約
-
 	foreach ($table as $row) {
 		$_type = trim($row[0]);
 		$exts = preg_split('/\s+|,/', trim($row[1]), -1, PREG_SPLIT_NO_EMPTY);
 		foreach ($exts as $ext) {
-			if (preg_match("/\.$ext$/i", $filename)) return $_type;
+			if (preg_match("/\.$ext$/i", $displayname)) return $_type;
 		}
 	}
-
 	return $type;
 }
 
@@ -610,7 +606,7 @@ class AttachFile
 		$this->time_str = get_date('Y/m/d H:i:s', $this->time);
 		$this->size     = filesize($this->filename);
 		$this->size_str = sprintf('%01.1f', round($this->size/1024, 1)) . 'KB';
-		$this->type     = attach_mime_content_type($this->filename);
+		$this->type     = attach_mime_content_type($this->filename, $this->file);
 
 		return TRUE;
 	}
@@ -1050,7 +1046,8 @@ class AttachFiles
 
 		$ret = '';
 		$files = array_keys($this->files);
-		sort($files);
+		//sort($files);
+		sort($files, SORT_STRING);
 
 		foreach ($files as $file) {
 			$_files = array();
@@ -1060,7 +1057,8 @@ class AttachFiles
 			if (! isset($_files[0])) {
 				$_files[0] = htmlspecialchars($file);
 			}
-			ksort($_files);
+			//ksort($_files);
+			ksort($_files, SORT_NUMERIC);
 			$_file = $_files[0];
 			unset($_files[0]);
 			$ret .= " <li>$_file\n";
@@ -1135,7 +1133,8 @@ class AttachPages
 		$ret = '';
 
 		$pages = array_keys($this->pages);
-		sort($pages);
+		//sort($pages);
+		sort($pages, SORT_STRING);
 
 		foreach ($pages as $page) {
 			if (check_non_list($page)) continue;
