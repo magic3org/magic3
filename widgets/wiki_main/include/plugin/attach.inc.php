@@ -966,6 +966,11 @@ class AttachFile
 			return array('msg'=>$_attach_messages['err_exists']);
 		}
 
+		// 添付ファイル名変更
+		if (!rename($this->basename, $newbase)) {
+			return array('msg'=>$_attach_messages['err_rename']);
+		}
+		
 		return array('msg'=>$_attach_messages['msg_renamed']);
 	}
 
