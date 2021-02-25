@@ -63,9 +63,13 @@ class BaseFrameContainer extends _Core
 				
 				if ($isRedirect){
 					// インストーラファイルがない場合は回復
-					$this->gInstance->getFileManager()->recoverInstaller();
-
-					$this->gPage->redirectToInstall();
+					$ret = $this->gInstance->getFileManager()->recoverInstaller();
+					if ($ret){	// インストーラファイルが再生できた場合
+						$this->gPage->redirectToInstall();
+					} else {
+						// サイト非公開(システムメンテナンス)表示
+						$this->gPage->showError(503);
+					}
 				} else {
 					// サイト非公開(システムメンテナンス)表示
 					$this->gPage->showError(503);
@@ -74,9 +78,13 @@ class BaseFrameContainer extends _Core
 			} else if ($this->gConfig->isConfigured() && !$this->gEnv->canUseDb()){		// DB接続失敗のとき
 				if ($this->gEnv->isAdminDirAccess()){		// 管理画面の場合のみインストーラ起動
 					// インストーラファイルがない場合は回復
-					$this->gInstance->getFileManager()->recoverInstaller();
-
-					$this->gPage->redirectToInstall();
+					$ret = $this->gInstance->getFileManager()->recoverInstaller();
+					if ($ret){	// インストーラファイルが再生できた場合
+						$this->gPage->redirectToInstall();
+					} else {
+						// サーバ内部エラーメッセージ表示
+						$this->gPage->showError(500);
+					}
 				} else {
 					// サーバ内部エラーメッセージ表示
 					$this->gPage->showError(500);
