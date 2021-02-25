@@ -199,6 +199,9 @@ function attach_upload($file, $page, $pass = NULL)
 	// ページの更新日時を更新
 	if (WikiPage::isPage($page)) WikiPage::updatePageTime($page);
 
+	// ### 運用ログを残す ###
+	$obj->outputOpeLog(1/*添付ファイルアップロード*/, $page);
+		
 	// パスワードは使用しない
 /*
 	$obj->getstatus();
@@ -550,12 +553,17 @@ function plugin_attach_addScript()
 // ファイル
 class AttachFile
 {
-	var $page, $file, $age, $basename, $filename, $logname;
+	var $page, $file, $age, $basename, $filename;
 	var $time = 0;
 	var $size = 0;
 	var $time_str = '';
 	var $size_str = '';
 	var $status = array('count'=>array(0), 'age'=>'', 'pass'=>'', 'freeze'=>FALSE);
+
+	// 運用ログメッセージ
+	const LOG_MSG_UPLOAD = 'Wikiコンテンツを更新(添付ファイルアップロード)しました。タイトル: %s; 添付ファイル名: %s';
+	const LOG_MSG_RENAME = 'Wikiコンテンツを更新(添付ファイル名変更)しました。タイトル: %s; 添付ファイル名: %s → %s';
+	const LOG_MSG_DELETE = 'Wikiコンテンツを更新(添付ファイル削除)しました。タイトル: %s; 添付ファイル名: %s';
 
 	function __construct($page, $file, $age = 0)
 	{
@@ -565,7 +573,6 @@ class AttachFile
 
 		$this->basename = UPLOAD_DIR . encode($page) . '_' . encode($this->file);
 		$this->filename = $this->basename . ($age ? '.' . $age : '');
-		$this->logname  = $this->basename . '.log';
 		$this->exist    = file_exists($this->filename);
 		$this->time     = $this->exist ? filemtime($this->filename) - LOCALZONE : 0;
 		$this->md5hash  = $this->exist ? md5_file($this->filename) : '';
@@ -576,14 +583,6 @@ class AttachFile
 	{
 		if (! $this->exist) return FALSE;
 
-		// ログファイル取得
-		/*if (file_exists($this->logname)) {
-			$data = file($this->logname);
-			foreach ($this->status as $key=>$value) {
-				$this->status[$key] = chop(array_shift($data));
-			}
-			$this->status['count'] = explode(',', $this->status['count']);
-		}*/
 		// 1レコード(行)のパターンは、「ファイル名」「元のファイル名」「ファイルハッシュキー」「世代番号」「アクセスカウント数」「凍結状態」をタブ区切りで格納
 		$keyFilename = basename($this->filename);
 		$lines = WikiPage::getPageUpload($this->page);
@@ -614,19 +613,6 @@ class AttachFile
 	// ステータス保存
 	function putstatus()
 	{
-	/*
-		$this->status['count'] = join(',', $this->status['count']);
-		$fp = fopen($this->logname, 'wb') or
-			die_message('cannot write ' . $this->logname);
-		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
-		rewind($fp);
-		foreach ($this->status as $key=>$value) {
-			fwrite($fp, $value . "\n");
-		}
-		flock($fp, LOCK_UN);
-		fclose($fp);*/
-		
 		// 配列を文字列に変換
 		$this->status['count'] = join(',', $this->status['count']);
 		
@@ -935,6 +921,12 @@ class AttachFile
 		// ページの更新日時を更新
 		if (WikiPage::isPage($this->page)) WikiPage::updatePageTime($this->page);
 
+		// ### 運用ログを残す ###
+		$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+								M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->page,
+								M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+		$this->_writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DELETE, $this->page, $this->file), 2403, 'ID=' . $this->page, $eventParam);
+				
 		if ($notify) {
 			$footer['ACTION']   = 'File deleted';
 			$footer['FILENAME'] = $this->file;
@@ -956,11 +948,6 @@ class AttachFile
 
 		if ($this->status['freeze']) return attach_info('msg_isfreeze');
 
-/*		if (! pkwk_login($pass)) {
-			if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age) {
-				return attach_info('err_adminpass');
-			}
-		}*/
 		$newbase = UPLOAD_DIR . encode($this->page) . '_' . encode($newname);
 		if (file_exists($newbase)) {
 			return array('msg'=>$_attach_messages['err_exists']);
@@ -970,6 +957,12 @@ class AttachFile
 		if (!rename($this->basename, $newbase)) {
 			return array('msg'=>$_attach_messages['err_rename']);
 		}
+		
+		// ### 運用ログを残す ###
+		$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+								M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->page,
+								M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+		$this->_writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_RENAME, $this->page, $this->file, $newname), 2403, 'ID=' . $this->page, $eventParam);
 		
 		return array('msg'=>$_attach_messages['msg_renamed']);
 	}
@@ -1025,6 +1018,41 @@ class AttachFile
 		
 		// システム強制終了
 		$gPageManager->exitSystem();
+	}
+
+	/**
+	 * 運用ログ出力
+	 *
+	 * @param int    $type		メッセージタイプ(1=添付ファイルアップロード,2=添付ファイル名変更,3=添付ファイル削除)
+	 * @param string $page   	Wikiページ名
+	 * @return なし
+	 */
+	function outputOpeLog($type, $page)
+	{
+		$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+								M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+								M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+		$this->_writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_UPLOAD, $page, $this->file), 2403, 'ID=' . $page, $eventParam);
+	}
+	/**
+	 * ユーザ操作運用ログ出力とイベント処理
+	 *
+	 * 以下の状況で運用ログメッセージを出力するためのインターフェイス
+	 * ユーザの通常の操作で記録すべきもの
+	 * 例) コンテンツの更新等
+	 *
+	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $msg   	メッセージ
+	 * @param int    $code		メッセージコード
+	 * @param string $msgExt   	詳細メッセージ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
+	 * @return なし
+	 */
+	function _writeUserInfoEvent($method, $msg, $code = 0, $msgExt = '', $eventParam = array())
+	{
+		global $gOpeLogManager;
+		
+		$gOpeLogManager->writeUserInfo($method, $msg, $code, $msgExt, '', '', false, $eventParam);
 	}
 }
 
