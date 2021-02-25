@@ -704,7 +704,7 @@ class AttachFile
 		global $script, $_attach_messages;
 		global $dummy_password;
 		global $gEnvManager;
-
+			
 		// テンプレートタイプに合わせて出力を変更
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		
@@ -713,6 +713,11 @@ class AttachFile
 		$s_file = htmlspecialchars($this->file);
 		$s_err = ($err == '') ? '' : '<p style="font-weight:bold">' . $_attach_messages[$err] . '</p>';
 		$msg_rename  = '';
+		
+		// ベースHタグレベル取得
+		$baseHTagLevel = 2;
+		$widgetObj = $gEnvManager->getCurrentWidgetObj();
+		if (!empty($widgetObj)) $baseHTagLevel = $widgetObj->getHTagLevel();
 
 		// テンプレートタイプに合わせて出力を変更
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap v3.0型テンプレートの場合
@@ -823,7 +828,7 @@ class AttachFile
 			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
 			$body .= '[<a href="' . $linkListAll . '">' . $_attach_messages['msg_listall'] . '</a>]' . M3_NL;
 			$body .= '</p>' . M3_NL;
-			$body .= '<h3>' . $info . '</h3>' . M3_NL;
+			$body .= '<h' . ($baseHTagLevel +1) . '>' . $info . '</h' . ($baseHTagLevel +1) . '>' . M3_NL;
 			//$body .= '<dl class="wiki_list">' . M3_NL;
 			$body .= '<dl>' . M3_NL;
 			//$body .= '<dt class="list-inline-item">' . $info . '</dt>' . M3_NL;

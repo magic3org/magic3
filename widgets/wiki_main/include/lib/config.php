@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -39,7 +39,6 @@ class Config
 	var $name, $page; // Page name
 	var $objs = array();
 
-//	function Config($name)
 	function __construct($name)
 	{
 		$this->name = $name;
@@ -49,13 +48,18 @@ class Config
 	// Load the configuration-page
 	function read()
 	{
-		if (! WikiPage::isPage($this->page)) return FALSE;
+		// 「:」で始まるシステムファイルを読み込むのでエラーチェックしない
+		//if (! WikiPage::isPage($this->page)) return FALSE;
 
 		$this->objs = array();
 		$obj        = new ConfigTable('');
 		$matches = array();
 
-		foreach (get_source($this->page) as $line) {
+		// ページデータ取得
+		$lines = str_replace("\r", '', WikiPage::getPage($this->page));	// 改行コード(CR)を削除
+		
+		//foreach (get_source($this->page) as $line) {
+		foreach ($lines as $line) {
 			if ($line == '') continue;
 
 			$head  = $line[0];	// The first letter
