@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -35,6 +35,9 @@ class WikiPage
 	const CONTENT_TYPE_CACHE_REF	= 'cache_ref';			// キャッシュデータ(参照ページ)
 //	const CONTENT_TYPE_TRACKBACK	= 'trackback';			// トラックバックデータ
 	const CONTENT_TYPE_CACHE		= 'cache';				// 共通キャッシュデータ
+	
+	// 運用ログメッセージ
+	const LOG_MSG_RENAME = 'Wikiコンテンツをタイトルを変更しました。タイトル: %s → %s';
 	
 	/**
 	 * コンストラクタ
@@ -303,6 +306,12 @@ class WikiPage
 			
 			// ##### 利用可能なページ名を更新 #####
 			if ($updateAvailablePages) self::updateAvailablePages();
+			
+			// ### 運用ログを残す ###
+			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $newName,
+									M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+			self::_writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_RENAME, $oldName, $newName), 2404, 'ID=' . $newName, $eventParam);
 		}
 		return $ret;
 	}
@@ -971,6 +980,26 @@ class WikiPage
 	public static function addFootNote($key, $value)
 	{
 		self::$footNote[$key] = $value;
+	}
+	/**
+	 * ユーザ操作運用ログ出力とイベント処理
+	 *
+	 * 以下の状況で運用ログメッセージを出力するためのインターフェイス
+	 * ユーザの通常の操作で記録すべきもの
+	 * 例) コンテンツの更新等
+	 *
+	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $msg   	メッセージ
+	 * @param int    $code		メッセージコード
+	 * @param string $msgExt   	詳細メッセージ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
+	 * @return なし
+	 */
+	private static function _writeUserInfoEvent($method, $msg, $code = 0, $msgExt = '', $eventParam = array())
+	{
+		global $gOpeLogManager;
+		
+		$gOpeLogManager->writeUserInfo($method, $msg, $code, $msgExt, '', '', false, $eventParam);
 	}
 }
 ?>
