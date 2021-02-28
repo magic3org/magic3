@@ -504,8 +504,9 @@ class AnalyzeManager extends _Core
 			'ichiro'					=> 'goo.gif',	// goo
 			'baiduspider'				=> 'baidu.png',	// 百度
 			'baiduspider+'				=> 'baidu.png',	// 百度
-			'sogou web spider'			=> '',			// 搜狗
+			'sogou web spider'			=> 'sogou.png',			// 搜狗
 			'sogou web'					=> 'sogou.png',			// 搜狗
+			'360spider'					=> 'haosou.png',	// 好捜
 			'asahina-antenna'			=> '',			// 朝日奈アンテナ
 			'hatena'					=> 'hatena.gif',	// はてなブックマーク
 			'hatena antenna'			=> 'hatena.gif',	// はてなアンテナ
