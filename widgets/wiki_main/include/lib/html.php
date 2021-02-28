@@ -510,13 +510,25 @@ function password_form()
 					$msgDetail = 'アクセスをブロックしました。URL=' . $gEnvManager->getCurrentRequestUri();
 					$widgetObj->writeUserError(__METHOD__, 'Wikiページへの不正なアクセスを検出しました。ページ名=' . $page, 2200, $msgDetail);
 				}*/
+				$cmd = WikiParam::getCmd();
+				$plugin = WikiParam::getPlugin();
+
+				// コマンドかプラグインが指定されている場合は実行権限エラーを返す
+				// 存在しないページを表示しようとした場合は、$cmdが「edit」で来る
+				if ((!empty($cmd) && $cmd != 'edit') || !empty($plugin)){
+					$msg = wiki_mainCommonDef::DEFAULT_FORBIDDEN_TITLE;
+					$body = '<p>' . wiki_mainCommonDef::DEFAULT_FORBIDDEN_MSG . '</p>';
 				
-				// ##### アクセス権限がないページへのアクセスは「未検出」とする #####
-				$msg = wiki_mainCommonDef::DEFAULT_NOT_FOUND_TITLE;
-				$body = '<p>' . wiki_mainCommonDef::DEFAULT_NOT_FOUND_MSG . '</p>';
+					// HTTPステータスコードを403に設定
+					$gPageManager->setResponse(403/*禁止されている*/);
+				} else {		// Wikiページの表示の場合
+					// ##### アクセス権限がないページへのアクセスは「未検出」とする #####
+					$msg = wiki_mainCommonDef::DEFAULT_NOT_FOUND_TITLE;
+					$body = '<p>' . wiki_mainCommonDef::DEFAULT_NOT_FOUND_MSG . '</p>';
 				
-				// HTTPステータスコードを404に設定
-				$gPageManager->setResponse(404/*存在しないページ*/);
+					// HTTPステータスコードを404に設定
+					$gPageManager->setResponse(404/*存在しないページ*/);
+				}
 			}
 			return array(
 				'msg'	=> $msg,
