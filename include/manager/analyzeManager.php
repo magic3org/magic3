@@ -431,6 +431,7 @@ class AnalyzeManager extends _Core
 			'galeon'						=> 'galeon.png',
 			'phoenix'						=> 'phoenix.png',
 			'firefox'						=> 'firefox.png',
+			'uc browser'					=> 'uc-browser.png',
 			'mozilla firebird'				=> 'firebird.png',
 			'firebird'						=> 'firebird.png',
 			'seamonkey'						=> 'seamonkey.png',
@@ -490,6 +491,7 @@ class AnalyzeManager extends _Core
 			'google favicon'			=> 'google.gif',	// Google
 			'google web preview'		=> 'google.gif',	// Google
 			'adsbot'					=> 'google_adsense.png',	// Google Adsense
+			'headlesschrome'			=> 'headless_chrome.png',
 			'msnbot'					=> 'msn.gif',	// MSN
 			'msnbot-media'				=> 'msn.gif',	// MSN
 			'yahooseeker'				=> 'yahoo.gif',	// YahooSeeker
