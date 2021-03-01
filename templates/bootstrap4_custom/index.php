@@ -13,7 +13,8 @@ if (empty($customCssData)){
 	$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';
 } else {
 	if (strStartsWith($customCssData, '/')){		// 相対パスの場合
-		$cssTag = '<link rel="stylesheet" href="' . $templateUrl . $customCssData . '" media="screen">';
+		$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';	// カスタム用CSSにはグリッド用のCSSが含まれていないので追加する
+		$cssTag .= '<link rel="stylesheet" href="' . $templateUrl . $customCssData . '" media="screen">';
 	} else {
 		$cssTag = $customCssData;
 	}
