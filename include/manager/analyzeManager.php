@@ -540,6 +540,7 @@ class AnalyzeManager extends _Core
 			'discordbot'				=> 'discordbot.png',
 			'obot'						=> 'ibm.png',
 			'github.com'				=> 'github.png',
+			'coccoc'					=> 'coccoc.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
