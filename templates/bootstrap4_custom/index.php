@@ -9,14 +9,15 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 
 // テンプレートカスタマイズパラメータがある場合は取得
 $customCssData = $document->getCustomTemplateHeadCssData();
-if (empty($customCssData)){
-	$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';
-} else {
+
+// BootstrapテーマCSSにはグリッド用のCSSが含まれていないのでデフォルトで追加する
+$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';
+
+if (!empty($customCssData)){
 	if (strStartsWith($customCssData, '/')){		// 相対パスの場合
-		$cssTag = '<link rel="stylesheet" href="' . $templateUrl . '/css/bootstrap.min.css" media="screen">';	// カスタム用CSSにはグリッド用のCSSが含まれていないので追加する
 		$cssTag .= '<link rel="stylesheet" href="' . $templateUrl . $customCssData . '" media="screen">';
 	} else {
-		$cssTag = $customCssData;
+		$cssTag .= $customCssData;
 	}
 }
 ?>
@@ -31,15 +32,6 @@ if (empty($customCssData)){
 	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_layout.css" media="screen">
 	<?php endif; ?>
-	<!--<script src="<?php echo $templateUrl; ?>/popper.min.js"></script>-->
-	<!--<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>-->
-<!--
-	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
--->
-<!--
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>-->
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>

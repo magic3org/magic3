@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -631,14 +631,19 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		
 		// テンプレートを作成したアプリケーション、バージョンを取得
 		if (empty($generator)){
-			if (file_exists($templateIndexFile)){
-				$content = file_get_contents($templateIndexFile);
-				$version = $this->getArtVersion($content);
-				if (empty($version)){
-					$formatType .= $this->_('Not Detected');		// 未検出
-				} else {
-					$formatType .= 'artisteer - ' . $version;
+			if (empty($version)){		// バージョンがない場合
+				// index.phpファイルを検索
+				if (file_exists($templateIndexFile)){
+					$content = file_get_contents($templateIndexFile);
+					$version = $this->getArtVersion($content);
+					if (empty($version)){
+						$formatType .= $this->_('Not Detected');		// 未検出
+					} else {
+						$formatType .= 'artisteer - ' . $version;
+					}
 				}
+			} else {		// バージョンがある場合
+				$formatType .= '- ' . $version;
 			}
 		} else {
 			$formatType .= $generator . ' - ' . $version;
