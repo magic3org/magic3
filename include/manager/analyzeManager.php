@@ -70,6 +70,18 @@ class AnalyzeManager extends _Core
 		return $count;
 	}
 	/**
+	 * コンテンツのビューカウント情報を取得
+	 *
+	 * @param string  $typeId				コンテンツタイプ
+	 * @param array   $contentIdArray		コンテンツIDの配列
+	 * @return array						キーがコンテンツIDの連想配列
+	 */
+	function getTotalContentViewCountInfo($typeId, $contentIdArray)
+	{
+		$resultArray = $this->db->getTotalViewCountInfo($typeId, $contentIdArray);
+		return $resultArray;
+	}
+	/**
 	 * コンテンツ参照を記録
 	 *
 	 * @param string    $typeId				コンテンツタイプ

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -3428,6 +3428,51 @@ class SystemDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		if ($ret) $count = intval($row['total']);
 		return $count;
+	}
+	/**
+	 * コンテンツのビューカウント情報を取得
+	 *
+	 * シリアル番号(maxserial)とビューカウント(subtotal)は1レコード以上存在するデータの情報であることに注意。
+	 *
+	 * @param string  $typeId				コンテンツタイプ
+	 * @param array   $contentIdArray		コンテンツIDの配列
+	 * @return array						キーがコンテンツIDの連想配列
+	 */
+	function getTotalViewCountInfo($typeId, $contentIdArray)
+	{
+		$params = array();
+		$queryStr  = 'SELECT SUM(vc_count) AS total, vc_content_id, vc_content_serial  FROM _view_count ';
+		$queryStr .= 'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプはデフォルトコンテンツ
+		$queryStr .=   'AND vc_content_id IN (' . substr(str_repeat(', ?', count($contentIdArray)), 1) . ') ';
+		$params = array_merge($params, $contentIdArray);
+		
+		$queryStr .= 'GROUP BY vc_content_id, vc_content_serial ';
+		$queryStr .= 'ORDER BY vc_content_id, vc_content_serial';
+		$ret = $this->selectRecords($queryStr, $params, $rows);
+		
+		$resultArray = array();
+		$foreContentId = '';
+		$foreSerialNo = 0;
+		$foreTotal = 0;
+		$contentTotal = 0;
+		for ($i = 0; $i < count($rows); $i++){
+			$row = $rows[$i];
+			$contentId = $row['vc_content_id'];
+			$serialNo = $row['vc_content_serial'];
+			$total = intval($row['total']);
+						
+			if (!empty($foreContentId) && $contentId !== $foreContentId){
+				if ($contentTotal > 0) $resultArray[$foreContentId] = array('maxserial' => $foreSerialNo, 'subtotal' => $foreTotal, 'total' => $contentTotal);
+				$contentTotal = 0;
+			}
+			$foreContentId = $contentId;
+			$foreSerialNo = $serialNo;
+			$foreTotal = $total;
+			$contentTotal += $total;
+		}
+		if ($contentTotal > 0) $resultArray[$foreContentId] = array('maxserial' => $foreSerialNo, 'subtotal' => $foreTotal, 'total' => $contentTotal);
+
+		return $resultArray;
 	}
 	/**
 	 * エラーログ書き込み
