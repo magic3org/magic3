@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -217,10 +217,11 @@ class wiki_mainDb extends BaseDb
 	 * @param int		$pageNo				取得するページ(1～)
 	 * @param string	$sortKey			ソートキー(id=WikiページID,date=更新日時,locked=ロック状態)
 	 * @param int		$sortDirection		取得順(0=降順,1=昇順)
-	 * @param function	$callback			コールバック関数
-	 * @return 								なし
+	 * @param  array    $rows				取得した行
+	 * @return bool						true=データあり, false=データなし
 	 */
-	function getAvailablePageList($limit, $pageNo, $sortKey, $sortDirection, $callback)
+	//function getAvailablePageList($limit, $pageNo, $sortKey, $sortDirection, $callback)
+	function getAvailablePageList($limit, $pageNo, $sortKey, $sortDirection, &$rows)
 	{
 		$offset = $limit * ($pageNo -1);
 		if ($offset < 0) $offset = 0;
@@ -248,7 +249,9 @@ class wiki_mainDb extends BaseDb
 		$defaultOrder = '';
 		if ($sortKey != 'id') $defaultOrder = ', wc_id ';
 		$queryStr .=   'ORDER BY ' . $orderKey . $ord . $defaultOrder . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
-		$this->selectLoop($queryStr, array($type), $callback);
+		//$this->selectLoop($queryStr, array($type), $callback);
+		$retValue = $this->selectRecords($queryStr, array($type), $rows);
+		return $retValue;
 	}
 	/**
 	 * 利用可能なWikiページ数を取得

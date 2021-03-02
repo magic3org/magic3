@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -336,10 +336,27 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl/*リンク作成用*/);
 
 		// ページリストを取得
-//		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
-		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, $this->sortKey, $this->sortDirection, array($this, 'itemListLoop'));
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
-		
+		//self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, $this->sortKey, $this->sortDirection, array($this, 'itemListLoop'));
+		$ret = self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, $this->sortKey, $this->sortDirection, $rows);
+		//if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
+		if ($ret){
+			// WikiページID取得
+			$idArray = array();
+			for ($i = 0; $i < count($rows); $i++){
+				$idArray[] = $rows[$i]['wc_id'];			// WikiページID
+			}
+			
+			// コンテンツのビューカウント情報を取得
+			$viewCountArray = $this->gInstance->getAnalyzeManager()->getTotalContentViewCountInfo(wiki_mainCommonDef::$_viewContentType, $idArray);
+
+			// 一覧作成
+			$this->itemListLoop($rows, $viewCountArray);
+		} else {
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
+		}
+
+
+
 		// ソート用データ設定
 		if (empty($this->sortDirection)){
 			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
@@ -516,70 +533,90 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 * @param array $rows			一覧に設定するレコード
+	 * @param array $viewCountArray	コンテンツのビューカウント情報
+	 * @return						なし
 	 */
-	function itemListLoop($index, $fetchedRow, $param)
+	//function itemListLoop($index, $fetchedRow, $param)
+	function itemListLoop($rows, $viewCountArray)
 	{
-		$serial		= $fetchedRow['wc_serial'];// シリアル番号
-		$id			= $fetchedRow['wc_id'];			// WikiページID
-		$date		= $fetchedRow['wc_content_dt'];	// 更新日時
-		$isLocked	= $fetchedRow['wc_locked'];		// ロック状態
+		for ($i = 0; $i < count($rows); $i++){
+			$fetchedRow = $rows[$i];
+			/*
+				$selected = '';
+				if ($rows[$i]['bl_id'] == $this->blogId) $selected = 'selected';
+				$row = array(
+					'value'    => $this->convertToDispString($rows[$i]['bl_id']),			// ブログID
+					'name'     => $this->convertToDispString($rows[$i]['bl_name']),			// ブログ名
+					'selected' => $selected														// 選択中かどうか
+				);
+				$this->tmpl->addVars('blogid_list', $row);
+				$this->tmpl->parseTemplate('blogid_list', 'a');
+			*/
+			$serial		= $fetchedRow['wc_serial'];// シリアル番号
+			$id			= $fetchedRow['wc_id'];			// WikiページID
+			$date		= $fetchedRow['wc_content_dt'];	// 更新日時
+			$isLocked	= $fetchedRow['wc_locked'];		// ロック状態
 		
-		$idTag = $this->convertToDispString($id);
-		if (in_array($id, $this->builtinPages)) $idTag = '<strong>' . $idTag . '</strong>';
+			$idTag = $this->convertToDispString($id);
+			if (in_array($id, $this->builtinPages)) $idTag = '<strong>' . $idTag . '</strong>';
 		
-		// Wikiページ状態
-		if ($isLocked){
-			$iconUrl = $this->gEnv->getRootUrl() . self::LOCK_ICON_FILE;			// ロック状態アイコン
-			$iconTitle = 'ロック';
-		} else {
-			$iconUrl = $this->gEnv->getRootUrl() . self::UNLOCK_ICON_FILE;		// アンロック状態アイコン
-			$iconTitle = 'アンロック';
+			// Wikiページ状態
+			if ($isLocked){
+				$iconUrl = $this->gEnv->getRootUrl() . self::LOCK_ICON_FILE;			// ロック状態アイコン
+				$iconTitle = 'ロック';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::UNLOCK_ICON_FILE;		// アンロック状態アイコン
+				$iconTitle = 'アンロック';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+	
+			// ビューカウント情報取得
+			$updateViewCount = 0;	// 更新後からの参照数
+			$totalViewCount = 0;	// 新規作成からの参照数
+			$viewInfo = $viewCountArray[$id];
+			if (isset($viewInfo)){
+				// maxserialは参照数が1以上の最新のコンテンツを指していることに注意。過去のコンテンツの可能性あり。
+				if ($viewInfo['maxserial'] == $serial) $updateViewCount = $viewInfo['subtotal'];
+				$totalViewCount = $viewInfo['total'];
+			}
+			
+			// 参照数
+			$viewCountStr = $updateViewCount;
+			if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
+		
+			// 添付ファイル数
+			$attachCount = '';
+			require_once(WikiConfig::getPluginDir() . 'attach.inc.php');
+			$obj = new AttachPages($id);			// 現状では世代管理なし
+			if (isset($obj->pages[$id])) $attachCount = count($obj->pages[$id]->files);
+	
+			// プレビュー用URL
+			$previewUrl = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?" . rawurlencode($id), false/*URLエンコードしない*/);
+			$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
+			$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
+			$previewStr = 'プレビュー';
+		
+			$row = array(
+				'index'			=> $index,		// 項目番号
+				'serial'		=> $this->convertToDispString($serial),	// シリアル番号
+				'id'			=> $idTag,		// WikiページID
+				'status'		=> $statusImg,		// Wikiページ状態
+	//			'view_count'	=> $totalViewCount,									// 参照数
+				'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
+				'attach_count'	=> $attachCount,									// 添付ファイル数
+				'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
+				'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
+				'preview_url'	=> $previewUrl,											// プレビュー用のURL
+				'preview_img'	=> $previewImg,											// プレビュー用の画像
+				'preview_str'	=> $previewStr									// プレビュー文字列
+			);
+			$this->tmpl->addVars('itemlist', $row);
+			$this->tmpl->parseTemplate('itemlist', 'a');
+			
+			// 表示中項目のシリアル番号を保存
+			$this->serialArray[] = $serial;
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-	
-		// 参照数
-//		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
-		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);	// 更新後からの参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, 0, $id);	// 新規作成からの参照数
-		$viewCountStr = $updateViewCount;
-		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
-		
-		// 添付ファイル数
-		$attachCount = '';
-		require_once(WikiConfig::getPluginDir() . 'attach.inc.php');
-		$obj = new AttachPages($id);			// 現状では世代管理なし
-		if (isset($obj->pages[$id])) $attachCount = count($obj->pages[$id]->files);
-	
-		// プレビュー用URL
-		$previewUrl = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?" . rawurlencode($id), false/*URLエンコードしない*/);
-		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
-		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
-		$previewStr = 'プレビュー';
-		
-		$row = array(
-			'index'			=> $index,		// 項目番号
-			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
-			'id'			=> $idTag,		// WikiページID
-			'status'		=> $statusImg,		// Wikiページ状態
-//			'view_count'	=> $totalViewCount,									// 参照数
-			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
-			'attach_count'	=> $attachCount,									// 添付ファイル数
-			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
-			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
-			'preview_url'	=> $previewUrl,											// プレビュー用のURL
-			'preview_img'	=> $previewImg,											// プレビュー用の画像
-			'preview_str'	=> $previewStr									// プレビュー文字列
-		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
-		
-		// 表示中項目のシリアル番号を保存
-		$this->serialArray[] = $serial;
-		return true;
 	}
 	/**
 	 * ページ名、ページファイルをUTF-8に変換
