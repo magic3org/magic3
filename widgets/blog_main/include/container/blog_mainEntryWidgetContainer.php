@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -302,8 +302,24 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// 記事項目リストを取得
-		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'), $this->blogId);
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		//self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'), $this->blogId);
+		//if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		$ret = self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, $this->blogId, $rows);
+		if ($ret){
+			// コンテンツID取得
+			$idArray = array();
+			for ($i = 0; $i < count($rows); $i++){
+				$idArray[] = $rows[$i]['be_id'];			// ブログ記事ID
+			}
+			
+			// コンテンツのビューカウント情報を取得
+			$viewCountArray = $this->gInstance->getAnalyzeManager()->getTotalContentViewCountInfo(blog_mainCommonDef::VIEW_CONTENT_TYPE, $idArray);
+
+			// 一覧作成
+			$this->itemListLoop($rows, $viewCountArray);
+		} else {
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
+		}
 		
 		// カテゴリーメニューを作成
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
@@ -1158,115 +1174,128 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 * @param array $rows			一覧に設定するレコード
+	 * @param array $viewCountArray	コンテンツのビューカウント情報
+	 * @return						なし
 	 */
-	function itemListLoop($index, $fetchedRow, $param)
+	//function itemListLoop($index, $fetchedRow, $param)
+	function itemListLoop($rows, $viewCountArray)
 	{
-		// レコード値取得
-		$serial = $fetchedRow['be_serial'];
-		$id		= $fetchedRow['be_id'];
+		for ($i = 0; $i < count($rows); $i++){
+			// レコード値取得
+			$fetchedRow = $rows[$i];
+			$serial = $fetchedRow['be_serial'];
+			$id		= $fetchedRow['be_id'];
 
-		// カテゴリーを取得
-		$categoryArray = array();
-		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
-		if ($ret){
-			for ($i = 0; $i < count($categoryRow); $i++){
-				if (function_exists('mb_strimwidth')){
-					$categoryArray[] = mb_strimwidth($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE, '…');
-				} else {
-					$categoryArray[] = substr($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE) . '...';
+			// カテゴリーを取得
+			$categoryArray = array();
+			$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
+			if ($ret){
+				for ($j = 0; $j < count($categoryRow); $j++){
+					if (function_exists('mb_strimwidth')){
+						$categoryArray[] = mb_strimwidth($categoryRow[$j]['bc_name'], 0, self::CATEGORY_NAME_SIZE, '…');
+					} else {
+						$categoryArray[] = substr($categoryRow[$j]['bc_name'], 0, self::CATEGORY_NAME_SIZE) . '...';
+					}
 				}
 			}
-		}
-		$category = implode(',', $categoryArray);
+			$category = implode(',', $categoryArray);
 		
-		// 公開状態
-		switch ($fetchedRow['be_status']){
-			case 1:	$status = '<font color="orange">編集中</font>';	break;
-			case 2:	$status = '<font color="green">公開</font>';	break;
-			case 3:	$status = '非公開';	break;
-		}
-		// 参照数
-		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);		// 更新後からの参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, 0, $id);		// 新規作成からの参照数
-		$viewCountStr = $updateViewCount;
-		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
-		
-		// ユーザからの参照状況
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$startDt = $fetchedRow['be_active_start_dt'];
-		$endDt = $fetchedRow['be_active_end_dt'];
-		
-		$isActive = false;		// 公開状態
-		if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $now);// 表示可能
-		
-		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
-			if ($isActive){		// コンテンツが公開状態のとき
-				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_ACTIVE_ICON_FILE;			// 公開中アイコン
-				$iconTitle = '公開中';
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_INACTIVE_ICON_FILE;		// 非公開アイコン
-				$iconTitle = '非公開';
+			// 公開状態
+			switch ($fetchedRow['be_status']){
+				case 1:	$status = '<font color="orange">編集中</font>';	break;
+				case 2:	$status = '<font color="green">公開</font>';	break;
+				case 3:	$status = '非公開';	break;
 			}
-			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SMALL_ICON_SIZE . '" height="' . self::SMALL_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		} else {
-			if ($isActive){		// コンテンツが公開状態のとき
-				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-				$iconTitle = '公開中';
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-				$iconTitle = '非公開';
+			
+			// ビューカウント情報取得
+			$updateViewCount = 0;	// 更新後からの参照数
+			$totalViewCount = 0;	// 新規作成からの参照数
+			$viewInfo = $viewCountArray[$id];
+			if (isset($viewInfo)){
+				// maxserialは参照数が1以上の最新のコンテンツを指していることに注意。過去のコンテンツの可能性あり。
+				if ($viewInfo['maxserial'] == $serial) $updateViewCount = $viewInfo['subtotal'];
+				$totalViewCount = $viewInfo['total'];
 			}
-			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		}
+						
+			// 参照数
+			//$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);		// 更新後からの参照数
+			//$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, 0, $id);		// 新規作成からの参照数
+			$viewCountStr = $updateViewCount;
+			if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
 		
-		// アイキャッチ画像
-		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
-		if (empty($fetchedRow['be_thumb_filename'])){
-			$iconTitle = 'アイキャッチ画像未設定';
-		} else {
-			$iconTitle = 'アイキャッチ画像';
-		}
-		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			// ユーザからの参照状況
+			$now = date("Y/m/d H:i:s");	// 現在日時
+			$startDt = $fetchedRow['be_active_start_dt'];
+			$endDt = $fetchedRow['be_active_end_dt'];
 		
-		// 投稿日時
-		$outputDate = $fetchedRow['be_regist_dt'];
-		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
-			if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){		// 年号が今日の年号のとき
-				$dispDate = $this->convertToDispDate($outputDate, 11/*年省略,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+			$isActive = false;		// 公開状態
+			if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $now);// 表示可能
+		
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				if ($isActive){		// コンテンツが公開状態のとき
+					$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_ACTIVE_ICON_FILE;			// 公開中アイコン
+					$iconTitle = '公開中';
+				} else {
+					$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_INACTIVE_ICON_FILE;		// 非公開アイコン
+					$iconTitle = '非公開';
+				}
+				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SMALL_ICON_SIZE . '" height="' . self::SMALL_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			} else {
-				$dispDate = $this->convertToDispDate($outputDate, 3/*短縮年,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+				if ($isActive){		// コンテンツが公開状態のとき
+					$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+					$iconTitle = '公開中';
+				} else {
+					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+					$iconTitle = '非公開';
+				}
+				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
-		} else {
-			$dispDate = $this->convertToDispDateTime($outputDate, 0/*ロングフォーマット*/, 10/*時分*/);
+		
+			// アイキャッチ画像
+			$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+			if (empty($fetchedRow['be_thumb_filename'])){
+				$iconTitle = 'アイキャッチ画像未設定';
+			} else {
+				$iconTitle = 'アイキャッチ画像';
+			}
+			$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+			// 投稿日時
+			$outputDate = $fetchedRow['be_regist_dt'];
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){		// 年号が今日の年号のとき
+					$dispDate = $this->convertToDispDate($outputDate, 11/*年省略,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+				} else {
+					$dispDate = $this->convertToDispDate($outputDate, 3/*短縮年,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+				}
+			} else {
+				$dispDate = $this->convertToDispDateTime($outputDate, 0/*ロングフォーマット*/, 10/*時分*/);
+			}
+		
+			$row = array(
+				'index' => $i,		// 項目番号
+				'no' => $i + 1,													// 行番号
+				'serial' => $serial,			// シリアル番号
+				'id' => $this->convertToDispString($id),			// 記事ID
+				'name' => $this->convertToDispString($fetchedRow['be_name']),		// 名前
+				'lang' => $lang,													// 対応言語
+				'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
+				'status_img' => $statusImg,												// 公開状態
+				'status' => $status,													// 公開状況
+				'category' => $category,											// 記事カテゴリー
+				//'view_count' => $totalViewCount,									// 参照数
+				'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
+				'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
+	//			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
+				'reg_date' => $dispDate
+			);
+			$this->tmpl->addVars('itemlist', $row);
+			$this->tmpl->parseTemplate('itemlist', 'a');
+		
+			// 表示中項目のシリアル番号を保存
+			$this->serialArray[] = $serial;
 		}
-		
-		$row = array(
-			'index' => $index,		// 項目番号
-			'no' => $index + 1,													// 行番号
-			'serial' => $serial,			// シリアル番号
-			'id' => $this->convertToDispString($id),			// 記事ID
-			'name' => $this->convertToDispString($fetchedRow['be_name']),		// 名前
-			'lang' => $lang,													// 対応言語
-			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
-			'status_img' => $statusImg,												// 公開状態
-			'status' => $status,													// 公開状況
-			'category' => $category,											// 記事カテゴリー
-			//'view_count' => $totalViewCount,									// 参照数
-			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
-			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-//			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
-			'reg_date' => $dispDate
-		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
-		
-		// 表示中項目のシリアル番号を保存
-		$this->serialArray[] = $serial;
-		return true;
 	}
 	/**
 	 * 取得した言語をテンプレートに設定する
