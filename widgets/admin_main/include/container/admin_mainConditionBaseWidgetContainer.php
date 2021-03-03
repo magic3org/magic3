@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -197,7 +197,7 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 															)
 										)
 									)
-								),
+								)/*,
 								(Object)array(
 									'name'		=> 'アクセス解析',
 									'task'		=> '',
@@ -218,7 +218,7 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 											'disabled'	=> (	!$this->isExistsAwstats()	)
 										)
 									)
-								)
+								)*/
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
