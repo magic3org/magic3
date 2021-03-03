@@ -587,11 +587,12 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			$previewStr = 'プレビュー';
 		
 			$row = array(
+				'index' 		=> $i,		// 項目番号
 				'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 				'id'			=> $idTag,		// WikiページID
 				'status'		=> $statusImg,		// Wikiページ状態
 	//			'view_count'	=> $totalViewCount,									// 参照数
-				'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
+				'view_count' 	=> $this->convertToDispString($viewCountStr),			// 参照数
 				'attach_count'	=> $attachCount,									// 添付ファイル数
 				'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 				'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時

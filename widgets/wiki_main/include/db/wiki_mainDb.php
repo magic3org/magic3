@@ -250,8 +250,8 @@ class wiki_mainDb extends BaseDb
 		if ($sortKey != 'id') $defaultOrder = ', wc_id ';
 		$queryStr .=   'ORDER BY ' . $orderKey . $ord . $defaultOrder . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
 		//$this->selectLoop($queryStr, array($type), $callback);
-		$retValue = $this->selectRecords($queryStr, array($type), $rows);
-		return $retValue;
+		$ret = $this->selectRecords($queryStr, array($type), $rows);
+		return $ret;
 	}
 	/**
 	 * 利用可能なWikiページ数を取得

@@ -1262,6 +1262,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			$previewStr = 'プレビュー';
 		
 			$row = array(
+				'index' => $i,		// 項目番号
 				'serial' => $serial,			// シリアル番号
 				'id' => $this->convertToDispString($contentId),			// ID
 				'name' => $this->convertToDispString($fetchedRow['cn_name']),		// 名前
