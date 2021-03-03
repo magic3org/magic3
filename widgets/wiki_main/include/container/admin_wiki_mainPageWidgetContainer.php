@@ -542,17 +542,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	{
 		for ($i = 0; $i < count($rows); $i++){
 			$fetchedRow = $rows[$i];
-			/*
-				$selected = '';
-				if ($rows[$i]['bl_id'] == $this->blogId) $selected = 'selected';
-				$row = array(
-					'value'    => $this->convertToDispString($rows[$i]['bl_id']),			// ブログID
-					'name'     => $this->convertToDispString($rows[$i]['bl_name']),			// ブログ名
-					'selected' => $selected														// 選択中かどうか
-				);
-				$this->tmpl->addVars('blogid_list', $row);
-				$this->tmpl->parseTemplate('blogid_list', 'a');
-			*/
 			$serial		= $fetchedRow['wc_serial'];// シリアル番号
 			$id			= $fetchedRow['wc_id'];			// WikiページID
 			$date		= $fetchedRow['wc_content_dt'];	// 更新日時
@@ -598,7 +587,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			$previewStr = 'プレビュー';
 		
 			$row = array(
-				'index'			=> $index,		// 項目番号
 				'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 				'id'			=> $idTag,		// WikiページID
 				'status'		=> $statusImg,		// Wikiページ状態

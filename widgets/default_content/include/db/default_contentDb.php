@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -624,10 +624,11 @@ class default_contentDb extends BaseDb
 	 * @param string	$keyword			検索キーワード
 	 * @param int		$searchKey			検索キー(0=コンテンツID、1=更新日時)
 	 * @param int		$searchOrder		検索ソート順(0=昇順、1=降順)
-	 * @param function	$callback			コールバック関数
-	 * @return 			なし
+	 * @param  array    $rows				取得した行
+	 * @return bool						true=データあり, false=データなし
 	 */
-	function searchContent($contentType, $langId, $limit, $page, $keyword, $searchKey, $searchOrder, $callback)
+//	function searchContent($contentType, $langId, $limit, $page, $keyword, $searchKey, $searchOrder, $callback)
+	function searchContent($contentType, $langId, $limit, $page, $keyword, $searchKey, $searchOrder, &$rows)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -655,7 +656,9 @@ class default_contentDb extends BaseDb
 			$queryStr .=  'desc ';
 		}
 		$queryStr .=  'limit ' . $limit . ' offset ' . $offset;
-		$this->selectLoop($queryStr, $params, $callback);
+		//$this->selectLoop($queryStr, $params, $callback);
+		$ret = $this->selectRecords($queryStr, $params, $rows);
+		return $ret;
 	}
 	/**
 	 * コンテンツ数を取得(管理用)

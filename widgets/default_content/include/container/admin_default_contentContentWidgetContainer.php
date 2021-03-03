@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -245,8 +245,24 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		}
 		
 		// コンテンツリストを取得
-		self::$_mainDb->searchContent(default_contentCommonDef::$_contentType, $this->langId, $maxListCount, $pageNo, $searchKeyword, $searchKey, $searchOrder, array($this, 'itemListLoop'));
-		if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
+		//self::$_mainDb->searchContent(default_contentCommonDef::$_contentType, $this->langId, $maxListCount, $pageNo, $searchKeyword, $searchKey, $searchOrder, array($this, 'itemListLoop'));
+		$ret = self::$_mainDb->searchContent(default_contentCommonDef::$_contentType, $this->langId, $maxListCount, $pageNo, $searchKeyword, $searchKey, $searchOrder, $rows);
+		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コンテンツ項目がないときは、一覧を表示しない
+		if ($ret){
+			// コンテンツID取得
+			$idArray = array();
+			for ($i = 0; $i < count($rows); $i++){
+				$idArray[] = $rows[$i]['cn_id'];			// コンテンツID
+			}
+			
+			// コンテンツのビューカウント情報を取得
+			$viewCountArray = $this->gInstance->getAnalyzeManager()->getTotalContentViewCountInfo(default_contentCommonDef::$_viewContentType, $idArray);
+
+			// 一覧作成
+			$this->itemListLoop($rows, $viewCountArray);
+		} else {
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
+		}
 		
 		// 画面にデータを埋め込む
 		// 検索条件
@@ -1167,103 +1183,113 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 * @param array $rows			一覧に設定するレコード
+	 * @param array $viewCountArray	コンテンツのビューカウント情報
+	 * @return						なし
 	 */
-	function itemListLoop($index, $fetchedRow, $param)
+	//function itemListLoop($index, $fetchedRow, $param)
+	function itemListLoop($rows, $viewCountArray)
 	{
-		$serial = $this->convertToDispString($fetchedRow['cn_serial']);
-		$contentId = $fetchedRow['cn_id'];		// コンテンツID
+		for ($i = 0; $i < count($rows); $i++){
+			$fetchedRow = $rows[$i];
+			$serial = $this->convertToDispString($fetchedRow['cn_serial']);
+			$contentId = $fetchedRow['cn_id'];		// コンテンツID
 
-		// ユーザ制限
-		$limited = '';
-		if ($fetchedRow['cn_user_limited']) $limited = 'checked';
+			// ユーザ制限
+			$limited = '';
+			if ($fetchedRow['cn_user_limited']) $limited = 'checked';
 		
-		// 対応言語を取得
-		$lang = '';
-		if ($this->isMultiLang){		// 多言語対応の場合
-			$lang = $this->createLangImage($contentId);
+			// 対応言語を取得
+			$lang = '';
+			if ($this->isMultiLang){		// 多言語対応の場合
+				$lang = $this->createLangImage($contentId);
+			}
+			
+			// ビューカウント情報取得
+			$updateViewCount = 0;	// 更新後からの参照数
+			$totalViewCount = 0;	// 新規作成からの参照数
+			$viewInfo = $viewCountArray[$contentId];
+			if (isset($viewInfo)){
+				// maxserialは参照数が1以上の最新のコンテンツを指していることに注意。過去のコンテンツの可能性あり。
+				if ($viewInfo['maxserial'] == $serial) $updateViewCount = $viewInfo['subtotal'];
+				$totalViewCount = $viewInfo['total'];
+			}
+			
+			// 参照数
+			//$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, $serial);	// 更新後からの参照数
+			//$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, 0, $contentId);	// 新規作成からの参照数
+			$viewCountStr = $updateViewCount;
+			if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
+		
+			// 公開状況の設定
+			$now = date("Y/m/d H:i:s");	// 現在日時
+			$startDt = $fetchedRow['cn_active_start_dt'];
+			$endDt = $fetchedRow['cn_active_end_dt'];
+		
+			$isActive = false;		// 公開状態
+			if ($fetchedRow['cn_visible']) $isActive = $this->isActive($startDt, $endDt, $now);// 表示可能
+		
+			if ($isActive){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+				$iconTitle = '公開中';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+				$iconTitle = '非公開';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+			// 操作用ボタン
+			$addToMenuImg = $this->getUrl($this->gEnv->getRootUrl() . self::ADD_TO_MENU_ICON_FILE);		// メニューに追加用アイコン
+			$addToMenuStr = 'メニューに追加';
+			$statusUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;// 現在の表示画面用URL
+		
+			// プレビュー用URL
+			switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
+				case 0:		// PC
+				default:
+					$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
+					break;
+				case 1:		// 携帯
+					$previewUrl = $this->gEnv->getDefaultMobileUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
+					break;
+				case 2:		// スマートフォン
+					$previewUrl = $this->gEnv->getDefaultSmartphoneUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
+					break;
+			}
+			$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
+	//		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
+			$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
+			$previewStr = 'プレビュー';
+		
+			$row = array(
+				'serial' => $serial,			// シリアル番号
+				'id' => $this->convertToDispString($contentId),			// ID
+				'name' => $this->convertToDispString($fetchedRow['cn_name']),		// 名前
+				'lang' => $lang,													// 対応言語
+				//'view_count' => $totalViewCount,									// 参照数
+				'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
+				'status' => $statusImg,												// 公開状況
+				'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
+				'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
+				'limited' => $limited,											// ユーザ制限
+				'add_to_menu_img' => $addToMenuImg,											// メニューに追加用の画像
+				'add_to_menu_str' => $addToMenuStr,											// メニューに追加用の文字列
+				'status_url' => $statusUrl,											// 現在の表示画面用URL
+				'preview_url' => $previewUrl,											// プレビュー用のURL
+				'preview_img' => $previewImg,											// プレビュー用の画像
+				'preview_str' => $previewStr									// プレビュー文字列
+			);
+			if ($this->isMultiLang){		// 多言語対応のとき
+				$this->tmpl->addVars('itemlist2', $row);
+				$this->tmpl->parseTemplate('itemlist2', 'a');
+			} else {
+				$this->tmpl->addVars('itemlist', $row);
+				$this->tmpl->parseTemplate('itemlist', 'a');
+			}
+		
+			// 表示中のコンテンツIDを保存
+			$this->serialArray[] = $fetchedRow['cn_serial'];
 		}
-		// 参照数
-		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, $serial);	// 更新後からの参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, 0, $contentId);	// 新規作成からの参照数
-		$viewCountStr = $updateViewCount;
-		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
-		
-		// 公開状況の設定
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$startDt = $fetchedRow['cn_active_start_dt'];
-		$endDt = $fetchedRow['cn_active_end_dt'];
-		
-		$isActive = false;		// 公開状態
-		if ($fetchedRow['cn_visible']) $isActive = $this->isActive($startDt, $endDt, $now);// 表示可能
-		
-		if ($isActive){		// コンテンツが公開状態のとき
-			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = '公開中';
-		} else {
-			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = '非公開';
-		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		
-		// 操作用ボタン
-		$addToMenuImg = $this->getUrl($this->gEnv->getRootUrl() . self::ADD_TO_MENU_ICON_FILE);		// メニューに追加用アイコン
-		$addToMenuStr = 'メニューに追加';
-		$statusUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;// 現在の表示画面用URL
-		
-		// プレビュー用URL
-		switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
-			case 0:		// PC
-			default:
-				$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
-				break;
-			case 1:		// 携帯
-				$previewUrl = $this->gEnv->getDefaultMobileUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
-				break;
-			case 2:		// スマートフォン
-				$previewUrl = $this->gEnv->getDefaultSmartphoneUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
-				break;
-		}
-		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
-//		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
-		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
-		$previewStr = 'プレビュー';
-		
-		$row = array(
-			'index' => $index,													// 項目番号
-			'serial' => $serial,			// シリアル番号
-			'id' => $this->convertToDispString($contentId),			// ID
-			'name' => $this->convertToDispString($fetchedRow['cn_name']),		// 名前
-			'lang' => $lang,													// 対応言語
-			//'view_count' => $totalViewCount,									// 参照数
-			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
-			'status' => $statusImg,												// 公開状況
-			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
-			'limited' => $limited,											// ユーザ制限
-			'add_to_menu_img' => $addToMenuImg,											// メニューに追加用の画像
-			'add_to_menu_str' => $addToMenuStr,											// メニューに追加用の文字列
-			'status_url' => $statusUrl,											// 現在の表示画面用URL
-			'preview_url' => $previewUrl,											// プレビュー用のURL
-			'preview_img' => $previewImg,											// プレビュー用の画像
-			'preview_str' => $previewStr									// プレビュー文字列
-		);
-		if ($this->isMultiLang){		// 多言語対応のとき
-			$this->tmpl->addVars('itemlist2', $row);
-			$this->tmpl->parseTemplate('itemlist2', 'a');
-		} else {
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-		}
-		
-		// 表示中のコンテンツIDを保存
-		$this->serialArray[] = $fetchedRow['cn_serial'];
-		
-		$this->isExistsContent = true;		// コンテンツ項目が存在するかどうか
-		return true;
 	}
 	/**
 	 * 取得した言語をテンプレートに設定する
