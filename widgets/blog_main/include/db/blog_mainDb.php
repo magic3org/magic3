@@ -78,11 +78,11 @@ class blog_mainDb extends BaseDb
 	 * @param array		$category			カテゴリーID
 	 * @param string	$keyword			検索キーワード
 	 * @param string	$langId				言語
-	 * @param function	$callback			コールバック関数
-	 * @param string	$blogId				ブログID(未指定の場合はnull)
-	 * @return 			なし
+	 * @param string	$blogId				ブログID
+	 * @param  array    $rows				取得した行
+	 * @return bool							true=データあり, false=データなし
 	 */
-	function searchEntryItems($limit, $page, $startDt, $endDt, $category, $keyword, $langId, $callback, $blogId = null)
+	function searchEntryItems($limit, $page, $startDt, $endDt, $category, $keyword, $langId, $blogId, &$rows)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -131,7 +131,8 @@ class blog_mainDb extends BaseDb
 		
 		if (count($category) == 0){
 			$queryStr .=  'ORDER BY be_regist_dt desc limit ' . $limit . ' offset ' . $offset;
-			$this->selectLoop($queryStr, $params, $callback, null);
+			//$this->selectLoop($queryStr, $params, $callback, null);
+			$ret = $this->selectRecords($queryStr, $params, $rows);
 		} else {
 			// シリアル番号を取得
 			$serialArray = array();
@@ -147,8 +148,10 @@ class blog_mainDb extends BaseDb
 			$queryStr = 'SELECT * FROM blog_entry LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
 			$queryStr .=  'WHERE be_serial in (' . $serialStr . ') ';
 			$queryStr .=  'ORDER BY be_regist_dt desc limit ' . $limit . ' offset ' . $offset;
-			$this->selectLoop($queryStr, array(), $callback, null);
+			//$this->selectLoop($queryStr, array(), $callback, null);
+			$ret = $this->selectRecords($queryStr, array(), $rows);
 		}
+		return $ret;
 	}
 	/**
 	 * エントリー項目数を取得(管理用)
