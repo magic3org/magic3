@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -264,7 +264,9 @@ class DesignManager extends _Core
 					switch ($style){
 						case 2:			// Bootstrap型のとき
 						case -1:		// 管理画面
-							$link = '<li class="active"><a href="#">' . $i . '<span class="sr-only">(current)</span></a></li>';
+							//$link = '<li class="active"><a href="#">' . $i . '<span class="sr-only">(current)</span></a></li>';
+							//$link = '<li class="page-item active"><a href="#" class="page-link">' . $i . '<span class="sr-only">(current)</span></a></li>';
+							$link = '<li class="page-item active" aria-current="page"><span class="page-link">' . $i . '</span></li>';
 							break;
 						default:
 							$link = '&nbsp;<span class="active">' . $i . '</span>';
@@ -281,7 +283,8 @@ class DesignManager extends _Core
 					switch ($style){
 						case 2:			// Bootstrap型のとき
 						case -1:		// 管理画面
-							$link = '<li>' . $this->_createLink($i, $linkUrl, $clickScript) . '</li>';
+							//$link = '<li>' . $this->_createLink($i, $linkUrl, $clickScript) . '</li>';
+							$link = '<li class="page-item">' . $this->_createLink($i, $linkUrl, $clickScript, 'class="page-link"') . '</li>';
 							break;
 						default:
 							$link = '&nbsp;' . $this->_createLink($i, $linkUrl, $clickScript);
@@ -295,7 +298,8 @@ class DesignManager extends _Core
 				switch ($style){
 					case 2:			// Bootstrap型のとき
 					case -1:		// 管理画面
-						$pageLink .= '<li class="disabled"><a href="#">…</a></li>';
+						//$pageLink .= '<li class="disabled"><a href="#">…</a></li>';
+						$pageLink .= '<li class="page-item disabled"><a href="#" class="page-link">…</a></li>';
 						break;
 					default:
 						$pageLink .= '&nbsp;...';
@@ -317,7 +321,8 @@ class DesignManager extends _Core
 			switch ($style){
 				case 2:			// Bootstrap型のとき
 				case -1:		// 管理画面
-					$link = '<li>' . $this->_createLink('&laquo;', $linkUrl, $clickScript) . '</li>';
+					//$link = '<li>' . $this->_createLink('&laquo;', $linkUrl, $clickScript) . '</li>';
+					$link = '<li class="page-item">' . $this->_createLink('&laquo;', $linkUrl, $clickScript, 'class="page-link"') . '</li>';
 					break;
 				default:
 					$link = $this->_createLink('&laquo; 前へ', $linkUrl, $clickScript);
@@ -340,7 +345,8 @@ class DesignManager extends _Core
 			switch ($style){
 				case 2:			// Bootstrap型のとき
 				case -1:		// 管理画面
-					$link = '<li>' . $this->_createLink('&raquo;', $linkUrl, $clickScript) . '</li>';
+					//$link = '<li>' . $this->_createLink('&raquo;', $linkUrl, $clickScript) . '</li>';
+					$link = '<li class="page-item">' . $this->_createLink('&raquo;', $linkUrl, $clickScript, 'class="page-link"') . '</li>';
 					break;
 				default:
 					$link = '&nbsp;' . $this->_createLink('次へ &raquo;', $linkUrl, $clickScript);
