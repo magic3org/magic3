@@ -232,7 +232,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'custom_search';
 INSERT INTO _widgets
 (wd_id,           wd_name,        wd_content_type, wd_category_id, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,         wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('custom_search', 'カスタム検索', 'search',        'search',       '4.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                '各種コンテンツが検索可能で表示レイアウトもカスタマイズ可能な検索ウィジェット', 'jquery', 'jquery.tablednd,ckeditor_m3toolbar,jquery.uploadfile', true, false, true, true,    '2018-11-02', now(), now());
+('custom_search', 'カスタム検索', 'search',        'search',       '4.1.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                '各種コンテンツが検索可能で表示レイアウトもカスタマイズ可能な検索ウィジェット', 'jquery', 'jquery.tablednd,ckeditor_m3toolbar,jquery.uploadfile', true, false, true, true,    '2021-03-06', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'custom_search_box';
 INSERT INTO _widgets
 (wd_id,               wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
