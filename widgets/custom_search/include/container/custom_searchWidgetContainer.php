@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -22,7 +22,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $resultCount;				// 結果表示件数
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	private $resultLength;		// 検索結果コンテンツの文字列最大長
-	private $templateType;		// 現在のテンプレートタイプ
+//	private $templateType;		// 現在のテンプレートタイプ
 	private $showImage;		// 画像を表示するかどうか
 	private $imageType;				// 画像タイプ
 	private $imageWidth;			// 画像幅
@@ -183,7 +183,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				
 				// リンク文字列作成、ページ番号調整
 				$linkStyle = 0;			// HTMLの出力タイプ
-				if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
+				//if ($this->_templateType == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
+				//if (intval($this->_templateType / 10) * 10 == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
+				if ($this->_renderType == M3_RENDER_BOOTSTRAP) $linkStyle = 2;		// Bootstrap型テンプレートの場合
 	//			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword),
 				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&task=search&keyword=' . urlencode($keyword),
 													''/*追加パラメータなし*/, $linkStyle);
@@ -430,14 +432,22 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
 			if (!empty($style)) $style = 'style="' . $style . '" ';
 			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $escapedTitle . '" title="' . $escapedTitle . '" ' . $style . '/>';
-			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
 			
 			// コンテンツ概要
-			$summary = '<div class="clearfix">' . $summary . '</div>';
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP){		// Bootstrap型テンプレートの場合
+				$imageTag = '<div style="float:left;" class="mr-2"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
+				$summary = '<p class="clearfix">' . $summary . '</p>';
+			} else {
+				$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
+				$summary = '<div class="clearfix">' . $summary . '</div>';
+			}
+		} else {
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP) $summary = '<p>' . $summary . '</p>';	// Bootstrap型テンプレートの場合
 		}
 		
 		if ($this->_renderType != M3_RENDER_JOOMLA_NEW){
 			$row = array(
+				'tag_level'	=> $this->hTagLevel +1,// タグレベル
 				'title'		=> $titleLink,		// タイトル
 				'image'		=> $imageTag,		// 画像
 				'body'		=> $summary			// コンテンツ概要

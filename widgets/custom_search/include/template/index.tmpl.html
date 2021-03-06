@@ -5,7 +5,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -52,11 +52,11 @@ $(function(){
 <input type="hidden" name="keyword" />
 {HTML}
 </form>
-<patTemplate:tmpl name="message" visibility="hidden"><div class="search_message">{MESSAGE}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="message" visibility="hidden"><p class="search_message">{MESSAGE}</p></patTemplate:tmpl>
 <patTemplate:tmpl name="page_link_top" visibility="hidden"><div class="search_page_link">{PAGE_LINK}</div></patTemplate:tmpl>
 <patTemplate:tmpl name="result_list">
 <div class="search_list">
-<h3>{NO}{TITLE}</h3>
+<h{TAG_LEVEL}>{NO}{TITLE}</h{TAG_LEVEL}>
 {IMAGE}{BODY}
 </div>
 </patTemplate:tmpl>
