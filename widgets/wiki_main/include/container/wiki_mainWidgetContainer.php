@@ -466,55 +466,64 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	function createToolbar()
 	{
 		// 編集権限ありまたは常時ツールバーを表示、以外の場合は作成しない
-		if (!WikiConfig::isUserWithEditAuth() && !WikiConfig::isShowToolbarForAllUser()) return '';
+		$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+		if (!$editAuth && !WikiConfig::isShowToolbarForAllUser()) return '';
 		
-		$pageEditable = WikiConfig::isPageEditable();		// ページ編集可能かどうか
+		if ($editAuth){	// 編集権限があるユーザの場合
+			$pageEditable = WikiConfig::isPageEditable();		// ページ編集可能かどうか
 		
-		$toolbar = $this->createToolbarButton('top');
-		if ($this->isPage){
-			$toolbar .= '&nbsp;';
-			if ($pageEditable){
-				if (WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
-					$toolbar .= $this->createToolbarButton('edit');
-				} else if (!$this->isFreeze){		 // 解凍・凍結権限なしの場合は、凍結されている場合は編集ボタン非表示
-					$toolbar .= $this->createToolbarButton('edit');
-				}
+			$toolbar = $this->createToolbarButton('top');
+			if ($this->isPage){
+				$toolbar .= '&nbsp;';
+				if ($pageEditable){
+					if (WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
+						$toolbar .= $this->createToolbarButton('edit');
+					} else if (!$this->isFreeze){		 // 解凍・凍結権限なしの場合は、凍結されている場合は編集ボタン非表示
+						$toolbar .= $this->createToolbarButton('edit');
+					}
 				
-			//	if ($this->isRead && WikiConfig::isPageFreeze() && WikiConfig::getFreezeButtonVisibility()){	// 凍結・解凍ボタンを表示する場合
-				if ($this->isRead && WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
-					if ($this->isFreeze){
-						$toolbar .= $this->createToolbarButton('unfreeze');
-					} else {
-						$toolbar .= $this->createToolbarButton('freeze');
+				//	if ($this->isRead && WikiConfig::isPageFreeze() && WikiConfig::getFreezeButtonVisibility()){	// 凍結・解凍ボタンを表示する場合
+					if ($this->isRead && WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
+						if ($this->isFreeze){
+							$toolbar .= $this->createToolbarButton('unfreeze');
+						} else {
+							$toolbar .= $this->createToolbarButton('freeze');
+						}
 					}
 				}
+				$toolbar .= $this->createToolbarButton('diff');
+				if (WikiConfig::isPageBackup()){
+					$toolbar .= $this->createToolbarButton('backup');
+				}
+				if ($pageEditable){
+					if ((bool)ini_get('file_uploads') && !$this->isFreeze){				// 凍結されていない場合のみファイル添付可能
+						$toolbar .= $this->createToolbarButton('upload');
+					}
+					$toolbar .= $this->createToolbarButton('copy');
+					if (!$this->isFreeze){				// 凍結されていない場合のみファイル名変更可能
+						$toolbar .= $this->createToolbarButton('rename');
+					}
+				}
+				$toolbar .= $this->createToolbarButton('reload');
 			}
-			$toolbar .= $this->createToolbarButton('diff');
-			if (WikiConfig::isPageBackup()){
-				$toolbar .= $this->createToolbarButton('backup');
-			}
+			$toolbar .= '&nbsp;';
 			if ($pageEditable){
-				if ((bool)ini_get('file_uploads') && !$this->isFreeze){				// 凍結されていない場合のみファイル添付可能
-					$toolbar .= $this->createToolbarButton('upload');
-				}
-				$toolbar .= $this->createToolbarButton('copy');
-				if (!$this->isFreeze){				// 凍結されていない場合のみファイル名変更可能
-					$toolbar .= $this->createToolbarButton('rename');
-				}
+				$toolbar .= $this->createToolbarButton('new');
 			}
-			$toolbar .= $this->createToolbarButton('reload');
+			$toolbar .= $this->createToolbarButton('list');
+			$toolbar .= $this->createToolbarButton('search');
+			$toolbar .= $this->createToolbarButton('recent');
+			$toolbar .= '&nbsp;';
+			$toolbar .= $this->createToolbarButton('help');
+		} else {	// (ツールバーを常に表示で)編集権限がないユーザの場合
+			$toolbar = $this->createToolbarButton('top');
+			$toolbar .= '&nbsp;';
+			$toolbar .= $this->createToolbarButton('list');
+			$toolbar .= $this->createToolbarButton('search');
+			$toolbar .= $this->createToolbarButton('recent');
+			$toolbar .= '&nbsp;';
+			$toolbar .= $this->createToolbarButton('help');
 		}
-		$toolbar .= '&nbsp;';
-		if ($pageEditable){
-			$toolbar .= $this->createToolbarButton('new');
-		}
-		$toolbar .= $this->createToolbarButton('list');
-		$toolbar .= $this->createToolbarButton('search');
-		$toolbar .= $this->createToolbarButton('recent');
-		$toolbar .= '&nbsp;';
-		$toolbar .= $this->createToolbarButton('help');
-//		$toolbar .= '&nbsp;';
-//		$toolbar .= $this->createToolbarButton('rss10', 36, 14);
 		return $toolbar;
 	}
 	/**
