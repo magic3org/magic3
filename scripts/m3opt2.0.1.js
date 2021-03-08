@@ -169,9 +169,13 @@ function m3Ajax(request_widget, request_params, request_url)
 		}).then(
 			function (data, textStatus, jqXHR) {	// 正常終了
 				var resultValue = jqXHR.getResponseHeader("X-JSON");
-				resultValue = resultValue.substr(1, resultValue.length -2);	// 前後「()」除く
-				resultValue = resultValue ? JSON.parse(resultValue) : null;
-				resolve(resultValue);
+				if (resultValue){
+					resultValue = resultValue.substr(1, resultValue.length -2);	// 前後「()」除く
+					resultValue = resultValue ? JSON.parse(resultValue) : null;
+					resolve(resultValue);
+				} else {
+					resolve(null);
+				}
 			},
 			function () {	// 通信エラー
 				reject();
