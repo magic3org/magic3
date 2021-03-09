@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -94,7 +94,8 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_MENUDEF_DETAIL		= 'menudef_detail';			// 多階層メニュー定義
 	const TASK_SMENUDEF				= 'smenudef';				// 単階層メニュー定義
 	const TASK_SMENUDEF_DETAIL		= 'smenudef_detail';		// 単階層メニュー定義詳細
-	const TASK_TEST					= 'test';						// テスト画面
+	const TASK_CONNECT				= 'connect';				// Ajax接続
+	const TASK_TEST					= 'test';					// テスト画面
 	
 	// DBアクセス用
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか

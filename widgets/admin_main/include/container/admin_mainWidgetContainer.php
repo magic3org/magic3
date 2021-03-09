@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -330,6 +330,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'tenantserver':			// テナントサーバ管理
 						case 'analyzecalc':		// アクセス解析集計
 						case 'analyzegraph':		// アクセス解析グラフ表示
+						case self::TASK_CONNECT:	// Ajax接続
 						
 						// 管理画面の設定用
 						case 'menu':			// 管理画面設定メニュー
