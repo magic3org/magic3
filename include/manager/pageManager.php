@@ -1600,12 +1600,14 @@ class PageManager extends _Core
 					$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
 					$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 					$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
+					$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 					//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_COOKIE);			// 管理パネル用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_IDLETIMEOUT);	// 無操作監視用
 				
 					$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
 				} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
@@ -1621,6 +1623,7 @@ class PageManager extends _Core
 					$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
+					$this->addScript('', ScriptLibInfo::LIB_IDLETIMEOUT);	// 無操作監視用
 					
 					// Googleマップライブラリの読み込み
 					if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
