@@ -1156,13 +1156,14 @@ $(function(){
 	// 無操作監視
 	if (typeof idleTimeout === 'function'){
 		const instance = idleTimeout(
-			() => {
+			async () => {
 				const params = 'task=connect&act=getloginstatus';
-				const result = await m3Ajax('', params).catch(() => alert('通信に失敗しました'));
-				if (result && result.data.code !== '0'){	// 正常に終了の場合
-					alert('正常終了しました');
-				} else {	// エラーの場合
-					alert('エラーが発生しました');
+				const result = await m3Ajax((M3_DEFAULT_ADMIN_URL, params).catch(() => alert('通信に失敗しました'));
+				if (!(result && result.data.code === '1')){	// ログアウト状態に変更された場合
+					//alert('エラーが発生しました');
+					// 画面再表示
+					var href = 	window.location.href.split('#');
+					window.location.href = href[0];
 				}
 			}, {
 				element: document,
