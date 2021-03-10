@@ -1158,7 +1158,7 @@ $(function(){
 		const instance = idleTimeout(
 			async () => {
 				const params = 'task=connect&act=getloginstatus';
-				const result = await m3Ajax((M3_DEFAULT_ADMIN_URL, params).catch(() => alert('通信に失敗しました'));
+				const result = await m3Ajax('', params, M3_DEFAULT_ADMIN_URL).catch(() => alert('通信に失敗しました'));
 				if (!(result && result.data.code === '1')){	// ログアウト状態に変更された場合
 					//alert('エラーが発生しました');
 					// 画面再表示
