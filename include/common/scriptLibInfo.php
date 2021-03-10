@@ -57,6 +57,7 @@ class ScriptLibInfo
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
 	const LIB_SOCKETIO				= 'socketio';				// socket.io
 	const LIB_WEBRTC				= 'webrtc';				// WebRTC
+	const LIB_IDLETIMEOUT			= 'idle-timeout';		// 無操作監視用
 
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
@@ -277,6 +278,7 @@ class ScriptLibInfo
 	const JSCALENDAR_SETUP_FILENAME	= 'jscalendar-1.0/calendar-setup.js';		// jscalendarセットアップファイル
 	const JSCALENDAR_CSS			= 'jscalendar-1.0/calendar-win2k-1.css';	// jscalendarCSS
 	const WEBRTC_ADAPTER_FILENAME	= 'adapter-1.1.0.js';				// WebRTC
+	const IDLETIMEOUT_FILENAME		= 'idle-timeout.js';						// 無操作監視用
 
 	// Bootstrapライブラリ
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.7/js/bootstrap.min.js';			// bootstrap
@@ -420,6 +422,7 @@ class ScriptLibInfo
 						self::LIB_SOCKETIO				=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
 						self::LIB_WEBRTC				=>	array(	'script' 	=> array(self::WEBRTC_ADAPTER_FILENAME)),			// WebRTC
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
+						self::LIB_IDLETIMEOUT				=>	array(	'script' 	=> array(self::IDLETIMEOUT_FILENAME)),		// idle-timeout.js
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array($ckeditorFile)),		// CKEditor
 						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
 																							self::JSCALENDAR_FILENAME,			// jscalendar

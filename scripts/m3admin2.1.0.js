@@ -1152,4 +1152,23 @@ $(function(){
 	 */
 	// ダイアログの閉じるボタンが消えるのを防ぐ
 	if ($.fn.button && $.fn.button.noConflict !== undefined) $.fn.bootstrapBtn = $.fn.button.noConflict();
+	
+	// 無操作監視
+	if (typeof idleTimeout === 'function'){
+		const instance = idleTimeout(
+			() => {
+				const params = 'task=connect&act=getloginstatus';
+				const result = await m3Ajax('', params).catch(() => alert('通信に失敗しました'));
+				if (result && result.data.code !== '0'){	// 正常に終了の場合
+					alert('正常終了しました');
+				} else {	// エラーの場合
+					alert('エラーが発生しました');
+				}
+			}, {
+				element: document,
+				timeout: 1000 * 60 * 1,
+				loop: true
+			}
+		);
+	}
 });
