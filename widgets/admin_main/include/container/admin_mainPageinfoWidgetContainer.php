@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -101,7 +101,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$toggleType = $request->trimValueOf('toggletype');			// トグルボタンのタイプ
 		$toggleValue = $request->trimValueOf('togglevalue');
 		
-		if ($act == 'toggle'){		// 値変更の場合
+		if ($act == 'toggle'){		// 状態の変更の場合
 			switch($toggleType){
 			case 'visible':				// 公開状態
 				$ret = $this->db->updatePageIdVisible(1/*ページID*/, $this->pageSubId, $toggleValue);
@@ -129,6 +129,13 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 				break;
+			}
+		} else if ($act == 'change_default'){		// デフォルトページの変更の場合
+			$ret = $this->_db->updateDefaultPageSubId($this->pageId, $this->pageSubId);
+			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, 'デフォルトページを変更しました');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'デフォルトページの変更に失敗しました');
 			}
 		}
 		
@@ -361,7 +368,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->tmpl->parseTemplate('sub_id_list', 'a');
 		
 		// 表示中項目のページサブIDを保存
-		$this->serialArray[] = $value;
+		$this->serialArray[] = $pageId;
 		return true;
 	}
 	/**
