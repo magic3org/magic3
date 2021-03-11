@@ -562,6 +562,9 @@ class AnalyzeManager extends _Core
 			'monazilla'					=> '',
 			'crawler'					=> 'crawler.png',			// クローラー該当なしの場合
 
+			// アプリケーション
+			'manictime'					=> 'manictime.png',		// ManicTime
+			
 			// 携帯
 			'docomo'					=> 'docomo.gif',		// ドコモ
 			'au'						=> 'au.gif',		// au
