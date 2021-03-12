@@ -131,11 +131,21 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 				break;
 			}
 		} else if ($act == 'change_default'){		// デフォルトページの変更の場合
-			$ret = $this->_db->updateDefaultPageSubId($this->pageId, $this->pageSubId);
-			if ($ret){
-				$this->setMsg(self::MSG_GUIDANCE, 'デフォルトページを変更しました');
+			// システム用機能タイプを取得
+			$systemType = '';
+			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+			if ($ret) $systemType = $row['pg_function_type'];		// システム用機能タイプ
+			
+			// システム用機能タイプが設定されている場合は変更不可
+			if (empty($systemType)){
+				$ret = $this->_db->updateDefaultPageSubId($this->pageId, $this->pageSubId);
+				if ($ret){
+					$this->setMsg(self::MSG_GUIDANCE, 'デフォルトページを変更しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'デフォルトページの変更に失敗しました');
+				}
 			} else {
-				$this->setMsg(self::MSG_APP_ERR, 'デフォルトページの変更に失敗しました');
+				$this->setMsg(self::MSG_APP_ERR, 'このページはデフォルトに設定できません');
 			}
 		}
 		
@@ -164,7 +174,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->pageSubId = $request->trimValueOf('pagesubid');// ページサブID
 		$this->contentType = $request->trimValueOf('item_contenttype');// コンテンツタイプ
 		$useSsl = ($request->trimValueOf('item_use_ssl') == 'on') ? 1 : 0;		// SSLを使用するかどうか
-		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// デフォルトページかどうか
+//		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// デフォルトページかどうか
 		$userLimited = ($request->trimValueOf('item_user_limited') == 'on') ? 1 : 0;		// ユーザ制限するかどうか
 		$this->templateId = $request->trimValueOf('item_template_id');// テンプレート
 		
@@ -177,11 +187,11 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// デフォルトページの変更
-				$ret = true;
-				if ($default) $ret = $this->_db->updateDefaultPageSubId($this->pageId, $this->pageSubId);
+//				$ret = true;
+//				if ($default) $ret = $this->_db->updateDefaultPageSubId($this->pageId, $this->pageSubId);
 				
 				// ページ情報の更新
-				if ($ret) $ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $this->contentType,
+				$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $this->contentType,
 														$this->templateId, ''/*サブテンプレートID*/, 0/*アクセス制御ユーザタイプ*/, $useSsl, $userLimited);
 
 				if ($ret){		// データ追加成功のとき
@@ -227,19 +237,19 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->db->getAllTemplateList($deviceType, array($this, 'templateIdLoop'));
 			
 		// デフォルトのページサブIDを取得
-		$isDefault = false;
-		$this->defaultSubId = $this->_db->getDefaultPageSubId($this->pageId);
-		if ($this->pageSubId == $this->defaultSubId) $isDefault = true;
+//		$isDefault = false;
+//		$this->defaultSubId = $this->_db->getDefaultPageSubId($this->pageId);
+//		if ($this->pageSubId == $this->defaultSubId) $isDefault = true;
 		
 		// システム用ページタイプの場合は更新を行わない
 		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 		if (empty($systemType)){
-			$this->tmpl->addVar("_widget", "default_disabled", $this->convertToDisabledString($isDefault));		// デフォルトの場合はデフォルト値の変更不可
+			//$this->tmpl->addVar("_widget", "default_disabled", $this->convertToDisabledString($isDefault));		// デフォルトの場合はデフォルト値の変更不可
 		} else {
 			$this->tmpl->addVar("update_button", "update_disabled", 'disabled');		// 更新ボタン無効
 			
 			// その他の項目無効化
-			$this->tmpl->addVar("_widget", "default_disabled", 'disabled');		// デフォルトページ
+			//$this->tmpl->addVar("_widget", "default_disabled", 'disabled');		// デフォルトページ
 			$this->tmpl->addVar("_widget", "use_ssl_disabled", 'disabled');		// SSL
 			$this->tmpl->addVar("_widget", "contenttype_disabled", 'disabled');		// ページ属性
 			$this->tmpl->addVar("_widget", "template_id_disabled", 'disabled');		// テンプレート
@@ -252,7 +262,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		$this->tmpl->addVar("_widget", "page_subid", $this->pageSubId);		// ページサブID
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
-		$this->tmpl->addVar("_widget", "default", $this->convertToCheckedString($isDefault));				// デフォルトのページかどうか
+//		$this->tmpl->addVar("_widget", "default", $this->convertToCheckedString($isDefault));				// デフォルトのページかどうか
 	}
 	/**
 	 * ページID、取得したデータをテンプレートに設定する

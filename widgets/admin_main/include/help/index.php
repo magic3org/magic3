@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -98,10 +98,10 @@ $HELP['pageinfo_ssl']['title'] = 'SSL';
 $HELP['pageinfo_ssl']['body'] = 'SSLを使用してページを表示するかどうかを設定します。';
 $HELP['pageinfo_user_limited']['title'] = 'ユーザ制限';
 $HELP['pageinfo_user_limited']['body'] = 'ページにアクセスできるユーザをログインしたユーザに制限するかどうかを設定します。チェックが入っている場合は、ログインユーザのみがアクセス可能です。';
-$HELP['pageinfo_default']['title'] = 'デフォルト';
-$HELP['pageinfo_default']['body'] = 'デフォルトで選択されている項目は、ページIDが省略されたときに指定されるページIDです。';
+//$HELP['pageinfo_default']['title'] = 'デフォルト';
+//$HELP['pageinfo_default']['body'] = 'デフォルトで選択されている項目は、ページIDが省略されたときに指定されるページIDです。';
 $HELP['pageinfo_status']['title'] = '状態';
-$HELP['pageinfo_status']['body'] = 'ページの有効・公開状態を示します。「有効」でページが使用可能な状態になり、「公開」で外部からの閲覧が可能になります。';
+$HELP['pageinfo_status']['body'] = 'ページの有効・公開状態を示します。「有効」でページがメニュー上に表示され選択可能になります。「公開」で外部からの閲覧が可能になります。';
 $HELP['pageinfo_ref']['title'] = '使用';
 $HELP['pageinfo_ref']['body'] = 'ページ上に存在するウィジェット数です。共通属性が設定されているウィジェットは含みません。';
 $HELP['pageinfo_edit_btn']['title'] = '編集ボタン';
