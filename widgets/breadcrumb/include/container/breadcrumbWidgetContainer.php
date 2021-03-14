@@ -8,7 +8,7 @@
  *
  * @package    パンくずリスト
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2018 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -238,7 +238,7 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			// メニュー項目IDの連想配列に変換
 			$this->menuItems = array();
 			for ($i = 0; $i < count($menuItems); $i++){
-				$key = $menuItems[$i][md_id];
+				$key = $menuItems[$i]['md_id'];
 				$this->menuItems[$key] = $menuItems[$i];
 			}
 
