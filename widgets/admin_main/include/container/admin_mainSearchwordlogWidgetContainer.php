@@ -33,7 +33,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	private $server;			// 指定サーバ
 	private $startNo;			// 先頭の項目番号
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const MAX_PAGE_COUNT = 20;				// 最大ページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const FLAG_ICON_DIR = '/images/system/flag/';		// 国旗アイコンディレクトリ
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
 	const ICON_SIZE = 16;		// アイコンのサイズ
@@ -137,12 +137,10 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		if ($this->logOrder == '') $this->logOrder = self::DEFAULT_LOG_ORDER;
 		
 		// 表示条件
-//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$viewCount = $request->trimIntValueOf('viewcount', '0');
-		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($maxListCount)) $maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-
+		
 		// 表示するログのタイプを設定
 		$pathParam = $this->path;
 		if ($pathParam == self::ACCESS_PATH_ALL){
@@ -166,6 +164,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 				break;
 		}
 
+/*
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
@@ -173,7 +172,12 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
 		$this->startNo = $startNo;			// 先頭の項目番号
+		*/
 		
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		
+/*
 		// ページング用リンク作成
 		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
@@ -186,16 +190,18 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		// ページングリンク作成
+		$detailUrl = '?task=searchwordlog';
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $detailUrl);
 		
 		// アクセスパスメニュー、表示順選択メニュー作成
 		$this->createPathMenu();
 		$this->createLogOrderMenu();
 			
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
+		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 //		$this->tmpl->addVar("search_range", "start_no", $startNo);
 //		$this->tmpl->addVar("search_range", "end_no", $endNo);
 //		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
@@ -209,13 +215,13 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		switch ($this->logOrder){
 			case 0:
 			default:
-				$this->db->getSearchWordLogList($viewCount, $pageNo, $pathParam, array($this, 'logListLoop'));
+				$this->db->getSearchWordLogList($maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'));
 				if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 				
 				$this->tmpl->addVar("_widget", "detail_disabled", 'disabled');		// 詳細画面遷移なし
 				break;
 			case 1:			// 頻度高
-				$this->db->getSearchWordSumList($viewCount, $pageNo, $pathParam, array($this, 'logListSumLoop'));
+				$this->db->getSearchWordSumList($maxListCount, $pageNo, $pathParam, array($this, 'logListSumLoop'));
 				if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist_sum', 'visibility', 'hidden');		// ログがないときは非表示
 				break;
 		}
@@ -310,9 +316,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	{
 		$agent = $fetchedRow['al_user_agent'];
 		
-		// 先頭の項目番号
-		$no = $this->startNo + $index;
-		
 		// アクセスユーザの国を取得
 		$countryCode = '';
 		if (!empty($fetchedRow['al_accept_language'])) $countryCode = $this->gInstance->getAnalyzeManager()->getBrowserCountryCode($fetchedRow['al_accept_language']);
@@ -342,7 +345,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 
 		$row = array(
 			'index' => $index,													// 行番号
-			'no' => $no,			// シリアル番号
 			'word' => $this->convertToDispString($fetchedRow['sw_word']),		// 語句
 			'browser' => $browserImg,		// ブラウザ
 			'country' => $countryImg,		// 国画像

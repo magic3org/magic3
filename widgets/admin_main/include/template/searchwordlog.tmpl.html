@@ -95,20 +95,18 @@ $(function(){
     <thead>
         <tr>
 	    <th class="select"><span {_HELP_SEARCHWORDLOG_CHECK}>選択</span></th>
-	    <th style="width:50px;"><span {_HELP_SEARCHWORDLOG_NO}>番号</span></th>
 	    <th><span {_HELP_SEARCHWORDLOG_WORD}>検索キーワード</span></th>
 	    <th style="width:50px;"><span {_HELP_SEARCHWORDLOG_BROWSER}>種別</span></th>
 	    <th style="width:50px;"><span {_HELP_SEARCHWORDLOG_COUNTRY}>国</span></th>
 	    <th style="width:80px;"><span {_HELP_SEARCHWORDLOG_ACCESS_LOG}>アクセスログ</span></th>
 	    <th style="width:60px;"><span {_HELP_SEARCHWORDLOG_USER}>ユーザ</span></th>
-	    <th><span {_HELP_SEARCHWORDLOG_DT}>日時</span></th>
+	    <th style="width:100px;"><span {_HELP_SEARCHWORDLOG_DT}>日時</span></th>
 	</tr>
     </thead>
     <tbody>
         <patTemplate:tmpl name="loglist">
         <tr>
             <td><input type="checkbox" name="item{INDEX}_selected" disabled /></td>
-	    <td>{NO}</td>
 	    <td>{WORD}</td>
 	    <td>{BROWSER}</td>
 	    <td>{COUNTRY}</td>
