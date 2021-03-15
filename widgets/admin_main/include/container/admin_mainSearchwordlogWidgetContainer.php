@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2016 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2016-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -196,9 +196,9 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+//		$this->tmpl->addVar("search_range", "start_no", $startNo);
+//		$this->tmpl->addVar("search_range", "end_no", $endNo);
+//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// アクセスログURL
 		$accessLogUrl = '?task=accesslog_detail&openby=simple';
@@ -279,9 +279,9 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "page_", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+//		$this->tmpl->addVar("search_range", "start_no", $startNo);
+//		$this->tmpl->addVar("search_range", "end_no", $endNo);
+//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 
 		// 前ウィンドウから引き継いだパラメータ
 		$this->tmpl->addVar("_widget", "log_order", $this->logOrder);

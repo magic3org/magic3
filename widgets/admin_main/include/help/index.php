@@ -272,19 +272,19 @@ $HELP['accesslog_edit_btn']['body'] = '選択されているアクセスログ�
 $HELP['accesslog_ret_btn']['title'] = '戻るボタン';
 $HELP['accesslog_ret_btn']['body'] = 'アクセスログ一覧へ戻ります。';
 
-// ########## 検索語ログ ##########
-$HELP['searchwordlog_list']['title'] = '検索語ログ一覧';
-$HELP['searchwordlog_list']['body'] = '検索語ログ一覧です。最新のメッセージから順にシステム運用状況のログを表示します。';
-$HELP['searchwordlog_detail']['title'] = '検索語ログ詳細';
-$HELP['searchwordlog_detail']['body'] = '検索語ログの情報を編集します。';
+// ########## 検索キーワードログ ##########
+$HELP['searchwordlog_list']['title'] = '検索キーワードログ一覧';
+$HELP['searchwordlog_list']['body'] = '検索キーワードのログ一覧です。最新のログ順または検索キーワードの頻度順でログを表示します。';
+$HELP['searchwordlog_detail']['title'] = '検索キーワードログ詳細';
+$HELP['searchwordlog_detail']['body'] = '検索キーワードログの詳細情報です。';
 $HELP['searchwordlog_check']['title'] = '選択用チェックボックス';
 $HELP['searchwordlog_check']['body'] = '詳細表示を行う項目を選択します。';
 $HELP['searchwordlog_no']['title'] = '番号';
 $HELP['searchwordlog_no']['body'] = '表示番号です。';
-$HELP['searchwordlog_word']['title'] = '検索語';
+$HELP['searchwordlog_word']['title'] = '検索キーワード';
 $HELP['searchwordlog_word']['body'] = '検索された文字列です。';
 $HELP['searchwordlog_compare_word']['title'] = '比較語';
-$HELP['searchwordlog_compare_word']['body'] = '同じ検索語とみなす比較用文字列です。';
+$HELP['searchwordlog_compare_word']['body'] = '同じ検索キーワードとみなす比較用文字列です。';
 $HELP['searchwordlog_country']['title'] = '国';
 $HELP['searchwordlog_country']['body'] = 'ブラウザの使用言語から判断したユーザの所属国です。';
 $HELP['searchwordlog_browser']['title'] = '種別';
@@ -300,9 +300,9 @@ $HELP['searchwordlog_user']['body'] = 'クッキーからユーザが識別可�
 $HELP['searchwordlog_dt']['title'] = '日時';
 $HELP['searchwordlog_dt']['body'] = 'ログを出力した日時です。';
 $HELP['searchwordlog_edit_btn']['title'] = '編集ボタン';
-$HELP['searchwordlog_edit_btn']['body'] = '選択されている検索語ログの詳細を参照します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['searchwordlog_edit_btn']['body'] = '選択されている検索キーワードログの詳細を参照します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['searchwordlog_ret_btn']['title'] = '戻るボタン';
-$HELP['searchwordlog_ret_btn']['body'] = '検索語ログ一覧へ戻ります。';
+$HELP['searchwordlog_ret_btn']['body'] = '検索キーワードログ一覧へ戻ります。';
 
 // ########## メニューID ##########
 $HELP['menuid']['title'] = 'メニューID';
