@@ -15,6 +15,7 @@
 //<![CDATA[
 function selectMenu(){
 	document.main.act.value = 'selpath';
+	document.main.page.value = 1;
 	document.main.submit();
 	return true;
 }
@@ -44,7 +45,7 @@ function editItemByWord(word){
 	document.main.word.value = word;
 	document.main.submit();
 }
-function selpage(page){
+function selectPage(page){
 	document.main.act.value = 'selpage';
 	document.main.page.value = page;
 	document.main.submit();
@@ -123,11 +124,10 @@ $(function(){
     <thead>
         <tr>
 	    <th class="select"><span {_HELP_SEARCHWORDLOG_CHECK}>選択</span></th>
-	    <th style="width:50px;"><span {_HELP_SEARCHWORDLOG_NO}>番号</span></th>
 	    <th><span {_HELP_SEARCHWORDLOG_WORD}>検索キーワード</span></th>
 	    <th><span {_HELP_SEARCHWORDLOG_COMPARE_WORD}>比較語</span></th>
 	    <th style="width:50px;"><span {_HELP_SEARCHWORDLOG_COUNT}>回数</span></th>
-	    <th style="width:60px;"><span {_HELP_SEARCHWORDLOG_USER}>ユーザ</span></th>
+	    <th style="width:60px;"><span {_HELP_SEARCHWORDLOG_LAST_USER}>ユーザ</span></th>
 	    <th><span {_HELP_SEARCHWORDLOG_LAST_DT}>最終日時</span></th>
 	</tr>
     </thead>
@@ -135,7 +135,6 @@ $(function(){
         <patTemplate:tmpl name="loglist_sum">
         <tr>
             <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{NO}</td>
 	    <td><a href="#" onclick="editItemByWord('{COMPARE_WORD}');">{WORD}</a></td>
 	    <td>{COMPARE_WORD}</td>
 	    <td>{COUNT}</td>

@@ -21,7 +21,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 {
 	private $db;	// DB接続オブジェクト
 	private $serverDb;		// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $serialNo;	// シリアルNo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $clientIp;			// クライアントのIPアドレス
@@ -31,8 +30,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	private $showMessage;		// メッセージ画面かどうか
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
-	private $startNo;			// 先頭の項目番号
-	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 3;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const FLAG_ICON_DIR = '/images/system/flag/';		// 国旗アイコンディレクトリ
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
@@ -149,7 +147,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 			$pathParam = '';
 		}
 		switch ($this->logOrder){
-			case 0:
+			case 0:		// 最新からログを取得
 			default:
 				$this->tmpl->setAttribute('show_last_log', 'visibility', 'visible');// 最新から検索語を表示
 				
@@ -192,8 +190,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 			}
 		}*/
 		// ページングリンク作成
-		$detailUrl = '?task=searchwordlog';
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $detailUrl);
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selectPage($1);return false;');
 		
 		// アクセスパスメニュー、表示順選択メニュー作成
 		$this->createPathMenu();
@@ -244,10 +241,8 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$savedPageNo = $request->trimValueOf('page');				// ページ番号
 		
 		// 表示条件
-//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$viewCount = $request->trimIntValueOf('viewcount', '0');
-		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($maxListCount)) $maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf('page_', '1');				// ページ番号
 		
 		// 総数を取得
@@ -258,15 +253,20 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 			$pathParam = '';
 		}
 		$totalCount = $this->db->getSearchWordLogCountByWord($word, $pathParam);
-				
+
+/*				
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
 		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
-		$this->startNo = $startNo;			// 先頭の項目番号
+		$this->startNo = $startNo;			// 先頭の項目番号*/
 		
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		
+/*
 		// ページング用リンク作成
 		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
@@ -279,10 +279,12 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 				}
 				$pageLink .= $link;
 			}
-		}
-			
+		}*/
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selectPage($1);return false;');
+		
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+//		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "page_", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
 //		$this->tmpl->addVar("search_range", "start_no", $startNo);
@@ -370,16 +372,12 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	 */
 	function logListSumLoop($index, $fetchedRow, $param)
 	{
-		// 先頭の項目番号
-		$no = $this->startNo + $index;
-
 		// 最新の検索語ログを取得
 		$word = $fetchedRow['sw_basic_word'];
 		$ret = $this->db->getSearchWordLogByCompareWord($word, $row);
 		
 		$row = array(
 			'index' => $index,													// 行番号
-			'no' => $no,			// シリアル番号
 			'word' => $this->convertToDispString($row['sw_word']),		// 語句
 			'compare_word' => $this->convertToDispString($word),		// 比較語
 			'count' => $this->convertToDispString($fetchedRow['ct']),		// 検索回数
@@ -462,11 +460,15 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	 */
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
+		// 開発モードのときはすべて表示、開発モードでないときはフロント画面用アクセスポイントのみ取得
+		if (!$this->developMode && !$fetchedRow['pg_frontend']) return true;
+		
 		$selected = '';
 		if ($fetchedRow['pg_path'] == $this->path){
 			$selected = 'selected';
 		}
-		$name = $this->convertToDispString($fetchedRow['pg_path']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
 		$row = array(
 			'value'    => $this->convertToDispString($fetchedRow['pg_path']),			// アクセスパス
 			'name'     => $name,			// ページ名
