@@ -303,7 +303,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$this->tmpl->addVar("_widget", "access_log_url", $accessLogUrl);
 		
 		// 運用ログを取得
-		$this->db->getSearchWordLogListByWord($word, $viewCount, $pageNo, $pathParam, array($this, 'logListLoop'));
+		$this->db->getSearchWordLogListByWord($word, $maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'));
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
 	/**
