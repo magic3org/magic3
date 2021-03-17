@@ -108,7 +108,7 @@ $(function(){
         <patTemplate:tmpl name="loglist">
         <tr>
             <td><input type="checkbox" name="item{INDEX}_selected" disabled /></td>
-	    <td>{WORD}</td>
+	    <td><div class="form-control-static">{WORD}</div></td>
 	    <td>{BROWSER}</td>
 	    <td>{COUNTRY}</td>
 	    <td><a href="#" onclick="showAccessLog({ACCESS_LOG});">{ACCESS_LOG}</a></td>
@@ -135,7 +135,7 @@ $(function(){
         <patTemplate:tmpl name="loglist_sum">
         <tr>
             <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemByWord('{COMPARE_WORD}');">{WORD}</a></td>
+	    <td><div class="form-control-static"><a href="#" onclick="editItemByWord('{COMPARE_WORD}');">{WORD}</a></div></td>
 	    <td>{COMPARE_WORD}</td>
 	    <td>{COUNT}</td>
 	    <td>{USER}</td>
