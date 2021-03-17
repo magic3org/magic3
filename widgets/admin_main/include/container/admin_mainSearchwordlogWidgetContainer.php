@@ -30,7 +30,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	private $showMessage;		// メッセージ画面かどうか
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
-	const DEFAULT_LIST_COUNT = 3;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const FLAG_ICON_DIR = '/images/system/flag/';		// 国旗アイコンディレクトリ
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
