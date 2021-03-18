@@ -62,6 +62,7 @@ define('M3_SYSTEM_VERSION',			'3.8.0');		// システムのバージョン
 define('M3_SYSTEM_RELEASE_DATE',	'2021/3/16');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
+define('M3_SYSTEM_OFFICIAL_SITE',	'http://magic3.org');	// Magic3公式サイトURL
 define('M3_SYSTEM_MIN_MEMORY',		'16M');			// 最小メモリ使用量
 define('M3_SYSTEM_DIR_PERMISSION',	0755);				// ディレクトリアクセス権
 define('M3_SYSTEM_FILE_PERMISSION',	0644);				// ファイルアクセス権

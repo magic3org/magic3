@@ -51,8 +51,8 @@ class custom_footerWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$footContent = '';	// フッタコンテンツ
-		$footContent .= '<div align="center">(C) ' . date("Y") . ' Magic3.org.</div>' . M3_NL;
-		$footContent .= '<div align="center"><a href="http://magic3.org">Magic3 ' . M3_SYSTEM_VERSION . '</a> is licensed under the terms of the GNU General Public License.</div>' . M3_NL;
+		$footContent .= '<div style="text-align:center;">(C) ' . date("Y") . ' Magic3.org.</div>' . M3_NL;
+		$footContent .= '<div style="text-align:center;"><a href="' . M3_SYSTEM_OFFICIAL_SITE . '">Magic3 v' . M3_SYSTEM_VERSION . '</a> is licensed under the terms of the GNU General Public License.</div>' . M3_NL;
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
 			$footContent	= $paramObj->footContent;			// フッタコンテンツ
