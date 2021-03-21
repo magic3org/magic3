@@ -17,25 +17,17 @@ class ScriptLibInfo
 {
 	private static $libs;						// ライブラリ情報
 	private static $jQueryMinVer = '1.12';		// システムで利用できるjQueryの最小のバージョン。バージョン回復時に使用。
-//	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVer = '1.12';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(
-											'1.9'	=> 'jquery-1.9.1.min.js',
-											//'1.10'	=> 'jquery-1.10.2.min.js',
-											//'1.11'	=> 'jquery-1.11.3.min.js',
 											'1.12'	=> 'jquery-1.12.4.min.js',
-											//'2.0'	=> 'jquery-2.0.3.min.js',
-											//'2.1'	=> 'jquery-2.1.4.min.js',
 											'2.2'	=> 'jquery-2.2.4.min.js',
-											//'3.1'	=> 'jquery-3.1.0.min.js'
 											'3.5'	=> 'jquery-3.5.1.min.js'
 										);
 	private static $wysiwygEditorType = 'ckeditor';		// WYSIWYGエディタータイプ
 	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = 'elfinder150';		// 選択中のelFinder、「elfinder150」が設定可能。
-	const SELECTED_LIB_ELFINDER = 'elfinder153';		// 選択中のelFinder、「elfinder150」が設定可能。
+	const SELECTED_LIB_ELFINDER = 'elfinder153';		// 選択中のelFinder、「elfinder153」が設定可能。
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -47,7 +39,6 @@ class ScriptLibInfo
 	const LIB_WYSIWYG_EDITOR		= 'wysiwyg_editor';			// LIB_CKEDITOR
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
-	const LIB_ELFINDER150			= 'elfinder150';			// v2.1.50
 	const LIB_ELFINDER153			= 'elfinder153';			// v2.1.53
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
@@ -251,15 +242,6 @@ class ScriptLibInfo
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
 	const CKEDITOR4141_FILENAME		= 'ckeditor4.14.1/ckeditor.js';				// CKEditor(最新スマートフォン対応)
-	
-	// elFinder v2.1.50版
-	const ELFINDER150_VER			= '2.1.50';									// elFinderバージョン
-//	const ELFINDER150_FILENAME		= 'elfinder-2.1.50/js/elfinder.full.js';		// elFinder
-	const ELFINDER150_FILENAME		= 'elfinder-2.1.50/js/elfinder.min.js';		// elFinder
-	const ELFINDER150_LANG_FILENAME	= 'elfinder-2.1.50/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER150_CSS			= 'elfinder-2.1.50/css/elfinder.full.css';		// elFinder CSS
-//	const ELFINDER150_CSS			= 'elfinder-2.1.50/css/elfinder.min.css';		// elFinder CSS
-	const ELFINDER150_OPTION_CSS	= 'elfinder-2.1.50/css/theme.css';				// elFinder CSS
 	
 	// elFinder v2.1.53版
 	const ELFINDER153_VER			= '2.1.53';									// elFinderバージョン
@@ -561,12 +543,7 @@ class ScriptLibInfo
 																	
 			// ##### ライブラリ情報更新 ####
 			// elFinderの選択状態に応じてライブラリを入れ替え
-			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER150){
-				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER150_FILENAME, self::ELFINDER150_LANG_FILENAME),		// elFinder v2.1.50
-															'css'		=> array(self::ELFINDER150_CSS, self::ELFINDER150_OPTION_CSS),	// テーマは最初に読み込む
-															'version'	=> self::ELFINDER150_VER					// elFinderバージョン
-														);
-			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER153){
+			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER153){
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER153_FILENAME, self::ELFINDER153_LANG_FILENAME),		// elFinder v2.1.53
 															'css'		=> array(self::ELFINDER153_CSS, self::ELFINDER153_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER153_VER					// elFinderバージョン
