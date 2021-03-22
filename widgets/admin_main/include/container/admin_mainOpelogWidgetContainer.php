@@ -150,7 +150,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_type'] = $this->_('Type');			// 種別
 			$localeText['label_message'] = $this->_('Message');			// メッセージ
-			$localeText['label_access_log'] = $this->_('Log No');			// ログ番号
+			$localeText['label_access_log'] = $this->_('Access Log');			// アクセスログ
 			$localeText['label_check'] = $this->_('Check');			// 確認
 			$localeText['label_date'] = $this->_('Date');			// 日時
 			$localeText['label_range'] = $this->_('Range:');		// 範囲：
