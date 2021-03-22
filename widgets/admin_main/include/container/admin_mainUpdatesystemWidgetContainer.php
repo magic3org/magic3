@@ -41,6 +41,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	const INSTALL_INFO_CLASS = 'InstallInfo';			// インストール情報クラス
 	const CF_TEST_MODE = 'test_mode';	// テストモード
 	const MAX_ERR_FILE_COUNT = 10;		// エラーファイルの最大検出数
+	const MAX_SERVER_LOAD_AVERAGE = 30;		// サーバの最大付加状況(%)
 	
 	/**
 	 * コンストラクタ
@@ -423,6 +424,13 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			}
 		} else {
 			// ########## 画面表示用 ##########
+			// サーバの負荷状況をチェック
+			$avg = $this->_checkServerLoadAverage();
+			if ($avg > 0){
+				$msg = '現在サーバ負荷が大きい状態(' . $avg . '%)です。システムのアップデートはサーバ負荷の少ない状態の時に実行してください。';
+				$this->setAppErrorMsg($msg);
+			}
+			
 			// スクリプト用の設定
 			$resumeStep = '10';	// 再開ステップ
 			
@@ -732,6 +740,25 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 		} else {		// オープン失敗のとき
 			return false;
 		}
+	}
+	/**
+	 * サーバの負荷状況をチェック
+	 *
+	 * @return int					負荷状況を%で返す。0の場合は問題なし。
+	 */
+	function _checkServerLoadAverage()
+	{
+		$load = sys_getloadavg();
+		$coreCount = shell_exec('nproc');	// プロセッサ数取得
+		
+		for ($i = 0; $i < 3; $i++){
+			$avg = $load[$i] / $coreCount * 100;
+			
+			// 最大負荷よりも大きい場合は負荷値を返す
+			if ($avg > self::MAX_SERVER_LOAD_AVERAGE) return $avg;
+		}
+		
+		return 0;
 	}
 }
 ?>
