@@ -334,9 +334,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$html = $request->valueOf('item_html');		// HTMLタグを可能とする
 		$desc = $request->trimValueOf('item_desc');		// 簡易説明
 		$key = $request->trimValueOf('item_key');		// 外部参照用キー
-		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
+		//$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
+		$visible = $request->trimValueOf('item_visible');	// 公開状態
 		$limited = ($request->trimValueOf('item_limited') == 'on') ? 1 : 0;		// チェックボックス
-//		$default = ($request->trimValueOf('item_default') == 'on') ? 1 : 0;		// チェックボックス
 		$searchTarget = $request->trimCheckedValueOf('item_search_target');		// 検索対象かどうか
 		$metaTitle = $request->trimValueOf('item_meta_title');		// ページタイトル名
 		$metaDesc = $request->trimValueOf('item_meta_desc');			// ページ要約
@@ -852,7 +852,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			
 				// 項目表示、デフォルト値チェックボックス
 				$visible = $row['cn_visible'];
-				$default = '0';			// 未使用(デフォルトかどうか)
 				$limited = $row['cn_user_limited'];		// ユーザ制限
 				$searchTarget = $row['cn_search_target'];		// 検索対象かどうか
 				$metaTitle = $row['cn_meta_title'];		// ページタイトル名(METAタグ)
@@ -912,7 +911,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			
 				// 項目表示、デフォルト値チェックボックス
 				$visible = '1';
-				$default = '0';		// 未使用(デフォルトかどうか)
 				$limited = '0';		// ユーザ制限
 				$searchTarget = '1';		// 検索対象かどうか
 				$metaTitle = '';		// ページタイトル名(METAタグ)
@@ -1053,17 +1051,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar('_widget', 'access_url', $this->convertToDispString($accessUrl));		// アクセスキー取得用URL
 				
 		// 項目表示、項目利用可否チェックボックス
-/*		$visibleStr = '';
-		if ($visible) $visibleStr = 'checked';
-		$this->tmpl->addVar("_widget", "sel_item_visible", $visibleStr);
-//		$defaultStr = '';
-//		if ($default) $defaultStr = 'checked';
-//		$this->tmpl->addVar("_widget", "sel_item_default", $defaultStr);
-		$limitedStr = '';
-		if ($limited) $limitedStr = 'checked';
-		$this->tmpl->addVar("_widget", "sel_item_limited", $limitedStr);
-*/
-		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));		// コンテンツ公開
+		//$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));		// コンテンツ公開
+		if (empty($visible)){		// コンテンツ公開
+			$this->tmpl->addVar('_widget', 'unvisible_checked', 'checked');		// 非公開
+		} else {
+			$this->tmpl->addVar('_widget', 'visible_checked', 'checked');		// 公開
+		}
 		$this->tmpl->addVar("_widget", "sel_item_limited", $this->convertToCheckedString($limited));		// ユーザ制限
 		$this->tmpl->addVar("_widget", "search_target_checked", $this->convertToCheckedString($searchTarget));		// 検索対象かどうか
 	

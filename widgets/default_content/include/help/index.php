@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,7 +30,7 @@ $HELP['content_name']['title'] = '名前';
 $HELP['content_name']['body'] = 'コンテンツの名前です。コンテンツのタイトルとして表示されます。';
 $HELP['content_lang']['title'] = '言語';
 $HELP['content_lang']['body'] = 'コンテンツの対応言語です。';
-$HELP['content_visible']['title'] = '公開';
+$HELP['content_visible']['title'] = '公開状態';
 $HELP['content_visible']['body'] = 'コンテンツをユーザに公開するかどうかを制御します。非公開に設定の場合はユーザから参照することはできません。';
 $HELP['content_status']['title'] = '閲覧状態';
 $HELP['content_status']['body'] = 'コンテンツの現在の閲覧状態を示します。';
