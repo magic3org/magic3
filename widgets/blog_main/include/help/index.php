@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,8 +34,8 @@ $HELP['entry_id']['title'] = 'ID';
 $HELP['entry_id']['body'] = 'ブログ記事に自動的に振られるIDです。';
 $HELP['entry_status']['title'] = '閲覧状態';
 $HELP['entry_status']['body'] = 'ブログ記事の現在の閲覧状態を示します。';
-$HELP['entry_visible_status']['title'] = '公開';
-$HELP['entry_visible_status']['body'] = 'ブログ記事の状態を示します。「公開」はユーザから閲覧できる状態です。「非公開」はユーザから閲覧できない状態です。「編集中」は記事が編集中でユーザから閲覧できない状態です。';
+$HELP['entry_visible_status']['title'] = '公開状態';
+$HELP['entry_visible_status']['body'] = 'ブログ記事の状態を示します。「公開する」はユーザから閲覧できる状態です。「公開しない」はユーザから閲覧できない状態です。「編集中」は記事が編集中でユーザから閲覧できない状態です。';
 $HELP['entry_category']['title'] = 'カテゴリー';
 $HELP['entry_category']['body'] = 'ブログ記事の分類カテゴリーです。';
 $HELP['entry_user']['title'] = '投稿者';

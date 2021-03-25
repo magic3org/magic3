@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -239,13 +239,13 @@ $(function(){
     <tr>
 	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
-	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
+	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開状態</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
 	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
 	    <select id="item_status" name="item_status" class="form-control">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
-		<option value="2" {SELECTED_PUBLIC}>公開</option>
-		<option value="3" {SELECTED_CLOSED}>非公開</option>
+		<option value="2" {SELECTED_PUBLIC}>公開する</option>
+		<option value="3" {SELECTED_CLOSED}>公開しない</option>
 	    </select>
 		</div>
 	    </td>
