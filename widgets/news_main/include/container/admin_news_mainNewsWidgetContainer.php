@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -171,9 +171,8 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		// ###### 一覧の取得条件を作成 ######
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
-		
+
 		// 総数を取得
-		//$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
 		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
 		// ページング計算
@@ -184,7 +183,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// コメントリストを取得
-		//self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
 

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -78,7 +78,10 @@ class news_mainDb extends BaseDb
 		$params = array();
 		$queryStr = 'SELECT * FROM news ';
 		$queryStr .=  'WHERE nw_deleted = false ';		// 削除されていない
-		if (!empty($contentType)) $queryStr .=    'AND nw_type = ? ';$params[] = $contentType;
+		if (!empty($contentType)){
+			$queryStr .=    'AND nw_type = ? ';
+			$params[] = $contentType;
+		}
 
 		// タイトル、本文、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
@@ -108,7 +111,10 @@ class news_mainDb extends BaseDb
 		$params = array();
 		$queryStr = 'SELECT * FROM news ';
 		$queryStr .=  'WHERE nw_deleted = false ';		// 削除されていない
-		if (!empty($contentType)) $queryStr .=    'AND nw_type = ? ';$params[] = $contentType;
+		if (!empty($contentType)){
+			$queryStr .=    'AND nw_type = ? ';
+			$params[] = $contentType;
+		}
 
 		// タイトル、本文、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
