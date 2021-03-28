@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -77,7 +77,7 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr onclick="showPreview('{URL}', '{WIDTH}', '{HEIGHT}');">
         <td><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>
-	    <td>{NAME}</td>
+	    <td><div class="form-control-static">{NAME}</div></td>
 	    <td>{IMAGE_ITEM}<!--<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div>--></td>
 	    <td>{DEF_COUNT}</td>
 	</tr>
