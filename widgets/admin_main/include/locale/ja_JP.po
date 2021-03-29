@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-13 12:45+0900\n"
-"PO-Revision-Date: 2020-10-13 12:46+0900\n"
+"POT-Creation-Date: 2021-03-29 11:17+0900\n"
+"PO-Revision-Date: 2021-03-29 11:18+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-SearchPath-0: ../container\n"
 "X-Poedit-SearchPath-1: ../help\n"
 
@@ -372,7 +372,7 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:182
-#: ../container/admin_mainWidgetContainer.php:475
+#: ../container/admin_mainWidgetContainer.php:476
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -670,6 +670,7 @@ msgstr "運用ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:102
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:94
+#: ../container/admin_mainOpelogWidgetContainer.php:153
 msgid "Access Log"
 msgstr "アクセスログ"
 
@@ -903,27 +904,27 @@ msgstr ""
 "アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
 "サイズを超えている可能性があります。 %sバイト)"
 
-#: ../container/admin_mainInstalldataWidgetContainer.php:333
+#: ../container/admin_mainInstalldataWidgetContainer.php:336
 #, php-format
 msgid "Database updated. Database Version: %s"
 msgstr "DB更新処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: ../container/admin_mainInstalldataWidgetContainer.php:342
+#: ../container/admin_mainInstalldataWidgetContainer.php:345
 msgid "Failed in updating database"
 msgstr "DB更新に失敗しました"
 
-#: ../container/admin_mainInstalldataWidgetContainer.php:343
+#: ../container/admin_mainInstalldataWidgetContainer.php:346
 msgid "Script filename"
 msgstr "スクリプト名"
 
-#: ../container/admin_mainInstalldataWidgetContainer.php:393
-#: ../container/admin_mainUpdatesystemWidgetContainer.php:456
+#: ../container/admin_mainInstalldataWidgetContainer.php:396
+#: ../container/admin_mainUpdatesystemWidgetContainer.php:613
 #, php-format
 msgid "Database updated. Database Version: from %s to %s"
 msgstr "DBをバージョンアップしました。 DBバージョン: %sから%s"
 
-#: ../container/admin_mainInstalldataWidgetContainer.php:401
-#: ../container/admin_mainUpdatesystemWidgetContainer.php:464
+#: ../container/admin_mainInstalldataWidgetContainer.php:404
+#: ../container/admin_mainUpdatesystemWidgetContainer.php:621
 #, php-format
 msgid "Bad script file found in files for update. Filename: %s"
 msgstr ""
@@ -933,7 +934,7 @@ msgstr ""
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:35
 #: ../container/admin_mainUserlistWidgetContainer.php:152
 #: ../container/admin_mainUserlistWidgetContainer.php:182
-#: ../container/admin_mainWidgetContainer.php:470
+#: ../container/admin_mainWidgetContainer.php:471
 msgid "Login"
 msgstr "ログイン"
 
@@ -945,7 +946,7 @@ msgstr "エラー"
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
 #: ../container/admin_mainUserlistWidgetContainer.php:135
-#: ../container/admin_mainWidgetContainer.php:376
+#: ../container/admin_mainWidgetContainer.php:377
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
@@ -1342,10 +1343,6 @@ msgstr "レベル："
 msgid "Status:"
 msgstr "ステータス："
 
-#: ../container/admin_mainOpelogWidgetContainer.php:153
-msgid "Log No"
-msgstr "ログ番号"
-
 #: ../container/admin_mainPagedefWidgetContainer.php:145
 msgid "Show Detail"
 msgstr "詳細"
@@ -1571,9 +1568,9 @@ msgid "Save"
 msgstr "保存"
 
 #: ../container/admin_mainTempgeneratecssWidgetContainer.php:299
-#: ../container/admin_mainTemplistWidgetContainer.php:739
-#: ../container/admin_mainTemplistWidgetContainer.php:861
-#: ../container/admin_mainTemplistWidgetContainer.php:886
+#: ../container/admin_mainTemplistWidgetContainer.php:744
+#: ../container/admin_mainTemplistWidgetContainer.php:866
+#: ../container/admin_mainTemplistWidgetContainer.php:891
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
@@ -1840,20 +1837,20 @@ msgid "Template not found."
 msgstr "テンプレートが見つかりません"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:627
-#: ../container/admin_mainTemplistWidgetContainer.php:638
+#: ../container/admin_mainTemplistWidgetContainer.php:640
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:651
+#: ../container/admin_mainTemplistWidgetContainer.php:656
 msgid ".zip Download"
 msgstr ".zip ダウンロード"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:727
+#: ../container/admin_mainTemplistWidgetContainer.php:732
 msgid "Upload file is not the correct template format."
 msgstr ""
 "アップロードしたファイルは正しいテンプレートフォーマットではありません。"
 
-#: ../container/admin_mainUpdatesystemWidgetContainer.php:308
+#: ../container/admin_mainUpdatesystemWidgetContainer.php:413
 #, php-format
 msgid "System updated. System Version: from %s to %s"
 msgstr "システムをバージョンアップしました。 システムバージョン: %sから%s"
@@ -1919,12 +1916,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:152
-#: ../container/admin_mainWidgetContainer.php:472
+#: ../container/admin_mainWidgetContainer.php:473
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:473 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:474 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1949,7 +1946,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:350
 #: ../container/admin_mainUserlistWidgetContainer.php:391
 #: ../container/admin_mainUserlistWidgetContainer.php:467
-#: ../container/admin_mainWidgetContainer.php:474 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:475 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -2023,23 +2020,23 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:383
+#: ../container/admin_mainWidgetContainer.php:384
 msgid "You need to have permissions to access this page."
 msgstr "この画面を表示するにはアクセス権が必要です。"
 
-#: ../container/admin_mainWidgetContainer.php:391
+#: ../container/admin_mainWidgetContainer.php:392
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:396
+#: ../container/admin_mainWidgetContainer.php:397
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:450
+#: ../container/admin_mainWidgetContainer.php:451
 msgid "Correct administration url is this:"
 msgstr "管理画面の正しいURLはこちらです："
 
-#: ../container/admin_mainWidgetContainer.php:471
+#: ../container/admin_mainWidgetContainer.php:472
 msgid "Send Password"
 msgstr "パスワード送信"
 
@@ -2578,6 +2575,15 @@ msgstr ""
 msgid "Go back to menu item list."
 msgstr "メニュー項目一覧へ戻ります。"
 
+#: ../help/help_menudef.php:107
+msgid "Get Title Button"
+msgstr "タイトル取得ボタン"
+
+#: ../help/help_menudef.php:108
+msgid "If item type is link, get the content title by the URL."
+msgstr ""
+"項目タイプがリンクの場合、リンク先URLのコンテンツのタイトルを取得します。"
+
 #: ../help/help_pagedef.php:32
 msgid ""
 "Page is identified by page id. Page id is added to url as parameter. "
@@ -3044,6 +3050,9 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Log No"
+#~ msgstr "ログ番号"
 
 #~ msgid "Mobile Page"
 #~ msgstr "携帯用画面編集"

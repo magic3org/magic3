@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -102,6 +102,10 @@ class help_menudef extends HelpConv
 			'menudef_ret_btn' => array(	
 				'title' =>	$this->_('Go back Button'),			// 戻るボタン
 				'body' =>	$this->_('Go back to menu item list.')		// メニュー項目一覧へ戻ります。
+			),
+			'menudef_get_title_btn' => array(	
+				'title' =>	$this->_('Get Title Button'),			// タイトル取得ボタン
+				'body' =>	$this->_('If item type is link, get the content title by the URL.')		// 項目タイプがリンクの場合、リンク先URLのコンテンツのタイトルを取得します。
 			),
 		);
 		return $helpData;
