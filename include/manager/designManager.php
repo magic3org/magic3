@@ -664,7 +664,8 @@ class DesignManager extends _Core
 		$menuTag = '';
 		$baseUrl = $navbarDef->baseurl;
 		$menu = $navbarDef->menu;
-		$menuItemCount = count($menu);
+		//$menuItemCount = count($menu);
+		$menuItemCount = empty($menu) ? 0 : count($menu);
 		for ($i = 0; $i < $menuItemCount; $i++){
 			$menuItem = $menu[$i];
 			$name	= $menuItem->name;
