@@ -79,12 +79,12 @@ $(function(){
 <table id="config_table">
     <thead>
     <tr>
-	    <th class="select"><span {_HELP_OPELOG_CHECK}>{_LC_LABEL_SELECT}</span></th>
+	    <th class="select"><span {_HELP_OPELOG_CHECK}>{_LC_LABEL_CHECK}</span></th>
 	    <th style="width:50px;"><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></th>
 	    <th style="width:350px;"><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></th>
 	    <th style="width:100px;"><span {_HELP_OPELOG_IP}>IP</span></th>
 	    <th style="width:100px;"><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG}</span></th>
-	    <th style="width:50px;"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <!--<th style="width:50px;"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></th>-->
 	    <th style="width:100px;"><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></th>
 	</tr>
     </thead>
@@ -96,7 +96,7 @@ $(function(){
 	    <td class="linebreak"><a href="{URL}">{MESSAGE}</a></td>
 	    <td>{IP}</td>
 	    <td><a href="#" onclick="showAccessLog({ACCESS_LOG});">{ACCESS_LOG}</a></td>
-	    <td><input type="checkbox" name="item{NO}_msgchecked" {MSG_CHECKED} disabled /></td>
+	    <!--<td><input type="checkbox" name="item{NO}_msgchecked" {MSG_CHECKED} disabled /></td>-->
 	    <td>{OUTPUT_DT}</td>
 	</tr>
 	</patTemplate:tmpl>

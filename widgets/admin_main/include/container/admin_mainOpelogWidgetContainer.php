@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -151,7 +151,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			$localeText['label_type'] = $this->_('Type');			// 種別
 			$localeText['label_message'] = $this->_('Message');			// メッセージ
 			$localeText['label_access_log'] = $this->_('Access Log');			// アクセスログ
-			$localeText['label_check'] = $this->_('Check');			// 確認
+			//$localeText['label_check'] = $this->_('Check');			// 確認
 			$localeText['label_date'] = $this->_('Date');			// 日時
 			$localeText['label_range'] = $this->_('Range:');		// 範囲：
 		}
@@ -384,10 +384,10 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		$serial = $fetchedRow['ol_serial'];
 		$agent = $fetchedRow['al_user_agent'];
 				
-		$msgChecked = '';
+/*		$msgChecked = '';
 		if ($fetchedRow['ol_checked']){
 			$msgChecked = 'checked';
-		}
+		}*/
 		// メッセージレベルの設定
 		$iconUrl = '';
 		switch ($fetchedRow['ot_level']){
@@ -453,7 +453,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			'access_log' => $accessLog,		// アクセスログ番号
 			'browser' => $browserImg,		// ブラウザ
 			'output_dt' => $this->convertToDispDateTime($fetchedRow['ol_dt']),	// 出力日時
-			'msg_checked' => $msgChecked,										// メッセージを確認したかどうか
+//			'msg_checked' => $msgChecked,										// メッセージを確認したかどうか
 			'selected' => $selected												// 項目選択用ラジオボタン
 		);
 		$this->tmpl->addVars('loglist', $row);
