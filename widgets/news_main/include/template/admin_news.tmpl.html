@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -156,15 +156,15 @@ $(function(){
         <th class="select"><span {_HELP_NEWS_CHECK}>選択</span></th>
 		<th style="width:50px;"><span {_HELP_NEWS_NO}>No</span></th>
         <th style="width:200px;"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
-		<th class="status"><span {_HELP_NEWS_LINK_STATUS}>リンク先<br />の状態</span></th>
+		<th class="status"><span {_HELP_NEWS_LINK_STATUS}>リンク先</span></th>
 	    <th style="width:80px;"><span {_HELP_NEWS_DT}>登録日時</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td><div class="col-sm-6"><input type="checkbox" name="item{INDEX}_selected" /></div><div class="pull-right">{DISP_STATUS}</div></td>
-		<td><div class="form-control-static">{NO}</div></td>
+	    <td class="select"><!--<div class="col-sm-6">--><input type="checkbox" name="item{INDEX}_selected" /><!--</div>--></td>
+		<td><div class="form-control-static m3config_item col-sm-4">{NO}</div><div class="pull-right" style="margin-top:4px;">{DISP_STATUS}</div></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{MESSAGE}</a></td>
 		<td class="status">{STATUS_IMG}</td>
 	    <td>{DATE}</td>

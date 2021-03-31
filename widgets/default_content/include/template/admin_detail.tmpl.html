@@ -212,12 +212,13 @@ function createUploader(){
 	});
 }
 function setStatusColor(){
-	//var status = $('#item_status').is(':checked');
 	var status = $('input[name="item_visible"]:checked').val();
 	if (status == '1'){		// 公開状態のとき
-		$('#status_field').removeClass('warning').addClass('success');
+		//$('#status_field').removeClass('warning').addClass('success');
+		$('#status_field').addClass('success');
 	} else {
-		$('#status_field').removeClass('success').addClass('warning');
+		//$('#status_field').removeClass('success').addClass('warning');
+		$('#status_field').removeClass('success');
 	}
 }
 // 作成リンク取得用

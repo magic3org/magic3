@@ -143,9 +143,11 @@ function editEntry(serial){
 function setStatusColor(){
 	var status = $('#item_status').val();
 	if (status == 2){		// 公開状態のとき
-		$('#status_field').removeClass('warning').addClass('success');
+		//$('#status_field').removeClass('warning').addClass('success');
+		$('#status_field').addClass('success');
 	} else {
-		$('#status_field').removeClass('success').addClass('warning');
+		//$('#status_field').removeClass('success').addClass('warning');
+		$('#status_field').removeClass('success');
 	}
 }
 $(function(){
@@ -240,7 +242,7 @@ $(function(){
 	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
 	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開状態</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
-	    <td id="status_field" colspan="3" class="warning">
+	    <td id="status_field" colspan="3">
 		<div class="col-sm-6 m3config_item">
 	    <select id="item_status" name="item_status" class="form-control">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
