@@ -223,7 +223,8 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$time = $request->trimValueOf('item_time');		// 投稿時間
 		$message = $request->valueOf('item_message');		// メッセージ
 		$url = $request->valueOf('item_url');
-		$visible = $request->trimCheckedValueOf('item_visible');		// 表示状態(0=非表示、1=表示)
+		//$visible = $request->trimCheckedValueOf('item_visible');		// 表示状態(0=非表示、1=表示)
+		$visible = $request->trimValueOf('item_visible');	// 公開状態
 		$mark = 0;
 		$contentTitleDisabled = '';
 		
@@ -360,7 +361,14 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
 		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
-		$this->tmpl->addVar("_widget", "visible_checked", $this->convertToCheckedString($visible));	// 表示
+		//$this->tmpl->addVar("_widget", "visible_checked", $this->convertToCheckedString($visible));	// 表示
+		
+		// 項目表示、項目利用可否チェックボックス
+		if (empty($visible)){		// 公開状態
+			$this->tmpl->addVar('_widget', 'unvisible_checked', 'checked');		// 非公開
+		} else {
+			$this->tmpl->addVar('_widget', 'visible_checked', 'checked');		// 公開
+		}
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

@@ -24,8 +24,10 @@ $HELP['news']['title'] = '新着情報一覧';
 $HELP['news']['body'] = '新着情報の一覧です。';
 $HELP['news_check']['title'] = '選択用チェックボックス';
 $HELP['news_check']['body'] = '編集や削除を行う項目を選択します。赤のアイコンの項目は「表示」に設定されていない項目です。';
+$HELP['news_message']['title'] = 'メッセージ';
+$HELP['news_message']['body'] = 'メッセージの内容です。任意に文字列を設定できます。<br />[#TITLE#]部はリンク付きのコンテンツタイトルに変換されます。';
 $HELP['news_link_status']['title'] = 'リンク先の状態';
 $HELP['news_link_status']['body'] = 'リンク先のコンテンツの状態を示します。';
-$HELP['news_visible']['title'] = '表示';
-$HELP['news_visible']['body'] = 'メッセージの表示、非表示制御を行います。';
+$HELP['news_visible']['title'] = '公開状態';
+$HELP['news_visible']['body'] = 'メッセージを公開するかどうかを制御します。';
 ?>
