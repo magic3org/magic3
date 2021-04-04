@@ -200,6 +200,10 @@ $HELP['accesspoint_edit_btn']['body'] = '選択されているアクセスポイ
 $HELP['accesspoint_ret_btn']['title'] = '戻るボタン';
 $HELP['accesspoint_ret_btn']['body'] = 'アクセスポイント一覧へ戻ります。';
 
+// ########## ログイン履歴 ##########
+$HELP['loginhistory_browser']['title'] = 'ブラウザ種別';
+$HELP['loginhistory_browser']['body'] = 'USER_AGENTから判断したWebブラウザ、クローラ等の種別です。';
+
 // ########## 運用ログ ##########
 $HELP['opelog_list']['title'] = '運用ログ一覧';
 $HELP['opelog_list']['body'] = '運用ログ一覧です。最新のメッセージから順にシステム運用状況のログを表示します。';

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,6 +19,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 {
 	private $loginStatusArray;		// ログイン状況選択用
 	private $loginStatus;	// ログイン状況
+	private $serialArray = array();
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const MAX_PAGE_COUNT = 20;				// 最大ページ数
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
