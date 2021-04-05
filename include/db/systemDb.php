@@ -2020,6 +2020,19 @@ class SystemDb extends BaseDb
 		return $this->isRecordExists($queryStr, array($account));
 	}
 	/**
+	 * ユーザ名が存在するかチェック
+	 *
+	 * @param string $name	ユーザ名
+	 * @return				true=存在する、false=存在しない
+	 */
+	function isExistsUserName($name)
+	{
+		$queryStr  = 'SELECT * FROM _login_user ';
+		$queryStr .= 'WHERE lu_name = ? ';
+		$queryStr .=   'AND lu_deleted = false';
+		return $this->isRecordExists($queryStr, array($name));
+	}
+	/**
 	 * ログインユーザ情報取得をIDで取得
 	 *
 	 * @param int	$id						ユーザID

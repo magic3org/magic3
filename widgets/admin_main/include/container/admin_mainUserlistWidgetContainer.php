@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -344,14 +344,19 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'update'){		// 行更新のとき
 			// ##### パーソナルモードの場合とパーソナルモードでない場合の処理を分ける #####
 			if ($this->gPage->isPersonalMode()){		// パーソナルモードの場合
-				// ### アカウントの変更は不可 ##
+				// ### アカウントの変更は不可 ###
 				// 入力チェック
 				$this->checkInput($name, $this->_('Name'));		// 名前
 				$this->checkMailAddress($email, $this->_('Email'), true);		// Eメール
 		
+				// ユーザ名重複チェック
 				// ユーザ情報を取得
 				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
-				if (!$ret) $this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+				if ($ret){
+					if ($row['lu_name'] != $name && $this->_db->isExistsUserName($name)) $this->setMsg(self::MSG_USER_ERR, $this->_('User name is duplicated.'));	// ユーザ名が重複しています
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
+				}
 				
 				// エラーなしの場合は、データを更新
 				if ($this->getMsgCount() == 0){
@@ -395,10 +400,11 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid active term.'));	// 有効期間が不正です
 				}
 		
-				// アカウント重複チェック
+				// ユーザ名、アカウント重複チェック
 				// ユーザ情報を取得
 				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 				if ($ret){
+					if ($row['lu_name'] != $name && $this->_db->isExistsUserName($name)) $this->setMsg(self::MSG_USER_ERR, $this->_('User name is duplicated.'));	// ユーザ名が重複しています
 					if ($row['lu_account'] != $account && $this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, $this->_('Login account is duplicated.'));		// アカウントが重複しています
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in getting data.'));			// データ取得に失敗しました
@@ -472,9 +478,12 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid active term.'));		// 有効期間が不正です
 			}
 			
+			// ユーザ名重複チェック
+			if ($this->_db->isExistsUserName($name)) $this->setMsg(self::MSG_USER_ERR, $this->_('User name is duplicated.'));	// ユーザ名が重複しています
+			
 			// アカウント重複チェック
 			if ($this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, $this->_('Login account is duplicated.'));	// アカウントが重複しています
-						
+			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// システム管理者は常にログイン可能

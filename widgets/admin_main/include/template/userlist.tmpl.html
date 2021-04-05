@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -96,7 +96,7 @@ $(function(){
 <table id="userlist">
     <thead>
     <tr>
-	    <th style="width:50px;"><span {_HELP_USERLIST_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <th class="select"><span {_HELP_USERLIST_CHECK}>{_LC_LABEL_CHECK}</span></th>
 	    <th><span {_HELP_USERLIST_ACCOUNT}>{_LC_LABEL_ACCOUNT}</span></th>
 	    <th><span {_HELP_USERLIST_NAME}>{_LC_LABEL_NAME}</span></th>
 	    <th><span {_HELP_USERLIST_EMAIL}>{_LC_LABEL_EMAIL}</span></th>
@@ -107,12 +107,12 @@ $(function(){
     <tbody>
     <patTemplate:tmpl name="userlist">
     <tr>
-        <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="return editItemBySerial({SERIAL});">{ACCOUNT}</a></td>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><div class="form-control-static m3config_item"><a href="#" onclick="return editItemBySerial({SERIAL});">{ACCOUNT}</a></div></td>
 	    <td>{NAME}</td>
 	    <td>{EMAIL}</td>
 	    <td>{USER_TYPE}</td>
-	    <td align="center">{LOGIN_PERMISSION}&nbsp;(<a href="{LOGIN_STATUS_URL}">{LOGIN_COUNT}</a>)</td>
+	    <td>{LOGIN_PERMISSION}&nbsp;(<a href="{LOGIN_STATUS_URL}">{LOGIN_COUNT}</a>)</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
