@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-29 11:17+0900\n"
-"PO-Revision-Date: 2021-03-29 11:18+0900\n"
+"POT-Creation-Date: 2021-04-06 08:24+0900\n"
+"PO-Revision-Date: 2021-04-06 08:24+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -324,7 +324,7 @@ msgid "H Tag Level"
 msgstr "Hタグレベル"
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:85
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:95
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:96
 #: ../container/admin_mainOpelogWidgetContainer.php:156
 #: ../container/admin_mainTempimageWidgetContainer.php:299
 #: ../container/admin_mainUserlistWidgetContainer.php:191
@@ -669,7 +669,7 @@ msgid "View system operation log."
 msgstr "運用ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:102
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:94
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:95
 #: ../container/admin_mainOpelogWidgetContainer.php:153
 msgid "Access Log"
 msgstr "アクセスログ"
@@ -755,7 +755,7 @@ msgid "Manage user original table."
 msgstr "ユーザ定義のテーブルの作成、データの編集を行います。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:122
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:36
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:37
 msgid "Logout"
 msgstr "ログアウト"
 
@@ -772,7 +772,7 @@ msgid "Administration Menu Others"
 msgstr "管理メニューその他"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:179
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:96
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:97
 #: ../container/admin_mainMenudefWidgetContainer.php:165
 #: ../container/admin_mainOpelogWidgetContainer.php:130
 #: ../container/admin_mainPagedefWidgetContainer.php:164
@@ -826,8 +826,8 @@ msgstr "未設定"
 #: ../container/admin_mainUserlistWidgetContainer.php:151
 #: ../container/admin_mainUserlistWidgetContainer.php:179
 #: ../container/admin_mainUserlistWidgetContainer.php:349
-#: ../container/admin_mainUserlistWidgetContainer.php:389
-#: ../container/admin_mainUserlistWidgetContainer.php:465
+#: ../container/admin_mainUserlistWidgetContainer.php:394
+#: ../container/admin_mainUserlistWidgetContainer.php:471
 #: ../container/admin_mainWidgetlistWidgetContainer.php:681
 #: ../help/help_menudef.php:43 ../help/help_menudef.php:47
 #: ../help/help_userlist.php:47
@@ -931,18 +931,18 @@ msgstr ""
 "DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファ"
 "イル名: %s"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:35
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:36
 #: ../container/admin_mainUserlistWidgetContainer.php:152
 #: ../container/admin_mainUserlistWidgetContainer.php:182
 #: ../container/admin_mainWidgetContainer.php:471
 msgid "Login"
 msgstr "ログイン"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:37
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:38
 msgid "Error"
 msgstr "エラー"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:81
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:82
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
 #: ../container/admin_mainUserlistWidgetContainer.php:135
@@ -950,29 +950,29 @@ msgstr "エラー"
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:90
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:91
 msgid "Login History"
 msgstr "ログイン履歴"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:91
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:92
 #: ../container/admin_mainOpelogWidgetContainer.php:137
 #: ../container/admin_mainOpelogWidgetContainer.php:155
 msgid "Date"
 msgstr "日付"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:92
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:93
 msgid "Name:"
 msgstr "名前："
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:93
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:94
 msgid "Login Acount:"
 msgstr "ログインアカウント："
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:97
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:98
 msgid "Browser"
 msgstr "ブラウザ"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:181
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:182
 #: ../container/admin_mainUserlistWidgetContainer.php:282
 #, php-format
 msgid "%d Total"
@@ -1298,7 +1298,6 @@ msgid "Type"
 msgstr "種別"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:132
-#: ../container/admin_mainOpelogWidgetContainer.php:154
 msgid "Check"
 msgstr "確認"
 
@@ -1551,7 +1550,7 @@ msgstr "サーバID"
 
 #: ../container/admin_mainPortalWidgetContainer.php:259
 #: ../container/admin_mainUserlistWidgetContainer.php:49
-#: ../container/admin_mainUserlistWidgetContainer.php:799
+#: ../container/admin_mainUserlistWidgetContainer.php:808
 msgid "Unselected"
 msgstr "未選択"
 
@@ -1662,14 +1661,14 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:357
-#: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../container/admin_mainUserlistWidgetContainer.php:449
+#: ../container/admin_mainUserlistWidgetContainer.php:379
+#: ../container/admin_mainUserlistWidgetContainer.php:455
 msgid "Item updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainTempimageWidgetContainer.php:366
-#: ../container/admin_mainUserlistWidgetContainer.php:384
-#: ../container/admin_mainUserlistWidgetContainer.php:459
+#: ../container/admin_mainUserlistWidgetContainer.php:389
+#: ../container/admin_mainUserlistWidgetContainer.php:465
 msgid "Failed in updating item."
 msgstr "データ更新に失敗しました"
 
@@ -1857,33 +1856,33 @@ msgstr "システムをバージョンアップしました。 システムバ�
 
 #: ../container/admin_mainUserlistWidgetContainer.php:50
 #: ../container/admin_mainUserlistWidgetContainer.php:57
-#: ../container/admin_mainUserlistWidgetContainer.php:663
+#: ../container/admin_mainUserlistWidgetContainer.php:672
 msgid "Normal User"
 msgstr "一般ユーザ"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:51
 #: ../container/admin_mainUserlistWidgetContainer.php:58
-#: ../container/admin_mainUserlistWidgetContainer.php:666
+#: ../container/admin_mainUserlistWidgetContainer.php:675
 msgid "Author"
 msgstr "投稿ユーザ"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:52
-#: ../container/admin_mainUserlistWidgetContainer.php:669
+#: ../container/admin_mainUserlistWidgetContainer.php:678
 msgid "Site Manager"
 msgstr "システム運営者"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:53
-#: ../container/admin_mainUserlistWidgetContainer.php:672
+#: ../container/admin_mainUserlistWidgetContainer.php:681
 msgid "Administrator"
 msgstr "システム管理者"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:55
-#: ../container/admin_mainUserlistWidgetContainer.php:657
+#: ../container/admin_mainUserlistWidgetContainer.php:666
 msgid "Not authenticated"
 msgstr "未承認ユーザ"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:56
-#: ../container/admin_mainUserlistWidgetContainer.php:660
+#: ../container/admin_mainUserlistWidgetContainer.php:669
 msgid "Temporary User"
 msgstr "仮登録ユーザ"
 
@@ -1944,8 +1943,8 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 #: ../container/admin_mainUserlistWidgetContainer.php:186
 #: ../container/admin_mainUserlistWidgetContainer.php:350
-#: ../container/admin_mainUserlistWidgetContainer.php:391
-#: ../container/admin_mainUserlistWidgetContainer.php:467
+#: ../container/admin_mainUserlistWidgetContainer.php:396
+#: ../container/admin_mainUserlistWidgetContainer.php:473
 #: ../container/admin_mainWidgetContainer.php:475 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
@@ -1963,8 +1962,8 @@ msgid "Update Date Time"
 msgstr "更新日時"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:180
-#: ../container/admin_mainUserlistWidgetContainer.php:390
-#: ../container/admin_mainUserlistWidgetContainer.php:466
+#: ../container/admin_mainUserlistWidgetContainer.php:395
+#: ../container/admin_mainUserlistWidgetContainer.php:472
 #: ../help/help_userlist.php:39
 msgid "Login Account"
 msgstr "ログインアカウント"
@@ -1974,49 +1973,55 @@ msgid "Count"
 msgstr "回数"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:226
-#: ../container/admin_mainUserlistWidgetContainer.php:354
-#: ../container/admin_mainUserlistWidgetContainer.php:404
-#: ../container/admin_mainUserlistWidgetContainer.php:530
+#: ../container/admin_mainUserlistWidgetContainer.php:358
+#: ../container/admin_mainUserlistWidgetContainer.php:410
+#: ../container/admin_mainUserlistWidgetContainer.php:539
 msgid "Failed in getting data."
 msgstr "データ取得に失敗しました"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:235
-#: ../container/admin_mainUserlistWidgetContainer.php:536
+#: ../container/admin_mainUserlistWidgetContainer.php:545
 msgid "Item deleted."
 msgstr "データを削除しました"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:248
-#: ../container/admin_mainUserlistWidgetContainer.php:541
+#: ../container/admin_mainUserlistWidgetContainer.php:550
 msgid "Failed in deleting item."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:395
-#: ../container/admin_mainUserlistWidgetContainer.php:472
+#: ../container/admin_mainUserlistWidgetContainer.php:356
+#: ../container/admin_mainUserlistWidgetContainer.php:407
+#: ../container/admin_mainUserlistWidgetContainer.php:482
+msgid "User name is duplicated."
+msgstr "ユーザ名は重複しています"
+
+#: ../container/admin_mainUserlistWidgetContainer.php:400
+#: ../container/admin_mainUserlistWidgetContainer.php:478
 msgid "Invalid active term."
 msgstr "有効期間が不正です"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:402
-#: ../container/admin_mainUserlistWidgetContainer.php:476
+#: ../container/admin_mainUserlistWidgetContainer.php:408
+#: ../container/admin_mainUserlistWidgetContainer.php:485
 msgid "Login account is duplicated."
 msgstr "ログインアカウントが重複しています"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:468
+#: ../container/admin_mainUserlistWidgetContainer.php:474
 msgid "User type not selected."
 msgstr "ユーザ種別が選択されていません"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:509
+#: ../container/admin_mainUserlistWidgetContainer.php:518
 msgid "Item added."
 msgstr "データを追加しました"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:519
+#: ../container/admin_mainUserlistWidgetContainer.php:528
 msgid "Failed in adding item."
 msgstr "データ追加に失敗しました"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:652
+#: ../container/admin_mainUserlistWidgetContainer.php:661
 msgid "Limited"
 msgstr "制限あり"
 
-#: ../container/admin_mainUserlistWidgetContainer.php:675
+#: ../container/admin_mainUserlistWidgetContainer.php:684
 msgid "Out of Range"
 msgstr "該当なし"
 

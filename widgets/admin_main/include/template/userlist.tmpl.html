@@ -112,15 +112,12 @@ $(function(){
 	    <td>{NAME}</td>
 	    <td>{EMAIL}</td>
 	    <td>{USER_TYPE}</td>
-	    <td>{LOGIN_PERMISSION}&nbsp;(<a href="{LOGIN_STATUS_URL}">{LOGIN_COUNT}</a>)</td>
+	    <td class="status">{LOGIN_PERMISSION}&nbsp;(<a href="{LOGIN_STATUS_URL}">{LOGIN_COUNT}</a>)</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-
 {PAGE_LINK}
-<patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label>
-
 </form>
 </div>
 </patTemplate:tmpl>

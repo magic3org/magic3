@@ -183,7 +183,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		
 		// ページ遷移(Pagination)用
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $this->convertToDispString($totalCount));
+//		$this->tmpl->addVar("_widget", "total_count", $this->convertToDispString($totalCount));
 		
 		// その他
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// 記事タイトル

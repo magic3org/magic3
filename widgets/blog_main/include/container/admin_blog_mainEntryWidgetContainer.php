@@ -330,7 +330,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+//		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		
 		// 検索条件
 		$this->tmpl->addVar("_widget", "search_start", $search_startDt);	// 開始日付

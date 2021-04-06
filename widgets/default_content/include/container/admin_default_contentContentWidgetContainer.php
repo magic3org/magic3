@@ -280,7 +280,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		// 検索条件
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+//		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "search_keyword", $searchKeyword);	// 検索キーワード
 				
 		// その他

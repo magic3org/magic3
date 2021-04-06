@@ -179,7 +179,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 			}
 		}
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
+//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
 		$this->tmpl->addVar("search_range", "start_no", $startNo);
