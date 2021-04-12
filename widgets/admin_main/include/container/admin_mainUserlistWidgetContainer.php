@@ -27,16 +27,27 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	private $userGroupListData;		// 全ユーザグループ
 	private $userGroupArray;		// 選択中のユーザグループ
 	private $canSelectGroup;		// グループ選択可能かどうか
+	private $sortKeyType;			// ソートキータイプ
+	private $sortKey;		// ソートキー
+	private $sortDirection;		// ソート方向
+	private $savedPage;	// ページ番号(ユーザ一覧の退避パラメータ)
+	private	$savedSort;	// ソート順(ユーザ一覧の退避パラメータ)
 	const DEFAULT_LIST_COUNT = 3;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const USER_GROUP_COUNT = 2;				// ユーザグループの選択可能数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	const STATUS_ICON_SIZE = 32;			// 状態表示アイコンサイズ
+	const SORT_ICON_SIZE = 10;		// ソートアイコンサイズ
+	const SORT_UP_ICON_FILE = '/images/system/arrow_up10.png';		// ソート降順アイコン
+	const SORT_DOWN_ICON_FILE = '/images/system/arrow_down10.png';		// ソート昇順アイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const LOGIN_ENABLED_ICON_FILE = '/images/system/active32.png';			// ログイン可アイコン
 	const CLOSED_ICON_FILE = '/images/system/closed32.png';	// ログイン不可アイコン
 	const SKYPE_STATUS_ICON_HEIGHT = 22;	// Skype状態アイコン
 	const SKYPE_STATUS_ICON_WIDTH = 91; 	// Skype状態アイコン
+	const DEFAULT_SORT_KEY = 'type';		// デフォルトのソートキー
+	const USERLIST_SAVED_PARAM_PAGE = '_page';		// ユーザ一覧からの引き継ぎデータ
+	const USERLIST_SAVED_PARAM_SORT = '_sort';		// ユーザ一覧からの引き継ぎデータ
 	
 	/**
 	 * コンストラクタ
@@ -57,6 +68,40 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 											array(	'name' => $this->_('Temporary User'),		'value' => strval(UserInfo::USER_TYPE_TMP)),		// 仮登録ユーザ
 											array(	'name' => $this->_('Normal User'),			'value' => strval(UserInfo::USER_TYPE_NORMAL)),	// 一般ユーザ
 											array(	'name' => $this->_('Author'),				'value' => strval(UserInfo::USER_TYPE_AUTHOR)));		// 投稿ユーザ
+		
+		// ソート順
+		$this->sortKeyType = array('account'/*ログインアカウント*/, 'name'/*ユーザ名*/, 'email'/*Eメール*/, 'type'/*ユーザ種別*/);
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'userlist_detail'){		// 詳細画面
+			$page = $request->trimValueOf('page');	// ページ番号
+			$sort = $request->trimValueOf('sort');	// ソート順
+			$this->savedPage = $request->trimValueOf(self::USERLIST_SAVED_PARAM_PAGE);	// ページ番号(ユーザ一覧の退避パラメータ)
+			$this->savedSort = $request->trimValueOf(self::USERLIST_SAVED_PARAM_SORT);	// ソート順(ユーザ一覧の退避パラメータ)
+			
+			// ### ユーザ一覧の検索条件を画面に埋め込む ###
+			// テンプレートに非表示INPUTタグ追加
+			if (empty($this->savedPage)){
+				// ユーザ一覧画面から遷移した場合
+				$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_PAGE, $this->convertToDispString($page));
+				$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_SORT, $this->convertToDispString($sort));
+			} else {
+				// ユーザ一覧画面以外(ログイン履歴画面)から遷移した場合
+				$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_PAGE, $this->convertToDispString($this->savedPage));
+				$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_SORT, $this->convertToDispString($this->savedSort));
+			}
+		}
 	}
 	/**
 	 * ヘルプデータを設定
@@ -201,6 +246,17 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function createList($request)
 	{
+		// 一覧の表示条件
+		$page = $request->trimValueOf('page');				// ページ番号
+		$this->sort = $request->trimValueOf('sort');// ソート順
+		
+		// ソート順
+		list($this->sortKey, $this->sortDirection) = explode('-', $sort);
+		if (!in_array($this->sortKey, $this->sortKeyType) || !in_array($this->sortDirection, array('0', '1'))){
+			$this->sortKey = self::DEFAULT_SORT_KEY;		// デフォルトのソートキー
+			$this->sortDirection = '1';	// 昇順
+		}
+		
 		$act = $request->trimValueOf('act');
 		
 		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// メニュー項目の削除
@@ -290,6 +346,45 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		
+		// ソート用データ設定
+		if (empty($this->sortDirection)){
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
+			$iconTitle = '降順';
+		} else {
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_DOWN_ICON_FILE);	// ソート昇順アイコン
+			$iconTitle = '昇順';
+		}
+		$style = 'style="' . 'width:' . self::SORT_ICON_SIZE . 'px;height:' . self::SORT_ICON_SIZE . 'px;"';
+		$sortImage = '<img src="' . $iconUrl . '" title="' . $iconTitle . '" alt="' . $iconTitle . '" rel="m3help" ' . $style . ' />';
+		
+		switch ($this->sortKey){
+			case 'id':		// WikiページID
+				$this->tmpl->addVar('_widget', 'direct_icon_id', $sortImage);
+				break;
+			case 'date':		// 更新日時
+				$this->tmpl->addVar('_widget', 'direct_icon_date', $sortImage);
+				break;
+			case 'locked':		// ロック状態
+				$this->tmpl->addVar('_widget', 'direct_icon_locked', $sortImage);
+				break;
+		}
+		if ($this->sortKey == 'id' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_id', 'id-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_id', 'id-1');
+		}
+		if ($this->sortKey == 'date' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_date', 'date-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_date', 'date-1');
+		}
+		if ($this->sortKey == 'locked' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-1');
+		}
+		$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
+		
 		// ユーザリストを取得
 		$this->_mainDb->getAllUserList($maxListCount, $pageNo, array($this, 'userListLoop'));
 		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
@@ -302,6 +397,16 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function createDetail($request)
 	{
+		// 一覧の表示条件
+		if (empty($this->savedPage)){
+			$page = $request->trimValueOf('page');	// ページ番号
+			$sort = $request->trimValueOf('sort');	// ソート順
+		} else {
+			// ユーザ一覧からの退避データがある場合は取得
+			$page = $this->savedPage;	// ページ番号
+			$sort = $this->savedSort;	// ソート順	
+		}
+	
 		// 入力値を取得
 		$act = $request->trimValueOf('act');
 		$userIdByUrl = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
@@ -638,6 +743,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "update_user", $this->convertToDispString($updateUser));	// データ登録者
 		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($updateDt));	// データ登録日時
 
+		// 一覧の表示条件
+		$this->tmpl->addVar("_widget", "page", $page);	// ページ番号
+		$this->tmpl->addVar("_widget", "sort", $sort);	// ソート順
+		
 		if (empty($this->serialNo)){		// ユーザIDが空のときは新規とする
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 新規登録ボタン表示
 		} else {
@@ -650,6 +759,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		
 		// ディレクトリを設定
 		$this->tmpl->addVar("_widget", "script_url", $this->getUrl($this->gEnv->getScriptsUrl()));
+		
+		// 「戻る」ボタンの表示制御
+		// 「page」パラメータを見て一覧から表示されたかを判断する。直接詳細画面を表示した場合は「戻る」ボタンを非表示にする。
+		if (empty($page)) $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');
 	}
 	/**
 	 * ユーザリスト、取得したデータをテンプレートに設定する

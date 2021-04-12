@@ -30,7 +30,9 @@ function cancelItem(){
 		location.href = document.main._backurl.value;
 		return false;
 	} else {
-//		history.back();
+		// 検索条件は削除
+		document.main.page.value = '';
+	
 		document.main.task.value = 'userlist_detail';
 		document.main.submit();
 		return false;

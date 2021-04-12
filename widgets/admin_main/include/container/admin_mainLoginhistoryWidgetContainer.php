@@ -23,6 +23,8 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const MAX_PAGE_COUNT = 20;				// 最大ページ数
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
+	const USERLIST_SAVED_PARAM_PAGE = '_page';		// ユーザ一覧からの引き継ぎデータ
+	const USERLIST_SAVED_PARAM_SORT = '_sort';		// ユーザ一覧からの引き継ぎデータ
 	
 	/**
 	 * コンストラクタ
@@ -36,6 +38,28 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$this->loginStatusArray = array(	array(	'name' => $this->_('Login'),		'value' => '0'),	// ログイン
 											array(	'name' => $this->_('Logout'),		'value' => '1'),	// ログアウト
 											array(	'name' => $this->_('Error'),		'value' => '2'));	// エラー
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+//		if ($task == 'userlist_detail'){		// 詳細画面
+			$page = $request->trimValueOf(self::USERLIST_SAVED_PARAM_PAGE);	// ページ番号
+			$sort = $request->trimValueOf(self::USERLIST_SAVED_PARAM_SORT);	// ソート順
+		
+			// ### ユーザ一覧の検索条件を画面に埋め込む ###
+			// テンプレートに非表示INPUTタグ追加
+			$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_PAGE, $this->convertToDispString($page));
+			$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_SORT, $this->convertToDispString($sort));
+//		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -108,7 +132,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	function createList($request)
 	{
 		// ウィンドウ制御
-		$this->setKeepForeTaskForBackUrl();	// 遷移前のタスクを戻りURLとして維持する
+//		if ($request->isGetMethod()) $this->setKeepForeTaskForBackUrl();	// GETで画面を直接表示させた場合は、遷移前のタスクを戻りURLとして維持する
 		
 		// パラメータの取得
 		$this->clientIp = $this->gRequest->trimServerValueOf('REMOTE_ADDR');		// クライアントのIPアドレス

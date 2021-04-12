@@ -52,20 +52,41 @@ function delItem(){
 	return true;
 }
 function cancelItem(){
-	if (document.main._backurl.value){
+/*	if (document.main._backurl.value){
 		location.href = document.main._backurl.value;
 		return false;
-	} else {
+	} else {*/
 //		history.back();
 		document.main.task.value = 'userlist';
+		
+		// ブラウザのパスワード保存ダイアログを表示させないための処理
+		/*document.main.item_name.value = '';
+		document.main.item_account.value = '';
+		document.main.item_password.value = '';
+		document.main.password.value = '';*/
+		$(":password").val('');
+		$(":password").attr('readonly');
+		
 		document.main.submit();
 		return false;
-	}
+//	}
 }
 function viewLoginHistory(){
-	//document.main.task.value = 'loginhistory';
-	//document.main.submit();
-	location.href = '?task=loginhistory&userid=' + document.main.userid.value;
+	if (document.main.page.value == ''){
+		// ユーザ一覧からの遷移でない場合はGETで画面遷移する
+		location.href = '?task=loginhistory&userid=' + document.main.userid.value;
+	} else {
+		// ブラウザのパスワード保存ダイアログを表示させないための処理
+		$(":password").val('');
+		$(":password").attr('readonly');
+	
+		// 検索条件は削除
+		document.main.page.value = '';
+		document.main.sort.value = '';
+	
+		document.main.task.value = 'loginhistory';
+		document.main.submit();
+	}
 	return true;
 }
 $(function(){
@@ -108,12 +129,14 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="userid" value="{USERID}" />
 <input type="hidden" name="password" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="sort" value="{SORT}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h">{_LC_LABEL_USERLIST_DETAIL}</h3>
 <div class="m3config_h_side_buttons pull-right">
 <div {_HELP_USERLIST_BUTTONS2}>
 <div class="btn-group">
-    <button type="button" class="button" onclick="cancelItem();">{_LC_LABEL_GO_BACK}</button>
+    <patTemplate:tmpl name="cancel_button" visibility="visible"><button type="button" class="button" onclick="cancelItem();">{_LC_LABEL_GO_BACK}</button></patTemplate:tmpl>
 </div>
 </div></div>
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
@@ -133,8 +156,10 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_PWD}>{_LC_LABEL_PASSWORD}</span></th>
-	    <td colspan="3"><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
-		<div class="col-sm-4 m3config_item password_area"><input type="password" id="item_password" name="item_password" class="form-control password" value="{PASSWORD}" maxlength="40" autocomplete="new-password" /><i class="glyphicon glyphicon-eye-open"></i></div></td>
+	    <td colspan="3">
+		<div class="col-sm-4 m3config_item password_area">
+		<input type="password" id="item_password" name="item_password" class="form-control password" value="{PASSWORD}" maxlength="40" autocomplete="new-password" />
+		<i class="glyphicon glyphicon-eye-open"></i></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USERTYPE}>{_LC_LABEL_USER_TYPE}</span></th>
