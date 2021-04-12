@@ -21,7 +21,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	private $loginStatus;	// ログイン状況
 	private $serialArray = array();
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const MAX_PAGE_COUNT = 20;				// 最大ページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
 	const USERLIST_SAVED_PARAM_PAGE = '_page';		// ユーザ一覧からの引き継ぎデータ
 	const USERLIST_SAVED_PARAM_SORT = '_sort';		// ユーザ一覧からの引き継ぎデータ
@@ -114,7 +114,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 			$localeText['label_name'] = $this->_('Name:');		// 名前：
 			$localeText['label_account'] = $this->_('Login Acount:');		// ログインアカウント：
 			$localeText['label_access_log'] = $this->_('Access Log');	// アクセスログ
-			$localeText['label_range'] = $this->_('Range:');		// 範囲：
+//			$localeText['label_range'] = $this->_('Range:');		// 範囲：
 			$localeText['label_go_back'] = $this->_('Go back');		// 戻る
 			$localeText['label_browser'] = $this->_('Browser');		// ブラウザ
 		}
@@ -137,10 +137,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$page = $request->trimValueOf('page');			// ページ
 		
 		// 表示条件
-//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$viewCount = $request->trimIntValueOf('viewcount', '0');
-		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// ユーザ情報取得
@@ -174,14 +171,16 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		// 総数を取得
 		$totalCount = $this->_mainDb->getOpeLogCountByMessageCode($messageCode, $searchOption);
 
-		// 表示するページ番号の修正
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+/*		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
 		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
+		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号*/
 		
-		// ページング用リンク作成
+		/*// ページング用リンク作成
 		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
@@ -195,14 +194,12 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 				}
 				$pageLink .= $link;
 			}
-		}
-		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
+		}*/
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		
 		// アクセスログURL
 		$accessLogUrl = '?task=accesslog_detail&openby=simple';
@@ -210,7 +207,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$this->tmpl->addVar("_widget", "access_log_url", $accessLogUrl);
 		
 		// 一覧作成
-		$this->_mainDb->getOpeLogListByMessageCode($messageCode, $searchOption, $viewCount, $pageNo, array($this, 'logListLoop'));
+		$this->_mainDb->getOpeLogListByMessageCode($messageCode, $searchOption, $maxListCount, $pageNo, array($this, 'logListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');			// 履歴がないときは一覧を表示しない
 		
 		// 値を画面に埋め込む

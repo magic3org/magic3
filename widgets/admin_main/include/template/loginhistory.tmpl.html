@@ -22,8 +22,6 @@ function selpage(page){
 function selectMenu(){
 	document.main.submit();
 	return true;
-//	location.href = '?task=loginstatus_history&account=' + document.main.account.value + '&loginstatus=' + document.main.loginstatus.value;
-//	return false;
 }
 function cancelItem(){
 	if (document.main._backurl.value){
@@ -39,7 +37,6 @@ function cancelItem(){
 	}
 }
 function showAccessLog(serial){
-	//window.open("{ACCESS_LOG_URL}&serial=" + serial, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=900,height=600");
 	m3ShowStandardWindow("{ACCESS_LOG_URL}&serial=" + serial);
 	return false;
 }
@@ -56,7 +53,6 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
-<!--<input type="hidden" name="account" value="{ACCOUNT}" />-->
 <input type="hidden" name="userid" value="{USERID}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_LOGINHISTORY}>{_LC_LABEL_LOGINHISTORY}</span>
@@ -95,10 +91,7 @@ $(function(){
 	</patTemplate:tmpl>
     </tbody>
 </table>
-
 {PAGE_LINK}
-<patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label>
-
 </form>
 </div>
 </patTemplate:tmpl>
