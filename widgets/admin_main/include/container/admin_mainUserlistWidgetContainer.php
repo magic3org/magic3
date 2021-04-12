@@ -746,7 +746,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		// 一覧の表示条件
 		$this->tmpl->addVar("_widget", "page", $page);	// ページ番号
 		$this->tmpl->addVar("_widget", "sort", $sort);	// ソート順
-		
+
 		if (empty($this->serialNo)){		// ユーザIDが空のときは新規とする
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 新規登録ボタン表示
 		} else {

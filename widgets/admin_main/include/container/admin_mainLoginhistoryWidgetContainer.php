@@ -50,16 +50,13 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	 */
 	function _init($request)
 	{
-		$task = $request->trimValueOf('task');
-//		if ($task == 'userlist_detail'){		// 詳細画面
-			$page = $request->trimValueOf(self::USERLIST_SAVED_PARAM_PAGE);	// ページ番号
-			$sort = $request->trimValueOf(self::USERLIST_SAVED_PARAM_SORT);	// ソート順
-		
-			// ### ユーザ一覧の検索条件を画面に埋め込む ###
-			// テンプレートに非表示INPUTタグ追加
-			$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_PAGE, $this->convertToDispString($page));
-			$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_SORT, $this->convertToDispString($sort));
-//		}
+		$page = $request->trimValueOf(self::USERLIST_SAVED_PARAM_PAGE);	// ページ番号
+		$sort = $request->trimValueOf(self::USERLIST_SAVED_PARAM_SORT);	// ソート順
+	
+		// ### ユーザ一覧の検索条件を画面に埋め込む ###
+		// テンプレートに非表示INPUTタグ追加
+		$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_PAGE, $this->convertToDispString($page));
+		$this->_addHiddenTag(self::USERLIST_SAVED_PARAM_SORT, $this->convertToDispString($sort));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -131,9 +128,6 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	 */
 	function createList($request)
 	{
-		// ウィンドウ制御
-//		if ($request->isGetMethod()) $this->setKeepForeTaskForBackUrl();	// GETで画面を直接表示させた場合は、遷移前のタスクを戻りURLとして維持する
-		
 		// パラメータの取得
 		$this->clientIp = $this->gRequest->trimServerValueOf('REMOTE_ADDR');		// クライアントのIPアドレス
 		$act = $request->trimValueOf('act');
