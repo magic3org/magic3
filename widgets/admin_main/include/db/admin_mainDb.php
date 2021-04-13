@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1549,17 +1549,41 @@ class admin_mainDb extends BaseDb
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
+	 * @param string	$sortKey			ソートキー(account=ログインアカウント,name=ユーザ名,email=Eメール,type=ユーザ種別)
+	 * @param int		$sortDirection		取得順(0=降順,1=昇順)
 	 * @param function $callback	コールバック関数
 	 * @return						なし
 	 */
-	function getAllUserList($limit, $page, $callback)
+	function getAllUserList($limit, $page, $sortKey, $sortDirection, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
 		
 		$queryStr = 'SELECT * FROM _login_user LEFT JOIN _login_log on lu_id = ll_user_id ';
 		$queryStr .=  'WHERE lu_deleted = false ';// 削除されていない
-		$queryStr .=  'ORDER BY lu_user_type, lu_account limit ' . $limit . ' offset ' . $offset;
+		
+		// ソート順
+		switch ($sortKey){
+			case 'account':		// ログインアカウント
+				$orderKey = 'lu_account ';
+				break;
+			case 'name':		// ユーザ名
+				$orderKey = 'lu_name ';
+				break;
+			case 'email':		// Eメール
+				$orderKey = 'lu_email ';
+				break;
+			case 'type':		// ユーザ種別
+				$orderKey = 'lu_user_type ';
+				break;
+		}
+		$ord = '';
+		if (empty($sortDirection)) $ord = 'DESC ';
+		$defaultOrder = '';
+		if ($sortKey != 'lu_account') $defaultOrder = ', lu_account ';
+		$queryStr .=   'ORDER BY ' . $orderKey . $ord . $defaultOrder . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
+		
+		//$queryStr .=  'ORDER BY lu_user_type, lu_account limit ' . $limit . ' offset ' . $offset;
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**

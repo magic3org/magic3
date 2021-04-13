@@ -28,11 +28,9 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	private $userGroupArray;		// 選択中のユーザグループ
 	private $canSelectGroup;		// グループ選択可能かどうか
 	private $sortKeyType;			// ソートキータイプ
-	private $sortKey;		// ソートキー
-	private $sortDirection;		// ソート方向
 	private $savedPage;	// ページ番号(ユーザ一覧の退避パラメータ)
 	private	$savedSort;	// ソート順(ユーザ一覧の退避パラメータ)
-	const DEFAULT_LIST_COUNT = 3;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const USER_GROUP_COUNT = 2;				// ユーザグループの選択可能数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
@@ -248,13 +246,13 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	{
 		// 一覧の表示条件
 		$page = $request->trimValueOf('page');				// ページ番号
-		$this->sort = $request->trimValueOf('sort');// ソート順
+		$sort = $request->trimValueOf('sort');// ソート順
 		
 		// ソート順
-		list($this->sortKey, $this->sortDirection) = explode('-', $sort);
-		if (!in_array($this->sortKey, $this->sortKeyType) || !in_array($this->sortDirection, array('0', '1'))){
-			$this->sortKey = self::DEFAULT_SORT_KEY;		// デフォルトのソートキー
-			$this->sortDirection = '1';	// 昇順
+		list($sortKey, $sortDirection) = explode('-', $sort);
+		if (!in_array($sortKey, $this->sortKeyType) || !in_array($sortDirection, array('0', '1'))){
+			$sortKey = self::DEFAULT_SORT_KEY;		// デフォルトのソートキー
+			$sortDirection = '0';	// 降順
 		}
 		
 		$act = $request->trimValueOf('act');
@@ -319,35 +317,13 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
-
-/*			
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $viewCount + 1;		// 先頭番号
-		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
-		
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}*/
 		
 		// 検索条件
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		
 		// ソート用データ設定
-		if (empty($this->sortDirection)){
+		if (empty($sortDirection)){
 			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
 			$iconTitle = '降順';
 		} else {
@@ -357,36 +333,44 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$style = 'style="' . 'width:' . self::SORT_ICON_SIZE . 'px;height:' . self::SORT_ICON_SIZE . 'px;"';
 		$sortImage = '<img src="' . $iconUrl . '" title="' . $iconTitle . '" alt="' . $iconTitle . '" rel="m3help" ' . $style . ' />';
 		
-		switch ($this->sortKey){
-			case 'id':		// WikiページID
-				$this->tmpl->addVar('_widget', 'direct_icon_id', $sortImage);
+		switch ($sortKey){
+			case 'account':		// ログインアカウント
+				$this->tmpl->addVar('_widget', 'direct_icon_account', $sortImage);
 				break;
-			case 'date':		// 更新日時
-				$this->tmpl->addVar('_widget', 'direct_icon_date', $sortImage);
+			case 'name':		// ユーザ名
+				$this->tmpl->addVar('_widget', 'direct_icon_name', $sortImage);
 				break;
-			case 'locked':		// ロック状態
-				$this->tmpl->addVar('_widget', 'direct_icon_locked', $sortImage);
+			case 'email':		// Eメール
+				$this->tmpl->addVar('_widget', 'direct_icon_email', $sortImage);
+				break;
+			case 'type':		// ユーザ種別
+				$this->tmpl->addVar('_widget', 'direct_icon_type', $sortImage);
 				break;
 		}
-		if ($this->sortKey == 'id' && !empty($this->sortDirection)){
-			$this->tmpl->addVar('_widget', 'sort_id', 'id-0');
+		if ($sortKey == 'account' && !empty($sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_account', 'account-0');
 		} else {
-			$this->tmpl->addVar('_widget', 'sort_id', 'id-1');
+			$this->tmpl->addVar('_widget', 'sort_account', 'account-1');
 		}
-		if ($this->sortKey == 'date' && !empty($this->sortDirection)){
-			$this->tmpl->addVar('_widget', 'sort_date', 'date-0');
+		if ($sortKey == 'name' && !empty($sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_name', 'name-0');
 		} else {
-			$this->tmpl->addVar('_widget', 'sort_date', 'date-1');
+			$this->tmpl->addVar('_widget', 'sort_name', 'name-1');
 		}
-		if ($this->sortKey == 'locked' && !empty($this->sortDirection)){
-			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-0');
+		if ($sortKey == 'email' && !empty($sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_email', 'email-0');
 		} else {
-			$this->tmpl->addVar('_widget', 'sort_locked', 'locked-1');
+			$this->tmpl->addVar('_widget', 'sort_email', 'email-1');
 		}
-		$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
+		if ($sortKey == 'type' && !empty($sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_type', 'type-0');
+		} else {
+			$this->tmpl->addVar('_widget', 'sort_type', 'type-1');
+		}
+		$this->tmpl->addVar('_widget', 'sort', $sortKey . '-' . $sortDirection);
 		
 		// ユーザリストを取得
-		$this->_mainDb->getAllUserList($maxListCount, $pageNo, array($this, 'userListLoop'));
+		$this->_mainDb->getAllUserList($maxListCount, $pageNo, $sortKey, $sortDirection, array($this, 'userListLoop'));
 		$this->tmpl->addVar("_widget", "serial_list", implode(',', $this->serialArray));// 表示項目のシリアル番号を設定
 	}
 	/**
