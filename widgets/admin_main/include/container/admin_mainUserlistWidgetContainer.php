@@ -257,7 +257,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		
 		$act = $request->trimValueOf('act');
 		
-		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// メニュー項目の削除
+		if ($this->checkSafePost()/*CSRF対策用*/ && $act == 'delete'){		// ユーザの削除
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
 			$delItems = array();
 			for ($i = 0; $i < count($listedItem); $i++){
@@ -270,11 +270,18 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				}
 			}
 			if (count($delItems) > 0){
-				// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
+				// 削除対象のエラーチェック
 				for ($i = 0; $i < count($delItems); $i++){
 					// ユーザ情報を取得
 					$ret = $this->_mainDb->getUserBySerial($delItems[$i], $row, $groupRows);
 					if ($ret){
+						// 自分自身が含まれている場合はエラー
+						if ($row['lu_id'] == $this->gEnv->getCurrentUserId()){
+							$this->setMsg(self::MSG_APP_ERR, 'ユーザの削除に失敗しました。自分自身は削除できません。アカウント: ' . $row['lu_account']);
+							break;
+						}
+						
+						// ### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 ###
 						$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
 						if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $this->setMsg(self::MSG_APP_ERR, 'ページ管理画面からユーザを削除してください。アカウント: ' . $row['lu_account']);
 					} else {
@@ -297,7 +304,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 								$loginUserId = $row['lu_id'];
 								$name = $row['lu_name'];
 							}
-							$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+							$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 						}
 					} else {
 						$this->setAppErrorMsg($this->_('Failed in deleting item.'));		// データ削除に失敗しました
@@ -614,7 +621,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					// 運用ログ出力
 					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
 					if ($ret) $loginUserId = $row['lu_id'];
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
@@ -639,7 +646,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item deleted.'));	// データを削除しました
 				
 					// 運用ログ出力
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を削除しました。アカウント: ' . $row['lu_account'], 2100, 'userid=' . $row['lu_id'] . ', username=' . $row['lu_name']);
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $row['lu_account'], 2100, 'userid=' . $row['lu_id'] . ', username=' . $row['lu_name']);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in deleting item.'));	// データ削除に失敗しました
 				}
@@ -737,8 +744,14 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 			$this->tmpl->addVar("_widget", "password", self::DEFAULT_PASSWORD);// 入力済みを示すパスワードの設定
 			
-			// 管理権限ありの場合は変更不可にする
-			if ($isAdmin) $this->tmpl->addVar('_widget', 'usertype_disabled', 'disabled');
+			// ボタンの使用可否制御
+			if ($isAdmin){	// 管理権限ありの場合
+				// ユーザ種別の変更不可
+				$this->tmpl->addVar('_widget', 'usertype_disabled', 'disabled');
+			}
+			
+			// 自分自身の削除は不可
+			if ($loginUserId == $this->gEnv->getCurrentUserId()) $this->tmpl->addVar('update_button', 'delete_btn_disabled', 'disabled');
 		}
 		
 		// ディレクトリを設定

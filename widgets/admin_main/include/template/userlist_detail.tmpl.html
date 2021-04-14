@@ -52,24 +52,18 @@ function delItem(){
 	return true;
 }
 function cancelItem(){
-/*	if (document.main._backurl.value){
-		location.href = document.main._backurl.value;
-		return false;
-	} else {*/
-//		history.back();
-		document.main.task.value = 'userlist';
-		
-		// ブラウザのパスワード保存ダイアログを表示させないための処理
-		/*document.main.item_name.value = '';
-		document.main.item_account.value = '';
-		document.main.item_password.value = '';
-		document.main.password.value = '';*/
-		$(":password").val('');
-		$(":password").attr('readonly');
-		
-		document.main.submit();
-		return false;
-//	}
+	document.main.task.value = 'userlist';
+	
+	// ブラウザのパスワード保存ダイアログを表示させないための処理
+	/*document.main.item_name.value = '';
+	document.main.item_account.value = '';
+	document.main.item_password.value = '';
+	document.main.password.value = '';*/
+	$(":password").val('');
+	$(":password").attr('readonly');
+	
+	document.main.submit();
+	return false;
 }
 function viewLoginHistory(){
 	if (document.main.page.value == ''){
@@ -206,7 +200,7 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_USERLIST_UPDATE_USER}>{_LC_LABEL_UPDATE_USER}</span></th>
-	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <td style="width:200px;"><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
 	    <th><span {_HELP_USERLIST_UPDATE_DT}>{_LC_LABEL_UPDATE_DT}</span></th>
 	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
@@ -217,7 +211,7 @@ $(function(){
 	    <input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />
+		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DELETE_BTN_DISABLED} />
 		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
 </patTemplate:tmpl>
 </div>
