@@ -633,7 +633,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			// ユーザ情報を取得
 			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 			if ($ret){
-				// ##### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 #####
+				// 自分自身は削除不可
+				if ($row['lu_id'] == $this->gEnv->getCurrentUserId()) $this->setMsg(self::MSG_APP_ERR, '自分自身は削除できません。');
+							
+				// ### ユーザタイプがページ運用者の場合はユーザの削除不可→それぞれの機能から削除 ###
 				$userOptType = UserInfo::parseUserTypeOption($row['lu_user_type_option']);
 				if ($userOptType == UserInfo::USER_OPT_TYPE_PAGE_MANAGER) $this->setMsg(self::MSG_APP_ERR, 'ページ管理画面からユーザを削除してください');
 			} else {
