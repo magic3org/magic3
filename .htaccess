@@ -1,2 +1,0 @@
-RewriteCond %{SERVER_PORT} ^443$
-RewriteRule ^robots.txt$ robots_ssl.txt
