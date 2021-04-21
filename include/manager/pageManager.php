@@ -212,6 +212,7 @@ class PageManager extends _Core
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// フロント画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// フロント画面共通のデフォルトCSS
 	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
+	const M3_ADMIN_ICONFONT_CSS_FILE		= 'fontawesome-free-5.15.3-web/css/all.min.css';			// 管理機能用アイコンフォントのCSS
 	
 	// 読み込み制御
 	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
@@ -293,7 +294,9 @@ class PageManager extends _Core
 												//	self::M3_STD_SCRIPT_FILENAME,
 													self::M3_ADMIN_SCRIPT_FILENAME
 												);
-			$this->defaultAdminCssFiles		= 	array();	// 管理機能用のCSS
+			$this->defaultAdminCssFiles		= 	array(
+													self::M3_ADMIN_ICONFONT_CSS_FILE			// 管理機能用アイコンフォントのCSS
+												);
 		} else {
 			$this->defaultAdminScriptFiles	=	array(
 													$this->selectedJQueryFilename,			// jQuery
@@ -304,7 +307,8 @@ class PageManager extends _Core
 													self::M3_OPTION_SCRIPT_FILENAME
 												);
 			$this->defaultAdminCssFiles		=	array(
-													self::M3_ADMIN_CSS_FILE			// 管理機能用のCSS
+													self::M3_ADMIN_CSS_FILE,			// 管理機能用のCSS
+													self::M3_ADMIN_ICONFONT_CSS_FILE	// 管理機能用アイコンフォントのCSS
 												);
 			
 			// Javascriptライブラリ
@@ -1609,7 +1613,8 @@ class PageManager extends _Core
 					$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					$this->addScript('', ScriptLibInfo::LIB_IDLETIMEOUT);	// 無操作監視用
 				
-					$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
+					$this->addCssFile(self::M3_ADMIN_CSS_FILE);				// 管理機能用CSS
+					$this->addCssFile(self::M3_ADMIN_ICONFONT_CSS_FILE);	// 管理機能用アイコンフォントのCSS
 				} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
 					$this->isEditMode = true;			// フロント画面編集モード
 				}
@@ -3665,7 +3670,6 @@ class PageManager extends _Core
 			$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 		}
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-			//if ($gEnvManager->isSystemAdmin()){		// 管理者権限がある場合のみ有効
 			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
 				// 管理機能用共通ライブラリのCSSの読み込み
 				$count = count($this->defaultAdminCssFiles);
