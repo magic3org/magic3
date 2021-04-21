@@ -212,7 +212,7 @@ class PageManager extends _Core
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// フロント画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// フロント画面共通のデフォルトCSS
 	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
-	const M3_ADMIN_ICONFONT_CSS_FILE		= 'fontawesome-free-5.15.3-web/css/all.min.css';			// 管理機能用アイコンフォントのCSS
+	const M3_ADMIN_ICONFONT_CSS_FILE		= 'fontawesome-free-5.15.3/css/all.min.css';			// 管理機能用アイコンフォントのCSS
 	
 	// 読み込み制御
 	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
