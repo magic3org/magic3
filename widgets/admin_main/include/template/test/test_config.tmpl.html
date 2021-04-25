@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -104,12 +104,37 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_ENTRY_NAME}>テキスト入力</span></th>
+	    <th><span {_HELP_ENTRY_NAME}>テキスト入力</span>
+	    <span class="fa-stack fa-xs text-danger">
+  <i class="fas fa-circle fa-stack-2x"></i>
+  <i class="fas fa-exclamation fa-stack-1x fa-inverse"></i>
+</span>
+	    </th>
 	    <td colspan="3"><input type="text" name="item_name" class="form-control" maxlength="30" value="{NAME}" /></td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_ENTRY_NAME}>テキスト固定</span></th>
-	    <td colspan="3"><i class="glyphicon glyphicon-cog"></i> {STATIC_NAME}<input type="button" class="button" onclick="showAlert();" value="アラート" /></td>
+	    <th><span {_HELP_ENTRY_NAME}>テキスト固定</span>
+	    <i class="fas fa-exclamation-circle text-danger"></i>
+	    <i class="fas fa-exclamation-circle text-danger" style="background: radial-gradient(white 50%, transparent 50%);"></i>
+<span class="fa-stack fa-xs text-danger">
+  <i class="fas fa-circle fa-stack-2x"></i>
+  <i class="fas fa-exclamation fa-stack-1x fa-inverse"></i>
+</span>
+<span class="fa-stack fa-xs text-success">
+  <i class="fas fa-circle fa-stack-2x"></i>
+  <i class="fas fa-flag fa-stack-1x fa-inverse"></i>
+</span>	    
+	    </th>
+	    <td colspan="3">
+	    <span class="fa-stack fa-2x">
+  <i class="fas fa-square fa-stack-2x"></i>
+  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+<span class="fa-stack fa-2x">
+  <i class="fas fa-circle fa-stack-2x"></i>
+  <i class="fas fa-flag fa-stack-1x fa-inverse"></i>
+</span>
+	    <i class="glyphicon glyphicon-cog"></i> {STATIC_NAME}<input type="button" class="button" onclick="showAlert();" value="アラート" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div>
@@ -118,7 +143,12 @@ $(function(){
 	    <td class="ckeditor" colspan="3"><textarea id="item_html" name="item_html">デフォルトのCKEditor。デフォルトのツールバー設定。</textarea></td>
 	</tr>
 	<tr>
-	    <th>チェックボックス<br />(インライン)</th>
+	    <th>チェックボックス<br />(インライン)
+	    <span class="fa-stack fa-xs text-danger">
+  <i class="fas fa-circle fa-stack-2x"></i>
+  <i class="fas fa-exclamation fa-stack-1x fa-inverse"></i>
+</span>
+	    </th>
 	    <td colspan="3">
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check1" />項目A</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check2" />項目BBB</label></div>
