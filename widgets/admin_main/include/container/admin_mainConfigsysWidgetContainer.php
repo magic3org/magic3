@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -360,22 +360,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->setAttribute('show_site_smartphone_close', 'visibility', 'visible');
 		}
 		
-		// SSL証明書期限を取得
-		if (!empty($sslUrl)){
-			$expireDt = $this->_getSslExpireDt($sslUrl, $sslDomain);
-			if (empty($expireDt)){
-				$expireDtTag = '未取得';
-			} else {
-				if (time() <= $expireDt){
-					$expireDt = date("Y/m/d H:i:s", $expireDt);
-					$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
-				} else {
-					$expireDt = date("Y/m/d H:i:s", $expireDt);
-					$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
-				}
-			}
-		}
-		
 		// 画面に書き戻す
 		$checked = '';
 		if ($sitePcInPublic) $checked = 'checked';
@@ -416,19 +400,61 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
 		}
 		
-		// URL
-		$this->tmpl->addVar("_widget", "root_url", $this->gEnv->getRootUrl());
-		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
-		$this->tmpl->addVar("_widget", "site_smartphone_url", $siteSmartphoneUrl);		// スマートフォン用サイトURL
+		// ルートURL
+		if ($this->gEnv->isRootUrlSsl()){		// ルートURLがSSL(サイト全体がSSL)の場合
+			// SSL証明書期限を取得
+			$expireDt = $this->_getSslExpireDt($this->gEnv->getRootUrl(), $sslDomain);
+			if (empty($expireDt)){
+				$expireDtTag = '未取得';
+			} else {
+				if (time() <= $expireDt){
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				} else {
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				}
+			}
+			
+			$this->tmpl->setAttribute('show_root_url', 'visibility', 'hidden');
+			$this->tmpl->setAttribute('show_root_url_expiredt', 'visibility', 'visible');		// SSLの期限を表示
+			
+			$this->tmpl->addVar("show_root_url_expiredt", "root_url", $this->gEnv->getRootUrl());
+			$this->tmpl->addVar('show_root_url_expiredt', 'root_ssl_expire_dt',	$expireDtTag);		// SSL証明書期限
+		} else {
+			$this->tmpl->addVar("show_root_url", "root_url", $this->gEnv->getRootUrl());
+		}
 		
 		// 共有SSL用のURL
 		if (!empty($sslUrl)){
+			// SSL証明書期限を取得
+			$expireDt = $this->_getSslExpireDt($sslUrl, $sslDomain);
+			if (empty($expireDt)){
+				$expireDtTag = '未取得';
+			} else {
+				if (time() <= $expireDt){
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				} else {
+					$expireDt = date("Y/m/d H:i:s", $expireDt);
+					$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
+				}
+			}
+		
 			$this->tmpl->setAttribute('show_ssl_url', 'visibility', 'hidden');
 			$this->tmpl->setAttribute('show_ssl_url_expiredt', 'visibility', 'visible');		// SSLの期限を表示
 			
 			$this->tmpl->addVar("show_ssl_url_expiredt", "ssl_url", $sslUrl);// SSLのURL
 			$this->tmpl->addVar('show_ssl_url_expiredt', 'ssl_expire_dt',	$expireDtTag);		// SSL証明書期限
+			
+			// ### 共有SSL用のURLのエラーチェック ###
+			// サイト全体にSSLが掛かっている場合は共有SSLは空にする
+			//$this->tmpl->addVar('_widget', 'error_info_ssl_url', 'エラー');
 		}
+		
+		// その他URL
+		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
+		$this->tmpl->addVar("_widget", "site_smartphone_url", $siteSmartphoneUrl);		// スマートフォン用サイトURL
 				
 		$checked = '';
 		if ($canDetailConfig) $checked = 'checked';

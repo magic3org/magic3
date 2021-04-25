@@ -124,10 +124,12 @@ $(function(){
     <tbody>
     <tr>
 	    <th>システムの<br />ルートURL</th>
-	    <td colspan="2"><div class="form-control-static">{ROOT_URL}</div></td>
+	    <td colspan="2">
+	    <patTemplate:tmpl name="show_root_url"><div class="form-control-static">{ROOT_URL}</div></patTemplate:tmpl>
+	    <patTemplate:tmpl name="show_root_url_expiredt" visibility="hidden"><div class="form-control-static col-sm-6 linebreak">{ROOT_URL}</div><div class="form-control-static col-sm-6 m3config_item" style="padding-left:10px;">SSL証明書期限：{ROOT_SSL_EXPIRE_DT}</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGSYS_SSL_URL}>共有SSLの<br />ルートURL</span></th>
+	    <th><span {_HELP_CONFIGSYS_SSL_URL}>共有SSLの<br />ルートURL</span>{ERROR_INFO_SSL_URL}</th>
 	    <td colspan="2"><patTemplate:tmpl name="show_ssl_url"><input type="text" name="item_ssl_url" class="form-control" maxlength="200" /></patTemplate:tmpl>
 		<patTemplate:tmpl name="show_ssl_url_expiredt" visibility="hidden"><div class="col-sm-6 m3config_item"><input type="text" name="item_ssl_url" class="form-control" value="{SSL_URL}" maxlength="200" /></div><div class="form-control-static col-sm-6 m3config_item" style="padding-left:10px;">SSL証明書期限：{SSL_EXPIRE_DT}</div></patTemplate:tmpl></td>
 	</tr>
