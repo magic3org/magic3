@@ -6148,44 +6148,47 @@ class PageManager extends _Core
 			$toUrl = $gEnvManager->getCurrentScriptUrl() . $toUrl;
 		}
 
-		// SSL化が必要な場合はhttpsに変更
+		// リダイレクト先のページの状態に合わせてSSLを制御する場合は、SSLの状態を必ず修正してリダイレクトする
 		if ($autoSsl){
-			$isSslPage = false;
-			if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
-				// ルートURLがSSLの場合は管理画面は常にSSL付き
-				if ($gEnvManager->isRootUrlSsl()) $isSslPage = true;
-				
-				// 管理画面のSSL状態を参照
-				if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
-			} else {		// フロント画面へのアクセスのとき
-				// ファイル名を取得
-				$paramArray = array();
-				//list($filename, $query) = explode('?', basename($toUrl));
-				list($url, $query) = explode('?', $toUrl);
-				$baseUrl = dirname($url);
-				$filename = basename($url);
-				if (empty($filename)) $filename = M3_FILENAME_INDEX;
-				if (!empty($query)) parse_str($query, $paramArray);		// クエリーの解析
+			if ($gEnvManager->isRootUrlSsl()){	// サイト全体がSSLの場合は常にSSL画面に遷移
+				$isSslPage = true;
+			} else {
+				$isSslPage = false;
+				if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
+					// 管理画面のSSL状態を参照
+					if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
+				} else {		// フロント画面へのアクセスのとき
+					// ファイル名を取得
+					$paramArray = array();
+					//list($filename, $query) = explode('?', basename($toUrl));
+					list($url, $query) = explode('?', $toUrl);
+					$baseUrl = dirname($url);
+					$filename = basename($url);
+					if (empty($filename)) $filename = M3_FILENAME_INDEX;
+					if (!empty($query)) parse_str($query, $paramArray);		// クエリーの解析
 		
-				// ページIDを取得
-				$pageId = basename($filename, '.php');
-				$pageSubId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
+					// ページIDを取得
+					$pageId = basename($filename, '.php');
+					$pageSubId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
 			
-				// ページのSSL設定状況を取得
-				$isSslPage = $this->isSslPage($pageId, $pageSubId);
+					// ページのSSL設定状況を取得
+					$isSslPage = $this->isSslPage($pageId, $pageSubId);
 			
-				// 階層化ページの場合はURLを修正
-				if ($this->gSystem->hierarchicalPage() && $filename == M3_FILENAME_INDEX){
-					$toUrl = $baseUrl . '/' . $pageSubId . '/';
-					unset($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID]);
+					// 階層化ページの場合はURLを修正
+					if ($this->gSystem->hierarchicalPage() && $filename == M3_FILENAME_INDEX){
+						$toUrl = $baseUrl . '/' . $pageSubId . '/';
+						unset($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID]);
 					
-					$paramStr = $this->_createUrlParamStr($paramArray);
-					if (!empty($paramStr)) $toUrl .= '?' . $paramStr;
+						$paramStr = $this->_createUrlParamStr($paramArray);
+						if (!empty($paramStr)) $toUrl .= '?' . $paramStr;
+					}
+					
+					// SSLありのページへ遷移する場合はSSL用のURLを修正
+					if ($isSslPage) $toUrl = $gEnvManager->getSslUrl($toUrl);		// SSL用URLに変換
 				}
 			}
 			if ($isSslPage){
-				//$toUrl = str_replace('http://', 'https://', $toUrl);
-				$toUrl = $gEnvManager->getSslUrl($toUrl);		// SSL用URLに変換
+				$toUrl = str_replace('http://', 'https://', $toUrl);
 			} else {
 				$toUrl = str_replace('https://', 'http://', $toUrl);
 			}

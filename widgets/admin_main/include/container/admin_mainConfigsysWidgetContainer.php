@@ -400,6 +400,15 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
 		}
 		
+		// ### 共有SSL用の設定のエラーチェック ###
+		// サイト全体にSSLが掛かっている場合は「管理画面にSSLを使用」「フロント画面にSSLを使用」のチェックは外す
+		if ($this->gEnv->isRootUrlSsl()){		// ルートURLがSSL(サイト全体がSSL)の場合
+			if ($useSsl || $useSslAdmin){
+				$errInfoIcon = $this->gDesign->createErrorInfoIcon('システムのルートURLがSSLの場合、「管理画面にSSLを使用」「フロント画面にSSLを使用」項目のチェックは外します。');
+				$this->tmpl->addVar('_widget', 'error_info_ssl', $errInfoIcon);
+			}
+		}
+		
 		// ルートURL
 		if ($this->gEnv->isRootUrlSsl()){		// ルートURLがSSL(サイト全体がSSL)の場合
 			// SSL証明書期限を取得
