@@ -449,7 +449,10 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			
 			// ### 共有SSL用のURLのエラーチェック ###
 			// サイト全体にSSLが掛かっている場合は共有SSLは空にする
-			//$this->tmpl->addVar('_widget', 'error_info_ssl_url', 'エラー');
+			if ($this->gEnv->isRootUrlSsl()){		// ルートURLがSSL(サイト全体がSSL)の場合
+				$errInfoIcon = $this->gDesign->createErrorInfoIcon('システムのルートURLがSSLの場合、共有SSLのルートURLを空に設定します。');
+				$this->tmpl->addVar('_widget', 'error_info_ssl_url', $errInfoIcon);
+			}
 		}
 		
 		// その他URL

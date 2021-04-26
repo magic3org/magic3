@@ -73,10 +73,6 @@ $(function(){
 });
 //]]>
 </script>
-<style type="text/css">
-.red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
-.red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; }
-</style>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
@@ -109,7 +105,7 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_ENTRY_NAME}>テキスト入力</span>
-	    <span class="fa-stack fa-xs text-danger">
+	    <span class="fa-stack fa-xs text-danger m3errorinfo" rel="m3help" data-placement="bottom" title="Tooltip danger example">
   <i class="fas fa-circle fa-stack-2x"></i>
   <i class="fas fa-exclamation fa-stack-1x fa-inverse"></i>
 </span>
@@ -138,7 +134,7 @@ $(function(){
   <i class="fas fa-circle fa-stack-2x"></i>
   <i class="fas fa-flag fa-stack-1x fa-inverse"></i>
 </span>
-	    <i class="glyphicon glyphicon-cog"></i> {STATIC_NAME}<input type="button" class="button red-tooltip" onclick="showAlert();" value="アラート" rel="m3help" data-placement="bottom" title="Tooltip danger example" /></td>
+	    <i class="glyphicon glyphicon-cog"></i> {STATIC_NAME}<input type="button" class="button" onclick="showAlert();" value="アラート" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div>

@@ -1070,6 +1070,17 @@ class DesignManager extends _Core
 		return $buttonTag;
 	}
 	/**
+	 * エラー情報アイコンを作成
+	 *
+	 * @param string $message	エラー情報メッセージ
+	 * @return string 			アイコンのタグ
+	 */
+	function createErrorInfoIcon($message = '')
+	{
+		$iconTag = '<span class="fa-stack fa-xs text-danger m3errorinfo" rel="m3help" data-placement="bottom" title="' . $message . '"><i class="fas fa-circle fa-stack-2x"></i><i class="fas fa-exclamation fa-stack-1x fa-inverse"></i></span>';
+		return $iconTag;
+	}
+	/**
 	 * カレンダーによる期間入力フィールドを作成
 	 *
 	 * @param string $startDateId		開始日タグID,タグ名
