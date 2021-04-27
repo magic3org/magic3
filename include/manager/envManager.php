@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -500,11 +500,16 @@ class EnvManager extends _Core
 	 */
 	public function isRootUrlSsl()
 	{
-		if (strncasecmp($this->currentDomainRootUrl, 'https://', 8) == 0){
-			return true;
-		} else {
-			return false;
+		static $isSsl;
+		
+		if (!isset($isSsl)){
+			if (strncasecmp($this->currentDomainRootUrl, 'https://', 8) == 0){
+				$isSsl = true;
+			} else {
+				$isSsl = false;
+			}
 		}
+		return $isSsl;
 	}
 	/**
 	 * SSL用のルートURLを取得
@@ -515,7 +520,11 @@ class EnvManager extends _Core
 		if (empty($this->sslUrl)){
 			$url = str_replace('http://', 'https://', M3_SYSTEM_ROOT_URL);
 		} else {
-			$url = $this->sslUrl;
+			if ($this->isRootUrlSsl()){		// ルートURLがSSL(サイト全体がSSL)の場合
+				$url = M3_SYSTEM_ROOT_URL;
+			} else {
+				$url = $this->sslUrl;
+			}
 		}
 		return $url;
 	}
