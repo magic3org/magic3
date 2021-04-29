@@ -423,15 +423,17 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "avatar_img", $iconTag);
 		
 			// ユーザメニュー
-			$iconTitle = 'ユーザ情報';
-			$iconUrl = $this->gEnv->getRootUrl() . self::USER_INFO_ICON_FILE;		// ユーザ情報
-			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			//$iconTitle = 'ユーザ情報';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::USER_INFO_ICON_FILE;		// ユーザ情報
+			//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			$iconTag = '<i class="fas fa-user fa-2x" style="color: black;"></i>';		// デフォルトカラーは黒。黒以外の場合はtext-danger等クラスを使用する。
 			$this->tmpl->addVar("menu", "user_info_img", $iconTag);
 			$loginStatusUrl = '?task=userlist_detail&userid=' . $userId;// ユーザ情報画面URL
 			$this->tmpl->addVar("menu", "user_info_url", $this->convertUrlToHtmlEntity($loginStatusUrl));
-			$iconTitle = 'ログアウト';
-			$iconUrl = $this->gEnv->getRootUrl() . self::LOGOUT_ICON_FILE;		// ログアウト
-			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			//$iconTitle = 'ログアウト';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::LOGOUT_ICON_FILE;		// ログアウト
+			//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			$iconTag = '<i class="fas fa-power-off fa-2x text-danger"></i>';
 			$this->tmpl->addVar("menu", "logout_img", $iconTag);
 			
 			// 運用中のコンテンツを取得
