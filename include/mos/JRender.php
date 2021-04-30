@@ -442,7 +442,8 @@ debug($contentItem->published);*/
 				// 必要な部分のみフィルタリングする
 				if (preg_match('/\$document->view->componentWrapper\(\'(.*?)\'\);/', $subTemplate, $matches)){
 					$contents = getCustomComponentContent($contents, $matches[1]);
-//debug('#content area='.$matches[1]);		// デバッグ用
+				} else {			// サブテンプレートIDが埋め込まれていない場合は「common」で取得する(Themler v1.0.520テンプレート対応 2021/4/30)
+					$contents = getCustomComponentContent($contents, 'common');
 				}
 				// ### ウィジェットエラーメッセージはここでコンテンツの先頭に追加して表示する? ###
 			}
