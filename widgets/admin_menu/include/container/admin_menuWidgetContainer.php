@@ -42,12 +42,12 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SMARTPHONE_ICON_FILE = '/images/system/device/smartphone.png';		// スマートフォンアイコン
 	const PC_CLOSED_ICON_FILE = '/images/system/device/pc_closed.png';		// PCアイコン(非公開)
 	const SMARTPHONE_CLOSED_ICON_FILE = '/images/system/device/smartphone_closed.png';		// スマートフォンアイコン(非公開)
-	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
-	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
-	const USER_INFO_ICON_FILE = '/images/system/info24.png';		// ユーザ情報アイコン
-	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
-	const PREVIEW_ICON_FILE = '/images/system/preview24.png';		// プレビューアイコン
-	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
+//	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
+//	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
+//	const USER_INFO_ICON_FILE = '/images/system/info24.png';		// ユーザ情報アイコン
+//	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
+//	const PREVIEW_ICON_FILE = '/images/system/preview24.png';		// プレビューアイコン
+//	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
 	const MENU_ICON_FILE = '/images/system/menu24.png';		// メニュー定義画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
 	const MAX_SITENAME_LENGTH_S = 9;		// サイト名の最大文字数
@@ -700,9 +700,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
 			$iconTag = '<i class="glyphicon glyphicon-picture"></i> ';
 		} else {
-			$iconTitle = 'プレビュー';
-			$iconUrl = $this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE;		// プレビューアイコン
-			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			//$iconTitle = 'プレビュー';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE;		// プレビューアイコン
+			//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			$iconTag = '<i class="fas fa-image fa-2x" style="color: black;"></i>';
 		}
 		$title = self::MENU_TITLE_PREVIEW;		// アイコン付加
 		switch ($deviceType){
@@ -729,9 +730,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
 				$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
 			} else {
-				$iconTitle = 'ウィジェット設定';
-				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
-				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+				//$iconTitle = 'ウィジェット設定';
+				//$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+				$iconTag = '<i class="fas fa-cog fa-2x" style="color: black;"></i>';
 			}
 			for ($i = 0; $i < count($menu); $i++){
 				$widgetId = $menu[$i]['wd_id'];
@@ -765,9 +767,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
 				$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
 			} else {
-				$iconTitle = 'ウィジェット設定';
-				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
-				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+				//$iconTitle = 'ウィジェット設定';
+				//$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+				$iconTag = '<i class="fas fa-cog fa-2x" style="color: black;"></i>';
 			}
 			
 			for ($i = 0; $i < count($subMenu); $i++){
@@ -816,16 +819,19 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		// アクセスポイントの公開制御
 		if ($isVisibleSite){
 			$openSiteMessage = 'アクセスポイントを非公開';
-			$iconTitle = 'アクセスポイントを非公開';
-			$iconUrl = $this->gEnv->getRootUrl() . self::SITE_CLOSE_ICON_FILE;// アクセスポイント非公開
+			//$iconTitle = 'アクセスポイントを非公開';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::SITE_CLOSE_ICON_FILE;// アクセスポイント非公開
+			$iconTag = '<i class="fas fa-minus-circle fa-2x text-danger"></i>';
 		} else {
 			$openSiteMessage = 'アクセスポイントを公開';
-			$iconTitle = 'アクセスポイントを公開';
-			$iconUrl = $this->gEnv->getRootUrl() . self::SITE_OPEN_ICON_FILE;		// アクセスポイント公開
+			//$iconTitle = 'アクセスポイントを公開';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::SITE_OPEN_ICON_FILE;		// アクセスポイント公開
+			$iconTag = '<i class="fas fa-caret-square-right fa-2x text-success"></i>';
 		}
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
-		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
+		//$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
+		$menuTag .= $iconTag . $openSiteMessage . '</a></li>' . M3_NL;
 		
 		return $menuTag;
 	}
@@ -874,8 +880,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 
-			$iconTitle = 'メニュー定義';
-			$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
+			//$iconTitle = 'メニュー定義';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::MENU_ICON_FILE;		// メニュー定義画面アイコン
 			
 			// メニュー定義の編集画面のタイプを取得
 //			$isHierMenu = $this->getMenuIsHider();			// メニュー定義編集画面が多階層タイプであるかどうか
@@ -891,7 +897,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 				$menuTag .= '<li><a href="' . $this->getUrl($menuDefUrl) . '">';
-				$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $this->convertToDispString($title) . '</a></li>' . M3_NL;
+//				$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $this->convertToDispString($title) . '</a></li>' . M3_NL;
+				$menuTag .= '<i class="fas fa-stream fa-2x" style="color: black;"></i>' . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
 		}
 		return $menuTag;
