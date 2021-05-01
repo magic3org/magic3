@@ -551,6 +551,7 @@ class AnalyzeManager extends _Core
 			'obot'						=> 'ibm.png',
 			'github.com'				=> 'github.png',
 			'coccoc'					=> 'coccoc.png',
+			'amazonbot'					=> 'amazon.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
