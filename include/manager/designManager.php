@@ -33,8 +33,8 @@ class DesignManager extends _Core
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
-	const NAV_ITEM_ICON_SIZE = 32;								// ナビゲーションメニューアイコンサイズ
+//	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+//	const NAV_ITEM_ICON_SIZE = 32;								// ナビゲーションメニューアイコンサイズ
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 	const DEFAULT_META_NO_INDEX = '<meta name="robots" content="noindex,nofollow" />';		// METAタグ(検索エンジン登録拒否)
 	
@@ -768,10 +768,10 @@ class DesignManager extends _Core
 				if ($openBy == 'other'){
 					$name = '閉じる';
 					$iconTitle = '閉じる';
-					$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
-					$imageSize = self::NAV_ITEM_ICON_SIZE;
-					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" alt="' . $iconTitle . '" />';
-					$menuTag .= '<li class="visible-xs"><a href="#" onclick="window.close();">' . $iconTag . ' ' . convertToHtmlEntity($name) . '</a></li>';
+//					$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
+//					$imageSize = self::NAV_ITEM_ICON_SIZE;
+//					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" alt="' . $iconTitle . '" />';
+					$menuTag .= '<li class="visible-xs"><a href="#" onclick="window.close();"><i class="fas fa-window-close fa-2x text-danger" style="background: radial-gradient(white 50%, transparent 50%);"></i> ' . convertToHtmlEntity($name) . '</a></li>';
 				}
 			}
 			$menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';

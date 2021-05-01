@@ -35,7 +35,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
 	const TOP_SERVER_ADMIN_ICON_FILE = '/images/system/globe32.png';		// トップ遷移アイコン(サーバ管理運用の場合)
 	const SMALL_DEVICE_ICON_FILE = '/images/system/smalldevice32.png';		// 小画面デバイスアイコン(小画面最適化実行時)
-	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+//	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const PC_ICON_FILE = '/images/system/device/pc.png';		// PCアイコン
@@ -197,8 +197,8 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->setAttribute('closebutton', 'visibility', 'visible');
 			
 				// ウィンドウ閉じるアイコンを設定
-				$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
-				$this->tmpl->addVar("closebutton", "close_image", $this->getUrl($iconUrl));
+				//$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
+				//$this->tmpl->addVar("closebutton", "close_image", $this->getUrl($iconUrl));
 				
 				// サーバ指定されている場合はサーバ名を設定
 				$server = $request->trimValueOf(M3_REQUEST_PARAM_SERVER);

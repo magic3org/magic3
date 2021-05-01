@@ -177,7 +177,7 @@ class PageManager extends _Core
 	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
 //	const EDIT_END_ICON_FILE = '/images/system/close32.png';		// パネルメニュー編集終了用アイコン
 	const EDIT_END_ICON_FILE = '/images/system/back32.png';		// パネルメニュー編集終了用アイコン
-	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+//	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
@@ -3107,12 +3107,12 @@ class PageManager extends _Core
 					if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'dialog'){		// 以外
 						if ($openBy == 'logout'){
 							$titleStr = 'ログアウト';
-							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-										'" alt="' . $titleStr . '" /></a></div>' . M3_NL;
+							//echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>' . M3_NL;
+							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><i class="fas fa-window-close fa-2x text-danger" style="background: radial-gradient(white 50%, transparent 50%);"></i></a></div>' . M3_NL;
 						} else {
 							$titleStr = '閉じる';
-							echo '<div class="m3configclose"><a href="#" onclick="window.close();" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-										'" alt="' . $titleStr . '" /></a></div>' . M3_NL;
+							//echo '<div class="m3configclose"><a href="#" onclick="window.close();" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>' . M3_NL;
+							echo '<div class="m3configclose"><a href="#" onclick="window.close();" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><i class="fas fa-window-close fa-2x text-danger" style="background: radial-gradient(white 50%, transparent 50%);"></i></a></div>' . M3_NL;
 						}
 					}
 				}
