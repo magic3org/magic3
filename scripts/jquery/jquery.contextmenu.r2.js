@@ -18,15 +18,16 @@
 
 (function($) {
 
- 	var menu, shadow, trigger, content, hash, currentTarget;
+  var menu, shadow, trigger, content, hash, currentTarget;
   var defaults = {
     menuStyle: {
       listStyle: 'none',
       padding: '1px',
       margin: '0px',
       backgroundColor: '#fff',
-      border: '1px solid #999'
-//      width: '100px'
+      border: '1px solid #999',
+      //width: '200px'
+      minWidth: '150px'
     },
     itemStyle: {
       margin: '0px',

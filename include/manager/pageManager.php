@@ -204,7 +204,7 @@ class PageManager extends _Core
 	
 	// Magic3用スクリプト
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin2.1.0.js';				// 管理機能用スクリプト(CKEditor4.0.1対応)
-	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.10.js';	// 管理機能(ウィジェット操作)用スクリプト
+	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.1.0.js';	// 管理機能(ウィジェット操作)用スクリプト
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.5.2.js';			// 一般、管理機能共通スクリプト
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt2.0.1.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
