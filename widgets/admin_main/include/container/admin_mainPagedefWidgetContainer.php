@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -44,6 +44,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const TEMPLATE_THUMBNAIL_FILENAME_WP = 'screenshot';				// テンプレートサムネール(WordPressテンプレート)
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
+	const TITLE_PRE_ICON_CLOSED = '<i class="fas fa-minus-circle text-danger" rel="m3help" title="非公開ページ"></i> ';		// タイトル付加用アイコン(非公開)
 	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
 	const TITLE_PRE_ICON_LOCK = '<i class="glyphicon glyphicon-lock" rel="m3help" title="SSL"></i> ';		// タイトル付加用アイコン(鍵)
 	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
@@ -673,6 +674,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// ページタイトル
 		$pageTitle = '';
 		$preTitle = '';
+		if (!$fetchedRow['pg_visible']) $preTitle .= self::TITLE_PRE_ICON_CLOSED;		// 「非公開」状態
 		if ($value == $this->defaultPageSubId) $preTitle .= self::TITLE_PRE_ICON_HOME;		// デフォルトページ(homeアイコン)
 		if ($useSsl) $preTitle .= self::TITLE_PRE_ICON_LOCK;		// SSL使用ページ(鍵アイコン)
 		if (!$fetchedRow['pg_active']) $preTitle .= self::TITLE_PRE_ICON_MINUS;			// 非表示ページ(非表示アイコン)

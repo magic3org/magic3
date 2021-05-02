@@ -4329,11 +4329,11 @@ class PageManager extends _Core
 				$this->initScript .= M3_INDENT_SPACE . '$("body").append(widgetWindow);' . M3_NL;
 				$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').contextMenu(\'m3_widgetmenu\', {' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'menuStyle: {' . M3_NL;
-				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// border : "2px solid green",' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'backgroundColor: \'#FFFFFF\',' . M3_NL;
-				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'width: "150px",' . M3_NL;
+				//$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'width: "150px",' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'textAlign: \'left\',' . M3_NL;
-				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'12px/1.5 Arial, sans-serif\'' . M3_NL;
+				//$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'c, sans-serif\'' . M3_NL;
+				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'15px/1.5 "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif\'' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'itemStyle: {' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'padding: \'3px 3px\'' . M3_NL;

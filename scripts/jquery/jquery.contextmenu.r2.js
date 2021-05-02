@@ -25,8 +25,8 @@
       padding: '1px',
       margin: '0px',
       backgroundColor: '#fff',
-      border: '1px solid #999',
-      width: '100px'
+      border: '1px solid #999'
+//      width: '100px'
     },
     itemStyle: {
       margin: '0px',
@@ -35,7 +35,8 @@
       cursor: 'default',
       padding: '3px',
       border: '1px solid #fff',
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
+      whiteSpace: 'nowrap'
     },
     itemHoverStyle: {
       border: '1px solid #0a246a',

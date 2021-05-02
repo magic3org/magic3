@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: cotextmenu1.0.js 5784 2013-03-04 03:46:49Z fishbone $
  * @link       http://www.magic3.org
@@ -16,7 +16,7 @@ $(function(){
 	// コンテキストメニュー
 	widgetWindow  = '<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">';
 	widgetWindow += '<ul>';
-	widgetWindow += '<li id="m3_wconfig"><img src="' + M3_ROOT_URL + '/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>';
+	widgetWindow += '<li id="m3_wconfig"><i class="fas fa-cog"></i>&nbsp;<span>ウィジェットの設定</span></li>';
 	widgetWindow += '</ul>';
 	widgetWindow += '</div>';
 	$("body").append(widgetWindow);
@@ -24,11 +24,9 @@ $(function(){
 	// コンテキストメニューを作成
 	$('.m3_widget').contextMenu('m3_widgetmenu', {
 		menuStyle: {
-			// border : "2px solid green",
 			backgroundColor: '#FFFFFF',
-			width: "150px",
 			textAlign: 'left',
-			font: '12px/1.5 Arial, sans-serif'
+			font: '15px/1.5 "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif'
 		},
 		itemStyle: {
 			padding: '3px 3px'

@@ -625,13 +625,16 @@ class DesignManager extends _Core
 			$iconTag = '';
 			switch ($iconType){
 				case 1:		// ウィジェット設定画面
-					$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
+					//$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
+					$iconTag = '<i class="fas fa-cog"></i> ';
 					break;
 				case 2:		// 共通設定画面
-					$iconTag = '<i class="glyphicon glyphicon-tasks"></i> ';
+					//$iconTag = '<i class="glyphicon glyphicon-tasks"></i> ';
+					$iconTag = '<i class="fas fa-window-maximize"></i> ';
 					break;
 				case 3:		// テンプレート設定画面
-					$iconTag = '<i class="glyphicon glyphicon-wrench"></i> ';
+					//$iconTag = '<i class="glyphicon glyphicon-wrench"></i> ';
+					$iconTag = '<i class="fas fa-wrench"></i> ';
 					break;
 			}
 			if (empty($navbarDef->help)){
