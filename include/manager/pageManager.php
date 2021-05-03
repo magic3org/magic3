@@ -3419,6 +3419,9 @@ class PageManager extends _Core
 				} else {		// ログインしていない場合(ログイン画面等)
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
+					
+					// アイコンフォントを追加
+					$this->defaultAdminDirCssFiles[] = self::M3_ADMIN_ICONFONT_CSS_FILE;// 管理機能用アイコンフォントのCSS
 				}
 			} else {		// フロント画面へのアクセスの場合
 				// ### Bootstrapのjsとcssはテンプレート側で読み込む ###
