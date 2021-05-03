@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -50,12 +50,15 @@ $(function(){
 	// パスワード入力部作成
 	$("#pwd").on("keyup",function(){
 		if ($(this).val()){
-			$(".glyphicon-eye-open").show();
+			//$(".glyphicon-eye-open").show();
+			$(".fa-eye").show();
 		} else {
-			$(".glyphicon-eye-open").hide();
+			//$(".glyphicon-eye-open").hide();
+			$(".fa-eye").hide();
 		}
 	});
-	$(".glyphicon-eye-open").mousedown(function(){
+	//$(".glyphicon-eye-open").mousedown(function(){
+	$(".fa-eye").mousedown(function(){
 		$("#pwd").attr('type','text');
 	}).mouseup(function(){
 		$("#pwd").attr('type','password');
@@ -94,7 +97,7 @@ $(function(){
     <label for="account" class="col-md-4 control-label">{_LC_LABEL_ACCOUNT}</label>
     <div class="col-md-7">
         <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <span class="input-group-addon"><!--<i class="glyphicon glyphicon-user"></i>--><i class="fas fa-user"></i></span>
             <input type="text" id="account" name="account" class="form-control">
         </div>
     </div>
@@ -103,11 +106,11 @@ $(function(){
     <label for="pwd" class="col-md-4 control-label"><span id="pwd_label">{_LC_LABEL_PASSWORD}</span></label>
     <div class="col-md-7">
         <div id="pwd_area" class="input-group password_area">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-            <input type="password" id="pwd" name="pwd" class="form-control"><i class="glyphicon glyphicon-eye-open"></i>
+            <span class="input-group-addon"><!--<i class="glyphicon glyphicon-lock"></i>--><i class="fas fa-lock"></i></span>
+            <input type="password" id="pwd" name="pwd" class="form-control"><!--<i class="glyphicon glyphicon-eye-open"></i>--><i class="fas fa-eye"></i>
         </div>
         <div id="email_area" class="input-group" style="display:none;">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <span class="input-group-addon"><!--<i class="glyphicon glyphicon-envelope"></i>--><i class="fas fa-envelope"></i></span>
             <input type="text" id="email" name="email" class="form-control" />
         </div>
     </div>

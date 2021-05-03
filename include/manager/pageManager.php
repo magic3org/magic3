@@ -3416,7 +3416,7 @@ class PageManager extends _Core
 						$templateType = $gEnvManager->getCurrentTemplateType();
 						if ($templateType != M3_TEMPLATE_BOOTSTRAP_30) $this->addAdminScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 					}
-				} else {		// ログインしていない場合(ログイン画面等)
+				} else {		// ログインしていない場合(ログイン画面、インストール画面等)
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
 					
