@@ -19,12 +19,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-    <link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
-    <!--[if IE]><link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/iestyles.css" media="screen"><![endif]-->
-    <!--[if lt IE 9]>
-    <script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
-    <script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/default.css" media="screen">
 </head>
 <body>
 <jdoc:include type="modules" name="top" style="none" />

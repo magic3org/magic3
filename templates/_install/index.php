@@ -6,11 +6,7 @@ defined('M3_SYSTEM') or die('Access error: Direct access denied.');
 <html>
 <head>
 <?php mosShowHead(); ?>
-<link href="../templates/_install/css/style.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]>
-     <script src="../templates/_install/html5shiv.js"></script>
-     <script src="../templates/_install/respond.min.js"></script>
-<![endif]-->
+<link href="../templates/_install/css/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="container">

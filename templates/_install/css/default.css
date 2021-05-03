@@ -29,7 +29,15 @@
 #password_area input[type="password"]{
 	padding-right: 30px;
 }
-#password_area i.glyphicon.glyphicon-eye-open {
+#password_area i.fas.fa-eye {
+	position: absolute;
+	z-index: 5;
+	display: none;
+	right: 23px;
+	top: 17px;
+	cursor: pointer;
+}
+#password_area i.glyphicon.glyphicon-eye-open { /* 廃止予定 */
 	position: absolute;
 	z-index: 5;
 	display: none;
