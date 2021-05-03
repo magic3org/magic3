@@ -4259,19 +4259,28 @@ class PageManager extends _Core
 				
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'\';' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (useconfig == 1){' . M3_NL;
+//				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
+//									'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" data-container="body" title="ウィジェットの設定">' .
+//									'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェットの設定" width="32" height="32" /></a>\';' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-									'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" data-container="body" title="ウィジェット設定">' .
-									'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェット設定" width="32" height="32" /></a>\';' . M3_NL;
+									'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" title="ウィジェットの設定">' .
+									'<i class="fas fa-cog fa-2x" style="color: black; margin:3px;"></i></a>\';' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
 				if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
+					//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 
+					//					'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" rel="m3help" data-container="body" title="タイトル・スタイル調整">' .
+					//					'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・スタイル調整" width="32" height="32" /></a>\';' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 
 										'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" rel="m3help" data-container="body" title="タイトル・スタイル調整">' .
-										'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・スタイル調整" width="32" height="32" /></a>\';' . M3_NL;
+										'<i class="fas fa-window-maximize fa-2x" style="color: black; margin:3px;"></i></a>\';' . M3_NL;
 				}
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (html != \'\'){' . M3_NL;
+				//$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
+				//						'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);" rel="m3help" data-container="body" title="閉じる">' . 
+				//						'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
 										'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);" rel="m3help" data-container="body" title="閉じる">' . 
-										'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
+										'<i class="fas fa-window-close" style="color:black; font-size:15px; vertical-align:20px;"></i></a></div>\';' . M3_NL;
 										
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).append(html);' . M3_NL;
 				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
@@ -4320,9 +4329,11 @@ class PageManager extends _Core
 				// コンテキストメニューを作成
 				$this->initScript .= M3_INDENT_SPACE . 'var widgetWindow = \'<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">\';' . M3_NL;
 				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<ul>\';' . M3_NL;
-				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
+	//			$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
+				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><i class="fas fa-cog"></i>&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
 				if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・スタイル調整</span></li>\';' . M3_NL;
+					//$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・スタイル調整</span></li>\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><i class="fas fa-window-maximize"></i>&nbsp;<span>タイトル・スタイル調整</span></li>\';' . M3_NL;
 				}
 				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</ul>\';' . M3_NL;
 				$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</div>\';' . M3_NL;
@@ -5575,7 +5586,7 @@ class PageManager extends _Core
 			}
 			if ($rows[$i]['wd_has_admin']){
 				$hasAdmin = '1';
-				$title = 'ウィジェット設定';
+				$title = 'ウィジェットの設定';
 				$configImg .= '<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', \'' . $configId . '\', \'' . $serial . '\');return false;" rel="m3help" data-container="body" title="' . $title . '">' .
 								'<img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" alt="' . $title . '"/></a>&nbsp;';
 			}
@@ -5603,14 +5614,19 @@ class PageManager extends _Core
 			$operationMenu .= '<a class="m3widgetdropdownbutton" data-dropdown="#' . $dropdownMenuId . '" href="#" data-horizontal-offset="4"><b class="caret"></b></a>';
 			$operationMenu .= '<div id="' . $dropdownMenuId . '" class="m3dropdown m3dropdown-tip m3dropdown-relative m3dropdown-anchor-right">';
 			$operationMenu .= '<ul class="m3dropdown-menu">';
-			if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
-			$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・スタイル調整</span></a></li>';
+			//if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
+			if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><i class="fas fa-cog" style="color:black;"></i> <span>ウィジェットの設定</span></a></li>';
+			//$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・スタイル調整</span></a></li>';
+			$operationMenu .= '<li class="m3_wadjust"><a href="#"><i class="fas fa-window-maximize" style="color:black;"></i> <span>タイトル・スタイル調整</span></a></li>';
 			if ($shared){
-				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を解除</span></a></li>';
+				//$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を解除</span></a></li>';
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><i class="fas fa-newspaper" style="color:black;"></i> <span>グローバル属性を解除</span></a></li>';
 			} else {
-				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を設定</span></a></li>';
+				//$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を設定</span></a></li>';
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><i class="fas fa-newspaper" style="color:black;"></i> <span>グローバル属性を設定</span></a></li>';
 			}
-			$operationMenu .= '<li class="m3_wdelete"><a href="#"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
+			//$operationMenu .= '<li class="m3_wdelete"><a href="#"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
+			$operationMenu .= '<li class="m3_wdelete"><a href="#"><i class="fas fa-times-circle text-danger"></i> <span>このウィジェットを削除</span></a></li>';
 			$operationMenu .= '</ul>';
 			$operationMenu .= '</div>';
 			$operationMenu .= '</div>';
