@@ -2988,13 +2988,10 @@ class PageManager extends _Core
 			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){	// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
 			if ($this->isHtml5){
-				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
+				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/default.css" media="screen">' . M3_NL;
 				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/widget.css" media="screen">' . M3_NL;		// ウィジェット設定画面用CSS
-	    		echo '<!--[if IE]><link rel="stylesheet" href="' . $curTemplateUrl . '/css/iestyles.css" media="screen"><![endif]-->' . M3_NL;
-				echo '<!--[if lt IE 9]><script src="' . $curTemplateUrl . '/html5shiv.js"></script><![endif]-->' . M3_NL;
 			} else {
-				echo '<link href="' . $curTemplateUrl . '/css/style.css" rel="stylesheet" type="text/css" />' . M3_NL;
-				echo '<!--[if IE]><link rel="stylesheet" type="text/css" media="screen" href="' . $curTemplateUrl . '/css/iestyles.css" /><![endif]-->' . M3_NL;
+				echo '<link href="' . $curTemplateUrl . '/css/default.css" rel="stylesheet" type="text/css" />' . M3_NL;
 			}
 		}
 		// ウィジェット情報取得
