@@ -2956,7 +2956,6 @@ class PageManager extends _Core
 			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . M3_NL;
 			echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $gEnvManager->getCurrentLanguage() . '" lang="' . $gEnvManager->getCurrentLanguage() . '">' . M3_NL;
 			echo '<head>' . M3_NL;
-//			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . M3_NL;
 		}
 
 		// HTMLのヘッダ部(headタグ内)出力
@@ -2987,12 +2986,12 @@ class PageManager extends _Core
 		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || $cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE ||						// ウィジェット設定画面またはテンプレート設定画面のとき
 			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){	// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
-			if ($this->isHtml5){
+//			if ($this->isHtml5){
 				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/default.css" media="screen">' . M3_NL;
-				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/widget.css" media="screen">' . M3_NL;		// ウィジェット設定画面用CSS
-			} else {
-				echo '<link href="' . $curTemplateUrl . '/css/default.css" rel="stylesheet" type="text/css" />' . M3_NL;
-			}
+//				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/widget.css" media="screen">' . M3_NL;		// ウィジェット設定画面用CSS(未使用?)
+//			} else {
+//				echo '<link href="' . $curTemplateUrl . '/css/default.css" rel="stylesheet" type="text/css" />' . M3_NL;
+//			}
 		}
 		// ウィジェット情報取得
 		$ret = $this->db->getWidgetInfo($widgetId, $row);
