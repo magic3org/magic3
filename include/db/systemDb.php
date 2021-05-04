@@ -496,7 +496,7 @@ class SystemDb extends BaseDb
 		$queryStr .=     'AND ag_client_id = ? ';
 		$ret = $this->selectRecord($queryStr, array($userId, $clientId), $row);
 		if ($ret){
-			return $row[ag_id];
+			return $row['ag_id'];
 		} else {
 			return '';
 		}
