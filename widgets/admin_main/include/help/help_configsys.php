@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -57,7 +57,7 @@ class help_configsys extends HelpConv
 			),
 			'configsys_front_page' => array(	
 				'title' =>	'フロント画面',
-				'body' =>	'フロント画面の設定です。<br />●jQueryバージョン ― 使用するjQueryのバージョンを指定します。テンプレート側で組み込みでjQueryを読み込みシステム内部のjQueryを読み込まない場合は「外部のjQueryを使用」にチェックを入れます。<br />●システム画面テンプレート ― アクセス不可等のメッセージを表示する画面で使用するテンプレートです。'
+				'body' =>	'フロント画面の設定です。<br />●システム画面テンプレート ― メンテナンス中、アクセス不可等のメッセージ表示用画面のテンプレートです。<br />●jQueryバージョン ― 使用するjQueryのバージョンを指定します。テンプレート側で組み込みでjQueryを読み込みシステム内部のjQueryを読み込まない場合は「外部のjQueryを使用」にチェックを入れます。'
 			),
 			'configsys_menu' => array(
 				'title' =>	'メニュー管理',
