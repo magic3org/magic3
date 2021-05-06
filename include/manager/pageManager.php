@@ -7385,5 +7385,17 @@ class PageManager extends _Core
 		}
 		return array();
 	}
+	// ********************************************************
+	//          テンプレート用API
+	// ********************************************************
+	/**
+	 * FontAwesomeのCSSファイルのURL取得
+	 *
+	 * @param string $baseUrl	テンプレートで取得されたベースURL
+	 * @return					CSSファイルのURL
+	 */
+	function getFontAwesomeUrl($baseUrl){
+		return $baseUrl . '/' . M3_DIR_NAME_SCRIPTS . '/' . self::M3_ADMIN_ICONFONT_CSS_FILE;
+	}
 }
 ?>
