@@ -13,8 +13,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <jdoc:include type="head" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootstrap.min.css" media="screen">
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/fontawesome-all.min.css" media="screen">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="<?php global $gPageManager; echo $gPageManager->getFontAwesomeUrl($document->baseurl); ?>" media="screen">
+	<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>
 </head>
 <body>
 <header>
