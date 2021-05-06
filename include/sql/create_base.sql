@@ -562,7 +562,7 @@ CREATE TABLE _templates (
     tm_editor_param      TEXT                                         NOT NULL,      -- 編集エディタ用パラメータ
     tm_attr              TEXT                                         NOT NULL,      -- その他属性(「,」区切り)(woocommerce等)
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
-    tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
+    tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrap用のHTML生成をするかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
     tm_has_admin         BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理画面があるかどうか
     tm_clean_type        INT            DEFAULT 0                     NOT NULL,      -- 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)

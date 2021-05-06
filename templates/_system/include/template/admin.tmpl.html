@@ -1,0 +1,99 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function uploadCssCheck(){
+	if (!document.upload.upfile.value){
+		alert('アップロードファイルが選択されていません');
+		return;
+	}
+	document.upload.act.value = 'upload_css';
+	document.upload.submit();
+	return false;
+}
+$(function(){
+	m3SetConfigTable('mainconfig');
+	
+	// ファイル選択用ボタン作成
+	m3SetFileSelectButton();
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="act" />
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
+    <tbody>
+    <tr>
+	    <th>Bootstrap4テーマ(CSS)</th>
+		<td>
+		<div class="form-group clearfix">
+		<div class="radio m3config_item"><label class=""><input type="radio" name="item_css_type" value="file" {CSS_FILE_CHECKED} />ファイルを選択</label></div>
+	    <div class="m3config_item col-sm-6"><select name="item_file" class="form-control">
+		    <option value="">-- デフォルト --</option>
+            <patTemplate:tmpl name="css_file_list">
+            <option value="{VALUE}" {SELECTED}>{NAME}</option>
+            </patTemplate:tmpl>
+            </select>
+		</div>
+		<div class="col-sm-6 side_buttons">{UPLOAD_BUTTON}</div>
+		</div>
+		<div class="form-group clearfix">
+		<div class="radio"><label><input type="radio" name="item_css_type" value="cdn" {CSS_CDN_CHECKED} />CDN(HTML LINKタグ形式)を入力</label></div>
+		<input type="text" name="item_cdn" class="form-control" value="{CDN}" />
+		</div>
+		</td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
+</form>
+</div>
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">CSSファイルアップロード</h4>
+            </div>
+            <div class="modal-body">
+			    <p>CSSファイルを選択してください</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-success" onclick="uploadCssCheck();">アップロード</button>
+            </div>
+        </div>
+    </div>
+</div>
+</patTemplate:tmpl>
