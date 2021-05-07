@@ -273,7 +273,7 @@ INSERT INTO _site_def
 -- 多言語対応文字列マスター
 INSERT INTO _language_string
 (ls_type, ls_id,                           ls_language_id, ls_value,                             ls_name) VALUES
-(0,       'msg_site_in_maintenance',       'ja',           'ただいまサイトのメンテナンス中です', 'メンテナンス中メッセージ'),
+(0,       'msg_site_in_maintenance',       'ja',           'ただいまサイトのメンテナンス中です。<br />もうしばらくお待ちください。', 'メンテナンス中メッセージ'),
 (0,       'msg_access_deny',               'ja',           'アクセスできません',                 'アクセス不可メッセージ'),
 (0,       'msg_page_not_found',            'ja',           'ページが見つかりません',             '存在しないページメッセージ'),
 (0,       'msg_admin_popup_login',         'ja',           '',                                   'ログイン時管理者向けポップアップメッセージ'),

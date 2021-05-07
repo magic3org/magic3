@@ -63,7 +63,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$cmd != M3_REQUEST_CMD_LOGOUT && 				// ログアウトはスルーして後のログアウト部分で処理
 				($cmd != M3_REQUEST_CMD_LOGIN || ($cmd == M3_REQUEST_CMD_LOGIN && $request->isGetMethod()))){	// GETで来たログインコマンドはログインとしない
 			if ($systemMode >= 10){			// サイト非公開、アクセス不可のとき
-				// 画面を作成
+				// ##### メッセージ表示用の画面を作成 #####
 				switch ($systemMode){
 					case 10:		// システムメンテナンスのとき
 						$useContentKey = self::CF_USE_CONTENT_MAINTENANCE;	// コンテンツを使用するかどうか

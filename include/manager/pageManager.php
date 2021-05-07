@@ -2206,16 +2206,25 @@ class PageManager extends _Core
 			if (!$this->isRedirect){			// リダイレクトがセットされていない場合
 				switch ($this->systemHandleMode){
 					case 10:			// サイト非公開(システムメンテナンス)
-						header('HTTP/1.1 503 Service Temporarily Unavailable');
-						header('Status: 503 Service Temporarily Unavailable');
+						//header('HTTP/1.1 503 Service Temporarily Unavailable');
+						//header('Status: 503 Service Temporarily Unavailable');
+						
+						// レスポンスヘッダ設定
+						$this->setResponse(503);
 						break;
 					case 11:			// アクセス禁止のとき
-						header('HTTP/1.1 403 Forbidden');
-						header('Status: 403 Forbidden');
+						//header('HTTP/1.1 403 Forbidden');
+						//header('Status: 403 Forbidden');
+						
+						// レスポンスヘッダ設定
+						$this->setResponse(403);
 						break;
 					case 12:			// 存在しないページのとき
-						header("HTTP/1.1 404 Not Found");
-						header("Status: 404 Not Found");
+						//header("HTTP/1.1 404 Not Found");
+						//header("Status: 404 Not Found");
+						
+						// レスポンスヘッダ設定
+						$this->setResponse(404);
 						break;
 				}
 			}

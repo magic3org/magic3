@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -65,11 +65,11 @@ class admin_mainConfigmessageWidgetContainer extends admin_mainConfigsystemBaseW
 		$this->langId		= $this->gEnv->getCurrentLanguage();
 
 		$act = $request->trimValueOf('act');
-		$msg_siteInMaintenance = $request->trimValueOf('item_msg_site_in_maintenance');		// メンテナンス中メッセージ
+		$msg_siteInMaintenance = $request->valueOf('item_msg_site_in_maintenance');		// メンテナンス中メッセージ
 		$useContentMaintenance = ($request->trimValueOf('item_use_content_maintenance') == 'on') ? 1 : 0;		// メンテナンス画面用コンテンツを汎用コンテンツから取得するかどうか
-		$msg_accessDeny = $request->trimValueOf('item_msg_access_deny');		// アクセス不可メッセージ
+		$msg_accessDeny = $request->valueOf('item_msg_access_deny');		// アクセス不可メッセージ
 		$useContentAccessDeny = ($request->trimValueOf('item_use_content_access_deny') == 'on') ? 1 : 0;		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
-		$msg_pageNotFound = $request->trimValueOf('item_msg_page_not_found');		// 存在しない画面メッセージ
+		$msg_pageNotFound = $request->valueOf('item_msg_page_not_found');		// 存在しない画面メッセージ
 		$useContentPageNotFound = ($request->trimValueOf('item_use_content_page_not_found') == 'on') ? 1 : 0;		// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
 		$msg_adminPopupLogin = $request->trimValueOf('item_msg_admin_popup_login');		// ログイン時管理者向けポップアップメッセージ
 		

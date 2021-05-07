@@ -33,7 +33,7 @@ class MessageManager extends _Core
 	const MSG_ACCESS_DENY = 'msg_access_deny';							// アクセス不可メッセージ
 	const MSG_PAGE_NOT_FOUND = 'msg_page_not_found';							// ページが見つからないメッセージ
 	const MSG_ADMIN_POPUP_LOGIN = 'msg_admin_popup_login';				// ログイン時管理者向けポップアップメッセージ
-	const DEFAULT_MSG_SITE_IN_MAINTENANCE = 'ただいまサイトのメンテナンス中です';// サイトメンテナンス中メッセージのデフォルト値
+	const DEFAULT_MSG_SITE_IN_MAINTENANCE = 'ただいまサイトのメンテナンス中です。<br />もうしばらくお待ちください。';// サイトメンテナンス中メッセージのデフォルト値
 	const DEFAULT_MSG_ACCESS_DENY = 'アクセスできません';						// アクセス不可メッセージのデフォルト値
 	const DEFAULT_MSG_PAGE_NOT_FOUND = 'ページが見つかりません';						// ページが見つからないメッセージのデフォルト値
 	const DEFAULT_WORD_UNTITLED = '[未設定]';		// 用語未設定
