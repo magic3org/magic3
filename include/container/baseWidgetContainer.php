@@ -3153,9 +3153,11 @@ class BaseWidgetContainer extends _Core
 	function getTempConfigId($paramObj)
 	{
 		$maxId = 0;
-		for ($i = 0; $i < count($paramObj); $i++){
-			$configId	= $paramObj[$i]->id;// 定義ID
-			if ($configId > $maxId) $maxId = $configId;
+		if (is_array($paramObj)){
+			for ($i = 0; $i < count($paramObj); $i++){
+				$configId	= $paramObj[$i]->id;// 定義ID
+				if ($configId > $maxId) $maxId = $configId;
+			}
 		}
 		$maxId++;
 		return $maxId;
