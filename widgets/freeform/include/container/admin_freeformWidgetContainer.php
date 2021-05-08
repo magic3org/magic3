@@ -8,7 +8,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -245,11 +245,13 @@ class admin_freeformWidgetContainer extends BaseAdminWidgetContainer
 			}
 								
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					if ($name == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			
@@ -602,6 +604,8 @@ class admin_freeformWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createItemMenu()
 	{
+		if (!is_array($this->paramObj)) return;
+		
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id = $this->paramObj[$i]->id;// 定義ID
 			$targetObj = $this->paramObj[$i]->object;
@@ -703,7 +707,9 @@ class admin_freeformWidgetContainer extends BaseAdminWidgetContainer
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
 			$name = self::DEFAULT_NAME_HEAD . $j;
+			
 			// 設定名の重複チェック
+			if (!is_array($this->paramObj)) break;
 			for ($i = 0; $i < count($this->paramObj); $i++){
 				$targetObj = $this->paramObj[$i]->object;
 				if ($name == $targetObj->name){		// 定義名
