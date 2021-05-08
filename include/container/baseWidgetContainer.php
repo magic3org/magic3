@@ -308,10 +308,12 @@ class BaseWidgetContainer extends _Core
 			// テキストのローカライズ
 			if ($useTemplate){
 				$localKeys = array_keys($this->localeText);			// ローカライズ用定義
-				for ($i = 0; $i < count($localKeys); $i++){
-					$key = $localKeys[$i];
-					$localText = $this->localeText[$key];			// ロケールファイルからテキストを取得
-					$this->tmpl->addGlobalVar(self::LOCAL_TEXT_HEAD . $key, $localText);		// グローバルパラメータを文字列変換
+				if (is_array($localKeys)){
+					for ($i = 0; $i < count($localKeys); $i++){
+						$key = $localKeys[$i];
+						$localText = $this->localeText[$key];			// ロケールファイルからテキストを取得
+						$this->tmpl->addGlobalVar(self::LOCAL_TEXT_HEAD . $key, $localText);		// グローバルパラメータを文字列変換
+					}
 				}
 			}
 
@@ -4059,31 +4061,33 @@ class BaseWidgetContainer extends _Core
 	 */
 	function assignTemplate_createItemList()
 	{
-		for ($i = 0; $i < count($this->_localParamObj); $i++){
-			$id			= $this->_localParamObj[$i]->id;// 定義ID
-			$targetObj	= $this->_localParamObj[$i]->object;
-			$name = $targetObj->name;// 定義名
+		if (is_array($this->_localParamObj)){
+			for ($i = 0; $i < count($this->_localParamObj); $i++){
+				$id			= $this->_localParamObj[$i]->id;// 定義ID
+				$targetObj	= $this->_localParamObj[$i]->object;
+				$name = $targetObj->name;// 定義名
 		
-			// 使用数
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				// 使用数
+				$defCount = 0;
+				if (!empty($id)){
+					$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				}
+				$operationDisagled = '';
+				if ($defCount > 0) $operationDisagled = 'disabled';
+			
+				$row = array(
+					'index' => $i,
+					'id' => $id,
+					'ope_disabled' => $operationDisagled,			// 選択可能かどうか
+					'name' => $this->convertToDispString($name),		// 名前
+					'def_count' => $defCount							// 使用数
+				);
+				$this->tmpl->addVars('itemlist', $row);
+				$this->tmpl->parseTemplate('itemlist', 'a');
+			
+				// シリアル番号を保存
+				$this->_localSerialArray[] = $id;
 			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			
-			$row = array(
-				'index' => $i,
-				'id' => $id,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'def_count' => $defCount							// 使用数
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->_localSerialArray[] = $id;
 		}
 		// 一覧部の表示制御
 		$this->setListTemplateVisibility('itemlist');
@@ -4112,7 +4116,9 @@ class BaseWidgetContainer extends _Core
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
 			$name = self::DEFAULT_NAME_HEAD . $j;
+			
 			// 設定名の重複チェック
+			if (!is_array($this->_configParamObj)) break;
 			for ($i = 0; $i < count($this->_configParamObj); $i++){
 				$targetObj = $this->_configParamObj[$i]->object;
 				if ($name == $targetObj->name){		// 定義名
@@ -4134,6 +4140,8 @@ class BaseWidgetContainer extends _Core
 	 */
 	function createConfigNameMenu($configId)
 	{
+		if (!is_array($this->_configParamObj)) return;
+		
 		for ($i = 0; $i < count($this->_configParamObj); $i++){
 			$id = $this->_configParamObj[$i]->id;// 定義ID
 			$targetObj = $this->_configParamObj[$i]->object;
