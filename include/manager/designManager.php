@@ -815,7 +815,8 @@ class DesignManager extends _Core
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
 		if ($disabled) $tagClass .= ' disabled';
-		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
+//		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="fas fa-edit"></i></a>';
 		return $buttonTag;
 	}
 	/**

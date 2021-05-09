@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,10 +20,10 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
-//	private $useBootstrap;
 	const DEFAULT_TITLE = 'ログインユーザ';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
-		
+	const TAG_ID_EDIT_USER = 'edituser';			// ユーザ編集ボタンタグID
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -34,8 +34,6 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new admin_loginuserDb();
-		
-//		$this->useBootstrap = $this->gPage->getUseBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -49,11 +47,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-//		if ($this->useBootstrap){
-//			return 'index_bs.tmpl.html';
-//		} else {
-			return 'index.tmpl.html';
-//		}
+		return 'index.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -106,7 +100,10 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->addVar("_widget", "login_dt", $this->convertToDispDateTime($loginDt, 0, 10/*時分表示*/));
 		}
 		
-		$this->tmpl->addVar("_widget", "user_detail_url", $this->convertUrlToHtmlEntity($userDetailUrl));	// ユーザ詳細画面URL
+		// ユーザ情報へのリンク
+		$buttonTag = $this->gDesign->createEditButton($userDetailUrl, 'ユーザ情報を編集', self::TAG_ID_EDIT_USER);
+		$this->tmpl->addVar("_widget", "user_detail_button", $buttonTag);
+			
 		$this->tmpl->addVar("_widget", "login_status_url", $this->convertUrlToHtmlEntity($loginStatusUrl));	// ログイン状況画面URL
 	}
 	/**
@@ -133,14 +130,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	function _addCssFileToHead($request, &$param)
 	{
 		$cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
-		
-		// Bootstrapを使用する場合はjQueryUIテーマを使用しない
-//		$useBootstrap = $this->gPage->getUseBootstrap();
-//		if ($useBootstrap){
-			return $cssFilePath;
-//		} else {
-//			return array($cssFilePath, $this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
-//		}
+		return $cssFilePath;
 	}
 }
 ?>
