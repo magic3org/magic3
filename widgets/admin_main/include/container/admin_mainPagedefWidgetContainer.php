@@ -423,6 +423,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_PLAIN32_ICON_FILE;
 		$this->tmpl->addVar("_widget", "template_plain32", $this->getUrl($iconUrl));
 		
+		// ボタン作成
+		$buttonTag = $this->gDesign->createEditButton('?task=pageinfo', 'ページ管理');		// 「ページ管理」ボタン
+		$this->tmpl->addVar("_widget", "edit_page_button", $buttonTag);
+		
 		// テンプレートモード(空=デザインテンプレート,plain=デザインなしテンプレート)を再設定
 		$this->tmpl->addVar("_widget", "layout_mode", $layoutMode);
 		if (empty($layoutMode)){
