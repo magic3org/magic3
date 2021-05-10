@@ -18,7 +18,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainTest_mobileWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.26/Mobile_Detect.php';		// デバイス判定用スクリプト
+	//const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.26/Mobile_Detect.php';		// デバイス判定用スクリプト
+	const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.37/Mobile_Detect.php';		// デバイス判定用スクリプト
 	
 	/**
 	 * コンストラクタ

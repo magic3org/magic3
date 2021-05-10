@@ -138,21 +138,6 @@ function preview()
 	}, function(request){		// 異常終了
 		alert('通信に失敗しました。');
 	}, '', false/*同期接続*/);
-
-//	var previewWindow = window.open("", windowName);
-//	previewWindow.document.body.innerHTML = "プレビュー作成中...";
-//	m3_ajax_request('', 'cmd=configwidget&widget={CURRENT_WIDGET}&' + $('#main').serialize(), function(request, retcode, jsondata){		// 正常終了
-//		// プレビュー用のURLを設定
-//		if (jsondata.url && jsondata.url != ''){
-//			previewWindow.location.href = jsondata.url;
-//		}
-//		previewWindow = null;
-//	}, function(request){		// 異常終了
-//		alert('通信に失敗しました。');
-//		
-//		previewWindow.close();
-// 		previewWindow = null;
-//	});
 }
 function editEntry(serial){
 	document.main.entryid.value = '';		// 値キャンセル
@@ -308,7 +293,7 @@ $(function(){
 	    <td><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" maxlength="60" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_ENTRY_DT}>投稿日時</span><a href="javascript:void(0);" id="edit_date_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
+	    <th><span {_HELP_ENTRY_DT}>投稿日時</span>{EDIT_DATE_BUTTON}
 		</th>
 	</tr>
 	<tr>
@@ -346,7 +331,7 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <th>その他<a href="javascript:void(0);" id="edit_others_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
+	    <th>その他{EDIT_OTHERS_BUTTON}
 		</th>
 	</tr>
 	<tr>
@@ -420,7 +405,7 @@ $(function(){
         </div><!-- panel body -->
 <table id="termpanel" class="input">
 	<tr>
-	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span><a href="javascript:void(0);" id="edit_term_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
+	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span>{EDIT_TERM_BUTTON}
 		</th>
 	</tr>
 	<tr class="term_toggle_area" style="display:none;">

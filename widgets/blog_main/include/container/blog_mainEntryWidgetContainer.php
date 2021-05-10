@@ -60,6 +60,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
 	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
 	const DATETIME_FORMAT = 'Y年n月j日($1) H:i:s';		// 日付時間フォーマット
+	const TAG_ID_EDIT_DATE = 'edit_date_button';	// 投稿日時編集ボタンタグID
+	const TAG_ID_EDIT_OTHERS = 'edit_others_button';	// その他編集ボタンタグID
+	const TAG_ID_EDIT_TERM = 'edit_term_button';	// 公開期間編集ボタンタグID
 	
 	/**
 	 * コンストラクタ
@@ -1073,17 +1076,16 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar('_widget', 'current_widget', $this->_widgetId);		// AJAX用ウィジェットID
 		
-		// 投稿日時
+		
 		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			// 投稿日時
 			$resistDtTimestamp = strtotime($row['be_regist_dt']);
 			$weekTypeArray = array('日', '月', '火', '水', '木', '金', '土');// 曜日表示名
 			$datetimeStr = $date = date(self::DATETIME_FORMAT, $resistDtTimestamp);
 			$datetimeStr = str_replace('$1', $weekTypeArray[intval(date('w', $resistDtTimestamp))], $datetimeStr);
 			$this->tmpl->addVar("_widget", "entry_datetime_text", '<div class="form-control-static m3config_item">' . $datetimeStr . '</div>');
-		}
-				
-		// 記事状態ラベル
-		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+		
+			// 記事状態ラベル
 			$statusLabelTag = '';
 			switch ($status){
 			case 1:				// 編集中
@@ -1105,6 +1107,15 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->tmpl->addVar("_widget", "status_label", $statusLabelTag);
 			$this->tmpl->addVar("_widget", "status_panel_color", $statusPanelColor);
 			$this->tmpl->addVar("_widget", "status_panel_title", $statusPanelTitle);
+			
+			// 編集ボタン
+			$editDateButtonTag = $this->gDesign->createEditButton(''/*同画面*/, '編集', self::TAG_ID_EDIT_DATE/*タグID*/, ''/*追加属性*/, false/*ボタン使用可*/, 'btn-warning m3config_table_h_side_button');	// 「投稿日時」編集ボタンタグ
+			$editOthersButtonTag = $this->gDesign->createEditButton(''/*同画面*/, '編集', self::TAG_ID_EDIT_OTHERS/*タグID*/, ''/*追加属性*/, false/*ボタン使用可*/, 'btn-warning m3config_table_h_side_button');	// 「その他」編集ボタンタグ
+			$editTermButtonTag = $this->gDesign->createEditButton(''/*同画面*/, '編集', self::TAG_ID_EDIT_TERM/*タグID*/, ''/*追加属性*/, false/*ボタン使用可*/, 'btn-warning m3config_table_h_side_button');	// 「公開期間」編集ボタンタグID
+			
+			$this->tmpl->addVar('_widget', 'edit_date_button', $editDateButtonTag);
+			$this->tmpl->addVar('_widget', 'edit_others_button', $editOthersButtonTag);
+			$this->tmpl->addVar('_widget', 'edit_term_button', $editTermButtonTag);
 		}
 		 
 		// 公開期間エリア表示ボタン
