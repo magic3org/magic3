@@ -25,7 +25,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	protected $useMenu;				// メニューを使用するかどうか
 	protected $useCloseButton;				// 「閉じる」を使用するかどうか
 	protected $systemType;			// システム運用タイプ
-	const DEFAULT_CSS_FILE = '/default2.0.css';		// CSSファイル
+	const DEFAULT_CSS_FILE = '/default2.1.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
