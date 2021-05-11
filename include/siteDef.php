@@ -13,7 +13,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: siteDef.php 1508 2009-02-10 10:06:04Z fishbone $
  * @link       http://www.magic3.org
@@ -24,7 +24,7 @@
 // 設定しない場合は、global.phpでデフォルトが設定される
 // デフォルト値: http://サーバ名/ルートディレクトリ名
 // 設定例)
-//define('M3_SYSTEM_ROOT_URL',	'http://www.magic3.org/magic3');
+//define('M3_SYSTEM_ROOT_URL',	'http://magic3.org/magic3');
 define('M3_SYSTEM_ROOT_URL', '');
 
 // ***************** DB接続設定 *****************

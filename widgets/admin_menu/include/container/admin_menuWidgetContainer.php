@@ -399,7 +399,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->setAttribute('system_version', 'visibility', 'hidden');
 			} else {
 				$this->tmpl->addVar("system_version", "system", 'Magic3 v' . M3_SYSTEM_VERSION);
-				$this->tmpl->addVar("system_version", "official_url", 'http://www.magic3.org');
+				$this->tmpl->addVar("system_version", "official_url", M3_SYSTEM_OFFICIAL_SITE);
 			}
 			
 			// ユーザ名
