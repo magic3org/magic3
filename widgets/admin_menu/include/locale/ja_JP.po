@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-24 21:22+0900\n"
-"PO-Revision-Date: 2018-06-24 21:24+0900\n"
+"POT-Creation-Date: 2021-05-12 08:11+0900\n"
+"PO-Revision-Date: 2021-05-12 08:12+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,48 +13,51 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-SearchPath-0: ../container\n"
 
-#: ../container/admin_menuWidgetContainer.php:229
+#: ../container/admin_menuWidgetContainer.php:210
 msgid "Server Name:"
 msgstr "サーバ名："
 
-#: ../container/admin_menuWidgetContainer.php:375
+#: ../container/admin_menuWidgetContainer.php:362
 msgid "Small Screen Device"
 msgstr "小画面デバイス"
 
-#: ../container/admin_menuWidgetContainer.php:387
+#: ../container/admin_menuWidgetContainer.php:378
 msgid "Develop Mode"
 msgstr "開発モード"
 
-#: ../container/admin_menuWidgetContainer.php:399
+#: ../container/admin_menuWidgetContainer.php:390
 msgid "Top Page"
 msgstr "トップ画面"
 
-#: ../container/admin_menuWidgetContainer.php:402
-msgid "Go Top"
-msgstr "トップ画面へ"
+#: ../container/admin_menuWidgetContainer.php:395
+msgid "Go to Dashboard"
+msgstr "ダッシュボードへ"
 
-#: ../container/admin_menuWidgetContainer.php:487
+#: ../container/admin_menuWidgetContainer.php:497
 msgid "Logout from system?"
 msgstr "ログアウトしますか?"
 
-#: ../container/admin_menuWidgetContainer.php:489
+#: ../container/admin_menuWidgetContainer.php:499
 msgid "Menu"
 msgstr "メニュー"
 
-#: ../container/admin_menuWidgetContainer.php:490
+#: ../container/admin_menuWidgetContainer.php:500
 msgid "User Information"
 msgstr "ユーザ情報"
 
-#: ../container/admin_menuWidgetContainer.php:491
+#: ../container/admin_menuWidgetContainer.php:501
 msgid "Logout"
 msgstr "ログアウト"
 
-#: ../container/admin_menuWidgetContainer.php:492
+#: ../container/admin_menuWidgetContainer.php:502
 msgid "Close"
 msgstr "閉じる"
+
+#~ msgid "Go Top"
+#~ msgstr "トップ画面へ"
 
 #~ msgid "Untitled Site"
 #~ msgstr "サイト名未設定"

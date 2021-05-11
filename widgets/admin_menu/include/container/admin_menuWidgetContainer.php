@@ -389,8 +389,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			}
 			$iconTitle = $this->_('Top Page');		// トップ画面
 			$imageSize = self::SITE_ICON_SIZE;
-			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
-			$topTitle = $this->_('Go Top');		// トップ画面へ
+			//$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
+			$iconTag = '<i class="dashboard fas fa-tachometer-alt text-warning"></i>';
+			//$topTitle = $this->_('Go Top');		// トップ画面へ
+			$topTitle = $this->_('Go to Dashboard');		// ダッシュボードへ
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
 			$this->tmpl->addVar("menu", "top_title", $preTitle . $topTitle);
 				

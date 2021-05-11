@@ -39,6 +39,12 @@ img.smalldevice {
 img.avatar {
 	margin-right:5px;
 }
+i.dashboard {
+	font-size: 30px;
+	margin-top: -5px;
+	margin-bottom: -5px;
+	vertical-align: middle;
+}
 .dropdown-menu-large > li > ul > li {
 	width:180px;
 }
