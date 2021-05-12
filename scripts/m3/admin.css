@@ -184,6 +184,10 @@
 	font-size: 30px;
 	vertical-align: middle;
 }
+.m3panel_top i.logout {
+	font-size: 32px;
+	vertical-align: middle;
+}
 
 .m3-nav{padding-left:0;margin-bottom:0;list-style:none;}
 .m3-nav:before,.m3-nav:after{display:table;content:" "}

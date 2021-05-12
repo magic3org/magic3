@@ -4216,12 +4216,14 @@ class PageManager extends _Core
 //						}
 					$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
 					$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-					$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					//$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					$logoutTag .= '<i class="logout fas fa-power-off text-danger"></i></a></li>';
 				
 					// ウィジェット操作表示制御ボタン
 					$titleStr = 'ウィジェット操作';
 					$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav">';
-					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '"><span class="title">' . $titleStr . '</span></button>';
+					//$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '"><span class="title">' . $titleStr . '</span></button>';
+					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success"><span class="title">' . $titleStr . '</span></button>';
 					$widgetToolTag .= '<input type="checkbox" class="hidden" />';
 					$widgetToolTag .= '</div></li>';
 					
