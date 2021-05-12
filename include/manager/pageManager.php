@@ -4204,7 +4204,8 @@ class PageManager extends _Core
 					$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 					$linkUrl .= '&' . M3_REQUEST_PARAM_BACKUP_URL . '=' . urlencode($gEnvManager->getCurrentRequestUri());			// URL退避用
 					$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-					$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					//$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					$editTag .= '<i class="editpage fas fa-clone"></i></a></li>';
 					
 					// ログアウトボタン
 					$titleStr = 'ログアウト';
@@ -4227,27 +4228,24 @@ class PageManager extends _Core
 					$widgetToolTag .= '<input type="checkbox" class="hidden" />';
 					$widgetToolTag .= '</div></li>';
 					
-					//$menubarTag .= '<div id="m3slidepanel">';
 					$menubarTag .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
-					$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';				
-			//		$menubarTag .= '<div tabindex="0" class="m3panel_wrap">';
+					$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
 					$menubarTag .= '<div>';
 					$menubarTag .= '<ul class="m3-nav m3-navbar-nav">';
 					if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
 						$menubarTag .= $adminTag;
 						$menubarTag .= $editTag;
 					}
-					$menubarTag .= $logoutTag;
 					$menubarTag .= $widgetToolTag;
+					$menubarTag .= '</ul>';
+					$menubarTag .= '<ul class="m3-nav m3-navbar-nav pos-right">';	// 右寄せボタン
+					$menubarTag .= $logoutTag;
 					$menubarTag .= '</ul>';
 					$menubarTag .= '</div>';
 					$menubarTag .= '</div>';
-				//	$menubarTag .= '</div>';
 
-				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $menubarTag . '\');' . M3_NL;
-					//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp($(\'#m3slidepanel\'));' . M3_NL;

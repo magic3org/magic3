@@ -184,6 +184,10 @@
 	font-size: 30px;
 	vertical-align: middle;
 }
+.m3panel_top i.editpage {
+	font-size: 30px;
+	vertical-align: middle;
+}
 .m3panel_top i.logout {
 	font-size: 32px;
 	vertical-align: middle;
@@ -214,7 +218,12 @@
 	/*.m3-navbar-nav>li>a{padding-top:19.5px;padding-bottom:19.5px}*/
 	.m3-navbar-nav>li>a{padding-top:14px;padding-bottom:14px/*for 32x32 icon top position*/}
 /*}*/
-
+/* 右寄せボタン用 */
+@media (min-width: 768px) {
+.m3-nav.pos-right {
+	float:right;
+}
+}
 .m3-navbar-default{background-color:#2c3e50;border-color:#202d3b}
 .m3-navbar-default .navbar-brand{color:#fff}
 .m3-navbar-default .navbar-brand:hover,.m3-navbar-default .navbar-brand:focus{color:#18bc9c;background-color:transparent}
