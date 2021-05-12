@@ -16,6 +16,26 @@
   src: url('../../bootstrap-3.3.7/fonts/glyphicons-halflings-regular.eot');
   src: url('../../bootstrap-3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../bootstrap-3.3.7/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../bootstrap-3.3.7/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../bootstrap-3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
+.text-primary,
+.text-primary:hover {
+  color: #2c3e50;
+}
+.text-success,
+.text-success:hover {
+  color: #18bc9c;
+}
+.text-danger,
+.text-danger:hover {
+  color: #e74c3c;
+}
+.text-warning,
+.text-warning:hover {
+  color: #f39c12;
+}
+.text-info,
+.text-info:hover {
+  color: #3498db;
+}
 .glyphicon {
 /*  position: relative; *//*アイコンが重なるのではずす */
   top: 1px;

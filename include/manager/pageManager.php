@@ -169,10 +169,9 @@ class PageManager extends _Core
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// ウィジェット配置注意アイコン
 	const ALERT_ICON_FILE = '/images/system/alert16.png';		// ウィジェット配置警告アイコン
-//	const ADMIN_ICON_FILE = '/images/system/admin64.png';		// パネルメニュー管理画面遷移用アイコン
 //	const LOGOUT_ICON_FILE = '/images/system/logout64.png';		// パネルメニューログアウト用アイコン
 //	const EDIT_PAGE_ICON_FILE = '/images/system/create_page64.png';		// パネルメニュー編集用アイコン	
-	const ADMIN_ICON_FILE = '/images/system/home32.png';		// パネルメニュー管理画面遷移用アイコン
+//	const ADMIN_ICON_FILE = '/images/system/home32.png';		// パネルメニュー管理画面遷移用アイコン
 	const LOGOUT_ICON_FILE = '/images/system/logout32.png';		// パネルメニューログアウト用アイコン
 	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
 //	const EDIT_END_ICON_FILE = '/images/system/close32.png';		// パネルメニュー編集終了用アイコン
@@ -4191,10 +4190,12 @@ class PageManager extends _Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 				} else if ($this->isAccessPointWithAdminMenu){		// 通常画面は、管理メニューを使用するアクセスポイントの場合のみ表示
 					// 管理画面ボタン
-					$titleStr = '管理画面へ遷移';
+					//$titleStr = '管理画面へ遷移';
+					$titleStr = 'ダッシュボードへ';
 					$linkUrl = $gEnvManager->getDefaultAdminUrl();
 					$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-					$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					//$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
+					$adminTag .= '<i class="dashboard fas fa-tachometer-alt text-warning"></i></a></li>';	// ダッシュボードアイコン
 				
 					// 編集ボタン
 					$titleStr = '画面を編集';
@@ -4217,9 +4218,10 @@ class PageManager extends _Core
 					$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 					$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 				
-					// ウィジェットツール表示制御ボタン
+					// ウィジェット操作表示制御ボタン
+					$titleStr = 'ウィジェット操作';
 					$widgetToolTag .= '<li><div class="m3widgettoolbutton m3-nav m3-navbar-nav">';
-					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェットツール"><span class="title"> ウィジェットツール</span></button>';
+					$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '"><span class="title">' . $titleStr . '</span></button>';
 					$widgetToolTag .= '<input type="checkbox" class="hidden" />';
 					$widgetToolTag .= '</div></li>';
 					

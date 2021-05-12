@@ -29,7 +29,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
-	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
+//	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
 	const SITE_TEST_ICON_FILE = '/images/system/site_test32.png';		// サイトテスト中アイコン
 	const TOP_MENU_ICON_FILE = '/images/system/home32_menu.png';		// トップ遷移アイコン(サイト運用モード)
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
@@ -366,6 +366,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			}
 			
 			// トップアイコンを設定
+			$iconUrl = '';
 			$this->systemType = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
 			$testMode = $this->gSystem->getSystemConfig(self::CF_TEST_MODE);	// テストモードかどうか
 			$developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
@@ -383,14 +384,20 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 					if ($isSiteOperationModeOn){			// サイト運用モードのとき
 						$iconUrl = $this->gEnv->getRootUrl() . self::TOP_MENU_ICON_FILE;
 					} else {
-						$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+						// デフォルトのダッシュボードアイコンを表示
+						//$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
 					}
 				}
 			}
-			$iconTitle = $this->_('Top Page');		// トップ画面
+			//$iconTitle = $this->_('Top Page');		// トップ画面
+			$iconTitle = $this->_('Go to Dashboard');		// ダッシュボードへ
 			$imageSize = self::SITE_ICON_SIZE;
-			//$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
-			$iconTag = '<i class="dashboard fas fa-tachometer-alt text-warning"></i>';
+			if (empty($iconUrl)){
+				$iconTag = '<i class="dashboard fas fa-tachometer-alt text-warning"></i>';	// ダッシュボードアイコン
+			} else {
+				$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
+			}
+			
 			//$topTitle = $this->_('Go Top');		// トップ画面へ
 			$topTitle = $this->_('Go to Dashboard');		// ダッシュボードへ
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
