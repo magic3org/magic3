@@ -4180,8 +4180,9 @@ class PageManager extends _Core
 					if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
 					//$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 					//$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
-					$editTag = '<div class="m3editend m3topright"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-					$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
+					$editTag = '<div class="m3editend m3topright"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="left" data-container="body" title="' . $titleStr . '">';
+					//$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
+					$editTag .= '<i class="fas fa-stop-circle text-danger fa-2x" style="background: radial-gradient(white 50%, transparent 50%);"></i></a></div>';
 					$menubarTag .= $editTag;
 					
 			//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示

@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -100,11 +100,19 @@
 }
 .m3panelopener.m3topleft a i,
 .m3panelopener.m3topright2 a i,
-.m3resizer.m3topright a i,
-.m3editend.m3topright a i {
+/*.m3resizer.m3topright a i,
+.m3editend.m3topright a i {*/
+.m3resizer.m3topright a i {
 	padding-top:8px;
 	padding-left:10px;
 }
+/* FontAwesome対応 */
+.m3editend.m3topright a i {
+	padding: 0px;
+	margin-top: 8px;
+	margin-left: 8px;	
+}
+
 .m3panelopener.m3topleft a:visited,
 .m3panelopener.m3topright2 a:visited,
 .m3resizer.m3topright a:visited,

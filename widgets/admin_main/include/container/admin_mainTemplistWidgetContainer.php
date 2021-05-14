@@ -587,7 +587,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		}
 		// デフォルトの場合はアイコンを付加
 		if ($templateId == $this->defalutTemplate){
-			$idText = '<span rel="m3help" data-container="body" title="デフォルトテンプレート"><i class="glyphicon glyphicon-ok-sign"></i></span> ' . $idText;
+			$idText = '<span rel="m3help" data-container="body" title="デフォルトテンプレート"><i class="fas fa-check-circle"></i></span> ' . $idText;
 		}
 		
 		// テンプレートサムネール画像
