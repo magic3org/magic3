@@ -169,7 +169,6 @@ class PageManager extends _Core
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// ウィジェット配置注意アイコン
 	const ALERT_ICON_FILE = '/images/system/alert16.png';		// ウィジェット配置警告アイコン
-//	const ADMIN_ICON_FILE = '/images/system/home32.png';		// パネルメニュー管理画面遷移用アイコン
 //	const LOGOUT_ICON_FILE = '/images/system/logout32.png';		// パネルメニューログアウト用アイコン
 //	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
 //	const EDIT_END_ICON_FILE = '/images/system/close32.png';		// パネルメニュー編集終了用アイコン
@@ -4193,7 +4192,6 @@ class PageManager extends _Core
 					$titleStr = 'ダッシュボードへ';
 					$linkUrl = $gEnvManager->getDefaultAdminUrl();
 					$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-					//$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					$adminTag .= '<i class="dashboard fas fa-tachometer-alt text-warning"></i></a></li>';	// ダッシュボードアイコン
 				
 					// 編集ボタン

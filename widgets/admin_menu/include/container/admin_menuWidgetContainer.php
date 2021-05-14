@@ -29,7 +29,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
-//	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
 	const SITE_TEST_ICON_FILE = '/images/system/site_test32.png';		// サイトテスト中アイコン
 	const TOP_MENU_ICON_FILE = '/images/system/home32_menu.png';		// トップ遷移アイコン(サイト運用モード)
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
@@ -42,9 +41,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SMARTPHONE_ICON_FILE = '/images/system/device/smartphone.png';		// スマートフォンアイコン
 	const PC_CLOSED_ICON_FILE = '/images/system/device/pc_closed.png';		// PCアイコン(非公開)
 	const SMARTPHONE_CLOSED_ICON_FILE = '/images/system/device/smartphone_closed.png';		// スマートフォンアイコン(非公開)
-//	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
-//	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
-//	const USER_INFO_ICON_FILE = '/images/system/info24.png';		// ユーザ情報アイコン
 //	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
 //	const PREVIEW_ICON_FILE = '/images/system/preview24.png';		// プレビューアイコン
 //	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
@@ -385,7 +381,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 						$iconUrl = $this->gEnv->getRootUrl() . self::TOP_MENU_ICON_FILE;
 					} else {
 						// デフォルトのダッシュボードアイコンを表示
-						//$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
 					}
 				}
 			}
@@ -432,9 +427,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "avatar_img", $iconTag);
 		
 			// ユーザメニュー
-			//$iconTitle = 'ユーザ情報';
-			//$iconUrl = $this->gEnv->getRootUrl() . self::USER_INFO_ICON_FILE;		// ユーザ情報
-			//$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
 			$iconTag = '<i class="fas fa-user fa-2x" style="color: black;"></i>';		// デフォルトカラーは黒。黒以外の場合はtext-danger等クラスを使用する。
 			$this->tmpl->addVar("menu", "user_info_img", $iconTag);
 			$loginStatusUrl = '?task=userlist_detail&userid=' . $userId;// ユーザ情報画面URL
@@ -829,12 +821,10 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 		if ($isVisibleSite){
 			$openSiteMessage = 'アクセスポイントを非公開';
 			//$iconTitle = 'アクセスポイントを非公開';
-			//$iconUrl = $this->gEnv->getRootUrl() . self::SITE_CLOSE_ICON_FILE;// アクセスポイント非公開
 			$iconTag = '<i class="fas fa-minus-circle fa-2x text-danger"></i>';
 		} else {
 			$openSiteMessage = 'アクセスポイントを公開';
 			//$iconTitle = 'アクセスポイントを公開';
-			//$iconUrl = $this->gEnv->getRootUrl() . self::SITE_OPEN_ICON_FILE;		// アクセスポイント公開
 			$iconTag = '<i class="fas fa-caret-square-right fa-2x text-success"></i>';
 		}
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
