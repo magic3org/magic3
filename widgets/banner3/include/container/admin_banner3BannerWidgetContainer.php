@@ -31,7 +31,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	private $idArray = array();			// 表示されている画像ID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
-	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
+//	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
 	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長

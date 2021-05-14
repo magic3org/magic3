@@ -161,11 +161,11 @@ class PageManager extends _Core
 	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
 	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
 //	const CONFIG_ICON_FILE = '/images/system/config.png';			// ウィジェット定義画面アイコン
-	const ADJUST_ICON_FILE = '/images/system/adjust_widget.png';	// 位置調整アイコン
+//	const ADJUST_ICON_FILE = '/images/system/adjust_widget.png';	// 位置調整アイコン
 	const SHARED_ICON_FILE = '/images/system/shared.png';	// グローバル属性
 	const DELETE_ICON_FILE = '/images/system/delete.png';	// ウィジェット削除
 //	const CONFIG_ICON32_FILE = '/images/system/config32.png';			// ウィジェット定義画面アイコン(ツールチップ用)
-	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
+//	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// ウィジェット配置注意アイコン
 	const ALERT_ICON_FILE = '/images/system/alert16.png';		// ウィジェット配置警告アイコン

@@ -32,7 +32,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 	const IMAGE_LIST_COUNT = 10;		// 表示画像数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
-	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
+//	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長
 	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
