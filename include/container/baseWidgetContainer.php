@@ -3008,16 +3008,18 @@ class BaseWidgetContainer extends _Core
 	{
 		// 該当項目を更新
 		$ret = false;
-		for ($i = 0; $i < count($paramObj); $i++){
-			$configId	= $paramObj[$i]->id;// 定義ID
-			if ($configId == $id){
-				// ウィジェットオブジェクト更新
-				$paramObj[$i]->object = $updateObj;
+		if (is_array($paramObj)){
+			for ($i = 0; $i < count($paramObj); $i++){
+				$configId	= $paramObj[$i]->id;// 定義ID
+				if ($configId == $id){
+					// ウィジェットオブジェクト更新
+					$paramObj[$i]->object = $updateObj;
 				
-				// ウィジェットパラメータオブジェクトを更新
-				$ret = $this->updateWidgetParamObjectWithId($paramObj[$i]);
-				if ($ret) $defConfigId = $id;		// 定義定義IDを更新
-				break;
+					// ウィジェットパラメータオブジェクトを更新
+					$ret = $this->updateWidgetParamObjectWithId($paramObj[$i]);
+					if ($ret) $defConfigId = $id;		// 定義定義IDを更新
+					break;
+				}
 			}
 		}
 		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
@@ -3050,16 +3052,18 @@ class BaseWidgetContainer extends _Core
 	{
 		// 該当項目を更新
 		$ret = false;
-		for ($i = 0; $i < count($paramObj); $i++){
-			$configId	= $paramObj[$i]->id;// 定義ID
-			if ($configId == $id){
-				// ウィジェットオブジェクト更新
-				$paramObj[$i]->object = $updateObj;
+		if (is_array($paramObj)){
+			for ($i = 0; $i < count($paramObj); $i++){
+				$configId	= $paramObj[$i]->id;// 定義ID
+				if ($configId == $id){
+					// ウィジェットオブジェクト更新
+					$paramObj[$i]->object = $updateObj;
 				
-				// ウィジェットパラメータオブジェクトを更新
-				$ret = $this->updateWidgetParamObjectWithId($paramObj[$i]);
-				if ($ret) $defConfigId = $id;		// 定義定義IDを更新
-				break;
+					// ウィジェットパラメータオブジェクトを更新
+					$ret = $this->updateWidgetParamObjectWithId($paramObj[$i]);
+					if ($ret) $defConfigId = $id;		// 定義定義IDを更新
+					break;
+				}
 			}
 		}
 		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト更新
@@ -3090,17 +3094,19 @@ class BaseWidgetContainer extends _Core
 		$saveDefConfigId = $defConfigId;		// 削除対象を退避
 		$delConfig = false;// 定義IDが削除対象かどうか
 		$ret = false;
-		for ($i = 0; $i < count($paramObj); $i++){
-			$configId = $paramObj[$i]->id;// 定義ID
-			if (in_array($configId, $idArray)){		// 削除対象のとき
-				$newParam = new stdClass;
-				$newParam->id = $configId;
-				$newParam->object = null;		// 削除処理
-				$ret = $this->updateWidgetParamObjectWithId($newParam);
-				if ($ret){
-					if ($configId == $defConfigId) $delConfig = true;
-				} else {
-					break;
+		if (is_array($paramObj)){
+			for ($i = 0; $i < count($paramObj); $i++){
+				$configId = $paramObj[$i]->id;// 定義ID
+				if (in_array($configId, $idArray)){		// 削除対象のとき
+					$newParam = new stdClass;
+					$newParam->id = $configId;
+					$newParam->object = null;		// 削除処理
+					$ret = $this->updateWidgetParamObjectWithId($newParam);
+					if ($ret){
+						if ($configId == $defConfigId) $delConfig = true;
+					} else {
+						break;
+					}
 				}
 			}
 		}
@@ -3137,11 +3143,13 @@ class BaseWidgetContainer extends _Core
 	 */
 	function getPageDefParam(&$defSerial, &$defConfigId, &$paramObj, $id, &$destObj)
 	{
-		for ($i = 0; $i < count($paramObj); $i++){
-			$configId	= $paramObj[$i]->id;// 定義ID
-			if ($configId == $id){
-				$destObj = $paramObj[$i]->object;
-				return true;
+		if (is_array($paramObj)){
+			for ($i = 0; $i < count($paramObj); $i++){
+				$configId	= $paramObj[$i]->id;// 定義ID
+				if ($configId == $id){
+					$destObj = $paramObj[$i]->object;
+					return true;
+				}
 			}
 		}
 		return false;

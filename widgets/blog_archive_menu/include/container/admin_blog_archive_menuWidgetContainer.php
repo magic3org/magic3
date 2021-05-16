@@ -161,11 +161,13 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($itemCount, '表示項目数');
 			
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					if ($name == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			
@@ -322,6 +324,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createItemList()
 	{
+		if (!is_array($this->paramObj)) return;
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id			= $this->paramObj[$i]->id;// 定義ID
 			$targetObj	= $this->paramObj[$i]->object;
@@ -358,6 +361,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createItemMenu()
 	{
+		if (!is_array($this->paramObj)) return;
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id = $this->paramObj[$i]->id;// 定義ID
 			$targetObj = $this->paramObj[$i]->object;

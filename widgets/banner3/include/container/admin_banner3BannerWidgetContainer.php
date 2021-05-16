@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -297,6 +297,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		for ($j = 1; $j < 100; $j++){
 			$name = self::DEFAULT_NAME_HEAD . $j;
 			// 設定名の重複チェック
+			if (!is_array($this->bannerNameArray)) break;
 			if (!in_array($name, $this->bannerNameArray)) break;
 		}
 		return $name;
