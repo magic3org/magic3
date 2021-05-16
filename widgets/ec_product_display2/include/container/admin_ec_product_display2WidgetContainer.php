@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -251,7 +251,8 @@ class admin_ec_product_display2WidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				//$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$detailLabel = 'もっと詳しく...';	// 詳細へのリンク
 				$rowCount = self::DEFAULT_ROW_COUNT;			// 表示する行の数
 				$columnCount = self::DEFAULT_COLUMN_COUNT;			// 表示する列の数
@@ -345,7 +346,7 @@ class admin_ec_product_display2WidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -361,7 +362,7 @@ class admin_ec_product_display2WidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * 一覧画面作成
 	 *

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -266,7 +266,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			
 			if ($replaceNew){		// データ再取得時
 				$this->menuId = self::DEFAULT_MENU_ID;
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				//$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 //				$isHierMenu = 0;		// 階層化メニューを使用するかどうか
 				$limitUser = 0;					// ユーザを制限するかどうか
 				$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
@@ -382,7 +383,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -398,7 +399,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *

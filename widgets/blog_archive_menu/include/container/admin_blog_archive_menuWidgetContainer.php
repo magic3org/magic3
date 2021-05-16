@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -224,7 +224,8 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				//$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 				$this->archiveType	= '0';		// アーカイブタイプ
 				$this->sortOrder	= '0';		// ソート順
@@ -378,7 +379,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -394,7 +395,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * アーカイブタイプ選択メニュー作成
 	 *

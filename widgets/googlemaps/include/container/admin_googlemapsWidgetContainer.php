@@ -8,7 +8,7 @@
  *
  * @package    Googleマップ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2012 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_googlemapsWidgetContainer.php 4766 2012-03-19 02:22:15Z fishbone $
  * @link       http://www.m-media.co.jp
@@ -246,7 +246,8 @@ class admin_googlemapsWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				//$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$width	= self::DEFAULT_WIDTH;		// 幅
 				$height	= self::DEFAULT_HEIGHT;		// 高さ
 				$lat	= self::DEFAULT_POS_LAT;		// 緯度
@@ -385,7 +386,7 @@ class admin_googlemapsWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -401,7 +402,7 @@ class admin_googlemapsWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * 一覧画面作成
 	 *

@@ -8,7 +8,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2018 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2021 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -438,7 +438,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+//				$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$this->langId = $this->gEnv->getDefaultLanguage();		// メッセージ表示言語を取得
 				$pageTitle = '';			// 画面タイトル
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
@@ -698,7 +699,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -714,7 +715,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * タイプ選択メニュー作成
 	 *

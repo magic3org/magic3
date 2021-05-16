@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_s_photoslideWidgetContainer.php 4701 2012-02-19 14:58:33Z fishbone $
  * @link       http://www.magic3.org
@@ -227,7 +227,8 @@ class admin_s_photoslideWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$name = $this->createDefaultName();			// デフォルト登録項目名
+				//$name = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$imageType = self::DEFAULT_IMAGE_TYPE;		// 表示画像タイプ
 				$dir = self::DEFAULT_DIR;		// 画像読み込みディレクトリ
 				$this->cssId = $this->createDefaultCssId();	// CSS用ID
@@ -438,7 +439,7 @@ class admin_s_photoslideWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -454,7 +455,7 @@ class admin_s_photoslideWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * スライドショー用画像一覧を作成
 	 *
