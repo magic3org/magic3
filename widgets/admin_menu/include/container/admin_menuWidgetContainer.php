@@ -41,9 +41,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 	const SMARTPHONE_ICON_FILE = '/images/system/device/smartphone.png';		// スマートフォンアイコン
 	const PC_CLOSED_ICON_FILE = '/images/system/device/pc_closed.png';		// PCアイコン(非公開)
 	const SMARTPHONE_CLOSED_ICON_FILE = '/images/system/device/smartphone_closed.png';		// スマートフォンアイコン(非公開)
-//	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
-//	const PREVIEW_ICON_FILE = '/images/system/preview24.png';		// プレビューアイコン
-//	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
 	const MENU_ICON_FILE = '/images/system/menu24.png';		// メニュー定義画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
 	const MAX_SITENAME_LENGTH_S = 9;		// サイト名の最大文字数
