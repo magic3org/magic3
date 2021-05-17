@@ -384,6 +384,8 @@ class admin_s_photoslideWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createItemMenu()
 	{
+		if (!is_array($this->paramObj)) return;
+		
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id = $this->paramObj[$i]->id;// 定義ID
 			$targetObj = $this->paramObj[$i]->object;
