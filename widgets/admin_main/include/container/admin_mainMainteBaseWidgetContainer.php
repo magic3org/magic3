@@ -71,13 +71,13 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'ファイル管理';
 				$titles[] = 'ファイルブラウザ';
 				break;
-			case self::TASK_PAGEINFO:	// ページ情報
+			case self::TASK_PAGEINFO:	// ページ管理
 				$titles[] = 'マスター管理';
-				$titles[] = 'ページ情報';
+				$titles[] = 'ページ管理';
 				break;
-			case self::TASK_PAGEINFO_DETAIL:	// ページ情報
+			case self::TASK_PAGEINFO_DETAIL:	// ページ管理詳細
 				$titles[] = 'マスター管理';
-				$titles[] = 'ページ情報';
+				$titles[] = 'ページ管理';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_ACCESSPOINT:		// アクセスポイント
@@ -172,8 +172,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> (
-														$task == self::TASK_PAGEINFO ||			// ページ情報
-														$task == self::TASK_PAGEINFO_DETAIL ||	// ページ情報詳細
+														$task == self::TASK_PAGEINFO ||			// ページ管理
+														$task == self::TASK_PAGEINFO_DETAIL ||	// ページ管理詳細
 														$task == self::TASK_ACCESSPOINT ||			// アクセスポイント
 														$task == self::TASK_ACCESSPOINT_DETAIL ||	// アクセスポイント
 														$task == self::TASK_PAGEID ||			// ページID
@@ -183,13 +183,13 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 													),
 									'submenu'	=> array(
 										(Object)array(
-											'name'		=> 'ページ情報',
+											'name'		=> 'ページ管理',
 											'task'		=> self::TASK_PAGEINFO,
 											'url'		=> '',
 											'tagid'		=> '',
 											'active'	=> (
-																$task == self::TASK_PAGEINFO ||			// ページ情報
-																$task == self::TASK_PAGEINFO_DETAIL	// ページ情報詳細
+																$task == self::TASK_PAGEINFO ||			// ページ管理
+																$task == self::TASK_PAGEINFO_DETAIL	// ページ管理詳細
 															)
 										),
 										(Object)array(

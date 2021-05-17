@@ -72,13 +72,13 @@ $HELP['usercustom_name']['body'] = '置換文字列の管理上の名前です�
 $HELP['usercustom_value']['title'] = '置換内容';
 $HELP['usercustom_value']['body'] = 'コンテンツ表示時に、コンテンツ上の置換キーから変換される文字列です。';
 
-// ########## ページ情報 ##########
-$HELP['pageinfo']['title'] = 'ページ情報';
-$HELP['pageinfo']['body'] = 'サイトのアクセス単位であるページについての情報を設定します。';
-$HELP['pageinfo_list']['title'] = 'ページ情報一覧';
-$HELP['pageinfo_list']['body'] = 'ページの属性等、ページに関する情報を設定します。<br />ページIDはURLのクエリーパラメータ「sub=ページID」で指定されるIDです。';
-$HELP['pageinfo_detail']['title'] = 'ページ情報詳細';
-$HELP['pageinfo_detail']['body'] = 'ページ情報を編集します。';
+// ########## ページ管理 ##########
+$HELP['pageinfo']['title'] = 'ページ管理';
+$HELP['pageinfo']['body'] = 'ページの属性設定やアクセス制御を行います。';
+$HELP['pageinfo_list']['title'] = 'ページ一覧';
+$HELP['pageinfo_list']['body'] = 'ページの有効制御、公開制御を行います。<br />ページIDは「マスター管理/ページID」画面で追加します。';
+$HELP['pageinfo_detail']['title'] = 'ページ詳細';
+$HELP['pageinfo_detail']['body'] = 'ページの属性設定を行います。';
 
 $HELP['pageinfo_check']['title'] = '選択用チェックボックス';
 $HELP['pageinfo_check']['body'] = '編集を行う項目を選択します。';
@@ -101,7 +101,7 @@ $HELP['pageinfo_user_limited']['body'] = 'ページにアクセスできるユ�
 //$HELP['pageinfo_default']['title'] = 'デフォルト';
 //$HELP['pageinfo_default']['body'] = 'デフォルトで選択されている項目は、ページIDが省略されたときに指定されるページIDです。';
 $HELP['pageinfo_status']['title'] = '状態';
-$HELP['pageinfo_status']['body'] = 'ページの有効・公開状態を示します。「有効」でページがメニュー上に表示され選択可能になります。「公開」で外部からの閲覧が可能になります。';
+$HELP['pageinfo_status']['body'] = 'ページの有効・公開状態を示します。「有効」でページが「ページ編集」画面のメニュー上に表示され選択可能になります。「公開」で外部からの閲覧が可能になります。';
 $HELP['pageinfo_ref']['title'] = '使用';
 $HELP['pageinfo_ref']['body'] = 'ページ上に存在するウィジェット数です。共通属性が設定されているウィジェットは含みません。';
 $HELP['pageinfo_edit_btn']['title'] = '編集ボタン';
