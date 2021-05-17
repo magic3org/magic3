@@ -40,7 +40,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 	const imageSizeHeight = 135;
 	const imageSizeWidth = 210;
 	const JOOMLA_CONFIG_FILENAME = 'templateDetails.xml';		// Joomla!のテンプレート設定ファイル名
-	const NOT_FOUND_TEMPLATE_ICON_FILE = '/images/system/notfound32.png';		// テンプレートが見つからないアイコン
+//	const NOT_FOUND_TEMPLATE_ICON_FILE = '/images/system/notfound32.png';		// テンプレートが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
 //	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
@@ -595,8 +595,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 			$imageTag = '<img src="' . $this->getUrl($imgUrl) . '" width="' . self::previewImageSizeWidth . '" height="' . self::previewImageSizeHeight . '" border="0" />';
 		} else {
 			$iconTitle = $this->_('Template not found.');		// テンプレートが見つかりません
-			$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_TEMPLATE_ICON_FILE;
-			$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			//$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_TEMPLATE_ICON_FILE;
+			//$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$imageTag = '<span rel="m3help" title="' . $iconTitle . '" data-container="body"><i class="fas fa-exclamation-triangle text-warning fa-2x"></i></span>';
 		}
 		
 		// テンプレート情報リンク
