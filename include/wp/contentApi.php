@@ -80,7 +80,7 @@ class ContentApi extends BaseApi
 		// コンテンツのアクセス権のチェック(メインウィジェットがページに配置されているか)
 		$widgetId = $this->gPage->getWidgetIdWithPageInfoByContentType($this->gEnv->getCurrentPageId(), $this->contentType);
 		if (empty($widgetId)){
-			$msgDetail = '対策：画面構成機能を使用して、該当するコンテンツタイプのページ属性のページにそのコンテンツを処理するメインウィジェットを配置します。';
+			$msgDetail = '対策：ページ編集で該当するコンテンツタイプのページ属性のページにそのコンテンツを処理するメインウィジェットを配置します。';
 			$this->gOpeLog->writeError(__METHOD__, 'デフォルトのコンテンツタイプに対応するメインウィジェットが配置されていません。(コンテンツタイプ=' . $this->contentType . ')', 2200, $msgDetail);
 			
 			// エラー処理

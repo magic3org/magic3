@@ -33,10 +33,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageInfoRows;			// ページ情報
 	private $isExistsDefItems;		// ページ定義項目が存在するかどうか
 	private $subTemplateInfo;		// サブテンプレート情報(Themler設定ファイルからの読み込み用)
-	const BREADCRUMB_TITLE				= '画面構成';
-	const BREADCRUMB_TITLE_PC			= 'PC画面';		// 画面タイトル名(パンくずリスト)
-	const BREADCRUMB_TITLE_MOBILE		= '携帯画面';		// 画面タイトル名(パンくずリスト)
-	const BREADCRUMB_TITLE_SMARTPHONE	= 'スマートフォン画面';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE				= '画面管理';
+	const BREADCRUMB_TITLE_PC			= 'ページ編集';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE_MOBILE		= 'ページ編集(携帯)';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE_SMARTPHONE	= 'ページ編集(スマートフォン)';		// 画面タイトル名(パンくずリスト)
 	const TEMPLATE_NORMAL_ICON_FILE = '/images/system/layout16.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN_ICON_FILE = '/images/system/layout_plain16.png';		// デザインなしテンプレートアイコン
 	const TEMPLATE_NORMAL32_ICON_FILE = '/images/system/layout32.png';		// 通常テンプレートアイコン
