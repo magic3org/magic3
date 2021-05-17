@@ -4190,7 +4190,7 @@ class PageManager extends _Core
 					$adminTag .= '<i class="dashboard fas fa-tachometer-alt text-warning"></i></a></li>';	// ダッシュボードアイコン
 				
 					// 編集ボタン
-					$titleStr = '画面を編集';
+					$titleStr = 'ページ編集';
 					$linkUrl  = $gEnvManager->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' .M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET;
 					$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $gEnvManager->getCurrentPageId();
 					$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
