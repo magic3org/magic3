@@ -337,7 +337,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			//$this->tmpl->addVar("menu", "widget_url", $this->getUrl($this->gEnv->getCurrentWidgetRootUrl()));	// ウィジェットのルートディレクトリ
 			$this->tmpl->addVar("menu", "top_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));		// トップメニュー画面URL
 			
-			// サイト表示
+			// ### サイト名表示 ###
 			$siteName = $this->gEnv->getSiteName();
 			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
 				$siteName = makeTruncStr($siteName, self::MAX_SITENAME_LENGTH_S);
@@ -347,7 +347,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 			$siteUrl = $this->gEnv->getRootUrl();
 			$this->tmpl->addVar("menu", "site_name", $siteName);
 			$this->tmpl->addVar("menu", "pc_url", $siteUrl);
-			//$this->tmpl->addVar("menu", "site", '<label><a href="#" onclick="previewSite(\'' . $siteUrl . '\');">' . $siteUrl . '</a></label>');
+			$this->tmpl->addVar('menu', 'site_title', $this->_('Go to Front'));// フロント画面遷移リンクのツールチップ(フロント画面へ)
 			
 			// 小画面最適化アイコン
 			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
@@ -358,7 +358,7 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->addVar("menu", "small_device_image", $iconTag);
 			}
 			
-			// トップアイコンを設定
+			// ### ダッシュボード(管理画面トップへの遷移)アイコンを設定 ###
 			$iconUrl = '';
 			$this->systemType = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
 			$testMode = $this->gSystem->getSystemConfig(self::CF_TEST_MODE);	// テストモードかどうか
@@ -381,7 +381,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 					}
 				}
 			}
-			//$iconTitle = $this->_('Top Page');		// トップ画面
 			$iconTitle = $this->_('Go to Dashboard');		// ダッシュボードへ
 			$imageSize = self::SITE_ICON_SIZE;
 			if (empty($iconUrl)){
@@ -390,7 +389,6 @@ class admin_menuWidgetContainer extends BaseAdminWidgetContainer
 				$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
 			}
 			
-			//$topTitle = $this->_('Go Top');		// トップ画面へ
 			$topTitle = $this->_('Go to Dashboard');		// ダッシュボードへ
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
 			$this->tmpl->addVar("menu", "top_title", $preTitle . $topTitle);
