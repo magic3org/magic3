@@ -37,6 +37,8 @@ class DesignManager extends _Core
 //	const NAV_ITEM_ICON_SIZE = 32;								// ナビゲーションメニューアイコンサイズ
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 	const DEFAULT_META_NO_INDEX = '<meta name="robots" content="noindex,nofollow" />';		// METAタグ(検索エンジン登録拒否)
+	const WIDTET_ICON_CLASS_NAME = 'm3widget';			// ウィジェットアイコンのタグクラス名
+	const WIDGET_ICON_NOT_FOUND = '__NOT_FOUND';		// ウィジェットアイコン取得用(ウィジェットが見つからない表記)
 	
 	/**
 	 * コンストラクタ
@@ -127,6 +129,41 @@ class DesignManager extends _Core
 		return $classStr;
 	}
 	/**
+	 * ウィジェットアイコンタグを作成
+	 *
+	 * ウィジェット用のアイコンのURLを取得する。
+	 * ウィジェットのアイコンが存在しない場合はデフォルトのアイコンのURLを返す。
+	 *
+	 * @param string $widgetId		ウィジェットID
+	 * @param int $size				アイコンサイズ
+	 * @return string 				ウィジェットのアイコンへのURL
+	 */
+	function createWidgetIconTag($widgetId, $size = 32)
+	{
+		if ($widgetId == self::WIDGET_ICON_NOT_FOUND){
+			if ($size == 32){		// デフォルトサイズの場合
+				$iconTag = '<i class="' . self::WIDTET_ICON_CLASS_NAME . ' fas fa-exclamation-triangle text-warning fa-2x"></i>';
+			} else {
+				$style = 'style="font-size:' . $size . 'px"';
+				$iconTag = '<i class="' . self::WIDTET_ICON_CLASS_NAME . ' fas fa-exclamation-triangle text-warning" ' . $style . '></i>';
+			}
+		} else {
+			$iconUrl = $this->_getWidgetIconUrl($widgetId, $size);
+		
+			if (empty($iconUrl)){		// ウィジェットにアイコンが格納されていない場合
+				if ($size == 32){		// デフォルトサイズの場合
+					$iconTag = '<i class="' . self::WIDTET_ICON_CLASS_NAME . ' fas fa-kiwi-bird fa-2x"></i>';
+				} else {
+					$style = 'style="font-size:' . $size . 'px"';
+					$iconTag = '<i class="' . self::WIDTET_ICON_CLASS_NAME . ' fas fa-kiwi-bird" ' . $style . '></i>';
+				}
+			} else {
+				$iconTag = '<img class="' . self::WIDTET_ICON_CLASS_NAME . '" src="' . $iconUrl . '" />';
+			}
+		}
+		return $iconTag;
+	}
+	/**
 	 * ウィジェットアイコンを取得
 	 *
 	 * ウィジェット用のアイコンのURLを取得する。
@@ -136,24 +173,27 @@ class DesignManager extends _Core
 	 * @param int $size				アイコンサイズ
 	 * @return string 				ウィジェットのアイコンへのURL
 	 */
-	function getWidgetIconUrl($widgetId, $size)
+	function _getWidgetIconUrl($widgetId, $size)
 	{
 		// サイズ指定で取得
 		for ($i = 0; $i < count($this->iconExts); $i++){
 			$iconName = 'icon' . $size . '.' . $this->iconExts[$i];
 			// ファイルが存在するかチェック
 			$iconPath = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/images/' . $iconName;
-			if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl() . '/' . $widgetId . '/images/' . $iconName;
+			//if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl() . '/' . $widgetId . '/images/' . $iconName;
+			if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl(true/*相対URL*/) . '/' . $widgetId . '/images/' . $iconName;	// 画像は相対URLで参照する
 		}
 		// 指定サイズがない場合はウィジェットのデフォルトアイコンを取得
 		for ($i = 0; $i < count($this->iconExts); $i++){
 			$iconName = 'icon.' . $this->iconExts[$i];
 			// ファイルが存在するかチェック
 			$iconPath = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/images/' . $iconName;
-			if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl() . '/' . $widgetId . '/images/' . $iconName;
+			//if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl() . '/' . $widgetId . '/images/' . $iconName;
+			if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl(true/*相対URL*/) . '/' . $widgetId . '/images/' . $iconName;	// 画像は相対URLで参照する
 		}
-		// 見つからない場合はシステムからデフォルトアイコンを取得
-		return $this->gEnv->getRootUrl() . '/images/system/wicon'. $size . '.png';
+		// 見つからない場合は空を返す
+		//return $this->gEnv->getRootUrl() . '/images/system/wicon'. $size . '.png';
+		return '';
 	}
 	/**
 	 * ウィジェット出力の前後に出力するHTMLを取得
@@ -166,7 +206,6 @@ class DesignManager extends _Core
 		if ($isPrefix){		// 前出力
 			return '';
 		} else {// 後出力
-			//return '<br>';
 			return '';
 		}
 	}

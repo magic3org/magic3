@@ -468,7 +468,7 @@ class admin_mainEditmenuWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->tmpl->parseTemplate('widget_list', 'a');
 		
 		$this->widgets[] = $row;				// ウィジェット情報
-		$image = $this->getUrl($this->gDesign->getWidgetIconUrl($id, self::DEFAULT_IMAGE_SIZE));
+		$image = $this->getUrl($this->gDesign->_getWidgetIconUrl($id, self::DEFAULT_IMAGE_SIZE));
 		$desc = $this->convertToDispString($fetchedRow['wd_description']);
 		$this->widgetInfoStr .= '{id:"' . $id . '",image:"' . $image . '",desc:"' . $desc . '"},';
 		return true;

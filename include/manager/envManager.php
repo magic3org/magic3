@@ -602,12 +602,27 @@ class EnvManager extends _Core
 	/**
 	 * widgetsディレクトリへのURLを取得
 	 *
-	 * 例) http://www.magic3.org/magic3/widgets
+	 * 例) (絶対URL)http://www.magic3.org/magic3/widgets
+	 *     (相対URL)/magic3/widgets
+	 
+	 * @param bool $relativeUrl		相対URLかどうか
+	 * @return string				URL
 	 */
-	public function getWidgetsUrl()
+	public function getWidgetsUrl($relativeUrl = false)
 	{
-		//return M3_SYSTEM_ROOT_URL . '/widgets';
-		return $this->currentDomainRootUrl . '/widgets';
+		static $relUrl;
+		
+		$url = $this->currentDomainRootUrl . '/widgets';
+		if ($relativeUrl){
+			// 相対パスを得る
+			if (!isset($relUrl)){
+				$res = parse_url($url);
+				$relUrl = $res['path'];
+			}
+			return $relUrl;
+		} else {
+			return $url;
+		}
 	}
 	/**
 	 * widgetsディレクトリへのSSL用URLを取得

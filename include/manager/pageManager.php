@@ -5305,15 +5305,16 @@ class PageManager extends _Core
 						$currentCategoryId = $categoryId;
 					}
 					
-					$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
-					if ($gEnvManager->getUseSslAdmin()){
+					$imageTag = $gDesignManager->createWidgetIconTag($widgetId, self::WIDGET_ICON_IMG_SIZE);
+					/*$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
+					if (!empty($image) && $gEnvManager->getUseSslAdmin()){
 						//$image = str_replace('http://', 'https://', $image);		// SSL通信の場合はSSL用に変換
 						$image = $gEnvManager->getSslUrl($image);
 					}
 					$imageTag = '<img class="' . self::WIDTET_CLASS_NAME . '" src="' . $image . '" ';
 					$imageTag .= 'width="' . self::WIDGET_ICON_IMG_SIZE . '"';
 					$imageTag .= ' height="' . self::WIDGET_ICON_IMG_SIZE . '"';
-					$imageTag .= ' />';
+					$imageTag .= ' />';*/
 					
 					// ウィジェット機能マーク
 					$widgetMark = '';
@@ -5550,15 +5551,18 @@ class PageManager extends _Core
 			$serial = $rows[$i]['pd_serial'];		// シリアル番号
 			$isShared = empty($rows[$i]['pd_sub_id']);			// グローバル属性が設定されているかどうか
 			$widgetTag = $widgetTagHead . '_' . $i;				// ウィジェット識別用ユニークタグ
-			$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
-			if ($gEnvManager->getUseSslAdmin()){
+			
+			$imageTag = $gDesignManager->createWidgetIconTag($widgetId, self::WIDGET_ICON_IMG_SIZE);
+			/*$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
+			if (!empty($image) && $gEnvManager->getUseSslAdmin()){
 				//$image = str_replace('http://', 'https://', $image);		// SSL通信の場合はSSL用に変換
 				$image = $gEnvManager->getSslUrl($image);
 			}
 			$imageTag = '<img class="' . self::WIDTET_CLASS_NAME . '" src="' . $image . '" ';
 			$imageTag .= 'width="' . self::WIDGET_ICON_IMG_SIZE . '"';
 			$imageTag .= ' height="' . self::WIDGET_ICON_IMG_SIZE . '"';
-			$imageTag .= ' />';
+			$imageTag .= ' />';*/
+			
 			// 定義名
 			if (empty($rows[$i]['pd_config_name'])){
 				if ($rows[$i]['wd_use_instance_def'] && $configId == 0){		// インスタンス定義が必要で未定義のとき

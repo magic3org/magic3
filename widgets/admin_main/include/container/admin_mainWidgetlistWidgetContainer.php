@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -35,7 +35,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
 	const ICON_SIZE = 32;		// アイコンのサイズ
-	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
+//	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
 //	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
@@ -923,17 +923,18 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		// ウィジェットの画像を設定
 		if ($isExistsWidget){		// ウィジェットが存在するとき
-			$iconTitle = '';
-			$iconUrl = $this->gDesign->getWidgetIconUrl($widgetId, $this->defaultImageSize);
+			//$iconTitle = '';
+			//$iconUrl = $this->gDesign->getWidgetIconUrl($widgetId, $this->defaultImageSize);
+			$imageTag = $this->gDesign->createWidgetIconTag($widgetId, $this->defaultImageSize);
 		} else {
-			//$iconTitle = self::NOT_FOUND_WIDGET_MESSAGE;		// ウィジェットが見つかりません
-			$iconTitle = $this->_('Widget not found.');		// ウィジェットが見つかりません
-			$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_WIDGET_ICON_FILE;
+			//$iconTitle = $this->_('Widget not found.');		// ウィジェットが見つかりません
+			//$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_WIDGET_ICON_FILE;
+			$imageTag = $this->gDesign->createWidgetIconTag(DesignManager::WIDGET_ICON_NOT_FOUND, $this->defaultImageSize);
 		}
-		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" ';
-		$imageTag .= 'width="' . $this->defaultImageSize . '"';
-		$imageTag .= ' height="' . $this->defaultImageSize . '"';
-		$imageTag .= ' alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		//$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" ';
+		//$imageTag .= 'width="' . $this->defaultImageSize . '"';
+		//$imageTag .= ' height="' . $this->defaultImageSize . '"';
+		//$imageTag .= ' alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// ヘルプの作成
 		$helpText = '';
