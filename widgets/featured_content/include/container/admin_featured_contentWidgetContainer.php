@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -120,9 +120,9 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		
 		// 入力値を取得
-		$defName	= $request->trimValueOf('item_def_name');			// 定義名
+		//$defName	= $request->trimValueOf('item_def_name');			// 定義名
+		$name	= $request->trimValueOf('item_name');			// 定義名
 		$fieldCount = $request->trimValueOf('fieldcount');		// 表示項目数
-//		$names = $request->trimValueOf('item_name');		// 表示項目、名前
 		$contentIds = $request->trimValueOf('item_contentid');		// 表示項目、コンテンツID
 		$showReadMore = ($request->trimValueOf('item_show_read_more') == 'on') ? 1 : 0;		// 「続きを読む」ボタンを表示
 		$readMoreTitle = $request->trimValueOf('item_read_more_title');						// 「続きを読む」ボタンタイトル
@@ -141,11 +141,14 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($columnCount, 'カラム数');
 			
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($defName == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					//if ($defName == $targetObj->name){		// 定義名
+					if ($name == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			
@@ -153,7 +156,8 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
-				$newObj->name		= $defName;// 表示名
+				//$newObj->name		= $defName;// 表示名
+				$newObj->name	= $name;// 表示名
 				$newObj->showReadMore	= $showReadMore;		// 「続きを読む」ボタンを表示
 				$newObj->readMoreTitle	= $readMoreTitle;		// 「続きを読む」ボタンタイトル
 				$newObj->leadContentCount	= $leadContentCount;						// 先頭のコンテンツ数
@@ -167,7 +171,6 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 				
 				for ($i = 0; $i < $fieldCount; $i++){
 					$newInfoObj = new stdClass;
-//					$newInfoObj->name		= $names[$i];
 					$newInfoObj->contentId	= $contentIds[$i];
 					$newObj->fieldInfo[] = $newInfoObj;
 				}
@@ -205,7 +208,6 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 				
 					for ($i = 0; $i < $fieldCount; $i++){
 						$newInfoObj = new stdClass;
-//						$newInfoObj->name		= $names[$i];
 						$newInfoObj->contentId	= $contentIds[$i];
 						$targetObj->fieldInfo[] = $newInfoObj;
 					}
@@ -232,9 +234,11 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 				
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
-			$this->tmpl->setAttribute('item_def_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
+			//$this->tmpl->setAttribute('item_def_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
+			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$defName = $this->createDefaultName();			// デフォルト登録項目名
+				//$defName = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
 				$showReadMore = 0;		// 「続きを読む」ボタンを表示
 				$readMoreTitle	= '';		// 「続きを読む」ボタンタイトル
 				$leadContentCount	= self::DEFAULT_LEAD_CONTENT_COUNT;						// 先頭のコンテンツ数
@@ -250,7 +254,8 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 			if ($replaceNew){// データ再取得時
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
-					$defName	= $targetObj->name;// 名前
+					//$defName	= $targetObj->name;// 名前
+					$name		= $targetObj->name;	// 名前
 					$showReadMore = $targetObj->showReadMore;		// 「続きを読む」ボタンを表示
 					$readMoreTitle	= $targetObj->readMoreTitle;		// 「続きを読む」ボタンタイトル
 					$leadContentCount	= $targetObj->leadContentCount;						// 先頭のコンテンツ数
@@ -274,7 +279,8 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 			
 		// 画面にデータを埋め込む(ウィジェット共通部)
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
-		$this->tmpl->addVar("item_def_name_visible", "def_name",	$defName);
+		//$this->tmpl->addVar("item_def_name_visible", "def_name",	$defName);
+		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// 画面にデータを埋め込む
@@ -376,7 +382,7 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -392,6 +398,6 @@ class admin_featured_contentWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 }
 ?>

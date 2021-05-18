@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -38,7 +38,7 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-// お問い合わせ項目を追加
+// 表示項目を追加
 function addLine()
 {
 	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
@@ -49,49 +49,19 @@ function addLine()
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
-	//setupList();
 	m3SetDragDropTable('field_list');
 }
-/*
-function setupList()
-{
-	$("#field_list").tableDnD({
-		onDrop: function(table, row){
-			setupNo();
-		},
-		dragHandle: ".m3drag_handle"
-	});
-	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('m3drag_current');
-	}, function() {
-		$(this.cells[0]).removeClass('m3drag_current');
-	});
-	// 項目削除処理
-	$("#field_list tr .m3drag_delrow").click(function(){
-		$(this).parents('.m3drag_row').remove();
-		setupNo();
-	});
-	// インデックスNo再設定
-	setupNo();
-}*/
-/*
-function setupNo()
-{
-	// インデックスNo再設定
-	$("#field_list tr .m3drag_rowno").each(function(index){
-		$(this).text(index + 1);
-	});
-}*/
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow()
 {
-	window.open("{PREVIEW_URL}","","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
+	//window.open("{PREVIEW_URL}","","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
-function viewWidget(widgetId){
+/*function viewWidget(widgetId){
 	window.open("?cmd=showwidget&widget=" + widgetId,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=800,height=600");
 	return false;
-}
+}*/
 $(function(){
 	// 項目一覧テーブル作成
 	m3SetDragDropTable('field_list');
@@ -125,8 +95,8 @@ $(function(){
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-	    <patTemplate:tmpl name="item_def_name_visible" visibility="hidden">
-	    <input type="text" name="item_def_name" value="{DEF_NAME}" size="40" maxlength="40" />
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
 	    </patTemplate:tmpl>
 	    </td>
 	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_ID}>ID</span></td>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_pdf_listWidgetContainer.php 2883 2010-02-28 14:54:34Z fishbone $
  * @link       http://www.magic3.org
@@ -23,7 +23,7 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 	private $langId;
 	private $configId;		// 定義ID
 	private $paramObj;		// パラメータ保存用オブジェクト
-	private $fieldInfoArray = array();			// お問い合わせ項目情報
+	private $fieldInfoArray = array();			// 表示項目情報
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_TITLE_NAME = 'お問い合わせ';	// デフォルトのタイトル名
 	
@@ -94,7 +94,8 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		
 		// 入力値を取得
-		$defName	= $request->trimValueOf('item_def_name');			// 定義名
+		//$defName	= $request->trimValueOf('item_def_name');			// 定義名
+		$name	= $request->trimValueOf('item_name');			// 定義名
 		$fieldCount = $request->trimValueOf('fieldcount');		// 表示項目数
 		$names = $request->trimValueOf('item_name');		// 表示項目、名前
 		$addresses = $request->trimValueOf('item_address');		// 表示項目、住所
@@ -105,11 +106,14 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 			// 入力値のエラーチェック
 			
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($defName == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					//if ($defName == $targetObj->name){		// 定義名
+					if ($name == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			
@@ -117,7 +121,8 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
-				$newObj->name		= $defName;// 表示名
+				//$newObj->name		= $defName;// 表示名
+				$newObj->name	= $name;// 表示名
 				$newObj->fieldInfo	= array();
 				
 				for ($i = 0; $i < $fieldCount; $i++){
@@ -178,18 +183,21 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 				
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
-			$this->tmpl->setAttribute('item_def_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
+			//$this->tmpl->setAttribute('item_def_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
+			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
-				$defName = $this->createDefaultName();			// デフォルト登録項目名
-				$this->fieldInfoArray = array();			// お問い合わせ項目情報
+				//$defName = $this->createDefaultName();			// デフォルト登録項目名
+				$name = $this->createConfigDefaultName();			// デフォルト登録項目名
+				$this->fieldInfoArray = array();			// 表示項目情報
 			}
 			$this->serialNo = 0;
 		} else {
 			if ($replaceNew){// データ再取得時
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
-					$defName	= $targetObj->name;// 名前
-					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせ項目情報
+					//$defName	= $targetObj->name;// 名前
+					$name		= $targetObj->name;	// 名前
+					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// 表示項目情報
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -204,7 +212,8 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
-		$this->tmpl->addVar("item_def_name_visible", "def_name",	$defName);
+		//$this->tmpl->addVar("item_def_name_visible", "def_name",	$defName);
+		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
@@ -280,7 +289,7 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string	デフォルト名						
 	 */
-	function createDefaultName()
+/*	function createDefaultName()
 	{
 		$name = self::DEFAULT_NAME_HEAD;
 		for ($j = 1; $j < 100; $j++){
@@ -296,7 +305,7 @@ class admin_pdf_listWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
+	}*/
 	/**
 	 * 一覧画面作成
 	 *

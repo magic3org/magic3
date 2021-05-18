@@ -318,6 +318,8 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createDefListMenu()
 	{
+		if (!is_array($this->paramObj)) return;
+		
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id = $this->paramObj[$i]->id;// 定義ID
 			$targetObj = $this->paramObj[$i]->object;
