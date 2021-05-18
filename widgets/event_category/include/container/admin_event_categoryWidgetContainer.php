@@ -133,11 +133,13 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($itemCount, '表示項目数');
 			
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					if ($name == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			
@@ -305,28 +307,6 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->parseTemplate('title_list', 'a');
 		}
 	}
-	/**
-	 * デフォルトの名前を取得
-	 *
-	 * @return string	デフォルト名						
-	 */
-/*	function createDefaultName()
-	{
-		$name = self::DEFAULT_NAME_HEAD;
-		for ($j = 1; $j < 100; $j++){
-			$name = self::DEFAULT_NAME_HEAD . $j;
-			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					break;
-				}
-			}
-			// 重複なしのときは終了
-			if ($i == count($this->paramObj)) break;
-		}
-		return $name;
-	}*/
 	/**
 	 * ソート順選択メニュー作成
 	 *

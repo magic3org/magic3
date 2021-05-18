@@ -122,11 +122,13 @@ class admin_tickerWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($height, '高さ', true);
 			
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($defName == $targetObj->name){		// 定義名
-					$this->setUserErrorMsg('名前が重複しています');
-					break;
+			if (is_array($this->paramObj)){
+				for ($i = 0; $i < count($this->paramObj); $i++){
+					$targetObj = $this->paramObj[$i]->object;
+					if ($defName == $targetObj->name){		// 定義名
+						$this->setUserErrorMsg('名前が重複しています');
+						break;
+					}
 				}
 			}
 			

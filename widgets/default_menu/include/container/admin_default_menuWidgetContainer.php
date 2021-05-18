@@ -381,28 +381,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 	}
 	/**
-	 * デフォルトの名前を取得
-	 *
-	 * @return string	デフォルト名						
-	 */
-/*	function createDefaultName()
-	{
-		$name = self::DEFAULT_NAME_HEAD;
-		for ($j = 1; $j < 100; $j++){
-			$name = self::DEFAULT_NAME_HEAD . $j;
-			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					break;
-				}
-			}
-			// 重複なしのときは終了
-			if ($i == count($this->paramObj)) break;
-		}
-		return $name;
-	}*/
-	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
