@@ -621,7 +621,8 @@ class DesignManager extends _Core
 			$title = $help['title'];
 			if (!empty($title)){
 				$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $help['body']);
-				$destHtml .= '<span ' . $helpText . '><i class="glyphicon glyphicon-question-sign text-warning"></i></span>';
+				//$destHtml .= '<span ' . $helpText . '><i class="glyphicon glyphicon-question-sign text-warning"></i></span>';
+				$destHtml .= '<span ' . $helpText . '><i class="fas fa-question-circle text-warning"></i></span>';
 			}
 		}
 		$destHtml .= '</div>';
