@@ -136,11 +136,6 @@
 		var page = urlParams['_page'];
 		var sub = urlParams['_sub'];
 		
-		// チェックボックス追加
-//		$('dt.m3_widget_with_check_box', $els).append('<span class="options"><a class="m3_widget_close">close</a></span>');
-//		$('a.m3_widget_close').bind('click', widgetClose);
-		
-		//$els.sortable('destroy');		// 一旦削除
 		$els.sortable({
 			items: '> dl',
 			handle: 'dt',
@@ -153,19 +148,10 @@
 			placeholder: 'm3_spacer',
 			connectWith: els,
 			start: function(e,ui){
-				// カーソルの位置を補正
-/*				var bodyLeft = parseInt($('body').css('left'));
-				if (bodyLeft > 0){
-					bodyLeft = PANEL_WIDTH - parseInt(ui.helper.css("margin-left"));
-					ui.helper.css("margin-left", '-' + String(bodyLeft).toString() + 'px');
-				}*/
-
 				// ドラッグ中のイメージの幅を固定
 				ui.helper.css('z-index', '2010');
 				ui.helper.css('width', DRAG_ITEM_WIDTH);
 			},
-//			stop: function(e,ui) {
-//			},
 			update: updateSortable
 		});
 		
@@ -305,13 +291,6 @@
 				}
 			},
 			start: function(e, ui){
-				// カーソルの位置を補正
-/*				var bodyLeft = parseInt($('body').css('left'));
-				if (bodyLeft > 0){
-					bodyLeft = PANEL_WIDTH - parseInt(ui.helper.css("margin-left"));
-					ui.helper.css("margin-left", '-' + String(bodyLeft).toString() + 'px');
-				}*/
-				
 				// ドラッグ中のイメージの幅を固定
 				ui.helper.css("width", DRAG_ITEM_WIDTH);
 			},
@@ -412,24 +391,19 @@
 	$(function(){
 		var widgetWindow = '';
 		// ウィジェット一覧(左パネル)
-//		widgetWindow += '<div id="m3slidepanel">';
 		widgetWindow += '<div id="m3slidepanel" class="m3panel_left m3-navbar-default" style="left:-240px; visibility:visible;">';
 		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェット一覧"><i class="glyphicon glyphicon-th-list"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<ul>';
 		widgetWindow += '<li><a href="#m3paneltab_widget">ウィジェット</a></li>';
-//		widgetWindow += '<li><a href="#m3paneltab_search">検索</a></li>';
 		widgetWindow += '</ul>';
 		widgetWindow += '<div id="m3paneltab_widget">';
 		widgetWindow += '<div class="m3message"></div>';
 		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist">';
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
-//		widgetWindow += '<div id="m3paneltab_search" style="overflow: auto;">';
-//		widgetWindow += '</div>';	// m3paneltab_search end	
 		widgetWindow += '</div>';	// m3paneltab_wrap end
 		widgetWindow += '</div>';	// m3panel_left end
-//		widgetWindow += '</div>';	// m3slidepanel end
 		
 		// その他ポジション(右パネル)
 //		widgetWindow += '<div id="m3slidepanel2">';
@@ -460,9 +434,9 @@
 		widgetWindow += '</div>';
 		
 		// 画面リサイズボタン(右上)
-		//if (!(window.parent && window.parent.frames.length == 0)){			// 親ウィンドウありの場合
 		if (!(window == window.parent)){		// 親ウィンドウありの場合
-			widgetWindow += '<div class="m3resizer m3topright"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="画面の拡大縮小"><i class="glyphicon"></i></a></div>';
+			//widgetWindow += '<div class="m3resizer m3topright"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="画面の拡大縮小"><i class="glyphicon"></i></a></div>';
+			widgetWindow += '<div class="m3resizer m3topright"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="画面の拡大縮小"><i class="fas fa-2x"></i></a></div>';
     	}
 		
 		$("body").append(widgetWindow);
@@ -500,16 +474,20 @@
 				openerCss['top'] = '0px';
 				
 				iframeObj.removeClass('layout_top_border');
-				iconObj.removeClass('glyphicon-resize-full');
-				iconObj.addClass('glyphicon-resize-small');
+				//iconObj.removeClass('glyphicon-resize-full');
+				//iconObj.addClass('glyphicon-resize-small');
+				iconObj.removeClass('fa-expand-alt');
+				iconObj.addClass('fa-compress-alt');
 			} else {
 				// 画面を縮小
 				parent.$("#layout_preview_outer").css('z-index', '1');
 				openerCss['top'] = '240px';		// 高さ調整
 				
 				iframeObj.addClass('layout_top_border');
-				iconObj.removeClass('glyphicon-resize-small');
-				iconObj.addClass('glyphicon-resize-full');
+				//iconObj.removeClass('glyphicon-resize-small');
+				//iconObj.addClass('glyphicon-resize-full');
+				iconObj.removeClass('fa-compress-alt');
+				iconObj.addClass('fa-expand-alt');
 			}
 			
 			// 画面をリサイズ
@@ -524,17 +502,17 @@
 				slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
 				$('#m3paneltab_widget_list2').height(slideMenuHeight);
 			}});
-			
-			// リロード
-			//parent.$('#layout_preview').attr('src', function (i, val){ return val; });
 
 			return false;		// クリックイベント終了
 		});
+		
 		// 画面リサイズボタンアイコン初期化
 		if (parent.$('#layout_preview').hasClass('layout_top_border')){		// デフォルト(縮小)状態のとき
-			$(".m3resizer.m3topright a i").addClass('glyphicon-resize-full');
+			//$(".m3resizer.m3topright a i").addClass('glyphicon-resize-full');
+			$(".m3resizer.m3topright a i").addClass('fa-expand-alt');
 		} else {
-			$(".m3resizer.m3topright a i").addClass('glyphicon-resize-small');
+			//$(".m3resizer.m3topright a i").addClass('glyphicon-resize-small');
+			$(".m3resizer.m3topright a i").addClass('fa-compress-alt');
 		}
 		
 		setupSortable();
