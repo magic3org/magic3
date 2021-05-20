@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -485,6 +485,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
 			
+			// ### 個別記事が見つからない場合はWebサーバ(Nginx)側で404ページを表示 ###
 			// HTTPステータスコードの設定
 			$this->gPage->setResponse(404/*存在しないページ*/);
 		}
@@ -635,8 +636,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
 				
+				// ### 一覧表示画面の場合は404を返さない ###
 				// HTTPステータスコードの設定
-				$this->gPage->setResponse(404/*存在しないページ*/);
+				//$this->gPage->setResponse(404/*存在しないページ*/);
 			}
 		}
 	}
@@ -766,8 +768,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
 				
+				// ### 一覧表示画面の場合は404を返さない ###
 				// HTTPステータスコードの設定
-				$this->gPage->setResponse(404/*存在しないページ*/);
+				//$this->gPage->setResponse(404/*存在しないページ*/);
 			}
 		} else if (!empty($year)){			// 年月日指定のとき
 			if (!empty($month) && !empty($day)){		// 日指定のとき
@@ -817,8 +820,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 					
+					// ### 一覧表示画面の場合は404を返さない ###
 					// HTTPステータスコードの設定
-					$this->gPage->setResponse(404/*存在しないページ*/);
+					//$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			} else if (!empty($month)){		// 月指定のとき
 				$this->showListType = 'month';				// 一覧表示タイプ(月)
@@ -866,8 +870,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 					
+					// ### 一覧表示画面の場合は404を返さない ###
 					// HTTPステータスコードの設定
-					$this->gPage->setResponse(404/*存在しないページ*/);
+					//$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			} else {		// 年指定のとき
 				$this->showListType = 'year';				// 一覧表示タイプ(年)
@@ -915,8 +920,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 					
+					// ### 一覧表示画面の場合は404を返さない ###
 					// HTTPステータスコードの設定
-					$this->gPage->setResponse(404/*存在しないページ*/);
+					//$this->gPage->setResponse(404/*存在しないページ*/);
 				}
 			}
 		}

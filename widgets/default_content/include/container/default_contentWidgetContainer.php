@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -399,6 +399,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 							// メッセージ
 							$this->setAppErrorMsg($messageDeny);
 							
+							// ### 記事が見つからない場合はWebサーバ(Nginx)側で404ページを表示 ###
 							// HTTPステータスコードの設定
 							$this->gPage->setResponse(404/*存在しないページ*/);
 						}
@@ -429,8 +430,10 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 						// メッセージ
 						$this->setAppErrorMsg('IDにエラー値があります');
 						
+						// ### パラメータエラー場合はWebサーバ(Nginx)側で404ページを表示 ###
+						$this->gPage->setResponse(404/*存在しないページ*/);
 						// HTTPステータスコードの設定
-						$this->gPage->setResponse(400/*リクエストにエラー*/);
+						//$this->gPage->setResponse(400/*リクエストにエラー*/);
 					}
 				}
 			}

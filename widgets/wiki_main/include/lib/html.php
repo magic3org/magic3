@@ -519,6 +519,7 @@ function password_form()
 					$msg = wiki_mainCommonDef::DEFAULT_FORBIDDEN_TITLE;
 					$body = '<p>' . wiki_mainCommonDef::DEFAULT_FORBIDDEN_MSG . '</p>';
 				
+					// ### アクセス禁止の場合はWebサーバ(Nginx)側で403ページを表示 ###
 					// HTTPステータスコードを403に設定
 					$gPageManager->setResponse(403/*禁止されている*/);
 				} else {		// Wikiページの表示の場合
@@ -526,6 +527,7 @@ function password_form()
 					$msg = wiki_mainCommonDef::DEFAULT_NOT_FOUND_TITLE;
 					$body = '<p>' . wiki_mainCommonDef::DEFAULT_NOT_FOUND_MSG . '</p>';
 				
+					// ### Wikiページが見つからない場合はWebサーバ(Nginx)側で404ページを表示 ###
 					// HTTPステータスコードを404に設定
 					$gPageManager->setResponse(404/*存在しないページ*/);
 				}

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: commentTopWidgetContainer.php 6179 2013-07-19 05:48:11Z fishbone $
  * @link       http://www.magic3.org
@@ -706,6 +706,7 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 			// ページ作成処理中断
 			$this->gPage->abortPage();
 						
+			// ### アクセス禁止の場合はWebサーバ(Nginx)側で403ページを表示 ###
 			// レスポンスヘッダ設定
 			$this->gPage->setResponse(403/*アクセス禁止*/);
 
