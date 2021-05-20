@@ -44,7 +44,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const TEMPLATE_THUMBNAIL_FILENAME_WP = 'screenshot';				// テンプレートサムネール(WordPressテンプレート)
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
-	const TITLE_PRE_ICON_CLOSED = '<i class="fas fa-minus-circle text-danger" rel="m3help" title="非公開ページ"></i> ';		// タイトル付加用アイコン(非公開)
+	const TITLE_PRE_ICON_CLOSED = '<i class="fas fa-minus-circle text-danger" rel="m3help" title="非公開ページ" style="background: radial-gradient(white 50%, transparent 50%);"></i> ';		// タイトル付加用アイコン(非公開)
 	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
 	const TITLE_PRE_ICON_LOCK = '<i class="glyphicon glyphicon-lock" rel="m3help" title="SSL"></i> ';		// タイトル付加用アイコン(鍵)
 	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
