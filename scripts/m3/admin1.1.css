@@ -250,39 +250,25 @@
 	list-style:none;
 	float:left;
 	height:35px;
+	margin-top:3px;
+	background-color: #18BC9C;
 }
 .m3paneltab > ul li a {	/*tab top*/
 	outline: 0;
 	display:block;
-	padding:6px 10px;
+	padding:6px 15px 3px;
 	text-decoration:none !important;
-/*  margin:1px;
-  margin-left:0;*/
 	font:14px;
-	font-weight:bold;
 	color:#fff;
-/*background:#444;*/
-	background:#95a5a6;
-}
-.m3paneltab > ul li a:hover {
-	color:#FFF;
-	background:#111;
-}
-.m3paneltab > ul li a.selected {
-	margin-bottom:0;
-	color:#000;
-	background:#fff;
-/*background:#18BC9C;*/
-/*  border-bottom:1px solid snow;*/
 	cursor:default;
 }
-.m3paneltab > div, .m3paneltab > div > div {
-	padding:2px 3px;
+/*.m3paneltab > div, .m3paneltab > div > div {*/
+.m3paneltab > div {
+	padding:4px 6px;
 	clear:left;
 	font:14pt;
 	outline:0;
 }
-/*.m3paneltab div a { color:#000; font-weight:bold; } */
 /* 右パネル差分 */
 #m3slidepanel2 .m3paneltab > ul {
 	margin-left:40px;
