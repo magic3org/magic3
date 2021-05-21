@@ -5,16 +5,11 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2017 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-/*img {
-    border: none;
-}*/
-/*.clear { clear:both; font-size:1px; line-height:1px; }*/
-
 .grab {
 	cursor: hand;
 	cursor: grab;
@@ -52,15 +47,12 @@
 	-webkit-touch-callout:none;
 }
 .m3_widgetpos_box .m3_widgetpos_box_title {
-/*	background-color:#555;*/
 	background-color:#1A242F;
-/*	border-top:3px solid #666;*/
 	color:#FFF;
-/*	margin:0 -10px 10px;*/
 	margin:0 0 10px 0;
 	padding:0 10px;
 
-	font-weight:bold;
+/*	font-weight:bold;*/
 	font-style: inherit;
 	font-size: 15px;
 	font-family: inherit;
@@ -191,28 +183,7 @@ dl.m3_widgetlist_item dd table td {
 dl.m3_widgetlist_item dd hr {
 	margin:5px 0;
 }
-/*
-.ui-sortable h2 span.options { right:10px; top:8px; width:30px; }
-.ui-sortable h2 span.options a { height:12px; width:30px; }*/
 
-/* widget close box */
-/*
-dl.m3_widget_sortable dt span.options {
-	font-size:1px;
-	line-height:1px;
-	position:absolute;
-	right:5px;
-	top:5px;
-	width:12px;
-}
-dl.m3_widget_sortable dt span.options a {
-	background-color:#FFF;
-	display:block;
-	float:left;
-	text-indent:-9000px;
-	height:12px;
-	width:12px;
-}*/
 img.m3widget {
 	width:32px;
 	height:32px;
@@ -223,23 +194,6 @@ img.m3widget {
 	margin: 5px 10px;
 }
 
-/* 編集終了アイコン */
-/*.m3editend {
-	position:fixed;
-	top:0;
-	right:0;
-	margin:0;
-	padding:0;
-	width:45px;
-	height:45px;
-	z-index:2147483647;
-}
-.m3editend a {
-	margin:0;
-}
-.m3editend a img {
-	margin:7px;
-}*/
 /* ヘルプ、ツールチップ */
 i[rel="m3help"] { cursor: default; }
 span[rel="m3help"] { cursor: default; }

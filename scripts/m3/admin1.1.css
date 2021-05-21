@@ -286,7 +286,8 @@
 /* ウィジェットカテゴリー */
 .m3accordion > dt{
 	color:#FFF;	
-	font-weight:bold;
+/*	font-weight:bold;*/
+	font-weight: normal;
 	font-size: 16px;
 	margin-top:1px;
 	padding:10px 15px;
@@ -299,29 +300,24 @@
 	background:#F39C12;
 }
 .m3accordion > dt:after{
-/*	content:"+";
-	border-radius:50%;
-	border:2px solid;
-	font-size:18px;
-	padding:0 7px;
-	margin-top:-3px;*/
-	content: "\e081";	/* 「+」 */
-	position: relative;
+	/*content: "\e081";*/	/* 「+」 */
+/*	position: relative;
 	margin-top:5px;
-	display: inline-block;
-	font-family: 'Glyphicons Halflings';
-	font-style: normal;
+	display: inline-block;*/
+	/*font-family: 'Glyphicons Halflings';*/
+	content: "\f054";	/* 「>」 */
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	/*font-style: normal;
 	font-weight: normal;
-	line-height: 1;
-	float:right;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	line-height: 1;*/
+	float: right;
+	/*-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;*/
 }
 .m3accordion > dt.active:after{
-	content: "\e082";	/* 「-」 */
-/*	content:"-";*/
-/*	border:2px solid #ccc;*/
-/*	color:#ccc;*/
+	/*content: "\e082";*/	/* 「-」 */
+	content: "\f078";	/* 下向き「>」 */
 }
 .m3accordion > dd {
 	margin: 3px 0;
