@@ -95,6 +95,11 @@ function m3ShowAdjustWindow(configId, serial, pageId, pageSubId)
 	window.open(M3_DEFAULT_ADMIN_URL + "?task=adjustwidget&openby=simple" + 
 					"&_defconfig=" + configId + "&_defserial=" + serial + "&_page=" + pageId + "&_sub=" + pageSubId, "adjust_" + serial);
 }
+// タスク指定で設定画面
+function m3ShowTaskWindow(taskId)
+{
+	window.open(M3_DEFAULT_ADMIN_URL + "?task=" + taskId + "&openby=simple";
+}
 // 各種端末用プレビューウィンドウ表示
 function m3ShowPreviewWindow(type, url)
 {

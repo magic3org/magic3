@@ -269,6 +269,15 @@
 /*	font:14px;*/
 	outline:0;
 }
+
+/*ウィジェット一覧編集ボタン*/
+#m3paneltab_edit a {
+	position: absolute;
+	right: 25px;
+	bottom: 30px;
+	color: #FFF;
+}
+
 /* 右パネル差分 */
 #m3slidepanel2 .m3paneltab > ul {
 	margin-left:40px;
