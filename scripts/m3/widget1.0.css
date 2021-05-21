@@ -53,6 +53,7 @@
 	padding:0 10px;
 
 /*	font-weight:bold;*/
+	font-weight: normal;
 	font-style: inherit;
 	font-size: 15px;
 	font-family: inherit;
@@ -156,7 +157,8 @@ dl.m3_widgetlist_item dt {
 /*	background-color:#FF9933;*/
 	background-color:#18bc9c;
 	color:#FFF;
-	font-size:14px;
+/*	font-size:14px;*/
+	font-size: 15px;
 	font-weight: normal;
 	height:2em;
 	line-height:2;

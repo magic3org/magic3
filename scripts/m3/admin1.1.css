@@ -258,7 +258,7 @@
 	display:block;
 	padding:6px 15px 3px;
 	text-decoration:none !important;
-	font:14px;
+/*	font:14px;*/
 	color:#fff;
 	cursor:default;
 }
@@ -266,7 +266,7 @@
 .m3paneltab > div {
 	padding:4px 6px;
 	clear:left;
-	font:14pt;
+/*	font:14px;*/
 	outline:0;
 }
 /* 右パネル差分 */
@@ -274,7 +274,7 @@
 	margin-left:40px;
 }
 #m3slidepanel2 .m3paneltab > ul li a {	/*tab top*/
-	background:#2C3E50;
+/*	background:#2C3E50;*/
 	pointer-events:none;
 }
 
