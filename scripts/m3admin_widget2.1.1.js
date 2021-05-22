@@ -265,11 +265,17 @@
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
 				$(this).next('dd').slideUp();
+				
+				// 一覧編集ボタン
+				$('#m3paneltab_edit').show();
 			} else{
 				$('.m3accordion').children('dt').removeClass('active');
 				$('.m3accordion').children('dd').slideUp();
 				$(this).addClass('active');
 				$(this).next('dd').slideDown();
+				
+				// 一覧編集ボタン
+				$('#m3paneltab_edit').hide();
 			}
 		});
 		
@@ -402,12 +408,11 @@
 		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist">';
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
-		widgetWindow += '<div id="m3paneltab_edit"><a href="?task=pageinfo" id="edituser" rel="m3help" title="一覧を編集"><i class="fas fa-edit"></i></a></div>';
+		widgetWindow += '<div><a id="m3paneltab_edit" href="#" rel="m3help" title="一覧を編集"><i class="fas fa-edit"></i></a></div>';
 		widgetWindow += '</div>';	// m3paneltab_wrap end
 		widgetWindow += '</div>';	// m3panel_left end
 		
 		// その他ポジション(右パネル)
-//		widgetWindow += '<div id="m3slidepanel2">';
 		widgetWindow += '<div id="m3slidepanel2" class="m3panel_right m3-navbar-default" style="right:-240px; visibility:visible;">';
 		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"><i class="glyphicon glyphicon-folder-open"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
@@ -422,7 +427,6 @@
 		widgetWindow += '</div>';	// m3paneltab_widget end
 		widgetWindow += '</div>';	// m3paneltab_wrap end
 		widgetWindow += '</div>';	// m3panel_right end
-//		widgetWindow += '</div>';	// m3slidepanel end
 		
 		// コンテキストメニュー
 		widgetWindow += '<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">';
@@ -515,6 +519,13 @@
 			//$(".m3resizer.m3topright a i").addClass('glyphicon-resize-small');
 			$(".m3resizer.m3topright a i").addClass('fa-compress-alt');
 		}
+		
+		// 編集アイコン作成
+		$('#m3paneltab_edit').click(function(){
+			// 一覧の設定画面を表示
+			m3ShowTaskWindow('initwizard_content');
+			return false;
+		});
 		
 		setupSortable();
 		

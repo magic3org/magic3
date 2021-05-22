@@ -271,9 +271,9 @@
 }
 
 /*ウィジェット一覧編集ボタン*/
-#m3paneltab_edit a {
+#m3paneltab_edit {
 	position: absolute;
-	right: 25px;
+	right: 20px;
 	bottom: 30px;
 	color: #FFF;
 }
