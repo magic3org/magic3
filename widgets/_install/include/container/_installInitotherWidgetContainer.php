@@ -21,7 +21,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
 	private $adminServerScriptArray;	// サーバ管理システム用スクリプト
-	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
+//	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 	
 	/**
@@ -85,7 +85,8 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 					$this->setMsg(self::MSG_APP_ERR, "サンプルデータインストールに失敗しました");
 				}
 			} else {
-				$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+				//$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+				$scriptPath = $this->gEnv->getSqlPath() . '/' . M3_DIR_NAME_TOOLS . '/' . $this->sampleId;
 			
 				// スクリプト実行
 				if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
@@ -118,7 +119,8 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		}
 		// サンプルSQLスクリプトディレクトリのチェック
 		$scriptFiles = array();
-		$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
+		//$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
+		$searchPath = $this->gEnv->getSqlPath() . '/' . M3_DIR_NAME_TOOLS;
 		if (is_dir($searchPath)){
 			// 1階層目のみ検索
 			$dir = dir($searchPath);

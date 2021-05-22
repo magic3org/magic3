@@ -24,7 +24,7 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 	private $sampleId;		// サンプルデータID
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
-	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
+//	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 	const UNTITLED_TITLE = 'タイトル未設定:';		// タイトルが取得できない場合のタイトル
@@ -87,7 +87,8 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 					$this->setMsg(self::MSG_APP_ERR, "サンプルデータインストールに失敗しました");
 				}
 			} else {
-				$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+				//$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+				$scriptPath = $this->gEnv->getSqlPath() . '/' . M3_DIR_NAME_TOOLS . '/' . $this->sampleId;
 			
 				// スクリプト実行
 				if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
@@ -125,7 +126,8 @@ class admin_mainInstalldataWidgetContainer extends admin_mainMainteBaseWidgetCon
 		$dbType = $this->db->getDbType();
 		
 		// サンプルSQLスクリプトディレクトリのチェック
-		$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
+		//$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
+		$searchPath = $this->gEnv->getSqlPath() . '/' . M3_DIR_NAME_TOOLS;
 		$files = $this->getScript($searchPath);
 		sort($files);		// ファイル名をソート
 
