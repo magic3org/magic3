@@ -71,7 +71,8 @@ class admin_opelogDb extends BaseDb
 	 */
 	function getOpeLogCount($level, $status, $userId)
 	{
-		$queryStr = 'SELECT * FROM _operation_log LEFT JOIN _operation_type ON ol_type = ot_id ';
+		//$queryStr = 'SELECT * FROM _operation_log LEFT JOIN _operation_type ON ol_type = ot_id ';
+		$queryStr = 'SELECT ol_serial FROM _operation_log LEFT JOIN _operation_type ON ol_type = ot_id ';	// パフォーマンス改善(2021/5/24)
 		
 		// 必須参照項目のみに限定
 		$params = array();
