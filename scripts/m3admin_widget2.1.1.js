@@ -408,7 +408,7 @@
 		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist">';
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
-		widgetWindow += '<div><a id="m3paneltab_edit" href="#" rel="m3help" title="一覧を編集"><i class="fas fa-edit"></i></a></div>';
+		widgetWindow += '<div><a id="m3paneltab_edit" href="#" rel="m3help" data-container="body" title="一覧を編集"><i class="fas fa-edit"></i></a></div>';
 		widgetWindow += '</div>';	// m3paneltab_wrap end
 		widgetWindow += '</div>';	// m3panel_left end
 		
