@@ -195,11 +195,11 @@ class PageManager extends _Core
 	
 	// Magic3用スクリプト
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin2.1.1.js';				// 管理機能用スクリプト(CKEditor4.0.1対応)
-	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.1.1.js';	// 管理機能(ウィジェット操作)用スクリプト
+	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.1.2.js';	// 管理機能(ウィジェット操作)用スクリプト
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget1.0.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.5.2.js';			// 一般、管理機能共通スクリプト
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt2.0.1.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
-	const M3_ADMIN_CSS_FILE					= 'm3/admin1.1.css';			// 管理機能用のCSS
+	const M3_ADMIN_CSS_FILE					= 'm3/admin1.2.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// フロント画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// フロント画面共通のデフォルトCSS
 	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
@@ -4221,7 +4221,7 @@ class PageManager extends _Core
 					$widgetToolTag .= '</div></li>';
 					
 					$menubarTag .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
-					$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
+					$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><!--<i class="glyphicon glyphicon-align-justify"></i>--><i class="fas fa-align-justify fa-2x"></i></a></div>';
 					$menubarTag .= '<div>';
 					$menubarTag .= '<ul class="m3-nav m3-navbar-nav">';
 					if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効

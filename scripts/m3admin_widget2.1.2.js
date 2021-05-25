@@ -398,7 +398,7 @@
 		var widgetWindow = '';
 		// ウィジェット一覧(左パネル)
 		widgetWindow += '<div id="m3slidepanel" class="m3panel_left m3-navbar-default" style="left:-240px; visibility:visible;">';
-		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェット一覧"><i class="glyphicon glyphicon-th-list"></i></a></div>';
+		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェット一覧"><i class="fas fa-th-list fa-2x"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<ul>';
 		widgetWindow += '<li><a href="#m3paneltab_widget">ウィジェット</a></li>';
@@ -414,7 +414,7 @@
 		
 		// その他ポジション(右パネル)
 		widgetWindow += '<div id="m3slidepanel2" class="m3panel_right m3-navbar-default" style="right:-240px; visibility:visible;">';
-		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"><i class="glyphicon glyphicon-folder-open"></i></a></div>';
+		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"><i class="fas fa-folder fa-2x"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<ul>';
 		widgetWindow += '<li><a href="#m3paneltab_position">その他ポジション</a></li>';
