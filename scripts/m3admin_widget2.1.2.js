@@ -102,7 +102,7 @@
 			param = '&task=wmove' + '&serial=' + attrs['serial'] + '&index=' + insertIndex + 
 					'&pos=' + position + '&widgets=' + widgets + '&updatepos=' + updatepos + '&rev=' + M3_REVISION;
 		}
-		//alert(param);
+		
 		$.ajax({	url: createUrl() + param,
 					type:		'get',
 					success:	function(data, textStatus){
@@ -523,7 +523,7 @@
 		// 編集アイコン作成
 		$('#m3paneltab_edit').click(function(){
 			// 一覧の設定画面を表示
-			m3ShowTaskWindow('initwizard_content');
+			m3ShowTaskWindow('editwidgetmenu');
 			return false;
 		});
 		
