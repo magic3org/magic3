@@ -21,14 +21,33 @@
 	var CURSOR_OFFSET = 10;				// カーソルの位置
 	
 	var m3UpdateByConfig = function(serial){
-		var widgets = $('.m3_widget_sortable');
-		for (var i = 0; i < widgets.length; i++){
-			var widget = $(widgets[i]);
-			var attrs = m3_splitAttr(widget.attr('m3'));
+		// シリアル番号が-1の場合はウィジェットカテゴリーを再取得
+		if (serial == -1){
+			// ウィジェット一覧取得
+			$.ajax({	url: createUrl() + '&task=list',
+						type:		'get',
+						success:	function(data, textStatus){
+										$("#m3paneltab_widget_list").html(data);
+										updateWidgetList();
+				
+										// ヘルプを設定
+										m3SetHelp();
+									},
+						error:		function(request, textStatus, errorThrown){
+										$(".m3message").text('通信エラー');
+									}
+			});
+		} else {
+			// 配置済みのウィジェットをシリアル番号(ウィジェット単位)で更新
+			var widgets = $('.m3_widget_sortable');
+			for (var i = 0; i < widgets.length; i++){
+				var widget = $(widgets[i]);
+				var attrs = m3_splitAttr(widget.attr('m3'));
 			
-			if (attrs['serial'] == serial){
-				m3TaskWidget('get', widget);
-				break;
+				if (attrs['serial'] == serial){
+					m3TaskWidget('get', widget);
+					break;
+				}
 			}
 		}
 	};

@@ -2845,7 +2845,8 @@ class PageManager extends _Core
 				// 画面定義のリビジョン番号
 				$contents .= 'var M3_REVISION=' . $this->pageDefRev . ';' . M3_NL;*/
 		
-				// 更新用関数追加
+				// 配置済みのウィジェットを更新またはウィジェット一覧を再取得する関数を追加
+				// serialが-1の場合ウィジェット一覧を更新。1以上の場合は配置済みのウィジェットのページ定義シリアル番号を指定。
 				$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
 				$contents .= M3_INDENT_SPACE . 'window.m3.m3UpdateByConfig(serial);' . M3_NL;
 				$contents .= '}' . M3_NL;

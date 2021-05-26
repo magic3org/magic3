@@ -53,7 +53,8 @@ class admin_mainEditwidgetmenuWidgetContainer extends admin_mainBaseWidgetContai
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'initwizard_content.tmpl.html';
+		//return 'initwizard_content.tmpl.html';
+		return 'editwidgetmenu.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -71,7 +72,6 @@ class admin_mainEditwidgetmenuWidgetContainer extends admin_mainBaseWidgetContai
 		
 		$act = $request->trimValueOf('act');
 	
-		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			$listedItem = explode(',', $request->trimValueOf('idlist'));
 			
@@ -170,18 +170,12 @@ class admin_mainEditwidgetmenuWidgetContainer extends admin_mainBaseWidgetContai
 //						}
 					}
 				}
-				if (true){
-					// 次の画面へ遷移
-					$this->_redirectNextTask();
-				} else {
-					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');			// データ更新に失敗しました
-				}
+				
+				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+				
+				// 親ウィンドウ(ページ編集画面)のウィジェット一覧を再取得
+				$this->gPage->updateParentWindow(-1/*ウィジェット一覧更新*/);
 			}
-		} else {
-			$reloadData = true;
-		}
-		
-		if ($reloadData){		// データ再取得のとき
 		}
 		
 		// 使用しているコンテンツタイプを取得
