@@ -336,6 +336,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'menu':			// 管理画面設定メニュー
 						case 'menucore':		// 管理画面コア設定メニュー
 						case 'editmenu':		// メニュー編集
+						case self::TASK_EDITWIDGETMENU:		// ページ編集画面のウィジェットカテゴリーメニュー編集
 						case 'corefile':		// コアファイル編集
 						case 'serverinfo':		// サーバ情報
 						case 'servertool':		// サーバ管理ツール

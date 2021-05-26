@@ -78,6 +78,7 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
 	const TASK_INITWIZARD		= 'initwizard';		// 管理画面カスタムウィザード
 	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
+	const TASK_EDITWIDGETMENU	= 'editwidgetmenu';		// ページ編集画面のウィジェットカテゴリーメニュー編集
 	const TASK_DB_ACCESSLOG		= 'dbaccesslog';			// DB管理アクセスログ
 	// サーバ管理
 	const TASK_SERVERINFO		= 'serverinfo';			// サーバ情報
