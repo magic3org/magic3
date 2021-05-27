@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,8 +28,8 @@ class help_adjustwidget extends HelpConv
 		// ########## ウィジェット表示調整 ##########
 		$helpData = array(
 			'adjustwidget_config' => array(	
-				'title' =>	$this->_('Widget Common Config'),	// ウィジェット共通設定
-				'body' =>	$this->_('Common config with all widgets.')		// すべてのウィジェットで共通する設定です。
+				'title' =>	$this->_('Widget View Configuration'),	// ウィジェットの表示設定
+				'body' =>	$this->_('Configure widget view style.')		// ウィジェットの表示スタイルを設定します。
 			),
 			'adjustwidget' => array(	
 				'title' =>	$this->_('Adjust Widget Title and Contents'),	// ウィジェットタイトル、位置調整
@@ -37,7 +37,7 @@ class help_adjustwidget extends HelpConv
 			),
 			'adjustwidget_view' => array(	
 				'title' =>	$this->_('View Control'),	// ウィジェット表示制御
-				'body' =>	$this->_('Control widget view.')		// ウィジェットの表示制御を行います。
+				'body' =>	$this->_('Control widget visibility.')		// ウィジェットの表示、非表示を制御します。
 			),
 			'adjustwidget_title' => array(	
 				'title' =>	$this->_('Title'),	// タイトル

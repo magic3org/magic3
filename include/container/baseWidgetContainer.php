@@ -298,7 +298,7 @@ class BaseWidgetContainer extends _Core
 					$navbarDef->menu = $this->configMenubarMenuDef;
 					
 					// 画面タイプ設定
-					$navbarDef->type = 1;		// 1=ウィジェット設定画面、2=システム画面(共通設定画面等)、3=テンプレート設定画面
+					$navbarDef->type = 1;		// 1=ウィジェット設定画面、2=システム画面(ウィジェット表示設定画面等)、3=テンプレート設定画面
 					if ($this->_cmd == M3_REQUEST_CMD_CONFIG_TEMPLATE) $navbarDef->type = 3;			// テンプレート設定画面
 					
 					$this->gPage->setAdminSubNavbarDef($navbarDef);

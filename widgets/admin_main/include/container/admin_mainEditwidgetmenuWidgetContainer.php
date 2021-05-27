@@ -16,6 +16,9 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
+/***************************************************************************************************
+	このクラスはadmin_mainInitwizard_contentWidgetContainerクラスと同じ処理を行う
+****************************************************************************************************/
 class admin_mainEditwidgetmenuWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
@@ -53,8 +56,24 @@ class admin_mainEditwidgetmenuWidgetContainer extends admin_mainBaseWidgetContai
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		//return 'initwizard_content.tmpl.html';
 		return 'editwidgetmenu.tmpl.html';
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// ナビゲーションメニューの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = 'ページ編集画面の設定';			// 画面タイトル
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 	/**
 	 * テンプレートにデータ埋め込む

@@ -101,7 +101,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// メニューバーの作成
 		$navbarDef = new stdClass;
-		$navbarDef->title = $this->_('Widget Common Configure');			// ウィジェット共通設定
+		//$navbarDef->title = $this->_('Widget Common Configure');			// ウィジェット共通設定
+		$navbarDef->title = $this->_('Widget View Configuration');			// ウィジェットの表示設定
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		$navbarDef->help	= $this->gInstance->getHelpManager()->getHelpText(self::HELP_ADJUSTWIDGET_CONFIG);// ヘルプ文字列
 		$navbarDef->menu =	array(
