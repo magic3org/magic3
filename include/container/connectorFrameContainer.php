@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: connectorFrameContainer.php 4297 2011-09-06 03:00:32Z fishbone $
  * @link       http://www.magic3.org
@@ -47,7 +47,6 @@ class connectorFrameContainer extends BaseFrameContainer
 				// サーバの登録状況をチェック
 				//$ret = $this->_db->isExistsTenantServerIp($senderIp);
 				// ブラックリストのIPはアクセス不可にする
-				$ret = true;
 			}
 		} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行
 			// 管理者権限がなければ実行できない

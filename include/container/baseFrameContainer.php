@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -238,10 +238,13 @@ class BaseFrameContainer extends _Core
 						}
 					}
 				}
-				// システム運用可能ユーザはアクセス可。
-				// ログアウトのときはすでに管理ユーザの可能性があるので、ログアウト時は変更しない
-				//if ($isSystemManageUser && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;
-				if ($isSystemAdmin && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;			// 2011/8/31 システム管理者のみに変更
+				
+				// ### システム運用可能ユーザはアクセス可。サーバ接続の場合は_checkAccess()の結果を優先する。 ###
+				if (!$this->gEnv->isServerConnector()){		// サーバ接続でない場合
+					// ログアウトのときはすでに管理ユーザの可能性があるので、ログアウト時は変更しない
+					//if ($isSystemManageUser && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;
+					if ($isSystemAdmin && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;			// 2011/8/31 システム管理者のみに変更
+				}
 			}
 			// #################### アクセスログ記録 #######################
 			// DBが使用可能であれば、ログイン処理終了後、アクセスログを残す
@@ -413,7 +416,7 @@ class BaseFrameContainer extends _Core
 				// オプション出力(時間計測等)追加
 				echo $this->gPage->getOptionContents($request);
 			}
-		} else {		// ウィジェット単体実行モードのとき
+		} else {		// 画面を作成しない場合(ウィジェット単体実行,RSS配信,サーバ接続)のとき
 			// ###################ウィジェット指定で出力の場合####################
 			// ウィジェット単体を直接実行するインターフェイスで、HTTPヘッダは送信しない。
 			// 以下のパターンで使用する。
@@ -452,32 +455,33 @@ class BaseFrameContainer extends _Core
 					return;
 				}
 			}
-			
-			// 管理権限がない場合は、ウィジェットのページへの配置状況からアクセス権限をチェックする
-			if (!$isSystemManageUser && !$this->_db->canAccessWidget($widgetId)){
-				// アクセスエラーのログを残す
-				$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd, self::ERR_MESSAGE_ACCESS_DENY);
+			if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
+				// サーバ接続の場合はサーバ間の接続なのでユーザ認証されていない
+				// _checkAccess()でアクセス元がサーバのIPと同じであることを確認済み
 				
-				$this->gOpeLog->writeUserAccess(__METHOD__, 'ウィジェットへの不正なアクセスを検出しました。(ウィジェットID: ' . $widgetId . ')', 2200,
-						'実行処理はキャンセルされました。このウィジェットは一般ユーザに公開されているページ上に存在しないため単体実行できません。');
-				return;
-			}
-			
-			// ################# パラメータチェック ################
-			if (!$isSystemManageUser && $this->gEnv->isServerConnector()){		// サーバ接続の場合
 				// クエリーパラメータはウィジェットIDのみ正常とする
-				$params = $request->getQueryArray();
-				$paramCount = count($params);
-				if (!($paramCount == 1 && !empty($params[M3_REQUEST_PARAM_WIDGET_ID]))){
+				//$params = $request->getQueryArray();
+				//$paramCount = count($params);
+				//if (!($paramCount == 1 && !empty($params[M3_REQUEST_PARAM_WIDGET_ID]))){
+				//	// アクセスエラーのログを残す
+				//	$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd, self::ERR_MESSAGE_ACCESS_DENY);
+				//
+				//	$this->gOpeLog->writeUserAccess(__METHOD__, 'サーバ接続アクセスポイントへの不正なアクセスを検出しました。', 2200,
+				//			'実行処理はキャンセルされました。URLのクエリー部が不正です。URL=' . $this->gEnv->getCurrentRequestUri());
+				//	return;
+				//}
+			} else {	// ウィジェット単体実行、RSS配信の場合
+				// 管理権限がない場合は、ウィジェットのページへの配置状況からアクセス権限をチェックする
+				if (!$isSystemManageUser && !$this->_db->canAccessWidget($widgetId)){
 					// アクセスエラーのログを残す
 					$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd, self::ERR_MESSAGE_ACCESS_DENY);
 				
-					$this->gOpeLog->writeUserAccess(__METHOD__, 'サーバ接続アクセスポイントへの不正なアクセスを検出しました。', 2200,
-							'実行処理はキャンセルされました。URLのクエリー部が不正です。URL=' . $this->gEnv->getCurrentRequestUri());
+					$this->gOpeLog->writeUserAccess(__METHOD__, 'ウィジェットへの不正なアクセスを検出しました。(ウィジェットID: ' . $widgetId . ')', 2200,
+							'実行処理はキャンセルされました。このウィジェットは一般ユーザに公開されているページ上に存在しないため単体実行できません。');
 					return;
 				}
 			}
-
+			
 			// 画面表示する場合はテンプレートを設定。画面に表示しない場合はテンプレートが必要ない。
 			if ($this->gPage->getShowWidget()){
 				// 管理用テンプレートに固定
@@ -499,12 +503,13 @@ class BaseFrameContainer extends _Core
 			$this->gEnv->setCurrentWidgetId($widgetId);
 			
 			if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
+				// ##### サーバ接続の場合は管理画面パス(admin_mainウィジェット)を起動する #####
 				// ウィジェット用のHTMLヘッダを出力
 				$this->gPage->startWidgetXml($cmd);
 
 				// 指定のウィジェットを実行
-				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
-
+				//$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
+				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/admin_main/' . M3_FILENAME_INDEX;
 				if (file_exists($widgetIndexFile)){
 					// 実行のログを残す
 					$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd);
