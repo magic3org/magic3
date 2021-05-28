@@ -61,9 +61,9 @@ class connectorFrameContainer extends BaseFrameContainer
 	 * @return 								テンプレートを固定にしたい場合はテンプレート名を返す。
 	 *										テンプレートが任意の場合(変更可能な場合)は空文字列を返す。
 	 */
-	function _setTemplate($request)
+	/*function _setTemplate($request)
 	{
 		return '_admin';
-	}
+	}*/
 }
 ?>

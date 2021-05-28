@@ -504,15 +504,19 @@ class BaseFrameContainer extends _Core
 			
 			if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
 				// ##### サーバ接続の場合は管理画面パス(admin_mainウィジェット)を起動する #####
+				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);		// 実行タスクを取得
+				
 				// ウィジェット用のHTMLヘッダを出力
-				$this->gPage->startWidgetXml($cmd);
+				//$this->gPage->startWidgetXml($cmd);
+				$this->gPage->startWidgetXml('');
 
 				// 指定のウィジェットを実行
 				//$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
 				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/admin_main/' . M3_FILENAME_INDEX;
 				if (file_exists($widgetIndexFile)){
 					// 実行のログを残す
-					$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd);
+					//$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd);
+					$this->_db->writeWidgetLog('admin_main', 1/*単体実行*/, $task);
 
 					require_once($widgetIndexFile);
 				} else {
