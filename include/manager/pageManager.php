@@ -114,7 +114,7 @@ class PageManager extends _Core
 	private $adminBreadcrumbDef = array();			// 管理画面用パンくずリスト定義
 	private $adminBreadcrumbDefHelp = array();				// 管理画面用パンくずリストヘルプ定義
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
-	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
+//	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
 	const WIDGET_ID_TAG_START = '{{WIDGETID:';		// 遅延実行用タグ
 	const WIDGET_ID_TAG_END = '}}';		// 遅延実行用タグ

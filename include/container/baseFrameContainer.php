@@ -25,7 +25,8 @@ class BaseFrameContainer extends _Core
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
-		
+	const ADMIN_WIDGET_ID = 'admin_main';		// 管理ウィジェットのウィジェットID
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -240,7 +241,13 @@ class BaseFrameContainer extends _Core
 				}
 				
 				// ### システム運用可能ユーザはアクセス可。サーバ接続の場合は_checkAccess()の結果を優先する。 ###
-				if (!$this->gEnv->isServerConnector()){		// サーバ接続でない場合
+				if ($this->gEnv->isServerConnector()){
+					// アクセス不可の場合は不正アクセスとみなしログに記録する
+					if (!$canAccess){
+						$isErrorAccess = true;		// 不正アクセス
+						$errMessage = 'サーバコネクターへの不正な接続。';
+					}
+				} else {		// サーバ接続でない場合
 					// ログアウトのときはすでに管理ユーザの可能性があるので、ログアウト時は変更しない
 					//if ($isSystemManageUser && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;
 					if ($isSystemAdmin && $cmd != M3_REQUEST_CMD_LOGOUT) $canAccess = true;			// 2011/8/31 システム管理者のみに変更
@@ -258,25 +265,25 @@ class BaseFrameContainer extends _Core
 						$this->gPage->setSystemHandleMode(1/*管理画面*/);
 						break;
 					case 2:			// サイト非公開画面へ
-						$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
+						$this->gPage->setSystemHandleMode(10/*サイト非公開中(503)*/);
 						break;
 					case 3:			// 存在しないページ画面へ(システム運用可能ユーザ以外)
 						// サイトが非公開の場合は、メンテナンス中画面のみ表示
 						if ($this->_accessSite($request)){		// サイト公開中の場合
 							$messageDetail = 'アクセスポイント状態=公開';
-							$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
+							$this->gPage->setSystemHandleMode(12/*存在しないページ(404)*/);
 						} else {
 							$messageDetail = 'アクセスポイント状態=非公開';
-							$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
+							$this->gPage->setSystemHandleMode(10/*サイト非公開中(503)*/);
 						}
 						break;
 					case 4:		// 不正なページIDの指定
 						$messageDetail = '不正なページIDの指定';
-						$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
+						$this->gPage->setSystemHandleMode(12/*存在しないページ(404)*/);
 						break;
 					default:		// アクセス不可画面へ
 						// システム制御モードに変更
-						$this->gPage->setSystemHandleMode(11/*アクセス不可*/);
+						$this->gPage->setSystemHandleMode(11/*アクセス不可(403)*/);
 						break;
 				}
 				// システム制御画面を表示
@@ -456,6 +463,9 @@ class BaseFrameContainer extends _Core
 				}
 			}
 			if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
+				// ウィジェットIDは管理機能メインウィジェットに固定
+				$widgetId = self::ADMIN_WIDGET_ID;
+				
 				// サーバ接続の場合はサーバ間の接続なのでユーザ認証されていない
 				// _checkAccess()でアクセス元がサーバのIPと同じであることを確認済み
 				
@@ -512,11 +522,11 @@ class BaseFrameContainer extends _Core
 
 				// 指定のウィジェットを実行
 				//$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_FILENAME_INDEX;
-				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/admin_main/' . M3_FILENAME_INDEX;
+				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . self::ADMIN_WIDGET_ID . '/' . M3_FILENAME_INDEX;
 				if (file_exists($widgetIndexFile)){
 					// 実行のログを残す
 					//$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd);
-					$this->_db->writeWidgetLog('admin_main', 1/*単体実行*/, $task);
+					$this->_db->writeWidgetLog(self::ADMIN_WIDGET_ID, 1/*単体実行*/, $task);
 
 					require_once($widgetIndexFile);
 				} else {

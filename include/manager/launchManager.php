@@ -11,7 +11,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -54,14 +54,12 @@ class LaunchManager extends _Core
 			$path = str_replace(M3_SYSTEM_ROOT_PATH, '', $filepath);
 			$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
 			$path = trim($path, '/');
-			//$pathArray = split('/', $path);
 			$pathArray = explode('/', $path);
 			$basename = '';
 			for ($i = 0; $i < count($pathArray); $i++){
 				if ($i == 0){
 					$basename .= $pathArray[$i];
 				} else {
-					//$basename .= ucfirst($pathArray[$i]);
 					$basename .= ('_' . $pathArray[$i]);
 				}
 			}
@@ -106,7 +104,7 @@ class LaunchManager extends _Core
 		
 		$basename = basename($filepath, '.php');
 		$widgetId = $gEnvManager->getCurrentWidgetId();// ウィジェットID
-		
+
 		// このメソッドにアクセスしたウィジェットのパスをみて、管理画面へのアクセスかどうかを判断
 		$pathArray = explode(DIRECTORY_SEPARATOR, $filepath);
 		$pathCount = count($pathArray);
@@ -115,7 +113,6 @@ class LaunchManager extends _Core
 		// ウィジェットの種別を設定
 		$gEnvManager->setIsSubWidget(false);			// 通常ウィジェットで起動
 		
-
 		// インナーウィジェットのチェック
 		$isIWidget = false;
 		if ($pathArray[$pathCount -4] == 'iwidgets' && $pathArray[$pathCount -2] == 'admin'){		// インナーウィジェット管理者画面
