@@ -27,7 +27,7 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
 	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
 	
-	// 画面
+	// ### 管理画面 ###
 	// 基本情報
 	const TASK_CONFIGSITE		= 'configsite';			// サイト情報
 	const TASK_PAGEHEAD			= 'pagehead';			// ページヘッダ情報
@@ -95,8 +95,12 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_MENUDEF_DETAIL		= 'menudef_detail';			// 多階層メニュー定義
 	const TASK_SMENUDEF				= 'smenudef';				// 単階層メニュー定義
 	const TASK_SMENUDEF_DETAIL		= 'smenudef_detail';		// 単階層メニュー定義詳細
-	const TASK_CONNECT				= 'connect';				// Ajax接続
+	const TASK_CONNECT				= 'connect';				// Ajax接続(ログイン状態取得等)
 	const TASK_TEST					= 'test';					// テスト画面
+	
+	// ### サーバ接続コネクター ###
+	const TASK_CONNECTOR					= 'connector';							// サーバ接続コネクター識別用
+	const TASK_CONNECTOR_UPDATEANALYTICS	= 'connector_updateanalytics';			// アクセス解析集計
 	
 	// DBアクセス用
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか

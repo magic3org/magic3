@@ -88,7 +88,7 @@ class admin_mainTest_batchWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!$fp) {
 		    echo "$errstr ($errno)<br />\n";
 		} else {
-		$out = "GET /magic3/connector.php?task=test_regex HTTP/1.1\r\n";
+		$out = "GET /magic3/connector.php?task=updateanalytics HTTP/1.1\r\n";
 		    //$out = "GET / HTTP/1.1\r\n";
 		    //$out .= "Host: 127.0.0.1\r\n";
 			$out .= "Host: localhost\r\n";

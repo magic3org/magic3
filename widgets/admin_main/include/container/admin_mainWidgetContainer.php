@@ -162,12 +162,27 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 			$retValue = $this->gPage->standardLoginLogoutRedirect($request, $success, $url);
 		}
 		if ($retValue == 0){		// 何も処理を行わなかったとき
-			if ($this->gEnv->isCurrentUserLogined()){	// ログインしている場合
+			$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+			
+			// #############################################################################################
+			// ##### サーバ接続コネクターの処理(_ckeckAccess()で認証済み)                              #####
+			// #############################################################################################
+			if ($this->gEnv->isServerConnector()){	// サーバ接続コネクター(connector.php)からの実行の場合
+				// コンテナクラス読み込み用のパスを追加
+				$path = $this->gEnv->getCurrentWidgetContainerPath() . '/' . self::TASK_CONNECTOR;
+				$this->gLaunch->addLoadPath($path);
+
+				$task = self::TASK_CONNECTOR . '_' . $task;
+				$ret = $this->gLaunch->goSubWidget($task);
+				if (!$ret){
+					// 実行失敗の場合はログを残す
+					$this->gOpeLog->writeError(__METHOD__, 'サーバ接続コネクターからの処理の実行に失敗しました。起動タスクが見つかりません。(タスクID=' . $task . ')', 1100);
+				}
+			} else if ($this->gEnv->isCurrentUserLogined()){	// ログインしている場合
 				// #############################################################################################
 				// ##### 管理画面ダッシュボードへのアクセス制御はここで行う                                #####
 				// #############################################################################################
 				// システム管理者か、システム運用者でアクセス可能なタスクかどうかをチェック
-				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 				if (empty($task)) $task = 'top';		// トップメニュー
 
 /*				// システム運用者が実行可能なタスクを取得

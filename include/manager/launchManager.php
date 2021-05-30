@@ -180,10 +180,10 @@ class LaunchManager extends _Core
 	/**
 	 * ウィジェットプログラム(サブ)を実行
 	 *
-	 * @param string $task		タスク名
-	 * @param bool $isAdmin		管理者機能(adminディレクトリ以下)かどうか
+	 * @param string $task				タスク名
+	 * @param bool $isAdmin				管理者機能(adminディレクトリ以下)かどうか
 	 * @param string $defaultWidgetId	カレントウィジェットの実行クラスが取得できない場合のデフォルトウィジェットID
-	 * @return なし
+	 * @return bool						true=実行に成功、false=実行に失敗
 	 */
 	function goSubWidget($task, $isAdmin = false, $defaultWidgetId = '')
 	{
@@ -206,6 +206,7 @@ class LaunchManager extends _Core
 		// コンテナクラスが既にロードされているときはエラー
 		if (class_exists($containerClass)){
 			echo 'class redefined error2: ' . $containerClass;
+			return false;
 		} else {
 			// コンテナクラスファイル取り込み
 			$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';	// カレントウィジェットのコンテナクラス
@@ -217,17 +218,25 @@ class LaunchManager extends _Core
 				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
 				$gEnvManager->setCurrentWidgetObj(null);
+				return true;
 			} else if (!empty($this->loadPath)){		// クラス検索用パスが設定されているとき
-				require_once($containerClass . '.php');
+				//$ret = require_once($containerClass . '.php');
+				$ret = @include_once($containerClass . '.php');		// スクリプトを停止させない
+				if (!$ret){
+					echo 'file not found error: ' . $containerClass . '.php';
+					return false;
+				}
 				
 				// コンテナクラスを起動
 				$widgetContainer = new $containerClass();
 				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
 				$gEnvManager->setCurrentWidgetObj(null);
+				return true;
 			} else {
 				if (empty($defaultWidgetId)){
 					echo 'file not found error: ' . $containerPath;
+					return false;
 				} else {		// デフォルトのウィジェットIDが指定されている場合はデフォルトウィジェットIDで実行
 					// コンテナクラス名作成
 					$containerClass = '';
@@ -240,6 +249,7 @@ class LaunchManager extends _Core
 					// コンテナクラスが既にロードされているときはエラー
 					if (class_exists($containerClass)){
 						echo 'class redefined error3: ' . $containerClass;
+						return false;
 					} else {
 						// コンテナクラスファイル取り込み
 						$containerPath = $gEnvManager->getWidgetsPath() . '/' . $defaultWidgetId . '/include/container/' . $containerClass . '.php';
@@ -251,8 +261,10 @@ class LaunchManager extends _Core
 							$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 							$widgetContainer->process($gRequestManager);
 							$gEnvManager->setCurrentWidgetObj(null);
+							return true;
 						} else {
 							echo 'file not found error: ' . $containerPath;
+							return false;
 						}
 					}
 				}
