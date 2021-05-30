@@ -12,11 +12,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainConnector_updateanalyticsWidgetContainer extends BaseAdminWidgetContainer
+class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	
