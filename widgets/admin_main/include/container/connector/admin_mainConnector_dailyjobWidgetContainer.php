@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
@@ -18,6 +18,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
+	const MAX_CALC_DAYS = 3;		// 集計最大日数
+	const MSG_JOB_COMPLETED = '日次処理終了しました。日時: %s';
 	
 	/**
 	 * コンストラクタ
@@ -40,10 +42,10 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
-/*	function _setTemplate($request, &$param)
+	function _setTemplate($request, &$param)
 	{
-		return 'dbcondition.tmpl.html';
-	}*/
+		return '';		// テンプレートは使用しない
+	}
 	/**
 	 * テンプレートにデータ埋め込む
 	 *
@@ -57,18 +59,18 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 	{
 		// ##### ウィジェット出力処理中断 ######
 		$this->gPage->abortWidget();
-			
-		//$act = $request->trimValueOf('act');
 
-		debug('#do analytics');
-		
+		// アクセス解析の集計処理
 		$messageArray = array();
-			$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_MONTHS * 30/*12ヶ月分集計*/);
-			if ($ret){
-				$this->setMsg(self::MSG_GUIDANCE, $messageArray[0]);
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, $messageArray[0]);
-			}
+		$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_DAYS);
+		if (!$ret){	// エラーの場合
+			// ログを残す
+			$this->gOpeLog->writeError(__METHOD__, '日次処理(アクセス解析の集計)に失敗しました。', 1100, implode(', ', $messageArray));
+			return;
+		}
+		
+		// 日次処理終了のログを残す
+		$this->gOpeLog->writeInfo(__METHOD__, sprintf(self::MSG_JOB_COMPLETED, date("Y/m/d H:i")), 1002);
 	}
 }
 ?>
