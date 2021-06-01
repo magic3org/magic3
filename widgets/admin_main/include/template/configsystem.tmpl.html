@@ -142,9 +142,9 @@ $(function(){
 		<!--マルチドメインURL：<input type="text" name="item_site_smartphone_url" class="form-control" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" />--></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGSYS_NETWORK}>ネットワーク</span></th>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></div></td>
-	</tr>
+	<th><span {_HELP_CONFIGSYS_NETWORK}>ネットワーク</span></th>
+	<td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></div></td>
+    </tr>
 <!--    <tr>
 	    <th>ポータル</th>
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_landing_page" {USE_LANDING_PAGE_CHECKED} />ランディングページ機能を使用</label></div></td>
@@ -209,7 +209,11 @@ $(function(){
 		<div class="form-control-static col-sm-1 m3config_item">幅：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_width" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
 		<div class="form-control-static col-sm-1 m3config_item">高さ：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_height" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
 		</td>
-	</tr>
+    </tr>
+    <tr>
+	<th><span {_HELP_CONFIGSYS_JOB}>自動起動</span></th>
+	<td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_daily_job" {DAILY_JOB} />日次処理(アクセス解析集計)</label></div></td>
+    </tr>
     <tr>
 	    <th rowspan="2">言語</th>
 	    <td colspan="2">
@@ -222,29 +226,29 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_language" {MULTI_LANGUAGE} />多言語対応</label></div>
-	    </td>
-	</tr>
+        <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_language" {MULTI_LANGUAGE} />多言語対応</label></div>
+        </td>
+    </tr>
+    <tr>
+	<th>リソース<br />ディレクトリ</th>
+	<td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{RESOURCE_DIR_ACCESS}</div><div class="form-control-static col-sm-12 m3config_item">ディスク使用量：{RESOURCE_DIR_SIZE}バイト</div></td>
+    </tr>
+    <!--<tr>
+	    <th>非公開リソース<br />ディレクトリ</th>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{PRIVATE_RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{PRIVATE_RESOURCE_DIR_ACCESS}</div></td>
+	</tr>-->
+    <tr>
+	<th>テンプレート<br />ディレクトリ</th>
+	<td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{TEMPLATES_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{TEMPLATES_DIR_ACCESS}</div></td>
+    </tr>
+    <!--<tr>
+	    <th>ウィジェット<br />ディレクトリ</th>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{WIDGETS_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{WIDGETS_DIR_ACCESS}</div></td>
+	</tr>-->
     <tr>
 	    <th>一時ディレクトリ</th>
 	    <td colspan="2"><div class="col-sm-10 m3config_item"><input type="text" name="item_work_dir" class="form-control" value="{WORK_DIR}" size="60" maxlength="120" /></div><div class="form-control-static col-sm-2 text-right m3config_item">{WORK_DIR_ACCESS}</div></td>
-	</tr>
-    <tr>
-	    <th>公開リソース<br />ディレクトリ</th>
-	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{RESOURCE_DIR_ACCESS}</div><div class="form-control-static col-sm-12 m3config_item">ディスク使用量：{RESOURCE_DIR_SIZE}バイト</div></td>
-	</tr>
-    <tr>
-	    <th>非公開リソース<br />ディレクトリ</th>
-	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{PRIVATE_RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{PRIVATE_RESOURCE_DIR_ACCESS}</div></td>
-	</tr>
-    <tr>
-	    <th>テンプレート<br />ディレクトリ</th>
-	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{TEMPLATES_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{TEMPLATES_DIR_ACCESS}</div></td>
-	</tr>
-    <tr>
-	    <th>ウィジェット<br />ディレクトリ</th>
-	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{WIDGETS_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{WIDGETS_DIR_ACCESS}</div></td>
-	</tr>
+    </tr>
     <tr>
 	    <th>システムDB<br />バージョン</th>
 	    <td colspan="2"><div class="form-control-static col-sm-12 m3config_item">{SYSTEM_DB_VERSION}&nbsp;&nbsp;更新日時:&nbsp;{SYSTEM_DB_UPDATE_DT}</div></td>

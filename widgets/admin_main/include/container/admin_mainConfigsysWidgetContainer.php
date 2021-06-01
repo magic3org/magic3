@@ -50,6 +50,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	const CF_DEFAULT_LANG		= 'default_lang';					// デフォルト言語
 	const CF_WORK_DIR = 'work_dir';			// 作業ディレクトリ
+	const CF_DAILY_JOB = 'daily_job';			// 日次処理を実行するかどうか
 	
 	/**
 	 * コンストラクタ
@@ -130,6 +131,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
 		$uploadImageAutoresizeMaxWidth = $request->trimValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
 		$uploadImageAutoresizeMaxHeight = $request->trimValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
+		$dailyJob = $request->trimCheckedValueOf('item_daily_job');		// 日次処理を実行するかどうか
 		$isHier = $request->trimValueOf('menu_type');
 		
 		if ($act == 'update'){		// 設定更新のとき
@@ -212,6 +214,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT, $uploadImageAutoresizeMaxHeight)) $isErr = true;		// アップロード画像の自動リサイズ、画像最大高さ
 			}
 			if (!$isErr){
+				if (!$this->db->updateSystemConfig(self::CF_DAILY_JOB, $dailyJob)) $isErr = true;		// 日次処理を実行するかどうか
+			}
+			if (!$isErr){
 				if (!$this->gSystem->changeSiteMenuHier($isHier)) $isErr = true;// メニュー管理画面を変更
 			}
 			
@@ -251,6 +256,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
+			$dailyJob = $this->db->getSystemConfig(self::CF_DAILY_JOB);		// 日次処理を実行するかどうか
 			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 			
 			// ### サイト定義ファイル(siteDef.php)にオプション定義を追加 ###
@@ -320,6 +326,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
+			$dailyJob = $this->db->getSystemConfig(self::CF_DAILY_JOB);		// 日次処理を実行するかどうか
 			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 		}
 		// 言語選択メニューを作成
@@ -479,7 +486,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "upload_image_autoresize", $this->convertToCheckedString($uploadImageAutoresize));			// アップロード画像の自動リサイズを行うかどうか
 		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_width", $uploadImageAutoresizeMaxWidth);		// アップロード画像の自動リサイズ、画像最大幅
 		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_height", $uploadImageAutoresizeMaxHeight);		// アップロード画像の自動リサイズ、画像最大高さ
-			
+		$this->tmpl->addVar("_widget", "daily_job", $this->convertToCheckedString($dailyJob));		// 日次処理を実行するかどうか
+		
 		// 一時ディレクトリ
 		$this->tmpl->addVar("_widget", "work_dir", $workDir);
 		if (is_writable($workDir)){
