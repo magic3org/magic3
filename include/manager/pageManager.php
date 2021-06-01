@@ -1301,8 +1301,8 @@ class PageManager extends _Core
 		// ##### インストール時はここで終了 #####
 		if (defined('M3_STATE_IN_INSTALL')) return;		// インストール時は実行しない
 		
-		// ### 非同期処理を実行 ###
-		$this->launchJobs();
+		// ### 非同期処理を実行(サーバ接続コネクターの起動を除く) ###
+		if (!$gEnvManager->isServerConnector()) $this->launchJobs();
 		
 		// セッションを再生成する(セキュリティ対策)
 		if ($gSystemManager->regenerateSessionId()){

@@ -18,6 +18,8 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 {
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
 	const MSG_JOB_COMPLETED = '日次処理終了しました。日時: %s';
+	const MSG_JOB_CANCELD = '現在サーバ負荷が大きい状態(%d%%)です。日次処理をキャンセルしました。';
+	const MAX_SERVER_LOAD_AVERAGE = 30;		// サーバの最大付加状況(%)
 	
 	/**
 	 * コンストラクタ
@@ -52,7 +54,17 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 	 */
 	function _assign($request, &$param)
 	{
-		// ##### ウィジェット出力処理中断 ######
+		// サーバ負荷が高い場合は実行中止
+		$avg = $this->_checkServerLoadAverage();
+		if ($avg > 0){
+			$this->gOpeLog->writeInfo(__METHOD__, sprintf(self::MSG_JOB_CANCELD, $avg), 1002);
+			return;
+		}
+		
+		// タイムアウトを停止
+		$this->gPage->setNoTimeout();
+		
+		// ウィジェット出力処理中断
 		$this->gPage->abortWidget();
 
 		// アクセス解析の集計処理
@@ -66,6 +78,25 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 		
 		// 日次処理終了のログを残す
 		$this->gOpeLog->writeInfo(__METHOD__, sprintf(self::MSG_JOB_COMPLETED, date("Y/m/d H:i")), 1002);
+	}
+	/**
+	 * サーバの負荷状況をチェック
+	 *
+	 * @return int					負荷状況を%で返す。0の場合は問題なし。
+	 */
+	function _checkServerLoadAverage()
+	{
+		$load = sys_getloadavg();
+		$coreCount = shell_exec('nproc');	// プロセッサ数取得
+		
+		for ($i = 0; $i < 3; $i++){
+			$avg = $load[$i] / $coreCount * 100;
+			
+			// 最大負荷よりも大きい場合は負荷値を返す
+			if ($avg > self::MAX_SERVER_LOAD_AVERAGE) return $avg;
+		}
+		
+		return 0;
 	}
 }
 ?>
