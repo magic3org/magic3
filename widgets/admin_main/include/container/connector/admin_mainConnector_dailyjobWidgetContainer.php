@@ -13,11 +13,9 @@
  * @link       http://magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
 	const MSG_JOB_COMPLETED = '日次処理終了しました。日時: %s';
 	
@@ -28,9 +26,6 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new admin_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定

@@ -820,6 +820,31 @@ class EnvManager extends _Core
 		return $themeFile;
 	}
 	/**
+	 * サーバ接続コネクターのURLを取得
+	 *
+	 * 例) (絶対URL)http://www.magic3.org/magic3/connector.php
+	 *     (相対URL)/magic3/connector.php
+	 
+	 * @param bool $relativeUrl		相対URLかどうか
+	 * @return string				URL
+	 */
+	public function getServerConnectorUrl($relativeUrl = false)
+	{
+		static $relUrl;
+		
+		$url = $this->currentDomainRootUrl . '/' . M3_FILENAME_SERVER_CONNECTOR;
+		if ($relativeUrl){
+			// 相対パスを得る
+			if (!isset($relUrl)){
+				$res = parse_url($url);
+				$relUrl = $res['path'];
+			}
+			return $relUrl;
+		} else {
+			return $url;
+		}
+	}
+	/**
 	 * 作業用ディレクトリへのパスを取得
 	 *
 	 * @return string		作業ディレクトリ
