@@ -18,7 +18,7 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 {
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
 	const MSG_JOB_COMPLETED = '日次処理終了しました。日時: %s';
-	const MSG_JOB_CANCELD = '現在サーバ負荷が大きい状態(%d%%)です。日次処理をキャンセルしました。';
+	const MSG_JOB_CANCELD = '日次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
 	const MAX_SERVER_LOAD_AVERAGE = 30;		// サーバの最大付加状況(%)
 	
 	/**
