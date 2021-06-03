@@ -17,8 +17,9 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContainer
 {
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
-	const MSG_JOB_COMPLETED = '日次処理終了しました。日時: %s';
+	const MSG_JOB_COMPLETED = '日次処理終了しました。';
 	const MSG_JOB_CANCELD = '日次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
+	const MSG_ERR_JOB = '日次処理(アクセス解析の集計)に失敗しました。';
 	const MAX_SERVER_LOAD_AVERAGE = 30;		// サーバの最大付加状況(%)
 	
 	/**
@@ -72,12 +73,12 @@ class admin_mainConnector_dailyjobWidgetContainer extends BaseAdminWidgetContain
 		$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_DAYS);
 		if (!$ret){	// エラーの場合
 			// ログを残す
-			$this->gOpeLog->writeError(__METHOD__, '日次処理(アクセス解析の集計)に失敗しました。', 1100, implode(', ', $messageArray));
+			$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, implode(', ', $messageArray));
 			return;
 		}
 		
 		// 日次処理終了のログを残す
-		$this->gOpeLog->writeInfo(__METHOD__, sprintf(self::MSG_JOB_COMPLETED, date("Y/m/d H:i")), 1002);
+		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002);
 	}
 	/**
 	 * サーバの負荷状況をチェック
