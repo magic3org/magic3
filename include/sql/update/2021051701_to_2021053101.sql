@@ -20,8 +20,11 @@
 INSERT INTO _system_config 
 (sc_id,                sc_value,            sc_name) VALUES
 ('daily_job',          '0',                 '日次処理実行'),
-('daily_job_hour',     '5',                 '日次処理実行時間'), -- 0-23
-('daily_job_dt',       '',                  '日次処理完了日時');
+('daily_job_hour',     '3',                 '日次処理実行時間'), -- 0-23
+('daily_job_dt',       '',                  '日次処理完了日時'),
+('monthly_job',        '0',                 '月次処理実行'),
+('monthly_job_hour',   '5',                 '月次処理実行時間'), -- 0-23
+('monthly_job_dt',     '',                  '月次処理完了日時');
 
 -- *** システム標準テーブル ***
 
