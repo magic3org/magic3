@@ -2693,16 +2693,22 @@ class PageManager extends _Core
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$this->db->updateSystemConfig(self::CF_DAILY_JOB_DT, $now);
 		
+		// マルチドメイン対応のためにホスト名を取得
+		$parsedUrl = parse_url($this->gEnv->getRootUrl());
+		$host = $parsedUrl['host'];
+		//$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+		
 		// ジョブを実行
+		//$fp = fsockopen('ssl://127.0.0.1', 443, $errNo, $errStr, 30);	// SSLの場合?
 		$fp = fsockopen('127.0.0.1', 80, $errNo, $errStr, 30);
 		if (!$fp) {
 			// 実行失敗の場合はログを残す
 			$this->gOpeLog->writeError(__METHOD__, '日次処理実行に失敗しました。(要因: ' . $errStr . '(' . $errNo . '))', 1100);
 		} else {
-			//$out = "GET /magic3/connector.php?task=dailyjob HTTP/1.1\r\n";
 			$jobUrl = $this->gEnv->getServerConnectorUrl(true/*相対URL*/) . '?task=dailyjob';
 			$out = "GET $jobUrl HTTP/1.1\r\n";
-			$out .= "Host: localhost\r\n";
+			//$out .= "Host: localhost\r\n";
+			$out .= "Host: $host\r\n";
 		    $out .= "Connection: Close\r\n\r\n";
 		    fwrite($fp, $out);
 		    fclose($fp);
