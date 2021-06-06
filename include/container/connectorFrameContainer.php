@@ -10,8 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: connectorFrameContainer.php 4297 2011-09-06 03:00:32Z fishbone $
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseFrameContainer.php');
 
@@ -38,6 +37,7 @@ class connectorFrameContainer extends BaseFrameContainer
 		$ret = false;		// 戻り値リセット
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		if (empty($cmd)){
+			// ##### 自動起動処理(日次処理,月次処理)用のインターフェイス #####
 			// アクセス元をチェック
 			$senderIp = $this->gRequest->trimServerValueOf('REMOTE_ADDR');
 			$serverIp = $this->gRequest->trimServerValueOf('SERVER_ADDR');
@@ -54,16 +54,5 @@ class connectorFrameContainer extends BaseFrameContainer
 		}
 		return $ret;
 	}
-	/**
-	 * テンプレートファイルを設定
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @return 								テンプレートを固定にしたい場合はテンプレート名を返す。
-	 *										テンプレートが任意の場合(変更可能な場合)は空文字列を返す。
-	 */
-	/*function _setTemplate($request)
-	{
-		return '_admin';
-	}*/
 }
 ?>

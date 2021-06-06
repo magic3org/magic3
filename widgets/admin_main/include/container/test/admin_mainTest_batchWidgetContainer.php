@@ -83,8 +83,8 @@ class admin_mainTest_batchWidgetContainer extends admin_mainBaseWidgetContainer
         fwrite($fp, $out);
         fclose($fp);*/
 		
-		$fp = fsockopen('127.0.0.1', 80, $errno, $errstr, 30);
-		//$fp = fsockopen('localhost', 80, $errno, $errstr, 30);
+		$fp = fsockopen('127.0.0.1', 80, $errno, $errstr, 30);	// 送信元は「127.0.0.1」
+		//$fp = fsockopen('localhost', 80, $errno, $errstr, 30);		// 送信元がIPv6のループバックIP「::1」になる
 		if (!$fp) {
 		    echo "$errstr ($errno)<br />\n";
 		} else {
