@@ -14,12 +14,12 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/connector/admin_mainConnectorBaseWidgetContainer.php');
 
-class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBaseWidgetContainer
+class admin_mainConnector_monthlyjobWidgetContainer extends admin_mainConnectorBaseWidgetContainer
 {
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
-	const MSG_JOB_COMPLETED = '日次処理を実行しました。';
-	const MSG_JOB_CANCELD = '日次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
-	const MSG_ERR_JOB = '日次処理(アクセス解析の集計)に失敗しました。';
+	const MSG_JOB_COMPLETED = '月次処理を実行しました。';
+	const MSG_JOB_CANCELD = '月次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
+	const MSG_ERR_JOB = '月次処理に失敗しました。';
 	
 	/**
 	 * コンストラクタ
@@ -68,15 +68,15 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 		$this->gPage->abortWidget();
 
 		// アクセス解析の集計処理
-		$messageArray = array();
+/*		$messageArray = array();
 		$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_DAYS);
 		if (!$ret){	// エラーの場合
 			// ログを残す
 			$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, implode(', ', $messageArray));
 			return;
-		}
+		}*/
 		
-		// 日次処理終了のログを残す
+		// 月次処理終了のログを残す
 		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002);
 	}
 }

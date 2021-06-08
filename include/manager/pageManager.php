@@ -12,8 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/scriptLibInfo.php');
@@ -213,10 +212,13 @@ class PageManager extends _Core
 	const FILEBROWSER_WIDTH_RATIO = '0.8';			// ファイルブラウザ幅比率
 	const FILEBROWSER_HEIGHT_RATIO = '0.8';			// ファイルブラウザ高さ比率
 	
-	// 日次処理
+	// 日次処理,月次処理
 	const CF_DAILY_JOB = 'daily_job';			// 日次処理を実行するかどうか
 	const CF_DAILY_JOB_HOUR = 'daily_job_hour';	// 日次処理実行時間(0-23)
 	const CF_DAILY_JOB_DT = 'daily_job_dt';		// 日次処理完了日時
+	const CF_MONTHLY_JOB = 'monthly_job';			// 月次処理を実行するかどうか
+	const CF_MONTHLY_JOB_HOUR = 'monthly_job_hour';	// 月次処理実行時間(0-23)
+	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
 	
 	/**
 	 * コンストラクタ
@@ -2677,41 +2679,88 @@ class PageManager extends _Core
 	 */
 	function launchJobs()
 	{
-		// 日次処理を実行するか確認
+	/*
+	const CF_MONTHLY_JOB = 'monthly_job';			// 月次処理を実行するかどうか
+	const CF_MONTHLY_JOB_HOUR = 'monthly_job_hour';	// 月次処理実行時間(0-23)
+	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
+	*/
+	
+		// 日次処理を実行するか確認(自動処理フラグで確認?)
 		if (!$this->gSystem->getSystemConfig(self::CF_DAILY_JOB)) return;
 		
-		// ジョブ実行可能な時間帯以外の場合は終了
-		$currentHour = date('G');
-		$jobHour = $this->gSystem->getSystemConfig(self::CF_DAILY_JOB_HOUR);
-		if (intval($currentHour) != intval($jobHour)) return;
+		// ジョブ実行可能な時間帯を確認
+		$currentHour = intval(date('G'));
 		
-		// ジョブの実行を確認
-		$jobDt = $this->gSystem->getSystemConfig(self::CF_DAILY_JOB_DT);
-		if (!empty($jobDt) && strtotime(date('Y/m/d', strtotime($jobDt))) >= strtotime(date('Y/m/d'))) return;	// 日付のみで比較
+		// ### 日次処理を実行時間帯の場合 ###
+		$jobHour = intval($this->gSystem->getSystemConfig(self::CF_DAILY_JOB_HOUR));
+		if ($currentHour == $jobHour){
 		
-		// ### ２重起動防止のためジョブの実行を先に登録する ###
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$this->db->updateSystemConfig(self::CF_DAILY_JOB_DT, $now);
+			// ジョブの実行を確認
+			$jobDt = $this->gSystem->getSystemConfig(self::CF_DAILY_JOB_DT);
+			//if (!empty($jobDt) && strtotime(date('Y/m/d', strtotime($jobDt))) >= strtotime(date('Y/m/d'))) return;	// 日付のみで比較
+			if (empty($jobDt) || strtotime(date('Y/m/d', strtotime($jobDt))) < strtotime(date('Y/m/d'))){	// 日付のみで比較
 		
-		// マルチドメイン対応のためにホスト名を取得
-		$parsedUrl = parse_url($this->gEnv->getRootUrl());
-		$host = $parsedUrl['host'];
-		//$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+				// ### ２重起動防止のためジョブの実行を先に登録する ###
+				$now = date("Y/m/d H:i:s");	// 現在日時
+				$this->db->updateSystemConfig(self::CF_DAILY_JOB_DT, $now);
 		
-		// ジョブを実行
-		//$fp = fsockopen('ssl://127.0.0.1', 443, $errNo, $errStr, 30);	// SSLの場合?
-		$fp = fsockopen('127.0.0.1', 80, $errNo, $errStr, 30);
-		if (!$fp) {
-			// 実行失敗の場合はログを残す
-			$this->gOpeLog->writeError(__METHOD__, '日次処理実行に失敗しました。(要因: ' . $errStr . '(' . $errNo . '))', 1100);
-		} else {
-			$jobUrl = $this->gEnv->getServerConnectorUrl(true/*相対URL*/) . '?task=dailyjob';
-			$out = "GET $jobUrl HTTP/1.1\r\n";
-			//$out .= "Host: localhost\r\n";
-			$out .= "Host: $host\r\n";
-		    $out .= "Connection: Close\r\n\r\n";
-		    fwrite($fp, $out);
-		    fclose($fp);
+				// マルチドメイン対応のためにホスト名を取得
+				$parsedUrl = parse_url($this->gEnv->getRootUrl());
+				$host = $parsedUrl['host'];
+				//$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+		
+				// ジョブを実行
+				//$fp = fsockopen('ssl://127.0.0.1', 443, $errNo, $errStr, 30);	// SSLの場合?
+				$fp = fsockopen('127.0.0.1', 80, $errNo, $errStr, 30);
+				if (!$fp) {
+					// 実行失敗の場合はログを残す
+					$this->gOpeLog->writeError(__METHOD__, '日次処理実行に失敗しました。(要因: ' . $errStr . '(' . $errNo . '))', 1100);
+				} else {
+					$jobUrl = $this->gEnv->getServerConnectorUrl(true/*相対URL*/) . '?task=dailyjob';
+					$out = "GET $jobUrl HTTP/1.1\r\n";
+					$out .= "Host: $host\r\n";
+				    $out .= "Connection: Close\r\n\r\n";
+				    fwrite($fp, $out);
+				    fclose($fp);
+				}
+			
+				// ### 日次処理、月次処理は同時には実行しない ###
+				return;
+			}
+		}
+		
+		// ### 月次処理の実行時間帯の場合 ###
+		$jobHour = intval($this->gSystem->getSystemConfig(self::CF_MONTHLY_JOB_HOUR));
+		if ($currentHour == $jobHour){
+		
+			// ジョブの実行を確認
+			$jobDt = $this->gSystem->getSystemConfig(self::CF_MONTHLY_JOB_DT);
+			if (empty($jobDt) || strtotime(date('Y/m', strtotime($jobDt))) < strtotime(date('Y/m'))){	// 年月のみで比較
+		
+				// ### ２重起動防止のためジョブの実行を先に登録する ###
+				$now = date("Y/m/d H:i:s");	// 現在日時
+				$this->db->updateSystemConfig(self::CF_MONTHLY_JOB_DT, $now);
+		
+				// マルチドメイン対応のためにホスト名を取得
+				$parsedUrl = parse_url($this->gEnv->getRootUrl());
+				$host = $parsedUrl['host'];
+				//$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+		
+				// ジョブを実行
+				//$fp = fsockopen('ssl://127.0.0.1', 443, $errNo, $errStr, 30);	// SSLの場合?
+				$fp = fsockopen('127.0.0.1', 80, $errNo, $errStr, 30);
+				if (!$fp) {
+					// 実行失敗の場合はログを残す
+					$this->gOpeLog->writeError(__METHOD__, '月次処理実行に失敗しました。(要因: ' . $errStr . '(' . $errNo . '))', 1100);
+				} else {
+					$jobUrl = $this->gEnv->getServerConnectorUrl(true/*相対URL*/) . '?task=monthlyjob';
+					$out = "GET $jobUrl HTTP/1.1\r\n";
+					$out .= "Host: $host\r\n";
+				    $out .= "Connection: Close\r\n\r\n";
+				    fwrite($fp, $out);
+				    fclose($fp);
+				}
+			}
 		}
 	}
 	/**

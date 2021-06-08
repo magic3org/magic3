@@ -172,7 +172,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				$path = $this->gEnv->getCurrentWidgetContainerPath() . '/' . self::TASK_CONNECTOR;
 				$this->gLaunch->addLoadPath($path);
 
-				$task = self::TASK_CONNECTOR . '_' . $task;
+				$task = self::TASK_CONNECTOR . '_' . $task;	// タスク名を「connector_」の形にする
 				$ret = $this->gLaunch->goSubWidget($task);
 				if (!$ret){
 					// 実行失敗の場合はログを残す

@@ -100,7 +100,8 @@ class admin_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 	// ### サーバ接続コネクター ###
 	const TASK_CONNECTOR			= 'connector';					// サーバ接続コネクター識別用
-	const TASK_CONNECTOR_DAILYJOB	= 'connector_dailyjob';			// 日次ジョブ
+	const TASK_CONNECTOR_DAILYJOB	= 'connector_dailyjob';			// 日次処理
+	const TASK_CONNECTOR_MONTHLYJOB	= 'connector_monthlyjob';		// 月次処理
 	
 	// DBアクセス用
 	const CF_USE_LANDING_PAGE = 'use_landing_page';		// ランディングページ機能を使用するかどうか
