@@ -8,10 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/baseDb.php');
 
@@ -97,6 +96,24 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE al_serial = ?';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
+	}
+	/**
+	 * 日付以前の古いアクセスログのレコード数を取得
+	 *
+	 * @param date		$date		日付
+	 * @param int					レコード数
+	 */
+	public function getOldAccessLogRecordCount($date)
+	{
+		if (empty($date)) return 0;
+		
+		$count = 0;
+		$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
+		$queryStr  = 'SELECT COUNT(*) AS count FROM _access_log WHERE al_dt < ?';
+		$params[] = $endDt;
+		$ret = $this->selectRecord($queryStr, $params, $row);
+		if ($ret) $count = $row['count'];
+		return $count;
 	}
 	/**
 	 * 時間単位で一日分の集計処理を行う

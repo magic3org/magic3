@@ -8,10 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/baseDb.php');
 
@@ -91,7 +90,9 @@ class specificDb extends BaseDb
 		$dbType = $this->getDbType();
 		switch ($dbType){
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
-				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
+				$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user;
+				if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				$cmd .= ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
@@ -118,7 +119,10 @@ class specificDb extends BaseDb
 		$dbType = $this->getDbType();
 		switch ($dbType){
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
-				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
+				//$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user . ' -p ' . $this->_connect_password . ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
+				$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user;
+				if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				$cmd .= ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
@@ -155,7 +159,7 @@ class specificDb extends BaseDb
 				fclose($fp);
 
 				// リストアコマンド実行
-				$cmd = "mysql -u$this->_connect_user -p$this->_connect_password -e 'source $tmpFile' $this->_dbName";
+				$cmd = "mysql -u $this->_connect_user -p $this->_connect_password -e 'source $tmpFile' $this->_dbName";
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
@@ -189,9 +193,29 @@ class specificDb extends BaseDb
 			2 => array("pipe", "w")   // stderr
 		);
 
+		// コマンドを実行
 		$process = proc_open($command, $descriptorspec, $pipes, null, null);
+		if (!is_resource($process)) return $retVal;		// 起動に失敗した場合
 		
-		if (is_resource($process)){
+		// コマンドの終了を待機
+		$status = proc_get_status($process);
+		while ($status["running"]) {
+			sleep(1);
+			$status = proc_get_status($process);
+		}
+		$retVal = $status['exitcode'];	// 常に0が返る?
+		
+		$output = stream_get_contents($pipes[1]);
+		$errorOutput = stream_get_contents($pipes[2]);
+			
+		// 終了処理
+		fclose($pipes[0]);
+		fclose($pipes[1]);
+		fclose($pipes[2]);
+		proc_close($process);	// リソースを閉じる
+		
+		return $retVal;
+/*		if (is_resource($process)){
 			fclose($pipes[0]);
 
 			$output = stream_get_contents($pipes[1]);
@@ -202,7 +226,7 @@ class specificDb extends BaseDb
 			
 			$retVal = proc_close($process);
 		}
-		return $retVal;
+		return $retVal;*/
 	}
 }
 ?>
