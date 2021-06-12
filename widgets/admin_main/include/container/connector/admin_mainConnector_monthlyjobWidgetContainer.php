@@ -27,6 +27,7 @@ class admin_mainConnector_monthlyjobWidgetContainer extends admin_mainConnectorB
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const BACKUP_FILENAME_HEAD = 'backup_';
 	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
+	const CALC_COMPLETED_MIN_RECORDE_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
 	
 	/**
 	 * コンストラクタ
@@ -83,57 +84,38 @@ class admin_mainConnector_monthlyjobWidgetContainer extends admin_mainConnectorB
 
 		// ##### アクセスログのメンテナンス #####
 		// 集計済みのアクセスログのレコード数取得
-		// 最初の未集計日を取得
-		$lastDate = $this->analyzeDb->getStatus(self::CF_LAST_DATE_CALC_PV);		// ページビュー集計最終更新日
-		
-		$startDate = date("Y/m/d", strtotime("$lastDate 1 day"));		// 翌日
-		$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
-		
-			$queryStr  = 'SELECT COUNT(*) AS total,al_uri,al_path FROM _access_log ';
-			$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
-			$params[] = $startDt;
-			$params[] = $endDt;
-		if (empty($lastDate)) $this->setUserErrorMsg('集計が終了していません');
+		$calcCompletedRecordCount = $this->gInstance->getAnalyzeManager()->getCalcCompletedAccessLogRecordCount();
+		if ($calcCompletedRecordCount >= self::CALC_COMPLETED_MIN_RECORDE_COUNT){
+			// バックアップ用ディレクトリ作成
+			$backupDir = $this->gEnv->getIncludePath() . '/' . M3_DIR_NAME_BACKUP;				// バックアップファイル格納ディレクトリ
+			if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 			
-
-		
-		// アクセス解析の集計処理
-/*		$messageArray = array();
-		$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_DAYS);
-		if (!$ret){	// エラーの場合
-			// ログを残す
-			$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, implode(', ', $messageArray));
-			return;
-		}*/
-					// ダウンロード時のファイル名
-			$downloadFilename = self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
-						
-			// タイムアウトを停止
-			$this->gPage->setNoTimeout();
+			// バックアップファイル名作成
+			$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
 			
-			// バックアップ作成
+			// バックアップファイル作成
 			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
 			$ret = $this->gInstance->getDbManager()->backupTable(self::TABLE_NAME_ACCESS_LOG, $tmpFile);
-			if ($ret){
-				// ページ作成処理中断
-				$this->gPage->abortPage();
+			if ($ret){	// バックアップファイル作成成功の場合
+				// ファイル名変更
+				if (renameFile($tmpFile, $backupFile)){
+					// 集計終了分のアクセスログ削除
+					$this->gInstance->getAnalyzeManager()->deleteCalcCompletedAccessLog();
 				
-				// ダウンロード処理
-				$ret = $this->gPage->downloadFile($tmpFile, $downloadFilename, true/*実行後ファイル削除*/);
-				
-				// システム強制終了
-				$this->gPage->exitSystem();
+					// 月次処理終了のログを残す
+					$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002, 'ファイル=' . $backupFile);
+				} else {
+					// ログを残す
+					$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, 'ファイル名変更に失敗。ファイル=' . $backupFile);
+				}
 			} else {
-				$msg = 'バックアップファイルの作成に失敗しました';
-				$this->setAppErrorMsg($msg);
-				
 				// テンポラリファイル削除
 				unlink($tmpFile);
+				
+				// ログを残す
+				$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100);
 			}
-		
-		// 月次処理終了のログを残す
-		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002);
-		
+		}
 	}
 }
 ?>

@@ -13,7 +13,7 @@
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    Release 3.x SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
 define("M3_SYSTEM_DEFINE_INCLUDED", true);
@@ -87,6 +87,7 @@ define('M3_DIR_NAME_LOCALE',		'locale');								// ロケール情報格納デ�
 define('M3_DIR_NAME_TOOLS',			'tools');								// 管理ツール格納,SQLスクリプト格納ディレクトリ名
 define('M3_DIR_NAME_SERVER_TOOLS',	'stools');								// サーバ管理ツール格納ディレクトリ名
 define('M3_DIR_NAME_ADMIN',			'admin');								// 管理用ディレクトリ名
+define('M3_DIR_NAME_BACKUP',		'backup');								// バックアップ用ディレクトリ名
 define('M3_DIR_NAME_MOBILE',		'm');									// 携帯用ディレクトリ名
 define('M3_DIR_NAME_SMARTPHONE',	's');									// スマートフォン用ディレクトリ名
 define('M3_DIR_NAME_HOME',			'home');								// 一般ユーザ用ディレクトリ格納ディレクトリ
