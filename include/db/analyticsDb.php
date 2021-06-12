@@ -101,7 +101,7 @@ class analyticsDb extends BaseDb
 	 * 日付以前の古いアクセスログのレコード数を取得
 	 *
 	 * @param date		$date		日付
-	 * @param int					レコード数
+	 * @return int					レコード数
 	 */
 	public function getOldAccessLogRecordCount($date)
 	{
@@ -114,6 +114,23 @@ class analyticsDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		if ($ret) $count = $row['count'];
 		return $count;
+	}
+	/**
+	 * 日付以前の古いアクセスログのレコード削除
+	 *
+	 * @param date		$date		日付
+	 * @return bool					true=成功、false=失敗
+	 */
+	public function deleteOldAccessLog($date)
+	{
+		if (empty($date)) return false;
+		
+		$count = 0;
+		$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
+		$queryStr  = 'DELETE FROM _access_log WHERE al_dt < ?';
+		$params[] = $endDt;
+		$ret = $this->execStatement($queryStr, $params);
+		return $ret;
 	}
 	/**
 	 * 時間単位で一日分の集計処理を行う

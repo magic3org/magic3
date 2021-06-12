@@ -10,8 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/analyticsDb.php');
@@ -146,6 +145,28 @@ class AnalyzeManager extends _Core
 	{
 		// ダウンロードログ書き込み
 		$ret = $this->db->writeDownloadLog($contentType, $contentId);
+		return $ret;
+	}
+	/**
+	 * 集計が完了したアクセスログのレコード数を取得
+	 *
+	 * @return int					レコード数
+	 */
+	public function getCalcCompletedAccessLogRecordCount()
+	{
+		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
+		$count = $this->analyticsDb->getOldAccessLogRecordCount($lastDate);
+		return $count;
+	}
+	/**
+	 * 集計が完了したアクセスログを削除
+	 *
+	 * @param bool					true=成功、false=失敗
+	 */
+	public function deleteCalcCompletedAccessLog()
+	{
+		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
+		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate);
 		return $ret;
 	}
 	/**
