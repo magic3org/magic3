@@ -122,7 +122,7 @@ class specificDb extends BaseDb
 				//$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user . ' -p ' . $this->_connect_password . ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
 				$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user;
 				if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
-				$cmd .= ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
+				$cmd .= ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;

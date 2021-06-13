@@ -19,15 +19,10 @@ class admin_mainConnector_monthlyjobWidgetContainer extends admin_mainConnectorB
 {
 	private $db;	// DB接続オブジェクト
 	
-	const MAX_CALC_DAYS = 3;		// 集計最大日数
 	const MSG_JOB_COMPLETED = '月次処理を実行しました。';
 	const MSG_JOB_CANCELD = '月次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
 	const MSG_ERR_JOB = '月次処理に失敗しました。';
 	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
-	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
-	const BACKUP_FILENAME_HEAD = 'backup_';
-	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
-	const CALC_COMPLETED_MIN_RECORDE_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
 	
 	/**
 	 * コンストラクタ
@@ -81,41 +76,6 @@ class admin_mainConnector_monthlyjobWidgetContainer extends admin_mainConnectorB
 		
 		// ウィジェット出力処理中断
 		$this->gPage->abortWidget();
-
-		// ##### アクセスログのメンテナンス #####
-		// 集計済みのアクセスログのレコード数取得
-		$calcCompletedRecordCount = $this->gInstance->getAnalyzeManager()->getCalcCompletedAccessLogRecordCount();
-		if ($calcCompletedRecordCount >= self::CALC_COMPLETED_MIN_RECORDE_COUNT){
-			// バックアップ用ディレクトリ作成
-			$backupDir = $this->gEnv->getIncludePath() . '/' . M3_DIR_NAME_BACKUP;				// バックアップファイル格納ディレクトリ
-			if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
-			
-			// バックアップファイル名作成
-			$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
-			
-			// バックアップファイル作成
-			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
-			$ret = $this->gInstance->getDbManager()->backupTable(self::TABLE_NAME_ACCESS_LOG, $tmpFile);
-			if ($ret){	// バックアップファイル作成成功の場合
-				// ファイル名変更
-				if (renameFile($tmpFile, $backupFile)){
-					// 集計終了分のアクセスログ削除
-					$this->gInstance->getAnalyzeManager()->deleteCalcCompletedAccessLog();
-				
-					// 月次処理終了のログを残す
-					$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002, 'ファイル=' . $backupFile);
-				} else {
-					// ログを残す
-					$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, 'ファイル名変更に失敗。ファイル=' . $backupFile);
-				}
-			} else {
-				// テンポラリファイル削除
-				unlink($tmpFile);
-				
-				// ログを残す
-				$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100);
-			}
-		}
 	}
 }
 ?>

@@ -2679,12 +2679,6 @@ class PageManager extends _Core
 	 */
 	function launchJobs()
 	{
-	/*
-	const CF_MONTHLY_JOB = 'monthly_job';			// 月次処理を実行するかどうか
-	const CF_MONTHLY_JOB_HOUR = 'monthly_job_hour';	// 月次処理実行時間(0-23)
-	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
-	*/
-	
 		// 日次処理を実行するか確認(自動処理フラグで確認?)
 		if (!$this->gSystem->getSystemConfig(self::CF_DAILY_JOB)) return;
 		
