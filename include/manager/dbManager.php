@@ -21,6 +21,8 @@ class DbManager extends _Core
 	private $db;						// DBオブジェクト
 	private $specificDb;				// DBオブジェクト
 	private $outputPgUndefinedTableMsg;	// PostgreSQLの「Undefined table」のエラーメッセージを出力するかどうか
+	const BACKUP_FILENAME_HEAD = 'backup_';
+	const MSG_ERR_TABLE_MAINTENANCE = 'テーブルメンテナンス(%s)に失敗しました。';
 	
 	/**
 	 * コンストラクタ
@@ -303,12 +305,50 @@ class DbManager extends _Core
 	 * @param string $serialNoFieldName		シリアル番号のフィールド名
 	 * @param int    $minRowCount			最小行数
 	 * @param int    $maxRowCount			最大行数
-	 * @param string $filename				バックアップファイル名
+	 * @param string $backupDir				バックアップファイル格納用ディレクトリ
 	 * @param array  $message				処理メッセージ
 	 * @return bool							true=正常終了、false=異常終了
 	 */
-	function maintainTable($tableName, $serialNoFieldName, $minRowCount, $maxRowCount, $filename, &$message = null)
+	function maintainTable($tableName, $serialNoFieldName, $minRowCount, $maxRowCount, $backupDir, &$message = null)
 	{
+		$retStatus = false;		// 終了ステータス
+		
+		// バックアップファイル名作成
+		$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . $tableName . '_' . date('Ymd-His') . '.sql.gz';
+		
+		$recordCount = $this->specificDb->getTableRecordCount($tableName, $serialNoFieldName, $maxSerialNo);
+		if ($recordCount > $maxRowCount){		// レコード数オーバーの場合
+			// バックアップファイル作成
+			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
+			$ret = $this->gInstance->getDbManager()->backupTable($tableName, $tmpFile);
+			if ($ret){	// バックアップファイル作成成功の場合
+				// ファイル名変更
+				if (renameFile($tmpFile, $backupFile)){
+					// レコード数オーバーの分を削除
+					$delMaxSerialNo = $maxSerialNo - $minRowCount;
+					$ret = $this->specificDb->deleteTableRecord($tableName, $serialNoFieldName, $delMaxSerialNo);
+					if ($ret){
+						// ファイル名を記録
+						if (!is_null($message)) $message[] = 'テーブル(' . $tableName . ')バックアップファイル=' . $backupFile;
+					
+						$retStatus = true;
+					}
+				} else {
+					// テンポラリファイル削除
+					unlink($tmpFile);
+				
+					// ログを残す
+					$this->gOpeLog->writeError(__METHOD__, sprintf(self::MSG_ERR_TABLE_MAINTENANCE, $tableName), 1100, 'バックアップファイル名変更に失敗。ファイル=' . $backupFile);
+				}
+			} else {
+				// テンポラリファイル削除
+				unlink($tmpFile);
+				
+				// ログを残す
+				$this->gOpeLog->writeError(__METHOD__, sprintf(self::MSG_ERR_TABLE_MAINTENANCE, $tableName), 1100, 'バックアップファイルの作成に失敗。');
+			}
+		}
+		return $retStatus;
 	}
 }
 ?>

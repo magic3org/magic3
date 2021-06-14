@@ -13,16 +13,29 @@
  * @link       http://magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/connector/admin_mainConnectorBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_tableDb.php');
 
 class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBaseWidgetContainer
 {
+	private $db;	// DB接続オブジェクト
+	private $backupDir;		// バックアップファイル格納ディレクトリ
+	
 	const MAX_CALC_DAYS = 3;		// 集計最大日数
 	const MSG_JOB_COMPLETED = '日次処理を実行しました。';
 	const MSG_JOB_CANCELD = '日次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
 	const MSG_ERR_JOB = '日次処理(アクセス解析の集計)に失敗しました。';
 	const BACKUP_FILENAME_HEAD = 'backup_';
 	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
-	const CALC_COMPLETED_MIN_RECORDE_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
+	const TABLE_NAME_OPERATION_LOG = '_operation_log';			// 運用ログテーブル名
+	const TABLE_SERIAL_FIELD_OPERATION_LOG = 'ol_serial';			// 運用ログシリアル番号フィールド名
+	const ACCESS_LOG_REMAIN_MIN_MONTH_COUNT = 1;				// アクセスログ最小限残す月数期間
+/*	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
+	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 3000;				// テーブルメンテナンス用の最大レコード数
+	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 1000;				// テーブルメンテナンス用の最小レコード数
+*/
+	const CALC_COMPLETED_MIN_RECORD_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
+	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 30;				// テーブルメンテナンス用の最大レコード数
+	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 10;				// テーブルメンテナンス用の最小レコード数
 	
 	/**
 	 * コンストラクタ
@@ -31,6 +44,13 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// DB接続オブジェクト作成
+		$this->db = new admin_tableDb();
+		
+		// バックアップ用ディレクトリ作成
+		$this->backupDir = $this->gEnv->getIncludePath() . '/' . M3_DIR_NAME_BACKUP;				// バックアップファイル格納ディレクトリ
+		if (!file_exists($this->backupDir)) @mkdir($this->backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -82,6 +102,9 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 		// アクセスログをメンテナンス
 		$this->_maintainAccessLog($messageArray);
 		
+		// 運用ログをメンテナンス
+		$this->_maintainOpeLog($messageArray);
+		
 		// 日次処理終了のログを残す
 		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002, implode(', ', $messageArray));
 	}
@@ -97,13 +120,9 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 		
 		// 集計済みのアクセスログのレコード数取得
 		$calcCompletedRecordCount = $this->gInstance->getAnalyzeManager()->getCalcCompletedAccessLogRecordCount();
-		if ($calcCompletedRecordCount >= self::CALC_COMPLETED_MIN_RECORDE_COUNT){
-			// バックアップ用ディレクトリ作成
-			$backupDir = $this->gEnv->getIncludePath() . '/' . M3_DIR_NAME_BACKUP;				// バックアップファイル格納ディレクトリ
-			if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
-			
+		if ($calcCompletedRecordCount > self::CALC_COMPLETED_MIN_RECORD_COUNT){
 			// バックアップファイル名作成
-			$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
+			$backupFile = $this->backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
 			
 			// バックアップファイル作成
 			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
@@ -111,8 +130,8 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 			if ($ret){	// バックアップファイル作成成功の場合
 				// ファイル名変更
 				if (renameFile($tmpFile, $backupFile)){
-					// 集計終了分のアクセスログ削除
-					$this->gInstance->getAnalyzeManager()->deleteCalcCompletedAccessLog();
+					// 集計完了日から指定月数のログを残して、集計終了のアクセスログ削除(アクセスログは月の先頭日から残す)
+					$this->gInstance->getAnalyzeManager()->deleteCalcCompletedAccessLog(self::ACCESS_LOG_REMAIN_MIN_MONTH_COUNT);
 				
 					// ファイル名を記録
 					if (!is_null($message)) $message[] = 'アクセスログ(_access_log)バックアップファイル=' . $backupFile;
@@ -134,6 +153,17 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 			}
 		}
 		return $retStatus;
+	}
+	/**
+	 * 運用ログをメンテナンス
+	 *
+	 * @param array  	$message	エラーメッセージ
+	 * @return bool					true=成功、false=失敗
+	 */
+	function _maintainOpeLog(&$message = null)
+	{
+		$ret = $this->gInstance->getDbManager()->maintainTable(self::TABLE_NAME_OPERATION_LOG, self::TABLE_SERIAL_FIELD_OPERATION_LOG, self::MAINTAIN_TABLE_MIN_RECORD_COUNT, self::MAINTAIN_TABLE_MAX_RECORD_COUNT, $this->backupDir, $message);
+		return $ret;
 	}
 }
 ?>
