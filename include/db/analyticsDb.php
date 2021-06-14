@@ -118,15 +118,17 @@ class analyticsDb extends BaseDb
 	/**
 	 * 日付以前の古いアクセスログのレコード削除
 	 *
-	 * @param date		$date		日付
+	 * @param date  $date			日付
+	 * @param int   $monthCount		最低限残すログの期間月数
 	 * @return bool					true=成功、false=失敗
 	 */
-	public function deleteOldAccessLog($date)
+	public function deleteOldAccessLog($date, $monthCount)
 	{
 		if (empty($date)) return false;
 		
-		$count = 0;
-		$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
+		//$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
+		$endDt = date("Y/m/1", strtotime("$date"));		// 月の先頭日
+		$endDt = date("Y/m/1", strtotime("$endDate -$monthCount month")) . ' 0:0:0';	// nか月前の先頭日
 		$queryStr  = 'DELETE FROM _access_log WHERE al_dt < ?';
 		$params[] = $endDt;
 		$ret = $this->execStatement($queryStr, $params);

@@ -215,18 +215,39 @@ class specificDb extends BaseDb
 		proc_close($process);	// リソースを閉じる
 		
 		return $retVal;
-/*		if (is_resource($process)){
-			fclose($pipes[0]);
-
-			$output = stream_get_contents($pipes[1]);
-			$errorOutput = stream_get_contents($pipes[2]);
-
-			fclose($pipes[1]);
-			fclose($pipes[2]);
-			
-			$retVal = proc_close($process);
+	}
+	/**
+	 * テーブルのレコード数と最大シリアル番号を取得
+	 *
+	 * @param string $tableName				テーブル名
+	 * @param string $serialNoFieldName		シリアル番号のフィールド名
+	 * @param int    $maxSerialNo			最大シリアル番号
+	 * @return int							レコード数
+	 */
+	function getTableRecordCount($tableName, $serialNoFieldName, &$maxSerialNo)
+	{
+		$count = 0;
+		$queryStr  = 'SELECT COUNT(*) AS count, MAX(%s) AS maxserial FROM %s';
+		$ret = $this->selectRecord(sprintf($queryStr, $serialNoFieldName, $tableName), null, $row);
+		if ($ret){
+			$count = $row['count'];
+			$maxSerialNo = $row['maxserial'];
 		}
-		return $retVal;*/
+		return $count;
+	}
+	/**
+	 * 古いテーブルレコードを削除
+	 *
+	 * @param string $tableName				テーブル名
+	 * @param string $serialNoFieldName		シリアル番号のフィールド名
+	 * @param int    $maxSerialNo			削除するレコードの最大シリアル番号
+	 * @return bool							true=正常終了、false=異常終了
+	 */
+	function deleteTableRecord($tableName, $serialNoFieldName, $maxSerialNo)
+	{
+		$queryStr  = 'DELETE FROM %s WHERE %s <= ?';
+		$ret = $this->execStatement(sprintf($queryStr, $tableName, $serialNoFieldName), array($maxSerialNo));
+		return $ret;
 	}
 }
 ?>

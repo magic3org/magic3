@@ -159,14 +159,15 @@ class AnalyzeManager extends _Core
 		return $count;
 	}
 	/**
-	 * 集計が完了したアクセスログを削除
+	 * 集計完了日の前月先頭日からログを残して、集計が完了したアクセスログを削除
 	 *
-	 * @param bool					true=成功、false=失敗
+	 * @param int $monthCount		最低限残すログの期間月数
+	 * @return bool					true=成功、false=失敗
 	 */
-	public function deleteCalcCompletedAccessLog()
+	public function deleteCalcCompletedAccessLog($monthCount)
 	{
 		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
-		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate);
+		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate, $monthCount);
 		return $ret;
 	}
 	/**

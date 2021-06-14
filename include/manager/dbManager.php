@@ -296,5 +296,19 @@ class DbManager extends _Core
 		$ret = $this->specificDb->restoreDb($filename);
 		return $ret;
 	}
+	/**
+	 * 行数範囲指定でテーブルをメンテナンス
+	 *
+	 * @param string $tableName				テーブル名
+	 * @param string $serialNoFieldName		シリアル番号のフィールド名
+	 * @param int    $minRowCount			最小行数
+	 * @param int    $maxRowCount			最大行数
+	 * @param string $filename				バックアップファイル名
+	 * @param array  $message				処理メッセージ
+	 * @return bool							true=正常終了、false=異常終了
+	 */
+	function maintainTable($tableName, $serialNoFieldName, $minRowCount, $maxRowCount, $filename, &$message = null)
+	{
+	}
 }
 ?>
