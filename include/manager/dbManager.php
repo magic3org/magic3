@@ -303,13 +303,13 @@ class DbManager extends _Core
 	 *
 	 * @param string $tableName				テーブル名
 	 * @param string $serialNoFieldName		シリアル番号のフィールド名
-	 * @param int    $minRowCount			最小行数
-	 * @param int    $maxRowCount			最大行数
+	 * @param int    $minRecordCount		最小レコード数
+	 * @param int    $maxRecordCount		最大レコード数
 	 * @param string $backupDir				バックアップファイル格納用ディレクトリ
 	 * @param array  $message				処理メッセージ
 	 * @return bool							true=正常終了、false=異常終了
 	 */
-	function maintainTable($tableName, $serialNoFieldName, $minRowCount, $maxRowCount, $backupDir, &$message = null)
+	function maintainTable($tableName, $serialNoFieldName, $minRecordCount, $maxRecordCount, $backupDir, &$message = null)
 	{
 		$retStatus = false;		// 終了ステータス
 		
@@ -317,7 +317,7 @@ class DbManager extends _Core
 		$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . $tableName . '_' . date('Ymd-His') . '.sql.gz';
 		
 		$recordCount = $this->specificDb->getTableRecordCount($tableName, $serialNoFieldName, $maxSerialNo);
-		if ($recordCount > $maxRowCount){		// レコード数オーバーの場合
+		if ($recordCount > $maxRecordCount){		// レコード数オーバーの場合
 			// バックアップファイル作成
 			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
 			$ret = $this->gInstance->getDbManager()->backupTable($tableName, $tmpFile);
@@ -325,7 +325,7 @@ class DbManager extends _Core
 				// ファイル名変更
 				if (renameFile($tmpFile, $backupFile)){
 					// レコード数オーバーの分を削除
-					$delMaxSerialNo = $maxSerialNo - $minRowCount;
+					$delMaxSerialNo = $maxSerialNo - $minRecordCount;
 					$ret = $this->specificDb->deleteTableRecord($tableName, $serialNoFieldName, $delMaxSerialNo);
 					if ($ret){
 						// ファイル名を記録

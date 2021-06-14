@@ -24,19 +24,18 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 	const MSG_JOB_COMPLETED = '日次処理を実行しました。';
 	const MSG_JOB_CANCELD = '日次処理をキャンセルしました。現在サーバ負荷が大きい状態(%d%%)です。';
 	const MSG_ERR_JOB = '日次処理(アクセス解析の集計)に失敗しました。';
-	const BACKUP_FILENAME_HEAD = 'backup_';
-	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
+//	const BACKUP_FILENAME_HEAD = 'backup_';
+//	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
 	const TABLE_NAME_OPERATION_LOG = '_operation_log';			// 運用ログテーブル名
 	const TABLE_SERIAL_FIELD_OPERATION_LOG = 'ol_serial';			// 運用ログシリアル番号フィールド名
 	const ACCESS_LOG_REMAIN_MIN_MONTH_COUNT = 1;				// アクセスログ最小限残す月数期間
-/*	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
+	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
 	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 3000;				// テーブルメンテナンス用の最大レコード数
 	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 1000;				// テーブルメンテナンス用の最小レコード数
-*/
-	const CALC_COMPLETED_MIN_RECORD_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
+/*	const CALC_COMPLETED_MIN_RECORD_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
 	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 30;				// テーブルメンテナンス用の最大レコード数
 	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 10;				// テーブルメンテナンス用の最小レコード数
-	
+	*/
 	/**
 	 * コンストラクタ
 	 */
@@ -100,10 +99,12 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 		}
 		
 		// アクセスログをメンテナンス
-		$this->_maintainAccessLog($messageArray);
+		//$this->_maintainAccessLog($messageArray);
+		$this->gInstance->getAnalyzeManager()->maintainAccessLog(self::CALC_COMPLETED_MIN_RECORD_COUNT, self::ACCESS_LOG_REMAIN_MIN_MONTH_COUNT, $this->backupDir, $messageArray);
 		
 		// 運用ログをメンテナンス
-		$this->_maintainOpeLog($messageArray);
+		//$this->_maintainOpeLog($messageArray);
+		$this->gInstance->getDbManager()->maintainTable(self::TABLE_NAME_OPERATION_LOG, self::TABLE_SERIAL_FIELD_OPERATION_LOG, self::MAINTAIN_TABLE_MIN_RECORD_COUNT, self::MAINTAIN_TABLE_MAX_RECORD_COUNT, $this->backupDir, $messageArray);
 		
 		// 日次処理終了のログを残す
 		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002, implode(', ', $messageArray));
@@ -114,7 +115,7 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 	 * @param array  	$message	エラーメッセージ
 	 * @return bool					true=成功、false=失敗
 	 */
-	function _maintainAccessLog(&$message = null)
+/*	function _maintainAccessLog(&$message = null)
 	{
 		$retStatus = false;
 		
@@ -153,7 +154,7 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 			}
 		}
 		return $retStatus;
-	}
+	}*/
 	/**
 	 * 運用ログをメンテナンス
 	 *

@@ -25,6 +25,9 @@ class AnalyzeManager extends _Core
 	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.104/';		// クローラー解析スクリプトディレクトリ
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-1.2.0/UserAgentParser.php';		// ブラウザ判定スクリプト
 	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.1.3/';		// プラットフォーム判定スクリプト
+	const BACKUP_FILENAME_HEAD = 'backup_';
+	const TABLE_NAME_ACCESS_LOG = '_access_log';			// アクセスログテーブル名
+	const MSG_ERR_ACCESS_LOG_MAINTENANCE = 'アクセスログメンテナンスに失敗しました。';
 	
 	/**
 	 * コンストラクタ
@@ -169,6 +172,55 @@ class AnalyzeManager extends _Core
 		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
 		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate, $monthCount);
 		return $ret;
+	}
+	/**
+	 * アクセスログテーブルをメンテナンス
+	 *
+	 * @param int    $minRecordCount		バックアップ処理を行う最小レコード数
+	 * @param int    $monthCount			最低限残すログの期間月数
+	 * @param string $backupDir				バックアップファイル格納用ディレクトリ
+	 * @param array  $message				処理メッセージ
+	 * @return bool							true=正常終了、false=異常終了
+	 */
+	function maintainAccessLog($minRecordCount, $monthCount, $backupDir, &$message = null)
+	{
+		$retStatus = false;
+		
+		// 集計済みのアクセスログのレコード数取得
+		$calcCompletedRecordCount = $this->getCalcCompletedAccessLogRecordCount();
+		if ($calcCompletedRecordCount > $minRecordCount){
+			// バックアップファイル名作成
+			$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
+			
+			// バックアップファイル作成
+			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
+			$ret = $this->gInstance->getDbManager()->backupTable(self::TABLE_NAME_ACCESS_LOG, $tmpFile);
+			if ($ret){	// バックアップファイル作成成功の場合
+				// ファイル名変更
+				if (renameFile($tmpFile, $backupFile)){
+					// 集計完了日から指定月数のログを残して、集計終了のアクセスログ削除(アクセスログは月の先頭日から残す)
+					$this->deleteCalcCompletedAccessLog($monthCount);
+				
+					// ファイル名を記録
+					if (!is_null($message)) $message[] = 'アクセスログ(_access_log)バックアップファイル=' . $backupFile;
+					
+					$retStatus = true;
+				} else {
+					// テンポラリファイル削除
+					unlink($tmpFile);
+				
+					// ログを残す
+					$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_ACCESS_LOG_MAINTENANCE, 1100, 'バックアップファイル名変更に失敗。ファイル=' . $backupFile);
+				}
+			} else {
+				// テンポラリファイル削除
+				unlink($tmpFile);
+				
+				// ログを残す
+				$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_ACCESS_LOG_MAINTENANCE, 1100, 'バックアップファイルの作成に失敗。');
+			}
+		}
+		return $retStatus;
 	}
 	/**
 	 * ブラウザのタイプを取得
