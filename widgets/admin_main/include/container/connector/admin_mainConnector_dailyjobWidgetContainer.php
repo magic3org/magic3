@@ -30,11 +30,11 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 	const TABLE_SERIAL_FIELD_OPERATION_LOG = 'ol_serial';			// 運用ログシリアル番号フィールド名
 	const ACCESS_LOG_REMAIN_MIN_MONTH_COUNT = 1;				// アクセスログ最小限残す月数期間
 	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
-	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 3000;				// テーブルメンテナンス用の最大レコード数
 	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 1000;				// テーブルメンテナンス用の最小レコード数
+	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 3000;				// テーブルメンテナンス用の最大レコード数
 /*	const CALC_COMPLETED_MIN_RECORD_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
-	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 30;				// テーブルメンテナンス用の最大レコード数
 	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 10;				// テーブルメンテナンス用の最小レコード数
+	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 30;				// テーブルメンテナンス用の最大レコード数
 	*/
 	/**
 	 * コンストラクタ

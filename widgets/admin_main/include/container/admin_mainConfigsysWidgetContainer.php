@@ -51,6 +51,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_DEFAULT_LANG		= 'default_lang';					// デフォルト言語
 	const CF_WORK_DIR = 'work_dir';			// 作業ディレクトリ
 	const CF_DAILY_JOB = 'daily_job';			// 日次処理を実行するかどうか
+	const CF_DAILY_JOB_HOUR = 'daily_job_hour';			// 日次処理の実行時間帯
 	
 	/**
 	 * コンストラクタ
@@ -257,6 +258,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
 			$dailyJob = $this->db->getSystemConfig(self::CF_DAILY_JOB);		// 日次処理を実行するかどうか
+			$dailyJobHour = $this->db->getSystemConfig(self::CF_DAILY_JOB_HOUR);			// 日次処理の実行時間帯
 			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 			
 			// ### サイト定義ファイル(siteDef.php)にオプション定義を追加 ###
@@ -327,6 +329,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
 			$dailyJob = $this->db->getSystemConfig(self::CF_DAILY_JOB);		// 日次処理を実行するかどうか
+			$dailyJobHour = $this->db->getSystemConfig(self::CF_DAILY_JOB_HOUR);			// 日次処理の実行時間帯
 			$isHier = $this->gSystem->isSiteMenuHier();		// メニューを階層化するかどうかを取得
 		}
 		// 言語選択メニューを作成
@@ -487,6 +490,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_width", $uploadImageAutoresizeMaxWidth);		// アップロード画像の自動リサイズ、画像最大幅
 		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_height", $uploadImageAutoresizeMaxHeight);		// アップロード画像の自動リサイズ、画像最大高さ
 		$this->tmpl->addVar("_widget", "daily_job", $this->convertToCheckedString($dailyJob));		// 日次処理を実行するかどうか
+		$this->tmpl->addVar("_widget", "daily_job_hour", $dailyJobHour);		// 日次処理の実行時間帯
 		
 		// 一時ディレクトリ
 		$this->tmpl->addVar("_widget", "work_dir", $workDir);
