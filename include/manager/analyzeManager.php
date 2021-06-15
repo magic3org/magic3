@@ -384,7 +384,7 @@ class AnalyzeManager extends _Core
 			$date = $startDate;
 			while (true){
 				if (strtotime($date) > $endTime){
-					if (!is_null($message)) $message[] = '集計完了しました';
+					if (!is_null($message)) $message[] = '集計完了しました。';
 					break;
 				}
 				// トランザクションスタート
@@ -400,21 +400,21 @@ class AnalyzeManager extends _Core
 
 				// エラーの場合は終了
 				if (!$ret){
-					if (!is_null($message)) $message[] = 'エラーが発生しました';
+					if (!is_null($message)) $message[] = 'エラーが発生しました。';
 					break;
 				}
 				
 				// 集計日数を更新
 				$dayCount++;
 				if ($dayCount >= $maxDay){
-					if (!is_null($message)) $message[] = $maxDay . '日分の集計完了しました';
+					if (!is_null($message)) $message[] = $maxDay . '日分の集計完了しました。';
 					break;
 				}
 				
 				$date = date("Y/m/d", strtotime("$date 1 day"));
 			}
 		} else {				// 集計データがないとき
-			if (!is_null($message)) $message[] = '集計対象のアクセスログがありません';
+			if (!is_null($message)) $message[] = '集計対象のアクセスログがありません。';
 			
 			$ret = true;		// 正常終了
 		}
