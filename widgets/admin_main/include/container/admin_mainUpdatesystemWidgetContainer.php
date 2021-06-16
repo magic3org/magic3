@@ -10,8 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
@@ -28,6 +27,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $packageDir;		// ソースパッケージディレクトリ名
 	private $backupDir;			// バックアップディレクトリ名
 	private $coreDirList = array('include', 'widgets', 'scripts', 'images');
+	private $remainDirList = array('backup');		// includeディレクトリの内容で新規ソースへ移動するディレクトリ
 	private $testMode;			// テストモード
 	private $errFileList;			// エラーファイルリスト
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
@@ -374,6 +374,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 			} else if ($this->step == 4){
 				// *** ステップ4 *************************************
 				// 1.テンプレートの更新処理
+				// 2.旧ソースのDBバックアップファイルを新規ソースに移動
 				// ***************************************************
 				// Step3が完了していることを確認
 				if (empty($savedStatus) || !($savedStatus['step'] == 3 && $savedStatus['completed'])){
@@ -404,6 +405,16 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 						}
 					}
 				}
+				
+				// 旧ソースのDBバックアップファイルを新規ソースに移動
+				for ($i = 0; $i < count($this->remainDirList); $i++){
+					$moveDir = $this->remainDirList[$i];
+					$oldDir = $this->gEnv->getSystemRootPath() . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . $moveDir;
+					$backupDir = $updateWorkDir . DIRECTORY_SEPARATOR . $this->backupDir . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . $moveDir;
+					
+					rmDirectory($oldDir);
+					mvDirectory($backupDir, $oldDir);
+				}
 							
 				$this->_saveUpdateStep($this->step, true/*終了*/);
 				
@@ -416,7 +427,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 				// ログを残す
 				$this->_log('システムアップデート完了しました。新バージョン=' . $this->version . ', 旧バージョン=' . $this->preVersion);
 				
-				// システムアップデート用ワークディレクトリ削除
+				// ### システムアップデート用ワークディレクトリ削除 ###
 				rmDirectory($updateWorkDir);
 				
 				// 一般ユーザのアクセスを再開
