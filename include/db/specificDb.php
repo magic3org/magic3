@@ -91,7 +91,8 @@ class specificDb extends BaseDb
 		switch ($dbType){
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
 				$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user;
-				if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				//if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				if (!empty($this->_connect_password)) $cmd .= ' -p' . $this->_connect_password;
 				$cmd .= ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
@@ -121,7 +122,8 @@ class specificDb extends BaseDb
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
 				//$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user . ' -p ' . $this->_connect_password . ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
 				$cmd = self::BACKUP_CMD . ' --opt -u ' . $this->_connect_user;
-				if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				//if (!empty($this->_connect_password)) $cmd .= ' -p ' . $this->_connect_password;
+				if (!empty($this->_connect_password)) $cmd .= ' -p' . $this->_connect_password;
 				$cmd .= ' ' . $this->_dbName . ' ' . $tableName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
@@ -159,7 +161,8 @@ class specificDb extends BaseDb
 				fclose($fp);
 
 				// リストアコマンド実行
-				$cmd = "mysql -u $this->_connect_user -p $this->_connect_password -e 'source $tmpFile' $this->_dbName";
+				//$cmd = "mysql -u $this->_connect_user -p $this->_connect_password -e 'source $tmpFile' $this->_dbName";
+				$cmd = "mysql -u $this->_connect_user -p$this->_connect_password -e 'source $tmpFile' $this->_dbName";
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
