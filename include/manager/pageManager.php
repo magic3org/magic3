@@ -216,9 +216,9 @@ class PageManager extends _Core
 	const CF_DAILY_JOB = 'daily_job';			// 日次処理を実行するかどうか
 	const CF_DAILY_JOB_HOUR = 'daily_job_hour';	// 日次処理実行時間(0-23)
 	const CF_DAILY_JOB_DT = 'daily_job_dt';		// 日次処理完了日時
-	const CF_MONTHLY_JOB = 'monthly_job';			// 月次処理を実行するかどうか
-	const CF_MONTHLY_JOB_HOUR = 'monthly_job_hour';	// 月次処理実行時間(0-23)
-	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
+//	const CF_MONTHLY_JOB = 'monthly_job';			// 月次処理を実行するかどうか
+//	const CF_MONTHLY_JOB_HOUR = 'monthly_job_hour';	// 月次処理実行時間(0-23)
+//	const CF_MONTHLY_JOB_DT = 'monthly_job_dt';		// 月次処理完了日時
 	
 	/**
 	 * コンストラクタ
@@ -2724,6 +2724,7 @@ class PageManager extends _Core
 		}
 		
 		// ### 月次処理の実行時間帯の場合 ###
+		/*
 		$jobHour = intval($this->gSystem->getSystemConfig(self::CF_MONTHLY_JOB_HOUR));
 		if ($currentHour == $jobHour){
 		
@@ -2738,16 +2739,14 @@ class PageManager extends _Core
 				// マルチドメイン対応のためにホスト名を取得
 				$parsedUrl = parse_url($this->gEnv->getRootUrl());
 				$host = $parsedUrl['host'];
-				//$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
 		
 				// ジョブを実行
-				//$fp = fsockopen('ssl://127.0.0.1', 443, $errNo, $errStr, 30);	// SSLの場合?
 				$fp = fsockopen('127.0.0.1', 80, $errNo, $errStr, 30);
 				if (!$fp) {
 					// 実行失敗の場合はログを残す
 					$this->gOpeLog->writeError(__METHOD__, '月次処理実行に失敗しました。(要因: ' . $errStr . '(' . $errNo . '))', 1100);
 				} else {
-					$jobUrl = $this->gEnv->getServerConnectorUrl(true/*相対URL*/) . '?task=monthlyjob';
+					$jobUrl = $this->gEnv->getServerConnectorUrl(true) . '?task=monthlyjob';
 					$out = "GET $jobUrl HTTP/1.1\r\n";
 					$out .= "Host: $host\r\n";
 				    $out .= "Connection: Close\r\n\r\n";
@@ -2755,7 +2754,7 @@ class PageManager extends _Core
 				    fclose($fp);
 				}
 			}
-		}
+		}*/
 	}
 	/**
 	 * ヘッダ部マクロ変換処理
