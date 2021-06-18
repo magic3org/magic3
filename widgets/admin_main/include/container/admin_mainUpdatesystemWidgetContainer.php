@@ -27,7 +27,7 @@ class admin_mainUpdatesystemWidgetContainer extends admin_mainBaseWidgetContaine
 	private $packageDir;		// ソースパッケージディレクトリ名
 	private $backupDir;			// バックアップディレクトリ名
 	private $coreDirList = array('include', 'widgets', 'scripts', 'images');
-	private $remainDirList = array('backup');		// includeディレクトリの内容で新規ソースへ移動するディレクトリ
+	private $remainDirList = array('backup', 'log');		// includeディレクトリの内容で新規ソースへ移動するディレクトリ
 	private $testMode;			// テストモード
 	private $errFileList;			// エラーファイルリスト
 	const UPDATE_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/version_info/update_system.json';		// バージョンアップ可能なバージョン情報取得用
