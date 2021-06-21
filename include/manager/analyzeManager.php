@@ -151,44 +151,44 @@ class AnalyzeManager extends _Core
 		return $ret;
 	}
 	/**
-	 * 集計が完了したアクセスログのレコード数を取得
+	 * 集計が完了したアクセスログの日数を取得
 	 *
 	 * @return int					レコード数
 	 */
-	public function getCalcCompletedAccessLogRecordCount()
+	public function getCalcCompletedAccessLogDayCount()
 	{
 		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
-		$count = $this->analyticsDb->getOldAccessLogRecordCount($lastDate);
+		$count = $this->analyticsDb->getOldAccessLogDayCount($lastDate);
 		return $count;
 	}
 	/**
-	 * 集計完了日の前月先頭日からログを残して、集計が完了したアクセスログを削除
+	 * 集計完了日から日数分残してアクセスログを削除
 	 *
-	 * @param int $monthCount		最低限残すログの期間月数
+	 * @param int $dayCount			残すログの日数
 	 * @return bool					true=成功、false=失敗
 	 */
-	public function deleteCalcCompletedAccessLog($monthCount)
+	public function deleteCalcCompletedAccessLog($dayCount)
 	{
 		$lastDate = $this->analyticsDb->getStatus(self::CF_LAST_DATE_CALC_PV);
-		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate, $monthCount);
+		$ret = $this->analyticsDb->deleteOldAccessLog($lastDate, $dayCount);
 		return $ret;
 	}
 	/**
 	 * アクセスログテーブルをメンテナンス
 	 *
-	 * @param int    $minRecordCount		バックアップ処理を行う最小レコード数
-	 * @param int    $monthCount			最低限残すログの期間月数
+	 * @param int    $minRecordDayCount		最小レコード日数
+	 * @param int    $maxRecordDayCount		最大レコード日数
 	 * @param string $backupDir				バックアップファイル格納用ディレクトリ
 	 * @param array  $message				処理メッセージ
 	 * @return bool							true=正常終了、false=異常終了
 	 */
-	function maintainAccessLog($minRecordCount, $monthCount, $backupDir, &$message = null)
+	function maintainAccessLog($minRecordDayCount, $maxRecordDayCount, $backupDir, &$message = null)
 	{
 		$retStatus = false;
 		
-		// 集計済みのアクセスログのレコード数取得
-		$calcCompletedRecordCount = $this->getCalcCompletedAccessLogRecordCount();
-		if ($calcCompletedRecordCount > $minRecordCount){
+		// 集計済みのアクセスログの日数を取得
+		$calcCompletedRecordDayCount = $this->getCalcCompletedAccessLogDayCount();
+		if ($calcCompletedRecordDayCount > $maxRecordDayCount){
 			// バックアップファイル名作成
 			$backupFile = $backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
 			
@@ -198,8 +198,8 @@ class AnalyzeManager extends _Core
 			if ($ret){	// バックアップファイル作成成功の場合
 				// ファイル名変更
 				if (renameFile($tmpFile, $backupFile)){
-					// 集計完了日から指定月数のログを残して、集計終了のアクセスログ削除(アクセスログは月の先頭日から残す)
-					$this->deleteCalcCompletedAccessLog($monthCount);
+					// 集計完了日から指定日数のログを残して、集計終了のアクセスログ削除
+					$this->deleteCalcCompletedAccessLog($minRecordDayCount);
 				
 					// ファイル名を記録
 					if (!is_null($message)) $message[] = 'アクセスログ(_access_log)バックアップファイル=' . $backupFile;

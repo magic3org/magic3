@@ -29,7 +29,9 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 	const TABLE_NAME_OPERATION_LOG = '_operation_log';			// 運用ログテーブル名
 	const TABLE_SERIAL_FIELD_OPERATION_LOG = 'ol_serial';			// 運用ログシリアル番号フィールド名
 	const ACCESS_LOG_REMAIN_MIN_MONTH_COUNT = 1;				// アクセスログ最小限残す月数期間
-	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
+//	const CALC_COMPLETED_MIN_RECORD_COUNT = 1000;			// バックアップ条件となる集計済みのレコード数
+	const CALC_COMPLETED_MIN_RECORD_DAY_COUNT = 30;				// アクセスログのバックアップ条件となる集計済みのレコード最小日数分
+	const CALC_COMPLETED_MAX_RECORD_DAY_COUNT = 40;				// アクセスログのバックアップ条件となる集計済みのレコード最大日数分
 	const MAINTAIN_TABLE_MIN_RECORD_COUNT = 1000;				// テーブルメンテナンス用の最小レコード数
 	const MAINTAIN_TABLE_MAX_RECORD_COUNT = 3000;				// テーブルメンテナンス用の最大レコード数
 /*	const CALC_COMPLETED_MIN_RECORD_COUNT = 10;			// バックアップ条件となる集計済みのレコード数
@@ -99,62 +101,15 @@ class admin_mainConnector_dailyjobWidgetContainer extends admin_mainConnectorBas
 		}
 		
 		// アクセスログをメンテナンス
-		//$this->_maintainAccessLog($messageArray);
-		$this->gInstance->getAnalyzeManager()->maintainAccessLog(self::CALC_COMPLETED_MIN_RECORD_COUNT, self::ACCESS_LOG_REMAIN_MIN_MONTH_COUNT, $this->backupDir, $messageArray);
+		//$this->gInstance->getAnalyzeManager()->maintainAccessLog(self::CALC_COMPLETED_MIN_RECORD_COUNT, self::ACCESS_LOG_REMAIN_MIN_MONTH_COUNT, $this->backupDir, $messageArray);
+		$this->gInstance->getAnalyzeManager()->maintainAccessLog(self::CALC_COMPLETED_MIN_RECORD_DAY_COUNT, self::CALC_COMPLETED_MAX_RECORD_DAY_COUNT, $this->backupDir, $messageArray);
 		
 		// 運用ログをメンテナンス
-		//$this->_maintainOpeLog($messageArray);
 		$this->gInstance->getDbManager()->maintainTable(self::TABLE_NAME_OPERATION_LOG, self::TABLE_SERIAL_FIELD_OPERATION_LOG, self::MAINTAIN_TABLE_MIN_RECORD_COUNT, self::MAINTAIN_TABLE_MAX_RECORD_COUNT, $this->backupDir, $messageArray);
 		
 		// 日次処理終了のログを残す
 		$this->gOpeLog->writeInfo(__METHOD__, self::MSG_JOB_COMPLETED, 1002, implode(', ', $messageArray));
 	}
-	/**
-	 * アクセスログをメンテナンス
-	 *
-	 * @param array  	$message	エラーメッセージ
-	 * @return bool					true=成功、false=失敗
-	 */
-/*	function _maintainAccessLog(&$message = null)
-	{
-		$retStatus = false;
-		
-		// 集計済みのアクセスログのレコード数取得
-		$calcCompletedRecordCount = $this->gInstance->getAnalyzeManager()->getCalcCompletedAccessLogRecordCount();
-		if ($calcCompletedRecordCount > self::CALC_COMPLETED_MIN_RECORD_COUNT){
-			// バックアップファイル名作成
-			$backupFile = $this->backupDir . '/' . self::BACKUP_FILENAME_HEAD . self::TABLE_NAME_ACCESS_LOG . '_' . date('Ymd-His') . '.sql.gz';
-			
-			// バックアップファイル作成
-			$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD);		// バックアップ一時ファイル
-			$ret = $this->gInstance->getDbManager()->backupTable(self::TABLE_NAME_ACCESS_LOG, $tmpFile);
-			if ($ret){	// バックアップファイル作成成功の場合
-				// ファイル名変更
-				if (renameFile($tmpFile, $backupFile)){
-					// 集計完了日から指定月数のログを残して、集計終了のアクセスログ削除(アクセスログは月の先頭日から残す)
-					$this->gInstance->getAnalyzeManager()->deleteCalcCompletedAccessLog(self::ACCESS_LOG_REMAIN_MIN_MONTH_COUNT);
-				
-					// ファイル名を記録
-					if (!is_null($message)) $message[] = 'アクセスログ(_access_log)バックアップファイル=' . $backupFile;
-					
-					$retStatus = true;
-				} else {
-					// テンポラリファイル削除
-					unlink($tmpFile);
-				
-					// ログを残す
-					$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, 'バックアップファイル名変更に失敗。ファイル=' . $backupFile);
-				}
-			} else {
-				// テンポラリファイル削除
-				unlink($tmpFile);
-				
-				// ログを残す
-				$this->gOpeLog->writeError(__METHOD__, self::MSG_ERR_JOB, 1100, 'バックアップファイルの作成に失敗。');
-			}
-		}
-		return $retStatus;
-	}*/
 	/**
 	 * 運用ログをメンテナンス
 	 *

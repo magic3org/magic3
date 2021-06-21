@@ -98,39 +98,47 @@ class analyticsDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * 日付以前の古いアクセスログのレコード数を取得
+	 * 日付以前の古いアクセスログの日数を取得
 	 *
 	 * @param date		$date		日付
-	 * @return int					レコード数
+	 * @return int					日数
 	 */
-	public function getOldAccessLogRecordCount($date)
+	public function getOldAccessLogDayCount($date)
 	{
 		if (empty($date)) return 0;
 		
 		$count = 0;
-		$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
-		$queryStr  = 'SELECT COUNT(*) AS count FROM _access_log WHERE al_dt < ?';
+		$endDate = date("Y/m/d", strtotime("$date 1 day"));// 翌日
+		$endDt = $endDate . ' 0:0:0';
+		$queryStr  = 'SELECT MIN(al_dt) AS first_dt FROM _access_log WHERE al_dt < ?';
 		$params[] = $endDt;
 		$ret = $this->selectRecord($queryStr, $params, $row);
-		if ($ret) $count = $row['count'];
+		if ($ret){
+			if (!is_null($row['first_dt'])){
+				$startDate = date("Y/m/d", strtotime($row['first_dt']));
+				$count = (strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24);
+			}
+		}
 		return $count;
 	}
 	/**
 	 * 日付以前の古いアクセスログのレコード削除
 	 *
 	 * @param date  $date			日付
-	 * @param int   $monthCount		最低限残すログの期間月数
+	 * @param int   $dayCount		残すログの日数
 	 * @return bool					true=成功、false=失敗
 	 */
-	public function deleteOldAccessLog($date, $monthCount)
+	public function deleteOldAccessLog($date, $dayCount)
 	{
 		if (empty($date)) return false;
 		
-		//$endDt = date("Y/m/d", strtotime("$date 1 day")) . ' 0:0:0';		// 翌日
-		$endDt = date("Y/m/1", strtotime("$date"));		// 月の先頭日
-		$endDt = date("Y/m/1", strtotime("$endDate -$monthCount month")) . ' 0:0:0';	// nか月前の先頭日
+		$endDate = date("Y/m/d", strtotime("$date 1 day"));		// 翌日
+		$startDate = date("Y/m/d", strtotime("$endDate -$dayCount day"));			// 残すログの先頭日
+		
+		// 先頭日より前のデータ削除
+		$startDt = $startDate . ' 0:0:0';
 		$queryStr  = 'DELETE FROM _access_log WHERE al_dt < ?';
-		$params[] = $endDt;
+		$params[] = $startDt;
 		$ret = $this->execStatement($queryStr, $params);
 		return $ret;
 	}
