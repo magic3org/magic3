@@ -10,8 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2021 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
- * @link       http://www.magic3.org
+ * @link       http://magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_analyticsDb.php');
@@ -264,6 +263,9 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 			$lastDate = self::DEFAULT_STR_NOT_CALC;
 		} else {
 			$lastDate = $this->convertToDispDate($endDate);		// 最終集計日
+			
+			// 前日まで集計が完了している場合はボタンを使用不可にする
+			if (strtotime("$endDate") == strtotime(date("Y-m-d", strtotime("-1 day")))) $this->tmpl->addVar("show_calc_button", "calc_disabled", 'disabled');
 		}
 		// 値を埋め込む
 		$this->tmpl->addVar("draw_graph", "term_start", $termStart);// グラフ期間開始
