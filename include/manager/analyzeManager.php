@@ -626,6 +626,7 @@ class AnalyzeManager extends _Core
 			'github.com'				=> 'github.png',
 			'coccoc'					=> 'coccoc.png',
 			'amazonbot'					=> 'amazon.png',
+			'lighthouse'				=> 'lighthouse.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
