@@ -1022,9 +1022,13 @@ class admin_mainTemplistWidgetContainer extends admin_mainTempBaseWidgetContaine
 		$ret = file_exists($appFile);
 		
 		if ($ret){
-			@require_once($dir . '/functions.php');		// エラーメッセージ抑止
-			$verSrc = addThemeVersion('');
-			list($tmp, $version) = explode('=', $verSrc);
+			// バージョン番号取得
+			$content = file_get_contents($appFile);
+			if (is_numeric($content)) $version = intval($content);
+
+			//@require_once($dir . '/functions.php');		// エラーメッセージ抑止
+			//$verSrc = addThemeVersion('');
+			//list($tmp, $version) = explode('=', $verSrc);
 		}
 		return $ret;
 	}
