@@ -4912,7 +4912,7 @@ class PageManager extends _Core
 										if (!empty($joomlaClass)) $params['moduleclass_sfx'] = $joomlaClass;
 										if (isset($joomlaParam['moduleclass_sfx'])) $params['moduleclass_sfx'] = $joomlaParam['moduleclass_sfx'];// ウィジェットでjoomla用パラメータの設定があるとき
 								
-										if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
+										if ($style == self::WIDGET_STYLE_NAVMENU){		// ポジションブロックがナビゲーションメニュー型の場合はメニューウィジェットのみ実行
 											$moduleContent = '';
 											
 											// ウィジェットタイプがメニューのときはナビゲーションメニューを生成
@@ -4923,7 +4923,10 @@ class PageManager extends _Core
 											$widgetContent = $moduleContent;
 										} else {
 											// ウィジェットタイプに応じた処理を実行
-											if ($widgetType == 'breadcrumb'){		// パンくずリスト
+											if ($widgetType == 'menu'){		// メニュー型
+												// デフォルトまたは縦型メニューでメニュー表示
+												$widgetContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+											} else if ($widgetType == 'breadcrumb'){		// パンくずリスト
 												$moduleContent = '';
 												
 												if (empty($launchWidgetTag)){			// 遅延実行の場合はここでパンくずリストを作成しないで遅延実行時に行う
@@ -4937,59 +4940,18 @@ class PageManager extends _Core
 												$widgetContent = $moduleContent;
 											} else {
 												if (strcmp($position, 'main') == 0){// メイン部のとき
-													// ウィジェットの内枠(コンテンツ外枠)を設定
-													// ウィジェットの内枠はレンダーで設定
-													//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 													$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 												} else {		// その他の位置のとき
-													// ウィジェットの内枠(コンテンツ外枠)を設定
-													// ウィジェットの内枠はレンダーで設定
-													//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-											
 													$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 												}
 											}
 										}
-/*										if (strcmp($position, 'main') == 0){// メイン部のとき
-											// ウィジェットの内枠(コンテンツ外枠)を設定
-											// ウィジェットの内枠はレンダーで設定
-											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-//										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
-										} else if (strcasecmp($position, 'user3') == 0 ||				// ナビゲーションメニュー位置の場合
-												strcasecmp($position, 'position-1') == 0 ||				// Joomla!v2.5テンプレート対応
-												strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
-
-											$moduleContent = '';
-											if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
-												if ($widgetType == 'menu') $moduleContent = $render->getNavMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-									
-												// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
-												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-											} else {
-												$moduleContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-											}
-											$widgetContent = $moduleContent;
-											
-											// ウィジェットの内枠(コンテンツ外枠)を設定。メニュー処理後に付加。
-											// ウィジェットの内枠はレンダーで設定
-											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-										} else {		// その他の位置のとき
-											// ウィジェットの内枠(コンテンツ外枠)を設定
-											// ウィジェットの内枠はレンダーで設定
-											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-											
-											$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-										}*/
 										$isRendered = true;		// Joomla!の描画処理を行ったかどうか
 									}
 								}
 								if (!$isRendered){		// Joomla!の描画処理を行っていない場合
 									// ウィジェット共通のコンテンツ処理
 									$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
-									
-									// ウィジェットの内枠(コンテンツ外枠)を設定
-								//	$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 								}
 							}
 							if (!$ret) return '';		// 処理中断のときは終了

@@ -41,7 +41,6 @@ class JRender extends JParameter
 	private $_hookPoints = array();			// フック管理用
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
-//	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
 
 	/**
 	 * コンストラクタ
@@ -83,42 +82,12 @@ class JRender extends JParameter
 		
 		$contents = '';
 		$params   = new JParameter();
-		if (isset($paramsOther['moduleclass_sfx'])){
-			$params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
-			
-			// メニュータイプの場合はメニュー表示用データに変換
-			if ($paramsOther['moduleclass_sfx'] == 'art-vmenu'){		// 縦型メニュー
-				if ($templateVer == 2){// Joomla!v2.5テンプレート
-					$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
-					return $content;
-				} else {
-				//	$params->set('startLevel',		0);
-					$params->set('startLevel',		1);
-					$params->set('endLevel',		0);
-					$params->set('showAllChildren',	1);		// サブメニュー表示
-					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_mainmenu/default.php';		// メニュー出力用スクリプト
-					
-					if (file_exists($path)){
-						// ウィジェットが出力したメニューコンテンツを設定
-						$gEnvManager->setJoomlaMenuContent($content);
-
-						ob_clean();
-						require_once($gEnvManager->getJoomlaRootPath() . '/render/mainmenuHelper.php');		// デフォルトの出力方法
-						require($path);		// 毎回実行する
-						$content = ob_get_contents();
-						ob_clean();
-					}
-				}
-			}
-		}
+		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
 
 		// 前後コンテンツ追加
 		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
 		// 「もっと読む」ボタンを追加
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
-		
-		// ウィジェットの内枠(コンテンツ外枠)を設定
-//		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 指定された表示スタイルでウィジェットを出力
 		$chromeMethod = 'modChrome_' . $style;
@@ -167,9 +136,6 @@ class JRender extends JParameter
 		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
 		// 「もっと読む」ボタンを追加
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
-		
-		// ウィジェットの内枠(コンテンツ外枠)を設定
-//		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 設定を作成
 		// 「$this->item」はテンプレート内では「$this->article」として認識される
@@ -453,7 +419,7 @@ debug($contentItem->published);*/
 	/**
 	 * Joomlaナビゲーションメニュー用コンテンツ取得
 	 * 
-	 * @param string $style			表示スタイル
+	 * @param string $style			表示スタイル(_navmenu(ナビゲーションメニュー型)に固定)
 	 * @param string $content		ウィジェット出力
 	 * @param string $title			タイトル(空のときはタイトル非表示)
 	 * @param array $attribs		その他タグ属性
@@ -466,14 +432,12 @@ debug($contentItem->published);*/
 	{
 		$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
 
-		// ウィジェットの内枠(コンテンツ外枠)を設定
-//		if (!empty($content)) $content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		return $content;
 	}
 	/**
 	 * Joomlaメニュー用コンテンツ取得
 	 * 
-	 * @param string $style			表示スタイル(_navmenu=ウィジェットタイプがナビゲーションメニュー,drstyle=Themler縦型メニュー)
+	 * @param string $style			メニューを配置するブロックのスタイル(_navmenu=ナビゲーションメニュー,drstyle=Themlerメニュー,bootblock=Bootstrapメニュー)
 	 * @param string $content		ウィジェット出力
 	 * @param string $title			タイトル(空のときはタイトル非表示)
 	 * @param array $attribs		その他タグ属性
@@ -485,6 +449,9 @@ debug($contentItem->published);*/
 	public function getMenuContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
 	{
 		global $gEnvManager;
+		
+		// テンプレート側で変更されてしまうので値を退避
+		$saveTitle = $title;
 
 //		// 前後コンテンツ追加
 //		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
@@ -498,7 +465,7 @@ debug($contentItem->published);*/
 		$params->set('endLevel',		0);
 		$params->set('showAllChildren',	1);		// サブメニュー表示
 		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
-
+			
 		// 必要なスクリプトを読み込む
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		switch ($templateVer){
@@ -511,8 +478,13 @@ debug($contentItem->published);*/
 				$helper = $gEnvManager->getJoomlaRootPath() . '/render/menuHelper.php';
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_menu/default.php';		// メニュー出力用スクリプト
 				
-				if ($style == 'drstyle'){		// Themlerテンプレート縦型メニューの場合はパラメータ追加
-					$params->set('moduleclass_sfx',		'vmenu');
+				if ($style == 'artstyle'){		// Artisteerテンプレートの場合
+					if ($paramsOther['moduleclass_sfx'] != 'art-vmenu'){	// 縦型メニューでない場合はデフォルトのモジュール出力を行う
+						$helper = '';
+						$menuPath = '';
+					}
+				} else if ($style == 'drstyle'){		// Themlerテンプレートの場合
+					if ($paramsOther['moduleclass_sfx'] == 'art-vmenu') $params->set('moduleclass_sfx',		'vmenu');	// 縦型メニューの場合はパラメータ追加
 				}
 				break;
 			default:
@@ -520,9 +492,10 @@ debug($contentItem->published);*/
 				$menuPath = '';
 		}
 
-		// メニュー出力を取得
+		// メニュー出力用スクリプトを実行
 		$contents = '';
 		if (is_readable($menuPath)){
+			// ### メニューを生成 ###
 			// ウィジェットが出力したメニューコンテンツを設定
 			$gEnvManager->setJoomlaMenuContent($content);
 
@@ -542,11 +515,38 @@ debug($contentItem->published);*/
 				$templateVer == 10){		// Bootstrapテンプレート
 				require_once($gEnvManager->getJoomlaRootPath() . '/class/moduleHelper.php');
 			}
-			//require_once($helper);		// デフォルトの出力方法
+
 			require($helper);		// デフォルトの出力方法
 			require($menuPath);		// 毎回実行する
 			$contents = ob_get_contents();
 			ob_clean();
+
+			// ### 生成したメニューをウィジェットスタイルで囲む(タイトル付加等) ###
+			$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/modules.php';		// テンプレート独自の変換処理
+			if (is_readable($path)) require_once($path);
+		
+			$chromeMethod = 'modChrome_' . $style;
+			if (function_exists($chromeMethod))
+			{
+				$module = new stdClass;
+				$module->content = $contents;
+				if (!empty($title)){
+					$module->showtitle = 1;
+					//$module->title = convertToHtmlEntity($title);
+					$module->title = $saveTitle;	// mod_menu/default_component.phpファイルの読み込みで$titleの値が変更されてしまうので退避値を使用
+				}
+			
+				// Joomla!2.5テンプレート用追加設定(2012/4/4 追加)
+				$GLOBALS['artx_settings'] = array('block' => array('has_header' => true));
+			
+				ob_clean();
+				$chromeMethod($module, $params, $attribs);
+				$contents = ob_get_contents();
+				ob_clean();
+			}
+		} else {
+			// メニュー出力用スクリプトがない場合はモジュール出力を取得
+			$contents = $this->getModuleContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
 		}
 		return $contents;
 	}

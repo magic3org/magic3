@@ -365,7 +365,8 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				$attr = '';
 				// Joomla用メニューデータ(デフォルト値)
 				$menuItem = new stdClass;		// Joomla用メニューデータ
-				$menuItem->type = 'alias';		// 内部リンク。外部リンク(url)
+				//$menuItem->type = 'alias';		// 内部リンク。外部リンク(url)
+				$menuItem->type = 'component';		// 項目タイプ(2021/11/30変更)
 				$menuItem->id = $index + 1;
 				$menuItem->level = $level + 1;
 				$menuItem->active = false;
