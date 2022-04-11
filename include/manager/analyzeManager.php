@@ -629,6 +629,7 @@ class AnalyzeManager extends _Core
 			'amazonbot'					=> 'amazon.png',
 			'lighthouse'				=> 'lighthouse.png',
 			'zoominfobot'				=> 'zoominfo.png',
+			'dataforseobot'				=> 'dataforseo.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
