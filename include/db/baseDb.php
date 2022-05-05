@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -118,7 +118,6 @@ class BaseDb extends _Core
 					self::$_con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 					
 					// 文字化け防止SQL実行(MySQL4.1以上)
-					//if (self::$_dbVersion >= '4.1') self::$_con->exec('SET NAMES utf8');
 					if (!$isCharset) self::$_con->exec('SET NAMES utf8');// クライアントの文字セットを設定
 				}
 			} catch (PDOException $e) {
@@ -1048,7 +1047,7 @@ class BaseDb extends _Core
 		}
 		// バックスラッシュ文字を処理するかどうか
 		$stripcSlash = false;
-		if (version_compare(self::getDbVersion(), '9.1.0') >= 0){// PostgreSQL 9.1以上の場合
+		if (self::$_dbType == M3_DB_TYPE_PGSQL && version_compare(self::getDbVersion(), '9.1.0') >= 0){// PostgreSQL 9.1以上の場合
 			$ret = $this->selectRecord('SELECT setting FROM pg_settings where name=\'standard_conforming_strings\'', $queryParams, $row);
 			if ($ret && $row['setting'] == 'on') $stripcSlash = true;
 		}
