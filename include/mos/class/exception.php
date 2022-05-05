@@ -29,13 +29,13 @@ class JException extends Exception
 	 * @var    string  Error code.
 	 * @since  11.1
 	 */
-	protected $code = null;
+	//protected $code = null;
 
 	/**
 	 * @var    string  Error message.
 	 * @since  11.1
 	 */
-	protected $message = null;
+	//protected $message = null;
 
 	/**
 	 * Additional info about the error relevant to the developer,
@@ -52,7 +52,7 @@ class JException extends Exception
 	 * @var    string
 	 * @since  11.1
 	 */
-	protected $file = null;
+	//protected $file = null;
 
 	/**
 	 * Line number the error occurred in [Available if backtrace is enabled]
@@ -60,7 +60,7 @@ class JException extends Exception
 	 * @var    int
 	 * @since  11.1
 	 */
-	protected $line = 0;
+	//protected $line = 0;
 
 	/**
 	 * Name of the method the error occurred in [Available if backtrace is enabled]
