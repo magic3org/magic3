@@ -198,7 +198,8 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 									
 										$errMsg .= $name . ' ' . $value;
 										if ($name != 'character_set_filesystem'){
-											if ($value != 'utf8'){
+											//if ($value != 'utf8'){
+											if (strncasecmp($value, 'utf8', strlen('utf8')) != 0){
 												$errMsg .= '(NG)';
 												$isErr = true;
 											}
