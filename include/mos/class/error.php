@@ -128,24 +128,6 @@ abstract class JError
 	}
 
 	/**
-	 * Method to add non-JError thrown JExceptions to the JError stack for debugging purposes
-	 *
-	 * @param   JException  &$e  Add an exception to the stack.
-	 *
-	 * @return  void
-	 *
-	 * @since       11.1
-	 * @deprecated  12.1
-	 */
-	public static function addToStack(JException &$e)
-	{
-		// Deprecation warning.
-//		JLog::add('JError::addToStack() is deprecated.', JLog::WARNING, 'deprecated');
-
-		JError::$stack[] = &$e;
-	}
-
-	/**
 	 * Create a new JException object given the passed arguments
 	 *
 	 * @param   integer  $level      The error level - use any of PHP's own error levels for
