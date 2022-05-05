@@ -8,13 +8,13 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2018 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($this->gEnv->getJoomlaRootPath() . '/class/error.php');
-require_once($this->gEnv->getJoomlaRootPath() . '/class/exception.php');
+//require_once($this->gEnv->getJoomlaRootPath() . '/class/exception.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/object.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/registry.php');
 
