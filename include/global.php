@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    Release 3.x
  * @link       http://magic3.org
@@ -58,7 +58,7 @@ define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'3.11.6');		// システムのバージョン
+define('M3_SYSTEM_VERSION',			'3.12.0');		// システムのバージョン
 define('M3_SYSTEM_RELEASE_DATE',	'2021/11/30');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
