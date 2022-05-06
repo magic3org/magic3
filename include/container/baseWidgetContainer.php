@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -35,6 +35,7 @@ class BaseWidgetContainer extends _Core
 	protected $guideMessage		= array();		// ガイダンス
 	protected $successMessage	= array();		// 成功メッセージ
 	protected $optionUrlParam = array();		// URLに付加する値
+	protected $loadLocaleText;					// ローカライズ用データを読み込んだかどうか
 	protected $localeText = array();			// ローカライズ用テキストの定義
 	protected $inputFieldInfo = array();		// 入力フィールド情報
 	protected $configMenubarBreadcrumbTitleDef;			// 設定画面用パンくずリストのタイトル定義
@@ -2617,18 +2618,14 @@ class BaseWidgetContainer extends _Core
 	 */
 	function _($id)
 	{
-		static $init = false;
-		
-		$widgetId = $this->gEnv->getCurrentWidgetId();
-
-		// 初期化されていない場合はロケールデータをロード
-		if (!$init){
-			$ret = $this->gInstance->getMessageManager()->loadLocaleText($widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
+		// 初期化されていない場合はローカライズ用データをロード
+		if (!$this->$loadLocaleText){					// ローカライズ用データを読み込んだかどうか
+			$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
 			
-			$init = true;		// ロケールデータロード完了
+			$this->$loadLocaleText = true;	// ローカライズ用データを読み込み完了
 		}
 		// テキストを取得
-		$destStr = $this->gInstance->getMessageManager()->getLocaleText($widgetId, $id);
+		$destStr = $this->gInstance->getMessageManager()->getLocaleText($this->_widgetId, $id);
 		return $destStr;
 	}
 	/**
@@ -2639,27 +2636,24 @@ class BaseWidgetContainer extends _Core
 	 */
 	function _s($id)
 	{
-		static $init = false;
-		
-		$widgetId = $this->gEnv->getCurrentWidgetId();
 		$defaultLocale = $this->gEnv->getDefaultLocale();
 		$currentLocale = $this->gEnv->getCurrentLocale();
 			
-		// 初期化されていない場合はロケールデータをロード
-		if (!$init){
+		// 初期化されていない場合はローカライズ用データをロード
+		if (!$this->$loadLocaleText){					// ローカライズ用データを読み込んだかどうか
 			if ($defaultLocale == $currentLocale){		// カレントの言語がデフォルト言語と同じとき
-				$ret = $this->gInstance->getMessageManager()->loadLocaleText($widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
+				$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
 			} else {
-				$ret = $this->gInstance->getMessageManager()->loadLocaleText($widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/, self::LOCAL_TYPE_SYSTEM);
+				$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/, self::LOCAL_TYPE_SYSTEM);
 			}
 			
-			$init = true;		// ロケールデータロード完了
+			$this->$loadLocaleText = true;	// ローカライズ用データを読み込み完了
 		}
 		// テキストを取得
 		if ($defaultLocale == $currentLocale){		// カレントの言語がデフォルト言語と同じとき
-			$destStr = $this->gInstance->getMessageManager()->getLocaleText($widgetId, $id);
+			$destStr = $this->gInstance->getMessageManager()->getLocaleText($this->_widgetId, $id);
 		} else {
-			$destStr = $this->gInstance->getMessageManager()->getLocaleText($widgetId, $id, self::LOCAL_TYPE_SYSTEM);
+			$destStr = $this->gInstance->getMessageManager()->getLocaleText($this->_widgetId, $id, self::LOCAL_TYPE_SYSTEM);
 		}
 		return $destStr;
 	}
