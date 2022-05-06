@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,6 +28,7 @@ class MessageManager extends _Core
 	private $langStringLoaded;		// 初期データを読み込んだかどうか
 	private $loadedLang;			// データを読み込んだ言語ID
 	private $loadedLocaleText = array();		// 各言語対応テキスト
+	private $loadedLocaleFile = array();		// 読み込んだローカライズ用ファイル
 	private $loadedGlobalLocaleText;		// 各言語対応テキスト(システム用)
 	const MSG_SITE_IN_MAINTENANCE = 'msg_site_in_maintenance';			// サイトメンテナンス中メッセージ
 	const MSG_ACCESS_DENY = 'msg_access_deny';							// アクセス不可メッセージ
@@ -244,8 +245,13 @@ class MessageManager extends _Core
 		if (!empty($filenameOption)) $filename = $filenameOption . '.' . $filename;
 		$file = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/' . M3_DIR_NAME_INCLUDE . '/' . M3_DIR_NAME_LOCALE . '/' . $filename;
 		if (is_readable($file)){
-			$input = new CachedFileReader($file);
-			$this->loadedLocaleText[$type] = new gettext_reader($input);
+			if (!in_array($file, $this->loadedLocaleFile)){	// 1度だけ読み込む
+				$input = new CachedFileReader($file);
+				$this->loadedLocaleText[$type] = new gettext_reader($input);
+			
+				// 読み込んだローカライズ用ファイルを登録
+				$this->loadedLocaleFile[] = $file;
+			}
 			return true;
 		} else {
 			$this->loadedLocaleText[$type] = NULL;
