@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2022 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -253,7 +253,8 @@ class ScriptLibInfo
 	
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
-	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
+	//const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
+	const MOMENT_FILENAME			= 'moment-with-locales-2.29.3.js';			// Moment.js
 	const JSCALENDAR_FILENAME		= 'jscalendar-1.0/calendar.js';				// jscalendar
 	const JSCALENDAR_LANG_FILENAME	= 'jscalendar-1.0/lang/calendar-ja.js';		// jscalendar言語ファイル
 	const JSCALENDAR_SETUP_FILENAME	= 'jscalendar-1.0/calendar-setup.js';		// jscalendarセットアップファイル
