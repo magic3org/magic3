@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,7 +17,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class RequestManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $tmpCookie;		// クッキー送信前のクッキー格納データ
 	private $sessionNoUpdate;		// セッションの更新を停止するかどうか(参照は可能)
 	private $sessionOpenEventCallbacks;		// セッション開始イベントコールバック関数
@@ -32,7 +32,7 @@ class RequestManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		
 		// その他パラメータ初期化
 		$this->tmpCookie = array();		// クッキー送信前のクッキー格納データ

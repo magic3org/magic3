@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: cacheManager.php 3456 2010-08-06 04:55:15Z fishbone $
  * @link       http://www.magic3.org
@@ -17,21 +17,22 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class CacheManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $usePageCache;				// ページキャッシュを使用するかどうか
 	private $useWidgetCache;				// ウィジェットキャッシュを使用するかどうか
 	private $isCacheOff;					// 強制キャッシュオフフラグ
-	
+	private $safeParam;
+
 	/**
 	 * コンストラクタ
 	 */
 	function __construct()
 	{
 		global $gInstanceManager;
-		
+
 		// システムDBオブジェクト取得
-		$this->db = $gInstanceManager->getSytemDbObject();
-		
+		//$this->systemDb = $gInstanceManager->getSytemDbObject();
+
 		// キャッシュ可能な画面の条件
 		// ・単純なURLで表現でき、GETで取得可能な画面
 		// ・task付きのURLでは、トップ画面(taskなし)のみ表示可能とする
@@ -82,15 +83,15 @@ class CacheManager extends _Core
 	 * キャッシュ機能を初期化
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @return 
+	 * @return
 	 */
 	function initCache($request)
 	{
 		global $gEnvManager;
-		
+
 		// 強制キャッシュオフのときは終了
 		if ($this->isCacheOff) return;
-				
+
 		$this->usePageCache = false;				// ページキャッシュを使用するかどうか
 		$this->useWidgetCache = false;				// ウィジェットキャッシュを使用するかどうか
 
@@ -98,7 +99,7 @@ class CacheManager extends _Core
 		if ($this->canUseCache($request)){		// キャッシュ機能が使用可能
 			// ログインをチェック
 			if (!$gEnvManager->isCurrentUserLogined()) $this->usePageCache = true;
-			
+
 			// ウィジェットキャッシュ機能をオンにする
 			$this->useWidgetCache = true;
 		}
@@ -113,18 +114,18 @@ class CacheManager extends _Core
 	{
 		global $gEnvManager;
 		global $gSystemManager;
-		
+
 		$cacheData = '';
 
 		// ページキャッシュ機能が使用できるかどうか
 		if (!$this->usePageCache) return $cacheData;
-		
+
 		$pageId = $gEnvManager->getCurrentPageId();
 		$pageSubId = $gEnvManager->getCurrentPageSubId();
-		
+
 		// キャッシュデータを取得
 		$url = $gEnvManager->getCurrentRequestUri();
-		$ret = $this->db->getCacheData('', $url, $row);
+		$ret = $this->systemDb->getCacheData('', $url, $row);
 		if ($ret){
 			// ページIDをチェック。ページIDがマッチしないときは、キャッシュを削除
 			if ($row['ca_page_id'] == $pageId && $row['ca_page_sub_id'] == $pageSubId){
@@ -154,7 +155,7 @@ class CacheManager extends _Core
 
 		// ページキャッシュ機能が使用できるかどうか
 		if (!$this->usePageCache) return false;
-		
+
 		// URLのチェック
 		$url = $gEnvManager->getCurrentRequestUri();
 		if (!$this->isProperCacheUrl($request)) return false;
@@ -166,18 +167,18 @@ class CacheManager extends _Core
 				if (!in_array($keys[$i], $this->safeParam)) return false;
 			}
 		}*/
-		
+
 		// キャッシュ可能なページかチェック
 		$pageId = $gEnvManager->getCurrentPageId();
 		$pageSubId = $gEnvManager->getCurrentPageSubId();
-		$ret = $this->db->getPageDefOnPage($pageId, $pageSubId, $rows);
+		$ret = $this->systemDb->getPageDefOnPage($pageId, $pageSubId, $rows);
 		$defCount = count($rows);
 		for ($i = 0; $i < $defCount; $i++){
 			if ($rows[$i]['wd_launch_index'] > 0) return false;		// 遅延実行ウィジェットはキャッシュできない
 			if ($rows[$i]['wd_cache_type'] <= 0) return false;		// キャッシュ不可の場合は終了
 		}
-		
-		$ret = $this->db->updateCacheData('', $url, $pageId, $pageSubId, $cacheData);
+
+		$ret = $this->systemDb->updateCacheData('', $url, $pageId, $pageSubId, $cacheData);
 		return $ret;
 	}
 	/**
@@ -194,7 +195,7 @@ class CacheManager extends _Core
 	{
 		global $gEnvManager;
 		global $gSystemManager;
-		
+
 		$cacheData = '';
 
 		// ウィジェットキャッシュ機能が使用できるかどうか
@@ -203,19 +204,19 @@ class CacheManager extends _Core
 		$url = $gEnvManager->getCurrentRequestUri();
 		$pageId = $gEnvManager->getCurrentPageId();
 		$pageSubId = $gEnvManager->getCurrentPageSubId();
-		
+
 		$ret = $this->canUseWidgetCache($request, $infoRow);
 		if ($ret){		// キャッシュ使用可能なとき
 			$widgetId = $infoRow['wd_id'];
 			$configId = $infoRow['pd_config_id'];
 			$lifetime = $infoRow['wd_cache_lifetime'];// キャッシュ保存時間(単位分)
-				
+
 			switch ($infoRow['wd_view_control_type']){
 				case -1:			// 表示が固定のとき
 					$configId = 0;		// インスタンス定義を使用しないときはパラメータID=0のパラメータを使用
 				case 1:			// ウィジェットパラメータで表示制御されるとき
 					// ウィジェットパラメータを取得
-					$ret = $this->db->getWidgetCache($widgetId, $configId, $row);
+					$ret = $this->systemDb->getWidgetCache($widgetId, $configId, $row);
 					if ($ret){
 						if ($row['wp_cache_update_dt'] != $gEnvManager->getInitValueOfTimestamp()){		// キャッシュデータがあるとき
 							// キャッシュの更新時間が0のときはキャッシュデータを更新しない
@@ -236,7 +237,7 @@ class CacheManager extends _Core
 					}
 					break;
 				case 2:			// URLパラメータで表示制御されるとき
-					$ret = $this->db->getCacheData($widgetId, $url, $row);
+					$ret = $this->systemDb->getCacheData($widgetId, $url, $row);
 					if ($ret){
 						// ページIDをチェック。ページIDがマッチしないときは、キャッシュを削除
 						if ($row['ca_page_id'] == $pageId && $row['ca_page_sub_id'] == $pageSubId){
@@ -277,13 +278,13 @@ class CacheManager extends _Core
 
 		// ウィジェットキャッシュ機能が使用できるかどうか
 		if (!$this->useWidgetCache) return false;
-		
+
 		$ret = $this->canUseWidgetCache($request, $infoRow);
 		if ($ret){		// キャッシュ使用可能なとき
 			$widgetId = $infoRow['wd_id'];
 			$configId = $infoRow['pd_config_id'];
 			$lifetime = $infoRow['wd_cache_lifetime'];// キャッシュ保存時間(単位分)
-				
+
 			switch ($infoRow['wd_view_control_type']){
 				case 0:				// 表示が可変のとき
 				default:
@@ -293,16 +294,16 @@ class CacheManager extends _Core
 					$configId = 0;		// インスタンス定義を使用しないときはパラメータID=0のパラメータを使用
 				case 1:			// ウィジェットパラメータで表示制御されるとき
 					// ウィジェットキャッシュを更新
-					$ret = $this->db->updateWidgetCache($widgetId, $configId, $cacheData, $metaTitle, $metaDesc, $metaKeyword);
+					$ret = $this->systemDb->updateWidgetCache($widgetId, $configId, $cacheData, $metaTitle, $metaDesc, $metaKeyword);
 					break;
 				case 2:			// URLパラメータで表示制御されるとき
 					// URLのチェック
 					$url = $gEnvManager->getCurrentRequestUri();
 					if (!$this->isProperCacheUrl($request)) return false;
-					
+
 					$pageId = $gEnvManager->getCurrentPageId();
 					$pageSubId = $gEnvManager->getCurrentPageSubId();
-					$ret = $this->db->updateCacheData($widgetId, $url, $pageId, $pageSubId, $cacheData, $metaTitle, $metaDesc, $metaKeyword);
+					$ret = $this->systemDb->updateCacheData($widgetId, $url, $pageId, $pageSubId, $cacheData, $metaTitle, $metaDesc, $metaKeyword);
 					break;
 			}
 		}
@@ -318,20 +319,20 @@ class CacheManager extends _Core
 	{
 		global $gEnvManager;
 		global $gSystemManager;
-		
+
 		// キャッシュ処理を行わないときは終了
 		if (!$gSystemManager->usePageCache()) return false;
-		
+
 		// システム運用者はキャッシュできない
 		if ($gEnvManager->isSystemManageUser()) return false;
-		
+
 		// 管理画面はキャッシュ機能は使用できない
 		if ($gEnvManager->isAdminDirAccess()) return false;
-		
+
 		// GET以外はキャッシュしない
 		$method = strtoupper($request->trimServerValueOf('REQUEST_METHOD'));	// アクセスメソッド
 		if ($method != 'GET') return false;
-		
+
 		return true;
 	}
 	/**
@@ -344,10 +345,10 @@ class CacheManager extends _Core
 	function canUseWidgetCache($request, $infoRow)
 	{
 		global $gEnvManager;
-		
+
 		// 遅延実行ウィジェットはキャッシュできない
 		if ($infoRow['wd_launch_index'] > 0) return false;
-		
+
 		// キャッシュタイプをチェック
 		$retStatus = false;
 		switch ($infoRow['wd_cache_type']){
@@ -374,9 +375,9 @@ class CacheManager extends _Core
 	function isProperCacheUrl($request)
 	{
 		global $gEnvManager;
-		
+
 		$url = $gEnvManager->getCurrentRequestUri();
-		
+
 		$queryArray = $request->getQueryArray();
 		if (count($queryArray) > 0){
 			$keys = array_keys($queryArray);
@@ -396,7 +397,7 @@ class CacheManager extends _Core
 	 */
 	function clearPageCache($pageId, $pageSubId)
 	{
-		$ret = $this->db->deletePageCacheData($pageId, $pageSubId);
+		$ret = $this->systemDb->deletePageCacheData($pageId, $pageSubId);
 		return $ret;
 	}
 	/**
@@ -407,10 +408,10 @@ class CacheManager extends _Core
 	function clearAllCache()
 	{
 		// ページキャッシュを削除
-		$ret = $this->db->deletePageCacheData('', '');
-		
+		$ret = $this->systemDb->deletePageCacheData('', '');
+
 		// ウィジェットキャッシュを削除
-		$ret = $this->db->deleteWidgetCache();
+		$ret = $this->systemDb->deleteWidgetCache();
 		return true;
 	}
 	/**
@@ -422,7 +423,7 @@ class CacheManager extends _Core
 	function clearCacheByWidgetType($widgetType)
 	{
 		// ウィジェットタイプに該当するウィジェットIDを取得
-		$ret = $this->db->getWidgetListByType($widgetType, $rows);
+		$ret = $this->systemDb->getWidgetListByType($widgetType, $rows);
 		if ($ret){
 			// ウィジェットごとにキャッシュを削除
 			for ($i = 0; $i < count($rows); $i++){
@@ -447,7 +448,7 @@ class CacheManager extends _Core
 		} else {
 			// ##### ページキャッシュを削除 #####
 			// ウィジェットを指定してキャッシュを削除
-			$ret = $this->db->getCacheDataByWidgetId($widgetId, $rows);
+			$ret = $this->systemDb->getCacheDataByWidgetId($widgetId, $rows);
 			if ($ret){
 				// URLパラメータがマッチしたレコードを削除
 				$serialArray = array();
@@ -469,11 +470,11 @@ class CacheManager extends _Core
 						}
 					}
 				//}
-				$ret = $this->db->deletePageCacheDataBySerial($serialArray);
+				$ret = $this->systemDb->deletePageCacheDataBySerial($serialArray);
 			}
-		
+
 			// ページキャッシュを削除
-			$ret = $this->db->getCacheDataByWidgetId('', $rows);
+			$ret = $this->systemDb->getCacheDataByWidgetId('', $rows);
 			if ($ret){
 				// URLパラメータがマッチしたレコードを削除
 				$serialArray = array();
@@ -495,7 +496,7 @@ class CacheManager extends _Core
 						}
 					}
 				//}
-				$ret = $this->db->deletePageCacheDataBySerial($serialArray);
+				$ret = $this->systemDb->deletePageCacheDataBySerial($serialArray);
 			}
 		}
 		return $ret;
@@ -511,19 +512,19 @@ class CacheManager extends _Core
 	{
 		// ##### ページキャッシュを削除 #####
 		// ページID,ページサブIDを取得
-		$ret = $this->db->getPageDefByWidgetConfigId($widgetId, $configId, $rows);
+		$ret = $this->systemDb->getPageDefByWidgetConfigId($widgetId, $configId, $rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
 				$pageId = $rows[$i]['pd_id'];
 				$pageSubId = $rows[$i]['pd_sub_id'];
-				
+
 				// キャッシュをクリア
 				$this->clearPageCache($pageId, $pageSubId);
 			}
 		}
-		
+
 		// ##### ウィジェットキャッシュを削除 #####
-		$ret = $this->db->deleteWidgetCache($widgetId, $configId);
+		$ret = $this->systemDb->deleteWidgetCache($widgetId, $configId);
 		return $ret;
 	}
 }

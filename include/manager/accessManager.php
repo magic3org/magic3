@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,7 +17,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class AccessManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $_clientIp;					// クライアントのIPアドレス
 	private $_clientId;					// クライアントID(クッキー用)
 	private $_oldSessionId;				// 古いセッションID
@@ -30,7 +30,7 @@ class AccessManager extends _Core
 	const TMP_PASSWORD_AVAILABLE_HOURS = 24;						// 仮パスワード有効時間
 	const CF_AUTO_LOGIN = 'auto_login';			// 自動ログイン機能を使用するかどうか
 	const AUTO_LOGIN_EXPIRE_DAYS = 30;			// 自動ログインの有効期間
-	
+
 	/**
 	 * コンストラクタ
 	 */
@@ -38,9 +38,9 @@ class AccessManager extends _Core
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
+
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * アクセスログ初期化処理(直接呼出し用)
@@ -80,17 +80,17 @@ class AccessManager extends _Core
 	{
 		// 初期化
 		$retValue = false;
-		
+
 		// アカウントが空のときはアクセス不可
 		if (empty($account)) return false;
-		
+
 		// ユーザ情報取得
-		if ($this->db->getLoginUserRecord($account, $row)){
+		if ($this->systemDb->getLoginUserRecord($account, $row)){
 			// ******** ユーザのログインチェック             ********
 			// ******** ログインのチェックを行うのはここだけ ********
 			$checkLogin = false;		// ログインが通ったかどうか
 			$pass  = $row['lu_password'];
-			
+
 			if ($pass == $password){
 				$checkLogin = true;			// パスワード一致
 			} else {
@@ -99,17 +99,17 @@ class AccessManager extends _Core
 				$tmpPassDt = $row['lu_tmp_pwd_dt'];			// 仮パスワード変更日時
 				if (!empty($tmpPass) && $tmpPass == $password && $tmpPassDt != $this->gEnv->getInitValueOfTimestamp() && 
 					strtotime('-' . self::TMP_PASSWORD_AVAILABLE_HOURS . ' hours') <= strtotime($tmpPassDt)){	// 仮パスワード有効のとき
-					
+
 					// 仮パスワード初期化
 					$fieldArray = array();
 					$fieldArray['lu_tmp_password'] = '';				// 仮パスワード
 					$fieldArray['lu_tmp_pwd_dt'] = $this->gEnv->getInitValueOfTimestamp();			// 仮パスワード変更日時
-					$ret = $this->db->updateLoginUserByField($row['lu_id'], $fieldArray, $newSerial);
-					
+					$ret = $this->systemDb->updateLoginUserByField($row['lu_id'], $fieldArray, $newSerial);
+
 					$checkLogin = true;			// パスワード一致
 				}
 			}
-			
+
 			if ($checkLogin){			// パスワード一致のとき
 				// ユーザ情報を読み込み
 				$retValue = $this->_loadUserInfo($row, $checkUser);
@@ -124,9 +124,9 @@ class AccessManager extends _Core
 			// ユーザエラーログを残す
 			$this->gOpeLog->writeUserError(__METHOD__, 'ユーザがログインに失敗しました。アカウント: ' . $account, 2310,
 											'account=' . $account . ', passward=' . $password . ', IP=' . $this->getClientIp(), 'account=' . $account/*検索補助データ*/);
-			
+
 			// 入力アカウントを保存
-			//$this->db->addErrorLoginLog($account, $accessIp, $this->_accessLogSerialNo);
+			//$this->systemDb->addErrorLoginLog($account, $accessIp, $this->_accessLogSerialNo);
 		}
 		return $retValue;
 	}
@@ -141,26 +141,26 @@ class AccessManager extends _Core
 	{
 		global $gInstanceManager;
 		global $gRequestManager;
-		
+
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$accessIp = $gRequestManager->trimServerValueOf('REMOTE_ADDR');		// アクセスIP
-		
+
 		// ユーザチェックが必要な場合は承認済みユーザのみ許可する
 		if (($checkUser && $row['lu_user_type'] >= 0 && $row['lu_enable_login'] &&
 			$this->_isActive($row['lu_active_start_dt'], $row['lu_active_end_dt'], $now)) || // 承認済みユーザ、ログイン可能
 			!$checkUser){			// ユーザのアクセス権をチェックしない場合
-			
+
 			// ログインした場合はセッションIDを変更する
 			$this->setOldSessionId(session_id());		// 古いセッションIDを保存
 			session_regenerate_id(true);
-			
+
 			// 新規のセッションにセキュリティコードを設定
 			$gRequestManager->setSessionValue(M3_SESSION_CODE, $this->getSessionSecurityCode());
 			$gRequestManager->setSessionValue(M3_SESSION_CLIENT_IP, $this->getClientIp());
-			
+
 			// Nodejs連携用データ
 			$gRequestManager->setSessionValue(M3_SESSION_USER_ID, $row['lu_id']);		// ユーザID
-	
+
 			// ユーザ情報オブジェクトを作成
 			$userInfo = new UserInfo();
 			$userInfo->userId	= $row['lu_id'];		// ユーザID
@@ -170,7 +170,7 @@ class AccessManager extends _Core
 			$userInfo->userType	= $row['lu_user_type'];	// ユーザタイプ
 			$userInfo->userTypeOption = $row['lu_user_type_option'];			// ユーザタイプオプション
 			$userInfo->_recordSerial = $row['lu_serial'];	// レコードシリアル番号
-		
+
 			// ユーザオプションタイプを取得
 			$userInfo->userOptType = '';			// ユーザオプションタイプ(page_manager等)
 			if (!empty($userInfo->userTypeOption)){
@@ -188,20 +188,20 @@ class AccessManager extends _Core
 					}
 				}*/
 			}
-			
+
 			// アクセス可能ウィジェット(システム運用者の場合)
 			$userInfo->adminWidget = array();
 			if ($userInfo->userType == UserInfo::USER_TYPE_MANAGER){	// システム運用可能ユーザのとき
 				$adminWidget = trim($row['lu_admin_widget']);
 				if (!empty($adminWidget)) $userInfo->adminWidget = explode(',', $adminWidget);
 			}
-		
+
 			// インスタンスマネージャーとセッションに保存
 			$gInstanceManager->setUserInfo($userInfo);
 			$gRequestManager->setSessionValueWithSerialize(M3_SESSION_USER_INFO, $userInfo);
-		
+
 			// ログインのログを残す
-			$this->db->updateLoginLog($userInfo->userId, $this->_accessLogSerialNo);
+			$this->systemDb->updateLoginLog($userInfo->userId, $this->_accessLogSerialNo);
 			return true;
 		} else {
 			return false;
@@ -216,12 +216,12 @@ class AccessManager extends _Core
 	{
 		global $gSystemManager;
 		global $gRequestManager;
-		
+
 		// 自動ログイン機能を使用するかどうか
 		$value = $gSystemManager->getSystemConfig(self::CF_AUTO_LOGIN);
 		$this->_useAutoLogin = isset($value) ? $value : '0';
 		if (!$this->_useAutoLogin) return false;
-		
+
 		// ログイン中でない場合のみ自動ログイン処理を行う
 		$userId = $this->gEnv->getCurrentUserId();
 		if ($userId > 0) return false;
@@ -230,11 +230,11 @@ class AccessManager extends _Core
 		$loginKey = $gRequestManager->getCookieValue(M3_COOKIE_AUTO_LOGIN);		// 自動ログインキー
 		$clientId = $this->getClientId();		// クライアントID
 		if (empty($loginKey) || empty($clientId)) return false;			// 空の場合は問題なし
-		$ret = $this->db->getAutoLogin($loginKey, $clientId, $row);
+		$ret = $this->systemDb->getAutoLogin($loginKey, $clientId, $row);
 		if (!$ret){		// 自動ログイン情報がない場合は終了
 			// 自動ログイン情報を削除
 			$this->_removeAutoLogin($loginKey);
-			
+
 			// ユーザエラーログを残す
 			$errMsg = '不正な自動ログインを検出しました。ログインキー: ' . $loginKey;
 			$msgDetail = 'クライアントID=' . $clientId;
@@ -251,21 +251,21 @@ class AccessManager extends _Core
 		}
 
 		// ユーザ情報を取得
-		$ret = $this->db->getLoginUserRecordById($row['ag_user_id'], $userInfoRow);
+		$ret = $this->systemDb->getLoginUserRecordById($row['ag_user_id'], $userInfoRow);
 		if (!$ret){
 			// 自動ログイン情報を削除
 			$this->_removeAutoLogin($loginKey);
-			
+
 			$errMsg = '自動ログインエラー(要因=ユーザ情報取得失敗)';
 			$msgDetail = 'ユーザID=' . $row['ag_user_id'];
 			$this->gOpeLog->writeError(__METHOD__, $errMsg, 1100, $msgDetail);
 			return false;
 		}
-		
+
 		// ユーザレベルをチェック。システム運用可能ユーザは自動ログイン不可。
 		// アクセスパスをチェック?
 		if ($userInfoRow['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER) return false;	// システム運用可能ユーザのとき
-		
+
 		// ユーザ情報を読み込む
 		$ret = $this->_loadUserInfo($userInfoRow);
 		$userId = $userInfoRow['lu_id'];		// ユーザID再取得
@@ -278,7 +278,7 @@ class AccessManager extends _Core
 		} else {
 			// 自動ログイン情報を削除
 			$this->_removeAutoLogin($loginKey);
-			
+
 			// ユーザエラーログを残す
 			$errMsg = 'ユーザが自動ログインに失敗しました。アカウント: ' . $account;
 			$msgDetail = 'ログインキー=' . $loginKey . ', クライアントID=' . $clientId;
@@ -315,20 +315,20 @@ class AccessManager extends _Core
 	{
 		// 自動ログイン行わない場合は終了
 		if (!$this->_useAutoLogin) return false;
-		
+
 		$clientId = $this->getClientId();		// クライアントID
 
 		if ($isAutoLogin){
 			// 引数エラーチェック
 			if ($userId <= 0) return false;
 			if (empty($clientId)) return false;
-		
+
 			// ユーザ情報取得
 			$userInfo = $this->gEnv->getCurrentUserInfo();
 
 			// ユーザレベルをチェック。システム運用可能ユーザは自動ログイン不可。
 			if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER) return false;	// システム運用可能ユーザのとき
-			
+
 			// 新規のログインキーを作成
 			$newLoginKey = md5($userInfo->account . $clientId . time());
 			$ret = $this->_createAutoLogin($newLoginKey, $userId, $clientId);
@@ -340,7 +340,7 @@ class AccessManager extends _Core
 		} else {
 			// クッキー削除は必ず行うため引数エラーチェックはしない
 			// 自動ログイン情報を削除
-			$loginKey = $this->db->getAutoLoginKey($userId, $clientId);
+			$loginKey = $this->systemDb->getAutoLoginKey($userId, $clientId);
 			$ret = $this->_removeAutoLogin($loginKey);
 		}
 		return $ret;
@@ -360,11 +360,11 @@ class AccessManager extends _Core
 		// クッキーを作成
 		//$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, '', -1);		// 一旦削除
 		$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, $loginKey, self::AUTO_LOGIN_EXPIRE_DAYS);
-		
+
 		// 自動ログイン情報を更新
 		$accessPath = $this->gEnv->getAccessPath();
 		$expireDt = date("Y/m/d H:i:s", strtotime(self::AUTO_LOGIN_EXPIRE_DAYS . ' day'));
-		$ret = $this->db->updateAutoLogin($userId, $loginKey, $clientId, $accessPath, $expireDt);
+		$ret = $this->systemDb->updateAutoLogin($userId, $loginKey, $clientId, $accessPath, $expireDt);
 		return $ret;
 	}
 	/**
@@ -380,9 +380,9 @@ class AccessManager extends _Core
 		// クッキーを削除
 		$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, '', -1);
 //		$gRequestManager->removeCookieValue(M3_COOKIE_AUTO_LOGIN);
-		
+
 		// 自動ログイン情報削除
-		$ret = $this->db->delAutoLogin($loginKey);
+		$ret = $this->systemDb->delAutoLogin($loginKey);
 		return $ret;
 	}
 	/**
@@ -417,23 +417,23 @@ class AccessManager extends _Core
 	{
 		// ユーザ情報取得
 		$userInfo = $this->gEnv->getCurrentUserInfo();
-		
+
 		// ##### 自動ログイン情報を削除 #####
 		$this->userAutoLogin($userInfo->userId, false/*自動ログイン情報削除*/);
-		
+
 		// ログアウトログを残す
 		if (!is_null($userInfo)){
 			$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザがログアウトしました。アカウント: ' . $userInfo->account, 2301,
 											'account=' . $userInfo->account . ', userid=' . $userInfo->userId, 'account=' . $userInfo->account/*検索補助データ*/);
 		}
-		
+
 		// ログアウトしたとき、管理者のセッション値は削除。一般ユーザの場合はログアウトしても残しておくセッション値があるので(テンプレート等)ユーザ情報のみ削除。
 		// セッション終了
 		if ($delSession){
 //			session_start();
 			session_destroy();
 		}
-			
+
 		// ユーザ情報を削除
 		$this->gInstance->setUserInfo(null);
 	}
@@ -466,29 +466,29 @@ class AccessManager extends _Core
 		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
 		$cmd		= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);	// 実行コマンド
 		$pageSubId	= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PAGE_SUB_ID);		// ページサブID
-		
+
 		$request = '';
 		foreach ($_REQUEST as $strKey => $strValue ) {
 			$request .= sprintf("%s=%s" . M3_TB, $strKey, $strValue);		// タブ区切り
 		}
 		$request = rtrim($request, M3_TB);		// 最後のタブを消去
 		$request = substr($request, 0, self::LOG_REQUEST_PARAM_MAX_LENGTH);	// 格納長を制限
-		
+
 		// アクセスパスを取得
 		$path = $gEnvManager->getAccessPath();
-		
+
 		// ランディングページIDを取得
 		$landingPageId = '';
 		if (strStartsWith($pageSubId, M3_PAGE_SUB_ID_PREFIX_LANDING_PAGE)) $landingPageId = substr($pageSubId, strlen(M3_PAGE_SUB_ID_PREFIX_LANDING_PAGE));
-		
+
 		// アクセスの種別を取得
 		$isCookie = !empty($_COOKIE);	// クッキーがあるかどうか
 		$isCrawler = false;				// クローラかどうか
 		$isCmd = !empty($cmd);			// コマンド実行かどうか
-		
+
 		// アクセスログのシリアルNoを保存
-		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $landingPageId, $isCookie, $isCrawler, $isCmd);
-		
+		$this->_accessLogSerialNo = $this->systemDb->accessLog($userId, $cookieVal, $session, $clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $landingPageId, $isCookie, $isCrawler, $isCmd);
+
 		// ##### 即時アクセス解析 #####
 		if (M3_SYSTEM_REALTIME_ANALYTICS) $gInstanceManager->getAnalyzeManager()->realtimeAnalytics($this->_accessLogSerialNo, $cookieVal);
 	}
@@ -500,7 +500,7 @@ class AccessManager extends _Core
 	function getClientIp()
 	{
 		global $gRequestManager;
-		
+
 		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
 		return $this->_clientIp;
 	}
@@ -515,7 +515,7 @@ class AccessManager extends _Core
 		$remoteIp		= $request->trimServerValueOf('REMOTE_ADDR');
 		$forwardedStr	= $request->trimServerValueOf('HTTP_X_FORWARDED_FOR');
 		if (empty($forwardedStr)) return $remoteIp;
-		
+
 		$candidateIpArray = array_reverse(explode(',', str_replace(' ', '', $forwardedStr) . ',' . $remoteIp));
 		foreach ($candidateIpArray as $ip){
 			if (!empty($ip) && !preg_match("/^(172\.(1[6-9]|2[0-9]|30|31)|192\.168|10|127)\./", $ip)) return $ip;
@@ -536,7 +536,7 @@ class AccessManager extends _Core
 		$senderIp = $gRequestManager->trimServerValueOf('REMOTE_ADDR');
 		$serverIp = $gRequestManager->trimServerValueOf('SERVER_ADDR');
 		if ($senderIp == $serverIp) return true;		// アクセス元と自サーバが同じとき
-			
+
 		// ユーザ情報がある場合のみチェックを行う
 		if (M3_SESSION_SECURITY_CHECK && isset($userInfo)){
 			// クライアントIP、セキュリティコードをチェック
@@ -544,7 +544,7 @@ class AccessManager extends _Core
 			$clientIp = $gRequestManager->getSessionValue(M3_SESSION_CLIENT_IP);
 			$checkSecurityCode = $this->getSessionSecurityCode();
 			$checkClientIp = $this->getClientIp();
-			
+
 			if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){
 				// システム運用可能ユーザのときはクライアントIP、セキュリティコード両方の合致を条件とする
 				if ($securityCode != $checkSecurityCode ||		// セッションのセキュリティコードが合わない場合
@@ -575,11 +575,11 @@ class AccessManager extends _Core
 	function _generateSessionSecurityCode()
 	{
 		global $gRequestManager;
-		
+
 		$agent		= $gRequestManager->trimServerValueOf('HTTP_USER_AGENT');		// クライアントアプリケーション
 		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
 		$sessionCode = md5($agent . ':' . $language);
-		
+
 		return $sessionCode;
 	}
 	/**
@@ -602,14 +602,14 @@ class AccessManager extends _Core
 	function accessLogUser()
 	{
 		global $gEnvManager;
-				
+
 		$userId = 0;
 		$userInfo = $gEnvManager->getCurrentUserInfo();
 		if (!is_null($userInfo)){		// ユーザ情報がある場合
 			$userId = $userInfo->userId;
 		}
 		// ユーザ情報が存在しているときは、ユーザIDを登録する
-		if ($userId != 0) $this->db->updateAccessLogUser($this->_accessLogSerialNo, $userId);
+		if ($userId != 0) $this->systemDb->updateAccessLogUser($this->_accessLogSerialNo, $userId);
 	}
 	/**
 	 * クッキーに保存するクライアントIDを生成
@@ -618,10 +618,10 @@ class AccessManager extends _Core
 	{
 		global $gRequestManager;
 		global $gEnvManager;
-			
+
 		// アクセスログの最大シリアルNoを取得
 		if ($gEnvManager->canUseDb()){	// DB接続可能なとき
-			$max = $this->db->getMaxSerialOfAccessLog();
+			$max = $this->systemDb->getMaxSerialOfAccessLog();
 		} else {
 			$max = 0;
 		}
@@ -655,7 +655,7 @@ class AccessManager extends _Core
 	{
 		$this->_oldSessionId = $sessionId;
 	}
-	
+
 	/**
 	 * アクセスログのシリアルNoを取得
 	 *
@@ -674,11 +674,11 @@ class AccessManager extends _Core
 	{
 		global $gRequestManager;
 		global $gSystemManager;
-		
+
 		// セッション変数を取得可能にする
 		session_cache_limiter('none');		// IE対策(暫定対応20070703)
 		session_start();
-		
+
 		// セッションを再生成する(セキュリティ対策)
 		if ($gSystemManager->regenerateSessionId()){
 			$this->setOldSessionId(session_id());		// 古いセッションIDを保存
@@ -706,11 +706,11 @@ class AccessManager extends _Core
 		global $gRequestManager;
 		global $gSystemManager;
 		global $gInstanceManager;
-		
+
 		// セッション変数を取得可能にする
 		session_cache_limiter('none');		// IE対策(暫定対応20070703)
 		session_start();
-		
+
 		// セッションを再生成する(セキュリティ対策)
 		if ($gSystemManager->regenerateSessionId()){
 			$this->setOldSessionId(session_id());		// 古いセッションIDを保存
@@ -721,10 +721,10 @@ class AccessManager extends _Core
 		// セッションが残っていない場合がある(IEのみ)→アクセスできない(原因不明)
 		$userInfo = $gRequestManager->getSessionValueWithSerialize(M3_SESSION_USER_INFO);
 		if (is_null($userInfo)) return false;		// ログインしていない場合
-		
+
 		// ユーザ情報を保存
 		$gInstanceManager->setUserInfo($userInfo);
-		
+
 		return true;
 		/*if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){	// システム運用可能ユーザのとき
 			return true;
@@ -750,7 +750,7 @@ class AccessManager extends _Core
 	 * URL用のパラメータとして使用するセッションIDを取得
 	 *
 	 * @return string			セッションIDパラメータ文字列
-	 */	
+	 */
 	function getSessionIdUrlParam()
 	{
 		return session_name() . '=' . session_id();
@@ -760,35 +760,35 @@ class AccessManager extends _Core
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @return bool   						true=送信完了、false=送信失敗
-	 */	
+	 */
 	function sendPassword($request)
 	{
 		global $gEnvManager;
-		
+
 		$account = $request->trimValueOf('account');
 		$inputEmail = $request->trimValueOf('email');		// 送信先Eメール
-		
+
 		$isSend = false;
 		$errMessage = '';
 		$errMessageDetail = '';
-		if ($this->db->getLoginUserRecord($account, $row, true/*有効なユーザのみ*/)){		// アカウントからログインIDを取得
+		if ($this->systemDb->getLoginUserRecord($account, $row, true/*有効なユーザのみ*/)){		// アカウントからログインIDを取得
 			$siteEmail = $gEnvManager->getSiteEmail();
 			$email = $row['lu_email'];
-			
+
 			// 送信先Eメールアドレスをチェック
 			if (!empty($inputEmail) && $inputEmail == $email){
 				// 送信先が設定されているかチェック
 				if (!empty($email) && !empty($siteEmail)){
 					$now = date("Y/m/d H:i:s");	// 現在日時
-				
+
 					// パスワード作成
 					$password = makePassword(self::PASSWORD_LENGTH);
-				
+
 					// 仮パスワードと発行日時を更新
 					$fieldArray = array();
 					$fieldArray['lu_tmp_password'] = md5($password);				// 仮パスワード
 					$fieldArray['lu_tmp_pwd_dt'] = $now;			// 仮パスワード変更日時
-					$ret = $this->db->updateLoginUserByField($row['lu_id'], $fieldArray, $newSerial);
+					$ret = $this->systemDb->updateLoginUserByField($row['lu_id'], $fieldArray, $newSerial);
 					if ($ret){
 						$fromAddress	= $siteEmail;		// 送信元アドレス
 						$toAddress		= $email;			// 送信先アドレス
@@ -823,7 +823,7 @@ class AccessManager extends _Core
 	 */
 	function registSessionAccessKey($name, $contentId, $accessType)
 	{
-		$ret = $this->db->addAccessKey($name, $this->gEnv->getCurrentWidgetId(), $contentId, $accessType);
+		$ret = $this->systemDb->addAccessKey($name, $this->gEnv->getCurrentWidgetId(), $contentId, $accessType);
 		return $ret;
 	}
 	/**
@@ -834,7 +834,7 @@ class AccessManager extends _Core
 	 */
 	function unegistAllSessionAccessKey($contentId)
 	{
-		$ret = $this->db->delAllAccessKey($this->gEnv->getCurrentWidgetId(), $contentId);
+		$ret = $this->systemDb->delAllAccessKey($this->gEnv->getCurrentWidgetId(), $contentId);
 		return $ret;
 	}
 	/**
@@ -847,7 +847,7 @@ class AccessManager extends _Core
 	function generateSessionAccessKey($name, $contentId)
 	{
 		global $gRequestManager;
-				
+
 		$gRequestManager->setSessionValue(M3_SESSION_ACCESS_KEY . $name, $this->gEnv->getCurrentWidgetId() . M3_WIDGET_ID_SEPARATOR . $contentId);		// ウィジェットID,コンテンツIDを格納
 		return true;
 	}
@@ -860,7 +860,7 @@ class AccessManager extends _Core
 	function getSessionAccessKey($name)
 	{
 		global $gRequestManager;
-		
+
 		$value = $gRequestManager->getSessionValue(M3_SESSION_ACCESS_KEY . $name);
 		return $value;
 	}

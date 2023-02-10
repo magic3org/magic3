@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -78,7 +78,7 @@ class SystemManager extends _Core
 		parent::__construct();
 											
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		
 		// 初期値を設定
 		$this->defaultAdminTemplateId = '';				// 管理画面用テンプレートID
@@ -121,7 +121,7 @@ class SystemManager extends _Core
 	 */
 	function updateSystemConfig($key, $value)
 	{
-		$ret = $this->db->updateSystemConfig($key, $value);
+		$ret = $this->systemDb->updateSystemConfig($key, $value);
 		if ($ret) $this->_systemConfigArray[$key] = $value;
 		return $ret;
 	}
@@ -151,7 +151,7 @@ class SystemManager extends _Core
 		$this->_siteDefArray = array();
 
 		// システム定義を読み込み
-		$ret = $this->db->getAllSystemConfig($rows);
+		$ret = $this->systemDb->getAllSystemConfig($rows);
 		if ($ret){
 			// 取得データを連想配列にする
 			$configCount = count($rows);
@@ -167,9 +167,9 @@ class SystemManager extends _Core
 				$serverDir = $this->getSystemConfig(self::CF_SERVER_DIR);
 				if ($serverUrl != M3_SYSTEM_ROOT_URL || $serverDir != M3_SYSTEM_ROOT_PATH){
 					
-					$ret = $this->db->updateSystemConfig(self::CF_SERVER_URL, M3_SYSTEM_ROOT_URL);
+					$ret = $this->systemDb->updateSystemConfig(self::CF_SERVER_URL, M3_SYSTEM_ROOT_URL);
 					if ($ret) $this->_systemConfigArray[self::CF_SERVER_URL] = M3_SYSTEM_ROOT_URL;
-					$ret = $this->db->updateSystemConfig(self::CF_SERVER_DIR, M3_SYSTEM_ROOT_PATH);
+					$ret = $this->systemDb->updateSystemConfig(self::CF_SERVER_DIR, M3_SYSTEM_ROOT_PATH);
 					if ($ret) $this->_systemConfigArray[self::CF_SERVER_DIR] = M3_SYSTEM_ROOT_PATH;
 					
 					$errMsg = 'DBの自動修正: システム設定マスター(_system_config)のサーバURL(server_url)またはサーバディレクトリ(server_dir)が変更されているので自動修正しました。URL: ' . $serverUrl . '=>' . M3_SYSTEM_ROOT_URL . ', ディレクトリ: ' . $serverDir . '=>' . M3_SYSTEM_ROOT_PATH;
@@ -213,7 +213,7 @@ class SystemManager extends _Core
 		$lang = $this->getSystemConfig(self::CF_DEFAULT_LANG);// デフォルト言語
 
 		// サイト定義をデフォルト言語で読み込む。データが空でもエラーとしない
-		$ret = $this->db->getAllSiteDefValue($lang, $rows);
+		$ret = $this->systemDb->getAllSiteDefValue($lang, $rows);
 		if ($ret){
 			// 取得データを連想配列にする
 			$defCount = count($rows);
@@ -234,7 +234,7 @@ class SystemManager extends _Core
 	public function canInitSystem($reload = false)
 	{
 		if ($reload){
-			$value = $this->db->getSystemConfig(self::CF_PERMIT_INIT_SYSTEM);			// システム初期化可能かどうか
+			$value = $this->systemDb->getSystemConfig(self::CF_PERMIT_INIT_SYSTEM);			// システム初期化可能かどうか
 			if ($value == '1'){
 				$this->permitInitSystem = true;
 			} else {
@@ -251,7 +251,7 @@ class SystemManager extends _Core
 	public function enableInitSystem()
 	{
 		// データを更新
-		$this->db->updateSystemConfig(self::CF_PERMIT_INIT_SYSTEM, 1);
+		$this->systemDb->updateSystemConfig(self::CF_PERMIT_INIT_SYSTEM, 1);
 		
 		// データを再取得
 		$this->canInitSystem(true);
@@ -264,7 +264,7 @@ class SystemManager extends _Core
 	public function disableInitSystem()
 	{
 		// データを更新
-		$this->db->updateSystemConfig(self::CF_PERMIT_INIT_SYSTEM, 0);
+		$this->systemDb->updateSystemConfig(self::CF_PERMIT_INIT_SYSTEM, 0);
 		
 		// データを再取得
 		$this->canInitSystem(true);
@@ -306,7 +306,7 @@ class SystemManager extends _Core
 	function defaultAdminTemplateId($reload = false)
 	{
 		if ($reload){
-			$this->defaultAdminTemplateId		= $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_TEMPLATE);
+			$this->defaultAdminTemplateId		= $this->systemDb->getSystemConfig(self::CF_ADMIN_DEFAULT_TEMPLATE);
 		}
 		return $this->defaultAdminTemplateId;
 	}
@@ -319,7 +319,7 @@ class SystemManager extends _Core
 	function defaultTemplateId($reload = false)
 	{
 		if ($reload){
-			$this->defaultTemplateId		= $this->db->getSystemConfig(self::CF_DEFAULT_TEMPLATE);
+			$this->defaultTemplateId		= $this->systemDb->getSystemConfig(self::CF_DEFAULT_TEMPLATE);
 		}
 		return $this->defaultTemplateId;
 	}
@@ -332,7 +332,7 @@ class SystemManager extends _Core
 	function defaultSubTemplateId($reload = false)
 	{
 		if ($reload){
-			$this->defaultSubTemplateId		= $this->db->getSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE);
+			$this->defaultSubTemplateId		= $this->systemDb->getSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE);
 		}
 		return $this->defaultSubTemplateId;
 	}
@@ -345,7 +345,7 @@ class SystemManager extends _Core
 	function defaultSmartphoneTemplateId($reload = false)
 	{
 		if ($reload){
-			$this->defaultSmartphoneTemplateId		= $this->db->getSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE);
+			$this->defaultSmartphoneTemplateId		= $this->systemDb->getSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE);
 		}
 		return $this->defaultSmartphoneTemplateId;
 	}
@@ -358,8 +358,8 @@ class SystemManager extends _Core
 	 */
 	function changeDefaultTemplate($templateId, $subTemplateId = '')
 	{
-		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_TEMPLATE, $templateId);
-		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE, $subTemplateId);
+		$ret = $this->systemDb->updateSystemConfig(self::CF_DEFAULT_TEMPLATE, $templateId);
+		$ret = $this->systemDb->updateSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE, $subTemplateId);
 		
 		// データ再取得
 		$this->defaultTemplateId(true);
@@ -374,7 +374,7 @@ class SystemManager extends _Core
 	 */
 	function changeDefaultSmartphoneTemplate($templateId)
 	{
-		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE, $templateId);
+		$ret = $this->systemDb->updateSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE, $templateId);
 		
 		// データ再取得
 		$this->defaultSmartphoneTemplateId(true);
@@ -389,7 +389,7 @@ class SystemManager extends _Core
 	function adminDefaultTheme($reload = false)
 	{
 		if ($reload){
-			$this->adminDefaultTheme		= $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);
+			$this->adminDefaultTheme		= $this->systemDb->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);
 		}
 		return $this->adminDefaultTheme;
 	}
@@ -416,7 +416,7 @@ class SystemManager extends _Core
 		if ($langId == $this->getSystemConfig(self::CF_DEFAULT_LANG)) return false;
 		
 		// サイト定義を読み込む
-		$ret = $this->db->getAllSiteDefValue($langId, $rows);
+		$ret = $this->systemDb->getAllSiteDefValue($langId, $rows);
 		if ($ret){
 			// 取得データを連想配列にする
 			$defCount = count($rows);
@@ -441,7 +441,7 @@ class SystemManager extends _Core
 	function getAcceptLanguage($reload = false)
 	{
 		if ($reload){
-			$value = $this->db->getSystemConfig(self::CF_ACCEPT_LANGUAGE);			// アクセス可能言語
+			$value = $this->systemDb->getSystemConfig(self::CF_ACCEPT_LANGUAGE);			// アクセス可能言語
 			if (empty($value)){
 				$this->acceptLanguage = array();
 			} else {
@@ -489,7 +489,7 @@ class SystemManager extends _Core
 		if (!isset($siteActiveStatus)){
 			$siteActiveStatus = array();
 			
-			$ret = $this->db->getPageIdRecords(0/*ページID*/, $rows);
+			$ret = $this->systemDb->getPageIdRecords(0/*ページID*/, $rows);
 			if ($ret){
 				for ($i = 0; $i < 3; $i++){
 					// ページID作成
@@ -524,7 +524,7 @@ class SystemManager extends _Core
 	public function siteInPublic($reload = false)
 	{
 		if ($reload){
-			$this->siteInPublic		= $this->db->getSystemConfig(self::CF_SITE_IN_PUBLIC);			// Webサイトの公開状況
+			$this->siteInPublic		= $this->systemDb->getSystemConfig(self::CF_SITE_IN_PUBLIC);			// Webサイトの公開状況
 			if ($this->siteInPublic == '') $this->siteInPublic = '1';		// デフォルトは公開
 		}
 		return $this->siteInPublic;			// Webサイトの公開状況
@@ -538,7 +538,7 @@ class SystemManager extends _Core
 	public function sitePcInPublic($reload = false)
 	{
 		if ($reload){
-			$this->sitePcInPublic		= $this->db->getSystemConfig(self::CF_SITE_PC_IN_PUBLIC);			// PC用サイトの公開状況
+			$this->sitePcInPublic		= $this->systemDb->getSystemConfig(self::CF_SITE_PC_IN_PUBLIC);			// PC用サイトの公開状況
 			if ($this->sitePcInPublic == '') $this->sitePcInPublic = '1';		// デフォルトは公開
 		}
 		return $this->sitePcInPublic;			// PC用サイトの公開状況
@@ -552,7 +552,7 @@ class SystemManager extends _Core
 	public function siteSmartphoneInPublic($reload = false)
 	{
 		if ($reload){
-			$this->siteSmartphoneInPublic	= $this->db->getSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC);	// スマートフォン用サイトの公開状況
+			$this->siteSmartphoneInPublic	= $this->systemDb->getSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC);	// スマートフォン用サイトの公開状況
 			if ($this->siteSmartphoneInPublic == '') $this->siteSmartphoneInPublic = '1';		// デフォルトは公開
 		}
 		return $this->siteSmartphoneInPublic;			// スマートフォン用サイトの公開状況
@@ -566,7 +566,7 @@ class SystemManager extends _Core
 	public function smartphoneAutoRedirect($reload = false)
 	{
 		if ($reload){
-			$this->smartphoneAutoRedirect	= $this->db->getSystemConfig(self::CF_SMARTPHONE_AUTO_REDIRECT);	// スマートフォンの自動遷移
+			$this->smartphoneAutoRedirect	= $this->systemDb->getSystemConfig(self::CF_SMARTPHONE_AUTO_REDIRECT);	// スマートフォンの自動遷移
 			if ($this->smartphoneAutoRedirect == '') $this->smartphoneAutoRedirect = '0';
 		}
 		return $this->smartphoneAutoRedirect;
@@ -580,7 +580,7 @@ class SystemManager extends _Core
 	public function usePageCache($reload = false)
 	{
 		if ($reload){
-			$this->usePageCache	= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);	// 表示キャッシュ機能を使用するかどうか
+			$this->usePageCache	= $this->systemDb->getSystemConfig(self::CF_USE_PAGE_CACHE);	// 表示キャッシュ機能を使用するかどうか
 			if ($this->usePageCache == '') $this->usePageCache = '0';		// デフォルトはキャッシュなし
 		}
 		return $this->usePageCache;
@@ -594,7 +594,7 @@ class SystemManager extends _Core
 	public function pageCacheLifetime($reload = false)
 	{
 		if ($reload){
-			$this->pageCacheLifetime = intval($this->db->getSystemConfig(self::CF_PAGE_CACHE_LIFETIME));	// 画面キャッシュの更新時間(分)
+			$this->pageCacheLifetime = intval($this->systemDb->getSystemConfig(self::CF_PAGE_CACHE_LIFETIME));	// 画面キャッシュの更新時間(分)
 			if ($this->pageCacheLifetime < 0) $this->pageCacheLifetime = self::DEFAULT_PAGE_CACHE_LIFETIME;
 		}
 		return $this->pageCacheLifetime;
@@ -639,9 +639,9 @@ class SystemManager extends _Core
 	{
 		// メニュー階層化の設定を更新
 		if ($isHier){
-			$this->db->updateSystemConfig(self::CF_SITE_MENU_HIER, '1');
+			$this->systemDb->updateSystemConfig(self::CF_SITE_MENU_HIER, '1');
 		} else {
-			$this->db->updateSystemConfig(self::CF_SITE_MENU_HIER, '0');
+			$this->systemDb->updateSystemConfig(self::CF_SITE_MENU_HIER, '0');
 		}
 		
 		// メニュー情報を更新
@@ -649,9 +649,9 @@ class SystemManager extends _Core
 		if ($ret){
 			// メニュー管理画面を変更
 			if ($isHier){		// 多階層の場合
-				$ret = $this->db->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+				$ret = $this->systemDb->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
 			} else {
-				$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
+				$ret = $this->systemDb->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 			}
 		}
 		return $ret;
@@ -667,11 +667,11 @@ class SystemManager extends _Core
 	function _getMenuInfo(&$isHier, &$itemId, &$row)
 	{
 		$isHier = false;	// 多階層メニューかどうか
-		$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		$ret = $this->systemDb->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
 		if ($ret){
 			$isHier = true;
 		} else {
-			$ret = $this->db->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
+			$ret = $this->systemDb->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
 		}
 		if ($ret) $itemId = $row['ni_id'];
 		return $ret;
@@ -700,7 +700,7 @@ class SystemManager extends _Core
 	 */
 	function recoverJQueryVersion($version)
 	{
-		$ret = $this->db->updateSystemConfig(self::CF_JQUERY_VERSION, $version);
+		$ret = $this->systemDb->updateSystemConfig(self::CF_JQUERY_VERSION, $version);
 		if ($ret){
 			$this->_systemConfigArray[self::CF_JQUERY_VERSION] = $version;
 		

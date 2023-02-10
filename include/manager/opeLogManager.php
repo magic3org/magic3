@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,8 +21,8 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアク�
 
 class OpeLogManager extends _Core
 {
-	private $db;						// DBオブジェクト
-	
+	//private $db;						// DBオブジェクト
+
 	/**
 	 * コンストラクタ
 	 */
@@ -30,9 +30,9 @@ class OpeLogManager extends _Core
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
+
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * デバッグ用出力
@@ -48,7 +48,7 @@ class OpeLogManager extends _Core
 	public function writeDebug($method, $msg, $code = 0, $msgExt = '')
 	{
 		// ログ出力
-		if (M3_SYSTEM_DEBUG) $this->db->debugOut($method, $msg, $code, $msgExt);
+		if (M3_SYSTEM_DEBUG) $this->systemDb->debugOut($method, $msg, $code, $msgExt);
 	}
 	/**
 	 * 運用状況確認用出力
@@ -70,8 +70,8 @@ class OpeLogManager extends _Core
 	public function writeInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -95,8 +95,8 @@ class OpeLogManager extends _Core
 	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
-		
+		$this->systemDb->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -120,8 +120,8 @@ class OpeLogManager extends _Core
 	public function writeWarn($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('warn', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('warn', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -145,8 +145,8 @@ class OpeLogManager extends _Core
 	public function writeError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('error', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('error', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -170,8 +170,8 @@ class OpeLogManager extends _Core
 	public function writeFatal($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('fatal', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('fatal', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -195,8 +195,8 @@ class OpeLogManager extends _Core
 	public function writeUserInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('user_info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('user_info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -221,8 +221,8 @@ class OpeLogManager extends _Core
 	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
-		
+		$this->systemDb->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -246,8 +246,8 @@ class OpeLogManager extends _Core
 	public function writeUserError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('user_err', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('user_err', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -271,8 +271,8 @@ class OpeLogManager extends _Core
 	public function writeUserAccess($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('user_access', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('user_access', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -296,8 +296,8 @@ class OpeLogManager extends _Core
 	public function writeUserData($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -320,8 +320,8 @@ class OpeLogManager extends _Core
 	public function writeGuide($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
-		$this->db->writeErrorLog('guide', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
-		
+		$this->systemDb->writeErrorLog('guide', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+
 		// イベントフック処理
 		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
@@ -337,7 +337,7 @@ class OpeLogManager extends _Core
 	private function _opelogEventHook($code, $eventParam, $msg, $msgExt)
 	{
 		global $gInstanceManager;
-		
+
 		// 運用ログ用イベントフックを実行
 		$gInstanceManager->callAddonEventHook(M3_EVENT_HOOK_TYPE_OPELOG, $code, $eventParam, $msg, $msgExt);
 	}

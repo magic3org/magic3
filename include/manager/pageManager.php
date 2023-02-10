@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @link       http://magic3.org
  */
@@ -31,7 +31,7 @@ class PageManager extends _Core
 	private $isPageTopUrl;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 	private $isContentDetailPage;	// コンテンツ詳細画面のページかどうか
 	private $tmpData;				// データ作成用
-	private $db;					// DBオブジェクト
+	//private $db;					// DBオブジェクト
 	private $defaultScriptFiles;	// デフォルトで読み込むスクリプトファイル
 	private $defaultCssFiles;		// デフォルトで読み込むCSSファイル
 	private $defaultAdminScriptFiles;	// デフォルトで読み込むスクリプトファイル(管理用)
@@ -237,7 +237,7 @@ class PageManager extends _Core
 		$widgetId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
 		
 		// システムDBオブジェクト取得
-		$this->db = $gInstanceManager->getSytemDbObject();
+		//$this->systemDb = $gInstanceManager->getSytemDbObject();
 		
 		// 運用方法
 		$value = $gSystemManager->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用かどうか
@@ -1383,7 +1383,7 @@ class PageManager extends _Core
 					if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser() && empty($task)){
 						// ダッシュボード機能は、パラメータなし、管理者ディレクトリ、システム運用者の条件で使用可能(2018/8/5変更)
 						// POST値にタスクがある場合はダッシュボードとしない
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_DASHBOARD, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+						$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_DASHBOARD, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 					}
 				} else if ($paramCount > 0 && !$gEnvManager->isAdminDirAccess()){		// パラメータ付きの場合(2013/3/23)
 					// ##### ページ属性から画面を選択(管理画面は対応しない) ###
@@ -1403,20 +1403,20 @@ class PageManager extends _Core
 							
 								// ローカルメニューのURLからページを特定。ページが特定できないときはページ属性で取得。
 								$url = $gEnvManager->getMacroPath($gEnvManager->getCurrentRequestUri());
-								$ret = $this->db->getSubPageIdByMenuItemUrl($url, $gEnvManager->getCurrentPageId(), M3_VIEW_TYPE_CONTENT, $rows);
+								$ret = $this->systemDb->getSubPageIdByMenuItemUrl($url, $gEnvManager->getCurrentPageId(), M3_VIEW_TYPE_CONTENT, $rows);
 								if ($ret){
 									$rowCount = count($rows);
 									for ($i = 0; $i < $rowCount; $i++){
 										// コンテンツを表示するウィジェットがあるときはページサブIDを確定
-										//$widgetId = $this->db->getWidgetIdByType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);
-										$widgetId = $this->db->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);// コンテンツタイプでの取得に変更(2012/6/20)
+										//$widgetId = $this->systemDb->getWidgetIdByType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);
+										$widgetId = $this->systemDb->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);// コンテンツタイプでの取得に変更(2012/6/20)
 										if (!empty($widgetId)){
 											$subId = $rows[$i]['pd_sub_id'];
 											break;
 										}
 									}
 								}
-								if (empty($subId)) $subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								if (empty($subId)) $subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_CONTENT;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
@@ -1428,7 +1428,7 @@ class PageManager extends _Core
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
 								
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PRODUCT;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
@@ -1442,7 +1442,7 @@ class PageManager extends _Core
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
 								
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BBS;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
@@ -1454,7 +1454,7 @@ class PageManager extends _Core
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
 								
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_EVENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_EVENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_EVENT;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
@@ -1466,7 +1466,7 @@ class PageManager extends _Core
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
 								
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PHOTO, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_PHOTO, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PHOTO;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
@@ -1480,14 +1480,14 @@ class PageManager extends _Core
 								$checkStatus = $this->_checkFirstValueRedirect($firstValue);
 								if (!$checkStatus) return;			// エラーの場合は終了
 		
-								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+								$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BLOG;		// ページのコンテンツタイプ
 								
 								// コンテンツ詳細ページかどうかを設定
 								if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT) $this->isContentDetailPage = true;
 								break;
 							default:		// オプションのURLコンテンツパラメータからサブページIDを取得
-								$ret = $this->db->getSubPageIdByUrlContentParam($gEnvManager->getCurrentPageId(), $firstKey, $row);
+								$ret = $this->systemDb->getSubPageIdByUrlContentParam($gEnvManager->getCurrentPageId(), $firstKey, $row);
 								if ($ret) $subId = $row['pd_sub_id'];
 								break;
 						}
@@ -1502,7 +1502,7 @@ class PageManager extends _Core
 			
 					if (!empty($wikiCmd) || !empty($pageName)){			// Wikiコンテンツページを指定のとき
 						// ページサブIDを取得
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_WIKI, $gEnvManager->getCurrentPageId());
+						$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_WIKI, $gEnvManager->getCurrentPageId());
 						$this->contentType = M3_VIEW_TYPE_WIKI;		// ページのコンテンツタイプ
 						
 						// コンテンツ詳細ページかどうかを設定
@@ -1579,14 +1579,14 @@ class PageManager extends _Core
 				$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 				
 				// スクリプトが必要なウィジェットをすべて取得
-				$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+				$this->systemDb->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 				for ($i = 0; $i < count($rows); $i++){
 					$this->addAdminScript($task, trim($rows[$i]['wd_add_script_lib']));
 				}
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 					// ウィジェット情報取得
 					$widgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
-					$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+					$ret = $this->systemDb->getWidgetInfo($widgetId, $this->configWidgetInfo);
 					if ($ret) $this->addAdminScript($task, trim($this->configWidgetInfo['wd_add_script_lib_a']));		// 管理機能用スクリプト
 				}
 			}
@@ -1651,7 +1651,7 @@ class PageManager extends _Core
 			
 		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
 			// テンプレートの情報を取得
-			$ret = $this->db->getPageDefOnPage($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+			$ret = $this->systemDb->getPageDefOnPage($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 			if ($ret){
 				for ($i = 0; $i < count($rows); $i++){
 					$position = $rows[$i]['pd_position_id'];
@@ -1723,7 +1723,7 @@ class PageManager extends _Core
 		}
 
 		// 現在の言語のページ情報でヘッダを更新
-		$ret = $this->db->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $lang, $row);
+		$ret = $this->systemDb->getPageInfo($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $lang, $row);
 		if ($ret){
 			$title		= $row['pn_meta_title'];		// 画面タイトル
 			$desc		= $row['pn_meta_description'];		// ページ要約
@@ -2395,7 +2395,7 @@ class PageManager extends _Core
 									}
 									
 									// テンプレートのタイプを取得
-									$ret = $this->db->getTemplate($curTemplate, $row);
+									$ret = $this->systemDb->getTemplate($curTemplate, $row);
 									if ($ret){
 										$templateType = $row['tm_type'];
 										$templateGenerator = $row['tm_generator'];
@@ -2550,7 +2550,7 @@ class PageManager extends _Core
 					$gEnvManager->setIsCurrentWidgetShared($shared);
 				
 					// 実行ログを残す
-					$this->db->writeWidgetLog($widgetId, 0/*ページ実行*/);
+				$this->systemDb->writeWidgetLog($widgetId, 0/*ページ実行*/);
 					
 					// ウィジェットを実行
 					// ウィジェットの呼び出しは、複数回存在する可能性があるのでrequire_once()で呼び出さない
@@ -2696,7 +2696,7 @@ class PageManager extends _Core
 		
 				// ### ２重起動防止のためジョブの実行を先に登録する ###
 				$now = date("Y/m/d H:i:s");	// 現在日時
-				$this->db->updateSystemConfig(self::CF_DAILY_JOB_DT, $now);
+				$this->systemDb->updateSystemConfig(self::CF_DAILY_JOB_DT, $now);
 		
 				// マルチドメイン対応のためにホスト名を取得
 				$parsedUrl = parse_url($this->gEnv->getRootUrl());
@@ -2734,7 +2734,7 @@ class PageManager extends _Core
 		
 				// ### ２重起動防止のためジョブの実行を先に登録する ###
 				$now = date("Y/m/d H:i:s");	// 現在日時
-				$this->db->updateSystemConfig(self::CF_MONTHLY_JOB_DT, $now);
+				$this->systemDb->updateSystemConfig(self::CF_MONTHLY_JOB_DT, $now);
 		
 				// マルチドメイン対応のためにホスト名を取得
 				$parsedUrl = parse_url($this->gEnv->getRootUrl());
@@ -2814,10 +2814,10 @@ class PageManager extends _Core
 		$targetWidgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
 		
 		// 対象のウィジェットのページサブIDを取得
-		$ret = $this->db->getSubPageId($targetWidgetId, $pageId, $rows);
+		$ret = $this->systemDb->getSubPageId($targetWidgetId, $pageId, $rows);
 		if ($ret){// データが存在する
 			if (empty($rows[0]['pd_sub_id'])){		// 共通ウィジェットのときは、送信元にあわせる
-				$ret = $this->db->getSubPageId($fromWidgetId, $pageId, $rows2);
+				$ret = $this->systemDb->getSubPageId($fromWidgetId, $pageId, $rows2);
 				if ($ret){// データが存在する
 					if (empty($rows2[0]['pd_sub_id'])){		// 送信元が共通ウィジェットのときは、既に設定されているページサブIDを使用
 					} else {
@@ -2827,7 +2827,7 @@ class PageManager extends _Core
 			} else {
 				// 送信元があるか順にチェック
 				for ($i = 0; $i < count($rows); $i++){
-					$ret = $this->db->isExistsWidgetOnPage($pageId, $rows[$i]['pd_sub_id'], $fromWidgetId);
+					$ret = $this->systemDb->isExistsWidgetOnPage($pageId, $rows[$i]['pd_sub_id'], $fromWidgetId);
 					if ($ret){	
 						break;
 					}
@@ -2839,15 +2839,15 @@ class PageManager extends _Core
 				}
 			}
 		} else {		// 対象のウィジェットが見つからない場合は、互換ウィジェットを探す
-			$widgetId = $this->db->getCompatibleWidgetId($targetWidgetId);
+			$widgetId = $this->systemDb->getCompatibleWidgetId($targetWidgetId);
 			if (!empty($widgetId)){
 				$targetWidgetId = $widgetId;
 				
 				// 対象のウィジェットのページサブIDを取得
-				$ret = $this->db->getSubPageId($targetWidgetId, $pageId, $rows);
+				$ret = $this->systemDb->getSubPageId($targetWidgetId, $pageId, $rows);
 				if ($ret){// データが存在する
 					if (empty($rows[0]['pd_sub_id'])){		// 共通ウィジェットのときは、送信元にあわせる
-						$ret = $this->db->getSubPageId($fromWidgetId, $pageId, $rows2);
+						$ret = $this->systemDb->getSubPageId($fromWidgetId, $pageId, $rows2);
 						if ($ret){// データが存在する
 							if (empty($rows2[0]['pd_sub_id'])){		// 送信元が共通ウィジェットのときは、既に設定されているページサブIDを使用
 							} else {
@@ -2857,7 +2857,7 @@ class PageManager extends _Core
 					} else {
 						// 送信元があるか順にチェック
 						for ($i = 0; $i < count($rows); $i++){
-							$ret = $this->db->isExistsWidgetOnPage($pageId, $rows[$i]['pd_sub_id'], $fromWidgetId);
+							$ret = $this->systemDb->isExistsWidgetOnPage($pageId, $rows[$i]['pd_sub_id'], $fromWidgetId);
 							if ($ret){	
 								break;
 							}
@@ -3074,7 +3074,7 @@ class PageManager extends _Core
 //			}
 		}
 		// ウィジェット情報取得
-		$ret = $this->db->getWidgetInfo($widgetId, $row);
+		$ret = $this->systemDb->getWidgetInfo($widgetId, $row);
 
 		// ##### 共通ライブラリ読み込み設定 #####
 		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行のとき
@@ -3173,7 +3173,7 @@ class PageManager extends _Core
 					$server = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_SERVER);
 					if (!empty($server)){
 						// 設定データを取得
-						$ret = $this->db->getServerById($server, $row);
+						$ret = $this->systemDb->getServerById($server, $row);
 						if ($ret){
 							$serverName = 'サーバ名：' . $row['ts_name'];// サーバ名
 							echo '<div align="left" style="float:left;padding-left:30px;"><label>' . convertToHtmlEntity($serverName) . '</label></div>';
@@ -3595,7 +3595,7 @@ class PageManager extends _Core
 		
 		// テンプレートの情報を取得
 		$cleanType = $gEnvManager->getCurrentTemplateCleanType();		// テンプレートクリーンタイプ
-/*		if ($this->db->getTemplate($gEnvManager->getCurrentTemplateId(), $templateRow)){
+/*		if ($this->systemDb->getTemplate($gEnvManager->getCurrentTemplateId(), $templateRow)){
 			$cleanType = $templateRow['tm_clean_type'];
 		}*/
 		
@@ -3729,7 +3729,7 @@ class PageManager extends _Core
 		
 		// ##### Ajaxライブラリの読み込み #####
 		if (!$gEnvManager->isAdminDirAccess()){		// 通常画面へのアクセスのとき
-			if ($this->db->isExistsWidgetWithAjax($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId())){// Ajaxライブラリを使用しているウィジェットがあるときは追加
+			if ($this->systemDb->isExistsWidgetWithAjax($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId())){// Ajaxライブラリを使用しているウィジェットがあるときは追加
 				$this->addScriptFile($this->selectedJQueryFilename);		// デフォルトAjaxライブラリ追加
 				$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 			}
@@ -3737,7 +3737,7 @@ class PageManager extends _Core
 			
 		// ##### 共通ライブラリの読み込み #####
 		if (!$this->showWidget){// 単体実行以外のとき
-			$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+			$this->systemDb->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 			for ($i = 0; $i < count($rows); $i++){
 				$this->addScript($task, trim($rows[$i]['wd_add_script_lib']));
 			}
@@ -3797,7 +3797,7 @@ class PageManager extends _Core
 		
 		// ##### ウィジェットごとのCSS読み込み #####
 		// CSSがあるウィジェットを取得
-		$this->db->getWidgetsIdWithCss($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+		$this->systemDb->getWidgetsIdWithCss($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 		for ($i = 0; $i < count($rows); $i++){
 			$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_CSS;
 			// ディレクトリがあるときはディレクトリ内読み込み
@@ -3939,7 +3939,7 @@ class PageManager extends _Core
 		}
 		// ##### ウィジェットごとのJavaScript読み込み #####
 		// スクリプトがあるウィジェットを取得
-		$this->db->getWidgetsIdWithScript($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
+		$this->systemDb->getWidgetsIdWithScript($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 		for ($i = 0; $i < count($rows); $i++){
 			$searchPath = $gEnvManager->getWidgetsPath() . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS;
 		
@@ -4173,7 +4173,7 @@ class PageManager extends _Core
 			
 				// ##### CKEditor用の設定 #####
 				// ウィジェット情報取得
-				$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+				$ret = $this->systemDb->getWidgetInfo($widgetId, $this->configWidgetInfo);
 				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
 			
 				// CKEditor用のCSSファイル
@@ -4568,7 +4568,7 @@ class PageManager extends _Core
 			case 0:		// 通常画面
 				// ページ定義を取得。同じポジションが続く場合は最初の一度だけ定義を取得
 				if (empty($this->pageDefPosition) || $position != $this->pageDefPosition){		// ポジションが異なる場合
-					$ret = $this->db->getPageDef($filename, $subId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
+					$ret = $this->systemDb->getPageDef($filename, $subId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
 					if ($ret){	// 1行以上データが取得できたとき
 						$this->pageDefRows = $rows;			// ページ定義レコード
 						$this->pageDefPosition = $position;
@@ -5066,7 +5066,7 @@ class PageManager extends _Core
 				
 				// ページ定義を取得。同じポジションが続く場合は最初の一度だけ定義を取得
 				if (empty($this->pageDefPosition) || $position != $this->pageDefPosition){		// ポジションが異なる場合
-					$ret = $this->db->getPageDef($filename, $subId, $position, $rows);
+					$ret = $this->systemDb->getPageDef($filename, $subId, $position, $rows);
 					if ($ret){	// 1行以上データが取得できたとき
 						$this->pageDefRows = $rows;			// ページ定義レコード
 						$this->pageDefPosition = $position;
@@ -5140,7 +5140,7 @@ class PageManager extends _Core
 			$viewPosId = self::POSITION_TAG_HEAD . $posId;
 
 			// 画面情報を取得
-			$ret = $this->db->getPageDef($pageId, $subId, $position, $rows);
+			$ret = $this->systemDb->getPageDef($pageId, $subId, $position, $rows);
 			if ($ret){
 				//$pageDefRows = $rows;			// ページ定義レコード
 						
@@ -5231,7 +5231,7 @@ class PageManager extends _Core
 
 		// 取得しようとするページ定義のポジションが既に取得しているポジションと異なるときはデータを取得
 		if (empty($this->pageDefPosition) || $position != $this->pageDefPosition){		// 現在取得しているページ定義のポジション
-			$ret = $this->db->getPageDef($filename, $subId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
+			$ret = $this->systemDb->getPageDef($filename, $subId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
 			if ($ret){	// 1行以上データが取得できたとき
 				$this->pageDefRows = $rows;			// ページ定義レコード
 				$this->pageDefPosition = $position;
@@ -5281,7 +5281,7 @@ class PageManager extends _Core
 	function getWidgetCssId($defSerial, $pageId, $pageSubId, $position)
 	{
 		$elementId = '';
-		$ret = $this->db->getPageDef($pageId, $pageSubId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
+		$ret = $this->systemDb->getPageDef($pageId, $pageSubId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
 		if ($ret){
 			$rowCount = count($rows);
 			for ($i = 0; $i < $rowCount; $i++){
@@ -5322,7 +5322,7 @@ class PageManager extends _Core
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if ($task == 'list'){
 			// ウィジェット一覧を取得
-			$ret = $this->db->getAvailableWidgetList($widgetDeviceType, $rows);
+			$ret = $this->systemDb->getAvailableWidgetList($widgetDeviceType, $rows);
 			if ($ret){
 				$currentCategoryId = '_none';		// 現在のウィジェットカテゴリー初期化
 				for ($i = 0; $i < count($rows); $i++){
@@ -5416,7 +5416,7 @@ class PageManager extends _Core
 			$rev = '111';			// データのリビジョン番号
 
 			// 変更前データ取得
-			$ret = $this->db->getPageDef($pageId, $pageSubId, $position, $rows);	// 0レコードでも正常とする
+			$ret = $this->systemDb->getPageDef($pageId, $pageSubId, $position, $rows);	// 0レコードでも正常とする
 			
 			// 変更前のウィジェットのシリアル番号をチェック
 			if (count($widgets) == count($rows)){
@@ -5435,11 +5435,11 @@ class PageManager extends _Core
 			// データの更新
 			if (!$isErr){		// エラーなしのとき
 				if ($task == 'wdelete'){
-					$ret = $this->db->deleteWidget($serial);
+					$ret = $this->systemDb->deleteWidget($serial);
 				} else if ($task == 'wtoggle'){
 					$newShared = 0;
 					if (empty($shared)) $newShared = 1;
-					$ret = $this->db->toggleSharedWidget($pageId, $pageSubId, $serial, $newShared);
+					$ret = $this->systemDb->toggleSharedWidget($pageId, $pageSubId, $serial, $newShared);
 				} else if ($task == 'wadd'){	// ウィジェットの追加
 					$widget = $request->trimValueOf('widget');
 					
@@ -5447,18 +5447,18 @@ class PageManager extends _Core
 					if (empty($widget)) $isErr = true;
 					
 					// ウィジェットを追加
-					if (!$isErr) $this->db->addWidget($pageId, $pageSubId, $position, $widget, $index);
+					if (!$isErr) $this->systemDb->addWidget($pageId, $pageSubId, $position, $widget, $index);
 				} else if ($task == 'wmove'){
 					// ウィジェットを移動
-					if (!$isErr) $this->db->moveWidget($pageId, $pageSubId, $position, $serial, $index);
+					if (!$isErr) $this->systemDb->moveWidget($pageId, $pageSubId, $position, $serial, $index);
 				}
 			}
 			// 再表示データ取得
-			$ret = $this->db->getPageDef($pageId, $pageSubId, $position, $rows);// 0レコードでも正常とする
+			$ret = $this->systemDb->getPageDef($pageId, $pageSubId, $position, $rows);// 0レコードでも正常とする
 			
 			// 移動のときは、移動元と移動先の再表示データを取得
 			if ($task == 'wmove' && !empty($position2)){
-				$ret = $this->db->getPageDef($pageId, $pageSubId, $position2, $rows2);// 0レコードでも正常とする
+				$ret = $this->systemDb->getPageDef($pageId, $pageSubId, $position2, $rows2);// 0レコードでも正常とする
 			}
 
 			// ##### 該当するページのテンプレートタイプを取得 #####
@@ -5480,7 +5480,7 @@ class PageManager extends _Core
 			}
 			
 			// テンプレートのタイプを取得
-			$ret = $this->db->getTemplate($curTemplate, $row);
+			$ret = $this->systemDb->getTemplate($curTemplate, $row);
 			if ($ret){
 				$templateType = $row['tm_type'];
 				$templateGenerator = $row['tm_generator'];
@@ -5868,7 +5868,7 @@ class PageManager extends _Core
 				$gEnvManager->setIsCurrentWidgetShared($shared);
 					
 				// 実行ログを残す
-				$this->db->writeWidgetLog($widgetId, 0/*ページ実行*/);
+			$this->systemDb->writeWidgetLog($widgetId, 0/*ページ実行*/);
 				
 				// ウィジェットを実行
 				//require_once($widgetIndexFile);
@@ -5931,10 +5931,10 @@ class PageManager extends _Core
 		global $gErrorManager;
 
 		// ウィジェットのアクセス権をチェック
-		if (!$this->db->canAccessWidget($widgetId)) return '';
+		if (!$this->systemDb->canAccessWidget($widgetId)) return '';
 
 		// ウィジェット情報取得
-		if (!$this->db->getWidgetInfo($widgetId, $row)) return '';
+		if (!$this->systemDb->getWidgetInfo($widgetId, $row)) return '';
 
 		// 端末タイプをチェック
 		if (intval($row['wd_device_type']) != intval($gEnvManager->getCurrentPageDeviceType())) return '';
@@ -5970,7 +5970,7 @@ class PageManager extends _Core
 		//$gEnvManager->setIsCurrentWidgetShared($shared);
 			
 		// 実行ログを残す
-		$this->db->writeWidgetLog($widgetId, 0/*ページ実行*/);
+	$this->systemDb->writeWidgetLog($widgetId, 0/*ページ実行*/);
 		
 		// ウィジェットを実行
 		//require_once($widgetIndexFile);
@@ -6373,7 +6373,7 @@ class PageManager extends _Core
 						// システム運用可能ユーザの場合でリダイレクト先が設定されていない場合はデフォルトの管理画面URLへ遷移
 						$userInfo = $gEnvManager->getCurrentUserInfo();// ユーザ情報取得
 						if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){
-							$ret = $this->db->getLoginUserRecordById($userInfo->userId, $userInfoRow);
+							$ret = $this->systemDb->getLoginUserRecordById($userInfo->userId, $userInfoRow);
 							if ($ret && !empty($userInfoRow['lu_default_admin_url'])){
 								$redirectUrl = $gEnvManager->getDefaultAdminUrl() . $userInfoRow['lu_default_admin_url'];
 							}
@@ -6450,7 +6450,7 @@ class PageManager extends _Core
 		$pageSubId = '';
 		
 		// 対象のウィジェットのページサブIDを取得
-		$ret = $this->db->getSubPageId($widgetId, $pageId, $rows);
+		$ret = $this->systemDb->getSubPageId($widgetId, $pageId, $rows);
 		if ($ret){// データが存在する
 			for ($i = 0; $i < count($rows); $i++){
 				if (!empty($rows[$i]['pd_sub_id']) && $rows[$i]['pd_config_id'] == $configId){
@@ -6479,7 +6479,7 @@ class PageManager extends _Core
 		if ($task == 'search' && $option == 'com_search'){		// joomla!の検索結果表示の場合
 			$this->contentType = M3_VIEW_TYPE_SEARCH;		// ページのコンテンツタイプ
 				
-			$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_SEARCH, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+			$subId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_SEARCH, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 			if (!empty($subId)){
 				// リダイレクト用URLを作成
 				$keyword = $request->trimValueOf('searchword');
@@ -6499,7 +6499,7 @@ class PageManager extends _Core
 	 */
 	function getPageSubIdByContentType($contentType, $pageId)
 	{
-		$subId = $this->db->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
+		$subId = $this->systemDb->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
 		return $subId;
 	}
 	/**
@@ -6512,7 +6512,7 @@ class PageManager extends _Core
 	 */
 	function isWidgetOnPage($pageId, $widgetId, $activePageOnly=true)
 	{
-		$ret = $this->db->isWidgetOnPage($pageId, $widgetId, $activePageOnly, 0/*定義セットID*/);
+		$ret = $this->systemDb->isWidgetOnPage($pageId, $widgetId, $activePageOnly, 0/*定義セットID*/);
 		return $ret;
 	}
 	/**
@@ -6527,7 +6527,7 @@ class PageManager extends _Core
 		$ret = $this->getPageIdFromUrl($url, $pageId, $pageSubId, $param);
 		
 		// ウィジェットIDを取得
-		if ($ret) $widgetId = $this->db->getWidgetIdByType($pageId, $pageSubId, $widgetType);
+		if ($ret) $widgetId = $this->systemDb->getWidgetIdByType($pageId, $pageSubId, $widgetType);
 		return $widgetId;
 	}
 	/**
@@ -6539,7 +6539,7 @@ class PageManager extends _Core
 	 */
 	function getWidgetIdWithPageInfoByContentType($pageId, $contentType)
 	{
-		$widgetId = $this->db->getWidgetIdWithPageInfoByContentType($pageId, $contentType);
+		$widgetId = $this->systemDb->getWidgetIdWithPageInfoByContentType($pageId, $contentType);
 		return $widgetId;
 	}
 	/**
@@ -6559,10 +6559,10 @@ class PageManager extends _Core
 		if (isset($linkInfoObj)) $widgetId = $linkInfoObj->getJobWidget($jobType);
 		
 		// ウィジェットのアクセス権をチェック
-		if (!$this->db->canAccessWidget($widgetId)) return '';
+		if (!$this->systemDb->canAccessWidget($widgetId)) return '';
 
 		// ウィジェット情報取得
-		if (!$this->db->getWidgetInfo($widgetId, $row)) return '';
+		if (!$this->systemDb->getWidgetInfo($widgetId, $row)) return '';
 
 		// 端末タイプをチェック
 		if (intval($row['wd_device_type']) != intval($gEnvManager->getCurrentPageDeviceType())) return '';
@@ -6578,7 +6578,7 @@ class PageManager extends _Core
 	function getActiveMainWidgetIdByWidgetType($widgetType)
 	{
 		// ウィジェットIDを取得
-		$widgetId = $this->db->getActiveMainWidgetIdByType($widgetType);
+		$widgetId = $this->systemDb->getActiveMainWidgetIdByType($widgetType);
 		return $widgetId;
 	}
 	/**
@@ -6625,7 +6625,7 @@ class PageManager extends _Core
 		$subPageId = $this->getPageSubIdByWidget($pageId, $widgetId);
 		if (empty($subPageId)){
 			// 見つからないときは互換ウィジェットを探す
-			$targetWidgetId = $this->db->getCompatibleWidgetId($widgetId);
+			$targetWidgetId = $this->systemDb->getCompatibleWidgetId($widgetId);
 			if (!empty($targetWidgetId)){
 				$subPageId = $this->getPageSubIdByWidget($pageId, $targetWidgetId);
 			}
@@ -6860,7 +6860,7 @@ class PageManager extends _Core
 		// 現在設定されているページIDを取得
 		$pageId		= $gEnvManager->getCurrentPageId();
 		$pageSubId	= $gEnvManager->getCurrentPageSubId();
-		$ret = $this->db->canAccessPage($pageId, $pageSubId, $pageVisible, $pageSubVisible, $isAdminMenu);
+		$ret = $this->systemDb->canAccessPage($pageId, $pageSubId, $pageVisible, $pageSubVisible, $isAdminMenu);
 		if ($ret){		// アクセス可能なときは、ユーザ制限もチェックする
 			$isActivePage = true;
 			
@@ -6974,7 +6974,7 @@ class PageManager extends _Core
 	{
 		// ページ情報が空のときはデータをロード
 		if (empty($this->pageInfo)){
-			$records = $this->db->getPageInfoRecords();
+			$records = $this->systemDb->getPageInfoRecords();
 			$count = count($records);
 			$this->pageInfo = array();
 			for ($i = 0; $i < $count; $i++){
@@ -7122,7 +7122,7 @@ class PageManager extends _Core
 	{
 		if (empty($templateId)) $templateId = $this->gSystem->defaultTemplateId();		// PC画面デフォルトのテンプレートを取得
 
-		$ret = $this->db->getTemplate($templateId, $row);
+		$ret = $this->systemDb->getTemplate($templateId, $row);
 		if (!$ret) return false;
 		
 		// 編集エディタ用パラメータが初期化されていない場合は初期化
@@ -7133,7 +7133,7 @@ class PageManager extends _Core
 			// テンプレートの情報を更新
 			$updateParam = array();
 			$updateParam['tm_editor_param'] = serialize($editorParamObj);
-			$ret = $this->db->updateTemplate($templateId, $updateParam);
+			$ret = $this->systemDb->updateTemplate($templateId, $updateParam);
 		} else {
 			$editorParamObj = unserialize($row['tm_editor_param']);
 		}
@@ -7416,7 +7416,7 @@ class PageManager extends _Core
 		}
 
 		// テンプレート情報取得
-		$ret = $this->db->getTemplate($templateId, $row);
+		$ret = $this->systemDb->getTemplate($templateId, $row);
 		if (!$ret) return array();
 		if (empty($row['tm_editor_param'])) return array();
 	

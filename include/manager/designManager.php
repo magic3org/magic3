@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,7 +20,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアク�
 class DesignManager extends _Core
 {
 	private $_getUrlCallback;		// URL変換(getUrl())用コールバック関数
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $defaultMenuParam;			// デフォルトメニュー用パラメータ
 	private $pageLinkInfo;				// ページリンク情報
 	private $iconExts = array('png', 'gif');
@@ -49,7 +49,7 @@ class DesignManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * URL変換(getUrl())用コールバック関数を設定
@@ -100,7 +100,7 @@ class DesignManager extends _Core
 	function getDefaultWidgetTableParam($menuType = 0)
 	{
 		if (empty($this->defaultMenuParam)){
-			$value = $this->db->getDesignConfig(DEFAULT_MENU_PARAM_KEY);
+			$value = $this->systemDb->getDesignConfig(DEFAULT_MENU_PARAM_KEY);
 			if (empty($value)){
 				$this->defaultMenuParam = self::DEFAULT_MENU_PARAM_INIT_VALUE;
 			} else {

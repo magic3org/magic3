@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,7 +22,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
  */
 class InstanceManager extends _Core
 {
-    private $systemDb;			// システムDBオブジェクト
+  private $db;			// システムDBオブジェクト
 	private $userInfo;			// ユーザ情報オブジェクト
 	private $addonDir;			// 追加クラスインストールディレクトリ
 	private $addonArray;		// ロード済みの追加クラス
@@ -37,7 +37,7 @@ class InstanceManager extends _Core
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		$this->systemDb = new SystemDb();
+		$this->db = new SystemDb();
 		
 		// 変数初期化
 		//$this->addonArray = array();
@@ -47,7 +47,7 @@ class InstanceManager extends _Core
 	 */
 	public function getSytemDbObject()
 	{
-		return $this->systemDb;
+		return $this->db;
 	}
 	/**
 	 * ユーザ情報設定
@@ -154,7 +154,7 @@ class InstanceManager extends _Core
 		// 追加クラス格納ディレクトリを取得
 		$this->addonDir = $gEnvManager->getAddonsPath();
 		
-		$ret = $this->systemDb->getAllAddons($rows);
+		$ret = $this->db->getAllAddons($rows);
 		if ($ret){
 			$this->addonInfoArray = array();// アドオンクラス情報
 			for ($i = 0; $i < count($rows); $i++){

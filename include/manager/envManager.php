@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -55,7 +55,7 @@ class EnvManager extends _Core
 	private $adminDefaultTheme;	// 管理画面のデフォルトテーマ
 	private $accessPath;		// アクセスポイントパス
 	private $accessDir;			// アクセスポイントディレクトリ(空文字列=PC用、s=スマートフォン用、m=携帯用)
- 	private $db;				// DBオブジェクト
+ 	//private $db;				// DBオブジェクト
 	private $canUseDb;			// DBが使用可能状態にあるかどうか
 	private $canUseCookie;		// クッキーが使用可能かどうか
 	private $canChangeLang;		// 言語変更可能かどうか
@@ -155,17 +155,17 @@ class EnvManager extends _Core
 		if (!file_exists($this->workDir)) $this->workDir = M3_SYSTEM_WORK_DIR_PATH;// 作業用ディレクトリデフォルト値
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		
 		// ######## DBの接続チェック ########
 		if (defined('M3_STATE_IN_INSTALL')){		// システムがインストールモードで起動のとき
 			$this->canUseDb = false;			// DBは使用できない
 		} else {
 			// システム名称、バージョンを取得
-			$status = $this->db->getDisplayErrMessage();	// 出力状態を取得
-			$this->db->displayErrMessage(false);		// 画面へのエラー出力を抑止
+			$status = $this->systemDb->getDisplayErrMessage();	// 出力状態を取得
+			$this->systemDb->displayErrMessage(false);		// 画面へのエラー出力を抑止
 			$ret = $this->gSystem->_loadSystemConfig();
-			$this->db->displayErrMessage($status);		// 抑止解除
+			$this->systemDb->displayErrMessage($status);		// 抑止解除
 			if ($ret){
 				$this->canUseDb = true;			// DBは使用可能
 				
@@ -1254,16 +1254,16 @@ class EnvManager extends _Core
 			// ページサブIDがないときは、パラメータからページ属性を判断する
 			// キーが設定されていれば値は空文字列でも属性を持っているとする
 			if (isset($queryArray[M3_REQUEST_PARAM_CONTENT_ID]) || isset($queryArray[M3_REQUEST_PARAM_CONTENT_ID_SHORT])){		// コンテンツIDのとき
-				$pageSubId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $pageId);// ページサブIDを取得
+				$pageSubId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $pageId);// ページサブIDを取得
 			} else if (isset($queryArray[M3_REQUEST_PARAM_PRODUCT_ID]) || isset($queryArray[M3_REQUEST_PARAM_PRODUCT_ID_SHORT])){	// 製品IDのとき
-				$pageSubId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $pageId);// ページサブIDを取得
+				$pageSubId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $pageId);// ページサブIDを取得
 			} else if (isset($queryArray[M3_REQUEST_PARAM_BBS_ID]) || isset($queryArray[M3_REQUEST_PARAM_BBS_ID_SHORT])){	// 掲示板投稿記事のとき
-				$pageSubId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $pageId);// ページサブIDを取得
+				$pageSubId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $pageId);// ページサブIDを取得
 			} else if (isset($queryArray[M3_REQUEST_PARAM_BLOG_ENTRY_ID]) || isset($queryArray[M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT])){	// ブログ記事のとき
-				$pageSubId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $pageId);// ページサブIDを取得
+				$pageSubId = $this->systemDb->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $pageId);// ページサブIDを取得
 			}
 		}
-		if (empty($pageSubId)) $pageSubId = $this->db->getDefaultPageSubId($pageId);	// 最終的に見つからないときはデフォルト値を取得
+		if (empty($pageSubId)) $pageSubId = $this->systemDb->getDefaultPageSubId($pageId);	// 最終的に見つからないときはデフォルト値を取得
 		return $pageSubId;
 	}*/
 	/**
@@ -1360,7 +1360,7 @@ class EnvManager extends _Core
 		$this->currentTemplateCleanType = 0;
 		$this->currentTemplateUseBootstrap = false;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 		if ($this->canUseDb){		// DB使用可能なとき
-			if ($this->db->getTemplate($name, $row)){
+			if ($this->systemDb->getTemplate($name, $row)){
 				$this->currentTemplateType = $row['tm_type'];		// テンプレートタイプ
 				$this->currentTemplateGenerator = $row['tm_generator'];		// テンプレート作成アプリケーション
 				$this->currentTemplateVersion = $row['tm_version'];		// テンプレートバージョン
@@ -1495,7 +1495,7 @@ class EnvManager extends _Core
 	{
 		$updateParam = array();
 		$updateParam['tm_custom_params'] = $params;
-		$ret = $this->db->updateTemplate($this->currentTemplateId, $updateParam);
+		$ret = $this->systemDb->updateTemplate($this->currentTemplateId, $updateParam);
 		return $ret;
 	}
 	// ##################### カレントのウィジェット関係 #####################
@@ -2161,7 +2161,7 @@ class EnvManager extends _Core
 	 */
 	public function isSystemAdminUser($userId)
 	{
-		return $this->db->isSystemAdmin($userId);
+		return $this->systemDb->isSystemAdmin($userId);
 	}
 	// ##################### アクセスログ #####################
 	/**
@@ -2302,7 +2302,7 @@ class EnvManager extends _Core
 		// 現在のページIDが変更のときは、デフォルトのページサブIDを更新
 		if ($this->canUseDb && $this->currentPageId != $id){
 			$deviceType = 0;		// 端末タイプ取得
-			$this->defaultPageSubId = $this->db->getDefaultPageSubId($id, $deviceType);
+			$this->defaultPageSubId = $this->systemDb->getDefaultPageSubId($id, $deviceType);
 			$this->currentPageDeviceType = $deviceType;		// 現在のページの端末タイプ
 		}
 		$this->currentPageId = $id;
@@ -2354,7 +2354,7 @@ class EnvManager extends _Core
 	 */
 	public function getDefaultPageSubIdByPageId($pageId)
 	{
-		return $this->db->getDefaultPageSubId($pageId);
+		return $this->systemDb->getDefaultPageSubId($pageId);
 	}
 	/**
 	 * 現在実行中のウィジェット用のページサブID取得
@@ -2377,7 +2377,7 @@ class EnvManager extends _Core
 	 */
 	public function getPageSubIdByContentType($pageId, $contentType)
 	{
-		$pageSubId = $this->db->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
+		$pageSubId = $this->systemDb->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
 		return $pageSubId;
 	}
 	/**
@@ -2451,7 +2451,7 @@ class EnvManager extends _Core
 	 */
 	public function getDefaultLanguageNameByCurrentLanguage()
 	{
-		return $this->db->getLanguageNameByDispLanguageId($this->defaultLanguage, $this->currentLanguage);
+		return $this->systemDb->getLanguageNameByDispLanguageId($this->defaultLanguage, $this->currentLanguage);
 	}
 	/**
 	 * カレント言語取得
@@ -2569,9 +2569,9 @@ class EnvManager extends _Core
 	 */
 	public function getInitValueOfTimestamp()
 	{
-		if ($this->db->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+		if ($this->systemDb->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
 			return M3_TIMESTAMP_INIT_VALUE_MYSQL;
-		} else if ($this->db->getDbType() == M3_DB_TYPE_PGSQL){
+		} else if ($this->systemDb->getDbType() == M3_DB_TYPE_PGSQL){
 			return M3_TIMESTAMP_INIT_VALUE_PGSQL;
 		} else {
 			return '';
@@ -2584,9 +2584,9 @@ class EnvManager extends _Core
 	 */
 	public function getInitValueOfDate()
 	{
-		if ($this->db->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+		if ($this->systemDb->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
 			return M3_DATE_INIT_VALUE_MYSQL;
-		} else if ($this->db->getDbType() == M3_DB_TYPE_PGSQL){
+		} else if ($this->systemDb->getDbType() == M3_DB_TYPE_PGSQL){
 			return M3_DATE_INIT_VALUE_PGSQL;
 		} else {
 			return '';
