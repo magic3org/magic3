@@ -21,12 +21,19 @@ class BaseFrameContainer extends _Core
 	protected $_db;	// DB接続オブジェクト
 	private $joomlaBufArray = array();			// Joomla!データ受け渡し用
 	private $templateCustomObj;				// テンプレートカスタマイズパラメータオブジェクト
+	// Joomla!v1.5用のパラメータ
+	private $language;
+	private $template;
+	private $baseurl;
+	private $direction;
+	private $params;
+
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理ウィジェットのウィジェットID
-	
+
 	/**
 	 * コンストラクタ
 	 */

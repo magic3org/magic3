@@ -2619,10 +2619,10 @@ class BaseWidgetContainer extends _Core
 	function _($id)
 	{
 		// 初期化されていない場合はローカライズ用データをロード
-		if (!$this->$loadLocaleText){					// ローカライズ用データを読み込んだかどうか
+		if (!$this->loadLocaleText){					// ローカライズ用データを読み込んだかどうか
 			$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
 			
-			$this->$loadLocaleText = true;	// ローカライズ用データを読み込み完了
+			$this->loadLocaleText = true;	// ローカライズ用データを読み込み完了
 		}
 		// テキストを取得
 		$destStr = $this->gInstance->getMessageManager()->getLocaleText($this->_widgetId, $id);
@@ -2640,14 +2640,14 @@ class BaseWidgetContainer extends _Core
 		$currentLocale = $this->gEnv->getCurrentLocale();
 			
 		// 初期化されていない場合はローカライズ用データをロード
-		if (!$this->$loadLocaleText){					// ローカライズ用データを読み込んだかどうか
+		if (!$this->loadLocaleText){					// ローカライズ用データを読み込んだかどうか
 			if ($defaultLocale == $currentLocale){		// カレントの言語がデフォルト言語と同じとき
 				$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/);
 			} else {
 				$ret = $this->gInstance->getMessageManager()->loadLocaleText($this->_widgetId, $this->gEnv->getCurrentLocale(), ''/*ファイル名オプション*/, self::LOCAL_TYPE_SYSTEM);
 			}
 			
-			$this->$loadLocaleText = true;	// ローカライズ用データを読み込み完了
+			$this->loadLocaleText = true;	// ローカライズ用データを読み込み完了
 		}
 		// テキストを取得
 		if ($defaultLocale == $currentLocale){		// カレントの言語がデフォルト言語と同じとき
