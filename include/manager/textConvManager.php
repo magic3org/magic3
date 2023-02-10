@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,7 +17,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class TextConvManager extends _Core
 {
-	private $db;						// DBオブジェクト
+//	private $db;						// DBオブジェクト
 	private $rootUrl;					// ルートURL
 	private $contentType;				// コンテンツタイプ
 	private $contentDt;					// コンテンツ作成日時
@@ -40,7 +40,7 @@ class TextConvManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+	//	$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * キー値テーブルの値を使用してテキストを変換
@@ -67,7 +67,7 @@ class TextConvManager extends _Core
 		// キーワードを変換
 		for ($i = 0; $i < count($keywords); $i++){
 			$key = $keywords[$i];
-			$value = $this->db->getKeyValue($key, $tmp);
+			$value = $this->systemDb->getKeyValue($key, $tmp);
 			if ($convBr){// 改行コード変換の場合
 				$value = $this->convLineBreakToBr($value);
 			}

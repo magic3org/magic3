@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @link       http://magic3.org
  */
@@ -17,7 +17,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/db/analyticsDb.php');
 
 class AnalyzeManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $analyticsDb;
 	const NOT_FOUND_BROWSER_IMAGE = 'noimage.png';			// ブラウザアイコンが見つからなかった場合のアイコン
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
@@ -39,7 +39,7 @@ class AnalyzeManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		$this->analyticsDb = new analyticsDb();
 	}
 	/**
@@ -54,7 +54,7 @@ class AnalyzeManager extends _Core
 	 */
 	function updateContentViewCount($typeId, $serial, $day = null, $hour = null, $contentId = '')
 	{
-		$ret = $this->db->updateViewCount($typeId, $serial, $contentId, $day, $hour);
+		$ret = $this->systemDb->updateViewCount($typeId, $serial, $contentId, $day, $hour);
 		return $ret;
 	}
 	/**
@@ -67,7 +67,7 @@ class AnalyzeManager extends _Core
 	 */
 	function getTotalContentViewCount($typeId, $serial, $contentId = '')
 	{
-		$count = $this->db->getTotalViewCount($typeId, $serial, $contentId);
+		$count = $this->systemDb->getTotalViewCount($typeId, $serial, $contentId);
 		return $count;
 	}
 	/**
@@ -79,7 +79,7 @@ class AnalyzeManager extends _Core
 	 */
 	function getTotalContentViewCountInfo($typeId, $contentIdArray)
 	{
-		$resultArray = $this->db->getTotalViewCountInfo($typeId, $contentIdArray);
+		$resultArray = $this->systemDb->getTotalViewCountInfo($typeId, $contentIdArray);
 		return $resultArray;
 	}
 	/**
@@ -105,7 +105,7 @@ class AnalyzeManager extends _Core
 		if (!isset($day)) $day = date("Y/m/d");		// 日
 		if (!isset($hour)) $hour = (int)date("H");		// 時間
 
-		$ret = $this->db->updateViewCount($typeId, $serial, $contentId, $day, $hour);
+		$ret = $this->systemDb->updateViewCount($typeId, $serial, $contentId, $day, $hour);
 		return $ret;
 	}
 	/**
@@ -135,7 +135,7 @@ class AnalyzeManager extends _Core
 		$path = $this->gEnv->getAccessPath();
 		
 		// 検索キーワードログ書き込み
-		$this->db->writeSearchWordLog(0/*デバイスタイプ*/, $cid, $widgetId, $keyword, $basicWord, $path);
+		$this->systemDb->writeSearchWordLog(0/*デバイスタイプ*/, $cid, $widgetId, $keyword, $basicWord, $path);
 		return true;
 	}
 	/**
@@ -148,7 +148,7 @@ class AnalyzeManager extends _Core
 	function logContentDownload($contentType, $contentId)
 	{
 		// ダウンロードログ書き込み
-		$ret = $this->db->writeDownloadLog($contentType, $contentId);
+		$ret = $this->systemDb->writeDownloadLog($contentType, $contentId);
 		return $ret;
 	}
 	/**

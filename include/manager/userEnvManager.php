@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class UserEnvManager extends _Core
 {
-	private $db;						// DBオブジェクト
+//	private $db;						// DBオブジェクト
 	private $widgetId;					// 処理対象ウィジェット
 	private $personalizeParams;		// 個人最適化パラメータ
 	const WORK_DIR_EXPIRE_HOUR = 1;		// 作業ディレクトリ自動削除時間
@@ -33,7 +33,7 @@ class UserEnvManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * ユーザ環境マネージャの使用宣言(このマネージャーを使用する場合は必ず呼び出す)
@@ -193,7 +193,7 @@ class UserEnvManager extends _Core
 			if (empty($clientId)){
 				$this->personalizeParams = array();
 			} else {
-				$serializedParam = $this->db->getPersonalizeParam($clientId);
+				$serializedParam = $this->systemDb->getPersonalizeParam($clientId);
 				if (empty($serializedParam)){
 					$this->personalizeParams = array();
 				} else {
@@ -220,7 +220,7 @@ class UserEnvManager extends _Core
 		$ret = false;
 		$clientId = $this->gAccess->getClientId();
 		if (!empty($clientId)){
-			$ret = $this->db->updatePersonalizeParam($clientId, $serializedParam);
+			$ret = $this->systemDb->updatePersonalizeParam($clientId, $serializedParam);
 			if ($ret) $this->personalizeParams = $params;
 		}
 		return $ret;

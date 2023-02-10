@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: connectManager.php 5114 2012-08-16 01:04:11Z fishbone $
  * @link       http://www.magic3.org
@@ -17,7 +17,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class ConnectManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	const CF_CONNECT_SERVER_URL = 'default_connect_server_url';			// ポータル接続先URL
 	const CF_PORTAL_SERVER_URL = 'portal_server_url';		// ポータルサーバURL
 	const CF_SERVER_ID = 'server_id';		// サーバID
@@ -34,7 +34,7 @@ class ConnectManager extends _Core
 		parent::__construct();
 			
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * コンテンツ更新情報をサーバに登録
@@ -66,7 +66,7 @@ class ConnectManager extends _Core
 		if (empty($url)) return false;
 		
 		// サーバIDが設定されていないときは終了
-		$serverId = $this->db->getSystemConfig(self::CF_SERVER_ID);
+		$serverId = $this->systemDb->getSystemConfig(self::CF_SERVER_ID);
 		if (empty($serverId)) return false;
 		
 		// コンテンツタイプ設定
@@ -169,7 +169,7 @@ class ConnectManager extends _Core
 		if (empty($url)) return false;
 		
 		// サーバIDが設定されていないときは終了
-		$serverId = $this->db->getSystemConfig(self::CF_SERVER_ID);
+		$serverId = $this->systemDb->getSystemConfig(self::CF_SERVER_ID);
 		if (empty($serverId)) return false;
 		
 		// ##### 送信データ設定 #####

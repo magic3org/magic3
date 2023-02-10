@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,7 +18,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/db/specificDb.php');
 
 class DbManager extends _Core
 {
-	private $db;						// DBオブジェクト
+//	private $db;						// DBオブジェクト
 	private $specificDb;				// DBオブジェクト
 	private $outputPgUndefinedTableMsg;	// PostgreSQLの「Undefined table」のエラーメッセージを出力するかどうか
 	const BACKUP_FILENAME_HEAD = 'backup_';
@@ -33,7 +33,7 @@ class DbManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+//		$this->systemDb = $this->gInstance->getSytemDbObject();
 		$this->specificDb = new specificDb();
 	}
 	/**
@@ -48,11 +48,11 @@ class DbManager extends _Core
 		global $gEnvManager;
 		
 		// DBの属性を取得
-		$this->db->init();
+		$this->systemDb->init();
 		
 		$scriptPath = '';
-		if ($this->db->getDbType() == M3_DB_TYPE_MYSQL ||		// MySQLの場合
-			$this->db->getDbType() == M3_DB_TYPE_PGSQL){	// PostgreSQLの場合
+		if ($this->systemDb->getDbType() == M3_DB_TYPE_MYSQL ||		// MySQLの場合
+			$this->systemDb->getDbType() == M3_DB_TYPE_PGSQL){	// PostgreSQLの場合
 			$scriptPath = $gEnvManager->getSqlPath() . '/' . $filename;
 		} else {
 			$errors = array();
@@ -62,11 +62,11 @@ class DbManager extends _Core
 
 		// スクリプトファイルが存在するときはスクリプトファイルを実行
 		if (file_exists($scriptPath)){
-			$this->db->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
-			$this->db->execSqlScriptWithConvert($scriptPath);
+			$this->systemDb->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
+			$this->systemDb->execSqlScriptWithConvert($scriptPath);
 		
-			$errors = $this->db->getErrMsg();
-			if ($this->db->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
+			$errors = $this->systemDb->getErrMsg();
+			if ($this->systemDb->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
 				// 「Undefined table」のエラーメッセージを削除
 				$modifiedErrors = array();
 				for ($i = 0; $i < count($errors); $i++){
@@ -92,7 +92,7 @@ class DbManager extends _Core
 	 */
 	function startTransaction()
 	{
-		$this->db->startTransaction();
+		$this->systemDb->startTransaction();
 	}
 	/**
 	 * トランザクション終了
@@ -101,7 +101,7 @@ class DbManager extends _Core
 	 */
 	function endTransaction()
 	{
-		return $this->db->endTransaction();
+		return $this->systemDb->endTransaction();
 	}
 	/**
 	 * システム管理DB初期化スクリプトファイルを実行
@@ -115,8 +115,8 @@ class DbManager extends _Core
 		global $gEnvManager;
 		
 		// DBのバージョン取得
-		$this->db->init();		// DBの属性を取得
-		$dbVersion = $this->db->getDbVersion();
+		$this->systemDb->init();		// DBの属性を取得
+		$dbVersion = $this->systemDb->getDbVersion();
 		$ver = explode('.', $dbVersion);
 		$majorVer = $ver[0];		// メジャーバージョン
 		$minorVer = $ver[1];		// マイナーバージョン
@@ -135,8 +135,8 @@ class DbManager extends _Core
 		}*/
 		$scriptName = '_create_' . $scriptType . '.sql';
 		$scriptPath = '';
-		if ($this->db->getDbType() == M3_DB_TYPE_MYSQL ||		// MySQLの場合
-			$this->db->getDbType() == M3_DB_TYPE_PGSQL){	// PostgreSQLの場合
+		if ($this->systemDb->getDbType() == M3_DB_TYPE_MYSQL ||		// MySQLの場合
+			$this->systemDb->getDbType() == M3_DB_TYPE_PGSQL){	// PostgreSQLの場合
 			$scriptPath = $gEnvManager->getSqlPath() . '/' . M3_DB_TYPE_MYSQL . $scriptName;
 		} else {
 			$errors = array();
@@ -145,11 +145,11 @@ class DbManager extends _Core
 		}
 		// スクリプトファイルが存在するときはスクリプトファイルを実行
 		if (file_exists($scriptPath)){
-			$this->db->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
-			$this->db->execSqlScriptWithConvert($scriptPath);
+			$this->systemDb->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
+			$this->systemDb->execSqlScriptWithConvert($scriptPath);
 		
-			$errors = $this->db->getErrMsg();
-			if ($this->db->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
+			$errors = $this->systemDb->getErrMsg();
+			if ($this->systemDb->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
 				// 「Undefined table」のエラーメッセージを削除
 				$modifiedErrors = array();
 				for ($i = 0; $i < count($errors); $i++){
@@ -179,9 +179,9 @@ class DbManager extends _Core
 	{
 		// スクリプトファイルが存在するときはスクリプトファイルを実行
 		if (file_exists($scriptPath)){
-			$this->db->execSqlScript($scriptPath);
+			$this->systemDb->execSqlScript($scriptPath);
 		
-			$errors = $this->db->getErrMsg();
+			$errors = $this->systemDb->getErrMsg();
 			if (count($errors)){
 				return false;
 			} else {
@@ -204,11 +204,11 @@ class DbManager extends _Core
 	{
 		// スクリプトファイルが存在するときはスクリプトファイルを実行
 		if (file_exists($scriptPath)){
-			$this->db->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
-			$this->db->execSqlScriptWithConvert($scriptPath);
+			$this->systemDb->displayErrMessage(false);		// エラーメッセージの画面出力を抑止
+			$this->systemDb->execSqlScriptWithConvert($scriptPath);
 		
-			$errors = $this->db->getErrMsg();
-			if ($this->db->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
+			$errors = $this->systemDb->getErrMsg();
+			if ($this->systemDb->getDbType() == M3_DB_TYPE_PGSQL && !$this->outputPgUndefinedTableMsg){	// PostgreSQLの場合で「Undefined table」のエラーメッセージを出さないとき
 				// 「Undefined table」のエラーメッセージを削除
 				$modifiedErrors = array();
 				for ($i = 0; $i < count($errors); $i++){
@@ -216,9 +216,9 @@ class DbManager extends _Core
 				}
 				$errors = $modifiedErrors;
 			}
-			//$this->db->execSqlScript($scriptPath);
+			//$this->systemDb->execSqlScript($scriptPath);
 			//
-			//$errors = $this->db->getErrMsg();
+			//$errors = $this->systemDb->getErrMsg();
 			if (count($errors)){
 				return false;
 			} else {

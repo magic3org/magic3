@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,7 +18,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH .	'/lib/PHPMailer-5.2.26/PHPMailerAutoload.p
 
 class MailManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 	private $smtpTestMode;				// SMTPテストモードかどうか
 	private $errMessages;				// エラーメッセージ
 	private $isMultipleSend;			// 連続送信かどうか
@@ -44,7 +44,7 @@ class MailManager extends _Core
 		parent::__construct();
 			
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		
 		// 初期値設定
 		$this->maxMultipleSendCount = self::DEFAULT_MULTIPLE_SEND_COUNT;			// 連続送信数最大
@@ -155,7 +155,7 @@ class MailManager extends _Core
 			$destSubject = $subject;
 			$destContent = $mailForm;
 		} else {
-			if (!$this->db->getMailForm($formId, $langId, $row)){
+			if (!$this->systemDb->getMailForm($formId, $langId, $row)){
 				$this->gOpeLog->writeError(__METHOD__, 'メールフォームが見つかりません。(id=' . $formId . ')', 1100);
 				return false;
 			}
@@ -252,7 +252,7 @@ class MailManager extends _Core
 		// ##### ログ出力 #####
 		// 送信成功したときは、ログに残す
 		if ($ret){
-			$this->db->addMailLog($type, $widgetId, $toAddress, $fromAddress, $destSubject, $destContent);
+			$this->systemDb->addMailLog($type, $widgetId, $toAddress, $fromAddress, $destSubject, $destContent);
 			$msgDetail = 'subject=' . $destSubject . ', body=' . $destContent;
 			$this->gOpeLog->writeInfo(__METHOD__, 'メールが送信されました。(送信先=' . $toAddress . ', 送信元=' . $fromAddress . ')', 1000, $msgDetail);
 		}
@@ -268,7 +268,7 @@ class MailManager extends _Core
 	 */
 	function getMailForm($id, $langId, &$row)
 	{
-		$ret = $this->db->getMailForm($id, $langId, $row);
+		$ret = $this->systemDb->getMailForm($id, $langId, $row);
 		return $ret;
 	}
 	/**
@@ -282,7 +282,7 @@ class MailManager extends _Core
 	 */
 	function updateMailForm($id, $langId, $content, $subject = null)
 	{
-		$ret = $this->db->updateMailForm($id, $langId, $content, $subject);
+		$ret = $this->systemDb->updateMailForm($id, $langId, $content, $subject);
 		return $ret;
 	}
 	/**

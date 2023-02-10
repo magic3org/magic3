@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアク�
 
 class ContentManager extends _Core
 {
-	private $db;					// DBオブジェクト
+	//private $db;					// DBオブジェクト
 	// データ解析用
 	private $_data = array();
 	private $_foundImages = array();	// コンテンツに含まれる画像の画像名
@@ -39,13 +39,8 @@ class ContentManager extends _Core
 	 */
 	function __construct()
 	{
-		global $gInstanceManager;
-		
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// システムDBオブジェクト取得
-		$this->db = $gInstanceManager->getSytemDbObject();
 	}
 	
 	/**
@@ -124,7 +119,7 @@ class ContentManager extends _Core
 			
 			$updateParam = array();
 			$updateParam['tm_custom_params'] = serialize($templateCustomObj);
-			$ret = $this->db->updateTemplate($templateId, $updateParam);
+			$ret = $this->systemDb->updateTemplate($templateId, $updateParam);
 			if (!$ret) return false;
 			
 			// 画像ディレクトリ作成
@@ -138,7 +133,7 @@ class ContentManager extends _Core
 			}
 			
 			// ##### ウィジェットを配置し、コンテンツを表示させる #####
-			$ret = $this->db->delPageDefAll($pageId, $pageSubId);	// 透過ウィジェットを除くすべて削除
+			$ret = $this->systemDb->delPageDefAll($pageId, $pageSubId);	// 透過ウィジェットを除くすべて削除
 			if (!$ret) return false;
 			
 			$now = date("Y/m/d H:i:s");	// 現在日時
@@ -153,20 +148,20 @@ class ContentManager extends _Core
 			
 			// ウィジェットの設定追加
 			$configId = -1;		// 新規追加
-			$ret = $this->db->updateWidgetParam(self::NICEPAGE_CONTENT_VIEW_WIDGET, serialize($newObj), $gEnvManager->getCurrentUserId(), $now, $configId);
+			$ret = $this->systemDb->updateWidgetParam(self::NICEPAGE_CONTENT_VIEW_WIDGET, serialize($newObj), $gEnvManager->getCurrentUserId(), $now, $configId);
 			if (!$ret) return false;
 			
 			// ウィジェットを配置
-			$ret = $this->db->addWidget($pageId, $pageSubId, 'main', self::NICEPAGE_CONTENT_VIEW_WIDGET, 0/*インデックス*/);
+			$ret = $this->systemDb->addWidget($pageId, $pageSubId, 'main', self::NICEPAGE_CONTENT_VIEW_WIDGET, 0/*インデックス*/);
 			if (!$ret) return false;
 			
 			// 配置したウィジェットのページ定義シリアル番号を取得
-			$ret = $this->db->getPageDefOnPageByWidgetId($pageId, $pageSubId, self::NICEPAGE_CONTENT_VIEW_WIDGET, $row);
+			$ret = $this->systemDb->getPageDefOnPageByWidgetId($pageId, $pageSubId, self::NICEPAGE_CONTENT_VIEW_WIDGET, $row);
 			if (!$ret) return false;
 			
 			// ウィジェットに設定を結びつける
 			$serial = $row['pd_serial'];		// シリアル番号
-			$ret = $this->db->updateWidgetConfigId(self::NICEPAGE_CONTENT_VIEW_WIDGET, $serial, $configId, $configTitle);
+			$ret = $this->systemDb->updateWidgetConfigId(self::NICEPAGE_CONTENT_VIEW_WIDGET, $serial, $configId, $configTitle);
 			if (!$ret) return false;
 			
 			break;		// 1コンテンツで処理終了

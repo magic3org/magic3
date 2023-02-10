@@ -8,14 +8,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class FileManager extends _Core
 {
-	private $db;						// DBオブジェクト
+	//private $db;						// DBオブジェクト
 		
 	/**
 	 * コンストラクタ
@@ -26,7 +26,7 @@ class FileManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * インストーラを退避
@@ -109,7 +109,7 @@ class FileManager extends _Core
 	 */
 	public function addAttachFileInfo($contentType, $fileId, $filePath, $originalFilename, $originalUrl = '')
 	{
-		$ret = $this->db->addAttachFileInfo($contentType, $fileId, $filePath, $originalFilename, $originalUrl);
+		$ret = $this->systemDb->addAttachFileInfo($contentType, $fileId, $filePath, $originalFilename, $originalUrl);
 		return $ret;
 	}
 	/**
@@ -125,7 +125,7 @@ class FileManager extends _Core
 	 */
 	public function updateAttachFileInfo($contentType, $contentId, $oldContentSerial, $contentSerial, $fileInfo, $dir)
 	{
-		$ret = $this->db->updateAttachFileInfo($contentType, $contentId, $oldContentSerial, $contentSerial, $fileInfo, $dir);
+		$ret = $this->systemDb->updateAttachFileInfo($contentType, $contentId, $oldContentSerial, $contentSerial, $fileInfo, $dir);
 		return $ret;
 	}
 	/**
@@ -138,7 +138,7 @@ class FileManager extends _Core
 	 */
 	public function getAttachFileInfo($contentType, $contentSerial, &$rows)
 	{
-		$ret = $this->db->getAttachFileInfo($contentType, $contentSerial, $rows);
+		$ret = $this->systemDb->getAttachFileInfo($contentType, $contentSerial, $rows);
 		return $ret;
 	}
 	/**
@@ -152,7 +152,7 @@ class FileManager extends _Core
 	 */
 	public function getAttachFileInfoByFileId($contentType, $fileId, &$row, $assignedOnly = true)
 	{
-		$ret = $this->db->getAttachFileInfoByFileId($contentType, $fileId, $row, $assignedOnly);
+		$ret = $this->systemDb->getAttachFileInfoByFileId($contentType, $fileId, $row, $assignedOnly);
 		return $ret;
 	}
 	/**
@@ -165,7 +165,7 @@ class FileManager extends _Core
 	 */
 	public function getAttachFileInfoByClientId($contentType, $clientId, &$rows)
 	{
-		$ret = $this->db->getAttachFileInfoByClientId($contentType, $clientId, $rows);
+		$ret = $this->systemDb->getAttachFileInfoByClientId($contentType, $clientId, $rows);
 		return $ret;
 	}
 	/**
@@ -178,7 +178,7 @@ class FileManager extends _Core
 	 */
 	public function delAttachFileInfo($contentType, $contentSerial, $dir)
 	{
-		$ret = $this->db->delAttachFileInfo($contentType, $contentSerial, $dir);
+		$ret = $this->systemDb->delAttachFileInfo($contentType, $contentSerial, $dir);
 		return $ret;
 	}
 	/**
@@ -191,7 +191,7 @@ class FileManager extends _Core
 	 */
 	public function delAttachFileInfoByContentId($contentType, $contentId, $dir)
 	{
-		$ret = $this->db->delAttachFileInfoByContentId($contentType, $contentId, $dir);
+		$ret = $this->systemDb->delAttachFileInfoByContentId($contentType, $contentId, $dir);
 		return $ret;
 	}
 	/**
@@ -204,7 +204,7 @@ class FileManager extends _Core
 	 */
 	public function cleanAttachFileInfo($contentType, $dir, $fileIdArray = null)
 	{
-		$ret = $this->db->cleanAttachFileInfo($contentType, $dir, $fileIdArray);
+		$ret = $this->systemDb->cleanAttachFileInfo($contentType, $dir, $fileIdArray);
 		return $ret;
 	}
 	/**

@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2022 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class MessageManager extends _Core
 {
-	private $db;						// DBオブジェクト
+//	private $db;						// DBオブジェクト
 	private $errorMessage    = array();		// アプリケーションのエラー
 	private $warningMessage  = array();		// ユーザ操作の誤り
 	private $guideMessage = array();		// ガイダンス
@@ -50,7 +50,7 @@ class MessageManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+//		$this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * メッセージを追加する
@@ -151,7 +151,7 @@ class MessageManager extends _Core
 		$this->_langStringArray = array();		// 読み込んだ言語テキスト
 
 		// 言語定義を読み込み
-		$ret = $this->db->getAllLangString($lang, $rows);
+		$ret = $this->systemDb->getAllLangString($lang, $rows);
 		if ($ret){
 			// 取得データを連想配列にする
 			$configCount = count($rows);
@@ -223,7 +223,7 @@ class MessageManager extends _Core
 	{
 		if (empty($lang)) $lang = $this->gEnv->getCurrentLanguage();
 		
-		$ret = $this->db->updateLangString($lang, $key, $value);
+		$ret = $this->systemDb->updateLangString($lang, $key, $value);
 		return $ret;
 	}
 	/**

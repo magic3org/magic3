@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアク�
 
 class HelpManager extends _Core
 {
-	private $db;						// DBオブジェクト
+//	private $db;						// DBオブジェクト
 //	private $currentWidgetId;			// 現在処理中のウィジェットID
 //	private $currentHelpKeys;			// 現在処理中のヘルプのキー
 	private $helpObj;					// ヘルプオブジェクト
@@ -34,7 +34,7 @@ class HelpManager extends _Core
 		parent::__construct();
 		
 		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		//$this->systemDb = $this->gInstance->getSytemDbObject();
 		
 //		$this->currentHelpKeys = array();			// 現在処理中のヘルプのキー
 	}

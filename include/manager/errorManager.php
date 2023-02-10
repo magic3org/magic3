@@ -8,24 +8,18 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2007 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: errorManager.php 198 2008-01-07 01:42:19Z fishbone $
  * @link       http://www.magic3.org
  */
 class ErrorManager
 {
-	private $db;						// DBオブジェクト
-	
 	/**
 	 * コンストラクタ
 	 */
 	function __construct()
 	{
-		global $gInstanceManager;
-		
-		// システムDBオブジェクト取得
-		$this->db = $gInstanceManager->getSytemDbObject();
 	}
 	/**
 	 * デバッグ用出力
@@ -37,7 +31,7 @@ class ErrorManager
 	 */
 	public function writeDebug($method, $msg)
 	{
-		if (M3_SYSTEM_DEBUG) $this->db->debugOut($method, $msg);
+		if (M3_SYSTEM_DEBUG) $this->systemDb->debugOut($method, $msg);
 	}
 	/**
 	 * 運用状況確認用出力
@@ -51,7 +45,7 @@ class ErrorManager
 	 */
 	public function writeInfo($method, $msg)
 	{
-		$this->db->writeErrorLog('info', $method, $msg);
+		$this->systemDb->writeErrorLog('info', $method, $msg);
 	}
 	/**
 	 * ワーニング出力
@@ -65,7 +59,7 @@ class ErrorManager
 	 */
 	public function writeWarn($method, $msg)
 	{
-		$this->db->writeErrorLog('warn', $method, $msg);
+		$this->systemDb->writeErrorLog('warn', $method, $msg);
 	}
 	/**
 	 * 通常エラー出力
@@ -79,7 +73,7 @@ class ErrorManager
 	 */
 	public function writeError($method, $msg)
 	{
-		$this->db->writeErrorLog('error', $method, $msg);
+		$this->systemDb->writeErrorLog('error', $method, $msg);
 	}
 	/**
 	 * 致命的エラー出力
@@ -93,7 +87,7 @@ class ErrorManager
 	 */
 	public function writeFatal($method, $msg)
 	{
-		$this->db->writeErrorLog('fatal', $method, $msg);
+		$this->systemDb->writeErrorLog('fatal', $method, $msg);
 	}
 }
 ?>

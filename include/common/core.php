@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2020 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -29,7 +29,8 @@ class _Core
 	protected $gRequest;
 	protected $gDesign;
 	protected $gDisp;
-	
+	protected $systemDb;
+
 	/**
 	 * コンストラクタ
 	 */
@@ -49,7 +50,7 @@ class _Core
 		global $gRequestManager;
 		global $gDesignManager;
 		global $gDispManager;
-	
+
 		$this->gLog			= $gLogManager;
 		$this->gInstance	= $gInstanceManager;
 		$this->gSystem		= $gSystemManager;
@@ -64,6 +65,8 @@ class _Core
 		$this->gRequest		= $gRequestManager;
 		$this->gDesign		= $gDesignManager;
 		$this->gDisp		= $gDispManager;
+
+		if (!is_null($this->gInstance)) $this->systemDb = $this->gInstance->getSytemDbObject();
 	}
 }
 ?>
