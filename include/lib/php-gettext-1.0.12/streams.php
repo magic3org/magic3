@@ -56,7 +56,7 @@ class StringReader {
   }
 
   function read($bytes) {
-    $data = substr($this->_str, $this->_pos, $bytes);
+    $data = substr($this->_str, intval($this->_pos), $bytes);	// Fixed by naoki for PHP 8.2: substr(): Passing null to parameter #2 ($offset) of type int is deprecated
     $this->_pos += $bytes;
     if (strlen($this->_str)<$this->_pos)
       $this->_pos = strlen($this->_str);
