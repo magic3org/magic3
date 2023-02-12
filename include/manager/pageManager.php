@@ -60,7 +60,7 @@ class PageManager extends _Core
 	private $headDescription;				// HTMLヘッダ「description」に出力する文字列
 	private $headKeywords;				// HTMLヘッダ「keywords」に出力する文字列
 	private $headOthers;				// HTMLヘッダに出力するタグ文字列
-	private $adminHeadOthers;				// HTMLヘッダに出力するタグ文字列(管理画面用)
+	private $adminHeadOthers = '';				// HTMLヘッダに出力するタグ文字列(管理画面用)
 	private $lastHeadTitle;				// 最後にヘッダ部titleにセットした文字列
 	private $lastHeadDescription;		// 最後にヘッダ部descriptionにセットした文字列
 	private $lastHeadKeywords;			// 最後にヘッダ部keywordsにセットした文字列
@@ -6974,7 +6974,7 @@ class PageManager extends _Core
 	 * @param string $pageId	ページID
 	 * @param string $pageSubId	ページサブID
 	 * @return array			ページ情報レコード
-	 */	
+	 */
 	function getPageInfo($pageId, $pageSubId)
 	{
 		// ページ情報が空のときはデータをロード
@@ -6987,7 +6987,12 @@ class PageManager extends _Core
 				$this->pageInfo[$pId] = $records[$i];
 			}
 		}
-		return $this->pageInfo[$pageId . self::PAGE_ID_SEPARATOR . $pageSubId];
+		//return $this->pageInfo[$pageId . self::PAGE_ID_SEPARATOR . $pageSubId];
+		if (isset($this->pageInfo[$pageId . self::PAGE_ID_SEPARATOR . $pageSubId])){
+			return $this->pageInfo[$pageId . self::PAGE_ID_SEPARATOR . $pageSubId];
+		} else {
+			return NULL;
+		}
 	}
 	/**
 	 * 現在のページのページ情報を取得
