@@ -279,6 +279,7 @@ class JDate extends DateTime
 	 *
 	 * @since   11.1
 	 */
+	#[\ReturnTypeWillChange]
 	public function format($format, $local = false, $translate = true)
 	{
 		if ($translate)
@@ -395,6 +396,7 @@ class JDate extends DateTime
 	 *
 	 * @since   11.1
 	 */
+	#[\ReturnTypeWillChange]
 	public function setTimezone($tz)
 	{
 		$this->tz = $tz;

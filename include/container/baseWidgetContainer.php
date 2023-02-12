@@ -1784,10 +1784,11 @@ class BaseWidgetContainer extends _Core
 		$mm = '';
 		$dd = '';
 		$ret_stat = '';
-		list($srcstr, $dummy) = explode(' ', $datestr);
+		//list($srcstr, $dummy) = explode(' ', $datestr);
+		list($srcstr) = explode(' ', $datestr);
 		if (strlen($datestr) == 0) return "";
 		$srcarray = preg_split('/[\/\.\-]/', $srcstr);
-		
+
 		//月日しか入力されていないときは、年を追加
 		if (count($srcarray) == 2){	// 月日のみ入力
 			array_unshift($srcarray, date("Y"));

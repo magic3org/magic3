@@ -120,6 +120,7 @@ class JRegistry extends JObject
 	 */
 	function getValue($regpath, $default=null)
 	{
+		/*
 		$result = $default;
 
 		// Explode the registry path into an array
@@ -141,15 +142,20 @@ class JRegistry extends JObject
 
 				//for ($i = 0; $i < $pathNodes; $i ++) {
 				for ($i = 1; $i < $pathNodes; $i ++) {
-					if((isset($ns->$nodes[$i]))) $ns =& $ns->$nodes[$i];
+					//if((isset($ns->$nodes[$i]))) $ns =& $ns->$nodes[$i];
+					if((isset($ns->nodes[$i]))) $ns =& $ns->nodes[$i];
 				}
-
-				if(isset($ns->$nodes[$i])) {
-					$result = $ns->$nodes[$i];
+				//if(isset($ns->$nodes[$i])) {
+				//	$result = $ns->$nodes[$i];
+				//}
+				if(isset($ns->nodes[$i])) {
+					$result = $ns->nodes[$i];
 				}
 			}
 		}
 		return $result;
+		*/
+		return NULL;
 	}
 
 	/**
@@ -163,6 +169,7 @@ class JRegistry extends JObject
 	 */
 	function setValue($regpath, $value)
 	{
+		/*
 		// Explode the registry path into an array
 		$nodes = explode('.', $regpath);
 
@@ -201,6 +208,8 @@ class JRegistry extends JObject
 		$ns->$nodes[$i] =& $value;
 
 		return $ns->$nodes[$i];
+		*/
+		return NULL;
 	}
 
 	/**
@@ -525,7 +534,7 @@ class JRegistry extends JObject
 	{
 		$this->_registry = unserialize(serialize($this->_registry));
 	}
-	
+
 	/**
 	 * Returns a property of the object or the default value if the property is not set.
 	 *
@@ -543,16 +552,16 @@ class JRegistry extends JObject
 		}*/
 		global $gEnvManager;
 		global $gSystemManager;
-		
+
 		switch ($property){
 		case 'sitename':
 			$default = $gEnvManager->getSiteName();
 			break;
 		case 'siteSlogan':
-			$default = $gSystemManager->getSiteDef(M3_TB_FIELD_SITE_SLOGAN);			// サイトスローガン
+			$default = $gSystemManager->getSiteDef(M3_TB_FIELD_SITE_SLOGAN);				// 繧ｵ繧､繝医せ繝ｭ繝ｼ繧ｬ繝ｳ
 			break;
 		}
-		
+
 		return $default;
 	}
 }
