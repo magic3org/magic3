@@ -11,8 +11,6 @@
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
 */
-// テンプレートから直接実行されるパターンはない　meme by naoki
-
 // Check to ensure this file is within the rest of the framework
 //defined('JPATH_BASE') or die();
 
@@ -499,7 +497,11 @@ class JLanguage extends JObject
 	* @since	1.5
 	*/
 	function getTag() {
-		return $this->_metadata['tag'];
+		if (isset($this->_metadata['tag'])){
+			return $this->_metadata['tag'];
+		} else {
+			return '';
+		}
 	}
 
 	/**
@@ -511,7 +513,12 @@ class JLanguage extends JObject
 	*/
 	function getLocale()
 	{
-		$locales = explode(',', $this->_metadata['locale']);
+		//$locales = explode(',', $this->_metadata['locale']);
+		if (isset($this->_metadata['locale'])){
+			$locales = explode(',', $this->_metadata['locale']);
+		} else {
+			$locales = array();
+		}
 
 		for($i = 0; $i < count($locales); $i++ ) {
 			$locale = $locales[$i];

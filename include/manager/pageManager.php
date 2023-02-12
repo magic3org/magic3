@@ -734,9 +734,9 @@ class PageManager extends _Core
 	{
 		// パラメータエラーチェック
 		if (!is_array($rssFile)) return;
-		
-		$line = $rssFile[0];
-		if (is_array($line)){	// 複数追加の場合
+
+		if (array_keys($rssFile) === range(0, count($rssFile) - 1)){	// 複数追加の場合
+			$line = $rssFile[0];	// 最初の1行のみ取得
 			for ($i = 0; $i < count($line); $i++){
 				// すでに追加済みかどうかチェック
 				$url = trim($line[$i]['href']);
@@ -5221,8 +5221,9 @@ class PageManager extends _Core
 		if ($pos !== false) return 1;
 		
 		// 既にウィジェット数が取得されている場合は保存値を返す
-		$widgetCount = $widgetCountArray[$position];
-		if (isset($widgetCount)) return $widgetCount;
+		//$widgetCount = $widgetCountArray[$position];
+		//if (isset($widgetCount)) return $widgetCount;
+		if (isset($widgetCountArray[$position])) return $widgetCountArray[$position];
 		
 		// ファイル名、ページ名を取得
 		$filename	= $gEnvManager->getCurrentPageId();
@@ -5788,7 +5789,8 @@ class PageManager extends _Core
 			if ($widgetHeaderType > 0 && empty($style)){			// Joomla!1.0テンプレートのとき
 				if (!empty($fetchedRow['pd_title'])) $title = $fetchedRow['pd_title'];
 			}
-			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index, $fetchedRow);
+//			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index, $fetchedRow);
+			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, ''/* exportCss */, $position, $index, $fetchedRow);
 			
 			// 遅延実行用タグを埋め込む
 			$launchWidgetTag = self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;		// 遅延ウィジェット埋め込み用タグ
@@ -6650,29 +6652,32 @@ class PageManager extends _Core
 	{
 		global $gEnvManager;
 		static $urlArray = array();
-		
+
 		// 複数回呼ばれるのでコンテンツタイプごとにページまでのURLは保存しておく
-		$baseUrl = $urlArray[$contentType];
-		if (!isset($baseUrl)){
+		//$baseUrl = $urlArray[$contentType];
+		//if (!isset($baseUrl)){
+		if (isset($urlArray[$contentType])) {
+			$baseUrl = $urlArray[$contentType];
+		} else {
 			// コンテンツタイプからページサブIDを取得
 			$pageSubId = $this->getPageSubIdByContentType($contentType, $gEnvManager->getCurrentPageId());		// DBから取得
-		
+
 			if (empty($pageSubId)){	// ページサブIDが取得できない場合はデフォルトのページサブIDを取得
 				$pageSubId = $gEnvManager->getDefaultPageSubId();
 			} else if ($pageSubId == $gEnvManager->getDefaultPageSubId()){		// デフォルトページの場合
 				if ($omitPageId) $pageSubId = '';	// ページID省略形を使用する場合はページサブIDを省略
 			}
-			
+
 			// 現在のアクセスポイントのURLを取得
 			$baseUrl = $gEnvManager->createPageUrl();
-			
+
 			// ページサブIDを付加
 			if (!empty($pageSubId)) $baseUrl .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId;
-			
+
 			// URLを保存
 			$urlArray[$contentType] = $baseUrl;
 		}
-		
+
 		// 追加パラメータ
 		$url = $baseUrl;
 		if (!empty($param)){

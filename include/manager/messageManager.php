@@ -342,9 +342,14 @@ class MessageManager extends _Core
 		// 初期データ読み込み
 		$this->_loadLangString($lang);
 		
-		$value = $this->_langStringArray[$key];
-		if (!isset($value)) $value = '';
-		return $value;
+		//$value = $this->_langStringArray[$key];
+		//if (!isset($value)) $value = '';
+		//return $value;
+		if (isset($this->_langStringArray[$key])){
+			return $this->_langStringArray[$key];
+		} else {
+			return '';
+		}
 	}
 	/**
 	 * Joomla!用定義値を変更

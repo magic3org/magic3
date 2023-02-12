@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -3104,10 +3104,14 @@ class SystemDb extends BaseDb
 	function getWidgetParam($widgetId, $configId = 0)
 	{
 		$sql = 'SELECT wp_param FROM _widget_param WHERE wp_id = ? AND wp_config_id = ? AND wp_deleted = false';
-		$params = array($widgetId, $configId); 
-		$this->selectRecord($sql, $params, $row);
-		return $row['wp_param'];
-    }
+		$params = array($widgetId, $configId);
+		$ret = $this->selectRecord($sql, $params, $row);
+		if ($ret){
+			return $row['wp_param'];
+		} else {
+			return '';
+		}
+  }
 	/**
 	 * ウィジェットパラメータ取得(キャッシュデータ取得用)
 	 *

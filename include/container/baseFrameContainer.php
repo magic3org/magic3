@@ -27,6 +27,8 @@ class BaseFrameContainer extends _Core
 	private $baseurl;
 	private $direction;
 	private $params;
+	private $_scripts = array();
+	private $_script = array();
 
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ

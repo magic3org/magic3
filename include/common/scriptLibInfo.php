@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2022 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,11 +28,11 @@ class ScriptLibInfo
 
 	// ##### 選択中のライブラリ #####
 	const SELECTED_LIB_ELFINDER = 'elfinder153';		// 選択中のelFinder、「elfinder153」が設定可能。
-		
+
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
 	const LIB_SET_CKEDITOR_M3_TOOLBAR	= 'ckeditor_m3toolbar';		// CKEditorのツールバー用ライブラリ
-	
+
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
 	const LIB_JQUERY_UI				= 'jquery-ui';
@@ -540,7 +540,7 @@ class ScriptLibInfo
 																		'url'		=> self::CODEMIRROR_URL,
 																		'version'	=> self::CODEMIRROR_VER)
 																	);
-																	
+
 			// ##### ライブラリ情報更新 ####
 			// elFinderの選択状態に応じてライブラリを入れ替え
 			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER153){
@@ -628,8 +628,11 @@ class ScriptLibInfo
 										self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(self::LIB_MOMENT,		self::LIB_JQUERY_FULLCALENDAR),		// MomentをFullCalendarより先に読み込む
 										self::LIB_BOOTSTRAP_DATETIMEPICKER		=> array(self::LIB_MOMENT)
 									);
-
-		return $dependentLib[$lib];
+		if (isset($dependentLib[$lib])){
+			return $dependentLib[$lib];
+		} else {
+			return NULL;
+		}
 	}
 	/**
 	 * ライブラリセットの構成ライブラリ取得
@@ -640,9 +643,8 @@ class ScriptLibInfo
 	static function getLibSet($libSetId)
 	{
 		static $libSet = array(	self::LIB_SET_CKEDITOR_M3_TOOLBAR	=>	array(self::LIB_ELFINDER));		// CKEditorのMagic3拡張ツールバー用
-		$libs = $libSet[$libSetId];
-		if (isset($libs)){
-			return $libs;
+		if (isset($libSet[$libSetId])){
+			return $libSet[$libSetId];
 		} else {
 			return array();
 		}

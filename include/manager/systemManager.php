@@ -133,9 +133,11 @@ class SystemManager extends _Core
 	 */
 	function getSiteDef($key)
 	{
-		$value = $this->_siteDefArray[$key];
-		if (isset($value)){
-			return $value;
+		//$value = $this->_siteDefArray[$key];
+		//if (isset($value)){
+		//	return $value;
+		if (isset($this->_siteDefArray[$key])){
+			return $this->_siteDefArray[$key];
 		} else {
 			return '';
 		}

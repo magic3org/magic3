@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2021 Magic3 Project.
+ * @copyright  Copyright 2006-2023 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -741,10 +741,10 @@ debug($contentItem->published);*/
 	 */
 	private function _execHook($name, $methodParam = array())
 	{
-		$method = $this->_hookPoints[$name];			// フック管理用
-		
-		if (is_callable($method)){
-			call_user_func_array($method, $methodParam);
+		//$method = $this->_hookPoints[$name];			// フック管理用
+		//if (is_callable($method)){
+		if (isset($this->_hookPoints[$name]) && is_callable($this->_hookPoints[$name])){
+			call_user_func_array($this->_hookPoints[$name], $methodParam);
 		}
 		return true;
 	}
