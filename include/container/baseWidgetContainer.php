@@ -3751,13 +3751,22 @@ class BaseWidgetContainer extends _Core
 	function getCurrentLangString($str)
 	{
 		$langs = $this->unserializeLangArray($str);
-		$langStr = $langs[$this->gEnv->getCurrentLanguage()];
+		/*$langStr = $langs[$this->gEnv->getCurrentLanguage()];
 		if (isset($langStr)){
 			return $langStr;
 		} else {
 			$langStr = $langs[$this->gEnv->getDefaultLanguage()];
 			if (isset($langStr)){
 				return $langStr;
+			} else {
+				return '';
+			}
+		}*/
+		if (isset($langs[$this->gEnv->getCurrentLanguage()])){
+			return $langs[$this->gEnv->getCurrentLanguage()];
+		} else {
+			if (isset($langs[$this->gEnv->getDefaultLanguage()])){
+				return $langs[$this->gEnv->getDefaultLanguage()];
 			} else {
 				return '';
 			}
