@@ -23,25 +23,25 @@
  */
 function m3AnchorWidget($widgetId)
 {
-	global $gEnvManager;
+    global $gEnvManager;
 
-	// ウィジェットのindex.phpファイルのパスを作成
-	$widgetIndexFile = $gEnvManager->getWidgetsPath() . '/' . $widgetId . '/index.php';
-	if (file_exists($widgetIndexFile)){
-		// 作業中のウィジェットIDを設定
-		$gEnvManager->setCurrentWidgetId($widgetId);
-	
-		// ウィジェットを実行
-		// ウィジェットの呼び出しは、複数回存在する可能性があるのでrequire_once()で呼び出さない
-		require($widgetIndexFile);
+    // ウィジェットのindex.phpファイルのパスを作成
+    $widgetIndexFile = $gEnvManager->getWidgetsPath() . '/' . $widgetId . '/index.php';
+    if (file_exists($widgetIndexFile)) {
+        // 作業中のウィジェットIDを設定
+        $gEnvManager->setCurrentWidgetId($widgetId);
 
-		// 作業中のウィジェットIDを解除
-		$gEnvManager->setCurrentWidgetId('');
-		
-		echo '<!-- ' . time() . ' -->' . M3_NL;
-	} else {
-		echo 'widget not found error: ' . $widgetId;
-	}
+        // ウィジェットを実行
+        // ウィジェットの呼び出しは、複数回存在する可能性があるのでrequire_once()で呼び出さない
+        require $widgetIndexFile;
+
+        // 作業中のウィジェットIDを解除
+        $gEnvManager->setCurrentWidgetId('');
+
+        echo '<!-- ' . time() . ' -->' . M3_NL;
+    } else {
+        echo 'widget not found error: ' . $widgetId;
+    }
 }
 /**
  * 配列を挿入する
@@ -56,17 +56,19 @@ function m3AnchorWidget($widgetId)
 function array_insert($srcArray, $insertArray, $position = -1)
 {
     // 引数$arrayが配列でない場合は空配列を返す
-    if (!is_array($srcArray)) return array();
-	
-	// 挿入位置を修正
-	$position = ($position == -1) ? (count($srcArray)) : $position;
-	
+    if (!is_array($srcArray)) {
+        return [];
+    }
+
+    // 挿入位置を修正
+    $position = $position == -1 ? count($srcArray) : $position;
+
     // 挿入する位置～末尾まで
     $lastArray = array_splice($srcArray, $position);
-	
+
     // 先頭～挿入前位置までの配列に、挿入する値を追加
     array_push($srcArray, $insertArray);
-	
+
     // 配列を結合
     return array_merge($srcArray, $lastArray);
 }
@@ -80,20 +82,24 @@ function array_insert($srcArray, $insertArray, $position = -1)
  */
 function trimExplode($delimiter, $str, $charList = '')
 {
-	$srcArray = explode($delimiter, $str);
-	$destArray = array();
-	if (empty($charList)){
-		for ($i = 0; $i < count($srcArray); $i++){
-			$value = trim($srcArray[$i]);
-			if (!empty($value)) $destArray[] = $value;
-		}
-	} else {
-		for ($i = 0; $i < count($srcArray); $i++){
-			$value = trim($srcArray[$i], $charList);
-			if (!empty($value)) $destArray[] = $value;
-		}
-	}
-	return $destArray;
+    $srcArray = explode($delimiter, $str);
+    $destArray = [];
+    if (empty($charList)) {
+        for ($i = 0; $i < count($srcArray); $i++) {
+            $value = trim($srcArray[$i]);
+            if (!empty($value)) {
+                $destArray[] = $value;
+            }
+        }
+    } else {
+        for ($i = 0; $i < count($srcArray); $i++) {
+            $value = trim($srcArray[$i], $charList);
+            if (!empty($value)) {
+                $destArray[] = $value;
+            }
+        }
+    }
+    return $destArray;
 }
 /**
  * パスワードを生成する
@@ -104,17 +110,17 @@ function trimExplode($delimiter, $str, $charList = '')
  */
 function makePassword($len, $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-+#%?!$@*=')
 {
-	$l = strlen($str) - 1;
-	$pwd = "";
-	for ($i = 0; $i < $len; $i++){
-		// 一度使用した文字は再度使わない
-		$n = (int)mt_rand(0, $l);
-		$newChar = substr($str, $n, 1);
-		$str = substr($str, 0, $n) . substr($str, $n + 1);
-		$pwd .= $newChar;
-		$l--;
-	}
-	return $pwd;
+    $l = strlen($str) - 1;
+    $pwd = '';
+    for ($i = 0; $i < $len; $i++) {
+        // 一度使用した文字は再度使わない
+        $n = (int) mt_rand(0, $l);
+        $newChar = substr($str, $n, 1);
+        $str = substr($str, 0, $n) . substr($str, $n + 1);
+        $pwd .= $newChar;
+        $l--;
+    }
+    return $pwd;
 }
 /**
  * 短いハッシュ文字列を生成する
@@ -124,7 +130,7 @@ function makePassword($len, $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGH
  */
 function makeShortHash($data, $algo = 'md5')
 {
-	return strtr(rtrim(base64_encode(pack('H*', $algo($data))), '='), '+/', '-_');
+    return strtr(rtrim(base64_encode(pack('H*', $algo($data))), '='), '+/', '-_');
 }
 /**
  * 省略文字列を作成
@@ -135,15 +141,19 @@ function makeShortHash($data, $algo = 'md5')
  */
 function makeTruncStr($str, $len)
 {
-	$addStr = '';
-	if (function_exists('mb_substr')){
-		if (mb_strlen($str) > $len) $addStr = '…';
-		$destStr = mb_substr($str, 0, $len) . $addStr;
-	} else {
-		if (strlen($str) > $len) $addStr = '...';
-		$destStr = substr($str, 0, $len) . $addStr;
-	}
-	return $destStr;
+    $addStr = '';
+    if (function_exists('mb_substr')) {
+        if (mb_strlen($str) > $len) {
+            $addStr = '…';
+        }
+        $destStr = mb_substr($str, 0, $len) . $addStr;
+    } else {
+        if (strlen($str) > $len) {
+            $addStr = '...';
+        }
+        $destStr = substr($str, 0, $len) . $addStr;
+    }
+    return $destStr;
 }
 /**
  * 文字数を取得
@@ -153,11 +163,11 @@ function makeTruncStr($str, $len)
  */
 function getLetterCount($str)
 {
-	if (function_exists('mb_strlen')){
-		return mb_strlen($str);
-	} else {
-		return strlen($str);
-	}
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($str);
+    } else {
+        return strlen($str);
+    }
 }
 /**
  * メールアドレスの取り出し
@@ -172,15 +182,16 @@ function getLetterCount($str)
  */
 function separateMailAddress($str, &$mail, &$name)
 {
-	$pattern = "/<.*>/";		// メールアドレス検索パターン
-	$ret = preg_match($pattern, $str, $matches);
-	if ($ret == 1){		// メールアドレスが見つかったとき
-		$mail = trim($matches[0], ' <>');
-		$name = preg_replace($pattern, '', $str);
-		return true;
-	} else {
-		return false;
-	}
+    $pattern = '/<.*>/'; // メールアドレス検索パターン
+    $ret = preg_match($pattern, $str, $matches);
+    if ($ret == 1) {
+        // メールアドレスが見つかったとき
+        $mail = trim($matches[0], ' <>');
+        $name = preg_replace($pattern, '', $str);
+        return true;
+    } else {
+        return false;
+    }
 }
 /**
  * メールアドレス形式かどうかのチェック
@@ -190,7 +201,7 @@ function separateMailAddress($str, &$mail, &$name)
  */
 function isMailAddress($str)
 {
-	return preg_match("/[\w\d\-\.]+\@[\w\d\-\.]+/", $str);
+    return preg_match('/[\w\d\-\.]+\@[\w\d\-\.]+/', $str);
 }
 /**
  * CSVファイルの切り出し
@@ -204,49 +215,62 @@ function isMailAddress($str)
  */
 function fgetByCsv(&$fp, $delimType = 0, $encode = '')
 {
-	global $gEnvManager;
-	
-	if (feof($fp)) return false;
+    global $gEnvManager;
 
-	// 変換元エンコーディングが設定されていないときはデフォルトを使用
-	$encoding = $encode;
-	if (empty($encoding)){
-		$encoding = $gEnvManager->getCsvUploadEncoding();		// デフォルトのアップロードエンコーディング取得
-		if (empty($encoding)) $encoding = 'SJIS-win';
-	}
-	
-	if ($delimType == 0){
-		$csv = '';
-		while (!feof($fp)){
-		    $csv .= mb_convert_encoding(fgets($fp), M3_ENCODING, $encoding);
-		    if (((preg_match_all('/"/', $csv, $matches)) % 2) == 0) break;
-		}
-		if (feof($fp)) return false;
-		
-		$values = array();
-		$temp = preg_replace('/(?:\x0D\x0A|[\x0D\x0A])?$/', ',', $csv, 1);
-		preg_match_all('/("[^"]*(?:""[^"]*)*"|[^,]*),/', $temp, $matches);
+    if (feof($fp)) {
+        return false;
+    }
 
-		for ($i = 0; $i < count($matches[1]) ; $i++){
-		    if (preg_match('/^"(.*)"$/s', $matches[1][$i], $m)){
-		        $matches[1][$i] = preg_replace('/""/', '"', $m[1]);
-		    }
-		    $values[] = $matches[1][$i];
-		}
-		return $values;
-	} else if ($delimType == 1){
-		// UTF-8に変換
-		$csv = '';
-		while (!feof($fp)){		// 空行は読み飛ばす
-		    $csv = mb_convert_encoding(fgets($fp), M3_ENCODING, $encoding);
-			$checkCsv = trim($csv);
-			if (!empty($checkCsv)) break;
-		}
-		if (feof($fp)) return false;
-	
-		$values = explode("\t", $csv);
-		return $values;
-	}
+    // 変換元エンコーディングが設定されていないときはデフォルトを使用
+    $encoding = $encode;
+    if (empty($encoding)) {
+        $encoding = $gEnvManager->getCsvUploadEncoding(); // デフォルトのアップロードエンコーディング取得
+        if (empty($encoding)) {
+            $encoding = 'SJIS-win';
+        }
+    }
+
+    if ($delimType == 0) {
+        $csv = '';
+        while (!feof($fp)) {
+            $csv .= mb_convert_encoding(fgets($fp), M3_ENCODING, $encoding);
+            if (preg_match_all('/"/', $csv, $matches) % 2 == 0) {
+                break;
+            }
+        }
+        if (feof($fp)) {
+            return false;
+        }
+
+        $values = [];
+        $temp = preg_replace('/(?:\x0D\x0A|[\x0D\x0A])?$/', ',', $csv, 1);
+        preg_match_all('/("[^"]*(?:""[^"]*)*"|[^,]*),/', $temp, $matches);
+
+        for ($i = 0; $i < count($matches[1]); $i++) {
+            if (preg_match('/^"(.*)"$/s', $matches[1][$i], $m)) {
+                $matches[1][$i] = preg_replace('/""/', '"', $m[1]);
+            }
+            $values[] = $matches[1][$i];
+        }
+        return $values;
+    } elseif ($delimType == 1) {
+        // UTF-8に変換
+        $csv = '';
+        while (!feof($fp)) {
+            // 空行は読み飛ばす
+            $csv = mb_convert_encoding(fgets($fp), M3_ENCODING, $encoding);
+            $checkCsv = trim($csv);
+            if (!empty($checkCsv)) {
+                break;
+            }
+        }
+        if (feof($fp)) {
+            return false;
+        }
+
+        $values = explode("\t", $csv);
+        return $values;
+    }
 }
 /**
  * ファイルの拡張子を取得
@@ -256,12 +280,16 @@ function fgetByCsv(&$fp, $delimType = 0, $encode = '')
  */
 function getExtension($path)
 {
-	if (function_exists('mb_ereg')){
-		if (mb_ereg('^.*\.([^\.]*)$', $path, $part)) return strtolower($part[1]);
-	} else {
-		if (preg_match('/^.*\.([^\.]*)$/', $path, $part)) return strtolower($part[1]);
-	}
-	return '';
+    if (function_exists('mb_ereg')) {
+        if (mb_ereg('^.*\.([^\.]*)$', $path, $part)) {
+            return strtolower($part[1]);
+        }
+    } else {
+        if (preg_match('/^.*\.([^\.]*)$/', $path, $part)) {
+            return strtolower($part[1]);
+        }
+    }
+    return '';
 }
 /**
  * ファイルの拡張子を除く
@@ -271,16 +299,16 @@ function getExtension($path)
  */
 function removeExtension($path)
 {
-//	if (version_compare(PHP_VERSION, '5.2.0') < 0){
-		$ext = pathinfo($path, PATHINFO_EXTENSION);
-		if (empty($ext)){
-			return $path;
-		} else {
-			return substr($path, 0, strlen($path) - strlen('.' . $ext));
-		}
-//	} else {
-//		return pathinfo($path, PATHINFO_FILENAME);		// 日本語パスは解析できない
-//	}
+    //	if (version_compare(PHP_VERSION, '5.2.0') < 0){
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    if (empty($ext)) {
+        return $path;
+    } else {
+        return substr($path, 0, strlen($path) - strlen('.' . $ext));
+    }
+    //	} else {
+    //		return pathinfo($path, PATHINFO_FILENAME);		// 日本語パスは解析できない
+    //	}
 }
 /**
  * 相対パスから絶対パスを生成(パスまたはURL)
@@ -291,38 +319,45 @@ function removeExtension($path)
  */
 function rel2abs($rel, $base)
 {
-	/* return if already absolute URL */
-	if (parse_url($rel, PHP_URL_SCHEME) != '') return $rel;
+    /* return if already absolute URL */
+    if (parse_url($rel, PHP_URL_SCHEME) != '') {
+        return $rel;
+    }
 
-	/* queries and anchors */
-	if ($rel[0]=='#' || $rel[0]=='?') return $base.$rel;
+    /* queries and anchors */
+    if ($rel[0] == '#' || $rel[0] == '?') {
+        return $base . $rel;
+    }
 
-	/* parse base URL and convert to local variables: $scheme, $host, $path */
-	extract(parse_url($base));
+    /* parse base URL and convert to local variables: $scheme, $host, $path */
+    extract(parse_url($base));
 
-	/* remove non-directory element from path */
-//	$path = preg_replace('#/[^/]*$#', '', $path);
+    /* remove non-directory element from path */
+    //	$path = preg_replace('#/[^/]*$#', '', $path);
 
-	/* destroy path if relative url points to root */
-	if ($rel[0] == '/') $path = '';
+    /* destroy path if relative url points to root */
+    if ($rel[0] == '/') {
+        $path = '';
+    }
 
-	/* dirty absolute URL // with port number if exists */
-	if (parse_url($base, PHP_URL_PORT) != ''){
-		$abs = "$host:" . parse_url($base, PHP_URL_PORT) . "$path/$rel";
-	}else{
-		$abs = "$host$path/$rel";
-	}
-	
-	/* replace '//' or '/./' or '/foo/../' with '/' */
-	$re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
-	for ($n = 1; $n > 0; $abs = preg_replace($re, '/', $abs, -1, $n)){}
+    /* dirty absolute URL // with port number if exists */
+    if (parse_url($base, PHP_URL_PORT) != '') {
+        $abs = "$host:" . parse_url($base, PHP_URL_PORT) . "$path/$rel";
+    } else {
+        $abs = "$host$path/$rel";
+    }
+
+    /* replace '//' or '/./' or '/foo/../' with '/' */
+    $re = ['#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#'];
+    for ($n = 1; $n > 0; $abs = preg_replace($re, '/', $abs, -1, $n)) {
+    }
 
     // 絶対パスを返す
-	if (empty($scheme)){
-		return $abs;
-	} else {
-    	return $scheme . '://' . $abs;
-	}
+    if (empty($scheme)) {
+        return $abs;
+    } else {
+        return $scheme . '://' . $abs;
+    }
 }
 /**
  * ディレクトリ内のファイル一覧の取得
@@ -333,20 +368,22 @@ function rel2abs($rel, $base)
  */
 function getFileList($dirPath, $fileOnly = false)
 {
-	$fileList = array();
-	if (is_dir($dirPath)){
-		$dir = dir($dirPath);
-		while (($file = $dir->read()) !== false){
-			$filePath = $dirPath . '/' . $file;
-			// ディレクトリかどうかチェック
-			if (strncmp($file, '.', 1) != 0 && $file != '..'){
-				if (!$fileOnly || ($fileOnly && is_file($filePath))) $fileList[] = $file;
-			}
-		}
-		$dir->close();
-	}
-	sort($fileList);		// ファイル名をソート
-	return $fileList;
+    $fileList = [];
+    if (is_dir($dirPath)) {
+        $dir = dir($dirPath);
+        while (($file = $dir->read()) !== false) {
+            $filePath = $dirPath . '/' . $file;
+            // ディレクトリかどうかチェック
+            if (strncmp($file, '.', 1) != 0 && $file != '..') {
+                if (!$fileOnly || ($fileOnly && is_file($filePath))) {
+                    $fileList[] = $file;
+                }
+            }
+        }
+        $dir->close();
+    }
+    sort($fileList); // ファイル名をソート
+    return $fileList;
 }
 /**
  * ファイルの移動
@@ -357,22 +394,28 @@ function getFileList($dirPath, $fileOnly = false)
  */
 function mvFile($srcFile, $destFile)
 {
-	// 移動先ファイルを削除
-	if (file_exists($destFile)) unlink($destFile);
-	
-	// コピー先ディレクトリの確認
-	$destDir = dirname($destFile);
-	if (!file_exists($destDir)){
-		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
-	}
-	
-	// ファイルコピー
-	$ret = copy($srcFile, $destFile);
-	if (!$ret) return false;
-	
-	// 移動元のファイル削除
-	$ret = unlink($srcFile);
-	return $ret;
+    // 移動先ファイルを削除
+    if (file_exists($destFile)) {
+        unlink($destFile);
+    }
+
+    // コピー先ディレクトリの確認
+    $destDir = dirname($destFile);
+    if (!file_exists($destDir)) {
+        if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true /*再帰的*/)) {
+            return false;
+        }
+    }
+
+    // ファイルコピー
+    $ret = copy($srcFile, $destFile);
+    if (!$ret) {
+        return false;
+    }
+
+    // 移動元のファイル削除
+    $ret = unlink($srcFile);
+    return $ret;
 }
 /**
  * 複数ファイルの移動
@@ -384,25 +427,29 @@ function mvFile($srcFile, $destFile)
  */
 function mvFileToDir($srcDir, $filenames, $destDir)
 {
-	$noErr = true;
-	
-	// コピー先ディレクトリの確認
-	if (!file_exists($destDir)){
-		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
-	}
-	
-	for ($i = 0; $i < count($filenames); $i++){
-		$srcPath = $srcDir . '/' . $filenames[$i];
-		if (file_exists($srcPath)){
-			$destPath = $destDir . '/' . $filenames[$i];
-			$ret = mvFile($srcPath, $destPath);
-			if (!$ret) $noErr = false;
-		} else {
-			$noErr = false;
-			break;
-		}
-	}
-	return $noErr;
+    $noErr = true;
+
+    // コピー先ディレクトリの確認
+    if (!file_exists($destDir)) {
+        if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true /*再帰的*/)) {
+            return false;
+        }
+    }
+
+    for ($i = 0; $i < count($filenames); $i++) {
+        $srcPath = $srcDir . '/' . $filenames[$i];
+        if (file_exists($srcPath)) {
+            $destPath = $destDir . '/' . $filenames[$i];
+            $ret = mvFile($srcPath, $destPath);
+            if (!$ret) {
+                $noErr = false;
+            }
+        } else {
+            $noErr = false;
+            break;
+        }
+    }
+    return $noErr;
 }
 /**
  * 複数ファイルのコピー
@@ -414,25 +461,29 @@ function mvFileToDir($srcDir, $filenames, $destDir)
  */
 function cpFileToDir($srcDir, $filenames, $destDir)
 {
-	$noErr = true;
-	
-	// コピー先ディレクトリの確認
-	if (!file_exists($destDir)){
-		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
-	}
-	
-	for ($i = 0; $i < count($filenames); $i++){
-		$srcPath = $srcDir . '/' . $filenames[$i];
-		if (file_exists($srcPath)){
-			$destPath = $destDir . '/' . $filenames[$i];
-			$ret = copy($srcPath, $destPath);
-			if (!$ret) $noErr = false;
-		} else {
-			$noErr = false;
-			break;
-		}
-	}
-	return $noErr;
+    $noErr = true;
+
+    // コピー先ディレクトリの確認
+    if (!file_exists($destDir)) {
+        if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true /*再帰的*/)) {
+            return false;
+        }
+    }
+
+    for ($i = 0; $i < count($filenames); $i++) {
+        $srcPath = $srcDir . '/' . $filenames[$i];
+        if (file_exists($srcPath)) {
+            $destPath = $destDir . '/' . $filenames[$i];
+            $ret = copy($srcPath, $destPath);
+            if (!$ret) {
+                $noErr = false;
+            }
+        } else {
+            $noErr = false;
+            break;
+        }
+    }
+    return $noErr;
 }
 /**
  * ディレクトリの削除
@@ -442,27 +493,36 @@ function cpFileToDir($srcDir, $filenames, $destDir)
  */
 function rmDirectory($dirname)
 {
-	// ディレクトリが存在しないときは終了
-	if (!file_exists($dirname)) return true;
+    // ディレクトリが存在しないときは終了
+    if (!file_exists($dirname)) {
+        return true;
+    }
 
-	$ret = false;
-	if (is_dir($dirname)){		// ディレクトリのとき
-		if ($dirHandle = opendir($dirname)){
-			chdir($dirname);
-			while ($file = readdir($dirHandle)) {
-				if ($file == '.' || $file == '..') continue;
-				if (is_dir($file)) rmDirectory($file);
-				else unlink($file);
-			}
-			chdir('..');
-			$ret = rmdir($dirname);
-			closedir($dirHandle);
-		}
-	} else {			// ファイルのとき
-		unlink($dirname);
-		$ret = true;
-	}
-	return $ret;
+    $ret = false;
+    if (is_dir($dirname)) {
+        // ディレクトリのとき
+        if ($dirHandle = opendir($dirname)) {
+            chdir($dirname);
+            while ($file = readdir($dirHandle)) {
+                if ($file == '.' || $file == '..') {
+                    continue;
+                }
+                if (is_dir($file)) {
+                    rmDirectory($file);
+                } else {
+                    unlink($file);
+                }
+            }
+            chdir('..');
+            $ret = rmdir($dirname);
+            closedir($dirHandle);
+        }
+    } else {
+        // ファイルのとき
+        unlink($dirname);
+        $ret = true;
+    }
+    return $ret;
 }
 /**
  * ディレクトリの移動
@@ -473,17 +533,21 @@ function rmDirectory($dirname)
  */
 function mvDirectory($srcDir, $destDir)
 {
-	// 移動先ディレクトリを削除
-	$ret = rmDirectory($destDir);
-	if (!$ret) return false;
+    // 移動先ディレクトリを削除
+    $ret = rmDirectory($destDir);
+    if (!$ret) {
+        return false;
+    }
 
-	// ディレクトリコピー
-	$ret = cpDirectory($srcDir, $destDir);
-	if (!$ret) return false;
+    // ディレクトリコピー
+    $ret = cpDirectory($srcDir, $destDir);
+    if (!$ret) {
+        return false;
+    }
 
-	// 移動元のディレクトリ削除
-	$ret = rmDirectory($srcDir);
-	return $ret;
+    // 移動元のディレクトリ削除
+    $ret = rmDirectory($srcDir);
+    return $ret;
 }
 /**
  * ディレクトリのコピー
@@ -494,30 +558,37 @@ function mvDirectory($srcDir, $destDir)
  */
 function cpDirectory($srcDir, $destDir)
 {
-	// ディレクトリが存在しないときは作成
-	if (!file_exists($destDir)){
-		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
-	}
+    // ディレクトリが存在しないときは作成
+    if (!file_exists($destDir)) {
+        if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true /*再帰的*/)) {
+            return false;
+        }
+    }
 
-	if ($dirHandle = opendir($srcDir)){
-		$ret = true;		// 空のときは正常終了
-		while ($file = readdir($dirHandle)) {
-			if ($file == '.' || $file == '..') continue;
-			
-			$filePath = $srcDir . '/' . $file;
-			$destFilePath = $destDir . '/' . $file;
-			if (is_dir($filePath)){
-				$ret = cpDirectory($filePath, $destFilePath);
-			} else {
-				$ret = copy($filePath, $destFilePath);
-			}
-			if (!$ret) break;
-		}
-		closedir($dirHandle);
-		return $ret;
-	} else {		// オープン失敗のとき
-		return false;
-	}
+    if ($dirHandle = opendir($srcDir)) {
+        $ret = true; // 空のときは正常終了
+        while ($file = readdir($dirHandle)) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+
+            $filePath = $srcDir . '/' . $file;
+            $destFilePath = $destDir . '/' . $file;
+            if (is_dir($filePath)) {
+                $ret = cpDirectory($filePath, $destFilePath);
+            } else {
+                $ret = copy($filePath, $destFilePath);
+            }
+            if (!$ret) {
+                break;
+            }
+        }
+        closedir($dirHandle);
+        return $ret;
+    } else {
+        // オープン失敗のとき
+        return false;
+    }
 }
 /**
  * ファイルの移動(異なるドライブ間でも移動可)
@@ -528,10 +599,12 @@ function cpDirectory($srcDir, $destDir)
  */
 function renameFile($srcFile, $destFile)
 {
-	if (@rename($srcFile, $destFile)) return true;
-	
-	$ret = mvFile($srcFile, $destFile);
-	return $ret;
+    if (@rename($srcFile, $destFile)) {
+        return true;
+    }
+
+    $ret = mvFile($srcFile, $destFile);
+    return $ret;
 }
 /**
  * ファイルへのデータの書き込み
@@ -543,26 +616,30 @@ function renameFile($srcFile, $destFile)
  */
 function writeFile($path, $data, $mkDirectory = true)
 {
-	$ret = false;		// 戻り値リセット
-	
-	// ディレクトリ作成
-	$dirPath = dirname($path);
-	if (!file_exists($dirPath)){// ディレクトリがないとき
-		if (!mkdir($dirPath, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
-	}
-	
-	$fp = fopen($path, "w+");
-	if ($fp){
-		if (flock($fp, LOCK_EX)) { // 排他ロック
-			fwrite($fp, $data);
-			flock($fp, LOCK_UN); // ロックを解放
-			$ret = true;
-		}
-		fclose($fp);
-		return $ret;
-	} else {
-		return $ret;
-	}
+    $ret = false; // 戻り値リセット
+
+    // ディレクトリ作成
+    $dirPath = dirname($path);
+    if (!file_exists($dirPath)) {
+        // ディレクトリがないとき
+        if (!mkdir($dirPath, M3_SYSTEM_DIR_PERMISSION, true /*再帰的*/)) {
+            return false;
+        }
+    }
+
+    $fp = fopen($path, 'w+');
+    if ($fp) {
+        if (flock($fp, LOCK_EX)) {
+            // 排他ロック
+            fwrite($fp, $data);
+            flock($fp, LOCK_UN); // ロックを解放
+            $ret = true;
+        }
+        fclose($fp);
+        return $ret;
+    } else {
+        return $ret;
+    }
 }
 /**
  * ディレクトリの書き込みチェック
@@ -572,14 +649,14 @@ function writeFile($path, $data, $mkDirectory = true)
  */
 function checkWritableDir($path)
 {
-	$filename = '_magic3_test';			// 書き込みテスト用ファイル名
-	$ret = false;
-	if ($fp = @fopen($path . '/' . $filename, 'w')){
-		@fclose($fp);
-		@unlink($path . '/' . $filename);
-		$ret = true;
-	}
-	return $ret;
+    $filename = '_magic3_test'; // 書き込みテスト用ファイル名
+    $ret = false;
+    if ($fp = @fopen($path . '/' . $filename, 'w')) {
+        @fclose($fp);
+        @unlink($path . '/' . $filename);
+        $ret = true;
+    }
+    return $ret;
 }
 /**
  * 指定のパスが基準パス以下にあるかどうかを判断
@@ -590,16 +667,17 @@ function checkWritableDir($path)
  */
 function isDescendantPath($basePath, $targetPath)
 {
-	// 相対パスを得る
-	$base = explode('/', $basePath);
-	$target = explode('/', $targetPath);
-	
-	$baseCount = count($base);
-	for ($i = 0; $i < $baseCount; $i++)
-	{
-		if ($base[$i] != $target[$i]) return false;
-	}
-	return true;
+    // 相対パスを得る
+    $base = explode('/', $basePath);
+    $target = explode('/', $targetPath);
+
+    $baseCount = count($base);
+    for ($i = 0; $i < $baseCount; $i++) {
+        if ($base[$i] != $target[$i]) {
+            return false;
+        }
+    }
+    return true;
 }
 /**
  * ユーザカスタマイズ用パラメータの解析
@@ -611,16 +689,16 @@ function isDescendantPath($basePath, $targetPath)
  */
 function parseUserCustomParam($src)
 {
-	$dest = array();
-	$parsedArray = explode(';', $src);
-	for ($i = 0; $i < count($parsedArray); $i++){
-		list($key, $value) = explode(':', $parsedArray[$i]);
-		$obj = new stdClass;
-		$obj->key = trim($key);
-		$obj->value = trim($value);
-		$dest[] = $obj;
-	}
-	return $dest;
+    $dest = [];
+    $parsedArray = explode(';', $src);
+    for ($i = 0; $i < count($parsedArray); $i++) {
+        list($key, $value) = explode(':', $parsedArray[$i]);
+        $obj = new stdClass();
+        $obj->key = trim($key);
+        $obj->value = trim($value);
+        $dest[] = $obj;
+    }
+    return $dest;
 }
 /**
  * URLパラメータを連想配列に変換
@@ -632,13 +710,15 @@ function parseUserCustomParam($src)
  */
 function parseUrlParam($src)
 {
-	$dest = array();
-	$parsedArray = explode('&', $src);
-	for ($i = 0; $i < count($parsedArray); $i++){
-		list($key, $value) = explode('=', $parsedArray[$i]);
-		if (!empty($key)) $dest[$key] = $value;
-	}
-	return $dest;
+    $dest = [];
+    $parsedArray = explode('&', $src);
+    for ($i = 0; $i < count($parsedArray); $i++) {
+        list($key, $value) = explode('=', $parsedArray[$i]);
+        if (!empty($key)) {
+            $dest[$key] = $value;
+        }
+    }
+    return $dest;
 }
 /**
  * ディレクトリのファイル使用サイズを求める
@@ -648,23 +728,25 @@ function parseUrlParam($src)
  */
 function calcDirSize($path)
 {
-	$size = 0;		// ディスク使用サイズ
-	
-	if ($dirHandle = @opendir($path)){
-		while ($file = @readdir($dirHandle)) {
-			if ($file == '.' || $file == '..') continue;
-		
-			// ディレクトリのときはサブディレクトリを計算
-			$filePath = $path . '/' . $file;
-			if (is_dir($filePath)){
-				$size += calcDirSize($filePath);
-			} else {
-				$size += @filesize($filePath);
-			}
-		}
-		closedir($dirHandle);
-	}
-	return $size;
+    $size = 0; // ディスク使用サイズ
+
+    if ($dirHandle = @opendir($path)) {
+        while ($file = @readdir($dirHandle)) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+
+            // ディレクトリのときはサブディレクトリを計算
+            $filePath = $path . '/' . $file;
+            if (is_dir($filePath)) {
+                $size += calcDirSize($filePath);
+            } else {
+                $size += @filesize($filePath);
+            }
+        }
+        closedir($dirHandle);
+    }
+    return $size;
 }
 /**
  * 文字列メモリ表現から数値メモリ表現を取得
@@ -674,17 +756,19 @@ function calcDirSize($path)
  */
 function convBytes($val)
 {
-	$val = trim($val);
-	$last = strtolower($val[strlen($val) -1]);
-	switch($last){
-		case 'g':
-			$val *= 1024;
-		case 'm':
-			$val *= 1024;
-		case 'k':
-			$val *= 1024;
-	}
-	return $val;
+    $val = trim($val);
+    $last = strtolower($val[strlen($val) - 1]);
+
+    $numVal = floatval($val);
+    switch ($last) {
+        case 'g':
+            $numVal *= 1024;
+        case 'm':
+            $numVal *= 1024;
+        case 'k':
+            $numVal *= 1024;
+    }
+    return floor($numVal);
 }
 /**
  * 数値メモリ表現から文字列メモリ表現を取得
@@ -694,16 +778,16 @@ function convBytes($val)
  */
 function convFromBytes($val)
 {
-	$destVal = (float)$val / 1024.0;
-	if ($destVal < 1024){
-		return ceil($destVal) . 'K';
-	}
-	$destVal = $destVal / 1024.0;
-	if ($destVal < 1024){
-		return ceil($destVal) . 'M';
-	}
-	$destVal = $destVal / 1024.0;
-	return ceil($destVal) . 'G';
+    $destVal = (float) $val / 1024.0;
+    if ($destVal < 1024) {
+        return ceil($destVal) . 'K';
+    }
+    $destVal = $destVal / 1024.0;
+    if ($destVal < 1024) {
+        return ceil($destVal) . 'M';
+    }
+    $destVal = $destVal / 1024.0;
+    return ceil($destVal) . 'G';
 }
 /**
  * URL以外の文字列をエンティティ文字に変換
@@ -714,15 +798,16 @@ function convFromBytes($val)
  */
 function convertToHtmlEntity($src, $keepTags = false)
 {
-	// 変換文字「&<>"」
-	if ($keepTags){			// タグを変換しないとき
-		//$str = "/<[^>]+>/";
-		$str = "/[^<>]+[^<>]/";
-		$dest = preg_replace_callback($str, '_replace_nottag_callback', $src);
-		return $dest;
-	} else {
-		return htmlentities($src, ENT_COMPAT, M3_HTML_CHARSET);
-	}
+    // 変換文字「&<>"」
+    if ($keepTags) {
+        // タグを変換しないとき
+        //$str = "/<[^>]+>/";
+        $str = '/[^<>]+[^<>]/';
+        $dest = preg_replace_callback($str, '_replace_nottag_callback', $src);
+        return $dest;
+    } else {
+        return htmlentities($src, ENT_COMPAT, M3_HTML_CHARSET);
+    }
 }
 /**
  * エンティティ文字を元の文字列に変換
@@ -732,9 +817,9 @@ function convertToHtmlEntity($src, $keepTags = false)
  */
 function convertFromHtmlEntity($src)
 {
-	$transTable = get_html_translation_table(HTML_ENTITIES);
-	$transTable = array_flip($transTable);
-	return strtr($src, $transTable);
+    $transTable = get_html_translation_table(HTML_ENTITIES);
+    $transTable = array_flip($transTable);
+    return strtr($src, $transTable);
 }
 /**
  * タグ以外変換コールバック関数
@@ -744,7 +829,7 @@ function convertFromHtmlEntity($src)
  */
 function _replace_nottag_callback($matchData)
 {
-	return htmlentities($matchData[0], ENT_COMPAT, M3_HTML_CHARSET);
+    return htmlentities($matchData[0], ENT_COMPAT, M3_HTML_CHARSET);
 }
 /**
  * URLをエンティティ文字に変換
@@ -754,8 +839,8 @@ function _replace_nottag_callback($matchData)
  */
 function convertUrlToHtmlEntity($src)
 {
-	// 変換文字「&<>"'」
-	return htmlspecialchars($src, ENT_QUOTES, M3_HTML_CHARSET);
+    // 変換文字「&<>"'」
+    return htmlspecialchars($src, ENT_QUOTES, M3_HTML_CHARSET);
 }
 /**
  * 文字列の先頭を比較
@@ -766,11 +851,11 @@ function convertUrlToHtmlEntity($src)
  */
 function strStartsWith($src, $startStr)
 {
-	if (strncmp($src, $startStr, strlen($startStr)) == 0){
-		return true;
-	} else {
-		return false;
-	}
+    if (strncmp($src, $startStr, strlen($startStr)) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 /**
  * 文字列の最後を比較
@@ -781,14 +866,16 @@ function strStartsWith($src, $startStr)
  */
 function strEndsWith($src, $endStr)
 {
-	$length = strlen($endStr);
-	if (strlen($src) < $length) return false;			// PHP 5.1でWarningが出力される問題に対応(2011/11/24)
-	
-	if (substr_compare($src, $endStr, -$length, $length) == 0){
-		return true;
-	} else {
-		return false;
-	}
+    $length = strlen($endStr);
+    if (strlen($src) < $length) {
+        return false;
+    } // PHP 5.1でWarningが出力される問題に対応(2011/11/24)
+
+    if (substr_compare($src, $endStr, -$length, $length) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 /**
  * URLを作成
@@ -797,25 +884,32 @@ function strEndsWith($src, $endStr)
  * @param string,array	$addParam 	追加パラメータ
  * @return string					作成したURL
  */
-function createUrl($baseUrl, $addParam='')
+function createUrl($baseUrl, $addParam = '')
 {
-	$url = $baseUrl;
-	
-	// 追加パラメータがある場合
-	if (!empty($addParam)){
-		if (strEndsWith($url, '.php') || strEndsWith($url, '/')) $url .= '?';
-		
-		if (is_array($addParam)){		// 配列の場合
-			foreach (array_keys($addParam) as $key){
-				if (!strEndsWith($url, '?')) $url .= '&';
-				$url .= urlencode($key) . '=' . urlencode($addParam[$key]);
-			}
-		} else {
-			if (!strEndsWith($url, '?')) $url .= '&';
-			$url .= trim($addParam, '&');
-		}
-	}
-	return $url;
+    $url = $baseUrl;
+
+    // 追加パラメータがある場合
+    if (!empty($addParam)) {
+        if (strEndsWith($url, '.php') || strEndsWith($url, '/')) {
+            $url .= '?';
+        }
+
+        if (is_array($addParam)) {
+            // 配列の場合
+            foreach (array_keys($addParam) as $key) {
+                if (!strEndsWith($url, '?')) {
+                    $url .= '&';
+                }
+                $url .= urlencode($key) . '=' . urlencode($addParam[$key]);
+            }
+        } else {
+            if (!strEndsWith($url, '?')) {
+                $url .= '&';
+            }
+            $url .= trim($addParam, '&');
+        }
+    }
+    return $url;
 }
 /**
  * 指定したURLパラメータを削除
@@ -826,47 +920,57 @@ function createUrl($baseUrl, $addParam='')
  */
 function removeUrlParam($url, $param)
 {
-	// URLを分割
-	list($destUrl, $query) = explode('?', $url);
-	if (empty($query)) return $url;
-			
-	// URLを解析
-	$queryArray = array();
-	$parsedUrl = parse_url($url);
-	if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
-	
-	$destArray = array();
-	$keys = array_keys($queryArray);
-	$keyCount = count($keys);
-	$paramCount = count($param);
-	for ($i = 0; $i < $keyCount; $i++){
-		$key = $keys[$i];
-		$value = $queryArray[$key];
-		
-		for ($j = 0; $j < $paramCount; $j++){
-			$paramKey = $param[$j]['key'];
-			$paramValue = $param[$j]['value'];
-			if ($key == $paramKey && $value == $paramValue) break;
-		}
-		if ($j == $paramCount) $destArray[$key] = $value;
-	}
-	// パラメータを連結
-	if (count($destArray) > 0){
-		$keys = array_keys($destArray);
-		$keyCount = count($keys);
-	
-		$destParam = '';
-		for ($i = 0; $i < $keyCount; $i++){
-			$key = $keys[$i];
-			$value = $destArray[$key];
-			if ($i > 0) $destParam .= '&';
-			$destParam .= $key . '=' . $value;
-		}
-		// 最後に「=」がある場合は削除(Wiki名対応)
-		$destParam = rtrim($destParam, '=');
-		$destUrl .= '?' . $destParam;
-	}
-	return $destUrl;
+    // URLを分割
+    list($destUrl, $query) = explode('?', $url);
+    if (empty($query)) {
+        return $url;
+    }
+
+    // URLを解析
+    $queryArray = [];
+    $parsedUrl = parse_url($url);
+    if (!empty($parsedUrl['query'])) {
+        parse_str($parsedUrl['query'], $queryArray);
+    } // クエリーの解析
+
+    $destArray = [];
+    $keys = array_keys($queryArray);
+    $keyCount = count($keys);
+    $paramCount = count($param);
+    for ($i = 0; $i < $keyCount; $i++) {
+        $key = $keys[$i];
+        $value = $queryArray[$key];
+
+        for ($j = 0; $j < $paramCount; $j++) {
+            $paramKey = $param[$j]['key'];
+            $paramValue = $param[$j]['value'];
+            if ($key == $paramKey && $value == $paramValue) {
+                break;
+            }
+        }
+        if ($j == $paramCount) {
+            $destArray[$key] = $value;
+        }
+    }
+    // パラメータを連結
+    if (count($destArray) > 0) {
+        $keys = array_keys($destArray);
+        $keyCount = count($keys);
+
+        $destParam = '';
+        for ($i = 0; $i < $keyCount; $i++) {
+            $key = $keys[$i];
+            $value = $destArray[$key];
+            if ($i > 0) {
+                $destParam .= '&';
+            }
+            $destParam .= $key . '=' . $value;
+        }
+        // 最後に「=」がある場合は削除(Wiki名対応)
+        $destParam = rtrim($destParam, '=');
+        $destUrl .= '?' . $destParam;
+    }
+    return $destUrl;
 }
 /**
  * URLがグローバルで有効かどうかチェック
@@ -876,38 +980,45 @@ function removeUrlParam($url, $param)
  */
 function checkGlobalUrl($url)
 {
-	$siteUrl = parse_url($url);
-	$ip = $siteUrl['host'];
+    $siteUrl = parse_url($url);
+    $ip = $siteUrl['host'];
 
-	if (version_compare(phpversion(), '5.2.0' ) >= 0){
-		if (filter_var($ip, FILTER_VALIDATE_IP)){		// IPの場合
-			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return true;
-		}
-	} else {
-		$longIp = ip2long($ip);
-		if ($longIp == -1 || $longIp === FALSE){		// IPアドレスでないとき
-			return true;
-		} else {		// IPアドレスのとき
-			$privAddrs = array(	'10.0.0.0|10.255.255.255',
-								'172.16.0.0|172.31.255.255',
-								'192.168.0.0|192.168.255.255',
-								'169.254.0.0|169.254.255.255',
-								'127.0.0.0|127.255.255.255');
-			if ($longIp != -1){
-				foreach ($privAddrs as $privAddr){
-					list($start, $end) = explode('|', $privAddr);
-					if ($longIp >= ip2long($start) && $longIp <= ip2long($end)) return false;		// プライベートIP
-				}
-			}
-			return true;
-		}
-	}
+    if (version_compare(phpversion(), '5.2.0') >= 0) {
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            // IPの場合
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    } else {
+        $longIp = ip2long($ip);
+        if ($longIp == -1 || $longIp === false) {
+            // IPアドレスでないとき
+            return true;
+        } else {
+            // IPアドレスのとき
+            $privAddrs = [
+                '10.0.0.0|10.255.255.255',
+                '172.16.0.0|172.31.255.255',
+                '192.168.0.0|192.168.255.255',
+                '169.254.0.0|169.254.255.255',
+                '127.0.0.0|127.255.255.255',
+            ];
+            if ($longIp != -1) {
+                foreach ($privAddrs as $privAddr) {
+                    list($start, $end) = explode('|', $privAddr);
+                    if ($longIp >= ip2long($start) && $longIp <= ip2long($end)) {
+                        return false;
+                    } // プライベートIP
+                }
+            }
+            return true;
+        }
+    }
 }
 /**
  * 日付をW3C-DTFフォーマット(YYYY-MM-DDThh:mm:ss.sTZD(例：2001-08-02T10:45:23.5+09:00)で取得
@@ -915,11 +1026,11 @@ function checkGlobalUrl($url)
  * @param timestamp $src	タイムスタンプ型の日時
  * @return string				変換後文字列
  */
-function getW3CDate($src = NULL)
+function getW3CDate($src = null)
 {
-	$src = ($src === NULL) ? time() : strtotime($src);
-	$date = substr_replace(date('Y-m-d\TH:i:sO', $src), ':', -2, 0);
-	return $date;
+    $src = $src === null ? time() : strtotime($src);
+    $date = substr_replace(date('Y-m-d\TH:i:sO', $src), ':', -2, 0);
+    return $date;
 }
 /**
  * 日付をRFC822フォーマット(例：Sun, 29 Aug 2004 15:42:09 +0900)で取得
@@ -927,11 +1038,11 @@ function getW3CDate($src = NULL)
  * @param timestamp $src	タイムスタンプ型の日時
  * @return string				変換後文字列
  */
-function getRFC822Date($src = NULL)
+function getRFC822Date($src = null)
 {
-	$src = ($src === NULL) ? time() : strtotime($src);
-	$date = date(DATE_RFC822, $src);
-	return $date;
+    $src = $src === null ? time() : strtotime($src);
+    $date = date(DATE_RFC822, $src);
+    return $date;
 }
 /**
  * 簡易版デバッグ出力
@@ -941,15 +1052,15 @@ function getRFC822Date($src = NULL)
  */
 function debug($msg)
 {
-	global $gLogManager;
-	
-	if (is_string($msg)){
-		$gLogManager->debug(__METHOD__, $msg);
-	} else {
-		$gLogManager->debug(__METHOD__, var_export($msg, true));
-	}
-	// コールスタック情報出力
-	//$gLogManager->debug(__METHOD__, var_export(debug_backtrace(2), true));
+    global $gLogManager;
+
+    if (is_string($msg)) {
+        $gLogManager->debug(__METHOD__, $msg);
+    } else {
+        $gLogManager->debug(__METHOD__, var_export($msg, true));
+    }
+    // コールスタック情報出力
+    //$gLogManager->debug(__METHOD__, var_export(debug_backtrace(2), true));
 }
 /**
  * 簡易版デバッグ出力(時間付き)
@@ -959,6 +1070,6 @@ function debug($msg)
  */
 function debugtime($msg = '')
 {
-	debug(sprintf('%01.03f', microtime(true) - M3_MTIME) . ' ' . $msg);
+    debug(sprintf('%01.03f', microtime(true) - M3_MTIME) . ' ' . $msg);
 }
 ?>
