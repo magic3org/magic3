@@ -60,18 +60,14 @@
 			}
 			$(function () {
 				// パスワード入力部
-				//$(".glyphicon-eye-open").show();		// 初期状態で表示
 				$(".fa-eye").show();		// 初期状態で表示
 				$("#password").on("keyup", function () {
 					if ($(this).val()) {
-						//$(".glyphicon-eye-open").show();
 						$(".fa-eye").show();
 					} else {
-						//$(".glyphicon-eye-open").hide();
 						$(".fa-eye").hide();
 					}
 				});
-				//$(".glyphicon-eye-open").mousedown(function(){
 				$(".fa-eye").mousedown(function () {
 					$("#password").attr('type', 'text');
 				}).mouseup(function () {
@@ -152,9 +148,9 @@
 						<patTemplate:tmpl name="input_password" visibility="hidden"><input id="password" name="password"
 								type="password" class="form-control textbox-imeoff" value="{PASSWORD}" maxlength="40"
 								autocomplete="new-password" /><i class="fas fa-eye"></i></patTemplate:tmpl>
-						<patTemplate:tmpl name="static_password" visibility="hidden"><input id="password" name="password"
-								type="password" class="form-control textbox-imeoff" value="{PASSWORD}" maxlength="40"
-								autocomplete="new-password" disabled /><input type="hidden" name="password" value="{PASSWORD}" />
+						<patTemplate:tmpl name="static_password" visibility="hidden"><input type="password"
+								class="form-control textbox-imeoff" value="{PASSWORD}" maxlength="40" autocomplete="new-password"
+								disabled /><input type="hidden" name="password" value="{PASSWORD}" />
 						</patTemplate:tmpl>
 					</div>
 				</div>
