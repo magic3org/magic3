@@ -141,6 +141,10 @@ function makeShortHash($data, $algo = 'md5')
  */
 function makeTruncStr($str, $len)
 {
+    if (!isset($str)) {
+        return '';
+    }
+
     $addStr = '';
     if (function_exists('mb_substr')) {
         if (mb_strlen($str) > $len) {
@@ -798,6 +802,10 @@ function convFromBytes($val)
  */
 function convertToHtmlEntity($src, $keepTags = false)
 {
+    if (!isset($src)) {
+        return '';
+    }
+
     // 変換文字「&<>"」
     if ($keepTags) {
         // タグを変換しないとき
