@@ -3342,9 +3342,6 @@ class BaseWidgetContainer extends _Core
             );
         }
 
-        // キャッシュをクリア
-        $this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defConfigId);
-
         // 親ウィンドウを更新
         $this->gPage->updateParentWindow($defSerial);
         return $ret;
@@ -3392,9 +3389,6 @@ class BaseWidgetContainer extends _Core
                 $contentId
             );
         }
-
-        // キャッシュをクリア
-        $this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defConfigId);
 
         // 親ウィンドウを更新
         $this->gPage->updateParentWindow($defSerial);
@@ -3444,9 +3438,6 @@ class BaseWidgetContainer extends _Core
                 $menuId
             );
         }
-
-        // キャッシュをクリア
-        $this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $id);
 
         // 親ウィンドウを更新
         $this->gPage->updateParentWindow($defSerial);
@@ -3506,9 +3497,6 @@ class BaseWidgetContainer extends _Core
             );
         }
 
-        // キャッシュをクリア
-        $this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $id);
-
         // 親ウィンドウを更新
         $this->gPage->updateParentWindow($defSerial);
         return $ret;
@@ -3562,9 +3550,6 @@ class BaseWidgetContainer extends _Core
             // 画面作成から呼ばれている場合のみ更新
             $ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, 0, '');
         }
-
-        // キャッシュをクリア
-        $this->gCache->clearCacheByWidgetConfigId($this->gEnv->getCurrentWidgetId(), $saveDefConfigId);
 
         // 親ウィンドウを更新
         $this->gPage->updateParentWindow($defSerial);
@@ -4243,7 +4228,7 @@ class BaseWidgetContainer extends _Core
      */
     function clearCache($param = [])
     {
-        $this->gCache->clearCacheByWidgetId($this->gEnv->getCurrentWidgetId(), $param);
+        //$this->gCache->clearCacheByWidgetId($this->gEnv->getCurrentWidgetId(), $param);
     }
     /**
      * 多言語対応文字列を作成
