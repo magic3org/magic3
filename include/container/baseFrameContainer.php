@@ -18,6 +18,7 @@ require_once M3_SYSTEM_INCLUDE_PATH . '/common/core.php';
 
 class BaseFrameContainer extends _Core
 {
+    private $_props = []; // 動的プロパティ
     protected $_db; // DB接続オブジェクト
     private $joomlaBufArray = []; // Joomla!データ受け渡し用
     private $templateCustomObj; // テンプレートカスタマイズパラメータオブジェクト
@@ -35,6 +36,22 @@ class BaseFrameContainer extends _Core
     const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip'; // アクセス制御、例外とするIP
     const CONFIG_KEY_MSG_TEMPLATE = 'msg_template'; // メッセージ用テンプレート取得キー
     const ADMIN_WIDGET_ID = 'admin_main'; // 管理ウィジェットのウィジェットID
+
+    /**
+     * 動的なプロパティに対応
+     */
+    public function __set($name, $value)
+    {
+        $this->_props[$name] = $value;
+    }
+    public function __get($name)
+    {
+        if (isset($this->_props[$name])) {
+            return $this->_props[$name];
+        } else {
+            return null;
+        }
+    }
 
     /**
      * コンストラクタ

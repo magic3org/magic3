@@ -17,23 +17,6 @@ require_once $gEnvManager->getContainerPath() . '/baseFrameContainer.php';
 
 class indexFrameContainer extends BaseFrameContainer
 {
-    private $props = [];
-
-    /**
-     * 動的なプロパティに対応
-     */
-    public function __set($name, $value)
-    {
-        $this->props[$name] = $value;
-    }
-    public function __get($name)
-    {
-        if (isset($this->props[$name])) {
-            return $this->props[$name];
-        } else {
-            return null;
-        }
-    }
     /**
      * コンストラクタ
      */
