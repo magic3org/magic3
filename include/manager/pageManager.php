@@ -5306,7 +5306,6 @@ class PageManager extends _Core
 	{
 		global $gEnvManager;
 		global $gDesignManager;
-		global $gCacheManager;
 		
 		// アクセスするページIDからPC用、携帯用、スマートフォン用かを判断
 		$widgetDeviceType = 0;		// 端末タイプをPC用に初期化
@@ -5555,9 +5554,6 @@ class PageManager extends _Core
 				echo '</div>' . M3_NL;
 			}
 			echo '</div>' . M3_NL;
-			
-			// キャッシュデータをクリア
-			$gCacheManager->clearAllCache();
 		}
 	}
 	/**
